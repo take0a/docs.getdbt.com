@@ -1,5 +1,5 @@
 ---
-title: "What is dbt?"
+title: "dbt とは"
 id: "introduction"
 description: "dbt is the industry standard for data transformation."
 pagination_next: null

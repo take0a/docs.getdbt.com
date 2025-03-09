@@ -240,7 +240,8 @@ var siteSettings = {
           customCss: require.resolve("./src/css/custom.css"),
         },
         docs: {
-          path: "docs",
+          // path: "docs",
+          path: "docs.ja",
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
           remarkPlugins: [math],
