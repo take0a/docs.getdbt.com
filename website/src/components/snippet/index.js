@@ -8,7 +8,7 @@ import clsx from 'clsx';
   as a prop to use throughout the docs.
 */}
 export default function Snippet({ path }) {
-  const file = require('../../../snippets/' + path + '.md')
+  const file = require('../../../snippets.ja/' + path + '.md')
   const contents = file.default({});
   return (
     <div className={clsx(styles.snippet, 'snippet')}>
