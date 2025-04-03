@@ -1,5 +1,5 @@
 ---
-title: About dbt setup
+title: dbt セットアップについて
 id: about-setup
 description: "About setup of dbt Core and Cloud"
 sidebar_label: "About dbt setup"
@@ -7,15 +7,15 @@ pagination_next: "docs/environments-in-dbt"
 pagination_prev: null
 ---
 
-dbt compiles and runs your analytics code against your data platform, enabling you and your team to collaborate on a single source of truth for metrics, insights, and business definitions. There are two options for deploying dbt:
+dbt は、データ プラットフォームに対して分析コードをコンパイルして実行し、お客様とチームがメトリクス、インサイト、ビジネス定義の唯一の真実のソースで共同作業できるようにします。dbt の導入には 2 つのオプションがあります。
 
-**dbt Cloud** runs dbt Core in a hosted (single or multi-tenant) environment with a browser-based interface. The intuitive user interface aids you in setting up the various components. dbt Cloud comes equipped with turnkey support for scheduling jobs, CI/CD, hosting documentation, monitoring, and alerting. It also offers an integrated development environment (IDE) and allows you to develop and run dbt commands from your local command line (CLI) or code editor.
+**dbt Cloud** は、ブラウザベースのインターフェースを備えたホスト型 (シングル テナントまたはマルチ テナント) 環境で dbt Core を実行します。直感的なユーザー インターフェースは、さまざまなコンポーネントの設定に役立ちます。dbt Cloud には、ジョブのスケジュール設定、CI/CD、ドキュメントのホスティング、監視、アラートのターンキー サポートが備わっています。また、統合開発環境 (IDE) も提供しており、ローカル コマンド ライン (CLI) またはコード エディターから dbt コマンドを開発して実行できます。
 
-**dbt Core** is an open-source command line tool that can be installed locally in your environment, and communication with databases is facilitated through adapters.
+**dbt Core** は、環境にローカルにインストールできるオープン ソース コマンド ライン ツールで、アダプターを介してデータベースとの通信が容易になります。
 
-If you're not sure which is the right solution for you, read our [What is dbt?](/docs/introduction) and our [dbt Cloud features](/docs/cloud/about-cloud/dbt-cloud-features) articles to help you decide. If you still have questions, don't hesitate to [contact us](https://www.getdbt.com/contact/).
+どのソリューションが適しているか分からない場合は、[dbt とは](/docs/introduction) および [dbt Cloud の機能](/docs/cloud/about-cloud/dbt-cloud-features) の記事を読んで判断してください。それでも質問がある場合は、[お問い合わせ](https://www.getdbt.com/contact/) までお気軽にお問い合わせください。
 
-To begin configuring dbt now, select the option that is right for you.
+今すぐ dbt の構成を開始するには、適切なオプションを選択してください。
 
 <div className="grid--2-col">
 

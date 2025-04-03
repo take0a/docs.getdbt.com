@@ -1,34 +1,34 @@
 ---
-title: "Intro to the dbt Semantic Layer"
+title: "dbt セマンティック レイヤーの概要"
 description: Getting started with the dbt Semantic Layer
 hoverSnippet: Learn how to get started with the dbt Semantic Layer
 pagination_next: "best-practices/how-we-build-our-metrics/semantic-layer-2-setup"
 pagination_prev: null
 ---
 
-Flying cars, hoverboards, and true self-service analytics: this is the future we were promised. The first two might still be a few years out, but real self-service analytics is here today. With dbt Cloud's Semantic Layer, you can resolve the tension between accuracy and flexibility that has hampered analytics tools for years, empowering everybody in your organization to explore a shared reality of metrics. Best of all for analytics engineers, building with these new tools will significantly [DRY](https://docs.getdbt.com/terms/dry) up and simplify your codebase. As you'll see, the deep interaction between your dbt models and the Semantic Layer make your dbt project the ideal place to craft your metrics.
+空飛ぶ車、ホバーボード、そして真のセルフサービス分析。これが私たちが約束された未来です。最初の 2 つはまだ数年先かもしれませんが、真のセルフサービス分析は今ここにあります。dbt Cloud のセマンティック レイヤーを使用すると、長年分析ツールを妨げてきた精度と柔軟性の間の緊張を解消し、組織内のすべての人が共通の指標の現実を探求できるようになります。分析エンジニアにとって最も良い点は、これらの新しいツールで構築することで、コードベースが大幅に [DRY](https://docs.getdbt.com/terms/dry) され、簡素化されることです。ご覧のとおり、dbt モデルとセマンティック レイヤー間の深い相互作用により、dbt プロジェクトは指標を作成するための理想的な場所になります。
 
-## Learning goals
+## 学習目標
 
-- ❓ Understand the **purpose and capabilities** of the **dbt Semantic Layer**, particularly MetricFlow as the engine that powers it.
-- 🧱 Familiarity with the core components of MetricFlow — **semantic models and metrics** — and how they work together.
-- 🔁 Know how to **refactor** dbt models for the Semantic Layer.
-- 🏅 Aware of **best practices** to take maximum advantage of the Semantic Layer.
+- ❓ **dbt セマンティック レイヤー** の **目的と機能**、特にそれを動かすエンジンとしての MetricFlow を理解します。
+- 🧱 MetricFlow のコア コンポーネント (**セマンティック モデルとメトリック**) とそれらがどのように連携するかを理解していること。
+- 🔁 セマンティック レイヤーの dbt モデルを **リファクタリング** する方法を理解します。
+- 🏅 セマンティック レイヤーを最大限に活用するための**ベスト プラクティス** を認識します。
 
-## Guide structure overview
+## ガイド構造の概要
 
-1. Getting **setup** in your dbt project.
-2. Building a **semantic model** and its fundamental parts: **entities, dimensions, and measures**.
-3. Building a **metric**.
-4. Defining **advanced metrics**: `ratio` and `derived` types.
-5. **File and folder structure**: establishing a system for naming things.
-6. **Refactoring** marts and roll-ups for the Semantic Layer.
-7. Review **best practices**.
+1. dbt プロジェクトで **セットアップ** を実行します。
+2. **セマンティック モデル** とその基本部分である **エンティティ、ディメンション、メジャー** を構築します。
+3. **メトリック**を構築します。
+4. **高度なメトリック** の定義: `ratio` および `derived` タイプ。
+5. **ファイルとフォルダの構造**: 名前を付けるためのシステムを確立します。
+6. セマンティック レイヤーのマートとロールアップを**リファクタリング**します。
+7. **ベスト プラクティス** を確認します。
 
-If you're ready to ship your users more power and flexibility with less code, let's dive in!
+より少ないコードでより強力かつ柔軟な機能をユーザーに提供する準備ができたら、ぜひ始めましょう。
 
 :::info
-MetricFlow is the engine for defining metrics in dbt and one of the key components of the [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl). It handles SQL query construction and defines the specification for dbt semantic models and metrics.
+MetricFlow は、dbt でメトリックを定義するためのエンジンであり、[dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) の主要コンポーネントの 1 つです。SQL クエリの構築を処理し、dbt セマンティック モデルとメトリックの仕様を定義します。
 
-To fully experience the dbt Semantic Layer, including the ability to query dbt metrics via external integrations, you'll need a [dbt Cloud Team or Enterprise account](https://www.getdbt.com/pricing/). Refer to [dbt Semantic Layer FAQs](/docs/use-dbt-semantic-layer/sl-faqs) for more information.
+外部統合を介して dbt メトリックをクエリする機能を含む、dbt セマンティック レイヤーを完全に体験するには、[dbt Cloud チーム アカウントまたはエンタープライズ アカウント](https://www.getdbt.com/pricing/) が必要です。詳細については、[dbt セマンティック レイヤーに関する FAQ](/docs/use-dbt-semantic-layer/sl-faqs) を参照してください。
 :::

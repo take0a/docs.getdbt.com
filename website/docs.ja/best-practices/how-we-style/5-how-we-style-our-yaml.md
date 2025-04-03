@@ -1,22 +1,22 @@
 ---
-title: How we style our YAML
+title: YAML のスタイル設定方法
 id: 5-how-we-style-our-yaml
 ---
 
-## YAML Style Guide
+## YAML スタイルガイド
 
-- 2️⃣ Indents should be two spaces
-- ➡️ List items should be indented
-- 🔠 List items with a single entry can be a string. For example, `'select': 'other_user'`, but it's best practice to provide the argument as an explicit list. For example, `'select': ['other_user']`
-- 🆕 Use a new line to separate list items that are dictionaries where appropriate
-- 📏 Lines of YAML should be no longer than 80 characters.
-- 🛠️ Use the [dbt JSON schema](https://github.com/dbt-labs/dbt-jsonschema) with any compatible IDE and a YAML formatter (we recommend [Prettier](https://prettier.io/)) to validate your YAML files and format them automatically.
+- 2️⃣ インデントは2スペースにしてください
+- ➡️ リスト項目はインデントする必要がある
+- 🔠 単一のエントリを持つリスト項目は文字列にすることができます。たとえば、`'select': 'other_user'` ですが、明示的なリストとして引数を指定するのがベストプラクティスです。たとえば、`'select': ['other_user']`
+- 🆕 適切な場合は、辞書のリスト項目を新しい行で区切ってください。
+- 📏 YAML の行は 80 文字以内にする必要があります。
+- 🛠️ 互換性のある IDE と YAML フォーマッタ ([Prettier](https://prettier.io/) を併用) で [dbt JSON スキーマ](https://github.com/dbt-labs/dbt-jsonschema) を使用して、YAML ファイルを検証し、自動的にフォーマットします。
 
 :::info
-☁️ As with Python and SQL, the dbt Cloud IDE comes with built-in formatting for YAML files (Markdown and JSON too!), via Prettier. Just click the `Format` button and you're in perfect style. As with the other tools, you can [also customize the formatting rules](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format#format-yaml-markdown-json) to your liking to fit your company's style guide.
+☁️ Python や SQL と同様に、dbt Cloud IDE には Prettier による YAML ファイル (Markdown と JSON も!) のフォーマット機能が組み込まれています。[Format] ボタンをクリックするだけで、完璧なスタイルになります。他のツールと同様に、[フォーマット ルールをカスタマイズ](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format#format-yaml-markdown-json) して、会社のスタイル ガイドに合うようにすることもできます。
 :::
 
-### Example YAML
+### YAML の例
 
 ```yaml
 version: 2

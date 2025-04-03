@@ -1,22 +1,22 @@
 ---
-title: "Install from source"
+title: "ソースからインストール"
 description: "You can install dbt Core from its GitHub code source."
 pagination_next: null
 ---
 
-dbt Core and almost all of its adapter plugins are open source software. As such, the codebases are freely available to download and build from source. You might install from source if you want the latest code or want to install dbt from a specific commit. This might be helpful when you are contributing changes, or if you want to debug a past change.
+dbt Core とそのアダプタ プラグインのほぼすべてはオープン ソース ソフトウェアです。そのため、コードベースはソースからダウンロードしてビルドすることができます。最新のコードが必要な場合や、特定のコミットから dbt をインストールする場合は、ソースからインストールできます。これは、変更をコントリビュートする場合や、過去の変更をデバッグする場合に役立ちます。
 
-To download from source, you would clone the repositories from GitHub, making a local copy, and then install the local version using `pip`.
+ソースからダウンロードするには、GitHub からリポジトリをクローンしてローカル コピーを作成し、`pip` を使用してローカル バージョンをインストールします。
 
-Downloading and building dbt Core will enable you to contribute to the project by fixing a bug or implementing a sought-after feature. For more details, read the [contributing guidelines](https://github.com/dbt-labs/dbt-core/blob/HEAD/CONTRIBUTING.md).
+dbt Core をダウンロードしてビルドすると、バグを修正したり、求められている機能を実装したりして、プロジェクトに貢献できます。詳細については、[コントリビュート ガイドライン](https://github.com/dbt-labs/dbt-core/blob/HEAD/CONTRIBUTING.md) をお読みください。
 
-### Installing dbt Core
+### dbt Core のインストール
 
-Beginning in v1.8, installing an adapter does not automatically install `dbt-core`. This is because adapters and dbt Core versions have been decoupled from each other so we no longer want to overwrite existing dbt-core installations
+v1.8以降、アダプタをインストールしても`dbt-core`は自動的にインストールされません。これは、アダプタとdbt Coreバージョンが互いに分離されているため、既存のdbt-coreインストールを上書きしたくないためです。
 
 <VersionBlock firstVersion="1.8">
 
-To install `dbt-core` only from the GitHub code source:
+GitHub コード ソースからのみ `dbt-core` をインストールするには:
 
 ```shell
 git clone https://github.com/dbt-labs/dbt-core.git
@@ -37,20 +37,20 @@ python -m pip install -r requirements.txt
 ```
 </VersionBlock>
 
-To install in editable mode, which includes your local changes as you make them:
+ローカルで行った変更が編集可能モードでインストールするには、次の手順を実行します:
 
 ```shell
 python -m pip install -e editable-requirements.txt` 
 ```
 instead.
 
-### Installing adapter plugins
+### アダプタプラグインのインストール
 
-To install an adapter plugin from source, you will need to first locate its source repository. For instance, the `dbt-redshift` adapter is located at https://github.com/dbt-labs/dbt-redshift.git, so you can clone it and install from there:
+ソースからアダプタ プラグインをインストールするには、まずそのソース リポジトリを見つける必要があります。たとえば、`dbt-redshift` アダプタは https://github.com/dbt-labs/dbt-redshift.git にあるので、そこからクローンしてインストールできます:
 
 <VersionBlock firstVersion="1.8">
 
-You will also need to install `dbt-core` before installing an adapter plugin.
+アダプタ プラグインをインストールする前に、`dbt-core` もインストールする必要があります。
 
 </VersionBlock>
 
@@ -65,7 +65,7 @@ cd dbt-redshift
 python -m pip install .
 ```
 
-To install in editable mode, such as while contributing, use `python -m pip install -e .` instead.
+貢献中など編集可能なモードでインストールするには、代わりに `python -m pip install -e .` を使用します。
 
 <FAQ path="Core/install-pip-os-prereqs" />
 <FAQ path="Core/install-python-compatibility" />

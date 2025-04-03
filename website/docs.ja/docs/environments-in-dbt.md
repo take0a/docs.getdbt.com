@@ -1,19 +1,19 @@
 ---
-title: "About environments"
+title: "環境について"
 id: "environments-in-dbt"
 hide_table_of_contents: true
 pagination_next: null
 ---
 
-In software engineering, environments are used to enable engineers to develop and test code without impacting the users of their software. Typically, there are two types of environments in dbt:
+ソフトウェア エンジニアリングでは、エンジニアがソフトウェアのユーザーに影響を与えることなくコードを開発およびテストできるようにするために環境が使用されます。通常、dbt には 2 種類の環境があります。
 
-- **Deployment or Production** (or _prod_) &mdash; Refers to the environment that end users interact with. 
+- **デプロイメントまたは本番** (または _prod_) - エンド ユーザーが操作する環境を指します。
 
-- **Development** (or _dev_) &mdash; Refers to the environment that engineers work in. This means that engineers can work iteratively when writing and testing new code in _development_. Once they are confident in these changes, they can deploy their code to _production_.
+- **開発** (または _dev_) - エンジニアが作業する環境を指します。つまり、エンジニアは _development_ で新しいコードの作成とテストを反復的に行うことができます。これらの変更に自信が持てるようになったら、コードを _production_ にデプロイできます。
 
-In traditional software engineering, different environments often use completely separate architecture. For example, the dev and prod versions of a website may use different servers and databases. <Term id="data-warehouse">Data warehouses</Term> can also be designed to have separate environments &mdash; the _production_ environment refers to the relations (for example, schemas, tables, and <Term id="view">views</Term>) that your end users query (often through a BI tool).
+従来のソフトウェア エンジニアリングでは、異なる環境で完全に異なるアーキテクチャが使用されることがよくあります。たとえば、Web サイトの開発バージョンと本番バージョンでは、異なるサーバーとデータベースが使用されることがあります。<Term id="data-warehouse">データ ウェアハウス</Term> も、別々の環境を持つように設計できます。 _production_ 環境は、エンドユーザーがクエリを実行する (多くの場合、BI ツール経由) リレーション (スキーマ、テーブル、<Term id="view">ビュー</Term> など) を指します。
 
-Configure environments to tell dbt Cloud or dbt Core how to build and execute your project in development and production:
+開発および本番環境でプロジェクトをビルドして実行する方法を dbt Cloud または dbt Core に指示するように環境を構成します。
 
 <div className="grid--2-col">
 
@@ -31,10 +31,10 @@ Configure environments to tell dbt Cloud or dbt Core how to build and execute yo
 
 </div> <br />
 
-## Related docs
+## 関連ドキュメント
 
-- [dbt Cloud environment best practices](/guides/set-up-ci)
-- [Deployment environments](/docs/deploy/deploy-environments)
-- [About dbt Core versions](/docs/dbt-versions/core)
-- [Set Environment variables in dbt Cloud](/docs/build/environment-variables#special-environment-variables)
-- [Use Environment variables in jinja](/reference/dbt-jinja-functions/env_var)
+- [dbt Cloud 環境のベスト プラクティス](/guides/set-up-ci)
+- [デプロイメント環境](/docs/deploy/deploy-environments)
+- [dbt Core のバージョンについて](/docs/dbt-versions/core)
+- [dbt Cloud で環境変数を設定する](/docs/build/environment-variables#special-environment-variables)
+- [jinja で環境変数を使用する](/reference/dbt-jinja-functions/env_var)

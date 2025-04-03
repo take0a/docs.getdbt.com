@@ -1,26 +1,26 @@
 ---
-title: "Set up the dbt Semantic Layer"
+title: "dbt セマンティックレイヤーを設定する"
 description: Getting started with the dbt Semantic Layer
 hoverSnippet: Learn how to get started with the dbt Semantic Layer
 pagination_next: "best-practices/how-we-build-our-metrics/semantic-layer-3-build-semantic-models"
 ---
 
-## Getting started
+## はじめる
 
-There are two options for developing a dbt project, including the Semantic Layer:
+セマンティック レイヤーを含む dbt プロジェクトを開発するには、次の 2 つのオプションがあります。
 
-- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) &mdash; MetricFlow commands are embedded in the dbt Cloud CLI under the `dbt sl` subcommand. This is the easiest, most full-featured way to develop dbt Semantic Layer code for the time being. You can use the editor of your choice and run commands from the terminal.
+- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) &mdash; MetricFlow コマンドは、dbt Cloud CLI の `dbt sl` サブコマンドの下に埋め込まれています。これは、現時点では dbt セマンティック レイヤー コードを開発する最も簡単で機能豊富な方法です。任意のエディターを使用して、ターミナルからコマンドを実行できます。
 
-- [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) &mdash; You can create semantic models and metrics in the dbt Cloud IDE. However, support for running `dbt sl` commands isn't available just yet, but is in active development. This means you won't be able to validate your code, so we'd recommend working with the Cloud CLI and a local editor for now.
+- [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) &mdash; dbt Cloud IDE でセマンティック モデルとメトリックを作成できます。ただし、`dbt sl` コマンドの実行のサポートはまだ利用できませんが、現在開発中です。つまり、コードを検証できないため、現時点では Cloud CLI とローカル エディターを使用することをお勧めします。
 
-## Basic commands
+## 基本コマンド
 
-- 🔍 A less common command that will come in handy with the Semantic Layer is `dbt parse`. This will parse your project and generate a **semantic manifest**, a representation of meaningful connections described by your project. This is uploaded to dbt Cloud, and used for running `dbt sl` commands in development. This file gives MetricFlow a **state of the world from which to generate queries**.
-- 🧰 `dbt sl query` is your other best friend, it will execute a query against your semantic layer and return a sample of the results. This is great for testing your semantic models and metrics as you build them. For example, if you're building a revenue model you can run `dbt sl query --metrics revenue --group-by metric_time__month` to validate that monthly revenue is calculating correctly.
-- 📝 Lastly, `dbt sl list dimensions --metrics [metric name]` will list all the dimensions available for a given metric. This is useful for checking that you're increasing dimensionality as you progress. You can `dbt sl list` other aspects of your Semantic Layer as well, run `dbt sl list --help` for the full list of options.
+- 🔍 セマンティック レイヤーで役立つ、あまり一般的ではないコマンドは `dbt parse` です。このコマンドはプロジェクトを解析し、**セマンティック マニフェスト** (プロジェクトで記述された意味のある接続の表現) を生成します。これは dbt Cloud にアップロードされ、開発中に `dbt sl` コマンドを実行するために使用されます。このファイルは MetricFlow に **クエリを生成するための世界の状態** を提供します。
+- 🧰 `dbt sl query` は、セマンティック レイヤーに対してクエリを実行し、結果のサンプルを返す、もう 1 つの優れたツールです。これは、セマンティック モデルとメトリックを構築する際にテストするのに最適です。たとえば、収益モデルを構築している場合は、`dbt sl query --metrics profit --group-by metric_time__month` を実行して、月間収益が正しく計算されていることを検証できます。
+- 📝 最後に、`dbt sl list dimensions --metrics [metric name]` は、特定のメトリックで使用可能なすべてのディメンションを一覧表示します。これは、作業の進行に伴ってディメンションが増加しているかどうかを確認するのに役立ちます。セマンティック レイヤーの他の側面も `dbt sl list` できます。オプションの完全なリストを表示するには、`dbt sl list --help` を実行します。
 
-For more information on the available commands, refer to the [MetricFlow commands](/docs/build/metricflow-commands) reference, or use `dbt sl --help` and `dbt sl [subcommand] --help` on the command line. If you need to set up a dbt project first, check out the [quickstart guides](/docs/get-started-dbt).
+使用可能なコマンドの詳細については、[MetricFlow コマンド](/docs/build/metricflow-commands) リファレンスを参照するか、コマンド ラインで `dbt sl --help` および `dbt sl [subcommand] --help` を使用してください。最初に dbt プロジェクトをセットアップする必要がある場合は、[クイックスタート ガイド](/docs/get-started-dbt) を確認してください。
 
-## Onward!
+## 前進！
 
-Throughout the rest of the guide, we'll show example code based on the Jaffle Shop project, a fictional chain of restaurants. You can check out the code yourself and try things out in the [Jaffle Shop repository](https://github.com/dbt-labs/jaffle-shop). So if you see us calculating metrics like `food_revenue` later in this guide, this is why!
+ガイドの残りの部分では、架空のレストラン チェーンである Jaffle Shop プロジェクトに基づいたサンプル コードを紹介します。[Jaffle Shop リポジトリ](https://github.com/dbt-labs/jaffle-shop) でコードを自分で確認して試してみることができます。このガイドの後半で `food_revenue` などのメトリックを計算しているのを見たら、これが理由です。

@@ -1,60 +1,60 @@
 ---
-title: "Install with pip"
+title: "pip でインストール"
 description: "Install dbt Core and adapter plugins from the command line with pip."
 ---
 
-You need to use `pip` to install dbt Core on Windows, Linux, or MacOS operating systems.
+Windows、Linux、または MacOS オペレーティング システムに dbt Core をインストールするには、`pip` を使用する必要があります。
 
-You can install dbt Core and plugins using `pip` because they are Python modules distributed on [PyPI](https://pypi.org/project/dbt-core/).
+dbt Core とプラグインは [PyPI](https://pypi.org/project/dbt-core/) で配布されている Python モジュールであるため、`pip` を使用してインストールできます。
 
 <FAQ path="Core/install-pip-os-prereqs" />
 <FAQ path="Core/install-python-compatibility" />
 
-## What is a Python virtual environment?
+## Python 仮想環境とは何ですか？
 
-A Python virtual environment creates an isolated workspace for Python projects, preventing conflicts between dependencies of different projects and versions.
+Python 仮想環境は、Python プロジェクト用の分離されたワークスペースを作成し、異なるプロジェクトやバージョンの依存関係間の競合を防ぎます。
 
-You can create virtual environments using tools like [conda](https://anaconda.org/anaconda/conda), [poetry](https://python-poetry.org/docs/managing-environments/) or `venv`. This guide uses `venv` because it's lightweight, has the fewest additional dependencies, and is included in Python by default.
+[conda](https://anaconda.org/anaconda/conda)、[poetry](https://python-poetry.org/docs/managing-environments/)、`venv` などのツールを使用して仮想環境を作成できます。このガイドでは、軽量で追加の依存関係が最も少なく、デフォルトで Python に含まれている `venv` を使用します。
 
-Users who want to run dbt locally, for example in [dbt Core](/docs/core/installation-overview) or the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation#install-a-virtual-environment) may want to install a Python virtual environment.
+[dbt Core](/docs/core/installation-overview) や [dbt Cloud CLI](/docs/cloud/cloud-cli-installation#install-a-virtual-environment) などで dbt をローカルで実行したいユーザーは、Python 仮想環境をインストールすることをお勧めします。
 
-### Prerequisites
+### 前提条件
 
-- Access to a terminal or command prompt.
-- Have [Python](https://www.python.org/downloads/) installed on your machine. You can check if Python is installed by running `python --version` or `python3 --version` in your terminal or command prompt.
-- Have [pip installed](https://pip.pypa.io/en/stable/installation/). You can check if pip is installed by running `pip --version` or `pip3 --version`.
-- Have the necessary permissions to create directories and install packages on your machine.
-- Once you've met the prerequisites, follow these steps to set up your virtual environment.
+- ターミナルまたはコマンド プロンプトにアクセスできる。
+- マシンに [Python](https://www.python.org/downloads/) がインストールされている。ターミナルまたはコマンド プロンプトで `python --version` または `python3 --version` を実行すると、Python がインストールされているかどうかを確認できます。
+- [pip](https://pip.pypa.io/en/stable/installation/) がインストールされている。`pip --version` または `pip3 --version` を実行すると、pip がインストールされているかどうかを確認できます。
+- マシンにディレクトリを作成し、パッケージをインストールするために必要な権限を持っている。
+- 前提条件を満たしたら、次の手順に従って仮想環境を設定します。
 
-### Set up a Python virtual environment 
+### Python 仮想環境を設定する
 
-`venv` will set up a Python virtual environment within the `env` folder.
+`venv` は、`env` フォルダ内に Python 仮想環境を設定します。
 
-Depending on the operating system you use, you'll need to execute specific steps to set up a virtual environment. 
+使用するオペレーティング システムに応じて、仮想環境を設定するための特定の手順を実行する必要があります。
 
-To set up a Python virtual environment, navigate to your project directory and execute the command. This will generate a new virtual environment within a local folder that you can name anything.  [Our convention](https://github.com/dbt-labs/dbt-core/blob/main/CONTRIBUTING.md#virtual-environments) has been to name it `env` or `env-anything-you-want`
+Python 仮想環境を設定するには、プロジェクト ディレクトリに移動してコマンドを実行します。これにより、任意の名前を付けることができるローカル フォルダ内に新しい仮想環境が生成されます。[私たちの慣例](https://github.com/dbt-labs/dbt-core/blob/main/CONTRIBUTING.md#virtual-environments) では、`env` または `env-anything-you-want` という名前を付けています。
 
 <Tabs>
   <TabItem value="Unix/macOS" label="Unix/macOS">
-    1. Create your virtual environment:
+    1. 仮想環境を作成します:
 
     ```shell
     python3 -m venv env
     ```
 
-    2. Activate your virtual environment:
+    2. 仮想環境をアクティブ化します:
 
     ```shell
     source env/bin/activate
     ```
 
-    3. Verify Python Path:
+    3. Python パスを確認します:
 
     ```shell
     which python
     ```
 
-    4. Run Python:
+    4. Python を実行します:
 
     ```shell
     env/bin/python
@@ -62,25 +62,25 @@ To set up a Python virtual environment, navigate to your project directory and e
   </TabItem>
 
   <TabItem value="Windows" label="Windows">
-    1. Create your virtual environment
+    1. 仮想環境を作成します:
 
     ```shell
     py -m venv env
     ```
 
-    2. Activate your virtual environment:
+    2. 仮想環境をアクティブ化します:
 
     ```shell
     env\Scripts\activate
     ```
 
-    3. Verify Python Path:
+    3. Python パスを確認します:
 
     ```shell
     where python
     ```
 
-    4. Run Python:
+    4. Python を実行します:
 
     ```shell
     env\Scripts\python
@@ -88,31 +88,31 @@ To set up a Python virtual environment, navigate to your project directory and e
   </TabItem>
 </Tabs>
 
-If you're using dbt Core, refer to [What are the best practices for installing dbt Core with pip?](/faqs/Core/install-pip-best-practices.md#using-virtual-environments) after creating your virtual environment. 
+dbt Core を使用している場合は、仮想環境を作成した後、[pip を使用して dbt Core をインストールするためのベスト プラクティスは何ですか?](/faqs/Core/install-pip-best-practices.md#using-virtual-environments) を参照してください。
 
-If you're using the dbt Cloud CLI, you can [install dbt Cloud CLI in pip](/docs/cloud/cloud-cli-installation#install-dbt-cloud-cli-in-pip) after creating your virtual environment.
+dbt Cloud CLI を使用している場合は、仮想環境を作成した後、[pip で dbt Cloud CLI をインストール](/docs/cloud/cloud-cli-installation#install-dbt-cloud-cli-in-pip) できます。
 
-### Deactivate virtual environment
+### 仮想環境を非アクティブ化する
 
-To switch projects or leave your virtual environment, deactivate the environment using the command while the virtual environment is active:
+プロジェクトを切り替えたり、仮想環境を離れたりするには、仮想環境がアクティブなときに次のコマンドを使用して環境を非アクティブ化します:
 
 ```shell
 deactivate
 ```
 
-### Create an alias
+### エイリアスを作成する
 
-To activate your dbt environment with every new shell window or session, you can create an alias for the source command in your `$HOME/.bashrc`, `$HOME/.zshrc`, or whichever config file your shell draws from. 
+新しいシェル ウィンドウまたはセッションごとに dbt 環境をアクティブ化するには、`$HOME/.bashrc`、`$HOME/.zshrc`、またはシェルが取得する構成ファイルにソース コマンドのエイリアスを作成します。
 
-For example, add the following to your rc file, replacing `<PATH_TO_VIRTUAL_ENV_CONFIG>` with the path to your virtual environment configuration.
+たとえば、rc ファイルに次のコードを追加し、`<PATH_TO_VIRTUAL_ENV_CONFIG>` を仮想環境構成へのパスに置き換えます。
 
 ```shell
 alias env_dbt='source <PATH_TO_VIRTUAL_ENV_CONFIG>/bin/activate'
 ```
 
-## Installing the adapter
+## アダプタのインストール
 
-Once you decide [which adapter](/docs/supported-data-platforms) you're using, you can install using the command line. Beginning in v1.8, installing an adapter does not automatically install `dbt-core`. This is because adapters and dbt Core versions have been decoupled from each other so we no longer want to overwrite existing dbt-core installations.
+使用する [アダプタ](/docs/supported-data-platforms) を決定したら、コマンド ラインを使用してインストールできます。v1.8 以降では、アダプタをインストールしても `dbt-core` は自動的にインストールされません。これは、アダプタと dbt Core バージョンが互いに分離され、既存の dbt-core インストールを上書きしないようにしたためです。
 
 <VersionBlock firstVersion="1.8">
 
@@ -130,7 +130,7 @@ python -m pip install dbt-ADAPTER_NAME
 
 </VersionBlock>
 
-For example, if using Postgres:
+たとえば、Postgres を使用する場合:
 
 <VersionBlock firstVersion="1.8">
 
@@ -138,7 +138,7 @@ For example, if using Postgres:
 python -m pip install dbt-core dbt-postgres
 ```
 
-This will install `dbt-core` and `dbt-postgres` _only_:
+これにより、`dbt-core` と `dbt-postgres` のみがインストールされます:
 
 ```shell
 $ dbt --version
@@ -151,7 +151,7 @@ Plugins:
   - postgres: 1.0.0
 ```
 
-All adapters build on top of `dbt-core`. Some also depend on other adapters: for example, `dbt-redshift` builds on top of `dbt-postgres`. In that case, you would see those adapters included by your specific installation, too.
+すべてのアダプタは `dbt-core` 上に構築されます。一部のアダプタは他のアダプタにも依存します。たとえば、`dbt-redshift` は `dbt-postgres` 上に構築されます。その場合、特定のインストールにそれらのアダプタも含まれることになります。
 </VersionBlock>
 
 <VersionBlock lastVersion="1.7">
@@ -160,7 +160,7 @@ All adapters build on top of `dbt-core`. Some also depend on other adapters: for
 python -m pip install dbt-postgres
 ```
 
-This will install `dbt-core` and `dbt-postgres` _only_:
+これにより、`dbt-core` と `dbt-postgres` のみがインストールされます:
 
 ```shell
 $ dbt --version
@@ -173,36 +173,36 @@ Plugins:
   - postgres: 1.0.0
 ```
 
-Some adapters depend on other adapters. For example, `dbt-redshift` builds on top of `dbt-postgres`. In that case, you would see those adapters included by your specific installation, too.
+一部のアダプタは他のアダプタに依存します。たとえば、`dbt-redshift` は `dbt-postgres` の上に構築されます。その場合、特定のインストールにそれらのアダプタも含まれることになります。
 </VersionBlock>
 
-### Upgrade adapters
+### アダプタのアップグレード
 
-To upgrade a specific adapter plugin:
+特定のアダプタ プラグインをアップグレードするには:
 
 ```shell
 python -m pip install --upgrade dbt-ADAPTER_NAME
 ```
 
-### Install dbt-core only
+### dbt-core のみをインストールする
 
-If you're building a tool that integrates with dbt Core, you may want to install the core library alone, without a database adapter. Note that you won't be able to use dbt as a CLI tool.
+dbt Core と統合するツールを構築する場合は、データベース アダプターなしでコア ライブラリのみをインストールすることをお勧めします。dbt を CLI ツールとして使用することはできないことに注意してください。
 
 ```shell
 python -m pip install dbt-core
 ```
 
-## Change dbt Core versions
+## dbt Core のバージョンを変更する
 
-You can upgrade or downgrade versions of dbt Core by using the `--upgrade` option on the command line (CLI). For more information, see [Best practices for upgrading in Core versions](/docs/dbt-versions/core#best-practices-for-upgrading).
+コマンドライン (CLI) で `--upgrade` オプションを使用すると、dbt Core のバージョンをアップグレードまたはダウングレードできます。詳細については、[Core バージョンのアップグレードに関するベスト プラクティス](/docs/dbt-versions/core#best-practices-for-upgrading) を参照してください。
 
-To upgrade dbt to the latest version:
+dbt を最新バージョンにアップグレードするには:
 
 ```
 python -m pip install --upgrade dbt-core
 ```
 
-To downgrade to an older version, specify the version you want to use. This command can be useful when you're resolving package dependencies. As an example:
+古いバージョンにダウングレードするには、使用するバージョンを指定します。このコマンドは、パッケージの依存関係を解決するときに役立ちます。例:
 
 ```
 python -m pip install --upgrade dbt-core==1.9
@@ -210,9 +210,9 @@ python -m pip install --upgrade dbt-core==1.9
 
 ## `pip install dbt`
 
-In the fall of 2023, the `dbt` package on PyPI became a supported method to install the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation?install=pip#install-dbt-cloud-cli-in-pip).
+2023 年秋、PyPI の `dbt` パッケージは、[dbt Cloud CLI](/docs/cloud/cloud-cli-installation?install=pip#install-dbt-cloud-cli-in-pip) をインストールするためのサポート対象メソッドになりました。
 
-If you have workflows or integrations that rely on installing the package named `dbt`, you can achieve the same behavior by installing the same five packages that it used:
+`dbt` という名前のパッケージのインストールに依存するワークフローまたは統合がある場合は、そのパッケージで使用されたのと同じ 5 つのパッケージをインストールすることで、同じ動作を実現できます:
 
 ```shell
 python -m pip install \
@@ -224,25 +224,25 @@ python -m pip install \
   dbt-trino
 ```
 
-Or, better yet, just install the package(s) you need!
+あるいは、必要なパッケージだけをインストールするのも良いでしょう。
 
 <VersionBlock firstVersion="1.8">
 
-## Installing prereleases
+## プレリリースのインストール
 
-A prerelease adapter is a version released before the final, stable version. It allows users to test new features, provide feedback, and get early access to upcoming functionality &mdash; ensuring your system will be ready for the final release.
+プレリリース アダプターは、最終的な安定バージョンより前にリリースされるバージョンです。これにより、ユーザーは新機能をテストし、フィードバックを提供し、今後の機能に早期にアクセスして、システムが最終リリースに対応できるようにすることができます。
 
-Using a prerelease of an adapter has many benefits such as granting you early access to new features and improvements ahead of the stable release. As well as compatibility testing, allowing you to test the adapter in your environment to catch integration issues early, ensuring your system will be ready for the final release. 
+アダプターのプレリリースを使用すると、安定リリースに先立って新機能や改善点に早期にアクセスできるなど、多くの利点があります。互換性テストだけでなく、自分の環境でアダプターをテストして統合の問題を早期に把握し、システムが最終リリースに対応できるようにすることができます。
 
-Note that using a prerelease version before the final, stable version means the version isn't fully optimized and can result in unexpected behavior. Additionally, frequent updates and patches during the prerelease phase may require extra time and effort to maintain. Furthermore, the `--pre flag` may install compatible prerelease versions of other dependencies, which could introduce additional instability.
+最終的な安定バージョンより前にプレリリース バージョンを使用すると、バージョンが完全に最適化されていないため、予期しない動作が発生する可能性があります。さらに、プレリリース フェーズ中に頻繁に更新やパッチを適用すると、メンテナンスに余分な時間と労力が必要になる場合があります。さらに、`--pre フラグ` により、他の依存関係の互換性のあるプレリリース バージョンがインストールされる可能性があり、不安定さが増す可能性があります。
 
-To install prerelease versions of dbt Core and your adapter, use this command (replace `dbt-adapter-name` with your adapter)
+dbt Core とアダプターのプレリリース バージョンをインストールするには、このコマンドを使用します (`dbt-adapter-name` をアダプターに置き換えます)
 
 ```shell
 python3 -m pip install --pre dbt-core dbt-adapter-name
 ```
 
-For example, if you’re using Snowflake, you would use the command:
+たとえば、Snowflake を使用している場合は、次のコマンドを使用します:
 
 
 ```shell
@@ -250,7 +250,7 @@ python3 -m pip install --pre dbt-core dbt-snowflake
 
 ```
 
-We recommend you install prereleases in a [virtual Python environment](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/). For example, to install a prerelease in a `POSIX bash`/`zsh` virtual Python environment, use the following commands:
+プレリリースは [仮想 Python 環境](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) にインストールすることをお勧めします。たとえば、プレリリースを `POSIX bash`/`zsh` 仮想 Python 環境にインストールするには、次のコマンドを使用します:
 
 ```shell
 dbt --version
@@ -261,21 +261,21 @@ python3 -m pip install --pre dbt-core dbt-adapter-name
 source .venv/bin/activate
 dbt --version
 ```
-Note, this will also install any pre-releases of all dependencies.
+注意: これにより、すべての依存関係のプレリリースもインストールされます。
 
-### Activate your virtual environment 
+### 仮想環境をアクティブ化する
 
-To install or use packages within your virtual environment:
+仮想環境内でパッケージをインストールまたは使用するには:
 
-- Activate the virtual environment to add its specific Python and `pip` executables to your shell’s PATH. This ensures you use the environment’s isolated setup. 
+- 仮想環境をアクティブ化して、特定の Python および `pip` 実行可能ファイルをシェルの PATH に追加します。これにより、環境の分離されたセットアップが確実に使用されます。
 
-For more information, refer to [Create and use virtual environments](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#create-and-use-virtual-environments).
+詳細については、[仮想環境の作成と使用](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#create-and-use-virtual-environments) を参照してください。
 
-Select your operating system and run the following command to activate it:
+オペレーティング システムを選択し、次のコマンドを実行してアクティブ化します:
 
 <Expandable alt_header="Unix/macOS" >
 
-1. Activate your virtual environment: 
+1. 仮想環境をアクティブ化します:
 
 ```shell
 source .venv/bin/activate
@@ -283,7 +283,7 @@ which python
 .venv/bin/python
   
 ```
-  2. Install the prerelease using the following command:
+  2. 次のコマンドを使用してプレリリースをインストールします:
 
 
 ```shell
@@ -296,7 +296,7 @@ dbt --version
 
 <Expandable alt_header="Windows" >
 
-1. Activate your virtual environment: 
+1. 仮想環境をアクティブ化します:
 
 ```shell
 .venv\Scripts\activate
@@ -304,7 +304,7 @@ where python
 .venv\Scripts\python
 ```
 
-2. Install the prerelease using the following command:
+2. 次のコマンドを使用してプレリリースをインストールします:
 
 ```shell
 py -m pip install --pre dbt-core dbt-adapter-name

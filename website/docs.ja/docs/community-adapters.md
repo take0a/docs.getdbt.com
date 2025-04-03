@@ -1,9 +1,9 @@
 ---
-title: "Community adapters"
+title: "コミュニティアダプター"
 id: "community-adapters"
 ---
 
-Community adapters are adapter plugins contributed and maintained by members of the community. We welcome and encourage [adapter plugins contributions](/docs/contribute-core-adapters#contribute-to-a-pre-existing-adapter) from the dbt community.  Please be mindful that these [community maintainers](/docs/connect-adapters#maintainers) are intrepid volunteers who donate their time and effort — so be kind, understanding, and help out where you can!
+コミュニティ アダプターは、コミュニティのメンバーによって提供および保守されるアダプター プラグインです。dbt コミュニティからの [アダプター プラグインの提供](/docs/contribute-core-adapters#contribute-to-a-pre-existing-adapter) を歓迎し、奨励しています。これらの [コミュニティ メンテナー](/docs/connect-adapters#maintainers) は、時間と労力を惜しみなく提供してくれる勇敢なボランティアであることを心に留めておいてください。親切に、理解を示し、できる限りお手伝いください。
 
 | Data platforms (click to view setup guide) |||
 | ------------------------------------------ | -------------------------------- | ------------------------------------- |

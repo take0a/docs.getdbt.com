@@ -1,5 +1,5 @@
 ---
-title: About dbt Core setup
+title: dbt Coreのセットアップについて
 id: about-core-setup
 description: "Configuration settings for dbt Core."
 sidebar_label: "About dbt Core setup"
@@ -7,13 +7,13 @@ pagination_next: "docs/core/dbt-core-environments"
 pagination_prev: null
 ---
 
-dbt Core is an [open-source](https://github.com/dbt-labs/dbt-core) tool that enables data teams to transform data using analytics engineering best practices. You can install dbt locally in your environment and use dbt Core on the command line. It can communicate with databases through adapters.
+dbt Core は、データ チームが分析エンジニアリングのベスト プラクティスを使用してデータを変換できるようにする [オープンソース](https://github.com/dbt-labs/dbt-core) ツールです。dbt をローカル環境にインストールし、コマンド ラインで dbt Core を使用できます。アダプタを介してデータベースと通信できます。
 
- This section of our docs will guide you through various settings to get started:
+ドキュメントのこのセクションでは、開始するためのさまざまな設定について説明します。
 
-- [Connecting to a data platform](/docs/core/connect-data-platform/profiles.yml)
-- [How to run your dbt projects](/docs/running-a-dbt-project/run-your-dbt-projects)
+- [データ プラットフォームへの接続](/docs/core/connect-data-platform/profiles.yml)
+- [dbt プロジェクトの実行方法](/docs/running-a-dbt-project/run-your-dbt-projects)
 
-If you're interested in using a command line interface to [develop dbt projects in dbt Cloud](/docs/cloud/about-develop-dbt), the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) lets you run dbt commands locally. The dbt Cloud CLI is tailored for dbt Cloud's infrastructure and integrates with all its [features](/docs/cloud/about-cloud/dbt-cloud-features).
+コマンド ライン インターフェースを使用して [dbt Cloud で dbt プロジェクトを開発](/docs/cloud/about-develop-dbt) する場合は、[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) を使用して dbt コマンドをローカルで実行できます。 dbt Cloud CLI は dbt Cloud のインフラストラクチャに合わせてカスタマイズされており、そのすべての [機能](/docs/cloud/about-cloud/dbt-cloud-features) と統合されています。
 
-If you need a more detailed first-time setup guide for specific data platforms, read our [quickstart guides](https://docs.getdbt.com/guides).
+特定のデータ プラットフォームの詳細な初回セットアップ ガイドが必要な場合は、[クイックスタート ガイド](https://docs.getdbt.com/guides) をお読みください。

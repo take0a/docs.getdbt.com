@@ -1,20 +1,20 @@
 ---
-title: "Trusted adapters"
+title: "信頼できるアダプター"
 id: "trusted-adapters"
 hide_table_of_contents: true
 ---
 
 
-Trusted adapters take part in the Trusted Adapter Program, including a commitment to meet the program's requirements. They are maintained by dbt Labs, partners, and community members. Trusted adapters in dbt Cloud undergo an additional rigorous process that covers development, documentation, user experience, and maintenance requirements. We strongly recommend using them in production environments. For further details, refer to [What it means to be trusted](/guides/adapter-creation?step=8#what-it-means-to-be-trusted).
+信頼できるアダプタは、信頼できるアダプタ プログラムに参加しており、プログラムの要件を満たす義務を負っています。信頼できるアダプタは、dbt Labs、パートナー、コミュニティ メンバーによって管理されています。dbt Cloud の信頼できるアダプタは、開発、ドキュメント、ユーザー エクスペリエンス、メンテナンスの要件を網羅する厳格な追加プロセスを経ています。実稼働環境で使用することをお勧めします。詳細については、[信頼できるとは](/guides/adapter-creation?step=8#what-it-means-to-be-trusted) を参照してください。
 
-Free and open-source tools for the data professional are increasingly abundant. This is by-and-large a *good thing*, however it requires due diligence that wasn't required in a paid-license, closed-source software world. As a user, there are important questions to answer before taking a dependency on an open-source project. The trusted adapter designation is meant to streamline this process for end users.
+データ プロフェッショナル向けの無料およびオープン ソース ツールはますます豊富になっています。これは概して「良いこと」ですが、有料ライセンスのクローズド ソース ソフトウェアの世界では必要とされなかったデュー デリジェンスが必要です。ユーザーとして、オープン ソース プロジェクトに依存する前に答えるべき重要な質問があります。信頼できるアダプターの指定は、エンド ユーザーのためにこのプロセスを合理化することを目的としています。
 
-### Trusted adapter specifications
+### 信頼できるアダプタの仕様
 
-Refer to the [Build, test, document, and promote adapters](/guides/adapter-creation) guide for more information, particularly if you are an adapter maintainer considering having your adapter be added to the trusted list.
+詳細については、[アダプタの構築、テスト、ドキュメント化、およびプロモーション](/guides/adapter-creation)ガイドを参照してください。特に、アダプタを信頼済みリストに追加することを検討しているアダプタのメンテナーの場合は、このガイドが参考になります。
 
 
-### Trusted adapters
+### 信頼できるアダプター
 
 import AdaptersTrusted from '/snippets/_adapters-trusted.md';
 

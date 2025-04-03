@@ -1,29 +1,29 @@
 ---
-title: How we style our dbt projects
+title: dbt プロジェクトのスタイル
 id: 0-how-we-style-our-dbt-projects
 ---
 
-## Why does style matter?
+## スタイルはなぜ重要なのでしょうか？
 
-Style might seem like a trivial, surface-level issue, but it's a deeply material aspect of a well-built project. A consistent, clear style enhances readability and makes your project easier to understand and maintain. Highly readable code helps build clear mental models making it easier to debug and extend your project. It's not just a favor to yourself, though; equally importantly, it makes it less effort for others to understand and contribute to your project, which is essential for peer collaboration, open-source work, and onboarding new team members. [A style guide lets you focus on what matters](https://mtlynch.io/human-code-reviews-1/#settle-style-arguments-with-a-style-guide), the logic and impact of your project, rather than the superficialities of how it's written. This brings harmony and pace to your team's work, and makes reviews more enjoyable and valuable.
+スタイルは些細で表面的な問題のように思えるかもしれませんが、よく構築されたプロジェクトにとって非常に重要な側面です。一貫性のある明確なスタイルは読みやすさを向上させ、プロジェクトを理解して維持しやすくします。読みやすいコードは明確なメンタルモデルの構築に役立ち、プロジェクトのデバッグと拡張が容易になります。ただし、これは自分にとって有利なだけではありません。同様に重要なのは、他の人がプロジェクトを理解して貢献する労力が減ることです。これは、ピアコラボレーション、オープンソース作業、新しいチームメンバーのオンボーディングに不可欠です。[スタイルガイドを使用すると、重要なことに集中できます](https://mtlynch.io/human-code-reviews-1/#settle-style-arguments-with-a-style-guide)、つまりプロジェクトのロジックと影響に焦点を当てることができ、書き方の表面的な部分には焦点を当てる必要はありません。これにより、チームの作業に調和とペースがもたらされ、レビューがより楽しく価値のあるものになります。
 
-## What's important about style?
+## スタイルで重要なことは何ですか？
 
-There are two crucial tenets of code style:
+コード スタイルには、2 つの重要な原則があります。
 
-- Clarity
-- Consistency
+- 明確さ
+- 一貫性
 
-Style your code in such a way that you can quickly read and understand it. It's also important to consider code review and git diffs. If you're making a change to a model, you want reviewers to see just the material changes you're making clearly.
+コードをすばやく読み、理解できるようにスタイル設定します。コード レビューと Git の差分を考慮することも重要です。モデルに変更を加える場合は、レビュー担当者に、変更内容が明確にわかるようにする必要があります。
 
-Once you've established a clear style, stay consistent. This is the most important thing. Everybody on your team needs to have a unified style, which is why having a style guide is so crucial. If you're writing a model, you should be able to look at other models in the project that your teammates have written and read in the same style. If you're writing a macro or a test, you should see the same style as your models. Consistency is key.
+明確なスタイルを確立したら、一貫性を維持します。これが最も重要なことです。チームの全員が統一されたスタイルを持つ必要があるため、スタイル ガイドが非常に重要です。モデルを作成する場合は、プロジェクト内のチーム メンバーが作成した他のモデルを見て、同じスタイルで読むことができる必要があります。マクロまたはテストを作成する場合は、モデルと同じスタイルを確認する必要があります。一貫性が重要です。
 
-## How should I style?
+## どのようにスタイリングすればいいでしょうか？
 
-You should style the project in a way you and your teammates or collaborators agree on. The most important thing is that you have a style guide and stick to it. This guide is just a suggestion to get you started and to give you a sense of what a style guide might look like. It covers various areas you may want to consider, with suggested rules. It emphasizes lots of whitespace, clarity, clear naming, and comments.
+プロジェクトのスタイルは、あなたとチームメイトや共同作業者が合意した方法で設定する必要があります。最も重要なことは、スタイル ガイドを用意し、それに従うことです。このガイドは、開始するための提案であり、スタイル ガイドがどのようなものになるかを知るためのものです。このガイドでは、考慮すべきさまざまな領域を、推奨されるルールとともに取り上げています。多くの空白、明瞭性、明確な命名、コメントを強調しています。
 
-We believe one of the strengths of SQL is that it reads like English, so we lean into that declarative nature throughout our projects. Even within dbt Labs, though, there are differing opinions on how to style, even a small but passionate contingent of leading comma enthusiasts! Again, the important thing is not to follow this style guide; it's to make _your_ style guide and follow it. Lastly, be sure to include rules, tools, _and_ examples in your style guide to make it as easy as possible for your team to follow.
+SQL の強みの 1 つは英語のように読めることだと考えているため、プロジェクト全体を通じてその宣言的な性質を重視しています。ただし、dbt Labs 内でも、スタイルの設定方法については意見が分かれており、少数ながら熱心なコンマ愛好家もいます。繰り返しますが、重要なのはこのスタイル ガイドに従うことではなく、_自分の_ スタイル ガイドを作成してそれに従うことです。最後に、ルール、ツール、_および_ 例をスタイル ガイドに必ず含めて、チームができるだけ簡単に従えるようにしてください。
 
-## Automation
+## オートメーション
 
-Use formatters and linters as much as possible. We're all human, we make mistakes. Not only that, but we all have different preferences and opinions while writing code. Automation is a great way to ensure that your project is styled consistently and correctly and that people can write in a way that's quick and comfortable for them, while still getting perfectly consistent output.
+フォーマッタとリンタをできるだけ多く使用してください。私たちはみな人間であり、間違いを犯します。それだけでなく、コードを書くときには、好みや意見がそれぞれ異なります。自動化は、プロジェクトのスタイルが一貫して正しく設定され、人々が迅速かつ快適にコードを書くことができ、しかも完全に一貫した出力が得られるようにするための優れた方法です。

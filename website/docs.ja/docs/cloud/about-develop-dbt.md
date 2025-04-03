@@ -1,14 +1,14 @@
 ---
-title: About developing in dbt
+title: dbt での開発について
 id: about-develop-dbt
 description: "Learn how to develop your dbt projects using dbt Cloud."
 sidebar_label: "About developing in dbt" 
 pagination_next: "docs/cloud/about-cloud-develop-defer"
 hide_table_of_contents: true
-intro_text: "Develop dbt projects using dbt Cloud, a faster and more reliable way to deploy dbt and manage your project in a single, web-based UI."
+intro_text: "dbt Cloud を使用して dbt プロジェクトを開発します。これは、単一の Web ベースの UI で dbt を展開し、プロジェクトを管理するための、より高速で信頼性の高い方法です。"
 ---
 
-You can develop in your browser using a dbt Cloud-powered command line interface (CLI), an integrated development environment (IDE), or Visual editor.
+dbt クラウドベースのコマンド ライン インターフェース (CLI)、統合開発環境 (IDE)、またはビジュアル エディターを使用して、ブラウザーで開発できます。
 
 <div className="grid--3-col" >
 
@@ -32,4 +32,4 @@ You can develop in your browser using a dbt Cloud-powered command line interface
 
 </div><br />
 
-To get started, you'll need a [dbt Cloud](https://www.getdbt.com/signup) account and a developer seat. For a more comprehensive guide about developing in dbt, refer to the [quickstart guides](/docs/get-started-dbt).
+開始するには、[dbt Cloud](https://www.getdbt.com/signup) アカウントと開発者シートが必要です。dbt での開発に関するより包括的なガイドについては、[クイックスタート ガイド](/docs/get-started-dbt) を参照してください。

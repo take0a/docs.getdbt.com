@@ -1,70 +1,70 @@
 ---
-title: Deciding how to structure your dbt Mesh
+title: dbt Mesh の構造を決定する
 description: Getting started with dbt Mesh patterns
 hoverSnippet: Learn how to get started with dbt Mesh
 ---
-## Exploring mesh patterns
+## メッシュパターンの探索
 
-When adopting a multi-project architecture, where do you draw the lines between projects?
+マルチプロジェクト アーキテクチャを採用する場合、プロジェクト間の境界線はどこに引くべきでしょうか?
 
-How should you organize data workflows in a world where instead of having a single dbt DAG, you have multiple projects speaking to each other, each comprised of their own DAG?
+単一の dbt DAG ではなく、複数のプロジェクトが相互に通信し、それぞれが独自の DAG で構成される世界では、データ ワークフローをどのように編成すべきでしょうか?
 
-Adopting the dbt Mesh pattern is not a one-size-fits-all process. In fact, it's the opposite! It's about customizing your project structure to fit _your_ team and _your_ data. Now you can mold your organizational knowledge graph to your organizational people graph, bringing people and data closer together rather than compromising one for the other.
+dbt メッシュ パターンの採用は、万能のプロセスではありません。実際、その逆です。プロジェクト構造をカスタマイズして、チームとデータに適合させることです。これで、組織のナレッジ グラフを組織の人グラフに合わせて形作り、人とデータを互いに妥協するのではなく、近づけることができます。
 
-While there is not a single best way to implement this pattern, there are some common decision points that will be helpful for you to consider.
+このパターンを実装する最善の方法は 1 つではありませんが、検討するのに役立つ一般的な決定ポイントがいくつかあります。
 
-At a high level, you’ll need to decide:
+大まかに言うと、次のことを決定する必要があります。
 
-- Where to draw the lines between your dbt Projects -- i.e. how do you determine where to split your DAG and which models go in which project?
-- How to manage your code -- do you want multiple dbt Projects living in the same repository (mono-repo) or do you want to have multiple repos with one repo per project?
+- dbt プロジェクト間の境界線をどこに引くか (つまり、DAG をどこで分割し、どのモデルをどのプロジェクトに配置するかをどのように決定するか)。
+- コードの管理方法 - 複数の dbt プロジェクトを同じリポジトリ (モノリポジトリ) に置きますか、それともプロジェクトごとに 1 つのリポジトリを持つ複数のリポジトリを用意しますか?
 
-## Define your project interfaces by splitting your DAG
+## DAG を分割してプロジェクトインターフェースを定義する
 
-The first (and perhaps most difficult!) decision when migrating to a multi-project architecture is deciding where to draw the line in your DAG to define the interfaces between your projects. Let's explore some language for discussing the design of these patterns.
+マルチプロジェクト アーキテクチャに移行する際の最初の (そしておそらく最も難しい!) 決定は、プロジェクト間のインターフェイスを定義するために DAG 内でどこに線を引くかを決めることです。これらのパターンの設計について説明するための用語をいくつか見てみましょう。
 
-### Vertical splits
+### 垂直分割
 
-Vertical splits separate out layers of transformation in DAG order. Let's look at some examples.
+垂直分割は、DAG の順序で変換レイヤーを分離します。例をいくつか見てみましょう。
 
-- **Splitting up staging and mart layers** to create a more tightly-controlled, shared set of components that other projects build on but can't edit.
-- **Isolating earlier models for security and governance requirements** to separate out and mask PII data so that downstream consumers can't access it is a common use case for a vertical split.
-- **Protecting complex or expensive data** to isolate large or complex models that are expensive to run so that they are safe from accidental selection, independently deployable, and easier to debug when they have issues.
+- **ステージング レイヤーとマート レイヤーを分割** して、他のプロジェクトが構築するが編集できない、より厳密に制御された共有コンポーネント セットを作成します。
+- **セキュリティとガバナンスの要件に合わせて以前のモデルを分離** して、PII データを分離してマスクし、下流の消費者がアクセスできないようにすることは、垂直分割の一般的な使用例です。
+- **複雑または高価なデータを保護する** 実行コストが高い大規模または複雑なモデルを分離して、誤って選択されることを防ぎ、独立してデプロイでき、問題が発生した場合にデバッグしやすくします。
 
 <Lightbox src="/img/best-practices/how-we-mesh/vertical_split.png" title="A simplified dbt DAG with a dotted line representing a vertical split." />
 
-### Horizontal splits
+### 水平分割
 
-Horizontal splits separate your DAG based on source or domain. These splits are often based around the shape and size of the data and how it's used. Let's consider some possibilities for horizontal splitting.
+水平分割は、ソースまたはドメインに基づいて DAG を分割します。これらの分割は、多くの場合、データの形状とサイズ、およびその使用方法に基づいて行われます。水平分割の可能性をいくつか考えてみましょう。
 
-- **Team consumption patterns.** For example, splitting out the marketing team's data flow into a separate project.
-- **Data from different sources.** For example, clickstream event data and transactional ecommerce data may need to be modeled independently of each other.
-- **Team workflows.** For example, if two embedded groups operate at different paces, you may want to split the projects up so they can move independently.
+- **チームの消費パターン。** たとえば、マーケティング チームのデータ フローを別のプロジェクトに分割します。
+- **異なるソースからのデータ。** たとえば、クリックストリーム イベント データとトランザクション e コマース データは、互いに独立してモデル化する必要がある場合があります。
+- **チームのワークフロー。** たとえば、2 つの埋め込みグループが異なるペースで動作している場合、プロジェクトを分割して独立して移動できるようにする必要があります。
 
 
 <Lightbox src="/img/best-practices/how-we-mesh/horizontal_split.png" title="A simplified dbt DAG with a dotted line representing a horizontal split." />
 
-### Combining these strategies
+### これらの戦略を組み合わせる
 
-- **These are not either/or techniques**. You should consider both types of splits, and combine them in any way that makes sense for your organization.
-- **Pick one type of split and focus on that first**. If you have a hub-and-spoke team topology for example, handle breaking out the central platform project before you split the remainder into domains. Then if you need to break those domains up horizontally you can focus on that after the fact.
-- **DRY applies to underlying data, not just code.** Regardless of your strategy, you should not be sourcing the same rows and columns into multiple nodes. When working within a mesh pattern it becomes increasingly important that we don't duplicate logic or data.
+- **これらはどちらか一方だけの手法ではありません**。両方のタイプの分割を検討し、組織にとって意味のある方法で組み合わせる必要があります。
+- **まずは 1 つのタイプの分割を選択し、それに集中します**。たとえば、ハブ アンド スポーク チーム トポロジがある場合は、残りの部分をドメインに分割する前に、中央プラットフォーム プロジェクトを分割します。その後、それらのドメインを水平に分割する必要がある場合は、事後にそれに集中できます。
+- **DRY は、コードだけでなく、基礎となるデータにも適用されます**。戦略に関係なく、同じ行と列を複数のノードにソースしないでください。メッシュ パターン内で作業する場合、ロジックやデータを重複させないことがますます重要になります。
 
 
 <Lightbox src="/img/best-practices/how-we-mesh/combined_splits.png" title="A simplified dbt DAG with two dotted lines representing both a vertical and horizontal split." />
 
 
-## Determine your git strategy
+## Git 戦略を決定する
 
-A multi-project architecture can exist in a single repo (monorepo) or as multiple projects, with each one being in their own repository (multi-repo).
+マルチプロジェクト アーキテクチャは、単一のリポジトリ (モノリポジトリ) に存在することも、複数のプロジェクトとして存在して各プロジェクトが独自のリポジトリに存在することもできます (マルチリポジトリ)。
 
-- If you're a **smaller team** looking primarily to speed up and simplify development, a **monorepo** is likely the right choice, but can become unwieldy as the number of projects, models and contributors grow.
-- If you’re a **larger team with multiple groups**, and need to decouple projects for security and enablement of different development styles and rhythms, a **multi-repo setup** is your best bet.
+- 主に開発のスピードアップと簡素化を目指している **小規模チーム** の場合は、**モノリポジトリ** が適切な選択である可能性が高いですが、プロジェクト、モデル、貢献者の数が増えると扱いにくくなる可能性があります。
+- **複数のグループを持つ大規模なチーム** で、セキュリティとさまざまな開発スタイルやリズムの有効化のためにプロジェクトを分離する必要がある場合は、**マルチリポジトリ セットアップ** が最適です。
 
-## Projects, splits, and teams
+## プロジェクト、分割、チーム
 
-Since the launch of dbt Mesh, the most common pattern we've seen is one where projects are 1:1 aligned to teams, and each project has its own codebase in its own repository. This isn’t a hard-and-fast rule: Some organizations want multiple teams working out of a single repo, and some teams own multiple domains that feel awkward to keep combined.
+dbt Mesh のリリース以来、私たちが目にしてきた最も一般的なパターンは、プロジェクトがチームに 1:1 で対応し、各プロジェクトが独自のリポジトリに独自のコードベースを持つというものです。これは絶対的なルールではありません。組織によっては、複数のチームが単一のリポジトリで作業することを望んでいる場合もあれば、複数のドメインを所有していて、それらを結合しておくのが面倒だと感じる場合もあります。
 
-Users may need to contribute models across multiple projects and this is fine. There will be some friction doing this, versus a single repo, but this is _useful_ friction, especially if upstreaming a change from a “spoke” to a “hub.” This should be treated like making an API change, one that the other team will be living with for some time to come. You should be concerned if your teammates find they need to make a coordinated change across multiple projects very frequently (every week), or as a key prerequisite for ~20%+ of their work.
+ユーザーは複数のプロジェクトにまたがってモデルを提供する必要があるかもしれませんが、これは問題ありません。単一のリポジトリの場合と比べて、これを行うと多少の摩擦が生じますが、これは _有用な_ 摩擦であり、特に「スポーク」から「ハブ」への変更をアップストリームする場合はそうです。これは、他のチームが今後しばらく使用する API 変更と同様に扱う必要があります。チームメイトが複数のプロジェクト間で調整された変更を非常に頻繁に (毎週) 行う必要がある場合、または作業の約 20% 以上の重要な前提条件として行う必要がある場合は、心配する必要があります。
 
 ### Cycle detection
 
@@ -75,9 +75,10 @@ import CycleDetection from '/snippets/_mesh-cycle-detection.md';
 
 ### Tips and tricks
 
-The [implementation](/best-practices/how-we-mesh/mesh-4-implementation) page provides more in-depth examples of how to split a monolithic project into multiple projects. Here are some tips to get you started when considering the splitting methods listed above on your own projects:
+[実装](/best-practices/how-we-mesh/mesh-4-implementation) ページには、モノリシック プロジェクトを複数のプロジェクトに分割する方法の詳細な例が示されています。上記の分割方法を自分のプロジェクトで検討する際のヒントをいくつか紹介します。
 
-1. Start by drawing a diagram of your teams doing data work. Map each team to a single dbt project. If you already have an existing monolithic project, and you’re onboarding _net-new teams,_ this could be as simple as declaring the existing project as your “hub” and creating new “spoke” sandbox projects for each team.
-2. Split off common foundations when you know that multiple downstream teams will require the same data source. Those could be upstreamed into a centralized hub or split off into a separate foundational project. need some splits to facilitate other splits, for example, source staging models in A that are used in both B and C (lack of project cycles).
-3. Split again to introduce intentional friction and encapsulate a particular set of models (for example, for external export).
-4. Recombine if you have “hot path” subsets of the DAG that you need to deploy with low latency because it powers in-app reporting or operational analytics. It might make sense to have a different dedicated team own these data models (see principle 1), similar to how software services with significantly different performance characteristics often warrant dedicated infrastructure, architecture, and staffing.
+1. まず、データ作業を行うチームの図を描きます。各チームを 1 つの dbt プロジェクトにマッピングします。既存のモノリシック プロジェクトがあり、_まったく新しいチーム_ をオンボーディングしている場合は、既存のプロジェクトを「ハブ」として宣言し、各チームに新しい「スポーク」サンドボックス プロジェクトを作成するだけで済みます。
+
+2. 複数の下流チームが同じデータ ソースを必要とすることがわかっている場合は、共通の基盤を分割します。これらは、中央ハブに上流化するか、別の基盤プロジェクトに分割できます。他の分割を容易にするためにいくつかの分割が必要です。たとえば、A のソース ステージング モデルを B と C の両方で使用します (プロジェクト サイクルがない)。
+3. 再度分割して意図的に摩擦を導入し、特定のモデル セットをカプセル化します (たとえば、外部エクスポート用)。
+4. アプリ内レポートや運用分析を強化するため、低レイテンシで展開する必要がある DAG の「ホット パス」サブセットがある場合は、再結合します。パフォーマンス特性が大きく異なるソフトウェア サービスでは、専用のインフラストラクチャ、アーキテクチャ、および人員が必要になることが多いのと同様に、これらのデータ モデルを別の専用チームに所有させることは理にかなっています (原則 1 を参照)。

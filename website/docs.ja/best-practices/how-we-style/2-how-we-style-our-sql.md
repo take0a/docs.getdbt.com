@@ -1,46 +1,46 @@
 ---
-title: How we style our SQL
+title: SQL のスタイル設定方法
 id: 2-how-we-style-our-sql
 ---
 
 ## Basics
 
-- ☁️ Use [SQLFluff](https://sqlfluff.com/) to maintain these style rules automatically.
-  - Customize `.sqlfluff` configuration files to your needs.
-  - Refer to our [SQLFluff config file](https://github.com/dbt-labs/jaffle-shop-template/blob/main/.sqlfluff) for the rules we use in our own projects. 
-  - Exclude files and directories by using a standard `.sqlfluffignore` file. Learn more about the syntax in the [.sqlfluffignore syntax docs](https://docs.sqlfluff.com/en/stable/configuration/index.html).
-    - Excluding unnecessary folders and files (such as `target/`, `dbt_packages/`, and `macros/`) can speed up linting, improve run times, and help you avoid irrelevant logs.
-- 👻 Use Jinja comments (`{# #}`) for comments that should not be included in the compiled SQL.
-- ⏭️ Use trailing commas.
-- 4️⃣ Indents should be four spaces.
-- 📏 Lines of SQL should be no longer than 80 characters.
-- ⬇️ Field names, keywords, and function names should all be lowercase.
-- 🫧 The `as` keyword should be used explicitly when aliasing a field or table.
+- ☁️ これらのスタイル ルールを自動的に維持するには、[SQLFluff](https://sqlfluff.com/) を使用します。
+  - `.sqlfluff` 構成ファイルをニーズに合わせてカスタマイズします。
+  - 私たちのプロジェクトで使用しているルールについては、[SQLFluff 構成ファイル](https://github.com/dbt-labs/jaffle-shop-template/blob/main/.sqlfluff)を参照してください。
+  - 標準の `.sqlfluffignore` ファイルを使用してファイルとディレクトリを除外します。構文の詳細については、[.sqlfluffignore 構文ドキュメント](https://docs.sqlfluff.com/en/stable/configuration/index.html) を参照してください。
+    - 不要なフォルダーとファイル (`target/`、`dbt_packages/`、`macros/` など) を除外すると、リンティングが高速化され、実行時間が短縮され、無関係なログを回避するのに役立ちます。
+- 👻 コンパイルされた SQL に含めるべきではないコメントには、Jinja コメント (`{# #}`) を使用します。
+- ⏭️ 末尾にカンマを使用します。
+- 4️⃣ インデントは 4 スペースにする必要があります。
+- 📏 SQL 行の長さは 80 文字以下にする必要があります。
+- ⬇️ フィールド名、キーワード、関数名はすべて小文字にする必要があります。
+- 🫧 フィールドまたはテーブルにエイリアスを付ける場合は、`as` キーワードを明示的に使用する必要があります。
 
 :::info
-☁️ dbt Cloud users can use the built-in [SQLFluff Cloud IDE integration](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format) to automatically lint and format their SQL. The default style sheet is based on dbt Labs style as outlined in this guide, but you can customize this to fit your needs. No need to setup any external tools, just hit `Lint`! Also, the more opinionated [sqlfmt](http://sqlfmt.com/) formatter is also available if you prefer that style.
+☁️ dbt Cloud ユーザーは、組み込みの [SQLFluff Cloud IDE 統合](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format) を使用して、SQL を自動的に lint およびフォーマットできます。デフォルトのスタイル シートは、このガイドで説明されている dbt Labs スタイルに基づいていますが、ニーズに合わせてカスタマイズできます。外部ツールを設定する必要はなく、`Lint` を押すだけです。また、そのスタイルが好みであれば、より独自の [sqlfmt](http://sqlfmt.com/) フォーマッタも利用できます。
 :::
 
-## Fields, aggregations, and grouping
+## フィールド、集計、グループ化
 
-- 🔙 Fields should be stated before aggregates and window functions.
-- 🤏🏻 Aggregations should be executed as early as possible (on the smallest data set possible) before joining to another table to improve performance.
-- 🔢 Ordering and grouping by a number (eg. group by 1, 2) is preferred over listing the column names (see [this classic rant](https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1) for why). Note that if you are grouping by more than a few columns, it may be worth revisiting your model design.
+- 🔙 フィールドは、集計関数やウィンドウ関数の前に指定する必要があります。
+- 🤏🏻 パフォーマンスを向上させるには、別のテーブルに結合する前に、できるだけ早く (可能な限り小さいデータ セットで) 集計を実行する必要があります。
+- 🔢 番号による順序付けとグループ化 (例: group by 1, 2) は、列名をリストするよりも優先されます (理由については、[この古典的な暴言](https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1) を参照してください)。複数の列でグループ化する場合は、モデル設計を再検討する価値があることに注意してください。
 
-## Joins
+## 結合
 
-- 👭🏻 Prefer `union all` to `union` unless you explicitly want to remove duplicates.
-- 👭🏻 If joining two or more tables, _always_ prefix your column names with the table name. If only selecting from one table, prefixes are not needed.
-- 👭🏻 Be explicit about your join type (i.e. write `inner join` instead of `join`).
-- 🥸 Avoid table aliases in join conditions (especially initialisms) — it's harder to understand what the table called "c" is as compared to "customers".
-- ➡️ Always move left to right to make joins easy to reason about - `right joins` often indicate that you should change which table you select `from` and which one you `join` to.
+- 👭🏻 重複を明示的に削除する場合を除き、`union` よりも `union all` を使用することをお勧めします。
+- 👭🏻 2 つ以上のテーブルを結合する場合は、必ず列名の前にテーブル名を付けます。1 つのテーブルからのみ選択する場合は、プレフィックスは必要ありません。
+- 👭🏻 結合タイプを明示的に指定します (つまり、`join` ではなく `inner join` と記述します)。
+- 🥸 結合条件ではテーブル エイリアス (特に頭字語) を使用しないでください。"customers" と比較すると、"c" というテーブルが何であるかを理解するのが難しくなります。
+- ➡️ 結合がわかりやすくなるように、常に左から右へ移動します。`右結合` は、多くの場合、`選択元` のテーブルと `結合` 先のテーブルを変更する必要があることを示します。
 
-## 'Import' CTEs
+## 「インポート」CTE
 
-- 🔝 All `{{ ref('...') }}` statements should be placed in CTEs at the top of the file.
-- 📦 'Import' CTEs should be named after the table they are referencing.
-- 🤏🏻 Limit the data scanned by CTEs as much as possible. Where possible, only select the columns you're actually using and use `where` clauses to filter out unneeded data.
-- For example:
+- 🔝 すべての `{{ ref('...') }}` ステートメントは、ファイルの先頭の CTE に配置する必要があります。
+- 📦 「インポート」CTE は、参照先のテーブルにちなんで命名する必要があります。
+- 🤏🏻 CTE によってスキャンされるデータを可能な限り制限します。可能な場合は、実際に使用する列のみを選択し、`where` 句を使用して不要なデータを除外します。
+- 例えば：
 
 ```sql
 with
@@ -60,18 +60,18 @@ orders as (
 )
 ```
 
-## 'Functional' CTEs
+## 「ファンクショナル」CTE
 
-- ☝🏻 Where performance permits, CTEs should perform a single, logical unit of work.
-- 📖 CTE names should be as verbose as needed to convey what they do e.g. `events_joined_to_users` instead of `user_events` (this could be a good model name, but does not describe a specific function or transformation).
-- 🌉 CTEs that are duplicated across models should be pulled out into their own intermediate models. Look out for chunks of repeated logic that should be refactored into their own model.
-- 🔚 The last line of a model should be a `select *` from your final output CTE. This makes it easy to materialize and audit the output from different steps in the model as you're developing it. You just change the CTE referenced in the `select` statement to see the output from that step.
+- ☝🏻 パフォーマンスが許す限り、CTE は単一の論理的な作業単位を実行する必要があります。
+- 📖 CTE 名は、その機能を伝えるために必要なだけ冗長にする必要があります。たとえば、`user_events` ではなく `events_joined_to_users` です (これは適切なモデル名ですが、特定の機能や変換を説明するものではありません)。
+- 🌉 モデル間で重複している CTE は、独自の中間モデルに取り出す必要があります。独自のモデルにリファクタリングする必要がある、繰り返しロジックのチャンクに注意してください。
+- 🔚 モデルの最後の行は、最終出力 CTE からの `select *` である必要があります。これにより、モデルの開発中に、モデル内のさまざまなステップからの出力を簡単に実現および監査できます。そのステップからの出力を表示するには、`select` ステートメントで参照されている CTE を変更するだけです。
 
-## Model configuration
+## モデル構成
 
-- 📝 Model-specific attributes (like sort/dist keys) should be specified in the model.
-- 📂 If a particular configuration applies to all models in a directory, it should be specified in the `dbt_project.yml` file.
-- 👓 In-model configurations should be specified like this for maximum readability:
+- 📝 モデル固有の属性 (sort/dist キーなど) はモデル内で指定する必要があります。
+- 📂 特定の構成がディレクトリ内のすべてのモデルに適用される場合、`dbt_project.yml` ファイルで指定する必要があります。
+- 👓 読みやすさを最大限に高めるには、モデル内の構成を次のように指定する必要があります:
 
 ```sql
 {{

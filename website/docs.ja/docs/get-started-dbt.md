@@ -1,24 +1,24 @@
 ---
-title: "dbt Quickstarts"
+title: "dbt クイックスタート"
 id: get-started-dbt
 hide_table_of_contents: true
 pagination_next: null
 pagination_prev: null
 ---
 
-Begin your dbt journey by trying one of our quickstarts, which provides a step-by-step guide to help you set up [dbt Cloud](#dbt-cloud) or [dbt Core](#dbt-core) with a [variety of data platforms](/docs/cloud/connect-data-platform/about-connections).
+クイックスタートのいずれかを試して、dbt の旅を始めましょう。クイックスタートでは、[さまざまなデータ プラットフォーム](/docs/cloud/connect-data-platform/about-connections)を使用して [dbt Cloud](#dbt-cloud) または [dbt Core](#dbt-core) を設定するためのステップ バイ ステップ ガイドが提供されます。
 
 ## dbt Cloud
 
-dbt Cloud is a scalable solution that enables you to develop, test, deploy, and explore data products using a single, fully managed software service. It enables teams with diverse skills to build reliable data products at any scale, with capabilities including:
+dbt Cloud は、単一の完全に管理されたソフトウェア サービスを使用してデータ製品を開発、テスト、展開、および調査できるスケーラブルなソリューションです。さまざまなスキルを持つチームが、あらゆる規模で信頼性の高いデータ製品を構築できるようにし、次のような機能を提供します。
 
-- Development experiences tailored to multiple personas (in-browser [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) or locally with the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation))
-- Out-of-the-box [CI/CD workflows](/docs/deploy/ci-jobs)
-- The [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) for consistent metrics that can be delivered to any endpoint
-- Domain ownership of data with multi-project [dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro) setups
-- [dbt Explorer](/docs/collaborate/explore-projects) for collaborative data discovery and understanding
+- 複数のペルソナに合わせた開発エクスペリエンス (ブラウザ内の [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) またはローカルの [dbt Cloud CLI](/docs/cloud/cloud-cli-installation))
+- すぐに使用できる [CI/CD ワークフロー](/docs/deploy/ci-jobs)
+- あらゆるエンドポイントに配信できる一貫したメトリックのための [dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl)
+- マルチプロジェクトの [dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro) セットアップによるデータのドメイン所有権
+- 共同でデータの検出と理解を行う [dbt Explorer](/docs/collaborate/explore-projects)
 
-Learn more about [dbt Cloud features](/docs/cloud/about-cloud/dbt-cloud-features) and [start your free trial](https://www.getdbt.com/signup/) today.
+[dbt Cloud](/docs/cloud/about-cloud/dbt-cloud-features) の詳細機能を確認し、[無料トライアルを開始](https://www.getdbt.com/signup/)して今すぐご利用ください。
 
 <div className="grid--3-col">
 
@@ -80,7 +80,7 @@ Learn more about [dbt Cloud features](/docs/cloud/about-cloud/dbt-cloud-feature
 
 ## dbt Core
 
-[dbt Core](/docs/core/about-core-setup) is a command-line [open-source tool](https://github.com/dbt-labs/dbt-core) that enables data practitioners to transform data using analytics engineering best practices. It suits individuals and small technical teams who prefer manual setup and customization, supports community adapters, and open-source standards.
+[dbt Core](/docs/core/about-core-setup) は、データ実践者が分析エンジニアリングのベスト プラクティスを使用してデータを変換できるようにするコマンド ラインの [オープン ソース ツール](https://github.com/dbt-labs/dbt-core) です。手動のセットアップとカスタマイズを好む個人や小規模の技術チームに適しており、コミュニティ アダプターとオープン ソース標準をサポートしています。
 
 <div className="grid--3-col">
 
@@ -97,12 +97,12 @@ Learn more about [dbt Cloud features](/docs/cloud/about-cloud/dbt-cloud-feature
     icon="duckdb"/>
 </div>
 
-## Related docs
+## 関連ドキュメント
 
-Expand your dbt knowledge and expertise with these additional resources:
+以下の追加リソースを利用して、dbt の知識と専門知識を広げてください:
 
-- [Join the monthly demos](https://www.getdbt.com/resources/webinars/dbt-cloud-demos-with-experts) to see dbt Cloud in action and ask questions.
-- [dbt Cloud AWS marketplace](https://aws.amazon.com/marketplace/pp/prodview-tjpcf42nbnhko) contains information on how to deploy dbt Cloud on AWS, user reviews, and more.
-- [Best practices](https://docs.getdbt.com/best-practices) contains information on how dbt Labs approaches building projects through our current viewpoints on structure, style, and setup.
-- [dbt Learn](https://learn.getdbt.com) offers free online courses that cover dbt fundamentals, advanced topics, and more.
-- [Join the dbt Community](https://www.getdbt.com/community/join-the-community) to learn how other data practitioners globally are using dbt, share your own experiences, and get help with your dbt projects.
+- [毎月のデモに参加](https://www.getdbt.com/resources/webinars/dbt-cloud-demos-with-experts) して、dbt Cloud の動作を確認し、質問してください。
+- [dbt Cloud AWS マーケットプレイス](https://aws.amazon.com/marketplace/pp/prodview-tjpcf42nbnhko) には、AWS に dbt Cloud をデプロイする方法、ユーザー レビューなどに関する情報が含まれています。
+- [ベスト プラクティス](https://docs.getdbt.com/best-practices) には、構造、スタイル、セットアップに関する現在の視点から、dbt Labs がプロジェクトの構築にどのように取り組んでいるかに関する情報が含まれています。
+- [dbt Learn](https://learn.getdbt.com) には、dbt の基礎、高度なトピックなどをカバーする無料のオンライン コースが用意されています。
+- [dbt コミュニティに参加](https://www.getdbt.com/community/join-the-community)して、世界中の他のデータ実務者が dbt をどのように使用しているかを知り、自分の経験を共有し、dbt プロジェクトに関する支援を受けましょう。

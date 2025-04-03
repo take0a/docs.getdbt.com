@@ -1,17 +1,17 @@
 ---
-title: "dbt Core environments"
+title: "dbt Core 環境"
 id: "dbt-core-environments"
 pagination_next: "docs/running-a-dbt-project/run-your-dbt-projects"
 ---
 
-dbt makes it easy to maintain separate production and development environments through the use of [targets](/reference/dbt-jinja-functions/target.md) within a [profile](/docs/core/connect-data-platform/profiles.yml). A typical profile, when using dbt locally (for example, running from your command line), will have a target named `dev` and have this set as the default. This means that while making changes, your objects will be built in your _development_ target without affecting production queries made by your end users. Once you are confident in your changes, you can deploy the code to _production_, by running your dbt project with a _prod_ target.
+dbt では、[profile](/docs/core/connect-data-platform/profiles.yml) 内の [targets](/reference/dbt-jinja-functions/target.md) を使用することで、本番環境と開発環境を別々に維持することが容易になります。dbt をローカルで使用する場合 (たとえば、コマンド ラインから実行する場合)、一般的なプロファイルには `dev` という名前のターゲットがあり、これがデフォルトとして設定されます。つまり、変更を加えると、オブジェクトは _development_ ターゲットに構築され、エンド ユーザーが行う本番クエリには影響しません。変更に自信が持てたら、_prod_ ターゲットで dbt プロジェクトを実行して、コードを _production_ にデプロイできます。
 
-:::info Running dbt in production
+:::info dbt を本番環境で実行する
 
-You can learn more about different ways to run dbt in production in [this article](/docs/deploy/deployments).
+[この記事](/docs/deploy/deployments) では、本番環境で dbt を実行するさまざまな方法について詳しく説明しています。
 
 :::
 
-Targets offer the flexibility to decide how to implement your separate environments – whether you want to use separate schemas, databases, or entirely different clusters altogether! We recommend using _different schemas within one database_ to separate your environments. This is the easiest to set up and is the most cost-effective solution in a modern cloud-based data stack.
+ターゲットは、個別の環境を実装する方法を柔軟に決定できます。個別のスキーマ、データベース、またはまったく異なるクラスターを使用するかどうかに関係なく、環境を分離できます。環境を分離するには、_1 つのデータベース内で異なるスキーマ_を使用することをお勧めします。これは、設定が最も簡単で、最新のクラウドベースのデータ スタックで最もコスト効率の高いソリューションです。
 
-In practice, this means that most of the details in a target will be consistent across all targets, except for the `schema` and user credentials. If you have multiple dbt users writing code, it often makes sense for _each user_ to have their own _development_ environment. A pattern we've found useful is to set your dev target schema to be `dbt_<username>`. User credentials should also differ across targets so that each dbt user is using their own data warehouse user.
+実際には、これは、`スキーマ` とユーザー資格情報を除いて、ターゲットの詳細のほとんどがすべてのターゲットで一貫していることを意味します。複数の dbt ユーザーがコードを作成している場合、_各ユーザー_ が独自の _開発_ 環境を持つことが理にかなっていることがよくあります。役立つことがわかったパターンは、開発ターゲット スキーマを `dbt_<username>` に設定することです。ユーザー資格情報もターゲット間で異なる必要があります。これにより、各 dbt ユーザーが独自のデータ ウェアハウス ユーザーを使用します。

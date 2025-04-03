@@ -1,23 +1,23 @@
 ---
-title: "Connect to adapters"
+title: "アダプタに接続する"
 id: "connect-adapters"
 ---
 
-Adapters are an essential component of dbt. At their most basic level, they are how dbt connects with the various supported data platforms. At a higher-level, adapters strive to give analytics engineers more transferrable skills as well as standardize how analytics projects are structured. Gone are the days where you have to learn a new language or flavor of SQL when you move to a new job that has a different data platform. That is the power of adapters in dbt &mdash; for more detail, refer to the [Build, test, document, and promote adapters](/guides/adapter-creation) guide.
+アダプターは dbt の重要なコンポーネントです。最も基本的なレベルでは、アダプターは dbt がサポートされているさまざまなデータ プラットフォームに接続する方法です。より高レベルでは、アダプターは分析エンジニアに転用可能なスキルを提供し、分析プロジェクトの構造を標準化することを目指しています。異なるデータ プラットフォームを持つ新しい仕事に移ったときに、新しい言語や SQL の種類を学習しなければならない時代は終わりました。これが dbt のアダプターの力です。詳細については、[アダプターの構築、テスト、ドキュメント化、およびプロモーション](/guides/adapter-creation) ガイドを参照してください。
 
-This section provides more details on different ways you can connect dbt to an adapter, and explains what a maintainer is.
+このセクションでは、dbt をアダプターに接続するさまざまな方法について詳しく説明し、メンテナーとは何かについて説明します。
 
-### Set up in dbt Cloud
+### dbt Cloud で設定
 
-Explore the fastest and most reliable way to deploy dbt using dbt Cloud, a hosted architecture that runs dbt Core across your organization. dbt Cloud lets you seamlessly [connect](/docs/cloud/about-cloud-setup) with a variety of [trusted](/docs/supported-data-platforms) data platform providers directly in the dbt Cloud UI.
+組織全体で dbt Core を実行するホスト型アーキテクチャである dbt Cloud を使用して、dbt を展開する最も高速で信頼性の高い方法を探ります。dbt Cloud を使用すると、さまざまな [信頼できる](/docs/cloud/about-cloud-setup) データ プラットフォーム プロバイダーに dbt Cloud UI で直接シームレスに [接続](/docs/cloud/about-cloud-setup) できます。
 
-### Install with dbt Core
+### dbt Core でインストール
 
-Install dbt Core, an open-source tool, locally using the command line. dbt communicates with a number of different data platforms by using a dedicated  adapter plugin for each. When you install dbt Core, you'll also need to install the specific adapter for your database, [connect to dbt Core](/docs/core/about-core-setup), and set up a `profiles.yml` file.
+コマンドラインを使用して、オープンソース ツールの dbt Core をローカルにインストールします。dbt は、それぞれ専用のアダプタ プラグインを使用して、さまざまなデータ プラットフォームと通信します。dbt Core をインストールするときは、データベース用の特定のアダプタもインストールし、[dbt Core に接続](/docs/core/about-core-setup)、`profiles.yml` ファイルを設定する必要があります。
 
-With a few exceptions [^1], you can install all [adapters](/docs/supported-data-platforms) from PyPI using `python -m pip install adapter-name`. For example to install Snowflake, use the command `python -m pip install dbt-snowflake`. The installation will include `dbt-core` and any other required dependencies, which may include both other dependencies and even other adapter plugins. Read more about [installing dbt](/docs/core/installation-overview).
+いくつかの例外 [^1] を除き、`python -m pip install アダプタ名` を使用して、PyPI からすべての [アダプタ](/docs/supported-data-platforms) をインストールできます。たとえば、Snowflake をインストールするには、コマンド `python -m pip install dbt-snowflake` を使用します。インストールには、`dbt-core` とその他の必要な依存関係が含まれます。これには、他の依存関係と他のアダプタ プラグインの両方が含まれる場合があります。[dbt のインストール](/docs/core/installation-overview) の詳細については、こちらをご覧ください。
 
-[^1]: Use the PyPI package name when installing with `pip`
+[^1]: `pip`でインストールする場合はPyPIパッケージ名を使用します
 
     | Adapter repo name | PyPI package name    |
     | ----------------- | -------------------- |

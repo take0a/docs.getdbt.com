@@ -1,44 +1,44 @@
 ---
-title: "Intro to dbt Mesh"
+title: "dbt Mesh の紹介"
 description: Getting started with dbt Mesh patterns
 hoverSnippet: Learn how to get started with dbt Mesh
 ---
 
-## What is dbt Mesh?
+## dbt Mesh とは？
 
-Organizations of all sizes rely upon dbt to manage their data transformations, from small startups to large enterprises. At scale, it can be challenging to coordinate all the organizational and technical requirements demanded by your stakeholders within the scope of a single dbt project.
+小規模なスタートアップから大企業まで、あらゆる規模の組織がデータ変換の管理に dbt を利用しています。規模が大きくなると、単一の dbt プロジェクトの範囲内で関係者が要求するすべての組織的および技術的要件を調整することが困難になる場合があります。
 
-To date, there also hasn't been a first-class way to effectively manage the dependencies, governance, and workflows between multiple dbt projects. 
+これまでのところ、複数の dbt プロジェクト間の依存関係、ガバナンス、ワークフローを効果的に管理するための優れた方法もありませんでした。
 
-That's where **dbt Mesh** comes in - empowering data teams to work *independently and collaboratively*; sharing data, code, and best practices without sacrificing security or autonomy. 
+ここで **dbt Mesh** が役立ちます。データ チームが *独立して、かつ共同で* 作業できるようにし、セキュリティや自律性を犠牲にすることなく、データ、コード、ベスト プラクティスを共有できるようにします。
 
-This guide will walk you through the concepts and implementation details needed to get started. dbt Mesh is not a single product - it is a pattern enabled by a convergence of several features in dbt:
+このガイドでは、開始するために必要な概念と実装の詳細について説明します。dbt Mesh は単一の製品ではなく、dbt の複数の機能の統合によって実現されるパターンです:
 
-- **[Cross-project references](/docs/collaborate/govern/project-dependencies#how-to-write-cross-project-ref)** - this is the foundational feature that enables the multi-project deployments. `{{ ref() }}`s now work across dbt Cloud projects on Enterprise plans.
-- **[dbt Explorer](/docs/collaborate/explore-projects)** - dbt Cloud's metadata-powered documentation platform, complete with full, cross-project lineage.
-- **Governance** - dbt's governance features allow you to manage access to your dbt models both within and across projects.
-  - **[Groups](/docs/collaborate/govern/model-access#groups)** - With groups, you can organize nodes in your dbt DAG that share a logical connection (for example, by functional area) and assign an owner to the entire group.
-  - **[Access](/docs/collaborate/govern/model-access#access-modifiers)** - access configs allow you to control who can reference models.
-  - **[Model Versions](/docs/collaborate/govern/model-versions)** - when coordinating across projects and teams, we recommend treating your data models as stable APIs. Model versioning is the mechanism to allow graceful adoption and deprecation of models as they evolve.
-  - **[Model Contracts](/docs/collaborate/govern/model-contracts)** - data contracts set explicit expectations on the shape of the data to ensure data changes upstream of dbt or within a project's logic don't break downstream consumers' data products.
+- **[プロジェクト間参照](/docs/collaborate/govern/project-dependencies#how-to-write-cross-project-ref)** - これは、マルチプロジェクトのデプロイメントを可能にする基本的な機能です。 `{{ ref() }}` は、Enterprise プランの dbt Cloud プロジェクト間で機能するようになりました。
+- **[dbt Explorer](/docs/collaborate/explore-projects)** - 完全なクロスプロジェクト リネージを備えた、dbt Cloud のメタデータを活用したドキュメント プラットフォームです。
+- **ガバナンス** - dbt のガバナンス機能を使用すると、プロジェクト内およびプロジェクト間で dbt モデルへのアクセスを管理できます。
+  - **[グループ](/docs/collaborate/govern/model-access#groups)** - グループを使用すると、論理接続を共有する dbt DAG 内のノードを整理し (たとえば、機能領域別)、グループ全体に所有者を割り当てることができます。
+  - **[アクセス](/docs/collaborate/govern/model-access#access-modifiers)** - アクセス構成により、モデルを参照できるユーザーを制御できます。
+  - **[モデル バージョン](/docs/collaborate/govern/model-versions)** - プロジェクトやチーム間で調整を行う場合は、データ モデルを安定した API として扱うことをお勧めします。モデルのバージョン管理は、モデルの進化に合わせてモデルを適切に採用および廃止できるようにするメカニズムです。
+  - **[モデル契約](/docs/collaborate/govern/model-contracts)** - データ契約は、データの形状に関する明示的な期待を設定し、dbt の上流またはプロジェクトのロジック内でのデータ変更によって下流の消費者のデータ製品が壊れないようにします。
 
-## When is the right time to use dbt Mesh?
+## dbt Mesh を使用するのに適した時期はいつですか？
 
-The multi-project architecture helps organizations with mature, complex transformation workflows in dbt increase the flexibility and performance of their dbt projects. If you're already using dbt and your project has started to experience any of the following, you're likely ready to start exploring this paradigm:
+マルチプロジェクト アーキテクチャは、dbt で成熟した複雑な変換ワークフローを持つ組織が dbt プロジェクトの柔軟性とパフォーマンスを向上させるのに役立ちます。すでに dbt を使用していて、プロジェクトで次のいずれかが発生し始めている場合は、このパラダイムの検討を開始する準備ができている可能性があります。
 
-- The **number of models** in your project is degrading performance and slowing down development.
-- Teams have developed **separate workflows** and need to decouple development from each other.
-- Teams are experiencing **communication challenges**, and the reliability of some of your data products has started to deteriorate.
-- **Security and governance** requirements are increasing and would benefit from increased isolation.
+- プロジェクト内の **モデルの数** によってパフォーマンスが低下し、開発が遅くなっています。
+- チームが **個別のワークフロー** を開発しており、開発を相互に分離する必要があります。
+- チームが **コミュニケーションの課題** を経験しており、一部のデータ製品の信頼性が低下し始めています。
+- **セキュリティとガバナンス** の要件が増加しており、分離を強化することでメリットが得られます。
 
-dbt Cloud is designed to coordinate the features above and simplify the complexity to solve for these problems.
+dbt Cloud は、上記の機能を調整し、複雑さを簡素化してこれらの問題を解決するように設計されています。
 
-If you're just starting your dbt journey, don't worry about building a multi-project architecture right away. You can _incrementally_ adopt the features in this guide as you scale. The collection of features work effectively as independent tools. Familiarizing yourself with the tooling and features that make up a multi-project architecture, and how they can apply to your organization will help you make better decisions as you grow.
+dbt の取り組みを始めたばかりの場合は、マルチプロジェクト アーキテクチャをすぐに構築する必要はありません。規模を拡大するにつれて、このガイドの機能を段階的に導入できます。機能のコレクションは、独立したツールとして効果的に機能します。マルチプロジェクト アーキテクチャを構成するツールと機能、およびそれらを組織に適用する方法をよく理解しておくと、成長に合わせてより適切な決定を下すことができます。
 
-For additional information, refer to the [dbt Mesh FAQs](/best-practices/how-we-mesh/mesh-5-faqs).
+詳細については、[dbt Mesh FAQ](/best-practices/how-we-mesh/mesh-5-faqs) を参照してください。
 
-## Learning goals
+## 学習目標
 
-- Understand the **purpose and tradeoffs** of building a multi-project architecture.
-- Develop an intuition for various **dbt Mesh patterns** and how to design a multi-project architecture for your organization.
-- Establish recommended steps to **incrementally adopt** these patterns in your dbt implementation.
+- マルチプロジェクト アーキテクチャを構築する **目的とトレードオフ** を理解します。
+- さまざまな **dbt Mesh パターン** と、組織向けのマルチプロジェクト アーキテクチャの設計方法についての直感を養います。
+- dbt 実装でこれらのパターンを **段階的に採用** するための推奨手順を確立します。

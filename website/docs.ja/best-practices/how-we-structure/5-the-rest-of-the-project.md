@@ -1,14 +1,14 @@
 ---
-title: "The rest of the project"
+title: "プロジェクトの残りの部分"
 id: "5-the-rest-of-the-project"
 description: The rest of the project.
 displayText: The rest of the project.
 hoverSnippet: The rest of the project.
 ---
 
-### Project structure review
+### プロジェクト構造の見直し
 
-So far we’ve focused on the `models` folder, the primary directory of our dbt project. Next, we’ll zoom out and look at how the rest of our project files and folders fit in with this structure, starting with how we approach YAML configuration files.
+これまでは、dbt プロジェクトのプライマリ ディレクトリである `models` フォルダーに焦点を当ててきました。次に、YAML 構成ファイルへのアプローチ方法から始めて、プロジェクトの残りのファイルとフォルダーがこの構造にどのように適合するかを詳しく見ていきます。
 
 ```shell
 models
@@ -42,18 +42,18 @@ models
     └── all_dates.sql
 ```
 
-### YAML in-depth
+### YAML の詳細
 
-When structuring your YAML configuration files in a dbt project, you want to balance centralization and file size to make specific configs as easy to find as possible. It’s important to note that while the top-level YAML files (`dbt_project.yml`, `packages.yml`) need to be specifically named and in specific locations, the files containing your `sources` and `models` dictionaries can be named, located, and organized however you want. It’s the internal contents that matter here. As such, we’ll lay out our primary recommendation, as well as the pros and cons of a popular alternative. Like many other aspects of structuring your dbt project, what’s most important here is consistency, clear intention, and thorough documentation on how and why you do what you do.
+dbt プロジェクトで YAML 構成ファイルを構造化するときは、集中化とファイル サイズのバランスを取り、特定の構成をできるだけ簡単に見つけられるようにする必要があります。最上位レベルの YAML ファイル (`dbt_project.yml`、`packages.yml`) は特定の名前と場所を指定する必要がありますが、`sources` および `models` ディクショナリを含むファイルは、名前、場所、整理を自由に設定できることに注意してください。ここで重要なのは内部コンテンツです。そのため、主な推奨事項と、一般的な代替案の長所と短所を説明します。dbt プロジェクトの構造化の他の多くの側面と同様に、ここで最も重要なのは、一貫性、明確な意図、および実行方法と理由に関する徹底的なドキュメントです。
 
-- ✅ **Config per folder.** As in the example above, create a `_[directory]__models.yml` per directory in your models folder that configures all the models in that directory. for staging folders, also include a `_[directory]__sources.yml` per directory.
-  - The leading underscore ensures your YAML files will be sorted to the top of every folder to make them easy to separate from your models.
-  - YAML files don’t need unique names in the way that SQL model files do, but including the directory (instead of simply `_sources.yml` in each folder), means you can fuzzy find the right file more quickly.
-  - We’ve recommended several different naming conventions over the years, most recently calling these `schema.yml` files. We’ve simplified to recommend that these simply be labelled based on the YAML dictionary that they contain.
-  - If you utilize [doc blocks](https://docs.getdbt.com/docs/build/documentation#using-docs-blocks) in your project, we recommend following the same pattern, and creating a `_[directory]__docs.md` markdown file per directory containing all your doc blocks for that folder of models.
-- ❌ **Config per project.** Some people put _all_ of their source and model YAML into one file. While you can technically do this, and while it certainly simplifies knowing what file the config you’re looking for will be in (as there is only one file), it makes it much harder to find specific configurations within that file. We recommend balancing those two concerns.
-- ⚠️ **Config per model.** On the other end of the spectrum, some people prefer to create one YAML file per model. This presents less of an issue than a single monolith file, as you can quickly search for files, know exactly where specific configurations exist, spot models without configs (and thus without tests) by looking at the file tree, and various other advantages. In our opinion, the extra files, tabs, and windows this requires creating, copying from, pasting to, closing, opening, and managing creates a somewhat slower development experience that outweighs the benefits. Defining config per directory is the most balanced approach for most projects, but if you have compelling reasons to use config per model, there are definitely some great projects that follow this paradigm.
-- ✅ **Cascade configs.** Leverage your `dbt_project.yml` to set default configurations at the directory level. Use the well-organized folder structure we’ve created thus far to define the baseline schemas and materializations, and use dbt’s cascading scope priority to define variations to this. For example, as below, define your marts to be materialized as tables by default, define separate schemas for our separate subfolders, and any models that need to use incremental materialization can be defined at the model level.
+- ✅ **フォルダーごとの構成。** 上記の例のように、モデル フォルダー内のディレクトリごとに `_[directory]__models.yml` を作成し、そのディレクトリ内のすべてのモデルを構成します。ステージング フォルダーの場合は、ディレクトリごとに `_[directory]__sources.yml` も含めます。
+  - 先頭にアンダースコアを付けると、YAML ファイルが各フォルダーの先頭に並べ替えられ、モデルから簡単に分離できるようになります。
+  - YAML ファイルには、SQL モデル ファイルのように一意の名前は必要ありませんが、ディレクトリを含める (各フォルダーに単に `_sources.yml` を含めるのではなく) ことで、適切なファイルをより迅速に見つけることができます。
+  - 私たちは長年にわたり、いくつかの異なる命名規則を推奨してきましたが、最近ではこれらを `schema.yml` ファイルと呼んでいます。私たちは簡素化して、これらに含まれる YAML 辞書に基づいて単純にラベルを付けることを推奨しています。
+  - プロジェクトで [doc ブロック](https://docs.getdbt.com/docs/build/documentation#using-docs-blocks) を利用する場合は、同じパターンに従い、モデルのフォルダーのすべての doc ブロックを含むディレクトリごとに `_[directory]__docs.md` マークダウン ファイルを作成することをお勧めします。
+- ❌ **プロジェクトごとの構成。** ソースとモデルの YAML の _すべて_ を 1 つのファイルにまとめる人もいます。技術的にはこれを行うことは可能であり、探している構成がどのファイルにあるかを知ることは確かに簡単になりますが (ファイルが 1 つしかないため)、そのファイル内の特定の構成を見つけるのがはるかに難しくなります。これら 2 つの懸念事項のバランスを取ることをお勧めします。
+- ⚠️ **モデルごとの構成。** 一方、モデルごとに 1 つの YAML ファイルを作成することを好む人もいます。これは、ファイルをすばやく検索したり、特定の構成が存在する場所を正確に把握したり、ファイル ツリーを確認して構成のない (したがってテストのない) モデルを見つけたりできるなど、さまざまな利点があるため、単一のモノリス ファイルよりも問題が少なくなります。私たちの意見では、これにより、作成、コピー、貼り付け、閉じる、開く、および管理が必要な追加のファイル、タブ、およびウィンドウによって、開発エクスペリエンスがやや遅くなり、利点が上回ります。ディレクトリごとに構成を定義することは、ほとんどのプロジェクトにとって最もバランスの取れたアプローチですが、モデルごとに構成を使用する説得力のある理由がある場合は、このパラダイムに従う優れたプロジェクトが間違いなくいくつかあります。
+- ✅ **カスケード構成。** `dbt_project.yml` を活用して、ディレクトリ レベルでデフォルト構成を設定します。これまでに作成した整理されたフォルダー構造を使用してベースライン スキーマとマテリアライゼーションを定義し、dbt のカスケード スコープの優先順位を使用してこれにバリエーションを定義します。たとえば、以下のように、デフォルトでマートがテーブルとしてマテリアライズされるように定義し、個別のサブフォルダーに個別のスキーマを定義します。増分マテリアライゼーションを使用する必要があるモデルは、モデル レベルで定義できます。
 
 ```yaml
 -- dbt_project.yml
@@ -72,11 +72,11 @@ models:
         +schema: marketing
 ```
 
-:::tip Define your defaults.
-One of the many benefits this consistent approach to project structure confers to us is this ability to cascade default behavior. Carefully organizing our folders and defining configuration at that level whenever possible frees us from configuring things like schema and materialization in every single model (not very DRY!) — we only need to configure exceptions to our general rules. Tagging is another area this principle comes into play. Many people new to dbt will rely on tags rather than a rigorous folder structure, and quickly find themselves in a place where every model _requires_ a tag. This creates unnecessary complexity. We want to lean on our folders as our primary selectors and grouping mechanism, and use tags to define groups that are _exceptions._ A folder-based selection like \*\*`dbt build --select marts.marketing` is much simpler than trying to tag every marketing-related model, hoping all developers remember to add that tag for new models, and using `dbt build --select tag:marketing`.
+:::tip デフォルトを定義します。
+プロジェクト構造に対するこの一貫したアプローチがもたらす多くのメリットの 1 つは、デフォルトの動作をカスケードできることです。フォルダーを慎重に整理し、可能な限りそのレベルで構成を定義することで、スキーマやマテリアライゼーションなどを各モデルで構成する必要がなくなり (あまり DRY ではありません)、一般的なルールの例外を構成するだけで済みます。タグ付けもこの原則が関係するもう 1 つの領域です。dbt を初めて使用する人の多くは、厳密なフォルダー構造ではなくタグに頼り、すべてのモデルにタグが _必要_ であるという状況にすぐに陥ってしまいます。これにより、不要な複雑さが生じます。私たちは、フォルダーを主要なセレクターおよびグループ化メカニズムとして利用し、タグを使用して _例外_ となるグループを定義します。\*\*`dbt build --select marts.marketing` のようなフォルダーベースの選択は、すべてのマーケティング関連モデルにタグを付け、すべての開発者が新しいモデルにそのタグを追加することを忘れないようにして、`dbt build --select tag:marketing` を使用するよりもはるかに簡単です。
 :::
 
-### How we use the other folders
+### 他のフォルダの使い方
 
 ```shell
 jaffle_shop
@@ -91,28 +91,28 @@ jaffle_shop
 └── assert_positive_value_for_total_amount.sql
 ```
 
-We’ve focused heavily thus far on the primary area of action in our dbt project, the `models` folder. As you’ve probably observed though, there are several other folders in our project. While these are, by design, very flexible to your needs, we’ll discuss the most common use cases for these other folders to help get you started.
+これまで、dbt プロジェクトの主なアクション領域である `models` フォルダーに重点を置いてきました。しかし、お気づきかもしれませんが、プロジェクトには他にもフォルダーがいくつかあります。これらは設計上、ニーズに合わせて柔軟に対応できるようになっていますが、ここでは、作業を開始する際に役立つよう、これらの他のフォルダーの最も一般的な使用例について説明します。
 
-- ✅ `seeds` for lookup tables. The most common use case for seeds is loading lookup tables that are helpful for modeling but don’t exist in any source systems — think mapping zip codes to states, or UTM parameters to marketing campaigns. In this example project we have a small seed that maps our employees to their `customer_id`s, so that we can handle their purchases with special logic.
-- ❌ `seeds` for loading source data. Do not use seeds to load data from a source system into your warehouse. If it exists in a system you have access to, you should be loading it with a proper EL tool into the raw data area of your warehouse. dbt is designed to operate on data in the warehouse, not as a data-loading tool.
-- ✅ `analyses` for storing auditing queries. The `analyses` folder lets you store any queries you want to use Jinja with and version control, but not build into models in your warehouse. There are limitless possibilities here, but the most common use case when we set up projects at dbt Labs is to keep queries that leverage the [audit helper](https://github.com/dbt-labs/dbt-audit-helper) package. This package is incredibly useful for finding discrepancies in output when migrating logic from another system into dbt.
-- ✅ `tests` for testing multiple specific tables simultaneously. As dbt tests have evolved, writing singular tests has become less and less necessary. It's extremely useful for work-shopping test logic, but more often than not you'll find yourself either migrating that logic into your own custom generic tests or discovering a pre-built test that meets your needs from the ever-expanding universe of dbt packages (between the extra tests in [`dbt-utils`](https://github.com/dbt-labs/dbt-utils) and [`dbt-expectations`](https://github.com/calogica/dbt-expectations) almost any situation is covered). One area where singular tests still shine though is flexibly testing things that require a variety of specific models. If you're familiar with the difference between [unit tests](https://en.wikipedia.org/wiki/Unit_testing) [and](https://www.testim.io/blog/unit-test-vs-integration-test/) [integration](https://www.codecademy.com/resources/blog/what-is-integration-testing/) [tests](https://en.wikipedia.org/wiki/Integration_testing) in software engineering, you can think of generic and singular tests in a similar way. If you need to test the results of how several specific models interact or relate to each other, a singular test will likely be the quickest way to nail down your logic.
-- ✅ `snapshots` for creating [Type 2 slowly changing dimension](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) records from [Type 1](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_1:_overwrite) (destructively updated) source data. This is [covered thoroughly in the dbt Docs](/docs/build/snapshots), unlike these other folders has a more defined purpose, and is out-of-scope for this guide, but mentioned for completion.
-- ✅ `macros` for DRY-ing up transformations you find yourself doing repeatedly. Like snapshots, a full dive into macros is out-of-scope for this guide and well [covered elsewhere](/docs/build/jinja-macros), but one important structure-related recommendation is to [write documentation for your macros](https://docs.getdbt.com/faqs/docs/documenting-macros). We recommend creating a `_macros.yml` and documenting the purpose and arguments for your macros once they’re ready for use.
+- ✅ ルックアップ テーブル用の `seeds`。シードの最も一般的な使用例は、モデリングには役立つがソース システムに存在しないルックアップ テーブルをロードすることです。郵便番号を州にマッピングしたり、UTM パラメーターをマーケティング キャンペーンにマッピングしたりすることを考えてください。このサンプル プロジェクトには、従業員を `customer_id` にマッピングする小さなシードがあり、特別なロジックを使用して従業員の購入を処理できます。
+- ❌ ソース データをロードするための `seeds`。ソース システムからウェアハウスにデータをロードするために、seeds を使用しないでください。アクセスできるシステムにデータが存在する場合は、適切な EL ツールを使用してウェアハウスの生データ領域にロードする必要があります。dbt は、データ ロード ツールとしてではなく、ウェアハウス内のデータを操作するように設計されています。
+- ✅ 監査クエリを保存するための `analyses`。`analyses` フォルダーには、Jinja で使用してバージョン管理したいクエリを保存できますが、ウェアハウス内のモデルに組み込むことはできません。ここでは無限の可能性がありますが、dbt Labs でプロジェクトを設定するときに最も一般的な使用例は、[監査ヘルパー](https://github.com/dbt-labs/dbt-audit-helper) パッケージを活用するクエリを保存することです。このパッケージは、別のシステムから dbt にロジックを移行するときに出力の不一致を見つけるのに非常に役立ちます。
+- ✅ 複数の特定のテーブルを同時にテストするための `tests`。dbt テストが進化するにつれて、単一のテストを書く必要性はますます低くなっています。これはテスト ロジックのワークショップには非常に便利ですが、多くの場合、そのロジックを独自のカスタム汎用テストに移行するか、増え続ける dbt パッケージの中からニーズを満たす事前構築済みのテストを見つけることになります ([`dbt-utils`](https://github.com/dbt-labs/dbt-utils) と [`dbt-expectations`](https://github.com/calogica/dbt-expectations) の追加テストでほぼすべての状況がカバーされます)。ただし、単一のテストが依然として優れているのは、さまざまな特定のモデルを必要とするものを柔軟にテストする場合です。ソフトウェア エンジニアリングにおける [単体テスト](https://en.wikipedia.org/wiki/Unit_testing) [と](https://www.testim.io/blog/unit-test-vs-integration-test/) [統合](https://www.codecademy.com/resources/blog/what-is-integration-testing/) [テスト](https://en.wikipedia.org/wiki/Integration_testing) の違いを理解している場合は、汎用テストと特異テストを同様に考えることができます。複数の特定のモデルが相互にどのように相互作用または関係するかの結果をテストする必要がある場合、ロジックを確定するには、特異テストが最も簡単な方法になるでしょう。
+- ✅ `snapshots` は、[タイプ 1](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_1:_overwrite) (破壊的に更新された) ソース データから [タイプ 2 の緩やかに変化するディメンション](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) レコードを作成します。これは [dbt ドキュメントで詳しく説明されています](/docs/build/snapshots)。これらの他のフォルダーとは異なり、より明確な目的があり、このガイドの範囲外ですが、補足のために言及されています。
+- ✅ `macros` は、繰り返し実行している変換を DRY 化するためのものです。スナップショットと同様に、マクロについて完全に説明することはこのガイドの範囲外であり、[他の場所で十分に説明されています](/docs/build/jinja-macros)。ただし、構造に関する重要な推奨事項の 1 つは、[マクロのドキュメントを作成する](https://docs.getdbt.com/faqs/docs/documenting-macros) です。マクロが使用可能になったら、`_macros.yml` を作成し、マクロの目的と引数を文書化することをお勧めします。
 
-### Project splitting
+### プロジェクトの分割
 
-One important, growing consideration in the analytics engineering ecosystem is how and when to split a codebase into multiple dbt projects. Currently, our advice for most teams, especially those just starting, is fairly simple: in most cases, we recommend doing so with [dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro)! dbt Mesh allows organizations to handle complexity by connecting several dbt projects rather than relying on one big, monolithic project. This approach is designed to speed up development while maintaining governance. 
+分析エンジニアリング エコシステムにおいて、コードベースを複数の dbt プロジェクトに分割する方法とタイミングは、ますます重要になってきています。現在、ほとんどのチーム、特に始めたばかりのチームに対するアドバイスは非常にシンプルです。ほとんどの場合、[dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro) を使用することをお勧めします。dbt Mesh を使用すると、組織は 1 つの大きなモノリシック プロジェクトに頼るのではなく、複数の dbt プロジェクトを接続することで複雑さを処理できます。このアプローチは、ガバナンスを維持しながら開発をスピードアップするように設計されています。
 
-As breaking up monolithic dbt projects into smaller, connected projects, potentially within a modern mono repo becomes easier, the scenarios we currently advise against may soon become feasible. So watch this space!
+モノリシックな dbt プロジェクトを、最新のモノ リポジトリ内で、より小規模で接続されたプロジェクトに分割することが容易になるにつれて、現在推奨されていないシナリオがすぐに実現可能になる可能性があります。今後の動向にご注目ください。
 
-- ✅ **Business groups or departments.** Conceptual separations within the project are the primary reason to split up your project. This allows your business domains to own their own data products and still collaborate using dbt Mesh. For more information about dbt Mesh, please refer to our [dbt Mesh FAQs](/best-practices/how-we-mesh/mesh-5-faqs).
-- ✅ **Data governance.** Structural, organizational needs — such as data governance and security — are one of the few worthwhile reasons to split up a project. If, for instance, you work at a healthcare company with only a small team cleared to access raw data with PII in it, you may need to split out your staging models into their own projects to preserve those policies. In that case, you would import your staging project into the project that builds on those staging models as a [private package](https://docs.getdbt.com/docs/build/packages/#private-packages).
-- ✅ **Project size.** At a certain point, your project may grow to have simply too many models to present a viable development experience. If you have 1000s of models, it absolutely makes sense to find a way to split up your project.
-- ❌ **ML vs Reporting use cases.** Similarly to the point above, splitting a project up based on different use cases, particularly more standard BI versus ML features, is a common idea. We tend to discourage it for the time being. As with the previous point, a foundational goal of implementing dbt is to create a single source of truth in your organization. The features you’re providing to your data science teams should be coming from the same marts and metrics that serve reports on executive dashboards.
+- ✅ **ビジネス グループまたは部門。** プロジェクト内の概念的な分離が、プロジェクトを分割する主な理由です。これにより、ビジネス ドメインは独自のデータ製品を所有しながらも、dbt Mesh を使用してコラボレーションすることができます。dbt Mesh の詳細については、[dbt Mesh FAQ](/best-practices/how-we-mesh/mesh-5-faqs) を参照してください。
+- ✅ **データ ガバナンス。** データ ガバナンスやセキュリティなどの構造的、組織的なニーズは、プロジェクトを分割する価値のある数少ない理由の 1 つです。たとえば、PII を含む生データへのアクセスが許可されているのが小さなチームのみである医療会社で働いている場合、それらのポリシーを維持するために、ステージング モデルを独自のプロジェクトに分割する必要があるかもしれません。その場合、ステージング モデルに基づいて構築されるプロジェクトに、ステージング プロジェクトを [プライベート パッケージ](https://docs.getdbt.com/docs/build/packages/#private-packages) としてインポートします。
+- ✅ **プロジェクトのサイズ。** ある時点で、プロジェクトにモデルが多すぎて、実用的な開発エクスペリエンスを提供できなくなる場合があります。モデルが数千個ある場合は、プロジェクトを分割する方法を見つけることが絶対に理にかなっています。
+- ❌ **ML とレポートのユースケース。** 上記のポイントと同様に、さまざまなユースケース、特により標準的な BI 機能と ML 機能に基づいてプロジェクトを分割することは一般的な考え方です。当面は推奨しません。前のポイントと同様に、dbt を実装する基本的な目標は、組織内に単一の真実のソースを作成することです。データ サイエンス チームに提供する機能は、エグゼクティブ ダッシュボードでレポートを提供するのと同じマートとメトリックから提供される必要があります。
 
-## Final considerations
+## 最終的な考察
 
-Overall, consistency is more important than any of these specific conventions. As your project grows and your experience with dbt deepens, you will undoubtedly find aspects of the above structure you want to change. While we recommend this approach for the majority of projects, every organization is unique! The only dogmatic advice we’ll put forward here is that when you find aspects of the above structure you wish to change, think intently about your reasoning and document for your team _how_ and _why_ you are deviating from these conventions. To that end, we highly encourage you to fork this guide and add it to your project’s README, wiki, or docs so you can quickly create and customize those artifacts.
+全体的に、一貫性はこれらの特定の規則よりも重要です。プロジェクトが成長し、dbt の経験が深まるにつれて、上記の構造の変更したい側面が見つかることは間違いありません。ほとんどのプロジェクトではこのアプローチをお勧めしますが、組織はそれぞれ異なります。ここで提示する唯一の独断的なアドバイスは、上記の構造の変更したい側面が見つかった場合は、その理由をじっくり考え、これらの規則から _どのように_ _なぜ_ 逸脱しているのかをチームに文書化することです。そのためには、このガイドをフォークしてプロジェクトの README、wiki、またはドキュメントに追加し、それらの成果物をすばやく作成してカスタマイズすることを強くお勧めします。
 
-Finally, we emphasize that this guide is a living document! It will certainly change and grow as dbt and dbt Labs evolve. We invite you to join in — discuss, comment, and contribute regarding suggested changes or new elements to cover.
+最後に、このガイドは生きた文書であることを強調します。このガイドは、dbt と dbt Labs の進化に伴って確実に変化し、成長していきます。提案された変更や取り上げる新しい要素について議論し、コメントし、貢献していただくよう、皆様のご参加をお待ちしています。

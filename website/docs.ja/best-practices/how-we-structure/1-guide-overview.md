@@ -1,60 +1,60 @@
 ---
-title: "How we structure our dbt projects"
+title: "dbt プロジェクトの構造"
 id: 1-guide-overview
 description: Learn how we structure our dbt projects.
 displayText: How we structure our dbt projects
 hoverSnippet: Learn how we structure our dbt projects.
 ---
 
-## Why does structure matter?
+## 構造がなぜ重要なのか？
 
-Analytics engineering, at its core, is about helping groups of human beings collaborate on better decisions at scale. We have [limited bandwidth for making decisions](https://en.wikipedia.org/wiki/Decision_fatigue). We also, as a cooperative social species, rely on [systems and patterns to optimize collaboration](https://en.wikipedia.org/wiki/Pattern_language) with others. This combination of traits means that for collaborative projects it's crucial to establish consistent and comprehensible norms such that your team’s limited bandwidth for decision making can be spent on unique and difficult problems, not deciding where folders should go or how to name files.
+分析エンジニアリングの本質は、人間のグループが協力して、よりよい意思決定を大規模に行えるように支援することです。人間の [意思決定のための帯域幅は限られています](https://en.wikipedia.org/wiki/Decision_fatigue)。また、協調的な社会的な種族である私たちは、他者との [コラボレーションを最適化するためのシステムとパターン](https://en.wikipedia.org/wiki/Pattern_language) に依存しています。こうした特性の組み合わせにより、共同プロジェクトでは、チームの限られた意思決定の帯域幅を、フォルダーの配置場所やファイルの命名方法の決定ではなく、独特で難しい問題に費やせるように、一貫性がありわかりやすい規範を確立することが極めて重要になります。
 
-Building a great dbt project is an inherently collaborative endeavor, bringing together domain knowledge from every department to map the goals and narratives of the entire company. As such, it's especially important to establish a deep and broad set of patterns to ensure as many people as possible are empowered to leverage their particular expertise in a positive way, and to ensure that the project remains approachable and maintainable as your organization scales.
+優れた dbt プロジェクトの構築は、本質的に共同作業であり、各部門の専門知識を結集して会社全体の目標とストーリーをマッピングします。そのため、できるだけ多くの人がそれぞれの専門知識を積極的に活用できるようにし、組織が拡大してもプロジェクトが取り組みやすく維持しやすい状態を保つために、深く幅広いパターンを確立することが特に重要です。
 
-Famously, Steve Jobs [wore the same outfit everyday](https://images.squarespace-cdn.com/content/v1/5453c539e4b02ab5398ffc8f/1580381503218-E56FQDNFL1P4OBLQWHWW/ke17ZwdGBToddI8pDm48kJKedFpub2aPqa33K4gNUDwUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYxCRW4BPu10St3TBAUQYVKcxb5ZTIyC_D49_DDQq2Sj8YVGtM7O1i4h5tvKa2lazN4nGUQWMS_WcPM-ztWbVr-c/steve_jobs_outfit.jpg) to reduce decision fatigue. You can think of this guide similarly, as a black turtleneck and New Balance sneakers for your company’s dbt project. A dbt project’s power outfit, or more accurately its structure, is composed not of fabric but of files, folders, naming conventions, and programming patterns. How you label things, group them, split them up, or bring them together — the system you use to organize the [data transformations](https://www.getdbt.com/analytics-engineering/transformation/) encoded in your dbt project — this is your project’s structure.
+有名な話だが、スティーブ・ジョブズは[毎日同じ服を着ていた](https://images.squarespace-cdn.com/content/v1/5453c539e4b02ab5398ffc8f/1580381503218-E56FQDNFL1P4OBLQWHWW/ke17ZwdGBToddI8pDm48kJKedFpub2aPqa33K4gNUDwUqsxRU qqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYxCRW4BPu10St3TBAUQYVKcxb5ZTIyC_D49_DDQq2Sj8YVGtM7O1i4h5tvKa2lazN4nGUQWMS_WcPM-ztWbVr-c/steve_jobs_outfit.jpg) は、意思決定の疲労を軽減します。このガイドは、会社の dbt プロジェクト用の黒のタートルネックと New Balance のスニーカーと同じようなものと考えることができます。dbt プロジェクトのパワー アウトフィット、またはより正確にはその構造は、ファブリックではなく、ファイル、フォルダー、命名規則、およびプログラミング パターンで構成されます。物事にラベルを付ける方法、グループ化する方法、分割する方法、まとめる方法、つまり、dbt プロジェクトにエンコードされた [データ変換](https://www.getdbt.com/analytics-engineering/transformation/) を整理するために使用するシステム、これがプロジェクトの構造です。
 
-This guide is just a starting point. You may decide that you prefer Birkenstocks or a purple hoodie for your project over Jobs-ian minimalism. That's fine. What's important is that you think through the reasoning for those changes in your organization, explicitly declare them in a thorough, accessible way for all contributors, and above all _stay consistent_.
+このガイドは単なる出発点にすぎません。プロジェクトでは、ジョブズ流のミニマリズムよりもビルケンシュトックや紫のパーカーの方がいいと決めるかもしれません。それは構いません。重要なのは、組織内でそれらの変更の理由をよく考え、すべての貢献者が理解しやすい方法で明確に宣言し、何よりも _一貫性を保つ_ ことです。
 
-One foundational principle that applies to all dbt projects though, is the need to establish a cohesive arc moving data from _source-conformed_ to _business-conformed_. Source-conformed data is shaped by external systems out of our control, while business-conformed data is shaped by the needs, concepts, and definitions we create. No matter what patterns or conventions you define within your project, this process remains the essential purpose of the transformation layer, and dbt as your tool within it. This guide is an update to a seminal analytics engineering [post of the same name](https://discourse.getdbt.com/t/how-we-structure-our-dbt-projects/355) by the great Claire Carroll, and while some of the details have changed over time (as anticipated in that post) this fundamental trajectory holds true. Moving forward, this guide will be iteratively updated as new tools expand our viewpoints, new experiences sharpen our vision, and new voices strengthen our perspectives, but always in service of that aim.
+ただし、すべての dbt プロジェクトに適用される基本原則の 1 つは、データを _ソース準拠_ から _ビジネス準拠_ へと移行する一貫したアークを確立する必要があることです。ソース準拠データは、制御できない外部システムによって形成されますが、ビジネス準拠データは、私たちが作成するニーズ、概念、定義によって形成されます。プロジェクト内でどのようなパターンや規則を定義しても、このプロセスは変換レイヤーの重要な目的であり、その中でツールとしての dbt は変わりません。このガイドは、偉大な Claire Carroll による分析エンジニアリングに関する [同名の投稿](https://discourse.getdbt.com/t/how-we-structure-our-dbt-projects/355) の重要な更新版であり、時間の経過とともに詳細の一部が変更されていますが (その投稿で予想されているように)、この基本的な軌跡は変わりません。今後、新しいツールによって私たちの視点が広がり、新しい経験によって私たちのビジョンが研ぎ澄まされ、新しい声によって私たちの視点が強化されるにつれて、このガイドは繰り返し更新されますが、常にその目的に沿って行われます。
 
-### Learning goals
+### 学習目標
 
-This guide has three main goals:
+このガイドには、3 つの主な目標があります。
 
-- Thoroughly cover our most up-to-date recommendations on how to structure typical dbt projects
-- Illustrate these recommendations with comprehensive examples
-- At each stage, explain _why_ we recommend the approach that we do, so that you're equipped to decide when and where to deviate from these recommendations to better fit your organization’s unique needs
+- 一般的な dbt プロジェクトの構築方法に関する最新の推奨事項を徹底的にカバーする
+- これらの推奨事項を包括的な例で説明する
+- 各段階で、私たちがそのアプローチを推奨する理由を説明し、組織の独自のニーズに合わせてこれらの推奨事項からいつどこで逸脱するかを判断できるようにします。
 
-You should walk away from this guide with a deeper mental model of how the components of a dbt project fit together, such that purpose and principles of analytics engineering feel more clear and intuitive.
+このガイドを読めば、dbt プロジェクトのコンポーネントがどのように組み合わさるかに関するより深いメンタル モデルが得られ、分析エンジニアリングの目的と原則がより明確で直感的に感じられるようになるはずです。
 
-By approaching our structure intentionally, we’ll gain a better understanding of foundational ideals like moving our data from the wide array of narrower source-conformed models that our systems give us to a narrower set of wider, richer business-conformed designs we create. As we move along that arc, we’ll understand how stacking our transformations in optimized, modular layers means we can apply each transformation in only one place. With a disciplined approach to the files, folders, and materializations that comprise our structure, we’ll find that we can create clear stories not only through our data, but also our codebase and the artifacts it generates in our warehouse.
+意図的に構造に取り組むことで、システムが提供するソースに準拠した幅広い狭い範囲のモデルから、私たちが作成するビジネスに準拠したより幅広い、より豊富な設計の狭い範囲にデータを移行するなど、基本的な理想をより深く理解できるようになります。その弧に沿って進むと、最適化されたモジュール レイヤーに変換を積み重ねると、各変換を 1 か所でのみ適用できることが理解できるようになります。構造を構成するファイル、フォルダー、およびマテリアライゼーションに規律あるアプローチをとることで、データだけでなく、コードベースとウェアハウスで生成される成果物を通じて明確なストーリーを作成できることがわかります。
 
-Our hope is that by deepening your sense of the connections between these patterns and the principles they flow from, you'll be able to translate them to fit your specific needs and craft customized documentation for your team to act on.
+これらのパターンとそこから派生する原則とのつながりに対する理解を深めることで、パターンを特定のニーズに合わせて解釈し、チームが実行するためのカスタマイズされたドキュメントを作成できるようになることを願っています。
 
 :::info Example project.
-This guide walks through our recommendations using a very simple dbt project — similar to the one used for the Getting Started guide and many other demos — from a fictional company called the Jaffle Shop. You can read more about [jaffles](https://en.wiktionary.org/wiki/jaffle) if you want (they _are_ a real thing), but that context isn’t important to understand the structure. We encourage you to follow along, try things out, make changes, and take notes on what works or doesn't work for you along the way.
+このガイドでは、Jaffle Shop という架空の会社が提供する、非常にシンプルな dbt プロジェクト (入門ガイドや他の多くのデモで使用されているものと同様) を使用して、推奨事項を説明します。必要に応じて [jaffle](https://en.wiktionary.org/wiki/jaffle) について詳しく読むことができます (jaffle は実在します) が、その背景は構造を理解する上で重要ではありません。ガイドに沿って進み、いろいろ試し、変更を加え、その過程で何がうまくいったか、何がうまくいかなかったかをメモすることをお勧めします。
 :::
 
-We'll get a deeper sense of our project as we move through the guide, but for now we just need to know that the Jaffle Shop is a restaurant selling jaffles that has two main data sources:
+ガイドを読み進めていくと、プロジェクトについてより深く理解できるようになりますが、現時点では、Jaffle Shop がジャッフルを販売するレストランであり、2 つの主要なデータ ソースがあることだけを知っておく必要があります。
 
-- A replica of our transactional database, called `jaffle_shop`, with core entities like orders and customers.
-- Synced data from [Stripe](https://stripe.com/), which we use for processing payments.
+- 注文や顧客などのコア エンティティを含む、`jaffle_shop` と呼ばれるトランザクション データベースのレプリカ。
+- 支払い処理に使用する [Stripe](https://stripe.com/) からの同期データ。
 
-### Guide structure overview
+### ガイド構造の概要
 
-We'll walk through our topics in the same order that our data would move through transformation:
+データが変換される順序と同じ順序でトピックを順に見ていきます:
 
-1. Dig into how we structure the files, folders, and models for our three primary layers in the `models` directory, which build on each other:
-   1. **Staging** — creating our atoms, our initial modular building blocks, from source data
-   2. **Intermediate** — stacking layers of logic with clear and specific purposes to prepare our staging models to join into the entities we want
-   3. **Marts** — bringing together our modular pieces into a wide, rich vision of the entities our organization cares about
-2. Explore how these layers fit into the rest of the project:
-   1. Review the overall structure comprehensively
-   2. Expand on YAML configuration in-depth
-   3. Discuss how to use the other folders in a dbt project: `tests`, `seeds`, and `analyses`
+1. `models` ディレクトリ内の 3 つの主要なレイヤーのファイル、フォルダー、モデルが相互にどのように構築されるかを詳しく見てみましょう:
+   1. **Staging** — ソースデータから、最初のモジュールビルディングブロックであるアトムを作成します。
+   2. **Intermediate** — 明確で具体的な目的を持つロジックのレイヤーを積み重ねて、ステージングモデルを必要なエンティティに結合する準備をします。
+   3. **Marts** — 私たちの組織が関心を持つ実体の幅広く豊かなビジョンに、モジュール化された要素を統合します。
+2. これらのレイヤーがプロジェクトの残りの部分にどのように適合するかを調べます:
+   1. 全体構造を包括的に見直す
+   2. YAML構成の詳細を拡張する
+   3. dbt プロジェクト内の他のフォルダ (`tests`、`seeds`、`analyses`) の使用方法について説明します。
 
-Below is the complete file tree of the project we’ll be working through. Don’t worry if this looks like a lot of information to take in at once - this is just to give you the full vision of what we’re building towards. We’ll focus in on each of the sections one by one as we break down the project’s structure.
+以下は、これから取り組むプロジェクトの完全なファイル ツリーです。一度に理解するには情報が多すぎるように思えても心配しないでください。これは、私たちが目指すものの全体像を示すためのものです。プロジェクトの構造を分解しながら、各セクションに 1 つずつ焦点を当てていきます。
 
 ```shell
 jaffle_shop

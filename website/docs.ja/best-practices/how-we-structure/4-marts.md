@@ -1,17 +1,17 @@
 ---
-title: "Marts: Business-defined entities"
+title: "Marts: ビジネス定義エンティティ"
 id: "4-marts"
 ---
 
 :::info
-Our guidance here diverges if you use the dbt Semantic Layer. In a project without the Semantic Layer we recommend you denormalize heavily, per the best practices below. On the other hand, if you're using the Semantic Layer, we want to stay as normalized as possible to allow MetricFlow the most flexibility. Guidance for marts in a Semantic Layer context is on the next page.
+ここでのガイダンスは、dbt セマンティック レイヤーを使用する場合には異なります。セマンティック レイヤーのないプロジェクトでは、以下のベスト プラクティスに従って、大幅に非正規化することをお勧めします。一方、セマンティック レイヤーを使用している場合は、MetricFlow の柔軟性を最大限に高めるために、可能な限り正規化を維持する必要があります。セマンティック レイヤー コンテキストでのマートのガイダンスは次のページにあります。
 :::
 
-This is the layer where everything comes together and we start to arrange all of our atoms (staging models) and molecules (intermediate models) into full-fledged cells that have identity and purpose. We sometimes like to call this the _entity_ _layer_ or _concept layer_, to emphasize that all our marts are meant to represent a specific entity or concept at its unique grain. For instance, an order, a customer, a territory, a click event, a payment — each of these would be represented with a distinct mart, and each row would represent a discrete instance of these concepts. Unlike in a traditional Kimball star schema though, in modern data warehousing — where storage is cheap and compute is expensive — we’ll happily borrow and add any and all data from other concepts that are relevant to answering questions about the mart’s core entity. Building the same data in multiple places, as we do with `orders` in our `customers` mart example below, is more efficient in this paradigm than repeatedly rejoining these concepts (this is a basic definition of denormalization in this context). Let’s take a look at how we approach this first layer intended expressly for exposure to end users.
+これはすべてが集まるレイヤーであり、すべての原子 (ステージング モデル) と分子 (中間モデル) を、アイデンティティと目的を持つ本格的なセルに配置し始めます。私たちはこれをエンティティ レイヤーまたはコンセプト レイヤーと呼ぶことがあります。これは、すべてのマートが特定のエンティティまたはコンセプトを独自の粒度で表すことを意図していることを強調するためです。たとえば、注文、顧客、地域、クリック イベント、支払いはそれぞれ個別のマートで表され、各行はこれらのコンセプトの個別のインスタンスを表します。ただし、従来の Kimball スター スキーマとは異なり、ストレージは安価でコンピューティングは高価な最新のデータ ウェアハウスでは、マートのコア エンティティに関する質問に答えるために関連する他のコンセプトからあらゆるデータを喜んで借用して追加します。このパラダイムでは、以下の `customers` マートの例の `orders` のように、同じデータを複数の場所に構築する方が、これらの概念を繰り返し再結合するよりも効率的です (これがこのコンテキストでの非正規化の基本的な定義です)。エンド ユーザーに公開することを目的としたこの最初のレイヤーにどのようにアプローチするかを見てみましょう。
 
-### Marts: Files and folders
+### Marts: ファイルとフォルダ
 
-The last layer of our core transformations is below, providing models for both `finance` and `marketing` departments.
+コア変革の最後のレイヤーは以下であり、「財務」部門と「マーケティング」部門の両方にモデルを提供します。
 
 ```shell
 models/marts
@@ -24,16 +24,16 @@ models/marts
     └── customers.sql
 ```
 
-✅ **Group by department or area of concern.** If you have fewer than 10 or so marts you may not have much need for subfolders, so as with the intermediate layer, don’t over-optimize too early. If you do find yourself needing to insert more structure and grouping though, use useful business concepts here. In our marts layer, we’re no longer worried about source-conformed data, so grouping by departments (marketing, finance, etc.) is the most common structure at this stage.
+✅ **部門または関心領域別にグループ化します。** マートが 10 個程度未満の場合は、サブフォルダーの必要性があまりない可能性があるため、中間層と同様に、あまり早く最適化しすぎないでください。ただし、より多くの構造とグループ化を挿入する必要がある場合は、ここで便利なビジネス コンセプトを使用します。マート層では、ソースに準拠したデータについて心配する必要がなくなったため、この段階では部門 (マーケティング、財務など) 別にグループ化することが最も一般的な構造です。
 
-✅ **Name by entity.** Use plain English to name the file based on the concept that forms the grain of the mart’s `customers`, `orders`. Marts that don't include any time-based rollups (pure marts) should not have a time dimension (`orders_per_day`) here, typically best captured via metrics.
+✅ **エンティティごとに名前を付けます。** マートの `customers`、`orders` の粒度を形成する概念に基づいて、わかりやすい英語を使用してファイルに名前を付けます。時間ベースのロールアップを含まないマート (純粋なマート) には、ここでは時間ディメンション (`orders_per_day`) は必要ありません。通常は、メトリックを使用してキャプチャするのが最適です。
 
 
-❌ **Build the same concept differently for different teams.** `finance_orders` and `marketing_orders` is typically considered an anti-pattern. There are, as always, exceptions — a common pattern we see is that, finance may have specific needs, for example reporting revenue to the government in a way that diverges from how the company as a whole measures revenue day-to-day. Just make sure that these are clearly designed and understandable as _separate_ concepts, not departmental views on the same concept: `tax_revenue` and `revenue` not `finance_revenue` and `marketing_revenue`.
+❌ **同じコンセプトをチームごとに異なる方法で構築します。** `finance_orders` と `marketing_orders` は、通常、アンチパターンと見なされます。例外は常に存在します。よくあるパターンとして、財務には特定のニーズがある場合があります。たとえば、会社全体で日々の収益を測定する方法とは異なる方法で政府に収益を報告する場合などです。これらが明確に設計され、_別々の_コンセプトとして理解可能であり、同じコンセプトに対する部門のビューではないことを確認してください。`tax_revenue` と `revenue` であって、`finance_revenue` と `marketing_revenue` ではありません。
 
-### Marts: Models
+### Marts: モデル
 
-Finally we’ll take a look at the best practices for models within the marts directory by examining two of our marts models. These are the business-conformed — that is, crafted to our vision and needs — entities we’ve been bringing these transformed components together to create.
+最後に、2 つの marts モデルを検証して、marts ディレクトリ内のモデルのベスト プラクティスを確認します。これらは、ビジネスに適合した、つまり、私たちのビジョンとニーズに合わせて作成されたエンティティであり、変換されたコンポーネントを組み合わせて作成されています。
 
 ```sql
 -- orders.sql
@@ -122,19 +122,19 @@ customers_and_customer_orders_joined as (
 select * from customers_and_customer_orders_joined
 ```
 
-- ✅ **Materialized as tables or incremental models.** Once we reach the marts layer, it’s time to start building not just our logic into the warehouse, but the data itself. This gives end users much faster performance for these later models that are actually designed for their use, and saves us costs recomputing these entire chains of models every time somebody refreshes a dashboard or runs a regression in python. A good general rule of thumb regarding materialization is to always start with a view (as it takes up essentially no storage and always gives you up-to-date results), once that view takes too long to practically _query_, build it into a table, and finally once that table takes too long to _build_ and is slowing down your runs, [configure it as an incremental model](https://docs.getdbt.com/docs/build/incremental-models/). As always, start simple and only add complexity as necessary. The models with the most data and compute-intensive transformations should absolutely take advantage of dbt’s excellent incremental materialization options, but rushing to make all your marts models incremental by default will introduce superfluous difficulty. We recommend reading this [classic post from Tristan on the limits of incremental modeling](https://discourse.getdbt.com/t/on-the-limits-of-incrementality/303).
-- ✅ **Wide and denormalized.** Unlike old school warehousing, in the modern data stack storage is cheap and it’s compute that is expensive and must be prioritized as such, packing these into very wide denormalized concepts that can provide everything somebody needs about a concept as a goal.
-- ❌ **Too many joins in one mart.** One good rule of thumb when building dbt transformations is to avoid bringing together too many concepts in a single mart. What constitutes ‘too many’ can vary. If you need to bring 8 staging models together with nothing but simple joins, that might be fine. Conversely, if you have 4 concepts you’re weaving together with some complex and computationally heavy window functions, that could be too much. You need to weigh the number of models you’re joining against the complexity of the logic within the mart, and if it’s too much to read through and build a clear mental model of then look to modularize. While this isn’t a hard rule, if you’re bringing together more than 4 or 5 concepts to create your mart, you may benefit from adding some intermediate models for added clarity. Two intermediate models that bring together three concepts each, and a mart that brings together those two intermediate models, will typically result in a much more readable chain of logic than a single mart with six joins.
-- ✅ **Build on separate marts thoughtfully.** While we strive to preserve a narrowing DAG up to the marts layer, once here things may start to get a little less strict. A common example is passing information between marts at different grains, as we saw above, where we bring our `orders` mart into our `customers` marts to aggregate critical order data into a `customer` grain. Now that we’re really ‘spending’ compute and storage by actually building the data in our outputs, it’s sensible to leverage previously built resources to speed up and save costs on outputs that require similar data, versus recomputing the same views and CTEs from scratch. The right approach here is heavily dependent on your unique DAG, models, and goals — it’s just important to note that using a mart in building another, later mart is okay, but requires careful consideration to avoid wasted resources or circular dependencies.
+- ✅ **テーブルまたは増分モデルとして具体化します。** マート レイヤーに到達したら、ウェアハウスにロジックだけでなくデータ自体も構築し始めます。これにより、エンド ユーザーは、実際に使用するために設計されたこれらの後続のモデルのパフォーマンスが大幅に向上し、誰かがダッシュボードを更新したり Python で回帰を実行したりするたびに、これらのモデルのチェーン全体を再計算するコストを節約できます。具体化に関する一般的な経験則として、常にビューから開始し (基本的にストレージを占有せず、常に最新の結果が得られるため)、そのビューのクエリに時間がかかりすぎる場合はテーブルに構築し、最後にそのテーブルのビルドに時間がかかりすぎて実行が遅くなる場合は、[増分モデルとして構成](https://docs.getdbt.com/docs/build/incremental-models/) することが挙げられます。常に、シンプルに開始し、必要に応じて複雑さを追加します。最も多くのデータと計算集約型の変換を伴うモデルでは、dbt の優れた増分マテリアライゼーション オプションを必ず活用する必要がありますが、すべてのマート モデルをデフォルトで増分にしようとすると、余分な問題が生じます。[増分モデリングの限界に関する Tristan の古典的な投稿](https://discourse.getdbt.com/t/on-the-limits-of-incrementality/303) を読むことをお勧めします。
+- ✅ **幅広く非正規化されています。** 昔ながらのウェアハウジングとは異なり、最新のデータ スタックでは、ストレージは安価で、コンピューティングは高価であるため優先順位を付ける必要があり、これらを非常に幅広い非正規化された概念にまとめることで、目標としての概念について必要なすべてのものを提供できます。
+- ❌ **1 つのマートに結合が多すぎます。** dbt 変換を構築する際の 1 つの目安は、1 つのマートにあまり多くの概念をまとめないようにすることです。何が「多すぎる」かはさまざまです。単純な結合だけで 8 つのステージング モデルをまとめる必要がある場合は、問題ないかもしれません。逆に、複雑で計算量の多いウィンドウ関数を使用して 4 つの概念をまとめる場合は、多すぎる可能性があります。結合するモデルの数とマート内のロジックの複雑さを比較検討する必要があります。読み通して明確なメンタル モデルを構築するのが多すぎる場合は、モジュール化を検討してください。これは厳格なルールではありませんが、マートを作成するために 4 つまたは 5 つ以上の概念をまとめる場合は、明確さを高めるために中間モデルを追加すると効果的です。それぞれ 3 つの概念をまとめた 2 つの中間モデルと、その 2 つの中間モデルをまとめたマートは、通常、6 つの結合を持つ単一のマートよりもはるかに読みやすいロジック チェーンになります。
+- ✅ **別々のマートを慎重に構築します。** マート レイヤーまで DAG を狭めるよう努めていますが、ここまで来ると少し緩くなる可能性があります。一般的な例は、上で見たように、異なるグレインのマート間で情報を渡すことです。ここでは、`orders` マートを `customers` マートに持ち込んで、重要な注文データを `customer` グレインに集約します。出力に実際にデータを構築することで、コンピューティングとストレージを実際に「消費」しているので、同じビューと CTE を最初から再計算するのではなく、以前に構築したリソースを活用して、同様のデータを必要とする出力を高速化し、コストを節約するのが賢明です。ここでの適切なアプローチは、独自の DAG、モデル、および目標に大きく依存します。マートを別の後のマートの構築に使用することは問題ありませんが、リソースの無駄や循環依存関係を回避するために慎重に検討する必要があることに注意してください。
 
-:::tip Marts are entity-grained.
-The most important aspect of marts is that they contain all of the useful data about a _particular entity_ at a granular level. That doesn’t mean we don’t bring in lots of other entities and concepts, like tons of `user` data into our `orders` mart, we do! It just means that individual `orders` remain the core grain of our table. If we start grouping `users` and `orders` along a [date spine](https://github.com/dbt-labs/dbt-utils#date_spine-source), into something like `user_orders_per_day`, we’re moving past marts into _metrics_.
+:::tip マートはエンティティ単位で分類されます。
+マートの最も重要な側面は、_特定のエンティティ_ に関する有用なデータがすべて細かいレベルで含まれていることです。これは、大量の `user` データを `orders` マートに取り込むなど、他の多くのエンティティや概念を取り込まないという意味ではありません。取り込んでいます。個々の `orders` がテーブルの中核粒度のままであることを意味します。`users` と `orders` を [日付のスパイン](https://github.com/dbt-labs/dbt-utils#date_spine-source) に沿って `user_orders_per_day` などのようにグループ化し始めると、マートを過ぎて _metrics_ に移行していることになります。
 :::
 
-### Marts: Other considerations
+### Marts: その他の考慮事項
 
-- **Troubleshoot via tables.** While stacking views and ephemeral models up until our marts — only building data into the warehouse at the end of a chain when we have the models we really want end users to work with — is ideal in production, it can present some difficulties in development. Particularly, certain errors may seem to be surfacing in our later models that actually stem from much earlier dependencies in our model chain (ancestor models in our DAG that are built before the model throws the errors). If you’re having trouble pinning down where or what a database error is telling you, it can be helpful to temporarily build a specific chain of models as tables so that the warehouse will throw the error where it’s actually occurring.
+- **テーブルを使用してトラブルシューティングします。** ビューと一時的なモデルをマートまで積み重ねる (エンド ユーザーに実際に使用してもらいたいモデルができた場合にのみ、チェーンの最後にウェアハウスにデータを構築する) ことは、運用環境では理想的ですが、開発環境ではいくつかの問題が生じる可能性があります。特に、後のモデルで特定のエラーが表面化しているように見える場合がありますが、これは実際にはモデル チェーン内のかなり前の依存関係 (モデルがエラーをスローする前に構築された DAG 内の祖先モデル) に起因しています。データベース エラーが何を示しているのか、どこで発生しているのかを特定できない場合は、ウェアハウスがエラーを実際に発生している場所でスローするように、モデルの特定のチェーンを一時的にテーブルとして構築すると役立つ場合があります。
 
-### The dbt Semantic Layer and marts
+### dbt セマンティックレイヤーとマート
 
-Our structural recommendations are impacted quite a bit by whether or not you’re using the dbt Semantic Layer. If you're using the Semantic Layer, we recommend a more normalized approach to your marts. If you're not using the Semantic Layer, we recommend a more denormalized approach that has become typical in dbt projects. For the full list of recommendations on structure, naming, and organization in the Semantic Layer, check out the [How we build our metrics](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro) guide, particularly the [Refactoring an existing rollup](/best-practices/how-we-build-our-metrics/semantic-layer-8-refactor-a-rollup) section.
+構造に関する推奨事項は、dbt セマンティック レイヤーを使用しているかどうかによって大きく左右されます。セマンティック レイヤーを使用している場合は、マートに対してより正規化されたアプローチをお勧めします。セマンティック レイヤーを使用していない場合は、dbt プロジェクトで一般的になっている、より非正規化されたアプローチをお勧めします。セマンティック レイヤーの構造、命名、編成に関する推奨事項の完全なリストについては、[メトリクスの構築方法](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro) ガイド、特に [既存のロールアップのリファクタリング](/best-practices/how-we-build-our-metrics/semantic-layer-8-refactor-a-rollup) セクションをご覧ください。

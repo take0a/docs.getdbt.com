@@ -1,16 +1,16 @@
 ---
-title: "Intermediate: Purpose-built transformation steps"
+title: "Intermediate: 目的に合わせた変革ステップ"
 id: "3-intermediate"
 description: Purpose-built transformation steps.
 displayText: Purpose-built transformation steps.
 hoverSnippet: Purpose-built transformation steps.
 ---
 
-Once we’ve got our atoms ready to work with, we’ll set about bringing them together into more intricate, connected molecular shapes. The intermediate layer is where these molecules live, creating varied forms with specific purposes on the way towards the more complex proteins and cells we’ll use to breathe life into our data products.
+原子の準備ができたら、それらをより複雑で連結した分子形状にまとめていきます。中間層はこれらの分子が存在する場所で、データ製品に命を吹き込むために使用するより複雑なタンパク質や細胞へと向かう途中で、特定の目的を持つさまざまな形状を作成します。
 
-### Intermediate: Files and folders
+### Intermediate: ファイルとフォルダ
 
-Let’s take a look at the intermediate layer of our project to understand the purpose of this stage more concretely.
+この段階の目的をより具体的に理解するために、プロジェクトの intermediate 層を見てみましょう。
 
 ```shell
 models/intermediate
@@ -19,18 +19,18 @@ models/intermediate
     └── int_payments_pivoted_to_orders.sql
 ```
 
-- **Folders**
-  - ✅ **Subdirectories based on business groupings.** Much like the staging layer, we’ll house this layer of models inside their own `intermediate` subfolder. Unlike the staging layer, here we shift towards being business-conformed, splitting our models up into subdirectories not by their source system, but by their area of business concern.
-- **File names**
-  - `✅ int_[entity]s_[verb]s.sql` - the variety of transformations that can happen inside of the intermediate layer makes it harder to dictate strictly how to name them. The best guiding principle is to think about _verbs_ (e.g. `pivoted`, `aggregated_to_user`, `joined`, `fanned_out_by_quantity`, `funnel_created`, etc.) in the intermediate layer. In our example project, we use an intermediate model to pivot payments out to the order grain, so we name our model `int_payments_pivoted_to_orders`. It’s easy for anybody to quickly understand what’s happening in that model, even if they don’t know [SQL](https://mode.com/sql-tutorial/). That clarity is worth the long file name. It’s important to note that we’ve dropped the double underscores at this layer. In moving towards business-conformed concepts, we no longer need to separate a system and an entity and simply reference the unified entity if possible. In cases where you need intermediate models to operate at the source system level (e.g. `int_shopify__orders_summed`, `int_core__orders_summed` which you would later union), you’d preserve the double underscores. Some people like to separate the entity and verbs with double underscores as well. That’s a matter of preference, but in our experience, there is often an intrinsic connection between entities and verbs in this layer that make that difficult to maintain.
+- **フォルダ**
+  - ✅ **ビジネス グループに基づくサブディレクトリ。** ステージング レイヤーと同様に、このモデルのレイヤーを独自の `intermediate` サブフォルダー内に配置します。ステージング レイヤーとは異なり、ここではビジネスに準拠するようにシフトし、モデルをソース システムではなくビジネス関連の領域ごとにサブディレクトリに分割します。
+- **ファイル名**
+  - ✅ `int_[entity]s_[verb]s.sql` - 中間層内で発生する可能性のあるさまざまな変換により、それらの名前を厳密に指定することが難しくなります。最善の指針は、中間層の _動詞_ (例: `pivoted`、`aggregated_to_user`、`joined`、`fanned_out_by_quantity`、`funnel_created` など) について考えることです。サンプル プロジェクトでは、中間モデルを使用して支払いを注文粒度にピボットするため、モデルの名前を `int_payments_pivoted_to_orders` にします。[SQL](https://mode.com/sql-tutorial/) を知らなくても、誰でもそのモデルで何が起こっているのかをすぐに理解できます。その明確さは、長いファイル名の価値があります。このレイヤーでは二重アンダースコアを削除したことに注意してください。ビジネスに適合した概念に移行すると、システムとエンティティを分離する必要がなくなり、可能であれば統合されたエンティティを参照するだけです。ソース システム レベルで中間モデルを操作する必要がある場合 (たとえば、後で結合する `int_shopify__orders_summed`、`int_core__orders_summed` など)、二重アンダースコアを保持します。エンティティと動詞を二重アンダースコアで分離することを好む人もいます。これは好みの問題ですが、私たちの経験では、このレイヤーのエンティティと動詞の間には本質的なつながりがあり、それを維持するのが困難になることがよくあります。
 
-:::tip Don’t over-optimize too early!
-The example project is very simple for illustrative purposes. This level of division in our post-staging layers is probably unnecessary when dealing with these few models. Remember, our goal is a _single_ _source of truth._ We don’t want finance and marketing operating on separate `orders` models, we want to use our dbt project as a means to bring those definitions together! As such, don’t split and optimize too early. If you have less than 10 marts models and aren’t having problems developing and using them, feel free to forego subdirectories completely (except in the staging layer, where you should always implement them as you add new source systems to your project) until the project has grown to really need them. Using dbt is always about bringing simplicity to complexity.
+:::tip あまり早く過剰に最適化しないでください。
+サンプル プロジェクトは、説明のために非常にシンプルになっています。ステージング後のレイヤーをこのように分割することは、これらの少数のモデルを扱う場合にはおそらく不要です。ここでの目標は、_単一の_ _真実のソース_ であることを忘れないでください。財務とマーケティングが別々の `orders` モデルで動作することは望ましくありません。dbt プロジェクトは、それらの定義を 1 つにまとめる手段として使用したいのです。したがって、あまり早く分割して最適化しないでください。marts モデルの数が 10 未満で、開発と使用に問題がない場合は、プロジェクトが本当に必要になるまでサブディレクトリを完全に省略してもかまいません (ステージング レイヤーは除きます。ステージング レイヤーでは、新しいソース システムをプロジェクトに追加するたびにサブディレクトリを実装する必要があります)。dbt を使用するということは、常に複雑さをシンプルにすることです。
 :::
 
-### Intermediate: Models
+### Intermediate: モデル
 
-Below is the lone intermediate model from our small example project. This represents an excellent use case per our principles above, serving a clear single purpose: grouping and pivoting a staging model to different grain. It utilizes a bit of Jinja to make the model DRY-er (striving to be DRY applies to the code we write inside a single model in addition to transformations across the codebase), but don’t be intimidated if you’re not quite comfortable with [Jinja](/docs/build/jinja-macros) yet. Looking at the name of the <Term id="cte">CTE</Term>, `pivot_and_aggregate_payments_to_order_grain` we get a very clear idea of what’s happening inside this block. By descriptively labeling the transformations happening inside our CTEs within our model, just as we do with our files and folders, even a stakeholder who doesn’t know SQL would be able to grasp the purpose of this section, if not the code. As you begin to write more complex transformations moving out of the staging layer, keep this idea in mind. In the same way our models connect into a DAG and tell the story of our transformations on a macro scale, CTEs can do this on a smaller scale inside our model files.
+以下は、小規模なサンプル プロジェクトからの唯一の中間モデルです。これは、上記の原則に従った優れたユース ケースを表しており、ステージング モデルをグループ化して別の粒度にピボットするという明確な 1 つの目的を果たします。モデルを DRY にするために Jinja を少し使用していますが (DRY を目指すことは、コードベース全体の変換に加えて、単一のモデル内に記述するコードにも適用されます)、まだ [Jinja](/docs/build/jinja-macros) に慣れていない場合は、恐れる必要はありません。<Term id="cte">CTE</Term> の名前 `pivot_and_aggregate_payments_to_order_grain` を見ると、このブロック内で何が起こっているのか非常に明確にわかります。ファイルやフォルダーの場合と同じように、モデル内の CTE 内で行われている変換に説明的なラベルを付けることで、SQL を知らない利害関係者でも、コードではなくともこのセクションの目的を理解できるようになります。ステージング レイヤーから出て、より複雑な変換を記述し始めるときは、この考え方を念頭に置いてください。モデルが DAG に接続してマクロ スケールで変換のストーリーを伝えるのと同じように、CTE はモデル ファイル内でより小さなスケールでこれを実行できます。
 
 ```sql
 -- int_payments_pivoted_to_orders.sql
@@ -72,20 +72,20 @@ pivot_and_aggregate_payments_to_order_grain as (
 select * from pivot_and_aggregate_payments_to_order_grain
 ```
 
-- ❌ **Exposed to end users.** Intermediate models should generally not be exposed in the main production schema. They are not intended for output to final targets like dashboards or applications, so it’s best to keep them separated from models that are so you can more easily control data governance and discoverability.
-- ✅ **Materialized ephemerally.** Considering the above, one popular option is to default to intermediate models being materialized [ephemerally](/docs/build/materializations#ephemeral). This is generally the best place to start for simplicity. It will keep unnecessary models out of your warehouse with minimum configuration. Keep in mind though that the simplicity of ephemerals does translate a bit more difficulty in troubleshooting, as they’re interpolated into the models that `ref` them, rather than existing on their own in a way that you can view the output of.
-- ✅ **Materialized as views in a custom schema with special permissions.** A more robust option is to materialize your intermediate models as views in a specific [custom schema](/docs/build/custom-schemas), outside of your main production schema. This gives you added insight into development and easier troubleshooting as the number and complexity of your models grows, while remaining easy to implement and taking up negligible space.
+- ❌ **エンド ユーザーへの公開。** 中間モデルは、通常、メインの運用スキーマで公開しないでください。ダッシュボードやアプリケーションなどの最終ターゲットへの出力を目的としたものではないため、データ ガバナンスと検出可能性をより簡単に制御できるように、中間モデルを最終ターゲットのモデルから分離しておくことをお勧めします。
+- ✅ **エフェメラルにマテリアライズ。** 上記を考慮すると、中間モデルをデフォルトで [エフェメラルに](/docs/build/materializations#ephemeral) マテリアライズするようにするオプションが一般的です。これは、一般的に、シンプルさを求める場合に最適な開始点です。最小限の構成で、不要なモデルをウェアハウスから排除します。ただし、エフェメラルのシンプルさは、出力を表示できる方法で独自に存在するのではなく、それらを `ref` するモデルに補間されるため、トラブルシューティングが少し難しくなることに注意してください。
+- ✅ **特別な権限を持つカスタム スキーマのビューとして実現されます。** より堅牢なオプションは、メインの運用スキーマの外部にある特定の [カスタム スキーマ](/docs/build/custom-schemas) のビューとして中間モデルを実現することです。これにより、モデルの数と複雑さが増しても、開発に関する洞察が深まり、トラブルシューティングが容易になります。実装は簡単で、占有するスペースはごくわずかです。
 
-:::tip Keep your warehouse tidy!
-There are three interfaces to the organizational knowledge graph we’re encoding into dbt: the DAG, the files and folder structure of our codebase, and the output into the warehouse. As such, it’s really important that we consider that output intentionally! Think of the schemas, tables, and views we’re creating in the warehouse as _part of the UX,_ in addition to the dashboards, ML, apps, and other use cases you may be targeting for the data. Ensuring that our output is named and grouped well, and that models not intended for broad use are either not materialized or built into special areas with specific permissions is crucial to achieving this.
+:::tip 倉庫を整理整頓しましょう!
+dbt にエンコードする組織ナレッジ グラフには、DAG、コードベースのファイルとフォルダーの構造、ウェアハウスへの出力という 3 つのインターフェースがあります。そのため、出力を意図的に考慮することが非常に重要です。ウェアハウスで作成するスキーマ、テーブル、ビューは、ダッシュボード、ML、アプリ、およびデータの対象となるその他のユース ケースに加えて、_UX の一部_ として考えてください。出力に適切な名前が付けられ、適切にグループ化されていること、および幅広い使用を意図していないモデルが実現されないか、特定の権限を持つ特別な領域に組み込まれていないことを確認することが、これを実現する上で重要です。
 :::
 
-- Intermediate models’ purposes, as these serve to break up complexity from our marts models, can take as many forms as [data transformation](https://www.getdbt.com/analytics-engineering/transformation/) might require. Some of the most common use cases of intermediate models include:
+- 中間モデルの目的は、マート モデルから複雑さを分離することであり、[データ変換](https://www.getdbt.com/analytics-engineering/transformation/) に必要なさまざまな形式を取ることができます。中間モデルの最も一般的な使用例は次のとおりです:
 
-  - ✅ **Structural simplification.** Bringing together a reasonable number (typically 4 to 6) of entities or concepts (staging models, or perhaps other intermediate models) that will be joined with another similarly purposed intermediate model to generate a mart — rather than have 10 joins in our mart, we can join two intermediate models that each house a piece of the complexity, giving us increased readability, flexibility, testing surface area, and insight into our components.
-  - ✅ **Re-graining.** Intermediate models are often used to fan out or collapse models to the right composite grain — if we’re building a mart for `order_items` that requires us to fan out our `orders` based on the `quantity` column, creating a new single row for each item, this would be ideal to do in a specific intermediate model to maintain clarity in our mart and more easily view that our grain is correct before we mix it with other components.
-  - ✅ **Isolating complex operations.** It’s helpful to move any particularly complex or difficult to understand pieces of logic into their own intermediate models. This not only makes them easier to refine and troubleshoot, but simplifies later models that can reference this concept in a more clearly readable way. For example, in the `quantity` fan out example above, we benefit by isolating this complex piece of logic so we can quickly debug and thoroughly test that transformation, and downstream models can reference `order_items` in a way that’s intuitively easy to grasp.
+  - ✅ **構造の簡素化。** 適切な数 (通常は 4 ～ 6 個) のエンティティまたは概念 (ステージング モデル、または他の中間モデル) をまとめて、同様の目的を持つ別の中間モデルと結合してマートを生成します。マートに 10 個の結合を配置するのではなく、それぞれが複雑性の一部を保持する 2 つの中間モデルを結合できるため、読みやすさ、柔軟性、テスト対象領域、およびコンポーネントの洞察が向上します。
+  - ✅ **再粒度化。** 中間モデルは、モデルを適切な複合粒度に展開または縮小するためによく使用されます。たとえば、`quantity` 列に基づいて `orders` を展開し、各アイテムに対して新しい 1 行を作成する必要がある `order_items` のマートを構築する場合、マートの明瞭性を維持し、他のコンポーネントと混合する前に粒度が正しいことをより簡単に確認できるように、特定の中間モデルでこれを行うのが理想的です。
+  - ✅ **複雑な操作を分離します。** 特に複雑または理解しにくいロジックを、独自の中間モデルに移動すると便利です。これにより、ロジックの改良やトラブルシューティングが容易になるだけでなく、この概念をより明確かつ読みやすい方法で参照できる後続のモデルが簡素化されます。たとえば、上記の `quantity` ファンアウトの例では、この複雑なロジックを分離することで、その変換をすばやくデバッグして徹底的にテストできるようになり、下流のモデルは `order_items` を直感的に理解しやすい方法で参照できるようになります。
 
-:::tip Narrow the DAG, widen the tables.
-Until we get to the marts layer and start building our various outputs, we ideally want our DAG to look like an arrowhead pointed right. As we move from source-conformed to business-conformed, we’re also moving from numerous, narrow, isolated concepts to fewer, wider, joined concepts. We’re bringing our components together into wider, richer concepts, and that creates this shape in our DAG. This way when we get to the marts layer we have a robust set of components that can quickly and easily be put into any configuration to answer a variety of questions and serve specific needs. One rule of thumb to ensure you’re following this pattern on an individual model level is allowing multiple _inputs_ to a model, but **not** multiple _outputs_. Several arrows going _into_ our post-staging models is great and expected, several arrows coming _out_ is a red flag. There are absolutely situations where you need to break this rule, but it’s something to be aware of, careful about, and avoid when possible.
+:::tip DAG を狭くし、テーブルを広げます。
+マート レイヤーに到達してさまざまな出力の構築を開始するまで、DAG は右向きの矢印のように見えるのが理想的です。ソース準拠からビジネス準拠に移行すると、多数の狭い孤立した概念から、より少ない、より広い、結合された概念に移行します。コンポーネントをより広く豊かな概念にまとめることで、DAG にこの形状が作成されます。このようにして、マート レイヤーに到達すると、さまざまな質問に答え、特定のニーズに対応するために、あらゆる構成にすばやく簡単に配置できる堅牢なコンポーネント セットが得られます。個々のモデル レベルでこのパターンに従っていることを確認するための 1 つの経験則は、モデルへの複数の _入力_ を許可するが、複数の _出力_ は許可しないことです。ステージング後のモデルに複数の矢印が _入る_ のは適切で予想どおりですが、複数の矢印が _出る_ のは危険信号です。このルールを破る必要がある状況は確かにありますが、これは認識し、注意し、可能な場合は避けるべきことです。
 :::

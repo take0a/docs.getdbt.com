@@ -1,26 +1,27 @@
 ---
-title: "Using threads"
+title: "スレッドの使用"
 id: "using-threads"
 sidebar_label: "Use threads"
 description: "Understand what threads mean and how to use them."
 pagination_next: null
 ---
 
-When dbt runs, it creates a directed acyclic graph (DAG) of links between models. The number of threads represents the maximum number of paths through the graph dbt may work on at once – increasing the number of threads can minimize the run time of your project.
+dbt を実行すると、モデル間のリンクの有向非巡回グラフ (DAG) が作成されます。スレッド数は、dbt が一度に処理できるグラフのパスの最大数を表します。スレッド数を増やすと、プロジェクトの実行時間を最小限に抑えることができます。
 
-For example, if you specify `threads: 1`, dbt will start building only one model, and finish it, before moving onto the next. Specifying `threads: 8` means that dbt will work on _up to_ 8 models at once without violating dependencies – the actual number of models it can work on will likely be constrained by the available paths through the dependency graph.
+たとえば、`threads: 1` を指定すると、dbt は 1 つのモデルのみの構築を開始し、それを完了してから次のモデルに進みます。`threads: 8` を指定すると、dbt は依存関係に違反することなく、一度に最大 8 つのモデルを処理します。処理できる実際のモデルの数は、依存関係グラフで使用可能なパスによって制限される可能性があります。
 
-There's no set limit of the maximum number of threads you can set – while increasing the number of threads generally decreases execution time, there are a number of things to consider:
-* Increasing the number of threads increases the load on your warehouse, which may impact other tools in your data stack. For example, if your BI tool uses the same compute resources as dbt, their queries may get queued during a dbt run.
-* The number of concurrent queries your database will allow you to run may be a limiting factor in how many models can be actively built – some models may queue while waiting for an available query slot.
+設定できるスレッドの最大数に制限はありません。スレッド数を増やすと通常は実行時間が短縮されますが、考慮すべき点がいくつかあります。
 
-Generally the optimal number of threads depends on your data warehouse and its configuration. It’s best to test different values to find the best number of threads for your project. We recommend setting this to 4 to start with.
+* スレッド数を増やすとウェアハウスの負荷が増加し、データ スタック内の他のツールに影響する可能性があります。たとえば、BI ツールが dbt と同じコンピューティング リソースを使用する場合、そのクエリは dbt の実行中にキューに入れられる可能性があります。
+* データベースで実行できる同時クエリの数は、アクティブに構築できるモデルの数を制限する要因になる場合があります。一部のモデルは、使用可能なクエリ スロットを待機している間にキューに入れられる可能性があります。
 
-You can use a different number of threads than the value defined in your target by using the `--threads` option when executing a dbt command.
+一般的に、最適なスレッド数は、データ ウェアハウスとその構成によって異なります。さまざまな値をテストして、プロジェクトに最適なスレッド数を見つけることをお勧めします。最初は 4 に設定することをお勧めします。
 
-You will define the number of threads in your `profiles.yml` file (for dbt Core users only), dbt Cloud job definition, and dbt Cloud development credentials under your profile.
+dbt コマンドを実行するときに `--threads` オプションを使用すると、ターゲットで定義されている値とは異なるスレッド数を使用できます。
+
+スレッド数は、プロファイルの `profiles.yml` ファイル (dbt Core ユーザーのみ)、dbt Cloud ジョブ定義、および dbt Cloud 開発認証情報で定義します。
 
 
-## Related docs
-- [About profiles.yml](/docs/core/connect-data-platform/profiles.yml)
-- [dbt Cloud job scheduler](/docs/deploy/job-scheduler)
+## 関連ドキュメント
+- [profiles.yml について](/docs/core/connect-data-platform/profiles.yml)
+- [dbt Cloud ジョブ スケジューラ](/docs/deploy/job-scheduler)

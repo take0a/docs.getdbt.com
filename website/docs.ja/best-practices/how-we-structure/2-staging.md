@@ -1,18 +1,18 @@
 ---
-title: "Staging: Preparing our atomic building blocks"
+title: "Staging: アトミックな構成要素を準備する"
 id: 2-staging
 description: Preparing our atomic building blocks.
 displayText: Preparing our atomic building blocks.
 hoverSnippet: Preparing our atomic building blocks.
 ---
 
-The staging layer is where our journey begins. This is the foundation of our project, where we bring all the individual components we're going to use to build our more complex and useful models into the project.
+ステージング レイヤーは、私たちの旅の始まりです。これは私たちのプロジェクトの基盤であり、より複雑で有用なモデルを構築するために使用するすべての個別のコンポーネントをプロジェクトに持ち込みます。
 
-We'll use an analogy for working with dbt throughout this guide: thinking modularly in terms of atoms, molecules, and more complex outputs like proteins or cells (we apologize in advance to any chemists or biologists for our inevitable overstretching of this metaphor). Within that framework, if our source system data is a soup of raw energy and quarks, then you can think of the staging layer as condensing and refining this material into the individual atoms we’ll later build more intricate and useful structures with.
+このガイド全体を通して、dbt の操作について、原子、分子、およびタンパク質や細胞などのより複雑な出力の観点からモジュール的に考えるというアナロジーを使用します (化学者や生物学者の方には、このメタファーを無理やり拡大解釈していることをあらかじめお詫びします)。そのフレームワーク内で、ソース システム データが生のエネルギーとクォークのスープである場合、ステージング レイヤーは、この材料を個々の原子に凝縮して精製し、後でより複雑で有用な構造を構築するものと考えることができます。
 
-### Staging: Files and folders
+### Staging: ファイルとフォルダ
 
-Let's zoom into the staging directory from our `models` file tree [in the overview](/best-practices/how-we-structure/1-guide-overview) and walk through what's going on here.
+[概要](/best-practices/how-we-structure/1-guide-overview)の `models` ファイル ツリーからステージング ディレクトリにズームインして、ここで何が起こっているのかを確認してみましょう。
 
 ```shell
 models/staging
@@ -31,22 +31,22 @@ models/staging
     └── stg_stripe__payments.sql
 ```
 
-- **Folders.** Folder structure is extremely important in dbt. Not only do we need a consistent structure to find our way around the codebase, as with any software project, but our folder structure is also one of the key interfaces for understanding the knowledge graph encoded in our project (alongside the DAG and the data output into our warehouse). It should reflect how the data flows, step-by-step, from a wide variety of source-conformed models into fewer, richer business-conformed models. Moreover, we can use our folder structure as a means of selection in dbt [selector syntax](https://docs.getdbt.com/reference/node-selection/syntax). For example, with the above structure, if we got fresh Stripe data loaded and wanted to run all the models that build on our Stripe data, we can easily run `dbt build --select staging.stripe+` and we’re all set for building more up-to-date reports on payments.
-  - ✅ **Subdirectories based on the source system**. Our internal transactional database is one system, the data we get from Stripe's API is another, and lastly the events from our Snowplow instrumentation. We've found this to be the best grouping for most companies, as source systems tend to share similar loading methods and properties between tables, and this allows us to operate on those similar sets easily.
-  - ❌ **Subdirectories based on loader.** Some people attempt to group by how the data is loaded (Fivetran, Stitch, custom syncs), but this is too broad to be useful on a project of any real size.
-  - ❌ **Subdirectories based on business grouping.** Another approach we recommend against is splitting up by business groupings in the staging layer, and creating subdirectories like 'marketing', 'finance', etc. A key goal of any great dbt project should be establishing a single source of truth. By breaking things up too early, we open ourselves up to creating overlap and conflicting definitions (think marketing and financing having different fundamental tables for orders). We want everybody to be building with the same set of atoms, so in our experience, starting our transformations with our staging structure reflecting the source system structures is the best level of grouping for this step.
-- **File names.** Creating a consistent pattern of file naming is [crucial in dbt](https://docs.getdbt.com/blog/on-the-importance-of-naming). File names must be unique and correspond to the name of the model when selected and created in the warehouse. We recommend putting as much clear information into the file name as possible, including a prefix for the layer the model exists in, important grouping information, and specific information about the entity or transformation in the model.
-  - ✅ `stg_[source]__[entity]s.sql` - the double underscore between source system and entity helps visually distinguish the separate parts in the case of a source name having multiple words. For instance, `google_analytics__campaigns` is always understandable, whereas to somebody unfamiliar `google_analytics_campaigns` could be `analytics_campaigns` from the `google` source system as easily as `campaigns` from the `google_analytics` source system. Think of it like an [oxford comma](https://www.youtube.com/watch?v=P_i1xk07o4g), the extra clarity is very much worth the extra punctuation.
-  - ❌ `stg_[entity].sql` - might be specific enough at first, but will break down in time. Adding the source system into the file name aids in discoverability, and allows understanding where a component model came from even if you aren't looking at the file tree.
-  - ✅ **Plural.** SQL, and particularly SQL in dbt, should read as much like prose as we can achieve. We want to lean into the broad clarity and declarative nature of SQL when possible. As such, unless there’s a single order in your `orders` table, plural is the correct way to describe what is in a table with multiple rows.
+- **フォルダー。** フォルダー構造は、dbt では非常に重要です。他のソフトウェア プロジェクトと同様に、コードベース内を移動するために一貫した構造が必要なだけでなく、フォルダー構造は、プロジェクトにエンコードされたナレッジ グラフ (DAG およびウェアハウスへのデータ出力と並んで) を理解するための重要なインターフェイスの 1 つでもあります。フォルダー構造は、さまざまなソース準拠モデルから、より少ない、より豊富なビジネス準拠モデルへとデータが段階的にどのように流れるかを反映する必要があります。さらに、フォルダー構造は、dbt [セレクタ構文](https://docs.getdbt.com/reference/node-selection/syntax) での選択手段として使用できます。たとえば、上記の構造では、最新の Stripe データをロードし、Stripe データに基づいて構築されたすべてのモデルを実行したい場合、`dbt build --select staging.stripe+` を簡単に実行でき、支払いに関するより最新のレポートを作成する準備が整います。
+  - ✅ **ソース システムに基づくサブディレクトリ。** 社内トランザクション データベースが 1 つのシステム、Stripe の API から取得するデータが別のシステム、最後に除雪車インストルメンテーションからのイベントです。 ソース システムはテーブル間で同様の読み込み方法とプロパティを共有する傾向があるため、ほとんどの企業にとってこれが最適なグループ化であることがわかりました。これにより、同様のセットを簡単に操作できます。
+  - ❌**ローダーに基づくサブディレクトリ。** データのロード方法 (Fivetran、Stitch、カスタム同期) 別にグループ化しようとする人もいますが、これは範囲が広すぎるため、実際の規模のプロジェクトでは役に立ちません。
+  - ❌ **ビジネス グループに基づくサブディレクトリ。** 推奨しないもう 1 つの方法は、ステージング レイヤーでビジネス グループごとに分割し、「マーケティング」、「財務」などのサブディレクトリを作成することです。優れた dbt プロジェクトの主要な目標は、単一の真実のソースを確立することです。あまりに早く分割すると、重複や矛盾する定義が生じる可能性があります (マーケティングと財務で注文の基本テーブルが異なる場合など)。全員が同じアトム セットを使用して構築できるようにしたいため、私たちの経験では、ソース システム構造を反映したステージング構造で変換を開始するのが、このステップのグループ化の最適なレベルです。
+- **ファイル名。** 一貫したファイル名のパターンを作成することは、[dbt では非常に重要です](https://docs.getdbt.com/blog/on-the-importance-of-naming)。ファイル名は一意で、ウェアハウスで選択および作成されたときのモデルの名前に対応している必要があります。モデルが存在するレイヤーのプレフィックス、重要なグループ化情報、モデル内のエンティティまたは変換に関する具体的な情報など、できるだけ多くの明確な情報をファイル名に入れることをお勧めします。
+  - ✅ `stg_[source]__[entity]s.sql` - ソース システムとエンティティの間にある二重のアンダースコアは、ソース名に複数の単語がある場合に、別々の部分を視覚的に区別するのに役立ちます。たとえば、`google_analytics__campaigns` は常に理解できますが、慣れていない人にとっては、`google_analytics_campaigns` は、`google` ソース システムの `analytics_campaigns` であるのと同じくらい簡単に、`google_analytics` ソース システムの `campaigns` である可能性があります。[オックスフォード カンマ](https://www.youtube.com/watch?v=P_i1xk07o4g) のように考えてください。追加の句読点を使用する価値は十分にあります。
+  - ❌ `stg_[entity].sql` - 最初は十分に具体的かもしれませんが、時間が経つにつれて説明が難しくなります。ファイル名にソース システムを追加すると、見つけやすくなり、ファイル ツリーを見なくてもコンポーネント モデルがどこから来たのかを理解できるようになります。
+  - ✅ **複数形。** SQL、特に dbt の SQL は、できる限り散文のように読めるようにする必要があります。可能であれば、SQL の幅広い明快さと宣言的な性質を活かしたいと考えています。そのため、`orders` テーブルに単一の注文があるのでないなら、複数行のテーブルの内容を説明するには複数形が正しい方法です。
 
-### Staging: Models
+### Staging: モデル
 
-Now that we’ve got a feel for how the files and folders fit together, let’s look inside one of these files and dig into what makes for a well-structured staging model.
+ファイルとフォルダがどのように組み合わされているかがわかったので、これらのファイルの 1 つを見て、適切に構造化されたステージング モデルを構成する要素を詳しく調べましょう。
 
-Below, is an example of a standard staging model (from our `stg_stripe__payments` model) that illustrates the common patterns within the staging layer. We’ve organized our model into two <Term id='cte'>CTEs</Term>: one pulling in a source table via the [source macro](https://docs.getdbt.com/docs/build/sources#selecting-from-a-source) and the other applying our transformations.
+以下は、ステージング レイヤー内の一般的なパターンを示す標準ステージング モデル (`stg_stripe__payments` モデルから) の例です。モデルは 2 つの <Term id='cte'>CTE</Term> に整理されています。1 つは [ソース マクロ](https://docs.getdbt.com/docs/build/sources#selecting-from-a-source) を介してソース テーブルをプルし、もう 1 つは変換を適用します。
 
-While our later layers of transformation will vary greatly from model to model, every one of our staging models will follow this exact same pattern. As such, we need to make sure the pattern we’ve established is rock solid and consistent.
+後の変換レイヤーはモデルごとに大きく異なりますが、ステージング モデルはすべてこのまったく同じパターンに従います。そのため、確立したパターンが堅牢で一貫性があることを確認する必要があります。
 
 ```sql
 -- stg_stripe__payments.sql
@@ -97,17 +97,17 @@ renamed as (
 select * from renamed
 ```
 
-- Based on the above, the most standard types of staging model transformations are:
-  - ✅ **Renaming**
-  - ✅ **Type casting**
-  - ✅ **Basic computations** (e.g. cents to dollars)
-  - ✅ **Categorizing** (using conditional logic to group values into buckets or booleans, such as in the `case when` statements above)
-  - ❌ **Joins** — the goal of staging models is to clean and prepare individual source-conformed concepts for downstream usage. We're creating the most useful version of a source system table, which we can use as a new modular component for our project. In our experience, joins are almost always a bad idea here — they create immediate duplicated computation and confusing relationships that ripple downstream — there are occasionally exceptions though (refer to [base models](#staging-other-considerations) for more info).
-  - ❌ **Aggregations** — aggregations entail grouping, and we're not doing that at this stage. Remember - staging models are your place to create the building blocks you’ll use all throughout the rest of your project — if we start changing the grain of our tables by grouping in this layer, we’ll lose access to source data that we’ll likely need at some point. We just want to get our individual concepts cleaned and ready for use, and will handle aggregating values downstream.
-- ✅ **Materialized as views.** Looking at a partial view of our `dbt_project.yml` below, we can see that we’ve configured the entire staging directory to be materialized as <Term id='view'>views</Term>. As they’re not intended to be final artifacts themselves, but rather building blocks for later models, staging models should typically be materialized as views for two key reasons:
+- 上記に基づくと、ステージング モデル変換の最も標準的なタイプは次のようになります:
+  - ✅ **名前の変更**
+  - ✅ **型キャスト**
+  - ✅ **基本的な計算** (例: セントからドル)
+  - ✅ **分類** (上記の `case when` ステートメントのように、条件付きロジックを使用して値をバケットまたはブール値にグループ化する)
+  - ❌ **結合** — ステージング モデルの目的は、個々のソース準拠の概念をクリーンアップして、下流での使用に備えることです。私たちは、プロジェクトの新しいモジュール コンポーネントとして使用できる、ソース システム テーブルの最も便利なバージョンを作成しています。私たちの経験では、結合はほとんどの場合、ここでは悪い考えです。結合により、すぐに重複した計算と混乱を招く関係が作成され、下流に波及します。ただし、例外も時々あります (詳細については、[基本モデル](#staging-other-considerations) を参照してください)。
+  - ❌ **集計** — 集計にはグループ化が必要ですが、この段階では行いません。ステージング モデルは、プロジェクトの残りの部分で使用する構成要素を作成する場所であることを忘れないでください。このレイヤーでグループ化してテーブルの粒度を変更し始めると、ある時点で必要になる可能性のあるソース データにアクセスできなくなります。個々の概念を整理して使用できるようにし、下流で値の集計を処理します。
+- ✅ **ビューとしてマテリアライズされます。** 以下の `dbt_project.yml` の部分ビューを見ると、ステージング ディレクトリ全体が <Term id='view'>ビュー</Term> としてマテリアライズされるように構成されていることがわかります。ステージング モデルは最終的な成果物ではなく、後のモデルの構築ブロックとなることを意図しているため、通常、次の 2 つの主な理由から、ビューとしてマテリアライズする必要があります:
 
-  - Any downstream model (discussed more in [marts](/best-practices/how-we-structure/4-marts)) referencing our staging models will always get the freshest data possible from all of the component views it’s pulling together and materializing
-  - It avoids wasting space in the warehouse on models that are not intended to be queried by data consumers, and thus do not need to perform as quickly or efficiently
+  - ステージングモデルを参照する下流モデル（[marts](/best-practices/how-we-structure/4-marts)で詳しく説明）は、常に、集めて具体化するすべてのコンポーネントビューから可能な限り最新のデータを取得します。
+  - データ消費者によるクエリを意図していないモデルにウェアハウス内のスペースを無駄に費やすことを回避し、そのため、それほど高速または効率的に実行する必要がない。
 
     ```yaml
     # dbt_project.yml
@@ -118,19 +118,19 @@ select * from renamed
           +materialized: view
     ```
 
-- Staging models are the only place we'll use the [`source` macro](/docs/build/sources), and our staging models should have a 1-to-1 relationship to our source tables. That means for each source system table we’ll have a single staging model referencing it, acting as its entry point — _staging_ it — for use downstream.
+- ステージング モデルは、[`source` マクロ](/docs/build/sources) を使用する唯一の場所であり、ステージング モデルはソース テーブルと 1 対 1 の関係を持つ必要があります。つまり、ソース システム テーブルごとに、それを参照する単一のステージング モデルがあり、下流で使用するためのエントリ ポイント (ステージング) として機能します。
 
-:::tip Don’t Repeat Yourself.
-Staging models help us keep our code <Term id='dry'>DRY</Term>. dbt's modular, reusable structure means we can, and should, push any transformations that we’ll always want to use for a given component model as far upstream as possible. This saves us from potentially wasting code, complexity, and compute doing the same transformation more than once. For instance, if we know we always want our monetary values as floats in dollars, but the source system is integers and cents, we want to do the division and type casting as early as possible so that we can reference it rather than redo it repeatedly downstream.
+:::tip Don’t Repeat Yourself.（同じことを繰り返さないでください。）
+ステージング モデルは、コードを <Term id='dry'>DRY</Term> に保つのに役立ちます。dbt のモジュール式で再利用可能な構造により、特定のコンポーネント モデルで常に使用する変換を可能な限り上流にプッシュできます (プッシュする必要があります)。これにより、同じ変換を複数回実行してコード、複雑さ、計算を無駄にする可能性がなくなります。たとえば、通貨値を常にドル単位の浮動小数点数にしたいが、ソース システムが整数とセントである場合、下流で繰り返しやり直すのではなく、できるだけ早く除算と型キャストを実行して参照できるようにします。
 :::
 
-This is a welcome change for many of us who have become used to applying the same sets of SQL transformations in many places out of necessity! For us, the earliest point for these 'always-want' transformations is the staging layer, the initial entry point in our transformation process. The DRY principle is ultimately the litmus test for whether transformations should happen in the staging layer. If we'll want them in every downstream model and they help us eliminate repeated code, they're probably okay.
+これは、必要に迫られて多くの場所で同じ SQL 変換セットを適用することに慣れている私たちの多くにとって、歓迎すべき変更です。私たちにとって、これらの「常に必要な」変換の最も初期のポイントは、ステージング レイヤー、つまり変換プロセスの最初のエントリ ポイントです。DRY 原則は、最終的に、ステージング レイヤーで変換を行うべきかどうかを判断するためのリトマス試験です。下流のすべてのモデルで変換が必要であり、重複するコードを排除するのに役立つ場合は、おそらく問題ありません。
 
-### Staging: Other considerations
+### Staging: その他の考慮事項
 
-- **Base models when joins are necessary to stage concepts.** Sometimes, in order to maintain a clean and <Term id='dry'>DRY</Term> staging layer we do need to implement some joins to create a solid concept for our building blocks. In these cases, we recommend creating a sub-directory in the staging directory for the source system in question and building `base` models. These have all the same properties that would normally be in the staging layer, they will directly source the raw data and do the non-joining transformations, then in the staging models we’ll join the requisite base models. The most common use cases for building a base layer under a staging folder are:
+- **概念をステージングするために結合が必要な場合のベース モデル。** 場合によっては、クリーンで <Term id='dry'>DRY</Term> なステージング レイヤーを維持するために、ビルディング ブロックの堅固な概念を作成するためにいくつかの結合を実装する必要があります。このような場合は、問題のソース システムのステージング ディレクトリにサブディレクトリを作成し、`ベース` モデルを構築することをお勧めします。これらは、通常ステージング レイヤーにあるものと同じプロパティをすべて備えており、生データを直接取得して非結合変換を行い、ステージング モデルで必要なベース モデルを結合します。ステージング フォルダーの下にベース レイヤーを構築する最も一般的なユース ケースは次のとおりです。
 
-  - ✅ **Joining in separate delete tables**. Sometimes a source system might store deletes in a separate table. Typically we’ll want to make sure we can mark or filter out deleted records for all our component models, so we’ll need to join these delete records up to any of our entities that follow this pattern. This is the example shown below to illustrate.
+  - ✅ **別の削除テーブルへの結合。** ソース システムが削除を別のテーブルに保存する場合があります。通常、すべてのコンポーネント モデルで削除されたレコードをマークまたはフィルター処理できるようにする必要があるため、これらの削除レコードをこのパターンに従うエンティティのいずれかに結合する必要があります。これは、説明のために以下に示す例です。
 
     ```sql
     -- base_jaffle_shop__customers.sql
@@ -216,11 +216,11 @@ This is a welcome change for many of us who have become used to applying the sam
     select * from join_and_mark_deleted_customers
     ```
 
-  - ✅ **Unioning disparate but symmetrical sources**. A typical example here would be if you operate multiple ecommerce platforms in various territories via a SaaS platform like Shopify. You would have perfectly identical schemas, but all loaded separately into your warehouse. In this case, it’s easier to reason about our orders if _all_ of our shops are unioned together, so we’d want to handle the unioning in a base model before we carry on with our usual staging model transformations on the (now complete) set — you can dig into [more detail on this use case here](https://discourse.getdbt.com/t/unioning-identically-structured-data-sources/921).
+  - ✅ **異なるが対称的なソースの結合。** ここでの典型的な例は、Shopify などの SaaS プラットフォームを介して、さまざまな地域で複数の e コマース プラットフォームを運用している場合です。完全に同一のスキーマがありますが、すべて個別にウェアハウスにロードされます。この場合、すべてのショップが結合されていると注文について判断しやすくなります。そのため、(これで完了した) セットで通常のステージング モデル変換を実行する前に、ベース モデルで結合を処理する必要があります。[このユース ケースの詳細については、こちら](https://discourse.getdbt.com/t/unioning-identically-structured-data-sources/921) を参照してください。
 
-- **[Codegen](https://github.com/dbt-labs/dbt-codegen) to automate staging table generation.** It’s very good practice to learn to write staging models by hand, they’re straightforward and numerous, so they can be an excellent way to absorb the dbt style of writing SQL. Also, we’ll invariably find ourselves needing to add special elements to specific models at times — for instance, in one of the situations above that require base models — so it’s helpful to deeply understand how they work. Once that understanding is established though, because staging models are built largely following the same rote patterns and need to be built 1-to-1 for each source table in a source system, it’s preferable to start automating their creation. For this, we have the [codegen](https://github.com/dbt-labs/dbt-codegen) package. This will let you automatically generate all the source YAML and staging model boilerplate to speed up this step, and we recommend using it in every project.
-- **Utilities folder.** While this is not in the `staging` folder, it’s useful to consider as part of our fundamental building blocks. The `models/utilities` directory is where we can keep any general purpose models that we generate from macros or based on seeds that provide tools to help us do our modeling, rather than data to model itself. The most common use case is a [date spine](https://github.com/dbt-labs/dbt-utils#date_spine-source) generated with [the dbt utils package](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/).
+- **[Codegen](https://github.com/dbt-labs/dbt-codegen) を使用してステージング テーブルの生成を自動化します。** ステージング モデルを手動で記述することを学ぶことは非常に良い習慣です。ステージング モデルは単純で数が多いため、dbt スタイルの SQL 記述を習得するのに最適な方法です。また、特定のモデルに特別な要素を追加する必要があることが必ずあります (たとえば、ベース モデルを必要とする上記の状況の 1 つ)。そのため、その仕組みを深く理解しておくと役立ちます。ただし、その理解が確立されたら、ステージング モデルはほぼ同じ決まりきったパターンに従って構築され、ソース システム内のソース テーブルごとに 1 対 1 で構築する必要があるため、ステージング モデルの作成を自動化することをお勧めします。そのために、[codegen](https://github.com/dbt-labs/dbt-codegen) パッケージがあります。これにより、すべてのソース YAML とステージング モデルの定型文が自動的に生成され、この手順が高速化されるため、すべてのプロジェクトで使用することをお勧めします。
+- **ユーティリティ フォルダ。** これは `staging` フォルダ内にはありませんが、基本的な構成要素の一部として考えると便利です。`models/utilities` ディレクトリには、マクロから生成した汎用モデルや、モデル化を行うためのデータ自体ではなく、モデリングに役立つツールを提供するシードに基づいて生成した汎用モデルを保存できます。最も一般的な使用例は、[dbt utils パッケージ](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) で生成された [日付スパイン](https://github.com/dbt-labs/dbt-utils#date_spine-source) です。
 
-:::info Development flow versus DAG order.
-This guide follows the order of the DAG, so we can get a holistic picture of how these three primary layers build on each other towards fueling impactful data products. It’s important to note though that developing models does not typically move linearly through the DAG. Most commonly, we should start by mocking out a design in a spreadsheet so we know we’re aligned with our stakeholders on output goals. Then, we’ll want to write the SQL to generate that output, and identify what tables are involved. Once we have our logic and dependencies, we’ll make sure we’ve staged all the necessary atomic pieces into the project, then bring them together based on the logic we wrote to generate our mart. Finally, with a functioning model flowing in dbt, we can start refactoring and optimizing that mart. By splitting the logic up and moving parts back upstream into intermediate models, we ensure all of our models are clean and readable, the story of our DAG is clear, and we have more surface area to apply thorough testing.
+:::info 開発フローと DAG 順序。
+このガイドは DAG の順序に従っているため、これら 3 つの主要なレイヤーが相互に構築されて、インパクトのあるデータ製品を生み出す仕組みを全体的に把握できます。ただし、モデルの開発は通常、DAG を直線的に進むわけではないことに注意してください。最も一般的な方法は、まずスプレッドシートで設計をモックアップして、出力目標について関係者と一致させる必要があります。次に、その出力を生成する SQL を記述し、関係するテーブルを特定します。ロジックと依存関係ができたら、必要なアトミック ピースをすべてプロジェクトにステージングしたことを確認し、マートを生成するために記述したロジックに基づいてそれらをまとめます。最後に、dbt で機能するモデルが流れるようになったら、そのマートのリファクタリングと最適化を開始できます。ロジックを分割し、パーツを中間モデルに上流に戻すことで、すべてのモデルがクリーンで読みやすくなり、DAG のストーリーが明確になり、徹底的なテストを適用できる領域が広がります。
 :::

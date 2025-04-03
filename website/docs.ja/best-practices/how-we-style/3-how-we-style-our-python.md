@@ -1,22 +1,22 @@
 ---
-title: How we style our Python
+title: Python のスタイル
 id: 3-how-we-style-our-python
 ---
 
-## Python tooling
+## Python ツール
 
-- 🐍 Python has a more mature and robust ecosystem for formatting and linting (helped by the fact that it doesn't have a million distinct dialects). We recommend using those tools to format and lint your code in the style you prefer.
+- 🐍 Python には、フォーマットとリンティングのためのより成熟した堅牢なエコシステムがあります (100 万通りの異なる方言がないことが役立っています)。これらのツールを使用して、好みのスタイルでコードをフォーマットおよびリンティングすることをお勧めします。
 
-- 🛠️ Our current recommendations are
+- 🛠️ 現在の推奨事項は次のとおりです
 
   - [black](https://pypi.org/project/black/) formatter
   - [ruff](https://pypi.org/project/ruff/) linter
 
   :::info
-  ☁️ dbt Cloud comes with the [black formatter built-in](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format) to automatically lint and format their SQL. You don't need to download or configure anything, just click `Format` in a Python model and you're good to go!
+  ☁️ dbt Cloud には、SQL を自動的に lint してフォーマットする [black formatter が組み込まれています](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format)。ダウンロードや設定は一切不要で、Python モデルで「Format」をクリックするだけで準備完了です。
   :::
 
-## Example Python
+## Pythonの例
 
 ```python
 import pandas as pd

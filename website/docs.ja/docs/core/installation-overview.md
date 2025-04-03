@@ -1,50 +1,50 @@
 ---
-title: "About dbt Core and installation"
+title: "dbt Core とインストールについて"
 description: "Install dbt Core locally to begin transforming your data."
 pagination_next: "docs/core/pip-install"
 pagination_prev: null
 ---
 
-[dbt Core](https://github.com/dbt-labs/dbt-core) is an open sourced project where you can develop from the command line and run your dbt project.
+[dbt Core](https://github.com/dbt-labs/dbt-core) は、コマンドラインから開発して dbt プロジェクトを実行できるオープンソース プロジェクトです。
 
-To use dbt Core, your workflow generally looks like:
+dbt Core を使用する場合、ワークフローは通常次のようになります。
 
-1. **Build your dbt project in a code editor &mdash;** popular choices include VSCode and Atom.
+1. **コード エディターで dbt プロジェクトをビルドします。** 一般的な選択肢としては、VSCode や Atom などがあります。
 
-2. **Run your project from the command line &mdash;** macOS ships with a default Terminal program, however you can also use iTerm or the command line prompt within a code editor to execute dbt commands.
+2. **コマンド ラインからプロジェクトを実行します。** macOS にはデフォルトのターミナル プログラムが付属していますが、コード エディター内で iTerm またはコマンド ライン プロンプトを使用して dbt コマンドを実行することもできます。
 
-:::info How we set up our computers for working on dbt projects
+:::info dbt プロジェクトで作業するためにコンピューターを設定する方法
 
-We've written a [guide](https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243) for our recommended setup when running dbt projects using dbt Core.
+dbt Core を使用して dbt プロジェクトを実行する場合に推奨されるセットアップについては、[ガイド](https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243) を作成しました。
 
 :::
 
-If you're using the command line, we recommend learning some basics of your terminal to help you work more effectively. In particular, it's important to understand `cd`, `ls` and `pwd` to be able to navigate through the directory structure of your computer easily.
+コマンドラインを使用している場合は、より効率的に作業するために、ターミナルの基本を学ぶことをお勧めします。特に、コンピューターのディレクトリ構造を簡単にナビゲートできるようにするために、`cd`、`ls`、`pwd` を理解することが重要です。
 
-## Install dbt Core
+## dbt Core をインストールする
 
-You can install dbt Core on the command line by using one of these methods:
+次のいずれかの方法を使用して、コマンド ラインで dbt Core をインストールできます。
 
-- [Use pip to install dbt](/docs/core/pip-install) (recommended)
-- [Use a Docker image to install dbt](/docs/core/docker-install)
-- [Install dbt from source](/docs/core/source-install)
-- You can also develop locally using the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation). The dbt Cloud CLI and dbt Core are both command line tools that let you run dbt commands. The key distinction is the dbt Cloud CLI is tailored for dbt Cloud's infrastructure and integrates with all its [features](/docs/cloud/about-cloud/dbt-cloud-features).
+- [pip を使用して dbt をインストールする](/docs/core/pip-install) (推奨)
+- [Docker イメージを使用して dbt をインストールする](/docs/core/docker-install)
+- [ソースから dbt をインストールする](/docs/core/source-install)
+- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) を使用してローカルで開発することもできます。dbt Cloud CLI と dbt Core はどちらも、dbt コマンドを実行できるコマンド ライン ツールです。主な違いは、dbt Cloud CLI は dbt Cloud のインフラストラクチャに合わせて調整されており、そのすべての [機能](/docs/cloud/about-cloud/dbt-cloud-features) と統合されていることです。
 
-## Upgrading dbt Core
+## dbt Core のアップグレード
 
-dbt provides a number of resources for understanding [general best practices](/blog/upgrade-dbt-without-fear) while upgrading your dbt project as well as detailed [migration guides](/docs/dbt-versions/core-upgrade) highlighting the changes required for each [minor and major release](/docs/dbt-versions/core).
+dbt は、dbt プロジェクトのアップグレード中に [一般的なベスト プラクティス](/blog/upgrade-dbt-without-fear) を理解するためのリソースを多数提供しているほか、各 [マイナー リリースとメジャー リリース](/docs/dbt-versions/core) に必要な変更を強調した詳細な [移行ガイド](/docs/dbt-versions/core) も提供しています。
 
-- [Upgrade `pip`](/docs/core/pip-install#change-dbt-core-versions)
+- [`pip` のアップグレード](/docs/core/pip-install#change-dbt-core-versions)
 
-## About dbt data platforms and adapters
+## dbt データ プラットフォームとアダプタについて
 
-dbt works with a number of different data platforms (databases, query engines, and other SQL-speaking technologies). It does this by using a dedicated _adapter_ for each. When you install dbt Core, you'll also want to install the specific adapter for your database. For more details, see [Supported Data Platforms](/docs/supported-data-platforms).
+dbt は、さまざまなデータ プラットフォーム (データベース、クエリ エンジン、その他の SQL 対応テクノロジ) で動作します。これは、それぞれ専用の _アダプタ_ を使用して行われます。dbt Core をインストールするときは、データベースに固有のアダプタもインストールする必要があります。詳細については、[サポートされているデータ プラットフォーム](/docs/supported-data-platforms) を参照してください。
 
-:::tip Pro tip: Using the --help flag
+:::tip Pro tip: --helpフラグの使用
 
-Most command-line tools, including dbt, have a `--help` flag that you can use to show available commands and arguments. For example, you can use the `--help` flag with dbt in two ways:<br /><br />
-&mdash; `dbt --help`: Lists the commands available for dbt<br />
-&mdash; `dbt run --help`: Lists the flags available for the `run` command
+dbt を含むほとんどのコマンドライン ツールには、使用可能なコマンドと引数を表示するために使用できる `--help` フラグがあります。たとえば、dbt で `--help` フラグを使用するには、次の 2 つの方法があります。<br /><br />
+&mdash; `dbt --help`: dbt で使用可能なコマンドを一覧表示します<br />
+&mdash; `dbt run --help`: `run` コマンドで使用可能なフラグを一覧表示します
 
 :::
 

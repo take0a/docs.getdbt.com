@@ -1,22 +1,22 @@
 ---
-title: "Contribute to adapters"
+title: "アダプターに貢献する"
 id: "contribute-core-adapters"
 pagination_next: null
 ---
 
-The dbt Community exists to allow analytics practitioners share their knowledge, help others and collectively to drive forward the discipline of analytics engineering. There are opportunities here for everyone to contribute whether you're at the beginning of your analytics engineering journey or you are a seasoned data professional.
+dbt コミュニティは、分析の専門家が知識を共有し、他のユーザーを支援し、分析エンジニアリングの分野を共同で推進できるようにするために存在します。分析エンジニアリングの旅の始まりにいる人でも、経験豊富なデータ プロフェッショナルでも、誰もが貢献できる機会がここにあります。
 
-This section explains how you can contribute to existing adapters, or create a new adapter.
+このセクションでは、既存のアダプターに貢献する方法、または新しいアダプターを作成する方法について説明します。
 
-### Contribute to a pre-existing adapter
+### 既存のアダプタに貢献する
 
-Community-supported plugins are works in progress, and anyone is welcome to contribute by testing and writing code. If you're interested in contributing:
+コミュニティでサポートされているプラ​​グインは開発中であり、誰でもテストやコードの作成を通じて貢献できます。貢献に興味がある場合は、次の手順に従ってください。
 
-- Join both the dedicated channel, [#adapter-ecosystem](https://getdbt.slack.com/archives/C030A0UF5LM), in [dbt Slack](https://community.getdbt.com/) and the channel for your adapter's data store. Refer to the **Slack Channel** link in the [dbt Core platform](/docs/core/connect-data-platform/profiles.yml) pages. 
-- Check out the open issues in the plugin's source repository. Use the relevant **GitHub repo** link in the [dbt Core platform](/docs/core/connect-data-platform/profiles.yml) pages. 
+- [dbt Slack](https://community.getdbt.com/) の専用チャネル [#adapter-ecosystem](https://getdbt.slack.com/archives/C030A0UF5LM) と、アダプタのデータ ストアのチャネルの両方に参加してください。[dbt Core プラットフォーム](/docs/core/connect-data-platform/profiles.yml) ページの **Slack チャネル** リンクを参照してください。
+- プラグインのソース リポジトリで未解決の問題を確認してください。[dbt Core プラットフォーム](/docs/core/connect-data-platform/profiles.yml) ページの関連する **GitHub リポジトリ** リンクを使用してください。
 
-### Create a new adapter
+### 新しいアダプターを作成する
 
-If you see something missing from the lists above, and you're interested in developing an integration, read more about adapters and how they're developed in the [Build, test, document, and promote adapters](/guides/adapter-creation).
+上記のリストに欠けているものがあり、統合の開発に興味がある場合は、[アダプターの構築、テスト、ドキュメント化、および宣伝](/guides/adapter-creation)でアダプターとその開発方法の詳細をお読みください。
 
-If you have a new adapter, please add it to this list using a pull request! You can refer to [Build, test, document, and promote adapters](/guides/adapter-creation) for more information on documenting your adapter.
+新しいアダプターがある場合は、プル リクエストを使用してこのリストに追加してください。アダプターのドキュメント化の詳細については、[アダプターの構築、テスト、ドキュメント化、および宣伝](/guides/adapter-creation)を参照してください。

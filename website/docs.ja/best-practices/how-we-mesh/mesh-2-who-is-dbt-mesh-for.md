@@ -1,53 +1,53 @@
 ---
-title: Who is dbt Mesh for?
+title: dbt Mesh は誰のためのものですか？
 description: Understanding if dbt Mesh is the right fit for your team
 hoverSnippet: Learn how to get started with dbt Mesh
 ---
 
-Before embarking on a dbt Mesh implementation, it's important to understand if dbt Mesh is the right fit for your team. Here, we outline three common organizational structures to help teams identify whether dbt Mesh might fit your organization's needs. 
+dbt Mesh の実装に着手する前に、dbt Mesh がチームに適しているかどうかを把握することが重要です。ここでは、dbt Mesh が組織のニーズに合うかどうかをチームが判断できるように、3 つの一般的な組織構造について説明します。
 
-## The enterprise data mesh
+## エンタープライズデータメッシュ
 
-Some data teams operate on a global scale. By definition, the team needs to manage, deploy, and distribute data products across a large number of teams. Central IT may own some data products or simply own the platform upon which data products are built. Often, these organizations have “architects” who can advise line-of-business teams on their work while keeping track of what’s happening globally (regarding tooling and the substance of work). This is a lot like how software organizations work beyond a certain scale.
+一部のデータ チームは、グローバル規模で活動しています。当然のことながら、チームは多数のチームにまたがってデータ プロダクトを管理、展開、配布する必要があります。中央 IT 部門は、一部のデータ プロダクトを所有している場合もあれば、データ プロダクトが構築されるプラットフォームを所有しているだけの場合もあります。多くの場合、これらの組織には、グローバルに何が起こっているか (ツールと作業内容に関して) を追跡しながら、業務部門のチームに作業についてアドバイスできる「アーキテクト」がいます。これは、ソフトウェア組織が一定規模を超えるとどのように機能するかとよく似ています。
 
-The headcount ratio of platform team to domain teams in this scenario is roughly ≥10:1. For each member of the central platform team, there might be dozens of members of domain-aligned data teams.
+このシナリオでは、プラットフォーム チームとドメイン チームの人員比率は、およそ 10:1 以上です。中央プラットフォーム チームのメンバー 1 人に対して、ドメイン アラインメント データ チームのメンバーが数十人いる可能性があります。
 
-Is dbt Mesh a good fit in this scenario? Absolutely! There is no other way to share data products at scale. One dbt project would not keep up with the global demands of an organization like this.
+このシナリオでは、dbt Mesh が適していますか? もちろんです! 大規模にデータ プロダクトを共有する方法は他にありません。1 つの dbt プロジェクトでは、このような組織のグローバルな需要に対応できません。
 
-### Tips and tricks
+### ヒントとコツ
 
-- **Managing shared macros**: Teams operating at this scale will benefit from a separate repository containing a dbt package of reusable utility macros that all other projects will install. This is different from public models, which provide data-as-a-service (a set of “API endpoints”) — this is distributed as a **library**. This package can also standardize imports of other third-party packages, as well as providing wrappers / shims for those macros. This package should have a dedicated team of maintainers — probably the central platform team, or a set of “superusers” from domain-aligned data modeling teams.
+- **共有マクロの管理**: この規模で運用するチームは、他のすべてのプロジェクトがインストールする再利用可能なユーティリティ マクロの dbt パッケージを含む別のリポジトリの恩恵を受けます。これは、データ アズ ア サービス (一連の「API エンドポイント」) を提供するパブリック モデルとは異なり、**ライブラリ** として配布されます。このパッケージは、他のサードパーティ パッケージのインポートを標準化できるほか、それらのマクロのラッパー/シムも提供します。このパッケージには、専任のメンテナー チーム (おそらく中央プラットフォーム チーム、またはドメインに沿ったデータ モデリング チームの「スーパーユーザー」のセット) が必要です。
 
-### Adoption challenges
+### 採用の課題
 
-- Onboarding hundreds of people and dozens of projects is full of friction! The challenges of a scaled, global organization are not to be underestimated. To start the migration, prioritize teams that have strong dbt familiarity and fundamentals. dbt Mesh is an advancement of core dbt deployments, so these teams are likely to have a smoother transition. 
-  
-  Additionally, prioritize teams that manage strategic data assets that need to be shared widely. This ensures that dbt Mesh will help your teams deliver concrete value quickly.
+- 何百人もの人員と何十ものプロジェクトをオンボーディングするのは、摩擦に満ちています。大規模なグローバル組織の課題を過小評価してはいけません。移行を開始するには、dbt に精通し、基礎知識が豊富なチームを優先してください。dbt Mesh はコア dbt デプロイメントの進化版であるため、これらのチームはよりスムーズに移行できる可能性があります。
 
-If this sounds like your organization, dbt Mesh is the architecture you should pursue. ✅
+  さらに、広く共有する必要がある戦略的なデータ資産を管理するチームを優先してください。これにより、dbt Mesh がチームが具体的な価値を迅速に提供するのに役立ちます。
 
-## Hub and spoke
+これが組織に当てはまる場合は、dbt Mesh が追求すべきアーキテクチャです。 ✅
 
-Some slightly smaller organizations still operate with a central data team serving several business-aligned analytics teams in a ~5:1 headcount ratio. These central teams look less like an IT function and more like a modern data platform team of analytics engineers. This team provides the majority of the data products to the rest of the org, as well as the infrastructure for downstream analytics teams to spin up their own spoke projects to ensure quality and maintenance of the core platform.
+## ハブとスポーク
 
-Is dbt Mesh a good fit in this scenario? Almost certainly! If your central data team starts to bottleneck analysts’ work, you need a way for those teams to operate relatively independently while still ensuring the quality of the most used data products. dbt Mesh is designed to solve this exact problem.
+やや小規模な組織の中には、約 5:1 の人員比率で、複数のビジネス連携分析チームにサービスを提供する中央データ チームを擁しているところもあります。これらの中央チームは、IT 機能というよりは、分析エンジニアの最新のデータ プラットフォーム チームのように見えます。このチームは、組織の他の部分にデータ製品の大部分を提供するほか、下流の分析チームが独自のスポーク プロジェクトを立ち上げてコア プラットフォームの品質とメンテナンスを確保するためのインフラストラクチャも提供します。
 
-### Tips and tricks
+dbt Mesh はこのシナリオに適していますか? ほぼ間違いなく適しています。中央データ チームがアナリストの作業のボトルネックになり始めたら、最もよく使用されるデータ製品の品質を確保しながら、それらのチームが比較的独立して運用できる方法が必要です。dbt Mesh はまさにこの問題を解決するように設計されています。
 
-- **Data products by some, for all:** The spoke teams shouldn’t produce public models. By contrast, development in the hub team project should be slower, more careful, and focus on producing foundational public models shared across domains. We’d recommend giving hub team members access (at least read-only) to downstream projects, which will help with more granular impact analysis within dbt Explorer. If a public model isn’t used in any downstream project or a specific column in that model, the hub team can feel better about removing it. However, they should still utilize the dbt governance features like `deprecation_date` and `version` as appropriate to set expectations. If there is a need for a public model in a spoke project to be shared across multiple projects, consider first whether it could or should be moved to the hub project.
-- **Sources:** Spokes should be allowed/encouraged to define and use _domain-specific_ data sources. The platform team should not need to worry about, say, `Thinkific` data when building core data marts, but the Training project may need to. _No two sources anywhere in a dbt mesh should point to the same relation object._ If a spoke feels like they need to use a source the hub already uses, the interfaces should change so that the spoke can get what they need from the platform project.
-- **Project quality:** More analyst-focused teams will have different skill levels & quality bars. Owning their data means they own the consequences as well. Rather than being accountable for the end-to-end delivery of data assets, the Hub team is an enablement team: their role is to provide guardrails and quality checks, but not to fix all the issues exactly to their liking (and thereby remain a bottleneck).
+### ヒントとコツ
 
-### Adoption challenges
+- **一部の人による、全員のためのデータ製品:** スポーク チームはパブリック モデルを作成すべきではありません。対照的に、ハブ チーム プロジェクトでの開発は、よりゆっくりと慎重に行い、ドメイン間で共有される基礎となるパブリック モデルの作成に重点を置く必要があります。ハブ チーム メンバーにダウンストリーム プロジェクトへのアクセス権 (少なくとも読み取り専用) を付与することをお勧めします。これにより、dbt Explorer 内でより詳細な影響分析が可能になります。パブリック モデルがダウンストリーム プロジェクトのいずれでも使用されていない場合、またはそのモデル内の特定の列でも使用されていない場合、ハブ チームは安心してそのモデルを削除できます。ただし、必要に応じて `deprecation_date` や `version` などの dbt ガバナンス機能を利用して、期待を設定する必要があります。スポーク プロジェクトのパブリック モデルを複数のプロジェクト間で共有する必要がある場合は、まずハブ プロジェクトに移動できるかどうか、または移動すべきかどうかを検討してください。
+- **ソース:** スポークは、_ドメイン固有の_ データ ソースの定義と使用を許可/推奨する必要があります。プラットフォーム チームは、コア データ マートを構築するときに、たとえば `Thinkific` データについて心配する必要はありませんが、トレーニング プロジェクトでは心配する必要があるかもしれません。_dbt メッシュ内のどこにも、同じ関係オブジェクトを指す 2 つのソースがあってはなりません。_ スポークがハブがすでに使用しているソースを使用する必要があると感じた場合は、スポークがプラットフォーム プロジェクトから必要なものを取得できるように、インターフェイスを変更する必要があります。
+- **プロジェクトの品質:** アナリスト中心のチームほど、スキル レベルと品質基準が異なります。データを所有するということは、結果も所有するということです。ハブ チームは、データ資産のエンドツーエンドの配信に責任を負うのではなく、イネーブルメント チームです。つまり、ガードレールと品質チェックを提供することが役割であり、すべての問題を自分たちの好みに合わせて修正する (したがってボトルネックのままになる) ことではありません。
 
-There are trade-offs to using this architecture, especially for the hub team managing and maintaining public models. This workflow has intentional friction to reduce the chances of unintentional model changes that break unspoken data contracts. These assurances may come with some sacrifices, such as faster onboarding or more flexible development workflows. Compared to having a single project, where a select few are doing all the development work, this architecture optimizes for slower development from a wider group of people.
+### 採用の課題
 
-If this sounds like your organization, it's very likely that dbt Mesh is a good fit for you. ✅
+このアーキテクチャの使用にはトレードオフがあり、特にパブリック モデルを管理および保守するハブ チームにとってはトレードオフがあります。このワークフローには意図的な摩擦があり、暗黙のデータ コントラクトを破る意図しないモデル変更の可能性を減らします。これらの保証には、オンボーディングの高速化や開発ワークフローの柔軟性の向上など、いくつかの犠牲が伴う場合があります。少数の選ばれた人がすべての開発作業を行う単一のプロジェクトと比較すると、このアーキテクチャは、より幅広いグループによる低速の開発に最適化されています。
 
-## Single team monolith
+これがあなたの組織に当てはまる場合は、dbt Mesh が適している可能性が非常に高くなります。 ✅
 
-Some organizations operate on an even smaller scale. If your data org is a single small team that controls the end-to-end process of building and maintaining all data products at the organization, dbt Mesh may not be required. The complexity in projects comes from having a wide variety of data sources and stakeholders. However, given the team's size, operating on a single codebase may be the most efficient way to manage data products. Generally, if a team of this size and scope is looking to implement dbt Mesh, it's likely that they are looking for better interface design and/or performance improvements for certain parts of their dbt DAG, and not because they necessarily have an organizational pain point to solve.
+## 単一チームのモノリス
 
-_Is dbt Mesh a good fit?_  Maybe! There are reasons to separate out parts of a large monolithic project into several to better orchestrate and manage the models. However, if the same people are managing each project, they may find that the overhead of managing multiple projects is not worth the benefits.
+組織によっては、さらに小規模な規模で運営されているところもあります。データ組織が、組織内のすべてのデータ製品の構築と保守のエンドツーエンドのプロセスを管理する単一の小規模チームである場合、dbt Mesh は必要ないかもしれません。プロジェクトの複雑さは、さまざまなデータ ソースと関係者がいることに起因します。ただし、チームの規模を考えると、単一のコードベースで運用することが、データ製品を管理する最も効率的な方法である可能性があります。一般に、この規模と範囲のチームが dbt Mesh の実装を検討している場合、そのチームは、必ずしも組織上の問題点を解決しなければならないからではなく、dbt DAG の特定の部分に対するインターフェイス設計の改善やパフォーマンスの改善を求めている可能性が高いです。
 
-If this sounds like your organization, it's worth considering whether dbt Mesh is a good fit for you.
+_dbt Mesh は適していますか?_ おそらく適しています! モデルのオーケストレーションと管理を改善するために、大規模なモノリシック プロジェクトの一部を複数の部分に分割する理由があります。ただし、同じ人が各プロジェクトを管理している場合、複数のプロジェクトを管理するオーバーヘッドはメリットに見合わないと感じる可能性があります。
+
+これがあなたの組織に当てはまる場合は、dbt Mesh が適しているかどうかを検討する価値があります。
