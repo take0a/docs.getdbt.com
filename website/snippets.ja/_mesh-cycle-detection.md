@@ -1,9 +1,13 @@
-You can enable bidirectional dependencies across projects so these relationships can go in either direction, meaning that the `jaffle_finance` project can add a new model that depends on any public models produced by the `jaffle_marketing` project, so long as the new dependency doesn't introduce any node-level cycles. dbt checks for cycles across projects and raises errors if any are detected.
+プロジェクト間で双方向の依存関係を有効にすると、これらの関係はどちらの方向にも進むことができます。つまり、`jaffle_finance` プロジェクトは、`jaffle_marketing` プロジェクトによって生成された任意のパブリック モデルに依存する新しいモデルを追加できます (新しい依存関係によってノード レベルのサイクルが発生しない限り)。dbt はプロジェクト間のサイクルをチェックし、サイクルが検出された場合はエラーを発生します。
+
+相互に依存するプロジェクトを設定する場合、段階的に行うことが重要です。元のプロデューサー プロジェクトが元のコンシューマー プロジェクトに依存する前に、各プロジェクトを実行してパブリック モデルを生成する必要があります。たとえば、単純な 2 つのプロジェクトの設定の場合、操作の順序は次のようになります。
 
 
-When setting up projects that depend on each other, it's important to do so in a stepwise fashion. Each project must run and produce public models before the original producer project can take a dependency on the original consumer project. For example, the order of operations would be as follows for a simple two-project setup:
+1. `project_a` プロジェクトはデプロイメント環境で実行され、パブリック モデルを生成します。
 
-1. The `project_a` project runs in a deployment environment and produces public models.
-2. The `project_b` project adds `project_a` as a dependency.
-3. The `project_b` project runs in a deployment environment and produces public models.
-4. The `project_a` project adds `project_b` as a dependency.
+2. `project_b` プロジェクトは、依存関係として `project_a` を追加します。
+
+
+3. `project_b` プロジェクトはデプロイメント環境で実行され、パブリック モデルを生成します。
+
+4. `project_a` プロジェクトは `project_b` を依存関係として追加します。

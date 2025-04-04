@@ -5,336 +5,342 @@ hoverSnippet: "dbt Mesh FAQs"
 sidebar_label: "dbt Mesh FAQs"
 ---
 
-dbt Mesh is a new architecture enabled by dbt Cloud. It allows you to better manage complexity by deploying multiple interconnected dbt projects instead of a single large, monolithic project. It’s designed to accelerate development, without compromising governance.
+dbt Mesh は、dbt Cloud によって実現される新しいアーキテクチャです。単一の大規模なモノリシック プロジェクトではなく、相互接続された複数の dbt プロジェクトを展開することで、複雑さをより適切に管理できます。ガバナンスを損なうことなく開発を加速するように設計されています。
 
-## Overview of Mesh
+## メッシュの概要
 
-<DetailsToggle alt_header="What are the main benefits of implementing dbt Mesh?">
+<DetailsToggle alt_header="dbt Mesh を実装する主な利点は何ですか?">
   
-Here are some benefits of implementing dbt Mesh:
+dbt Mesh を実装するメリットは次のとおりです。
 
-* **Ship data products faster**: With a more modular architecture, teams can make changes rapidly and independently in specific areas without impacting the entire system, leading to faster development cycles.
-* **Improve trust in data:** Adopting dbt Mesh helps ensure that changes in one domain's data models do not unexpectedly break dependencies in other domain areas, leading to a more secure and predictable data environment.
-* **Reduce complexity**: By organizing transformation logic into distinct domains, dbt Mesh reduces the complexity inherent in large, monolithic projects, making them easier to manage and understand.
-* **Improve collaboration**: Teams are able to share and build upon each other's work without duplicating efforts.
+* **データ製品の出荷を迅速化**: よりモジュール化されたアーキテクチャにより、チームはシステム全体に影響を与えることなく特定の領域で迅速かつ独立して変更を加えることができるため、開発サイクルが迅速化されます。
 
-Most importantly, all this can be accomplished without the central data team losing the ability to see lineage across the entire organization, or compromising on governance mechanisms.
+* **データの信頼性を向上:** dbt Mesh を導入すると、1 つのドメインのデータ モデルの変更によって他のドメイン領域の依存関係が予期せず壊れることがなくなり、より安全で予測可能なデータ環境が実現します。
 
-</DetailsToggle>
+* **複雑さを軽減**: dbt Mesh は、変換ロジックを個別のドメインに編成することで、大規模でモノリシックなプロジェクトに固有の複雑さを軽減し、管理と理解を容易にします。
 
-<DetailsToggle alt_header="What are model contracts?">
+* **コラボレーションを向上**: チームは、作業を重複させることなく、互いの作業を共有して構築できます。
 
-dbt [model contracts](/docs/collaborate/govern/model-contracts) serve as a governance tool enabling the definition and enforcement of data structure standards in your dbt models. They allow you to specify and uphold data model guarantees, including column data types, allowing for the stability of dependent models. Should a model fail to adhere to its established contracts, it will not build successfully.
+最も重要なのは、これらすべてを、中央データ チームが組織全体の系統を確認する能力を失ったり、ガバナンス メカニズムを妥協したりすることなく実現できることです。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="What are model versions?">
+<DetailsToggle alt_header="モデルコントラクトとは何ですか?">
 
-dbt [model versions](https://docs.getdbt.com/docs/collaborate/govern/model-versions) are iterations of your dbt models made over time. In many cases, you might knowingly choose to change a model’s structure in a way that “breaks” the previous model contract, and may break downstream queries depending on that model’s structure. When you do so, creating a new version of the model is useful to signify this change.
-
-You can use model versions to:
-
-- Test "prerelease" changes (in production, in downstream systems).
-- Bump the latest version, to be used as the canonical "source of truth."
-- Offer a migration window off the "old" version.
+dbt [モデルコントラクト](/docs/collaborate/govern/model-contracts) は、dbt モデルでデータ構造標準の定義と適用を可能にするガバナンス ツールとして機能します。これにより、列のデータ型を含むデータ モデルの保証を指定して維持できるため、依存モデルの安定性を確保できます。モデルが確立されたコントラクトに準拠していない場合、そのモデルは正常にビルドされません。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="What are model access modifiers?">
+<DetailsToggle alt_header="モデルバージョンとは何ですか?">
 
-A [model access modifier](/docs/collaborate/govern/model-access) in dbt determines if a model is accessible as an input to other dbt models and projects. It specifies where a model can be referenced using [the `ref` function](/reference/dbt-jinja-functions/ref). There are three types of access modifiers:
+dbt [モデル バージョン](https://docs.getdbt.com/docs/collaborate/govern/model-versions) は、時間の経過とともに作成された dbt モデルの反復です。多くの場合、以前のモデル コントラクトを「破壊」するような方法でモデルの構造を意図的に変更することを選択する可能性があり、そのモデルの構造によっては下流のクエリが壊れる可能性があります。その場合、モデルの新しいバージョンを作成すると、この変更を示すのに役立ちます。
 
-* **Private:** A model with a private access modifier is only referenceable by models within the same group. This is intended for models that are implementation details and are meant to be used only within a specific group of related models.
-* **Protected:** Models with a protected access modifier can be referenced by any other model within the same dbt project or when the project is installed as a package. This is the default setting for all models, ensuring backward compatibility, especially when groups are assigned to an existing set of models.
-* **Public:** A public model can be referenced across different groups, packages, or projects. This is suitable for stable and mature models that serve as interfaces for other teams or projects.
+モデル バージョンを使用して、次の操作を実行できます。
 
-</DetailsToggle>
-
-<DetailsToggle alt_header="What are model groups?">
-
-A [model group](/docs/collaborate/govern/model-access#groups) in dbt is a concept used to organize models under a common category or ownership. This categorization can be based on various criteria, such as the team responsible for the models or the specific data source they model.
+- 「プレリリース」の変更をテストします (運用環境、下流のシステム)。
+- 最新バージョンをバンプして、標準的な「真実のソース」として使用します。
+- 「古い」バージョンからの移行ウィンドウを提供します。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="What are some potential challenges when using dbt Mesh?">
+<DetailsToggle alt_header="モデル アクセス修飾子とは何ですか?">
 
-This is a new way of working, and the intentionality required to build, and then maintain, cross-project interfaces and dependencies may feel like a slowdown versus what some developers are used to. The intentional friction introduced promotes thoughtful changes, fostering a mindset that values stability and systematic adjustments over rapid transformations.
+dbt の [モデル アクセス修飾子](/docs/collaborate/govern/model-access) は、モデルが他の dbt モデルやプロジェクトへの入力としてアクセス可能かどうかを決定します。[`ref` 関数](/reference/dbt-jinja-functions/ref) を使用してモデルを参照できる場所を指定します。アクセス修飾子には 3 つの種類があります。
 
-Orchestration across multiple projects is also likely to be slightly more challenging for many organizations, although we’re currently developing new functionality that will make this process simpler.
+* **Private:** Private アクセス修飾子を持つモデルは、同じグループ内のモデルからのみ参照できます。これは、実装の詳細であり、関連するモデルの特定のグループ内でのみ使用されることを意図したモデルを対象としています。
 
-</DetailsToggle>
+* **Protected:** Protected アクセス修飾子を持つモデルは、同じ dbt プロジェクト内の他のモデルから参照できます。または、プロジェクトがパッケージとしてインストールされている場合に参照できます。これはすべてのモデルのデフォルト設定であり、特にグループが既存のモデル セットに割り当てられている場合に下位互換性が確保されます。
 
-<DetailsToggle alt_header="How does this relate to the concept of data mesh?">
-
-dbt Mesh allows you to better _operationalize_ data mesh by enabling decentralized, domain-specific data ownership and collaboration.
-
-In data mesh, each business domain is responsible for its data as a product. This is the same goal that dbt Mesh facilitates by enabling organizations to break down large, monolithic data projects into smaller, domain-specific dbt projects. Each team or domain can independently develop, maintain, and share its data models, fostering a decentralized data environment.
-
-dbt Mesh also enhances the interoperability and reusability of data across different domains, a key aspect of the data mesh philosophy. By allowing cross-project references and shared governance through model contracts and access controls, dbt Mesh ensures that while data ownership is decentralized, there is still a governed structure to the overall data architecture.
+* **Public:** Public モデルは、異なるグループ、パッケージ、またはプロジェクト間で参照できます。これは、他のチームやプロジェクトとのインターフェースとして機能する安定した成熟したモデルに適しています。
 
 </DetailsToggle>
 
-## How dbt Mesh works
+<DetailsToggle alt_header="モデルグループとは何ですか?">
 
-<DetailsToggle alt_header="Can dbt Mesh handle cyclic dependencies between projects?">
+dbt の [モデル グループ](/docs/collaborate/govern/model-access#groups) は、共通のカテゴリまたは所有権の下でモデルを整理するために使用される概念です。この分類は、モデルを担当するチームやモデルがモデル化する特定のデータ ソースなど、さまざまな基準に基づいて行うことができます。
 
-import CycleDetection from '/snippets/_mesh-cycle-detection.md';
+</DetailsToggle>
+
+<DetailsToggle alt_header="dbt Mesh を使用する際に潜在的な課題は何ですか?">
+
+これは新しい作業方法であり、プロジェクト間のインターフェースと依存関係を構築して維持するために必要な意図は、一部の開発者が慣れているものと比較して、速度低下のように感じられるかもしれません。導入された意図的な摩擦は、思慮深い変更を促進し、急速な変革よりも安定性と体系的な調整を重視する考え方を育みます。
+
+複数のプロジェクトにわたるオーケストレーションも、多くの組織にとって少し難しくなる可能性がありますが、現在、このプロセスを簡素化する新しい機能を開発中です。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="これはデータ メッシュの概念とどのように関係しているのでしょうか?">
+
+dbt Mesh を使用すると、分散化されたドメイン固有のデータ所有権とコラボレーションを実現することで、データ メッシュをより適切に運用できます。
+
+データ メッシュでは、各ビジネス ドメインが製品としてそのデータに責任を負います。これは、組織が大規模でモノリシックなデータ プロジェクトをドメイン固有のより小さな dbt プロジェクトに分割できるようにすることで dbt Mesh が促進する目標と同じです。各チームまたはドメインは、データ モデルを独立して開発、保守、共有できるため、分散化されたデータ環境が促進されます。
+
+dbt Mesh は、データ メッシュの哲学の重要な側面である、異なるドメイン間でのデータの相互運用性と再利用性も強化します。モデル コントラクトとアクセス制御によるプロジェクト間の参照と共有ガバナンスを可能にすることで、dbt Mesh は、データ所有権が分散化されている間も、データ アーキテクチャ全体にガバナンス構造が存在することを保証します。
+
+</DetailsToggle>
+
+## dbtメッシュの仕組み
+
+<DetailsToggle alt_header="dbt Mesh はプロジェクト間の循環依存関係を処理できますか?">
+
+import CycleDetection from '/snippets.ja/_mesh-cycle-detection.md';
 
 <CycleDetection />
 
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Is it possible for multiple projects to directly reference a shared source?">
+<DetailsToggle alt_header="複数のプロジェクトが共有ソースを直接参照することは可能ですか?">
 
-While it’s not currently possible to share sources across projects, it would be possible to have a shared foundational project, with staging models on top of those sources, exposed as “public” models to other teams/projects.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="What if a model I've already built on from another project later becomes protected?">
-
-This would be a breaking change for downstream consumers of that model. If the maintainers of the upstream project wish to remove the model (or “downgrade” its access modifier, effectively the same thing), they should mark that model for deprecation (using [deprecation_date](/reference/resource-properties/deprecation_date)), which will deliver a warning to all downstream consumers of that model.
-
-In the future, we plan for dbt Cloud to also be able to proactively flag this scenario in [continuous integration](/docs/deploy/continuous-integration) for the maintainers of the upstream public model.
+現時点ではプロジェクト間でソースを共有することはできませんが、それらのソースの上にステージング モデルを配置した共有の基盤プロジェクトを作成し、それを「パブリック」モデルとして他のチーム/プロジェクトに公開することは可能です。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="If I run `dbt build --select +model`, will this trigger a run of upstream models in other projects?">
+<DetailsToggle alt_header="別のプロジェクトで既に構築したモデルが後で保護されるようになったらどうなりますか?">
 
-No, unless upstream projects are installed as [packages](/docs/build/packages) (source code). In that case, the models in project installed as a project become “your” models, and you can select or run them. There are cases in which this can be desirable; see docs on [project dependencies](/docs/collaborate/govern/project-dependencies).
+これは、そのモデルの下流の消費者にとって重大な変更となります。上流プロジェクトのメンテナーがモデルを削除したい場合（または、実質的に同じこととして、そのアクセス修飾子を「ダウングレード」したい場合）、そのモデルを非推奨としてマークする必要があります（[deprecation_date](/reference/resource-properties/deprecation_date) を使用）。これにより、そのモデルのすべての下流の消費者に警告が送信されます。
 
-</DetailsToggle>
-
-<DetailsToggle alt_header="If each project/domain has its own data warehouse, is it still possible to build models across them?">
-
-Yes, as long as they’re in the same data platform (BigQuery, Databricks, Redshift, Snowflake, etc.) and you have configured permissions and sharing in that data platform provider to allow this.
+今後、dbt Cloud では、上流のパブリック モデルのメンテナー向けに、[継続的インテグレーション](/docs/deploy/continuous-integration) でこのシナリオを積極的にフラグ付けできるようにする予定です。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Can I run tests that involve tables from multiple different projects?">
+<DetailsToggle alt_header="`dbt build --select +model` を実行すると、他のプロジェクトのアップストリーム モデルの実行がトリガーされますか?">
 
-Yes, because the cross-project collaboration is done using the `{{ ref() }}` macro, you can use those models from other teams in [singular tests](/docs/build/data-tests#singular-data-tests). 
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="Which team's data schema would dbt Mesh create?">
-
-Each team defines their connection to the data warehouse, and the default schema names for dbt to use when materializing datasets.
-
-By default, each project belonging to a team will create:
-
-- One schema for production runs (for example, `finance`).
-- One schema per developer (for example, `dev_jerco`).
-
-Depending on each team’s needs, this can be customized with model-level [schema configurations](/docs/build/custom-schemas), including the ability to define different rules by environment.
+いいえ、アップストリーム プロジェクトが [パッケージ](/docs/build/packages) (ソース コード) としてインストールされない限り、インストールされません。その場合、プロジェクトとしてインストールされたプロジェクト内のモデルが「自分の」モデルとなり、選択または実行できます。これが望ましい場合もあります。[プロジェクト依存関係](/docs/collaborate/govern/project-dependencies) のドキュメントを参照してください。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Is it possible to apply model contracts to source data?">
+<DetailsToggle alt_header="各プロジェクト/ドメインに独自のデータ ウェアハウスがある場合でも、それら全体にわたってモデルを構築することは可能ですか?">
 
-No, contracts can only be applied at the [model level](/docs/collaborate/govern/model-contracts). It is a recommended best practice to [define staging models](/best-practices/how-we-structure/2-staging) on top of sources, and it is possible to define contracts on top of those staging models.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="Can contracts be partially enforced?">
-
-No. A contract applies to an entire model, including all columns in the model’s output. This is the same set of columns that a consumer would see when viewing the model’s details in Explorer, or when querying the model in the data platform. 
-
-- If you wish to contract only a subset of columns, you can create a separate model (materialized as a view) selecting only that subset. 
-- If you wish to limit which rows or columns a downstream consumer can see when they query the model’s data, depending on who they are, some data platforms offer advanced capabilities around dynamic row-level access and column-level data masking.
+はい、同じデータ プラットフォーム (BigQuery、Databricks、Redshift、Snowflake など) にあり、そのデータ プラットフォーム プロバイダーでこれを許可するように権限と共有を構成している限り可能です。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Can I have multiple owners in a group?">
+<DetailsToggle alt_header="複数の異なるプロジェクトのテーブルを含むテストを実行できますか?">
 
-No, a [group](/docs/collaborate/govern/model-access#groups) can only be assigned to a single owner.  However, the assigned owner can be a _team_, rather than an individual.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="Can contracts be assigned individual owners?">
-
-Not directly, but contracts are [assigned to models](/docs/collaborate/govern/model-contracts) and models can be assigned to individual owners. You can use meta fields for this purpose.
+はい、プロジェクト間のコラボレーションは `{{ ref() }}` マクロを使用して行われるため、[singular テスト](/docs/build/data-tests#singular-data-tests) で他のチームのモデルを使用できます。 
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Can I make a model “public” only for specific team(s) to use?">
+<DetailsToggle alt_header="dbt Mesh はどのチームのデータ スキーマを作成しますか?">
 
-This is not currently possible, but something we hope to enable in the near future. If you’re interested in this functionality, please reach out to your dbt Labs account team.
+各チームは、データ ウェアハウスへの接続と、データセットを具体化するときに dbt が使用するデフォルトのスキーマ名を定義します。
 
-</DetailsToggle>
+デフォルトでは、チームに属する各プロジェクトは次のものを作成します:
 
-<DetailsToggle alt_header="Is it possible to orchestrate job runs across multiple different projects?">
+- 本番実行用の 1 つのスキーマ (例: `finance`)。
+- 開発者ごとに 1 つのスキーマ (例: `dev_jerco`)。
 
-dbt Cloud will soon offer the capability to trigger jobs on the completion of another job, including a job in a different project. This offers one mechanism for executing a pipeline from start to finish across projects.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="Integrations available between the dbt Cloud Discovery API and other tools for cross-project lineage?">
-
-Yes. In addition to being viewable natively through [dbt Explorer](https://www.getdbt.com/product/dbt-explorer), it is possible to view cross-project lineage connect using partner integrations with data cataloging tools. For a list of available dbt Cloud integrations, refer to the [Integrations page](https://www.getdbt.com/product/integrations).
+各チームのニーズに応じて、環境ごとに異なるルールを定義する機能など、モデル レベルの [スキーマ構成](/docs/build/custom-schemas) を使用してこれをカスタマイズできます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How does data restatement work in dbt Mesh, particularly when fixing a data set bug?">
+<DetailsToggle alt_header="モデルコントラクトをソースデータに適用することは可能ですか?">
 
-Tests and model contracts in dbt help eliminate the need to restate data in the first place. With these tools, you can incorporate checks at the source and output layers of your dbt projects to assess data quality in the most critical places. When there are changes in transformation logic (for example, the definition of a particular column is changed), restating the data is as easy as merging the updated code and running a dbt Cloud job.
-
-If a data quality issue does slip through, you also have the option of simply rolling back the git commit, and then re-running the dbt Cloud job with the old code.
+いいえ、コントラクトは [モデル レベル](/docs/collaborate/govern/model-contracts) でのみ適用できます。ソースの上に [ステージング モデルを定義](/best-practices/how-we-structure/2-staging) することが推奨されるベスト プラクティスであり、それらのステージング モデルの上に契約を定義することもできます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How does dbt handle job run logs and can it feed them to standard monitoring tools, reports, etc.?">
+<DetailsToggle alt_header="コントラクトを部分的に履行することはできますか?">
 
-Yes, all of this metadata is accessible via the [dbt Cloud Admin API](/docs/dbt-cloud-apis/admin-cloud-api). This metadata can be fed into a monitoring tool, or used to create reports and dashboards. 
+いいえ。コントラクトはモデル全体に​​適用され、モデルの出力のすべての列が含まれます。これは、Explorer でモデルの詳細を表示するとき、またはデータ プラットフォームでモデルをクエリするときにコンシューマーが表示する列のセットと同じです。
 
-We also expose some of this information in dbt Cloud itself in [jobs](/docs/deploy/jobs), [environments](/docs/environments-in-dbt) and in [dbt Explorer](https://www.getdbt.com/product/dbt-explorer).
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="Can dbt Mesh reference models in other accounts within the same data platform?">
-
-You can reference models in other accounts within the same data platform by leveraging the data-sharing capabilities of that platform, as long as the database identifier of the public model is consistent across the producer and consumer. 
-
-For example, [Snowflake cross-account data shares](https://docs.snowflake.com/en/user-guide/data-sharing-intro), [Databricks Unity Catalog across workspaces](https://docs.databricks.com/en/data-governance/unity-catalog/index.html), or multiple BigQuery projects. 
+- 列のサブセットのみを契約する場合は、そのサブセットのみを選択する別のモデル (ビューとしてマテリアライズ) を作成できます。
+- 下流のコンシューマーがモデルのデータをクエリするときに表示できる行または列を制限したい場合は、そのユーザーに応じて、一部のデータ プラットフォームでは、動的な行レベルのアクセスと列レベルのデータ マスキングに関する高度な機能が提供されています。
 
 </DetailsToggle>
 
-## Permissions and access
+<DetailsToggle alt_header="グループ内に複数の所有者を設定できますか?">
 
-<DetailsToggle alt_header="How do user access permissions work in dbt Mesh? ">
-
-The existence of projects that have at least one public model will be visible to everyone in the organization with [read-only access](/docs/cloud/manage-access/seats-and-users). 
-
-Private or protected models require a user to have read-only access to the specific project to see its existence.
+いいえ、[グループ](/docs/collaborate/govern/model-access#groups) は 1 人の所有者にのみ割り当てることができます。ただし、割り当てられる所有者は個人ではなく、_チーム_ になります。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How do all the different types of “access” interact?">
+<DetailsToggle alt_header="コントラクトに個別の所有者を割り当てることはできますか?">
 
-There’s model-level access within dbt, role-based access for users and groups in dbt Cloud, and access to the underlying data within the data platform.
-
-First things first: access to underlying data is always defined and enforced by the underlying data platform (for example, BigQuery, Databricks, Redshift, Snowflake, Starburst, etc.) This access is managed by executing “DCL statements” (namely `grant`). dbt makes it easy to [configure `grants` on models](/reference/resource-configs/grants), which provision data access for other roles/users/groups in the data warehouse. However, dbt does _not_ automatically define or coordinate those grants unless they are configured explicitly. Refer to your organization's system for managing data warehouse permissions.
-
-[dbt Cloud Enterprise plans](https://www.getdbt.com/pricing) support [role-based access control (RBAC)](/docs/cloud/manage-access/about-user-access#role-based-access-control-) that manages granular permissions for users and user groups. You can control which users can see or edit all aspects of a dbt Cloud project. A user’s access to dbt Cloud projects also determines whether they can “explore” that project in detail. Roles, users, and groups are defined within the dbt Cloud application via the UI or by integrating with an identity provider.
-
-[Model access](/docs/collaborate/govern/model-access) defines where models can be referenced. It also informs the discoverability of those projects within dbt Explorer. Model `access` is defined in code, just like any other model configuration (`materialized`, `tags`, etc).
-
-* **Public:** Models with `public` access can be referenced everywhere. These are the “data products” of your organization.
-
-* **Protected:** Models with `protected` access can only be referenced within the same project. This is the default level of model access. 
-We are discussing a future extension to `protected` models to allow for their reference in _specific_ downstream projects. Please read [the GitHub issue](https://github.com/dbt-labs/dbt-core/issues/9340), and upvote/comment if you’re interested in this use case.
-
-* **Private:** Model `groups` enable more-granular control over where `private` models can be referenced. By defining a group, and configuring models to belong to that group, you can restrict other models (not in the same group) from referencing any `private` models the group contains. Groups also provide a standard mechanism for defining the `owner` of all resources it contains.
-
-Within dbt Explorer, `public` models are discoverable for every user in the dbt Cloud account — every public model is listed in the “multi-project” view. By contrast, `protected` and `private` models in a project are visible only to users who have access to that project (including read-only access).
-
-Because dbt does not implicitly coordinate data warehouse `grants` with model-level `access`, it is possible for there to be a mismatch between them. For example, a `public` model’s metadata is viewable to all dbt Cloud users, anyone can write a `ref` to that model, but when they actually run or preview, they realize they do not have access to the underlying data in the data warehouse. **This is intentional.** In this way, your organization can retain least-privileged access to underlying data, while providing visibility and discoverability for the wider organization. Armed with the knowledge of which other “data products” (public models) exist — their descriptions, their ownership, which columns they contain — an analyst on another team can prepare a well-informed request for access to the underlying data.
+直接ではありませんが、契約は[モデルに割り当てられ](/docs/collaborate/govern/model-contracts)、モデルは個々の所有者に割り当てることができます。この目的にはメタフィールドを使用できます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Is it possible to request access permissions from other teams within dbt Cloud?">
+<DetailsToggle alt_header="モデルを特定のチームだけが使用できるように「公開」することはできますか?">
 
-Not currently! But this is something we may evaluate in the future.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="As a central data team member, can I still maintain visibility on the entire organizational DAG?">
-
-Yes! As long as a user has permissions (at least read-only access) on all projects in a dbt Cloud account, they can navigate across the entirety of the organization’s DAG in dbt Explorer, and see models at all levels of detail.
+これは現時点では不可能ですが、近い将来に実現できることを期待しています。この機能にご興味がある場合は、dbt Labs アカウント チームにお問い合わせください。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How can I limit my developers from accessing sensitive production data when referencing from other projects?">
+<DetailsToggle alt_header="複数の異なるプロジェクトにわたってジョブ実行を調整することは可能ですか?">
 
-By default, cross-project references resolve to the “Production” deployment environment of the upstream project. If your organization has genuinely different data in production versus non-production environments, this poses an issue.
-
-For this reason, we rolled out canonical type of deployment environment: “[Staging](/docs/deploy/deploy-environments#staging-environment).” If a project defines both a “Production” environment and a “Staging” environment, then cross-project references from development and “Staging” environments will resolve to “Staging,” whereas only references coming from “Production” environments will resolve to “Production.” In this way, you are guaranteed separation of data environments, without needing to duplicate project configurations.
+dbt Cloud は、別のジョブ (別のプロジェクトのジョブを含む) の完了時にジョブをトリガーする機能をまもなく提供します。これにより、プロジェクト間でパイプラインを最初から最後まで実行するための 1 つのメカニズムが提供されます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Does dbt Mesh work if projects are 'duplicated' (dev project <> prod project)?">
+<DetailsToggle alt_header="dbt Cloud Discovery API とプロジェクト間の系統のための他のツールとの統合は可能ですか?">
 
-The short answer is "no." Cross-project references require that each project `name` be unique in your dbt Cloud account.
-
-Historical limitations required customers to "duplicate" projects so that one actual dbt project (codebase) would map to more than one dbt Cloud project. To that end, we are working to remove the historical limitations that required customers to "duplicate" projects in dbt Cloud — Staging environments for data isolation, environment-level permissions, and environment-level data warehouse connections (coming soon). Once those pieces are in place, it should no longer be necessary to define separate dbt Cloud projects to isolate data environments or permissions.
+はい。[dbt Explorer](https://www.getdbt.com/product/dbt-explorer) を通じてネイティブに表示できるだけでなく、データ カタログ ツールとのパートナー統合を使用してプロジェクト間の系統接続を表示することもできます。利用可能な dbt Cloud 統合の一覧については、[統合ページ](https://www.getdbt.com/product/integrations) を参照してください。
 
 </DetailsToggle>
 
-## Compatibility with other features
+<DetailsToggle alt_header="dbt Mesh では、特にデータ セットのバグを修正するときに、データの再記述はどのように機能しますか?">
 
-<DetailsToggle alt_header="How does the dbt Semantic Layer relate to and work with dbt Mesh?">
+dbt のテストとモデル コントラクトは、そもそもデータを再記述する必要をなくすのに役立ちます。これらのツールを使用すると、dbt プロジェクトのソース レイヤーと出力レイヤーにチェックを組み込んで、最も重要な場所でデータの品質を評価できます。変換ロジックに変更があった場合 (たとえば、特定の列の定義が変更された場合)、更新されたコードをマージして dbt Cloud ジョブを実行するだけで、データを再記述できます。
 
-import SLMeshFAQs from '/snippets/_sl-dbt-mesh-faq.md';
+データ品質の問題が見逃された場合は、git コミットをロールバックして、古いコードで dbt Cloud ジョブを再実行することもできます。
 
-The [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) and dbt Mesh are complementary mechanisms enabled by dbt Cloud that work together to enhance the management, usability, and governance of data in large-scale data environments.
+</DetailsToggle>
 
-The Semantic Layer in dbt Cloud allows teams to centrally define business metrics and dimensions. It ensures consistent and reliable metric definitions across various analytics tools and platforms.
+<DetailsToggle alt_header="dbt はジョブ実行ログをどのように処理し、それを標準の監視ツールやレポートなどに提供できますか?">
 
-dbt Mesh enables organizations to split their data architecture into multiple domain-specific projects, while retaining the ability to reference “public” models across projects. It is also possible to reference a “public” model from another project for the purpose of defining semantic models and metrics. Your organization can have multiple dbt projects feed into a unified semantic layer, ensuring that metrics and dimensions are consistently defined and understood across these domains.
+はい、このメタデータはすべて [dbt Cloud Admin API](/docs/dbt-cloud-apis/admin-cloud-api) からアクセスできます。このメタデータは、監視ツールに取り込んだり、レポートやダッシュボードの作成に使用したりできます。
+
+この情報の一部は、dbt Cloud 自体の [ジョブ](/docs/deploy/jobs)、[環境](/docs/environments-in-dbt)、[dbt Explorer](https://www.getdbt.com/product/dbt-explorer) でも公開されています。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="dbt Mesh は同じデータ プラットフォーム内の他のアカウントのモデルを参照できますか?">
+
+パブリック モデルのデータベース識別子がプロデューサーとコンシューマー間で一貫している限り、そのプラットフォームのデータ共有機能を活用して、同じデータ プラットフォーム内の他のアカウントのモデルを参照できます。
+
+たとえば、[Snowflake のアカウント間データ共有](https://docs.snowflake.com/en/user-guide/data-sharing-intro)、[ワークスペース間の Databricks Unity Catalog](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)、または複数の BigQuery プロジェクトなどです。
+
+</DetailsToggle>
+
+## 権限とアクセス
+
+<DetailsToggle alt_header="dbt Mesh ではユーザー アクセス権限はどのように機能しますか? ">
+
+少なくとも 1 つのパブリック モデルを持つプロジェクトの存在は、[読み取り専用アクセス](/docs/cloud/manage-access/seats-and-users) を持つ組織内のすべてのユーザーに表示されます。
+
+プライベート モデルまたは保護されたモデルの存在を確認するには、ユーザーは特定のプロジェクトへの読み取り専用アクセスが必要です。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="さまざまなタイプの「アクセス」はどのように相互作用するのでしょうか?">
+
+dbt にはモデルレベルのアクセス、dbt Cloud のユーザーとグループに対するロールベースのアクセス、データ プラットフォーム内の基盤データへのアクセスがあります。
+
+まず第一に、基盤データへのアクセスは、基盤データ プラットフォーム (BigQuery、Databricks、Redshift、Snowflake、Starburst など) によって常に定義および適用されます。このアクセスは、「DCL ステートメント」(つまり `grant`) を実行することによって管理されます。dbt を使用すると、[モデルに `grants` を構成する](/reference/resource-configs/grants) が簡単になり、データ ウェアハウス内の他のロール/ユーザー/グループにデータ アクセスをプロビジョニングできます。ただし、明示的に構成されていない限り、dbt はそれらの許可を自動的に定義または調整しません。データ ウェアハウスの権限の管理については、組織のシステムを参照してください。
+
+[dbt Cloud Enterprise プラン](https://www.getdbt.com/pricing) は、ユーザーとユーザー グループの詳細な権限を管理する [ロールベースのアクセス制御 (RBAC)](/docs/cloud/manage-access/about-user-access#role-based-access-control-) をサポートしています。dbt Cloud プロジェクトのすべての側面を表示または編集できるユーザーを制御できます。dbt Cloud プロジェクトへのユーザーのアクセス権によって、そのプロジェクトを詳細に「探索」できるかどうかも決まります。ロール、ユーザー、グループは、UI を介して、または ID プロバイダーと統合することによって、dbt Cloud アプリケーション内で定義されます。
+
+[モデル アクセス](/docs/collaborate/govern/model-access) は、モデルを参照できる場所を定義します。また、dbt Explorer 内でそれらのプロジェクトを検出できるかどうかも通知します。モデルの `access` は、他のモデル構成 (`materialized`、`tags` など) と同様に、コードで定義されます。
+
+* **Public:** `public` アクセスを持つモデルはどこからでも参照できます。これらは組織の「データ製品」です。
+
+* **Protected:** `protected` アクセスを持つモデルは、同じプロジェクト内でのみ参照できます。これがモデル アクセスのデフォルト レベルです。
+`protected` モデルの将来的な拡張を検討しており、_特定の_ 下流プロジェクトで参照できるようにしています。[GitHub の問題](https://github.com/dbt-labs/dbt-core/issues/9340) を読んで、このユース ケースに興味がある場合は賛成/コメントしてください。
+
+* **Private:** モデル `groups` を使用すると、`p​​rivate` モデルを参照できる場所をより細かく制御できます。グループを定義し、モデルがそのグループに属するように構成することで、他のモデル (同じグループにない) がグループに含まれる `private` モデルを参照できないように制限できます。グループは、グループに含まれるすべてのリソースの「所有者」を定義するための標準的なメカニズムも提供します。
+
+dbt Explorer 内では、`public` モデルは dbt Cloud アカウントのすべてのユーザーが検出できます。すべての public モデルは「マルチプロジェクト」ビューにリストされます。対照的に、プロジェクト内の `protected` モデルと `private` モデルは、そのプロジェクトへのアクセス権を持つユーザー (読み取り専用アクセスを含む) にのみ表示されます。
+
+dbt はデータ ウェアハウスの `grant` とモデル レベルの `access` を暗黙的に調整しないため、両者の間に不一致が生じる可能性があります。たとえば、`public` モデルのメタデータはすべての dbt Cloud ユーザーが表示できるため、誰でもそのモデルへの `ref` を書き込むことができますが、実際に実行またはプレビューすると、データ ウェアハウス内の基礎データにアクセスできないことがわかります。**これは意図的なものです。** このようにして、組織は基礎データへの最小限の権限のアクセスを維持しながら、より広範な組織に可視性と検出可能性を提供できます。他の「データ製品」（パブリック モデル）が存在するかどうか（その説明、所有権、含まれる列）に関する知識があれば、別のチームのアナリストは、基礎となるデータへのアクセス要求を十分な情報に基づいて準備できます。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="dbt Cloud 内の他のチームからアクセス権限を要求することは可能ですか?">
+
+現時点ではそうではありません。ただし、将来的には評価する可能性があります。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="中央データ チームのメンバーとして、組織の DAG 全体の可視性を維持することはできますか?">
+
+はい。ユーザーが dbt Cloud アカウント内のすべてのプロジェクトに対する権限 (少なくとも読み取り専用アクセス) を持っている限り、dbt Explorer で組織の DAG 全体をナビゲートし、あらゆる詳細レベルでモデルを表示できます。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="他のプロジェクトから参照するときに、開発者が機密性の高い本番データにアクセスすることを制限するにはどうすればよいですか?">
+
+デフォルトでは、プロジェクト間の参照は上流プロジェクトの「本番」デプロイメント環境に解決されます。組織で本番環境と非本番環境でまったく異なるデータがある場合、これは問題となります。
+
+このため、標準的なデプロイメント環境のタイプ「[ステージング](/docs/deploy/deploy-environments#staging-environment)」を展開しました。プロジェクトで「本番」環境と「ステージング」環境の両方が定義されている場合、開発環境と「ステージング」環境からのプロジェクト間の参照は「ステージング」に解決されますが、「本番」環境からの参照のみが「本番」に解決されます。このようにして、プロジェクト構成を重複させることなく、データ環境の分離が保証されます。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="プロジェクトが「重複」している場合（開発プロジェクト <> 製品プロジェクト）でも、dbt Mesh は機能しますか?">
+
+簡単に答えると、「いいえ」です。プロジェクト間の参照では、各プロジェクト `name` が dbt Cloud アカウント内で一意である必要があります。
+
+これまでの制限により、実際の 1 つの dbt プロジェクト (コードベース) が複数の dbt Cloud プロジェクトにマップされるように、お客様はプロジェクトを「複製」する必要がありました。そのため、データ分離、環境レベルの権限、環境レベルのデータ ウェアハウス接続 (近日公開) のための dbt Cloud ステージング環境でプロジェクトを「複製」する必要があったこれまでの制限を解消する作業を進めています。これらの要素が整えば、データ環境や権限を分離するために個別の dbt Cloud プロジェクトを定義する必要はなくなります。
+
+</DetailsToggle>
+
+## 他の機能との互換性
+
+<DetailsToggle alt_header="dbt セマンティック レイヤーは dbt メッシュとどのように関連し、どのように機能しますか?">
+
+import SLMeshFAQs from '/snippets.ja/_sl-dbt-mesh-faq.md';
+
+[dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) と dbt Mesh は、dbt Cloud によって実現される補完的なメカニズムであり、連携して大規模データ環境におけるデータの管理、使いやすさ、ガバナンスを強化します。
+
+dbt Cloud のセマンティック レイヤーを使用すると、チームはビジネス メトリックとディメンションを一元的に定義できます。これにより、さまざまな分析ツールとプラットフォーム間で一貫性のある信頼性の高いメトリック定義が保証されます。
+
+dbt Mesh を使用すると、組織はデータ アーキテクチャを複数のドメイン固有のプロジェクトに分割しながら、プロジェクト間で「パブリック」モデルを参照できます。また、セマンティック モデルとメトリックを定義する目的で、別のプロジェクトから「パブリック」モデルを参照することもできます。組織では、複数の dbt プロジェクトを統合されたセマンティック レイヤーにフィードできるため、これらのドメイン間でメトリックとディメンションが一貫して定義され、理解されます。
 
 <SLMeshFAQs/>
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How does dbt Explorer relate to and work with dbt Mesh?">
+<DetailsToggle alt_header="dbt Explorer は dbt Mesh とどのように関連し、どのように動作しますか?">
 
-**[dbt Explorer](/docs/collaborate/explore-projects)** is a tool within dbt Cloud that serves as a knowledge base and lineage visualization platform. It provides a comprehensive view of your dbt assets, including models, tests, sources, and their interdependencies.
+**[dbt Explorer](/docs/collaborate/explore-projects)** は、dbt Cloud 内のツールであり、ナレッジ ベースおよび系統可視化プラットフォームとして機能します。モデル、テスト、ソース、およびそれらの相互依存関係を含む dbt アセットの包括的なビューを提供します。
 
-Used in conjunction with dbt Mesh, dbt Explorer becomes a powerful tool for visualizing and understanding the relationships and dependencies between models across multiple dbt projects.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="How does the dbt Cloud CLI relate to and work with dbt Mesh?">
-
-The [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) allows users to develop and run dbt commands from their preferred development environments, like VS Code, Sublime Text, or terminal interfaces. This flexibility is particularly beneficial in a dbt Mesh setup, where managing multiple projects can be complex. Developers can work in their preferred tools while leveraging the centralized capabilities of dbt Cloud.
+dbt Mesh と組み合わせて使用​​すると、dbt Explorer は、複数の dbt プロジェクトにわたるモデル間の関係と依存関係を視覚化して理解するための強力なツールになります。
 
 </DetailsToggle>
 
-## Availability
+<DetailsToggle alt_header="dbt Cloud CLI は dbt Mesh とどのように関連し、どのように機能しますか?">
 
-<DetailsToggle alt_header="Does dbt Mesh require me to be on a specific version of dbt?">
-
-Yes, your account must be on [at least dbt v1.6](/docs/dbt-versions/upgrade-dbt-version-in-cloud) to take advantage of [cross-project dependencies](/docs/collaborate/govern/project-dependencies), one of the most crucial underlying capabilities required to implement a dbt Mesh.
+[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) を使用すると、ユーザーは VS Code、Sublime Text、ターミナル インターフェースなどの好みの開発環境から dbt コマンドを開発および実行できます。この柔軟性は、複数のプロジェクトの管理が複雑になる可能性がある dbt Mesh セットアップで特に役立ちます。開発者は、dbt Cloud の集中管理された機能を活用しながら、好みのツールで作業できます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Is there a way to leverage dbt Mesh capabilities in dbt Core?">
+## 可用性
 
-While dbt Core defines several of the foundational elements for dbt Mesh, dbt Cloud offers an enhanced experience that leverages these elements for scaled collaboration across multiple teams, facilitated by multi-project discovery in dbt Explorer that’s tailored to each user’s access.
+<DetailsToggle alt_header="dbt Mesh を使用するには、特定のバージョンの dbt を使用する必要がありますか?">
 
-Several key components that underpin the dbt Mesh pattern, including model contracts, versions, and access modifiers, are defined and implemented in dbt Core. We believe these are components of the core language, which is why their implementations are open source. We want to define a standard pattern that analytics engineers everywhere can adopt, extend, and help us improve.
-
-To reference models defined in another project, users can also leverage [packages](/docs/build/packages), a longstanding feature of dbt Core. By importing an upstream project as a package, dbt will import all models defined in that project, which enables the resolution of cross-project references to those models. They can be [optionally restricted](/docs/collaborate/govern/model-access#how-do-i-restrict-access-to-models-defined-in-a-package) to just the models with `public` access.
-
-The major distinction comes with dbt Cloud's metadata service, which is unique to the dbt Cloud platform and allows for the resolution of references to only the public models in a project. This service enables users to take dependencies on upstream projects, and reference just their `public` models, *without* needing to load the full complexity of those upstream projects into their local development environment.
+はい、dbt メッシュを実装するために必要な最も重要な基盤機能の 1 つである [プロジェクト間の依存関係](/docs/collaborate/govern/project-dependencies) を活用するには、アカウントが [少なくとも dbt v1.6](/docs/dbt-versions/upgrade-dbt-version-in-cloud) である必要があります。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Does dbt Mesh require a specific dbt Cloud plan?">
+<DetailsToggle alt_header="dbt Core で dbt Mesh 機能を活用する方法はありますか?">
 
-Yes, a [dbt Cloud Enterprise](https://www.getdbt.com/pricing) plan is required to set up multiple projects and reference models across them.
+dbt Core は dbt Mesh の基本的な要素をいくつか定義していますが、dbt Cloud は、各ユーザーのアクセスに合わせて調整された dbt Explorer のマルチプロジェクト検出によって、これらの要素を活用して複数のチーム間での大規模なコラボレーションを実現する強化されたエクスペリエンスを提供します。
 
-</DetailsToggle>
+モデル コントラクト、バージョン、アクセス修飾子など、dbt Mesh パターンの基盤となるいくつかの主要コンポーネントは、dbt Core で定義および実装されています。これらはコア言語のコンポーネントであると考えているため、実装はオープンソースです。私たちは、あらゆるアナリティクス エンジニアが採用、拡張し、改善に協力できる標準パターンを定義したいと考えています。
 
-## Tips on implementing dbt Mesh
+別のプロジェクトで定義されたモデルを参照するために、ユーザーは dbt Core の長年の機能である [パッケージ](/docs/build/packages) を活用することもできます。上流プロジェクトをパッケージとしてインポートすると、dbt はそのプロジェクトで定義されているすべてのモデルをインポートし、それらのモデルへのプロジェクト間参照を解決できるようになります。これらは、[オプションで制限](/docs/collaborate/govern/model-access#how-do-i-restrict-access-to-models-defined-in-a-package)して、`public` アクセスを持つモデルのみにアクセスを許可できます。
 
-<DetailsToggle alt_header="Is there a recommended migration or implementation process?">
-
-Refer to our developer guide on [How we structure our dbt Mesh projects](https://docs.getdbt.com/best-practices/how-we-mesh/mesh-1-intro). You may also be interested in watching the recording of this talk from Coalesce 2023: [Unlocking model governance and multi-project deployments with dbt-meshify](https://www.youtube.com/watch?v=FAsY0Qx8EyU).
-
-You can also learn how to implement dbt Mesh by following our [Quickstart dbt Mesh](/guides/mesh-qs) guide.
+主な違いは、dbt Cloud のメタデータ サービスにあります。これは dbt Cloud プラットフォームに固有のもので、プロジェクト内のパブリック モデルのみへの参照を解決できます。このサービスにより、ユーザーは上流プロジェクトへの依存関係を取得し、それらの上流プロジェクトの複雑なすべてをローカル開発環境にロードすることなく、`public` モデルのみを参照できます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Are there tools available to help me migrate to a dbt Mesh?">
+<DetailsToggle alt_header="dbt Mesh には特定の dbt Cloud プランが必要ですか?">
 
-`dbt-meshify` is a [CLI tool](https://github.com/dbt-labs/dbt-meshify) that automates the creation of model governance and cross-project lineage features introduced in dbt-core v1.5 and v1.6. This package will leverage your dbt project metadata to create and/or edit the files in your project to properly configure the models in your project with these features.
+はい、複数のプロジェクトを設定し、それら全体でモデルを参照するには、[dbt Cloud Enterprise](https://www.getdbt.com/pricing) プランが必要です。
+
 </DetailsToggle>
 
-<DetailsToggle alt_header="My team isn’t structured to require multiple projects today. What aspects of dbt Mesh are relevant to me?">
+## dbt Mesh の実装に関するヒント
 
-Let’s say your organization has fewer than 500 models and fewer than a dozen regular contributors to dbt. You're operating at a scale well served by the monolith (a single project), and the larger pattern of dbt Mesh probably won't provide any immediate benefits.
+<DetailsToggle alt_header="推奨される移行または実装プロセスはありますか?">
 
-It’s never too early to think about how you’re organizing models _within_ that project. Use model `groups` to define clear ownership boundaries and `private` access to restrict purpose-built models from becoming load-bearing blocks in an unrelated section of the DAG. Your future selves will thank you for defining these interfaces, especially if you reach a scale where it makes sense to “graduate” the interfaces between `groups` into boundaries between projects.
+[dbt Mesh プロジェクトの構造化方法](https://docs.getdbt.com/best-practices/how-we-mesh/mesh-1-intro) に関する開発者ガイドを参照してください。Coalesce 2023 のこの講演の録画もご覧ください: [dbt-meshify によるモデル ガバナンスとマルチプロジェクト デプロイメントの実現](https://www.youtube.com/watch?v=FAsY0Qx8EyU)。
+
+[dbt Mesh クイックスタート](/guides/mesh-qs) ガイドに従って、dbt Mesh の実装方法を学ぶこともできます。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="dbt Mesh への移行に役立つツールはありますか?">
+
+`dbt-meshify` は、dbt-core v1.5 および v1.6 で導入されたモデル ガバナンスとプロジェクト間系統機能の作成を自動化する [CLI ツール](https://github.com/dbt-labs/dbt-meshify) です。このパッケージは、dbt プロジェクト メタデータを活用してプロジェクト内のファイルを作成および/または編集し、これらの機能を使用してプロジェクト内のモデルを適切に構成します。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="私のチームは現在、複数のプロジェクトを必要とする構造になっていません。dbt Mesh のどの側面が私に関係があるのでしょうか?">
+
+組織に 500 未満のモデルがあり、dbt への定期的な貢献者が 12 人未満であるとします。モノリス (単一のプロジェクト) で十分に対応できる規模で運用しており、dbt Mesh のより大きなパターンでは、すぐにメリットが得られる可能性は低いでしょう。
+
+そのプロジェクト内でモデルを整理する方法を考えるのに早すぎるということはありません。モデル `groups` を使用して明確な所有権の境界を定義し、`private` アクセスを使用して、目的に合わせて構築されたモデルが DAG の無関係なセクションの負荷を支えるブロックにならないようにします。特に、`groups` 間のインターフェイスをプロジェクト間の境界に「卒業」することが理にかなっている規模に達した場合は、これらのインターフェイスを定義したことに感謝するでしょう。
 
 </DetailsToggle>

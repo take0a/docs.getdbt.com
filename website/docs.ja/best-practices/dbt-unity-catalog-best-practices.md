@@ -1,5 +1,5 @@
 ---
-title: "Best practices for dbt and Unity Catalog"
+title: "dbt と Unity Catalog のベストプラクティス"
 id: "dbt-unity-catalog-best-practices"
 description: Learn how to configure your.
 displayText: Writing custom generic tests
@@ -7,33 +7,33 @@ hoverSnippet: Learn how to define your own custom generic tests.
 ---
 
 
-Your Databricks dbt project should be configured after following the ["How to set up your databricks dbt project guide"](/guides/set-up-your-databricks-dbt-project). Now we’re ready to start building a dbt project using Unity Catalog. However, we should first consider how we want to allow dbt users to interact with our different catalogs. We recommend the following best practices to ensure the integrity of your production data:
+Databricks dbt プロジェクトは、["Databricks dbt プロジェクトの設定方法ガイド"](/guides/set-up-your-databricks-dbt-project) に従って構成する必要があります。これで、Unity Catalog を使用して dbt プロジェクトの構築を開始する準備が整いました。ただし、まず、dbt ユーザーがさまざまなカタログと対話できるようにする方法を検討する必要があります。実稼働データの整合性を確保するために、次のベスト プラクティスをお勧めします:
 
-## Isolate your Bronze (aka source) data
+## ブロンズ（ソース）データを分離する
 
-We recommend using Unity Catalog because it allows you to reference data across your organization from any other catalog, legacy Hive metastore, external metastore, or Delta Live Table pipeline outputs. Additionally, Databricks offers the capability to [interact with external data](https://docs.databricks.com/external-data/index.html#interact-with-external-data-on-databricks) and supports query federation to many [database solutions](https://docs.databricks.com/query-federation/index.html#what-is-query-federation-for-databricks-sql). This means your dev and prod environments will have access to your source data, even if it is defined in another catalog or external data source.
+Unity Catalog を使用することをお勧めします。これにより、他のカタログ、従来の Hive メタストア、外部メタストア、または Delta Live Table パイプライン出力から組織全体のデータを参照できるようになります。さらに、Databricks は [外部データと対話する](https://docs.databricks.com/external-data/index.html#interact-with-external-data-on-databricks) 機能を提供し、多くの [データベース ソリューション](https://docs.databricks.com/query-federation/index.html#what-is-query-federation-for-databricks-sql) へのクエリ フェデレーションをサポートしています。つまり、ソース データが別のカタログまたは外部データ ソースで定義されている場合でも、開発環境と運用環境からソース データにアクセスできます。
 
-Raw data in your Bronze layer should be defined as dbt [sources](https://docs.getdbt.com/docs/build/sources) and should be read-only for all dbt interactions in both development and production. By default, we recommend that all of these inputs should be accessible by all dbt users in all dbt environments. This ensures that transformations in all environments begin with the same input data, and the results observed in development will be replicated when that code is deployed. That being said, there are times when your company’s data governance requirements necessitate using multiple workspaces or data catalogs depending on the environment.
+Bronze レイヤーの生データは、dbt [ソース](https://docs.getdbt.com/docs/build/sources) として定義し、開発と運用の両方ですべての dbt インタラクションに対して読み取り専用にする必要があります。デフォルトでは、すべての dbt 環境のすべての dbt ユーザーがこれらのすべての入力にアクセスできるようにすることをお勧めします。これにより、すべての環境での変換が同じ入力データから開始され、開発で観察された結果は、そのコードがデプロイされたときに複製されます。とはいえ、会社のデータ ガバナンス要件により、環境に応じて複数のワークスペースまたはデータ カタログを使用する必要がある場合があります。
 
-If you have different data catalogs/schemas for your source data depending on your environment, you can use the [target.name](https://docs.getdbt.com/reference/dbt-jinja-functions/target#use-targetname-to-change-your-source-database) to change the data catalog/schema you’re pulling from depending on the environment.
+環境に応じてソース データのデータ カタログ/スキーマが異なる場合は、[target.name](https://docs.getdbt.com/reference/dbt-jinja-functions/target#use-targetname-to-change-your-source-database) を使用して、環境に応じて取得するデータ カタログ/スキーマを変更できます。
 
-If you use multiple Databricks workspaces to isolate development from production, you can use dbt Cloud’s [environment variables](https://docs.getdbt.com/docs/build/environment-variables) in your connection config strings to reference multiple workspaces from one dbt Cloud project. You can also do the same thing for your SQL warehouse so you can have different sizes based on your environments.
+複数の Databricks ワークスペースを使用して開発と運用を分離する場合は、接続構成文字列で dbt Cloud の [環境変数](https://docs.getdbt.com/docs/build/environment-variables) を使用して、1 つの dbt Cloud プロジェクトから複数のワークスペースを参照できます。SQL ウェアハウスでも同じことを実行して、環境に応じて異なるサイズにすることもできます。
 
-To do so, use dbt's [environment variable syntax](https://docs.getdbt.com/docs/dbt-cloud/using-dbt-cloud/cloud-environment-variables#special-environment-variables) for Server Hostname of your Databricks workspace URL and HTTP Path for the SQL warehouse in your connection settings. Note that Server Hostname still needs to appear to be a valid domain name to pass validation checks, so you will need to hard-code the domain suffix on the URL, eg `{{env_var('DBT_HOSTNAME')}}.cloud.databricks.com` and the path prefix for your warehouses, eg `/sql/1.0/warehouses/{{env_var('DBT_HTTP_PATH')}}`.
+これを行うには、接続設定で、Databricks ワークスペース URL のサーバー ホスト名と SQL ウェアハウスの HTTP パスに dbt の [環境変数構文](https://docs.getdbt.com/docs/dbt-cloud/using-dbt-cloud/cloud-environment-variables#special-environment-variables) を使用します。サーバー ホスト名は、検証チェックに合格するために有効なドメイン名である必要があるため、URL のドメイン サフィックス (例: `{{env_var('DBT_HOSTNAME')}}.cloud.databricks.com`) とウェアハウスのパス プレフィックス (例: `/sql/1.0/warehouses/{{env_var('DBT_HTTP_PATH')}}`) をハードコードする必要があります。
 
 <Lightbox src="/img/guides/databricks-guides/databricks-connection-env-vars.png" title="Using environment variable syntax in connection configs" />
 
-When you create environments in dbt Cloud, you can assign environment variables to populate the connection information dynamically. Don’t forget to make sure the tokens you use in the credentials for those environments were generated from the associated workspace.
+dbt Cloud で環境を作成するときに、環境変数を割り当てて接続情報を動的に入力できます。これらの環境の認証情報で使用するトークンが、関連付けられているワークスペースから生成されたものであることを確認してください。
 
 <Lightbox src="/img/guides/databricks-guides/databricks-env-variables.png" title="Defining default environment variable values" />
 
-## Access Control
+## アクセス制御
 
-For granting access to data consumers, use dbt’s [grants config](https://docs.getdbt.com/reference/resource-configs/grants) to apply permissions to database objects generated by dbt models. This lets you configure grants as a structured dictionary rather than writing all the SQL yourself and lets dbt take the most efficient path to apply those grants.
+データ コンシューマーにアクセス権を付与するには、dbt の [grants config](https://docs.getdbt.com/reference/resource-configs/grants) を使用して、dbt モデルによって生成されたデータベース オブジェクトに権限を適用します。これにより、すべての SQL を自分で記述するのではなく、構造化された辞書として権限を構成でき、dbt は最も効率的なパスを使用してそれらの権限を適用できます。
 
-As for permissions to run dbt and read non-consumer-facing data sources, the table below summarizes an access model. Effectively, all developers should get no more than read access on the prod catalog and write access in the dev catalog. When using dbt, schema creation is taken care of for you; unlike traditional data warehousing workflows, you do not need to manually create any Unity Catalog assets other than the top-level catalogs.
+dbt を実行して消費者向けではないデータ ソースを読み取る権限については、以下の表にアクセス モデルをまとめています。実質的に、すべての開発者は、prod カタログの読み取り権限と dev カタログの書き込み権限のみを取得する必要があります。dbt を使用する場合、スキーマの作成は自動的に行われます。従来のデータ ウェアハウス ワークフローとは異なり、最上位のカタログ以外の Unity Catalog アセットを手動で作成する必要はありません。
 
-The **prod** service principal should have “read” access to raw source data, and “write” access to the prod catalog. If you add a **test** catalog and associated dbt environment, you should create a dedicated service principal. The test service principal should have *read* on raw source data, and *write* on the **test** catalog but no permissions on the prod or dev catalogs. A dedicated test environment should be used for [CI testing](https://www.getdbt.com/blog/adopting-ci-cd-with-dbt-cloud/) only.
+**prod** サービス プリンシパルには、生のソース データに対する「読み取り」権限と、prod カタログに対する「書き込み」権限が必要です。**test** カタログと関連する dbt 環境を追加する場合は、専用のサービス プリンシパルを作成する必要があります。test サービス プリンシパルには、生のソース データに対する *読み取り* 権限と、**test** カタログに対する *書き込み* 権限が必要ですが、prod カタログまたは dev カタログに対する権限はありません。専用のテスト環境は、[CI テスト](https://www.getdbt.com/blog/adopting-ci-cd-with-dbt-cloud/) にのみ使用する必要があります。
 
 
 **Table-level grants:**
@@ -54,15 +54,15 @@ The **prod** service principal should have “read” access to raw source data,
 | Test service principal | use | none | none | use, create schema, table & view |
 
 
-## Next steps
+## 次のステップ
 
-Ready to start transforming your Unity Catalog datasets with dbt?
+dbt を使用して Unity Catalog データセットの変換を開始する準備はできましたか?
 
-Check out the resources below for guides, tips, and best practices:
+ガイド、ヒント、ベスト プラクティスについては、以下のリソースをご覧ください:
 
-- [How we structure our dbt projects](/best-practices/how-we-structure/1-guide-overview)
-- [Self-paced dbt fundamentals training course](https://learn.getdbt.com/courses/dbt-fundamentals)
-- [Customizing CI/CD](/guides/custom-cicd-pipelines)
-- [Debugging errors](/guides/debug-errors)
-- [Writing custom generic tests](/best-practices/writing-custom-generic-tests)
-- [dbt packages hub](https://hub.getdbt.com/)
+- [dbt プロジェクトの構造化方法](/best-practices/how-we-structure/1-guide-overview)
+- [自分のペースで学べる dbt 基礎トレーニング コース](https://learn.getdbt.com/courses/dbt-fundamentals)
+- [CI/CD のカスタマイズ](/guides/custom-cicd-pipelines)
+- [エラーのデバッグ](/guides/debug-errors)
+- [カスタム汎用テストの作成](/best-practices/writing-custom-generic-tests)
+- [dbt パッケージ ハブ](https://hub.getdbt.com/)

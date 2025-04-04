@@ -1,11 +1,11 @@
-When using the dbt Semantic Layer in a [dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro) setting, we recommend the following:
+[dbt メッシュ](/best-practices/how-we-mesh/mesh-1-intro)設定で dbt セマンティック レイヤーを使用する場合は、次のことをお勧めします。
 
-- You have one standalone project that contains your semantic models and metrics.
-- Then as you build your Semantic Layer, you can [cross-reference dbt models](/docs/collaborate/govern/project-dependencies) across your various projects or packages to create your semantic models using the [two-argument `ref` function](/reference/dbt-jinja-functions/ref#ref-project-specific-models)( `ref('project_name', 'model_name')`).
-- Your dbt Semantic Layer project serves as a global source of truth across the rest of your projects.
+- セマンティック モデルとメトリックを含むスタンドアロン プロジェクトが 1 つあります。
+- 次に、セマンティック レイヤーを構築するときに、[2 つの引数を持つ `ref` 関数](/reference/dbt-jinja-functions/ref#ref-project-specific-models)( `ref('project_name', 'model_name')`) を使用して、さまざまなプロジェクトまたはパッケージ間で [dbt モデルを相互参照](/docs/collaborate/govern/project-dependencies) し、セマンティック モデルを作成できます。
+- dbt セマンティック レイヤー プロジェクトは、残りのプロジェクト全体で信頼できるグローバル ソースとして機能します。
 
-#### Usage example 
-For example, let's say you have a public model (`fct_orders`) that lives in the `jaffle_finance` project. As you build your semantic model, use the following syntax to ref the model:
+#### 使用例 
+たとえば、`jaffle_finance` プロジェクトに存在するパブリック モデル (`fct_orders`) があるとします。セマンティック モデルを構築するときは、次の構文を使用してモデルを参照します:
 
 <File name="models/metrics/semantic_model_name.yml">
 
@@ -26,5 +26,5 @@ semantic_models:
 ```
 </File>
 
-Notice that in the `model` parameter, we're using the `ref` function with two arguments to reference the public model `fct_orders` defined in the `jaffle_finance` project.
+`model` パラメータでは、`jaffle_finance` プロジェクトで定義されたパブリック モデル `fct_orders` を参照するために、2 つの引数を持つ `ref` 関数を使用していることに注意してください。
 <br />

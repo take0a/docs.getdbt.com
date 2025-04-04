@@ -1,39 +1,39 @@
 ---
-title: "Materializations best practices"
+title: "マテリアライゼーションのベストプラクティス"
 id: materializations-guide-1-guide-overview
 slug: 1-guide-overview
 description: Read this guide to understand how using materializations in dbt is a crucial skill for effective analytics engineering.
-displayText: Materializations best practices
+displayText: マテリアライゼーションのベストプラクティス
 hoverSnippet: Read this guide to understand how using materializations in dbt is a crucial skill for effective analytics engineering.
 ---
 
-What _really_ happens when you type `dbt build`? Contrary to popular belief, a crack team of microscopic data elves do _not_ construct your data row by row, although the truth feels equally magical. This guide explores the real answer to that question, with an introductory look at the objects that get built into your warehouse, why they matter, and how dbt knows what to build.
+`dbt build` と入力すると、実際に何が起こるのでしょうか。一般に信じられていることとは反対に、極小のデータ エルフの優秀なチームがデータを 1 行ずつ構築するわけではありませんが、真実は同じように魔法のようです。このガイドでは、ウェアハウスに構築されるオブジェクトの概要、それらが重要な理由、および dbt が構築するものを認識する方法について説明します。
 
-The configurations that tell dbt how to construct these objects are called _materializations,_ and knowing how to use them is a crucial skill for effective analytics engineering. When you’ve completed this guide, you will have that ability to use the three core materializations that cover most common analytics engineering situations.
+dbt にこれらのオブジェクトの構築方法を指示する構成は _マテリアライゼーション_ と呼ばれ、それらの使用方法を知ることは、効果的な分析エンジニアリングに不可欠なスキルです。このガイドを完了すると、最も一般的な分析エンジニアリング状況をカバーする 3 つのコア マテリアライゼーションを使用できるようになります。
 
 :::info
-😌 **Materializations abstract away DDL and DML**. Typically in raw SQL- or python-based [data transformation](https://www.getdbt.com/analytics-engineering/transformation/), you have to write specific imperative instructions on how to build or modify your data objects. dbt’s materializations make this declarative, we tell dbt how we want things to be constructed and it figures out how to do that given the unique conditions and qualities of our warehouse.
+😌 **マテリアライゼーションは、DDL と DML を抽象化します**。通常、生の SQL または Python ベースの [データ変換](https://www.getdbt.com/analytics-engineering/transformation/) では、データ オブジェクトを構築または変更する方法について具体的な命令型の指示を記述する必要があります。dbt のマテリアライゼーションはこれを宣言的にします。dbt に物事をどのように構築するかを伝えると、ウェアハウスの固有の条件と特性に基づいて、それを実行する方法を判断します。
 :::
 
-### Learning goals
+### 学習目標
 
-By the end of this guide you should have a solid understanding of:
+このガイドを読み終える頃には、以下の点についてしっかりと理解しているはずです:
 
-- 🛠️ what **materializations** are
-- 👨‍👨‍👧 how the three main materializations that ship with dbt — **table**, **view**, and **incremental** — differ
-- 🗺️ **when** and **where** to use specific materializations to optimize your development and production builds
-- ⚙️ how to **configure materializations** at various scopes, from an individual model to entire folder
+- 🛠️ **マテリアライゼーション**とは何か
+- 👨‍👨‍👧dbt に付属する 3 つの主要なマテリアライゼーション (**テーブル**、**ビュー**、**増分**) の違い
+- 🗺️ 開発ビルドと本番ビルドを最適化するために、特定のマテリアライゼーションを**いつ**、**どこで**使用するか
+- ⚙️ 個々のモデルからフォルダ全体まで、さまざまなスコープで**マテリアライゼーションを構成する**方法
 
-### Prerequisites
+### 前提条件
 
-- 📒 You’ll want to have worked through the [quickstart guide](/guides) and have a project setup to work through these concepts.
-- 🏃🏻‍♀️ Concepts like dbt runs, `ref()` statements, and models should be familiar to you.
-- 🔧 [**Optional**] Reading through the [How we structure our dbt projects](/best-practices/how-we-structure/1-guide-overview) Guide will be beneficial for the last section of this guide, when we review best practices for materializations using the dbt project approach of staging models and marts.
+- 📒 これらの概念を理解するには、[クイックスタート ガイド](/guides) を読み、プロジェクトをセットアップしておく必要があります。
+- 🏃🏻‍♀️ dbt 実行、`ref()` ステートメント、モデルなどの概念はよくご存知のはずです。
+- 🔧 [**オプション**] [dbt プロジェクトの構造化方法](/best-practices/how-we-structure/1-guide-overview) ガイドを読んでおくと、このガイドの最後のセクションで、ステージング モデルとマートの dbt プロジェクト アプローチを使用して実現化するためのベスト プラクティスを確認するときに役立ちます。
 
-### Guiding principle
+### ガイドの原則
 
-We’ll explore this in-depth throughout, but the basic guideline is **start as simple as possible**. We’ll follow a tiered approached, only moving up a tier when it’s necessary.
+これについては全体を通して詳しく検討しますが、基本的なガイドラインは **できるだけシンプルに始める** ことです。段階的なアプローチを採用し、必要な場合にのみ段階を上げていきます。
 
-- 🔍 **Start with a view.** When the view gets too long to _query_ for end users,
-- ⚒️ **Make it a table.** When the table gets too long to _build_ in your dbt Jobs,
-- 📚 **Build it incrementally.** That is, layer the data on in chunks as it comes in.
+- 🔍 **ビューから始めましょう。** ビューが長くなりすぎてエンドユーザーにとって_クエリ_しにくくなったら、
+- ⚒️ **テーブルにする。** テーブルが長くなりすぎてdbtジョブで構築できなくなった場合は、
+- 📚 **段階的に構築します。** つまり、データが入るたびに、それをチャンク単位で重ねていきます。

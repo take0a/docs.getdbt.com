@@ -1,5 +1,5 @@
 ---
-title: "Conclusion"
+title: "結論"
 id: materializations-guide-7-conclusion
 slug: 7-conclusion
 description: Read this conclusion to our guide on using materializations in dbt and how it is a crucial skill for effective analytics engineering.
@@ -7,8 +7,8 @@ displayText: Materializations best practices
 hoverSnippet: Read this conclusion to our guide on using materializations in dbt and how it is a crucial skill for effective analytics engineering.
 ---
 
-You're now following best practices in your project, and have optimized the materializations of your DAG. You’re equipped with the 3 main materializations that cover almost any analytics engineering situation!
+これで、プロジェクトのベスト プラクティスに従い、DAG のマテリアライゼーションを最適化できました。ほぼすべての分析エンジニアリング状況に対応する 3 つの主要なマテリアライゼーションが完成しました。
 
-There are more configs and materializations available, as well as specific materializations for certain platforms and adapters — and like everything with dbt, materializations are extensible, meaning you can create your own [custom materializations](/guides/create-new-materializations) for your needs. So this is just the beginning of what you can do with these powerful configurations.
+他にもさまざまな構成とマテリアライゼーションが用意されており、特定のプラットフォームやアダプタ向けの特定のマテリアライゼーションも用意されています。また、dbt のあらゆる機能と同様に、マテリアライゼーションは拡張可能で、ニーズに合わせて独自の [カスタム マテリアライゼーション](/guides/create-new-materializations) を作成できます。したがって、これはこれらの強力な構成で実行できることのほんの始まりにすぎません。
 
-For the vast majority of users and companies though, tables, views, and incremental models will handle everything you can throw at them. Develop your intuition and expertise for these materializations, and you’ll be well on your way to tackling advanced analytics engineering problems.
+ただし、大多数のユーザーや企業では、テーブル、ビュー、増分モデルであらゆる処理を実行できます。これらのマテリアライゼーションに関する直感と専門知識を身に付ければ、高度な分析エンジニアリングの問題に取り組む準備が整います。

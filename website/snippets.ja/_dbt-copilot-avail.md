@@ -1,4 +1,4 @@
-:::tip Use dbt Copilot
+:::tip dbt Copilot の使用
 
-<span>Use [dbt Copilot](/docs/cloud/dbt-copilot), available for dbt Cloud Enterprise accounts, to generate {props.resource} in the dbt Cloud IDE only.</span>
+<span>dbt Cloud Enterprise アカウントで利用可能な [dbt Copilot](/docs/cloud/dbt-copilot) を使用して、dbt Cloud IDE でのみ {props.resource} を生成します。</span>
 :::

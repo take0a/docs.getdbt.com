@@ -1,42 +1,42 @@
 ---
-title: "Implementing your mesh plan"
+title: "メッシュ計画の実装"
 description: Getting started with dbt Mesh patterns
 hoverSnippet: Learn how to get started with dbt Mesh
 ---
 
-### Where should your mesh journey start?
+### メッシュの旅はどこから始めるべきでしょうか？
 
-Moving to a dbt Mesh represents a meaningful change in development and deployment architecture. Before any sufficiently complex software refactor or migration, it's important to ask, 'Why might this not work?' The two most common reasons we've seen stem from
+dbt メッシュへの移行は、開発および展開アーキテクチャにおける重要な変更を意味します。十分に複雑なソフトウェアのリファクタリングや移行を行う前に、「なぜこれが機能しない可能性があるのか​​」を問うことが重要です。私たちが目にした最も一般的な 2 つの理由は、次のとおりです。
 
-1. Lack of buy-in that a dbt Mesh is the right long-term architecture
-2. Lack of alignment on a well-scoped starting point
+1. dbt メッシュが適切な長期アーキテクチャであるという認識の欠如
+2. 適切にスコープ設定された開始点の調整の欠如
 
-Creating alignment on your architecture and starting point are major steps in ensuring a successful migration. Deciding on the right starting point will look different for every organization, but there are some heuristics that can help you decide where to start. In all likelihood, your organization already has logical components, and you may already be grouping, building, and deploying your project according to these interfaces.The goal is to define and formalize these organizational interfaces and use these boundaries to split your project apart by domain.
+アーキテクチャと開始点の調整を行うことは、移行を成功させるための重要なステップです。適切な開始点の決定は組織ごとに異なりますが、どこから始めるかを決定するのに役立つ経験則がいくつかあります。おそらく、組織にはすでに論理コンポーネントがあり、これらのインターフェイスに従ってプロジェクトをグループ化、構築、展開している可能性があります。目標は、これらの組織インターフェイスを定義および形式化し、これらの境界を使用してプロジェクトをドメインごとに分割することです。
 
-How do you find these organizational interfaces? Here are some steps to get you started:
+こうした組織インターフェースをどのように見つけますか? 開始するための手順は次のとおりです:
 
-- **Talk to teams** about what sort of separation naturally exists right now.
-  - Are there various domains people are focused on?
-  - Are there various sizes, shapes, and sources of data that get handled separately (such as click event data)?
-  - Are there people focused on separate levels of transformation, such as landing and staging data or building marts?
-  - Is there a single team that is *downstream* of your current dbt project, who could more easily migrate onto dbt Mesh as a consumer? 
+- **チームと話し合い**、現在どのような分離が自然に存在しているかを確認します。
+  - 人々が注力しているドメインはさまざまですか?
+  - 別々に処理されるデータのサイズ、形状、ソースはさまざまですか (クリック イベント データなど)?
+  - ランディング データやステージング データ、マートの構築など、変換の個別のレベルに注力している人々はいますか?
+  - 現在の dbt プロジェクトの *下流* に、消費者として dbt Mesh に簡単に移行できる単一のチームがありますか?
 
-When attempting to define your project interfaces, you should consider investigating:
+プロジェクト インターフェースを定義する際には、次の点について調査することを検討してください。
 
-- **Your jobs:** Which sets of models are most often built together?
-- **Your lineage graph:** How are models connected?
-- **Your selectors(defined in `selectors.yml`):** How do people already define resource groups?
+- **ジョブ:** どのモデル セットが最も頻繁に一緒に構築されますか?
+- **系統グラフ:** モデルはどのように接続されていますか?
+- **セレクター (`selectors.yml` で定義):** 人々はすでにリソース グループをどのように定義していますか?
 
-Let's go through an example process of taking a monolithing project, using groups and access to define the interfaces, and then splitting it into multiple projects.
+モノリシック プロジェクトを取得し、グループとアクセスを使用してインターフェースを定義し、それを複数のプロジェクトに分割するプロセスの例を見てみましょう。
 
-To learn more, refer to our freely available [dbt Mesh learning course](https://learn.getdbt.com/courses/dbt-mesh). 
+詳細については、無料で利用できる [dbt Mesh 学習コース](https://learn.getdbt.com/courses/dbt-mesh) を参照してください。
 
 
-## Defining project interfaces with groups and access
+## グループとアクセスによるプロジェクトインターフェースの定義
 
-Once you have a sense of some initial groupings, you can first implement **group and access permissions** within a single project.
+初期のグループ化についてある程度理解できたら、まず 1 つのプロジェクト内で **グループとアクセス権限** を実装できます。
 
-- First you can create a [group](/docs/build/groups) to define the owner of a set of models.
+- まず、[グループ](/docs/build/groups) を作成して、一連のモデルの所有者を定義します。
 
 ```yml
 # in models/__groups.yml
@@ -48,7 +48,7 @@ groups:
         email: ben.jaffleck@jaffleshop.com
 ```
 
-- Then, we can add models to that group using the `group:` key in the model's YAML entry.
+- 次に、モデルの YAML エントリの `group:` キーを使用して、そのグループにモデルを追加できます。
 
 ```yml
 # in models/marketing/__models.yml
@@ -60,7 +60,7 @@ models:
     group: marketing
 ```
 
-- Once you've added models to the group, you can **add [access](/docs/collaborate/govern/model-access) settings to the models** based on their connections between groups, *opting for the most private access that will maintain current functionality*. This means that any model that has *only* relationships to other models in the same group should be `private` , and any model that has cross-group relationships, or is a terminal node in the group DAG should be `protected` so that other parts of the DAG can continue to reference it.
+- グループにモデルを追加したら、グループ間の接続に基づいて**モデルに [アクセス](/docs/collaborate/govern/model-access) 設定を追加** し、*現在の機能を維持する最もプライベートなアクセスを選択* できます。つまり、同じグループ内の他のモデルとのみ関係を持つモデルは `プライベート` にし、グループ間の関係を持つモデルやグループ DAG 内のターミナル ノードであるモデルは、DAG の他の部分が引き続き参照できるように `保護` する必要があります。
 
 ```yml
 # in models/marketing/__models.yml
@@ -74,21 +74,21 @@ models:
     access: private
 ```
 
-- **Validate these groups by incrementally migrating your jobs** to execute these groups specifically via selection syntax. We would recommend doing this in parallel to your production jobs until you’re sure about them. This will help you feel out if you’ve drawn the lines in the right place.
-- If you find yourself **consistently making changes across multiple groups** when you update logic, that’s a sign that **you may want to rethink your groups**.
+- **ジョブを段階的に移行してこれらのグループを検証**し、選択構文を介してこれらのグループを具体的に実行します。確信が持てるまで、本番ジョブと並行してこれを行うことをお勧めします。これにより、適切な場所に線を引いたかどうかを確認できます。
+- ロジックを更新したときに、**複数のグループにわたって一貫して変更を行っている**ことに気付いた場合は、**グループを再検討する必要がある**という兆候です。
 
-## Split your projects
+## プロジェクトを分割する
 
-1. **Move your grouped models into a subfolder**. This will include any model in the selected group, it's associated YAML entry, as well as its parent or child resources as appropriate depending on where this group sits in your DAG.
-   1. Note that just like in your dbt project, circular references are not allowed! Project B cannot have parents and children in Project A, for example.
-2. **Create a new `dbt_project.yml` file** in the subdirectory.
-3. **Copy any macros** used by the resources you moved.
-4. **Create a new `packages.yml` file** in your subdirectory with the packages that are used by the resources you moved.
-5. **Update `{{ ref }}` functions** &mdash; For any model that has a cross-project dependency (this may be in the files you moved, or in the files that remain in your project):
-   1. Update the `{{ ref() }}` function to have two arguments, where the first is the name of the source project and the second is the name of the model: e.g. `{{ ref('jaffle_shop', 'my_upstream_model') }}`
-   2. Update the upstream, cross-project parents’ `access` configs to `public` , ensuring any project can safely `{{ ref() }}` those models.
-   3. We *highly* recommend adding a [model contract](/docs/collaborate/govern/model-contracts) to the upstream models to ensure the data shape is consistent and reliable for your downstream consumers.
-6. **Create a `dependencies.yml` file** ([docs](/docs/collaborate/govern/project-dependencies)) for the downstream project, declaring the upstream project as a dependency.
+1. **グループ化されたモデルをサブフォルダーに移動します**。これには、選択したグループ内のすべてのモデル、それに関連付けられた YAML エントリ、およびこのグループが DAG 内のどこに配置されているかに応じて適切な親または子のリソースが含まれます。
+   1. dbt プロジェクトと同様に、循環参照は許可されないことに注意してください。たとえば、プロジェクト B はプロジェクト A の親と子を持つことはできません。
+2. サブディレクトリに**新しい `dbt_project.yml` ファイルを作成します**。
+3. 移動したリソースで使用されている**マクロをコピーします**。
+4. 移動したリソースで使用されるパッケージを含む**新しい `packages.yml` ファイルをサブディレクトリに作成します。**
+5. **`{{ ref }}` 関数を更新** &mdash; プロジェクト間の依存関係を持つモデルの場合 (移動したファイル内またはプロジェクト内に残っているファイル内にある可能性があります):
+   1. `{{ ref() }}` 関数を更新して 2 つの引数を設定します。最初の引数はソース プロジェクトの名前、2 番目の引数はモデルの名前です。例: `{{ ref('jaffle_shop', 'my_upstream_model') }}`
+   2. アップストリームのクロスプロジェクトの親の `access` 構成を `public` に更新して、どのプロジェクトでもそれらのモデルを安全に `{{ ref() }}` できるようにします。
+   3. 下流の消費者にとってデータ形状の一貫性と信頼性を確保するために、上流のモデルに [モデル契約](/docs/collaborate/govern/model-contracts) を追加することを強くお勧めします。
+6. 下流プロジェクト用の **`dependencies.yml` ファイル ([docs](/docs/collaborate/govern/project-dependencies)) を作成し**、上流プロジェクトを依存関係として宣言します。
 
 ```yml
 
@@ -97,55 +97,55 @@ projects:
   - name: jaffle_shop
 ```
 
-### Best practices
+### ベストプラクティス
 
-- When you’ve **confirmed the right groups**, it's time to split your projects.
-  - **Do *one* group at a time**!
-  - **Do *not* refactor as you migrate**, however tempting that may be. Focus on getting 1-to-1 parity and log any issues you find in doing the migration for later. Once you’ve fully migrated the project then you can start optimizing it for its new life as part of your mesh.
-- Start by splitting your project within the same repository for full git tracking and easy reversion if you need to start from scratch.
+- **適切なグループを確認**したら、プロジェクトを分割します。
+  - **一度に 1 つのグループだけ実行してください**!
+  - **移行中にリファクタリングしないでください**。誘惑に負けないようにしてください。1 対 1 のパリティを実現することに集中し、移行中に見つかった問題は後で記録します。プロジェクトを完全に移行したら、メッシュの一部として新しい生活に向けて最適化を開始できます。
+- 最初からやり直す必要がある場合は、完全な Git 追跡と簡単な復元のために、同じリポジトリ内でプロジェクトを分割することから始めます。
 
 
-## Connecting existing projects
+## 既存のプロジェクトを接続する
 
-Some organizations may already be coordinating across multiple dbt projects. Most often this is via:
+組織によっては、すでに複数の dbt プロジェクト間で調整を行っている場合があります。これは、ほとんどの場合、次の方法で行われます:
 
-1. Installing parent projects as dbt packages
-2. Using `{{ source() }}` functions to read the outputs of a parent project as inputs to a child project. 
+1. 親プロジェクトを dbt パッケージとしてインストールする
+2. `{{ source() }}` 関数を使用して、親プロジェクトの出力を子プロジェクトへの入力として読み取ります。
 
-This has a few drawbacks:
+これにはいくつか欠点があります:
 
-1. If using packages, each project has to include *all* resources from *all* projects in its manifest, slowing down dbt and the development cycle.
-2. If using sources, there are breakages in the lineage, as there's no real connection between the parent and child projects.
+1. パッケージを使用する場合、各プロジェクトのマニフェストにすべてのプロジェクトのすべてのリソースを含める必要があるため、dbt と開発サイクルが遅くなります。
+2. ソースを使用する場合、親プロジェクトと子プロジェクトの間に実際の接続がないため、系統に破損が生じます。
 
-The migration steps here are much simpler than splitting up a monolith!
+ここでの移行手順は、モノリスを分割するよりもはるかに簡単です。
 
-1. If using the `package` method:
-   1. In the parent project:
-      1. mark all models being referenced downstream as `public` and add a model contract.
-   2. In the child project:
-      1. Remove the package entry from `packages.yml`
-      2. Add the upstream project to your `dependencies.yml`
-      3. Update the `{{ ref() }}` functions to models from the upstream project to include the project name argument.
-1. If using `source` method:
-   1. In the parent project:
-      1. mark all models being imported downstream as `public` and add a model contract.
-   2. In the child project:
-      1. Add the upstream project to your `dependencies.yml`
-      2. Replace the `{{ source() }}` functions with cross project `{{ ref() }}` functions.
-      3. Remove the unnecessary `source` definitions.
+1. `package` メソッドを使用する場合:
+   1. 親プロジェクトの場合:
+      1. 下流で参照されるすべてのモデルを `public` としてマークし、モデル コントラクトを追加します。
+   2. 子プロジェクトの場合:
+      1. `packages.yml` からパッケージエントリを削除します。
+      2. アップストリームプロジェクトを `dependencies.yml` に追加します。
+      3. プロジェクト名引数を含めるように、アップストリーム プロジェクトのモデルに `{{ ref() }}` 関数を更新します。
+1. `source` メソッドを使用する場合:
+   1. 親プロジェクトの場合:
+      1. 下流にインポートされるすべてのモデルを `public` としてマークし、モデル コントラクトを追加します。
+   2. 子プロジェクトの場合:
+      1. アップストリームプロジェクトを `dependencies.yml` に追加します。
+      2. `{{ source() }}` 関数をクロスプロジェクトの `{{ ref() }}` 関数に置き換えます。
+      3. 不要な `source` 定義を削除します。
 
-## Additional Resources
-### Our example projects
+## 追加リソース
+### 私たちのプロジェクト例
 
-We've provided a set of example projects you can use to explore the topics covered here. We've split our [Jaffle Shop](https://github.com/dbt-labs/jaffle-shop) project into 3 separate projects in a multi-repo dbt Mesh. Note that you'll need to leverage dbt Cloud to use multi-project architecture, as cross-project references are powered via dbt Cloud's APIs.
+ここで取り上げたトピックを調べるために使用できるサンプル プロジェクトのセットを用意しました。[Jaffle Shop](https://github.com/dbt-labs/jaffle-shop) プロジェクトを、マルチリポジトリの dbt Mesh で 3 つの個別のプロジェクトに分割しました。プロジェクト間の参照は dbt Cloud の API を介して行われるため、マルチプロジェクト アーキテクチャを使用するには dbt Cloud を活用する必要があることに注意してください。
 
-- **[Platform](https://github.com/dbt-labs/jaffle-shop-mesh-platform)** - containing our centralized staging models.
-- **[Marketing](https://github.com/dbt-labs/jaffle-shop-mesh-marketing)** - containing our marketing marts.
-- **[Finance](https://github.com/dbt-labs/jaffle-shop-mesh-finance)** - containing our finance marts.
+- **[プラットフォーム](https://github.com/dbt-labs/jaffle-shop-mesh-platform)** - 集中ステージング モデルが含まれます。
+- **[マーケティング](https://github.com/dbt-labs/jaffle-shop-mesh-marketing)** - マーケティング マートが含まれます。
+- **[財務](https://github.com/dbt-labs/jaffle-shop-mesh-finance)** - 財務マートが含まれます。
 
-### dbt-meshify
+### dbt メッシュ化
 
-We recommend using the `dbt-meshify` [command line tool](<https://dbt-labs.github.io/dbt-meshify/>) to help you do this. This comes with CLI operations to automate most of the above steps.
+これを実行するには、`dbt-meshify` [コマンドライン ツール](<https://dbt-labs.github.io/dbt-meshify/>) を使用することをお勧めします。これには、上記の手順のほとんどを自動化する CLI 操作が付属しています。
 
 ## Related docs
-- [Quickstart with dbt Mesh](/guides/mesh-qs)
+- [dbt Mesh のクイックスタート](/guides/mesh-qs)

@@ -1,5 +1,5 @@
 ---
-title: "Add data tests to your DAG"
+title: "DAG にデータテストを追加する"
 sidebar_label: "Data tests"
 description: "Configure dbt data tests to assess the quality of your input data and ensure accuracy in resulting datasets."
 pagination_next: "docs/build/unit-tests"
@@ -10,51 +10,51 @@ keywords:
   - test, tests, testing, dag
 ---
 
-import CopilotBeta from '/snippets/_dbt-copilot-avail.md';
+import CopilotBeta from '/snippets.ja/_dbt-copilot-avail.md';
 
 <CopilotBeta resource='data tests' />
 
-## Related reference docs
-* [Test command](/reference/commands/test)
-* [Data test properties](/reference/resource-properties/data-tests)
-* [Data test configurations](/reference/data-test-configs)
-* [Test selection examples](/reference/node-selection/test-selection-examples)
+## 関連リファレンスドキュメント
+* [テストコマンド](/reference/commands/test)
+* [データテストプロパティ](/reference/resource-properties/data-tests)
+* [データテスト構成](/reference/data-test-configs)
+* [テスト選択例](/reference/node-selection/test-selection-examples)
 
 <VersionBlock firstVersion="1.8">
 
 :::important
 
-From dbt v1.8, "tests" are now called "data tests" to disambiguate from [unit tests](/docs/build/unit-tests). The YAML key `tests:` is still supported as an alias for `data_tests:`. Refer to [New `data_tests:` syntax](#new-data_tests-syntax) for more information.
+dbt v1.8 からは、[ユニット テスト](/docs/build/unit-tests) と区別するために、「テスト」は「データ テスト」と呼ばれるようになりました。YAML キー `tests:` は、`data_tests:` のエイリアスとして引き続きサポートされています。詳細については、[新しい `data_tests:` 構文](#new-data_tests-syntax) を参照してください。
 
 :::
 
 </VersionBlock>
 
-## Overview
+## 概要
 
-Data tests are assertions you make about your models and other resources in your dbt project (e.g. sources, seeds and snapshots). When you run `dbt test`, dbt will tell you if each test in your project passes or fails.
+データ テストは、dbt プロジェクト内のモデルやその他のリソース (ソース、シード、スナップショットなど) について行うアサーションです。`dbt test` を実行すると、dbt はプロジェクト内の各テストが合格か不合格かを通知します。
 
-You can use data tests to improve the integrity of the SQL in each model by making assertions about the results generated. Out of the box, you can test whether a specified column in a model only contains non-null values, unique values, or values that have a corresponding value in another model (for example, a `customer_id` for an `order` corresponds to an `id` in the `customers` model), and values from a specified list. You can extend data tests to suit business logic specific to your organization – any assertion that you can make about your model in the form of a select query can be turned into a data test.
+データ テストを使用すると、生成された結果についてアサーションを行うことで、各モデルの SQL の整合性を向上させることができます。すぐに使用できる状態で、モデル内の指定された列に、null 以外の値、一意の値、または別のモデルに対応する値を持つ値 (たとえば、`order` の `customer_id` は `customers` モデルの `id` に対応します)、および指定されたリストの値のみが含まれているかどうかをテストできます。データ テストを拡張して、組織固有のビジネス ロジックに適合させることができます。選択クエリの形式でモデルについて行うことができるアサーションはすべて、データ テストに変換できます。
 
-Data tests return a set of failing records. Generic data tests (f.k.a. schema tests) are defined using `test` blocks.
+データ テストは、失敗したレコードのセットを返します。汎用データ テスト (旧称スキーマ テスト) は、`test` ブロックを使用して定義されます。
 
-Like almost everything in dbt, data tests are SQL queries. In particular, they are `select` statements that seek to grab "failing" records, ones that disprove your assertion. If you assert that a column is unique in a model, the test query selects for duplicates; if you assert that a column is never null, the test seeks after nulls. If the data test returns zero failing rows, it passes, and your assertion has been validated.
+dbt のほとんどすべてと同様に、データ テストは SQL クエリです。特に、これらは「失敗した」レコード、つまりアサーションを反証するレコードを取得しようとする `select` ステートメントです。列がモデル内で一意であるとアサートする場合、テスト クエリは重複を選択します。列が null にならないとアサートする場合、テストは null を検索します。データ テストが失敗した行を 0 行返した場合、テストは成功し、アサーションは検証されています。
 
-There are two ways of defining data tests in dbt:
-* A **singular** data test is testing in its simplest form: If you can write a SQL query that returns failing rows, you can save that query in a `.sql` file within your [test directory](/reference/project-configs/test-paths). It's now a data test, and it will be executed by the `dbt test` command.
-* A **generic** data test is a parameterized query that accepts arguments. The test query is defined in a special `test` block (like a [macro](jinja-macros)). Once defined, you can reference the generic test by name throughout your `.yml` files—define it on models, columns, sources, snapshots, and seeds. dbt ships with four generic data tests built in, and we think you should use them!
+dbt でデータ テストを定義する方法は 2 つあります。
+* **単一** データ テストは、最も単純な形式のテストです。失敗した行を返す SQL クエリを記述できる場合は、そのクエリを [テスト ディレクトリ](/reference/project-configs/test-paths) 内の `.sql` ファイルに保存できます。これでデータ テストになり、`dbt test` コマンドによって実行されます。
+* **汎用** データ テストは、引数を受け入れるパラメーター化されたクエリです。テスト クエリは、特別な `test` ブロック ([マクロ](jinja-macros) など) で定義されます。定義したら、`.yml` ファイル全体で名前で汎用テストを参照できます。モデル、列、ソース、スナップショット、シードで定義します。dbt には 4 つの汎用データ テストが組み込まれており、これらを使用することをお勧めします。
 
-Defining data tests is a great way to confirm that your outputs and inputs are as expected, and helps prevent regressions when your code changes. Because you can use them over and over again, making similar assertions with minor variations, generic data tests tend to be much more common—they should make up the bulk of your dbt data testing suite. That said, both ways of defining data tests have their time and place.
+データ テストを定義することは、出力と入力が期待どおりであることを確認する優れた方法であり、コードが変更されたときの回帰を防ぐのに役立ちます。汎用データ テストは、わずかな違いはあるものの、同様のアサーションを繰り返して使用できるため、より一般的に使用される傾向があり、dbt データ テスト スイートの大部分を占める必要があります。とはいえ、データ テストを定義する両方の方法には、それぞれに適したタイミングと場所があります。
 
-:::tip Creating your first data tests
-If you're new to dbt, we recommend that you check out our [quickstart guide](/guides) to build your first dbt project with models and tests.
+:::tip 最初のデータテストを作成する
+dbt を初めて使用する場合は、[クイックスタート ガイド](/guides) を参照して、モデルとテストを含む最初の dbt プロジェクトを構築することをお勧めします。
 :::
 
-## Singular data tests
+## 特異データテスト
 
-The simplest way to define a data test is by writing the exact SQL that will return failing records. We call these "singular" data tests, because they're one-off assertions usable for a single purpose.
+データ テストを定義する最も簡単な方法は、失敗したレコードを返す正確な SQL を記述することです。これらは単一の目的に使用できる 1 回限りのアサーションであるため、「単一」データ テストと呼ばれます。
 
-These tests are defined in `.sql` files, typically in your `tests` directory (as defined by your [`test-paths` config](/reference/project-configs/test-paths)). You can use Jinja (including `ref` and `source`) in the test definition, just like you can when creating models. Each `.sql` file contains one `select` statement, and it defines one data test:
+これらのテストは、通常は `tests` ディレクトリ ([`test-paths` 構成](/reference/project-configs/test-paths) で定義) にある `.sql` ファイルで定義されます。モデルを作成する場合と同様に、テスト定義で Jinja (`ref` および `source` を含む) を使用できます。各 `.sql` ファイルには 1 つの `select` ステートメントが含まれ、1 つのデータ テストを定義します:
 
 <File name='tests/assert_total_payment_amount_is_positive.sql'>
 
@@ -71,13 +71,13 @@ having total_amount < 0
 
 </File>
 
-The name of this test is the name of the file: `assert_total_payment_amount_is_positive`. 
+このテストの名前は、ファイル名と同じです: `assert_total_payment_amount_is_positive`。
 
-Note:
-- Omit semicolons (;) at the end of the SQL statement in your singular test files, as they can cause your test to fail.
-- Singular tests placed in the tests directory are automatically executed when running `dbt test`. Don't reference singular tests in `model_name.yml`, as they are not treated as generic tests or macros, and doing so will result in an error.
+注:
+- 単一テスト ファイル内の SQL ステートメントの末尾にあるセミコロン (;) は省略してください。セミコロンがあるとテストが失敗する可能性があります。
+- tests ディレクトリに配置された単一テストは、`dbt test` の実行時に自動的に実行されます。単一テストは汎用テストまたはマクロとして扱われないため、`model_name.yml` で参照しないでください。参照するとエラーが発生します。
 
-To add a description to a singular test in your project, add a `.yml` file to your `tests` directory, for example, `tests/schema.yml` with the following content:
+プロジェクト内の単一テストに説明を追加するには、`tests` ディレクトリに `.yml` ファイル (たとえば、`tests/schema.yml`) を追加し、次の内容を含めます。
 
 <File name='tests/schema.yml'>
 
@@ -93,10 +93,10 @@ data_tests:
 
 </File>
 
-Singular data tests are so easy that you may find yourself writing the same basic structure repeatedly, only changing the name of a column or model. By that point, the test isn't so singular! In that case, we recommend generic data tests.
+単一データ テストは非常に簡単なので、列またはモデルの名前を変更するだけで、同じ基本構造を繰り返し記述することになります。その時点では、テストはそれほど単一ではありません。その場合は、汎用データ テストをお勧めします。
 
-## Generic data tests
-Certain data tests are generic: they can be reused over and over again. A generic data test is defined in a `test` block, which contains a parametrized query and accepts arguments. It might look like:
+## 一般的なデータテスト
+特定のデータ テストは汎用的であり、何度でも再利用できます。汎用データ テストは、パラメーター化されたクエリを含み、引数を受け入れる `test` ブロックで定義されます。次のようになります:
 
 ```sql
 {% test not_null(model, column_name) %}
@@ -108,13 +108,13 @@ Certain data tests are generic: they can be reused over and over again. A generi
 {% endtest %}
 ```
 
-You'll notice that there are two arguments, `model` and `column_name`, which are then templated into the query. This is what makes the test "generic": it can be defined on as many columns as you like, across as many models as you like, and dbt will pass the values of `model` and `column_name` accordingly. Once that generic test has been defined, it can be added as a _property_ on any existing model (or source, seed, or snapshot). These properties are added in  `.yml` files in the same directory as your resource.
+`model` と `column_name` という 2 つの引数があり、クエリにテンプレート化されていることに気付くでしょう。これがテストを「汎用的」にするものです。つまり、任意の数の列に、任意の数のモデルに定義でき、dbt はそれに応じて `model` と `column_name` の値を渡します。汎用テストが定義されると、既存のモデル (またはソース、シード、スナップショット) に _property_ として追加できます。これらのプロパティは、リソースと同じディレクトリの `.yml` ファイルに追加されます。
 
 :::info
-If this is your first time working with adding properties to a resource, check out the docs on [declaring properties](/reference/configs-and-properties).
+リソースにプロパティを追加する作業を初めて行う場合は、[プロパティの宣言](/reference/configs-and-properties)に関するドキュメントを確認してください。
 :::
 
-Out of the box, dbt ships with four generic data tests already defined: `unique`, `not_null`, `accepted_values` and `relationships`. Here's a full example using those tests on an `orders` model:
+dbt には、`unique`、`not_null`、`accepted_values`、`relationships` の 4 つの汎用データ テストがあらかじめ定義されています。`orders` モデルでこれらのテストを使用する完全な例を次に示します:
 
 ```yml
 version: 2
@@ -137,28 +137,28 @@ models:
               field: id
 ```
 
-In plain English, these data tests translate to:
-* `unique`: the `order_id` column in the `orders` model should be unique
-* `not_null`: the `order_id` column in the `orders` model should not contain null values
-* `accepted_values`: the `status` column in the `orders` should be  one of `'placed'`, `'shipped'`, `'completed'`, or  `'returned'`
-* `relationships`: each `customer_id` in the `orders` model exists as an `id` in the `customers` <Term id="table" /> (also known as referential integrity)
+平易な英語で言えば、これらのデータ テストは次のようになります:
+* `unique`: `orders` モデルの `order_id` 列は一意である必要があります
+* `not_null`: `orders` モデルの `order_id` 列には null 値が含まれていてはなりません
+* `accepted_values`: `orders` の `status` 列は `'placed'`、`'shipped'`、`'completed'`、または `'returned'` のいずれかである必要があります
+* `relationships`: `orders` モデルの各 `customer_id` は `customers` <Term id="table" /> の `​​id` として存在します (参照整合性とも呼ばれます)
 
-Behind the scenes, dbt constructs a `select` query for each data test, using the parametrized query from the generic test block. These queries return the rows where your assertion is _not_ true; if the test returns zero rows, your assertion passes.
+バックグラウンドでは、dbt は汎用テスト ブロックからのパラメーター化されたクエリを使用して、各データ テストの `select` クエリを構築します。これらのクエリは、アサーションが true ではない行を返します。テストが 0 行を返す場合、アサーションは成功します。
 
-You can find more information about these data tests, and additional configurations (including [`severity`](/reference/resource-configs/severity) and [`tags`](/reference/resource-configs/tags)) in the [reference section](/reference/resource-properties/data-tests). You can also add descriptions to the Jinja macro that provides the core logic of a generic data test. Refer to the [Add description to generic data test logic](/best-practices/writing-custom-generic-tests#add-description-to-generic-data-test-logic) for more information.
+これらのデータ テストと追加の構成 ([`severity`](/reference/resource-configs/severity) および [`tags`](/reference/resource-configs/tags) を含む) の詳細については、[リファレンス セクション](/reference/resource-properties/data-tests) を参照してください。汎用データ テストのコア ロジックを提供する Jinja マクロに説明を追加することもできます。詳細については、[汎用データ テスト ロジックに説明を追加する](/best-practices/writing-custom-generic-tests#add-description-to-generic-data-test-logic) を参照してください。
 
-### More generic data tests
+### より一般的なデータテスト
 
-Those four tests are enough to get you started. You'll quickly find you want to use a wider variety of tests—a good thing! You can also install generic data tests from a package, or write your own, to use (and reuse) across your dbt project. Check out the [guide on custom generic tests](/best-practices/writing-custom-generic-tests) for more information.
+これら 4 つのテストは、開始するには十分です。すぐに、より幅広い種類のテストを使用したくなるでしょう。これは良いことです。また、パッケージから汎用データ テストをインストールしたり、独自のテストを作成して、dbt プロジェクト全体で使用 (および再利用) することもできます。詳細については、[カスタム汎用テストのガイド](/best-practices/writing-custom-generic-tests) をご覧ください。
 
 :::info
-There are generic tests defined in some open-source packages, such as [dbt-utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) and [dbt-expectations](https://hub.getdbt.com/calogica/dbt_expectations/latest/) &mdash; skip ahead to the docs on [packages](/docs/build/packages) to learn more!
+[dbt-utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) や [dbt-expectations](https://hub.getdbt.com/calogica/dbt_expectations/latest/) などの一部のオープンソース パッケージでは、汎用テストが定義されています。詳細については、[packages](/docs/build/packages) のドキュメントに進んでください。
 :::
 
-### Example
-To add a generic (or "schema") test to your project:
+### 例
+プロジェクトに汎用 (または「スキーマ」) テストを追加するには:
 
-1. Add a `.yml` file to your `models` directory, e.g. `models/schema.yml`, with the following content (you may need to adjust the `name:` values for an existing model)
+1. `models` ディレクトリに `.yml` ファイル (例: `models/schema.yml`) を追加し、次の内容を入力します (既存のモデルの `name:` 値を調整する必要がある場合があります)
 
 <File name='models/schema.yml'>
 
@@ -177,7 +177,7 @@ models:
 
 </File>
 
-2. Run the [`dbt test` command](/reference/commands/test):
+2. [`dbt test` コマンド](/reference/commands/test)を実行します。
 
 ```
 $ dbt test
@@ -198,12 +198,12 @@ Completed successfully
 Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
 
 ```
-3. Check out the SQL dbt is running by either:
-   * **dbt Cloud:** checking the Details tab.
-   * **dbt Core:** checking the `target/compiled` directory
+3. 次のいずれかの方法で、SQL dbt が実行されていることを確認します。
+   * **dbt Cloud:** [詳細] タブを確認します。
+   * **dbt Core:** `target/compiled` ディレクトリを確認します。
 
 
-**Unique test**
+**Unique テスト**
 <Tabs
   defaultValue="compiled"
   values={[
@@ -276,33 +276,33 @@ where {{ column_name }} is null
   </TabItem>
 </Tabs>
 
-## Storing test failures
+## テスト失敗の保存
 
-Normally, a data test query will calculate failures as part of its execution. If you set the optional `--store-failures` flag,  the [`store_failures`](/reference/resource-configs/store_failures), or the [`store_failures_as`](/reference/resource-configs/store_failures_as) configs, dbt will first save the results of a test query to a table in the database, and then query that table to calculate the number of failures.
+通常、データ テスト クエリは、実行の一環として失敗を計算します。オプションの `--store-failures` フラグ、[`store_failures`](/reference/resource-configs/store_failures)、または [`store_failures_as`](/reference/resource-configs/store_failures_as) 構成を設定すると、dbt はまずテスト クエリの結果をデータベース内のテーブルに保存し、次にそのテーブルをクエリして失敗の数を計算します。
 
-This workflow allows you to query and examine failing records much more quickly in development:
+このワークフローにより、開発中に失敗したレコードをより迅速にクエリして調べることができます:
 
 <Lightbox src="/img/docs/building-a-dbt-project/test-store-failures.gif" title="Store test failures in the database for faster development-time debugging."/>
 
-Note that, if you select to store test failures:
-* Test result tables are created in a schema suffixed or named `dbt_test__audit`, by default. It is possible to change this value by setting a `schema` config. (For more details on schema naming, see [using custom schemas](/docs/build/custom-schemas).)
-- A test's results will always **replace** previous failures for the same test.
+テストの失敗を保存することを選択した場合は、次の点に注意してください。
+* テスト結果テーブルは、デフォルトでは、`dbt_test__audit` というサフィックスまたは名前の付いたスキーマに作成されます。`schema` 構成を設定することで、この値を変更できます。(スキーマの命名の詳細については、[カスタム スキーマの使用](/docs/build/custom-schemas)を参照してください。)
+- テストの結果は、常に同じテストの以前の失敗を **置き換え** ます。
 
 
 
-## New `data_tests:` syntax
+## 新しい `data_tests:` 構文
 
 <VersionBlock lastVersion="1.7">
 
-In dbt version 1.8, we updated the `tests` configuration to `data_tests`. For detailed information, select version v1.8 from the documentation navigation menu.
+dbt バージョン 1.8 では、`tests` 構成が `data_tests` に更新されました。詳細については、ドキュメント ナビゲーション メニューからバージョン v1.8 を選択してください。
 
 </VersionBlock>
 
 <VersionBlock firstVersion="1.8">
   
-Data tests were historically called "tests" in dbt as the only form of testing available. With the introduction of unit tests in v1.8, the key was renamed from `tests:` to `data_tests:`. 
+データ テストは、これまで dbt では唯一のテスト形式として「テスト」と呼ばれていました。バージョン 1.8 でユニット テストが導入されたことで、キーの名前が `tests:` から `data_tests:` に変更されました。
 
-dbt still supports `tests:` in your YML configuration files for backwards-compatibility purposes, and you might see it used throughout our documentation. However, you can't have a `tests` and a `data_tests` key associated with the same resource (e.g. a single model) at the same time.
+dbt は下位互換性のために引き続き YML 構成ファイルで `tests:` をサポートしており、ドキュメント全体で使用されていることがあります。ただし、`tests` キーと `data_tests` キーを同じリソース (単一のモデルなど) に同時に関連付けることはできません。
 
 <File name='models/schema.yml'>
 

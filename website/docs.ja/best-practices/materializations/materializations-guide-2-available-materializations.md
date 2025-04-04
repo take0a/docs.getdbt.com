@@ -1,5 +1,5 @@
 ---
-title: "Available materializations"
+title: "利用可能なマテリアライゼーション"
 id: materializations-guide-2-available-materializations
 slug: 2-available-materializations
 description: Read this guide to understand the different types of materializations you can create in dbt.
@@ -7,53 +7,53 @@ displayText: Materializations best practices
 hoverSnippet: Read this guide to understand the different types of materializations you can create in dbt.
 ---
 
-Views and tables and incremental models, oh my! In this section we’ll start getting our hands dirty digging into the three basic materializations that ship with dbt. They are considerably less scary and more helpful than lions, tigers, or bears — although perhaps not as cute (can data be cute? We at dbt Labs think so). We’re going to define, implement, and explore:
+ビュー、テーブル、増分モデル、おやまあ！このセクションでは、dbt に同梱されている 3 つの基本的なマテリアライゼーションを詳しく調べていきます。これらは、ライオン、トラ、クマに比べるとそれほど怖くなく、役に立つものですが、それほどかわいくはないかもしれません (データはかわいくできるでしょうか? dbt Labs ではそう思います)。以下を定義、実装、調査します。
 
-- 🔍 [**views**](/docs/build/materializations#view)
-- ⚒️ [**tables**](/docs/build/materializations#table)
-- 📚 [**incremental model**](/docs/build/materializations#incremental)
+- 🔍 [**ビュー**](/docs/build/materializations#view)
+- ⚒️ [**テーブル**](/docs/build/materializations#table)
+- 📚 [**増分モデル**](/docs/build/materializations#incremental)
 
 :::info
-👻 There is a fourth default materialization available in dbt called [**ephemeral materialization**](/docs/build/materializations#ephemeral). It is less broadly applicable than the other three, and better deployed for specific use cases that require weighing some tradeoffs. We chose to leave it out of this guide and focus on the three materializations that will power 99% of your modeling needs.
+👻 dbt には、[**ephemeral materialization**](/docs/build/materializations#ephemeral) と呼ばれる 4 番目のデフォルトのマテリアライゼーションがあります。これは他の 3 つほど適用範囲が広くなく、トレードオフを考慮する必要がある特定のユース ケースに展開するのに適しています。このガイドではこれを省略し、モデリング ニーズの 99% を満たす 3 つのマテリアライゼーションに焦点を当てることにしました。
 :::
 
-**Views and Tables are the two basic categories** of object that we can create across warehouses. They exist natively as types of objects in the warehouse, as you can see from this screenshot of Snowflake (depending on your warehouse the interface will look a little different). **Incremental models** and other materializations types are a little bit different. They tell dbt to **construct tables in a special way**.
+**ビューとテーブルは、ウェアハウス全体で作成できるオブジェクトの 2 つの基本カテゴリ** です。これらは、Snowflake のこのスクリーンショットからわかるように、ウェアハウス内のオブジェクトの種類としてネイティブに存在します (ウェアハウスによっては、インターフェイスが少し異なります)。**増分モデル** やその他のマテリアライゼーション タイプは少し異なります。これらは、**特別な方法でテーブルを構築する** ように dbt に指示します。
 
 ![Tables and views in the browser on Snowflake.](/img/best-practices/materializations/tables-and-views.png)
 
-### Views
+### ビュー
 
-- ✅ **The default materialization in dbt**. A starting project has no configurations defined for materializations, which means _everything_ is by default built as a view.
-- 👩‍💻 **Store _only the SQL logic_ of the transformation in the warehouse, _not the data_**. As such, they make a great default. They build almost instantly and cost almost nothing to build.
-- ⏱️ Always reflect the **most up-to-date** version of the input data, as they’re run freshly every time they’re queried.
-- 👎 **Have to be processed every time they’re queried, so slower to return results than a table of the same data.** That also means they can cost more over time, especially if they contain intensive transformations and are queried often.
+- ✅ **dbt のデフォルトのマテリアライゼーション**。開始プロジェクトにはマテリアライゼーション用の構成が定義されていないため、_すべて_ がデフォルトでビューとして構築されます。
+- 👩‍💻 **ウェアハウスには、_データではなく_変換の SQL ロジックのみを保存**します。そのため、これらは優れたデフォルトになります。ほぼ瞬時に構築でき、構築コストもほとんどかかりません。
+- ⏱️ 入力データはクエリされるたびに新しく実行されるため、常に**最新**バージョンの入力データが反映されます。
+- 👎 **クエリされるたびに処理する必要があるため、同じデータのテーブルよりも結果が返されるまでに時間がかかります。** また、集中的な変換が含まれており、頻繁にクエリされる場合は特に、時間の経過とともにコストが高くなる可能性があります。
 
-### Tables
+### テーブル
 
-- 🏗️ **Tables store the data itself** as opposed to views which store the query logic. This means we can pack all of the transformation compute into a single run. A view is storing a _query_ in the warehouse. Even to preview that data we have to query it. A table is storing the literal rows and columns on disk.
-- 🏎️ Querying lets us **access that transformed data directly**, so we get better performance. Tables feel **faster and more responsive** compared to views of the same logic.
-- 💸 **Improves compute costs.** Compute is significantly more expensive than storage. So while tables use much more storage, it’s generally an economical tradeoff, as you only pay for the transformation compute when you build a table during a job, rather than every time you query it.
-- 🔍 **Ideal for models that get queried regularly**, due to the combination of these qualities.
-- 👎 **Limited to the source data that was available when we did our most recent run.** We’re ‘freezing’ the transformation logic into a table. So if we run a model as a table every hour, at 10:59a we still only have data up to 10a, because that was what was available in our source data when we ran the table last at 10a. Only at the next run will the newer data be included in our rebuild.
+- 🏗️ **テーブルにはデータ自体が格納されます**。これは、クエリ ロジックを格納するビューとは対照的です。つまり、変換計算のすべてを 1 回の実行にまとめることができます。ビューはウェアハウスに _クエリ_ を格納します。そのデータをプレビューする場合にも、クエリを実行する必要があります。テーブルは、ディスク上にリテラルの行と列を格納します。
+- 🏎️ クエリを実行すると、**変換されたデータに直接アクセス** できるため、パフォーマンスが向上します。テーブルは、同じロジックのビューと比較して、**高速で応答性が高く** 感じられます。
+- 💸 **コンピューティング コストが削減されます。** コンピューティングはストレージよりも大幅に高価です。そのため、テーブルはより多くのストレージを使用しますが、クエリを実行するたびに支払うのではなく、ジョブ中にテーブルを構築するときにのみ変換コンピューティングの料金を支払うため、一般的には経済的なトレードオフとなります。
+- 🔍 これらの特性の組み合わせにより、**定期的にクエリされるモデルに最適です**。
+- 👎 **最新の実行時に利用可能だったソース データに限定されます。** 変換ロジックをテーブルに「固定」しています。したがって、モデルを 1 時間ごとにテーブルとして実行すると、午前 10 時 59 分には午前 10 時までのデータしか残りません。これは、午前 10 時にテーブルを最後に実行したときにソース データで利用可能だったデータだからです。次の実行時にのみ、新しいデータが再構築に含まれます。
 
-### Incremental models
+### 増分モデル
 
-- 🧱 **Incremental** models build a **table** in **pieces over time**, only adding and updating new or changed records.
-- 🏎️  **Builds more quickly** than a regular table of the same logic.
-- 🐢 **Initial runs are slow.** Typically we use incremental models on very large datasets, so building the initial table on the full dataset is time consuming and equivalent to the table materialization.
-- 👎 **Add complexity.** Incremental models require deeper consideration of layering and timing.
-- 👎 Can drift from source data over time. As we’re not processing all of the source data when we run an incremental model, extra effort is required to capture changes to historical data.
+- 🧱 **増分** モデルは、**時間の経過とともに**部分的に**テーブル**を構築し、新しいレコードまたは変更されたレコードのみを追加および更新します。
+- 🏎️  同じロジックの通常のテーブルよりも**速く構築**されます。
+- 🐢 **初期実行は低速です。** 通常、非常に大きなデータセットに対して増分モデルを使用するため、完全なデータセットで初期テーブルを構築するのは時間がかかり、テーブルの実現と同等になります。
+- 👎 **複雑さが増します。** 増分モデルでは、階層化とタイミングをより深く考慮する必要があります。
+- 👎 時間の経過とともにソース データからずれる場合があります。増分モデルを実行するときにすべてのソース データを処理するわけではないため、履歴データの変更をキャプチャするには追加の労力が必要です。
 
-### Comparing the materialization types
+### マテリアライゼーションタイプの比較
 
-|                      | view                                 | table                                  | incremental                            |
+|                      | ビュー                                | テーブル                                  | 増分                            |
 | -------------------- | ------------------------------------ | -------------------------------------- | -------------------------------------- |
-| 🛠️⌛ **build time**  | 💚  fastest — only stores logic      | ❤️  slowest — linear to size of data   | 💛  medium — builds flexible portion   |
-| 🛠️💸 **build costs** | 💚  lowest — no data processed       | ❤️  highest — all data processed       | 💛  medium — some data processed       |
-| 📊💸 **query costs** | ❤️  higher — reprocess every query   | 💚  lower — data in warehouse          | 💚  lower — data in warehouse          |
-| 🍅🌱 **freshness**   | 💚  best — up-to-the-minute of query | 💛  moderate — up to most recent build | 💛  moderate — up to most recent build |
-| 🧠🤔 **complexity**  | 💚 simple - maps to warehouse object | 💚 simple - map to warehouse concept   | 💛 moderate - adds logical complexity  |
+| 🛠️⌛ **ビルド時間**  | 💚  最速 - ロジックのみ保存      | ❤️  最も遅い — データのサイズに比例   | 💛  中程度 — 柔軟な部分を構築します   |
+| 🛠️💸 **ビルドコスト** | 💚  最低 — データは処理されません       | ❤️  最高 — すべてのデータを処理       | 💛  中 — ある程度のデータを処理       |
+| 📊💸 **クエリコスト** | ❤️  高い — すべてのクエリを再処理   | 💚  低い — ウェアハウス内のデータ          | 💚  低い — ウェアハウス内のデータ          |
+| 🍅🌱 **鮮度**   | 💚  ベスト — 最新のクエリ | 💛  中程度 — 最新のビルドまで | 💛  中程度 — 最新のビルドまで |
+| 🧠🤔 **複雑**  | 💚 シンプル - ウェアハウスのオブジェクトにマップ | 💚 シンプル - ウェアハウスのコンセプトにマップ   | 💛 中程度 - 論理的な複雑さが増  |
 
 :::info
-🔑 **Time is money.** Notice in the above chart that the time and costs rows contain the same results. This is to highlight that when we’re talking about time in warehouses, we’re talking about compute time, which is the primary driver of costs.
+🔑 **時は金なり。** 上のグラフでは、時間とコストの行に同じ結果が含まれていることに注目してください。これは、ウェアハウスでの時間について話しているとき、コストの主な要因である計算時間について話していることを強調するためです。
 :::

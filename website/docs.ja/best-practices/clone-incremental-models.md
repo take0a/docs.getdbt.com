@@ -1,61 +1,61 @@
 ---
-title: "Clone incremental models as the first step of your CI job"
+title: "CIジョブの最初のステップとして増分モデルをクローンする"
 id: "clone-incremental-models"
 description: Learn how to define clone incremental models as the first step of your CI job.
 displayText: Clone incremental models as the first step of your CI job
 hoverSnippet: Learn how to clone incremental models for CI jobs.
 ---
 
-Before you begin, you must be aware of a few conditions:
-- `dbt clone` is only available with dbt version 1.6 and newer. Refer to our [upgrade guide](/docs/dbt-versions/upgrade-dbt-version-in-cloud) for help enabling newer versions in dbt Cloud
-- This strategy only works for warehouse that support zero copy cloning (otherwise `dbt clone` will just create pointer views).
-- Some teams may want to test that their incremental models run in both incremental mode and full-refresh mode.
+始める前に、いくつかの条件に注意する必要があります:
+- `dbt clone` は、dbt バージョン 1.6 以降でのみ使用できます。dbt Cloud で新しいバージョンを有効にする方法については、[アップグレード ガイド](/docs/dbt-versions/upgrade-dbt-version-in-cloud) を参照してください。
+- この戦略は、ゼロ コピー クローン作成をサポートするウェアハウスでのみ機能します (それ以外の場合、`dbt clone` はポインター ビューを作成するだけです)。
+- チームによっては、増分モデルが増分モードとフル リフレッシュ モードの両方で実行されることをテストする必要がある場合があります。
 
-Imagine you've created a [Slim CI job](/docs/deploy/continuous-integration) in dbt Cloud and it is configured to: 
+dbt Cloud で [Slim CI ジョブ](/docs/deploy/continuous-integration) を作成し、次のように構成されているとします。
 
-- Defer to your production environment.
-- Run the command `dbt build --select state:modified+` to run and test all of the models you've modified and their downstream dependencies.
-- Trigger whenever a developer on your team opens a PR against the main branch.
+- 本番環境に従います。
+- コマンド `dbt build --select state:modified+` を実行して、変更したすべてのモデルとその下流の依存関係を実行してテストします。
+- チームの開発者がメイン ブランチに対して PR を開くたびにトリガーします。
 
 <Lightbox src="/img/best-practices/slim-ci-job.png" width="70%" title="Example of a slim CI job with the above configurations" />
 
-Now imagine your dbt project looks something like this in the DAG:
+ここで、DAG 内の dbt プロジェクトが次のようになっていると想像してください:
 
 <Lightbox src="/img/best-practices/dag-example.png" width="70%" title="Sample project DAG" />
 
-When you open a pull request (PR) that modifies `dim_wizards`, your CI job will kickoff and build _only the modified models and their downstream dependencies_ (in this case, `dim_wizards` and `fct_orders`) into a temporary schema that's unique to your PR. 
+`dim_wizards` を変更するプル リクエスト (PR) を開くと、CI ジョブが開始され、_変更されたモデルとその下流の依存関係_ (この場合は `dim_wizards` と `fct_orders`) のみが PR 固有の一時スキーマにビルドされます。
 
-This build mimics the behavior of what will happen once the PR is merged into the main branch. It ensures you're not introducing breaking changes, without needing to build your entire dbt project. 
+このビルドは、PR がメイン ブランチにマージされたときに発生する動作を模倣します。これにより、dbt プロジェクト全体をビルドする必要なく、重大な変更が発生しないことが保証されます。
 
-## What happens when one of the modified models (or one of their downstream dependencies) is an incremental model?
+## 変更されたモデルの 1 つ (またはその下流の依存関係の 1 つ) が増分モデルである場合はどうなりますか?
 
-Because your CI job is building modified models into a PR-specific schema, on the first execution of `dbt build --select state:modified+`, the modified incremental model will be built in its entirety _because it does not yet exist in the PR-specific schema_ and [is_incremental will be false](/docs/build/incremental-models#understand-the-is_incremental-macro). You're running in `full-refresh` mode.
+CI ジョブは変更されたモデルを PR 固有のスキーマに構築するため、`dbt build --select state:modified+` の最初の実行時に、変更された増分モデルは _PR 固有のスキーマにまだ存在しないため_ 完全に構築され、[is_incremental は false になります](/docs/build/incremental-models#understand-the-is_incremental-macro)。`full-refresh` モードで実行されています。
 
-This can be suboptimal because:
-- Typically incremental models are your largest datasets, so they take a long time to build in their entirety which can slow down development time and incur high warehouse costs.
-- There are situations where a `full-refresh` of the incremental model passes successfully in your CI job but an _incremental_ build of that same table in prod would fail when the PR is merged into main (think schema drift where [on_schema_change](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change) config is set to `fail`)
+これは、次の理由で最適ではない可能性があります:
+- 通常、増分モデルは最大のデータセットであるため、完全に構築するには長い時間がかかり、開発時間が遅くなり、ウェアハウス コストが高くなる可能性があります。
+- CI ジョブで増分モデルの `full-refresh` が正常に完了しても、PR がメインにマージされると、prod での同じテーブルの _incremental_ ビルドが失敗する場合があります ([on_schema_change](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change) 構成が `fail` に設定されているスキーマ ドリフトを考えてください)。
 
-You can alleviate these problems by zero copy cloning the relevant, pre-existing incremental models into your PR-specific schema as the first step of the CI job using the `dbt clone` command. This way, the incremental models already exist in the PR-specific schema when you first execute the command `dbt build --select state:modified+` so the `is_incremental` flag will be `true`. 
+これらの問題は、CI ジョブの最初のステップとして `dbt clone` コマンドを使用して、関連する既存の増分モデルを PR 固有のスキーマにゼロ コピー クローンすることで軽減できます。この方法では、`dbt build --select state:modified+` コマンドを最初に実行するときに、増分モデルが PR 固有のスキーマに既に存在するため、`is_incremental` フラグは `true` になります。
 
-You'll have two commands for your dbt Cloud CI check to execute:
-1. Clone all of the pre-existing incremental models that have been modified or are downstream of another model that has been modified:
+dbt Cloud CI チェックを実行するには、次の 2 つのコマンドが必要です:
+1. 変更された、または変更された別のモデルの下流にある既存の増分モデルをすべて複製します:
   ```shell
   dbt clone --select state:modified+,config.materialized:incremental,state:old
   ```
-1. Build all of the models that have been modified and their downstream dependencies:
+1. 変更されたすべてのモデルとその下流の依存関係をビルドします:
   ```shell
   dbt build --select state:modified+
   ```
 
-Because of your first clone step, the incremental models selected in your `dbt build` on the second step will run in incremental mode.
+最初のクローン手順により、2 番目の手順の `dbt build` で選択された増分モデルは増分モードで実行されます。
 
 <Lightbox src="/img/best-practices/clone-command.png" width="70%" title="Clone command in the CI config" />
 
-Your CI jobs will run faster, and you're more accurately mimicking the behavior of what will happen once the PR has been merged into main. 
+CI ジョブの実行速度が上がり、PR がメインにマージされた後の動作をより正確に模倣できるようになります。
 
-### Expansion on "think schema drift" where [on_schema_change](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change) config is set to `fail`" from above
+### 上記の [on_schema_change](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change) 構成が `fail` に設定されている場合に、「スキーマ ドリフトを考える」の拡張
 
-Imagine you have an incremental model `my_incremental_model` with the following config:
+次の構成の増分モデル `my_incremental_model` があるとします:
 
 ```sql
 
@@ -69,17 +69,17 @@ Imagine you have an incremental model `my_incremental_model` with the following 
 
 ```
 
-Now, let’s say you open up a PR that adds a new column to `my_incremental_model`. In this case:
-- An incremental build will fail.
-- A `full-refresh` will succeed.
+ここで、`my_incremental_model` に新しい列を追加する PR を開いたとします。この場合:
+- 増分ビルドは失敗します。
+- `full-refresh` は成功します。
 
-If you have a daily production job that just executes `dbt build` without a `--full-refresh` flag, once the PR is merged into main and the job kicks off, you will get a failure. So the question is - what do you want to happen in CI?
-- Do you want to also get a failure in CI, so that you know that once this PR is merged into main you need to immediately execute a `dbt build --full-refresh --select my_incremental_model` in production in order to avoid a failure in prod? This will block your CI check from passing.
-- Do you want your CI check to succeed, because once you do run a `full-refresh` for this model in prod you will be in a successful state? This may lead unpleasant surprises if your production job is suddenly failing when you merge this PR into main if you don’t remember you need to execute a `dbt build --full-refresh --select my_incremental_model` in production.
+`--full-refresh` フラグなしで `dbt build` を実行するだけの毎日の本番ジョブがある場合、PR がメインにマージされてジョブが開始されると、失敗します。そこで、CI で何が起こるようにしたいですか?
+- この PR がメインにマージされたら、本番環境で失敗を回避するために、本番環境ですぐに `dbt build --full-refresh --select my_incremental_model` を実行する必要があることがわかるように、CI でも失敗させたいですか? これにより、CI チェックが成功しなくなります。
+- 本番環境でこのモデルに対して `full-refresh` を実行すると、成功した状態になるため、CI チェックを成功させたいですか?この PR をメインにマージしたときに本番ジョブが突然失敗し、本番環境で `dbt build --full-refresh --select my_incremental_model` を実行する必要があることを覚えていない場合、これは不愉快な驚きにつながる可能性があります。
 
-There’s probably no perfect solution here; it’s all just tradeoffs! Our preference would be to have the failing CI job and have to manually override the blocking branch protection rule so that there are no surprises and we can proactively run the appropriate command in production once the PR is merged. 
+おそらく、ここには完璧な解決策はありません。すべてはトレードオフです。私たちが好むのは、失敗した CI ジョブを用意し、ブロッキング ブランチ保護ルールを手動でオーバーライドして、予期せぬ事態が起こらないようにし、PR がマージされたらプロダクションで適切なコマンドを積極的に実行できるようにすることです。
 
-### Expansion on "why `state:old`"
+### 「なぜ `state:old` なのか」の拡張
 
-For brand new incremental models, you want them to run in `full-refresh` mode in CI, because they will run in `full-refresh` mode in production when the PR is merged into `main`. They also don't exist yet in the production environment... they're brand new!
-If you don't specify this, you won't get an error just a “No relation found in state manifest for…”. So, it technically works without specifying `state:old` but adding `state:old` is more explicit and means it won't even try to clone the brand new incremental models.
+まったく新しい増分モデルの場合、CI では `full-refresh` モードで実行する必要があります。これは、PR が `main` にマージされると、本番環境で `full-refresh` モードで実行されるためです。また、本番環境にはまだ存在していません...まったく新しいモデルです!
+これを指定しないと、エラーは表示されず、「状態マニフェストに関係が見つかりません...」というメッセージが表示されます。したがって、技術的には `state:old` を指定しなくても機能しますが、`state:old` を追加するとより明示的になり、まったく新しい増分モデルのクローン作成も試行されなくなります。

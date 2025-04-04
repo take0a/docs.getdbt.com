@@ -1,5 +1,5 @@
 ---
-title: "Configuring materializations"
+title: "マテリアライゼーションの設定"
 id: materializations-guide-3-configuring-materializations
 slug: 3-configuring-materializations
 description: Read this guide to understand how to configure materializations in dbt.
@@ -10,18 +10,18 @@ hoverSnippet: Read this guide to understand how to configure materializations in
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## Configuring materializations
+## マテリアライゼーションの設定
 
-Choosing which materialization is as simple as setting any other configuration in dbt. We’ll look first at how we select our materializations for individual models, then at more powerful ways of setting materializations for entire folders of models.
+どのマテリアライゼーションを選択するかは、dbt で他の構成を設定するのと同じくらい簡単です。まず、個々のモデルのマテリアライゼーションを選択する方法を見て、次にモデルのフォルダー全体のマテリアライゼーションを設定するより強力な方法を見ていきます。
 
-### Configuring tables and views
+### テーブルとビューの構成
 
-Let’s look at how we can use tables and views to get started with materializations:
+テーブルとビューを使用してマテリアライゼーションを開始する方法を見てみましょう:
 
-- ⚙️ We can configure an individual model’s materialization using a **Jinja `config` block**, and passing in the **`materialized` argument**. This tells dbt what materialization to use.
-- 🚰 The underlying specifics of what is run depends on [which **adapter** you’re using](/docs/supported-data-platforms), but the end results will be equivalent.
-- 😌 This is one of the many valuable aspects of dbt: it lets us use a **declarative** approach, specifying the _outcome_ that we want in our code, rather than _specific steps_ to achieve it (the latter is an _imperative_ approach if you want to get computer science-y about it 🤓).
-- 🔍 In the below case, we want to create a SQL **view**, and can **declare** that in a **single line of code**. Note that python models [do not support materializing as views](https://docs.getdbt.com/docs/build/materializations#python-materializations) at this time.
+- ⚙️ **Jinja `config` ブロック** を使用して、**`materialized` 引数** を渡すことで、個々のモデルのマテリアライゼーションを構成できます。これにより、dbt に使用するマテリアライゼーションが指示されます。
+- 🚰 実行される内容の基本的な詳細は、[使用している **アダプタ**](/docs/supported-data-platforms) によって異なりますが、最終結果は同等になります。
+- 😌 これは、dbt の多くの価値ある側面の 1 つです。dbt では、**宣言型** アプローチを使用できるため、コードで必要な _結果_ を、それを達成するための _特定の手順_ ではなく指定できます (コンピューター サイエンス的に言えば、後者は _命令型_ アプローチです 🤓)。
+- 🔍 以下のケースでは、SQL **ビュー** を作成し、それを **1 行のコード** で **宣言** することができます。現時点では、Python モデルは [ビューとしてのマテリアライズをサポートしていない](https://docs.getdbt.com/docs/build/materializations#python-materializations) ことに注意してください。
 
 ```sql
     {{
@@ -35,10 +35,10 @@ Let’s look at how we can use tables and views to get started with materializat
 
 
 :::info
-🐍 **Not all adapters support python yet**, check the [docs here to be sure](/docs/build/python-models#specific-data-platforms) before spending time writing python models.
+🐍 **すべてのアダプタがまだ Python をサポートしているわけではありません**。Python モデルの作成に時間を費やす前に、[必ずこちらのドキュメント](/docs/build/python-models#specific-data-platforms)を確認してください。
 :::
 
-- Configuring a model to materialize as a `table` is simple, and possible for both SQL and python models.
+- モデルを `table` として実現するように構成するのは簡単で、SQL モデルと Python モデルの両方で可能です。
 
 <Tabs>
 <TabItem value="sql" label="SQL">
@@ -69,4 +69,4 @@ def model(dbt, session):
 </TabItem>
 </Tabs>
 
-Go ahead and try some of these out!
+ぜひ、これらのいくつかを試してみてください。

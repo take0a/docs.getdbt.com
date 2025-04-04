@@ -1,21 +1,21 @@
 ---
-title: "About dbt models"
+title: "dbt モデルについて"
 description: "Understand the role of dbt models transforming your data into analytics-ready datasets."
 id: "models"
 pagination_next: "docs/build/sql-models"
 pagination_prev: null
 ---
 
-dbt Core and Cloud are composed of different moving parts working harmoniously. All of them are important to what dbt does — transforming data—the 'T' in ELT. When you execute `dbt run`, you are running a model that will transform your data without that data ever leaving your warehouse.
+dbt Core と dbt Cloud は、調和して機能するさまざまな可動部分で構成されています。それらはすべて、dbt の機能であるデータの変換 (ELT の「T」) にとって重要です。`dbt run` を実行すると、データがウェアハウスから出ることなくデータを変換するモデルが実行されます。
 
-Models are where your developers spend most of their time within a dbt environment. Models are primarily written as a `select` statement and saved as a `.sql` file. While the definition is straightforward, the complexity of the execution will vary from environment to environment.  Models will be written and rewritten as needs evolve and your organization finds new ways to maximize efficiency.
+モデルは、開発者が dbt 環境内でほとんどの時間を費やす場所です。モデルは主に `select` ステートメントとして記述され、`.sql` ファイルとして保存されます。定義は簡単ですが、実行の複雑さは環境によって異なります。ニーズが進化し、組織が効率を最大化する新しい方法を見つけると、モデルが記述および書き換えられます。
 
-SQL is the language most dbt users will utilize, but it is not the only one for building models. Starting in version 1.3, dbt Core and dbt Cloud support Python models. Python models are useful for training or deploying data science models, complex transformations, or where a specific Python package meets a need &mdash; such as using the `dateutil` library to parse dates.
+SQL は、ほとんどの dbt ユーザーが使用する言語ですが、モデル構築に使用できる唯一の言語ではありません。バージョン 1.3 以降、dbt Core と dbt Cloud は Python モデルをサポートしています。Python モデルは、データ サイエンス モデルのトレーニングやデプロイ、複雑な変換、または特定の Python パッケージがニーズを満たす場合に役立ちます。たとえば、日付を解析するために `dateutil` ライブラリを使用するなどです。
 
-### Models and modern workflows
+### モデルと最新のワークフロー
 
-The top level of a dbt workflow is the project. A project is a directory of a `.yml` file (the project configuration) and either `.sql` or `.py` files (the models). The project file tells dbt the project context, and the models let dbt know how to build a specific data set. For more details on projects, refer to [About dbt projects](/docs/build/projects).
+dbt ワークフローの最上位レベルはプロジェクトです。プロジェクトは、`.yml` ファイル (プロジェクト構成) と `.sql` または `.py` ファイル (モデル) のディレクトリです。プロジェクト ファイルは dbt にプロジェクトのコンテキストを伝え、モデルは dbt に特定のデータ セットの構築方法を知らせます。プロジェクトの詳細については、[dbt プロジェクトについて](/docs/build/projects) を参照してください。
 
-Your organization may need only a few models, but more likely you’ll need a complex structure of nested models to transform the required data. A model is a single file containing a final `select` statement, and a project can have multiple models, and models can even reference each other. Add to that, numerous projects and the level of effort required for transforming complex data sets can improve drastically compared to older methods.
+組織に必要なモデルは少数かもしれませんが、必要なデータを変換するには、ネストされたモデルの複雑な構造が必要になる可能性が高くなります。モデルは最終的な `select` ステートメントを含む単一のファイルであり、プロジェクトには複数のモデルを含めることができ、モデルは相互参照することもできます。それに加えて、多数のプロジェクトと、複雑なデータ セットの変換に必要な労力のレベルは、従来の方法と比較して大幅に改善される可能性があります。
 
-Learn more about models in [SQL models](/docs/build/sql-models) and [Python models](/docs/build/python-models) pages. If you'd like to begin with a bit of practice, visit our [Getting Started Guide](/guides) for instructions on setting up the Jaffle_Shop sample data so you can get hands-on with the power of dbt.
+モデルの詳細については、[SQL モデル](/docs/build/sql-models) および [Python モデル](/docs/build/python-models) のページを参照してください。少し練習から始めたい場合は、[入門ガイド](/guides)にアクセスして、Jaffle_Shop サンプル データの設定手順を確認し、dbt のパワーを実際に体験してください。

@@ -1,5 +1,5 @@
 ---
-title: "Incremental models in-depth"
+title: "増分モデルの詳細"
 id: materializations-guide-4-incremental-models
 slug: 4-incremental-models
 description: Read this guide to understand the incremental models you can create in dbt.
@@ -7,29 +7,29 @@ displayText: Materializations best practices
 hoverSnippet: Read this guide to understand the incremental models you can create in dbt.
 ---
 
-So far we’ve looked at tables and views, which map to the traditional objects in the data warehouse. As mentioned earlier, incremental models are a little different. This is where we start to deviate from this pattern with more powerful and complex materializations.
+これまで、データ ウェアハウス内の従来のオブジェクトにマップされるテーブルとビューについて説明してきました。前述のように、増分モデルは少し異なります。ここから、より強力で複雑なマテリアライゼーションを使用して、このパターンから逸脱し始めます。
 
-- 📚 **Incremental models generate tables.** They physically persist the data itself to the warehouse, just piece by piece. What’s different is **how we build that table**.
-- 💅 **Only apply our transformations to rows of data with new or updated information**, this maximizes efficiency.
-  - 🌍  If we have a very large set of data or compute-intensive transformations, or both, it can be very slow and costly to process the entire corpus of source data being input into a model or chain of models. If instead we can identify _only rows that contain new information_ (that is, **new or updated records**), we then can process just those rows, building our models _incrementally_.
-- 3️⃣  We need **3 key things** in order to accomplish the above:
-  - a **filter** to select just the new or updated records
-  - a **conditional block** that wraps our filter and only applies it when we want it
-  - **configuration** that tells dbt we want to build incrementally and helps apply the conditional filter when needed
+- 📚 **増分モデルはテーブルを生成します。** データ自体を物理的にウェアハウスに少しずつ保存します。異なるのは、**テーブルの構築方法** です。
+- 💅 **新しい情報または更新された情報を含むデータ行にのみ変換を適用** すると、効率が最大化されます。
+  - 🌍  非常に大規模なデータセットや計算集約型の変換、またはその両方がある場合、モデルまたはモデル チェーンに入力されるソース データのコーパス全体を処理するのに非常に時間がかかり、コストがかかる可能性があります。代わりに、_新しい情報を含む行のみ_ (つまり、**新しいレコードまたは更新されたレコード**) を識別できれば、それらの行だけを処理して、モデルを _増分的に_ 構築できます。
+- 3️⃣  上記を達成するには、**3 つの重要なこと** が必要です:
+  - 新規または更新されたレコードのみを選択するための **フィルター**
+  - フィルターをラップし、必要な場合にのみ適用する **条件ブロック**
+  - 段階的に構築することを dbt に指示し、必要なときに条件フィルターを適用できるようにする **構成**
 
-Let’s dig into how exactly we can do that in dbt. Let’s say we have an `orders` table that looks like the below:
+dbt で具体的にどのように実行できるかを詳しく見てみましょう。次のような `orders` テーブルがあるとします:
 
 | order_id | order_status | customer_id | order_item_id | ordered_at | updated_at |
 | -------- | ------------ | ----------- | ------------- | ---------- | ---------- |
 | 123      | shipped      | 7           | 5791          | 2022-01-30 | 2022-01-30 |
 | 234      | confirmed    | 15          | 1643          | 2022-01-31 | 2022-01-31 |
 
-We did our last `dbt build` job on `2022-01-31`, so any new orders since that run won’t appear in our table. When we do our next run (for simplicity let’s say the next day, although for an orders model we’d more realistically run this hourly), we have two options:
+最後の `dbt build` ジョブは `2022-01-31` に実行されたため、その実行以降の新しい注文はテーブルに表示されません。次の実行 (簡単にするために翌日としますが、注文モデルの場合は現実的には 1 時間ごとに実行します) を行うときは、2 つのオプションがあります:
 
-- 🏔️ build the table from the **beginning of time again — a _table materialization_**
-  - Simple and solid, if we can afford to do it (in terms of time, compute, and money — which are all directly correlated in a cloud warehouse). It’s the easiest and most accurate option.
-- 🤏 find a way to run **just new and updated rows since our previous run — _an_ _incremental materialization_**
-  - If we _can’t_ realistically afford to run the whole table — due to complex transformations or big source data, it takes too long — then we want to build incrementally. We want to just transform and add the row with id 567 below, _not_ the previous two with ids 123 and 234 that are already in the table.
+- 🏔️ テーブルを**最初から再構築する - _テーブルのマテリアライゼーション_**
+  - シンプルで堅牢です。時間、コンピューティング、費用の面で余裕があれば、これらはすべてクラウド ウェアハウスで直接相関します。これが最も簡単で正確なオプションです。
+- 🤏 **前回の実行以降の新規行と更新行のみを実行する方法を見つける — _増分マテリアライゼーション_**
+  - 複雑な変換や大きなソース データのために時間がかかりすぎるなど、現実的にテーブル全体を実行する余裕がない場合は、段階的に構築する必要があります。テーブルに既に存在する ID 123 と ID 234 の 2 つの行ではなく、ID 567 の行のみを変換して追加する必要があります。
 
 | order_id | order_status | customer_id | order_item_id | ordered_at | updated_at |
 | -------- | ------------ | ----------- | ------------- | ---------- | ---------- |
@@ -37,14 +37,14 @@ We did our last `dbt build` job on `2022-01-31`, so any new orders since that ru
 | 234      | confirmed    | 15          | 1643          | 2022-01-31 | 2022-01-31 |
 | 567      | shipped      | 61          | 28            | 2022-02-01 | 2022-02-01 |
 
-### Writing incremental logic
+### 増分ロジックの記述
 
-Let’s think through the information we’d need to build such a model that only processes new and updated data. We would need:
+新しいデータと更新されたデータのみを処理するモデルを構築するために必要な情報を考えてみましょう。必要な情報は次のとおりです:
 
-- 🕜  **a timestamp indicating when a record was last updated**, let’s call it our `updated_at` timestamp, as that’s a typical convention and what we have in our example above.
-- ⌛ the **most recent timestamp from this table _in our warehouse_** _—_ that is, the one created by the previous run — to act as a cutoff point. We’ll call the model we’re working in `this`, for ‘this model we’re working in’.
+- 🕜  **レコードが最後に更新された日時を示すタイムスタンプ**。これは一般的な慣例であり、上記の例で使用されているため、これを `updated_at` タイムスタンプと呼びましょう。
+- ⌛ **ウェアハウス内のこのテーブルからの最新のタイムスタンプ** _—_ つまり、前回の実行で作成されたもの — がカットオフ ポイントとして機能します。作業中のモデルを「作業中のこのモデル」という意味で「this」と呼びます。
 
-That would lets us construct logic like this:
+これにより、次のようなロジックを構築できるようになります:
 
 ```sql
 select * from orders
@@ -53,38 +53,38 @@ where
   updated_at > (select max(updated_at) from {{ this }})
 ```
 
-Let’s break down that `where` clause a bit, because this is where the action is with incremental models. Stepping through the code **_right-to-left_** we:
+`where` 句を少し分解してみましょう。これは増分モデルでのアクションが行われる場所です。コードを **_右から左_** にステップ実行すると、次のようになります:
 
-1. Get our **cutoff.**
-   1. Select the `max(updated_at)` timestamp — the **most recent record**
-   2. from `{{ this }}` — the table for this model as it exists in the warehouse, as **built in our last run**,
-   3. so `max(updated_at) from {{ this }}` the **_most recent record processed in our last run,_**
-   4. that’s exactly what we want as a **cutoff**!
-2. **Filter** the rows we’re selecting to add in this run.
-   1. Use the `updated_at` timestamp from our input, the equivalent column to the one in the warehouse, but in the up-to-the-minute **source data we’re selecting from** and
-   2. check if it’s **greater than our cutoff,**
-   3. if so it will satisfy our where clause, so we’re **selecting all the rows more recent than our cutoff.**
+1. **カットオフ**を取得してください。
+   1. `max(updated_at)` タイムスタンプ（**最新のレコード**）を選択します。
+   2. `{{ this }}` から — **前回の実行で構築された** ウェアハウス内に存在するこのモデルのテーブル、
+   3. つまり、 `max(updated_at) from {{ this }}` は、**_前回の実行で処理された最新のレコード_** です。
+   4. まさにそれが**カットオフ**として私たちが望んでいるものです!
+2. この実行で追加するために選択する行を**フィルター**します。
+   1. 入力から `updated_at` タイムスタンプを使用します。これはウェアハウス内の列と同等ですが、**選択しているソースデータ** の最新のものです。
+   2. **カットオフより大きいかどうか**を確認してください
+   3. そうであれば、where 句を満たすので、**カットオフよりも新しいすべての行を選択します。**
 
-This logic would let us isolate and apply our transformations to just the records that have come in since our last run, and I’ve got some great news: that magic `{{ this }}` keyword [does in fact exist in dbt](/reference/dbt-jinja-functions/this), so we can write exactly this logic in our models.
+このロジックにより、前回の実行以降に入力されたレコードのみを分離して変換を適用できるようになります。そして、素晴らしいニュースがあります。魔法の `{{ this }}` キーワードは [実際に dbt に存在する](/reference/dbt-jinja-functions/this) ため、モデルにまさにこのロジックを記述できます。
 
-### Configuring incremental models
+### 増分モデルの構成
 
-So we’ve found a way to isolate the new rows we need to process. How then do we handle the rest? We still need to:
+処理する必要のある新しい行を分離する方法が見つかりました。では、残りの行をどのように処理すればよいでしょうか? まだ次のことが必要です:
 
-- ➕  make sure dbt knows to **_add_ new rows on top** of the existing table in the warehouse, **not replace** it.
-- 👉  If there are **updated rows**, we need a way for dbt to know **which rows to update**.
-- 🌍  Lastly, if we’re building into a new environment and there’s **no previous run to reference**, or we need to **build the model from scratch.** Put another way, we’ll want a means to skip the incremental logic and transform all of our input data like a regular table if needed.
-- 😎 **Visualized below**, we’ve figured out how to get the red ‘new records’ portion selected, but we need to sort out the step to the right, where we stick those on to our model.
+- ➕  dbt がウェアハウス内の既存のテーブルを **置き換えるのではなく**、その上に新しい行を **追加_ する** ことを認識していることを確認します。
+- 👉  **更新された行** がある場合、dbt が **どの行を更新するか** を知る方法が必要です。
+- 🌍  最後に、新しい環境に構築していて、**参照できる以前の実行がない**、または**モデルを最初から構築**する必要がある場合。言い換えると、増分ロジックをスキップし、必要に応じてすべての入力データを通常のテーブルのように変換する手段が必要になります。
+- 😎 **以下に視覚化** されているように、赤い「新しいレコード」部分を選択する方法がわかりましたが、右側のステップを整理して、それらをモデルに貼り付ける必要があります。
 
 ![Diagram visualizing how incremental models work](/img/best-practices/materializations/incremental-diagram.png)
 
 :::info
-😌 Incremental models can be confusing at first, **take your time reviewing** this visual and the previous steps until you have a **clear mental model.** Be patient with yourself. This materialization will become second nature soon, but it’s tough at first. If you’re feeling confused the [dbt Community is here for you on the Forum and Slack](https://www.getdbt.com/community/join-the-community).
+😌 増分モデルは最初は混乱するかもしれません。**時間をかけて**この図と前の手順を確認し**、**明確なメンタルモデル**が完成するまで待ちましょう。忍耐強くいてください。この具体化はすぐに自然にできるようになりますが、最初は大変です。混乱している場合は、[フォーラムと Slack の dbt コミュニティ](https://www.getdbt.com/community/join-the-community) をご利用ください。
 :::
 
-Thankfully dbt has some additional configuration and special syntax just for incremental models.
+ありがたいことに、dbt には増分モデル専用の追加の構成と特別な構文があります。
 
-First, let’s look at a config block for incremental materialization:
+まず、増分マテリアライゼーションの構成ブロックを見てみましょう:
 
 ```sql
 {{
@@ -97,28 +97,28 @@ First, let’s look at a config block for incremental materialization:
 select ...
 ```
 
-- 📚 The **`materialized` config** works just like tables and views, we just pass it the value `'incremental'`.
-- 🔑 We’ve **added a new config option `unique_key`,** that tells dbt that if it finds a record in our previous run — the data in the warehouse already — with the same unique id (in our case `order_id` for our `orders` table) that exists in the new data we’re adding incrementally, to **update that record instead of adding it as a separate row**.
-- 👯 This **hugely broadens the types of data we can build incrementally** from just immutable tables (data where rows only ever get added, never updated) to mutable records (where rows might change over time). As long as we’ve got a column that specifies when records were updated (such as `updated_at` in our example), we can handle almost anything.
-- ➕ We’re now **adding records** to the table **and updating existing rows**. That’s 2 of 3 concerns.
-- 🆕 We still need to **build the table from scratch** (via `dbt build` or `run` in a job) when necessary — whether because we’re in a new environment so don’t have an initial table to build on, or our model has drifted from the original over time due to data loading latency.
-- 🔀 We need to wrap our incremental logic, that is our `where` clause with our `updated_at` cutoff, in a **conditional statement that will only apply it when certain conditions are met**. If you’re thinking this is **a case for a Jinja `{% if %}` statement**, you’re absolutely right!
+- 📚 **`materialized` 構成** はテーブルやビューと同じように機能し、値 `'incremental'` を渡すだけです。
+- 🔑 **新しい設定オプション `unique_key` を追加しました**。このオプションは、前回の実行で、増分的に追加している新しいデータ内に存在する同じ一意の ID (この場合は `orders` テーブルの `order_id`) を持つレコード (ウェアハウスに既に存在するデータ) が見つかった場合、**そのレコードを別の行として追加するのではなく更新する** ように dbt に指示します。
+- 👯 これにより、**段階的に構築できるデータのタイプが大幅に広がります**。**不変テーブル (行が追加されるだけで更新されないデータ) から可変レコード (行が時間の経過とともに変化する可能性がある) までです。レコードが更新された日時を指定する列 (この例では `updated_at` など) があれば、ほぼ何でも処理できます。
+- ➕ 現在、テーブルに**レコードを追加**し、**既存の行を更新**しています。これが 3 つの懸念事項のうちの 2 つです。
+- 🆕 新しい環境なので構築する初期テーブルがない場合や、データの読み込み待ち時間によりモデルが時間の経過とともに元のモデルからずれてしまった場合など、必要に応じて (ジョブで `dbt build` または `run` を使用して) **テーブルを最初から構築** する必要があります。
+- 🔀 増分ロジック、つまり `updated_at` カットオフを含む `where` 句を、**特定の条件が満たされた場合にのみ適用される条件文** でラップする必要があります。これが **Jinja `{% if %}` 文のケース** だと考えている場合、その通りです。
 
-### Incremental conditions
+### 増分条件
 
-So we’re going to use an **if statement** to apply our cutoff filter **only when certain conditions are met**. We want to apply our cutoff filter _if_ the **following things are true**:
+そこで、**if ステートメント** を使用して、**特定の条件が満たされた場合にのみ** カットオフ フィルターを適用します。**次のことが当てはまる場合** にカットオフ フィルターを適用します:
 
-- ➕  we’ve set the materialization **config** to incremental,
-- 🛠️  there is an **existing table** for this model in the warehouse to build on,
-- 🙅‍♀️  and the `--full-refresh` **flag was _not_ passed.**
-  - [full refresh](/reference/resource-configs/full_refresh) is a configuration and flag that is specifically designed to let us override the incremental materialization and build a table from scratch again.
+- ➕  マテリアライゼーションの**config**を増分に設定し、
+- 🛠️  ウェアハウス内にこのモデルを構築するための**既存のテーブル**が存在し、
+- 🙅‍♀️  そして `--full-refresh` **フラグは渡されませんでした。**
+  - [フルリフレッシュ](/reference/resource-configs/full_refresh) は、増分マテリアライゼーションをオーバーライドし、テーブルを最初から再構築できるように特別に設計された構成とフラグです。
 
-Thankfully, we don’t have to dig into the guts of dbt to sort out each of these conditions individually.
+ありがたいことに、これらの各状態を個別に分類するために、dbt の核心に迫る必要はありません。
 
-- ⚙️  dbt provides us with a **macro [`is_incremental`](/docs/build/incremental-models#understand-the-is_incremental-macro)** that checks all of these conditions for this exact use case.
-- 🔀  By **wrapping our cutoff logic** in this macro, it will only get applied when the macro returns true for all of the above conditions.
+- ⚙️  dbt は、まさにこのユースケースの条件をすべてチェックする **マクロ [`is_incremental`](/docs/build/incremental-models#understand-the-is_incremental-macro)** を提供します。
+- 🔀  このマクロで**カットオフ ロジックをラップ**すると、マクロが上記のすべての条件に対して true を返す場合にのみ適用されます。
 
-Let’s take a look at all these pieces together:
+これらすべての部分を一緒に見てみましょう:
 
 ```sql
 {{
@@ -138,22 +138,22 @@ where
 {% endif %}
 ```
 
-Fantastic! We’ve got a working incremental model. On our first run, when there is no corresponding table in the warehouse, `is_incremental` will evaluate to false and we’ll capture the entire table. On subsequent runs it will evaluate to true and we’ll apply our filter logic, capturing only the newer data.
+素晴らしい! 増分モデルが機能するようになりました。最初の実行では、ウェアハウス内に対応するテーブルがない場合、`is_incremental` は false と評価され、テーブル全体がキャプチャされます。その後の実行では true と評価され、フィルター ロジックが適用され、新しいデータのみがキャプチャされます。
 
-### Late arriving facts
+### 遅れて到着した事実
 
-Our last concern specific to incremental models is what to do when data is inevitably loaded in a less-than-perfect way. Sometimes data loaders will, for a variety of reasons, load data late. Either an entire load comes in late, or some rows come in on a load after those with which they should have. The following is best practice for every incremental model to slow down the drift this can cause.
+増分モデルに特有の最後の懸念は、データが不完全な方法でロードされてしまう場合の対処方法です。さまざまな理由により、データ ローダーがデータを遅れてロードすることがあります。ロード全体が遅れるか、一部の行がロードされるべき行より遅れてロードされます。以下は、これが引き起こす可能性のあるドリフトを遅らせるための、すべての増分モデルのベスト プラクティスです。
 
-- 🕐 For example if most of our records for `2022-01-30` come in the raw schema of our warehouse on the morning of `2022-01-31`, but a handful don’t get loaded til `2022-02-02`, how might we tackle that? There will already be `max(updated_at)` timestamps of `2022-01-31` in the warehouse, filtering out those late records. **They’ll never make it to our model.**
-- 🪟 To mitigate this, we can add a **lookback window** to our **cutoff** point. By **subtracting a few days** from the `max(updated_at)`, we would capture any late data within the window of what we subtracted.
-- 👯 As long as we have a **`unique_key` defined in our config**, we’ll simply update existing rows and avoid duplication. We process more data this way, but in a fixed way, and it keeps our model hewing closer to the source data.
+- 🕐 たとえば、`2022-01-30` のレコードのほとんどが `2022-01-31` の朝にウェアハウスの生のスキーマに取り込まれ、少数が `2022-02-02` までロードされない場合、どのように対処すればよいでしょうか。ウェアハウスにはすでに `2022-01-31` の `max(updated_at)` タイムスタンプがあるため、それらの遅いレコードは除外されます。**それらはモデルには決して届きません。**
+- 🪟 これを軽減するには、**カットオフ** ポイントに **ルックバック ウィンドウ** を追加します。`max(updated_at)` から **数日を減算** することで、減算したウィンドウ内の遅延データをすべてキャプチャします。
+- 👯 **`unique_key` が設定で定義されている限り**、既存の行を更新するだけで重複を回避できます。この方法ではより多くのデータを処理しますが、方法は固定されており、モデルがソース データに近づきます。
 
-### Long-term considerations
+### 長期的な考慮
 
-Late arriving facts point to the biggest tradeoff with incremental models:
+遅れて到着した事実は、増分モデルとの最大のトレードオフを示しています:
 
-- 🪢 In addition to extra **complexity**, they also inevitably **drift from the source data over time.** Due to the imperfection of loaders and the reality of late arriving facts, we can’t help but miss some day in-between our incremental runs, and this accumulates.
-- 🪟 We can slow this entropy with the lookback window described above — **the longer the window the less efficient the model, but the slower the drift.** It’s important to note it will still occur though, however slowly. If we have a lookback window of 3 days, and a record comes in 4 days late from the loader, we’re still going to miss it.
-- 🌍 Thankfully, there is a way we can reset the relationship of the model to the source data. We can run the model with the **`--full-refresh` flag passed** (such as `dbt build --full-refresh -s orders`). As we saw in the `is_incremental` conditions above, that will make our logic return false, and our `where` clause filter will not be applied, running the whole table.
-- 🏗️ This will let us **rebuild the entire table from scratch,** a good practice to do regularly **if the size of the data will allow**.
-- 📆 A common pattern for incremental models of manageable size is to run a **full refresh on the weekend** (or any low point in activity), either **weekly or monthly**, to consistently reset the drift from late arriving facts.
+- 🪢 追加の**複雑さ**に加えて、時間の経過とともに**ソース データから必然的にずれていきます**。ローダーの不完全さと、遅れて到着する事実の現実により、増分実行の間に 1 日を逃さずにいられず、これが蓄積されていきます。
+- 🪟 上で説明したルックバック ウィンドウを使用すると、このエントロピーを遅くすることができます。**ウィンドウが長いほどモデルの効率は低下しますが、ドリフトは遅くなります。** ただし、ゆっくりではありますが、それでも発生することに注意することが重要です。ルックバック ウィンドウが 3 日間で、レコードがローダーから 4 日遅れで届いた場合、それでも見逃してしまいます。
+- 🌍 ありがたいことに、モデルとソース データの関係をリセットする方法があります。**`--full-refresh` フラグを渡して** モデルを実行できます (`dbt build --full-refresh -s orders` など)。上記の `is_incremental` 条件で確認したように、これによりロジックは false を返し、`where` 句フィルターは適用されず、テーブル全体が実行されます。
+- 🏗️ これにより、**テーブル全体を最初から再構築** できるようになります。**データのサイズが許す限り**、定期的に実行することをお勧めします。
+- 📆 管理可能なサイズの増分モデルの一般的なパターンは、**週末** (またはアクティビティの低い時点) に 完全更新を **毎週または毎月** 実行して、遅れて到着するファクトによるドリフトを一貫してリセットすることです。

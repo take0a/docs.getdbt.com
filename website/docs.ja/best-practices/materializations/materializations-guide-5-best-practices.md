@@ -1,5 +1,5 @@
 ---
-title: Best practices for materializations
+title: マテリアライゼーションのベストプラクティス
 id: materializations-guide-5-best-practices
 slug: 5-best-practices
 description: Read this guide to understand the different types of materializations you can create in dbt.
@@ -7,25 +7,25 @@ displayText: Materializations best practices
 hoverSnippet: Read this guide to understand the different types of materializations you can create in dbt.
 ---
 
-First, let’s consider some properties of various levels of our dbt project and materializations.
+まず、dbt プロジェクトと実現化のさまざまなレベルのいくつかのプロパティについて考えてみましょう。
 
-- 🔍 **Views** return the freshest, real-time state of their input data when they’re queried, this makes them ideal as **building blocks** for larger models.
-  - 🧶  When we’re building a model that stitches lots of other models together, we don’t want to worry about all those models having different states of freshness because they were built into tables at different times. We want all those inputs to give us all the underlying source data available.
-- 🤏 **Views** are also great for **small datasets** with minimally intensive logic that we want **near realtime** access to.
-- 🛠️ **Tables** are the **most performant** materialization, as they just return the transformed data when they’re queried, with no need to reprocess it.
-  - 📊  This makes tables great for **things end users touch**, like a mart that services a popular dashboard.
-  - 💪 Tables are also ideal for **frequently used, compute intensive** transformations. Making a table allows us to ‘freeze’ those transformations in place.
-- 📚  **Incremental models** are useful for the **same purposes as tables**, they just enable us to build them on larger datasets, so they can be **built** _and_ **accessed** in a **performant** way.
+- 🔍 **ビュー** は、クエリが実行されると入力データの最新のリアルタイムの状態を返すため、大規模なモデルの **ビルディング ブロック** として最適です。
+  - 🧶  他の多くのモデルをつなぎ合わせるモデルを構築する場合、モデルがテーブルに異なるタイミングで構築されたために、すべてのモデルの鮮度が異なる状態になることを心配する必要はありません。すべての入力から、利用可能なすべての基礎ソース データを取得する必要があります。
+- 🤏 **ビュー** は、**ほぼリアルタイム** でアクセスしたい、最小限のロジックしか必要としない **小さなデータセット** にも最適です。
+- 🛠️ **テーブル** は、クエリが実行されると変換されたデータを返すだけで、再処理する必要がないため、**最もパフォーマンスの高い** マテリアライゼーションです。
+  - 📊  これにより、テーブルは、人気のあるダッシュボードを提供するマーケットなど、**エンドユーザーが触れるもの** に最適です。
+  - 💪 テーブルは、**頻繁に使用され、計算負荷の高い** 変換にも最適です。テーブルを作成すると、それらの変換を所定の位置に「固定」できます。
+- 📚  **増分モデル** は **テーブルと同じ目的** に役立ちますが、より大きなデータセット上に構築できるため、**パフォーマンスの高い** 方法で **構築** _および_ **アクセス** できます。
 
-### Project-level configuration
+### プロジェクトレベルの構成
 
-Keeping these principles in mind, we can applying these materializations to a project. Earlier we looked at how to configure an individual model’s materializations. In practice though, we’ll want to set materializations at the folder level, and use individual model configs to override those as needed. This will keep our code DRY and avoid repeating the same config blocks in every model.
+これらの原則を念頭に置いて、これらのマテリアライゼーションをプロジェクトに適用できます。先ほど、個々のモデルのマテリアライゼーションを構成する方法について説明しました。ただし、実際には、フォルダー レベルでマテリアライゼーションを設定し、個々のモデル構成を使用して必要に応じてそれらをオーバーライドします。これにより、コードが DRY に保たれ、すべてのモデルで同じ構成ブロックが繰り返されることがなくなります。
 
-- 📂  In the `dbt_project.yml` we have a `models:` section (by default at the bottom of the file) we can use define various **configurations for entire directories**.
-- ⚙️  These are the **same configs that are passed to a `{{ config() }}` block** for individual models, but they get set for _every model in that directory and any subdirectories nested within it_.
-- ➕  We demarcate between a folder name and a configuration by using a `+`, so `marketing`, `paid_ads`, and `google` below are folder names, whereas **`+materialized` is a configuration** being applied to those folder and all folders nested below them.
-- ⛲  Configurations set in this way **cascade**, the **more specific scope** is the one that will be set.
-- 👇🏻  In the example below, all the models in the `marketing` and `paid_ads` folders would be views, but the `google` sub folder would be **tables.**
+- 📂  `dbt_project.yml` には、`models:` セクション (デフォルトではファイルの下部) があり、**ディレクトリ全体のさまざまな構成** を定義できます。
+- ⚙️  これらは、**個々のモデルの `{{ config() }}` ブロックに渡されるのと同じ構成** ですが、_そのディレクトリ内のすべてのモデルとその中にネストされたサブディレクトリ_ に対して設定されます。
+- ➕  フォルダー名と設定は `+` を使用して区別します。したがって、以下の `marketing`、`paid_ads`、`google` はフォルダー名ですが、**`+materialized` はそれらのフォルダーと、その下にネストされているすべてのフォルダーに適用される設定** です。
+- ⛲  このように設定された構成は **カスケード** され、**より具体的なスコープ** が設定されます。
+- 👇🏻  以下の例では、`marketing` および `paid_ads` フォルダ内のすべてのモデルはビューになりますが、`google` サブフォルダは **テーブル** になります。
 
 ```yaml
 models:
@@ -37,15 +37,15 @@ models:
           +materialized: table
 ```
 
-### Staging views
+### ステージングビュー
 
-We’ll start off simple with staging models. Lets consider some aspects of staging models to determine the ideal materialization strategy:
+まずはステージング モデルから簡単に始めましょう。ステージング モデルのいくつかの側面を考慮して、理想的な実現戦略を決定しましょう:
 
-- 🙅‍♀️ Staging models are **rarely accessed** directly by our **end users.**
-- 🧱 They need to be always up-to-date and in sync with our source data as a **building blocks** for later models
-- 🔍  It’s clear we’ll want to keep our **staging models as views**.
-- 👍  Since views are the **default materialization** in dbt, we don’t _have_ to do any specific configuration for this.
-- 💎  Still, for clarity, it’s a **good idea** to go ahead and **specify the configuration** to be explicit. We’ll want to make sure our `dbt_project.yml` looks like this:
+- 🙅‍♀️ ステージング モデルは、**エンド ユーザー** によって直接**アクセスされることはほとんどありません。**
+- 🧱 これらは常に最新の状態に保たれ、後のモデルの**構成要素**としてソースデータと同期されている必要があります。
+- 🔍  **ステージング モデルをビューとして保持** する必要があることは明らかです。
+- 👍  ビューは dbt の **デフォルトのマテリアライゼーション** であるため、これに対して特別な構成を行う必要はありません。
+- 💎  それでも、わかりやすくするために、**構成を明示的に指定** しておくのは**良い考え**です。`dbt_project.yml` が次のようになっていることを確認します:
 
 ```yaml
 models:
@@ -54,21 +54,21 @@ models:
       +materialized: view
 ```
 
-### Table and incremental marts
+### テーブルと増分マート
 
-As we’ve learned, views store only the logic of the transformation in the warehouse, so our runs take only a couple seconds per model (or less). What happens when we go to query the data though?
+すでに学んだように、ビューはウェアハウス内の変換ロジックのみを保存するため、実行にはモデルごとに数秒 (またはそれ以下) しかかかりません。しかし、データをクエリするとどうなるでしょうか?
 
 ![Long query time from Snowflake](/img/best-practices/materializations/snowflake-query-timing.png)
 
-Our marts are slow to query!
+私たちのマートはクエリが遅いです!
 
-Let’s contrast the same aspects of marts that we considered for staging models to assess the best materialization strategy:
+最適な実現戦略を評価するために、ステージング モデルで検討したマートの同じ側面を比較してみましょう:
 
-- 📊  Marts are **frequently accessed directly by our end users**, and need to be **performant.**
-- ⌛  Can often **function with intermittently refreshed data**, end user decision making in many domains is **fine with hourly or daily data.**
-- 🛠️  Given the above properties we’ve got a great use case for **building the data itself** into the warehouse, not the logic. In other words, **a table**.
-- ❓ The only decision we need to make with our marts is whether we can **process the whole table at once or do we need to do it in chunks**, that is, are we going to use the `table` materialization or `incremental`.
+- 📊  マートは**エンドユーザーによって頻繁に直接アクセスされる**ため、**パフォーマンスに優れている必要があります。**
+- ⌛  多くの場合、**断続的に更新されるデータで機能**できますが、多くのドメインでのエンドユーザーの意思決定は**時間ごとまたは日ごとのデータで問題ありません。**
+- 🛠️  上記の特性を考慮すると、ロジックではなく、**データ自体**をウェアハウスに構築する優れたユースケースが得られます。つまり、**テーブル**です。
+- ❓ マートで行う必要がある唯一の決定は、**テーブル全体を一度に処理できるか、またはチャンクで処理する必要があるか**、つまり、`テーブル` マテリアライゼーションを使用するか、`増分` を使用するかです。
 
 :::info
-🔑 **Golden Rule of Materializations** Start with models as views, when they take too long to query, make them tables, when the tables take too long to build, make them incremental.
+🔑 **マテリアライゼーションの黄金律** モデルをビューとして開始し、クエリに時間がかかりすぎる場合はテーブルにし、テーブルの構築に時間がかかりすぎる場合は増分モデルにします。
 :::

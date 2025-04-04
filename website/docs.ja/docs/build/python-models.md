@@ -1,21 +1,21 @@
 ---
-title: "Python models"
+title: "Python モデル"
 description: "Configure Python models to enhance your dbt project."
 id: "python-models"
 ---
 
-Note that only [specific data platforms](#specific-data-platforms) support dbt-py models.
+dbt-py モデルをサポートしているのは、[特定のデータ プラットフォーム](#specific-data-platforms) のみであることに注意してください。
 
-We encourage you to:
-- Read [the original discussion](https://github.com/dbt-labs/dbt-core/discussions/5261) that proposed this feature.
-- Contribute to [best practices for developing Python models in dbt](https://discourse.getdbt.com/t/dbt-python-model-dbt-py-best-practices/5204).
-- Share your thoughts and ideas on [next steps for Python models](https://github.com/dbt-labs/dbt-core/discussions/5742).
-- Join the **#dbt-core-python-models** channel in the [dbt Community Slack](https://www.getdbt.com/community/join-the-community/).
+次のことをお勧めします:
+- この機能を提案した [元のディスカッション](https://github.com/dbt-labs/dbt-core/discussions/5261) をお読みください。
+- [dbt で Python モデルを開発するためのベスト プラクティス](https://discourse.getdbt.com/t/dbt-python-model-dbt-py-best-practices/5204) に貢献してください。
+- [Python モデルの次のステップ](https://github.com/dbt-labs/dbt-core/discussions/5742) に関するご意見やアイデアを共有してください。
+- [dbt コミュニティ Slack](https://www.getdbt.com/community/join-the-community/) の **#dbt-core-python-models** チャネルに参加してください。
 
 
-## Overview
+## 概要
 
-dbt Python (`dbt-py`) models can help you solve use cases that can't be solved with SQL. You can perform analyses using tools available in the open-source Python ecosystem, including state-of-the-art packages for data science and statistics. Before, you would have needed separate infrastructure and orchestration to run Python transformations in production. Python transformations defined in dbt are models in your project with all the same capabilities around testing, documentation, and lineage.
+dbt Python (`dbt-py`) モデルは、SQL では解決できないユースケースを解決するのに役立ちます。データ サイエンスと統計の最先端のパッケージを含む、オープン ソース Python エコシステムで利用可能なツールを使用して分析を実行できます。以前は、本番環境で Python 変換を実行するには、別のインフラストラクチャとオーケストレーションが必要でした。dbt で定義された Python 変換は、テスト、ドキュメント、系統に関するすべての同じ機能を備えたプロジェクト内のモデルです。
 
 
 <File name='models/my_python_model.py'>
@@ -67,29 +67,29 @@ models:
 <!--- TODO: how to make this image preview bigger? --->
 <Lightbox src="/img/docs/building-a-dbt-project/building-models/python-models/python-model-dag.png" title="SQL + Python, together at last" style="width:200%"/>
 
-The prerequisites for dbt Python models include using an adapter for a data platform that supports a fully featured Python runtime. In a dbt Python model, all Python code is executed remotely on the platform. None of it is run by dbt locally. We believe in clearly separating _model definition_ from _model execution_. In this and many other ways, you'll find that dbt's approach to Python models mirrors its longstanding approach to modeling data in SQL.
+dbt Python モデルの前提条件には、フル機能の Python ランタイムをサポートするデータ プラットフォームのアダプターの使用が含まれます。dbt Python モデルでは、すべての Python コードはプラットフォーム上でリモートで実行されます。dbt によってローカルで実行されるものはありません。私たちは、_モデル定義_ と _モデル実行_ を明確に分離することを信条としています。この方法や他の多くの方法から、dbt の Python モデルへのアプローチは、SQL でデータをモデル化する長年のアプローチを反映していることがわかります。
 
-We've written this guide assuming that you have some familiarity with dbt. If you've never before written a dbt model, we encourage you to start by first reading [dbt Models](/docs/build/models). Throughout, we'll be drawing connections between Python models and SQL models, as well as making clear their differences.
+このガイドは、読者が dbt にある程度精通していることを前提に作成されています。dbt モデルを作成したことがない場合は、まず [dbt モデル](/docs/build/models) を読むことをお勧めします。全体を通して、Python モデルと SQL モデルの関係を示し、その違いを明確にします。
 
-### What is a Python model?
+### Python モデルとは何ですか?
 
-A dbt Python model is a function that reads in dbt sources or other models, applies a series of transformations, and returns a transformed dataset. <Term id="dataframe">DataFrame</Term> operations define the starting points, the end state, and each step along the way.
+dbt Python モデルは、dbt ソースまたは他のモデルを読み取り、一連の変換を適用し、変換されたデータセットを返す関数です。<Term id="dataframe">DataFrame</Term> 操作は、開始点、終了状態、および途中の各ステップを定義します。
 
-This is similar to the role of <Term id="cte">CTEs</Term> in dbt SQL models. We use CTEs to pull in upstream datasets, define (and name) a series of meaningful transformations, and end with a final `select` statement. You can run the compiled version of a dbt SQL model to see the data included in the resulting view or table. When you `dbt run`, dbt wraps that query in `create view`, `create table`, or more complex DDL to save its results in the database.
+これは、dbt SQL モデルにおける <Term id="cte">CTE</Term> の役割に似ています。CTE を使用して上流データセットをプルし、一連の意味のある変換を定義 (および命名) し、最終的な `select` ステートメントで終了します。コンパイルされたバージョンの dbt SQL モデルを実行して、結果のビューまたはテーブルに含まれるデータを確認できます。`dbt run` を実行すると、dbt はそのクエリを `create view`、`create table`、またはより複雑な DDL でラップして、その結果をデータベースに保存します。
 
-Instead of a final `select` statement, each Python model returns a final DataFrame. Each DataFrame operation is "lazily evaluated." In development, you can preview its data, using methods like `.show()` or `.head()`. When you run a Python model, the full result of the final DataFrame will be saved as a table in your data warehouse.
+最終的な `select` ステートメントの代わりに、各 Python モデルは最終的な DataFrame を返します。各 DataFrame 操作は「遅延評価」されます。開発中は、`.show()` や `.head()` などのメソッドを使用して、そのデータをプレビューできます。Python モデルを実行すると、最終的な DataFrame の完全な結果がデータ ウェアハウスにテーブルとして保存されます。
 
-dbt Python models have access to almost all of the same configuration options as SQL models. You can test and document them, add `tags` and `meta` properties, and grant access to their results to other users. You can select them by their name, file path, configurations, whether they are upstream or downstream of another model, or if they have been modified compared to a previous project state.
+dbt Python モデルは、SQL モデルとほぼ同じ構成オプションにアクセスできます。モデルをテストして文書化したり、`tags` や `meta` プロパティを追加したり、他のユーザーに結果へのアクセスを許可したりできます。モデルは、名前、ファイル パス、構成、別のモデルの上流または下流にあるかどうか、以前のプロジェクト状態と比較して変更されているかどうかで選択できます。
 
-### Defining a Python model
+### Python モデルの定義
 
-Each Python model lives in a `.py` file in your `models/` folder. It defines a function named **`model()`**, which takes two parameters:
-- **`dbt`**: A class compiled by dbt Core, unique to each model, enables you to run your Python code in the context of your dbt project and DAG.
-- **`session`**: A class representing your data platform’s connection to the Python backend. The session is needed to read in tables as DataFrames, and to write DataFrames back to tables. In PySpark, by convention, the `SparkSession` is named `spark`, and available globally. For consistency across platforms, we always pass it into the `model` function as an explicit argument called `session`.
+各 Python モデルは、`models/` フォルダーの `.py` ファイルにあります。このファイルは、2 つのパラメーターを受け取る **`model()`** という関数を定義します。
+- **`dbt`**: dbt Core によってコンパイルされ、各モデルに固有のクラス。これにより、dbt プロジェクトと DAG のコンテキストで Python コードを実行できます。
+- **`session`**: データ プラットフォームの Python バックエンドへの接続を表すクラス。セッションは、テーブルを DataFrame として読み込んだり、DataFrame をテーブルに書き戻したりするために必要です。PySpark では、慣例により、`SparkSession` は `spark` という名前で、グローバルに使用できます。プラットフォーム間の一貫性を保つために、常に `session` という明示的な引数として `model` 関数に渡します。
 
-The `model()` function must return a single DataFrame. On Snowpark (Snowflake), this can be a Snowpark or pandas DataFrame. Via PySpark (Databricks + BigQuery), this can be a Spark, pandas, or pandas-on-Spark DataFrame. For more about choosing between pandas and native DataFrames, see [DataFrame API + syntax](#dataframe-api-and-syntax).
+`model()` 関数は、単一の DataFrame を返す必要があります。Snowpark (Snowflake) では、これは Snowpark または pandas DataFrame になります。 PySpark (Databricks + BigQuery) 経由では、Spark、pandas、または pandas-on-Spark DataFrame になります。pandas とネイティブ DataFrame の選択の詳細については、[DataFrame API + 構文](#dataframe-api-and-syntax) を参照してください。
 
-When you `dbt run --select python_model`, dbt will prepare and pass in both arguments (`dbt` and `session`). All you have to do is define the function. This is how every single Python model should look:
+`dbt run --select python_model` を実行すると、dbt は両方の引数 (`dbt` と `session`) を準備して渡します。必要なのは関数を定義することだけです。すべての Python モデルは次のようになります。
 
 <File name='models/my_python_model.py'>
 
@@ -104,9 +104,9 @@ def model(dbt, session):
 </File>
 
 
-### Referencing other models
+### 他のモデルを参照する
 
-Python models participate fully in dbt's directed acyclic graph (DAG) of transformations. Use the `dbt.ref()` method within a Python model to read data from other models (SQL or Python). If you want to read directly from a raw source table, use `dbt.source()`. These methods return DataFrames pointing to the upstream source, model, seed, or snapshot.
+Python モデルは、dbt の変換の有向非巡回グラフ (DAG) に完全に参加します。Python モデル内で `dbt.ref()` メソッドを使用して、他のモデル (SQL または Python) からデータを読み取ります。生のソース テーブルから直接読み取る場合は、`dbt.source()` を使用します。これらのメソッドは、上流のソース、モデル、シード、またはスナップショットを指す DataFrames を返します。
 
 <File name='models/my_python_model.py'>
 
@@ -124,7 +124,7 @@ def model(dbt, session):
 
 </File>
 
-Of course, you can `ref()` your Python model in downstream SQL models, too:
+もちろん、ダウンストリーム SQL モデルで Python モデルを `ref()` することもできます。
 
 <File name='models/downstream_model.sql'>
 
@@ -142,12 +142,12 @@ with upstream_python_model as (
 
 :::caution
 
-Referencing [ephemeral](/docs/build/materializations#ephemeral) models is currently not supported (see [feature request](https://github.com/dbt-labs/dbt-core/issues/7288)) 
+[ephemeral](/docs/build/materializations#ephemeral) モデルの参照は現在サポートされていません ([機能リクエスト](https://github.com/dbt-labs/dbt-core/issues/7288) を参照)
 :::
 
 <VersionBlock firstVersion="1.8">
 
-From dbt version 1.8, Python models also support dynamic configurations within Python f-strings. This allows for more nuanced and dynamic model configurations directly within your Python code. For example:
+dbt バージョン 1.8 以降、Python モデルは Python f 文字列内での動的構成もサポートします。これにより、Python コード内で直接、より繊細で動的なモデル構成が可能になります。例:
 
 <File name='models/my_python_model.py'>
 
@@ -160,19 +160,19 @@ print(f"{dbt.config.get('my_var')}")  # Output before change: None
 print(f"{dbt.config.get('my_var')}")  # Output after change: 5
 ```
 
-This also means you can use `dbt.config.get()` within Python models to ensure that configuration values are effectively retrievable and usable within Python f-strings.
+これは、Python モデル内で `dbt.config.get()` を使用して、構成値が Python f 文字列内で効果的に取得および使用可能であることを保証できることも意味します。
 
 </File>
 </VersionBlock>
 
-## Configuring Python models
+## Python モデルの設定
 
-Just like SQL models, there are three ways to configure Python models:
-1. In `dbt_project.yml`, where you can configure many models at once
-2. In a dedicated `.yml` file, within the `models/` directory
-3. Within the model's `.py` file, using the `dbt.config()` method
+SQL モデルと同様に、Python モデルを構成する方法は 3 つあります:
+1. `dbt_project.yml` で、一度に複数のモデルを構成できます
+2. `models/` ディレクトリ内の専用の `.yml` ファイルで
+3. モデルの `.py` ファイル内で、`dbt.config()` メソッドを使用します
 
-Calling the `dbt.config()` method will set configurations for your model within your `.py` file, similar to the `{{ config() }}` macro in `.sql` model files:
+`dbt.config()` メソッドを呼び出すと、`.sql` モデル ファイルの `{{ config() }}` マクロと同様に、`.py` ファイル内でモデルの構成が設定されます:
 
 <File name='models/my_python_model.py'>
 
@@ -185,18 +185,18 @@ def model(dbt, session):
 
 </File>
 
-There's a limit to how complex you can get with the `dbt.config()` method. It accepts _only_ literal values (strings, booleans, and numeric types) and dynamic configuration. Passing another function or a more complex data structure is not possible. The reason is that dbt statically analyzes the arguments to `config()` while parsing your model without executing your Python code. If you need to set a more complex configuration, we recommend you define it using the [`config` property](/reference/resource-properties/config) in a YAML file.
+`dbt.config()` メソッドで設定できる複雑さには限界があります。このメソッドは、リテラル値 (文字列、ブール値、数値型) と動的設定のみを受け入れます。別の関数やより複雑なデータ構造を渡すことはできません。これは、dbt が Python コードを実行せずにモデルを解析しながら `config()` への引数を静的に分析するためです。より複雑な設定を設定する必要がある場合は、YAML ファイルの [`config` プロパティ](/reference/resource-properties/config) を使用して定義することをお勧めします。
 
-#### Accessing project context
+#### プロジェクトコンテキストへのアクセス
 
-dbt Python models don't use Jinja to render compiled code. Python models have limited access to global project contexts compared to SQL models. That context is made available from the `dbt` class, passed in as an argument to the `model()` function.
+dbt Python モデルは、コンパイルされたコードをレンダリングするために Jinja を使用しません。Python モデルは、SQL モデルと比較して、グローバル プロジェクト コンテキストへのアクセスが制限されています。そのコンテキストは、`model()` 関数に引数として渡される `dbt` クラスから利用可能になります。
 
-Out of the box, the `dbt` class supports:
-- Returning DataFrames referencing the locations of other resources: `dbt.ref()` + `dbt.source()`
-- Accessing the database location of the current model: `dbt.this()` (also: `dbt.this.database`, `.schema`, `.identifier`)
-- Determining if the current model's run is incremental: `dbt.is_incremental`
+`dbt` クラスは、すぐに使用できる次の機能をサポートします:
+- 他のリソースの場所を参照する DataFrame を返す: `dbt.ref()` + `dbt.source()`
+- 現在のモデルのデータベースの場所にアクセスする: `dbt.this()` (`dbt.this.database`、`.schema`、`.identifier` も)
+- 現在のモデルの実行が増分であるかどうかを判断する: `dbt.is_incremental`
 
-It is possible to extend this context by "getting" them with `dbt.config.get()` after they are configured in the [model's config](/reference/model-configs). Starting from dbt v1.8, the `dbt.config.get()` method supports dynamic access to configurations within Python models, enhancing flexibility in model logic. This includes inputs such as `var`, `env_var`, and `target`. If you want to use those values for the conditional logic in your model, we require setting them through a dedicated YAML file config:
+[モデルの構成](/reference/model-configs) で構成された後、`dbt.config.get()` を使用して「取得」することで、このコンテキストを拡張できます。 dbt v1.8 以降、`dbt.config.get()` メソッドは Python モデル内の構成への動的アクセスをサポートし、モデル ロジックの柔軟性を高めます。これには、`var`、`env_var`、`target` などの入力が含まれます。モデルの条件付きロジックにこれらの値を使用する場合は、専用の YAML ファイル構成を使用して設定する必要があります:
 
 <File name='models/config.yml'>
 
@@ -214,7 +214,7 @@ models:
 
 </File>
 
-Then, within the model's Python code, use the `dbt.config.get()` function to _access_ values of configurations that have been set:
+次に、モデルの Python コード内で、`dbt.config.get()` 関数を使用して、設定されている構成の値に _アクセス_ します:
 
 <File name='models/my_python_model.py'>
 
@@ -235,9 +235,9 @@ def model(dbt, session):
 
 <VersionBlock firstVersion="1.8">
 
-#### Dynamic configurations
+#### 動的構成
 
-In addition to the existing methods of configuring Python models, you also have dynamic access to configuration values set with `dbt.config()` within Python models using f-strings. This increases the possibilities for custom logic and configuration management.
+Python モデルを構成する既存の方法に加えて、f 文字列を使用して Python モデル内の `dbt.config()` で設定された構成値に動的にアクセスすることもできます。これにより、カスタム ロジックと構成管理の可能性が広がります。
 
 <File name='models/my_python_model.py'>
 
@@ -254,17 +254,17 @@ def model(dbt, session):
 </File>
 </VersionBlock>
 
-### Materializations
+### マテリアライゼーション
 
-Python models support these materializations:
-- `table` (default)
+Python モデルでは、次のマテリアライゼーションがサポートされています:
+- `table` (デフォルト)
 - `incremental`
 
-Incremental Python models support all the same [incremental strategies](/docs/build/incremental-strategy) as their SQL counterparts. The specific strategies supported depend on your adapter. As an example, incremental models are supported on BigQuery with Dataproc for the `merge` incremental strategy; the `insert_overwrite` strategy is not yet supported.
+増分 Python モデルでは、SQL のモデルと同じ [増分戦略](/docs/build/incremental-strategy) がすべてサポートされています。サポートされる具体的な戦略は、アダプタによって異なります。たとえば、増分モデルは、Dataproc を使用した BigQuery で `merge` 増分戦略でサポートされていますが、`insert_overwrite` 戦略はまだサポートされていません。
 
-Python models can't be materialized as `view` or `ephemeral`. Python isn't supported for non-model resource types (like tests and snapshots).
+Python モデルは、`view` または `ephemeral` としてマテリアライゼーションできません。Python は、モデル以外のリソースタイプ (テストやスナップショットなど) ではサポートされていません。
 
-For incremental models, like SQL models, you need to filter incoming tables to only new rows of data:
+SQL モデルなどの増分モデルでは、受信テーブルを新しいデータ行のみにフィルタリングする必要があります。
 
 <Tabs>
 
@@ -328,11 +328,11 @@ def model(dbt, session):
 
 </Tabs>
 
-## Python-specific functionality
+## Python固有の機能
 
-### Defining functions
+### 関数の定義
 
-In addition to defining a `model` function, the Python model can import other functions or define its own. Here's an example on Snowpark, defining a custom `add_one` function:
+`model` 関数を定義することに加えて、Python モデルは他の関数をインポートしたり、独自の関数を定義したりすることができます。以下は、Snowpark でカスタム `add_one` 関数を定義する例です:
 
 <File name='models/my_python_model.py'>
 
@@ -351,13 +351,13 @@ def model(dbt, session):
 
 </File>
 
-Currently, Python functions defined in one dbt model can't be imported and reused in other models. Refer to [Code reuse](#code-reuse) for the potential patterns being considered.
+現在、1 つの dbt モデルで定義された Python 関数を他のモデルにインポートして再利用することはできません。検討されている潜在的なパターンについては、[コードの再利用](#code-reuse) を参照してください。
 
-### Using PyPI packages
+### PyPIパッケージの使用
 
-You can also define functions that depend on third-party packages so long as those packages are installed and available to the Python runtime on your data platform. See notes on "Installing Packages" for [specific data platforms](#specific-data-platforms).
+また、サードパーティのパッケージがデータ プラットフォーム上の Python ランタイムにインストールされ、使用可能であれば、サードパーティのパッケージに依存する関数を定義することもできます。[特定のデータ プラットフォーム](#specific-data-platforms) の「パッケージのインストール」に関する注記を参照してください。
 
-In this example, we use the `holidays` package to determine if a given date is a holiday in France. The code below uses the pandas API for simplicity and consistency across platforms. The exact syntax, and the need to refactor for multi-node processing, still vary.
+この例では、`holidays` パッケージを使用して、特定の日付がフランスの休日かどうかを判断します。以下のコードでは、プラットフォーム間での簡潔性と一貫性を保つために pandas API を使用しています。正確な構文、およびマルチノード処理のためのリファクタリングの必要性は、依然として異なります。
 <Tabs>
 
 <TabItem value="Snowpark">
@@ -437,9 +437,9 @@ def model(dbt, session):
 
 </Tabs>
 
-#### Configuring packages
+#### パッケージの設定
 
-We encourage you to configure required packages and versions so dbt can track them in project metadata. This configuration is required for the implementation on some platforms. If you need specific versions of packages, specify them.
+必要なパッケージとバージョンを構成して、dbt がプロジェクト メタデータでそれらを追跡できるようにすることをお勧めします。この構成は、一部のプラットフォームでの実装に必要です。特定のバージョンのパッケージが必要な場合は、それを指定します。
 
 <File name='models/my_python_model.py'>
 
@@ -467,11 +467,11 @@ models:
 
 </File>
 
-#### User-defined functions (UDFs)
+#### ユーザー定義関数 (UDF)
 
-You can use the `@udf` decorator or `udf` function to define an "anonymous" function and call it within your `model` function's DataFrame transformation. This is a typical pattern for applying more complex functions as DataFrame operations, especially if those functions require inputs from third-party packages.
-- [Snowpark Python: Creating UDFs](https://docs.snowflake.com/en/developer-guide/snowpark/python/creating-udfs.html)
-- [PySpark functions: udf](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.udf.html)
+`@udf` デコレータまたは `udf` 関数を使用して「匿名」関数を定義し、`model` 関数の DataFrame 変換内でそれを呼び出すことができます。これは、特にそれらの関数がサードパーティ パッケージからの入力を必要とする場合に、より複雑な関数を DataFrame 操作として適用するための一般的なパターンです。
+- [Snowpark Python: UDF の作成](https://docs.snowflake.com/en/developer-guide/snowpark/python/creating-udfs.html)
+- [PySpark 関数: udf](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.udf.html)
 
 <Tabs>
 
@@ -511,9 +511,9 @@ def model(dbt, session):
 
 </File>
 
-**Note:** Due to a Snowpark limitation, it is not currently possible to register complex named UDFs within stored procedures and, therefore, dbt Python models. We are looking to add native support for Python UDFs as a project/DAG resource type in a future release. For the time being, if you want to create a "vectorized" Python UDF via the Batch API, we recommend either:
-- Writing [`create function`](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-batch.html) inside a SQL macro, to run as a hook or run-operation
-- [Registering from a staged file](https://docs.snowflake.com/en/developer-guide/snowpark/python/creating-udfs#creating-a-udf-from-a-python-source-file) within your Python model code
+**注:** Snowpark の制限により、現在、ストアド プロシージャ内、つまり dbt Python モデル内に複雑な名前の UDF を登録することはできません。今後のリリースでは、プロジェクト/DAG リソース タイプとして Python UDF のネイティブ サポートを追加する予定です。当面、バッチ API 経由で「ベクトル化された」Python UDF を作成する場合は、次のいずれかをお勧めします。
+- SQL マクロ内に [`create function`](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-batch.html) を記述して、フックまたは実行操作として実行する
+- Python モデル コード内で [ステージングされたファイルから登録](https://docs.snowflake.com/en/developer-guide/snowpark/python/creating-udfs#creating-a-udf-from-a-python-source-file) する
 
 </TabItem>
 
@@ -551,62 +551,64 @@ def model(dbt, session):
 
 </Tabs>
 
-#### Code reuse
+#### コードの再利用
 
-Currently, Python functions defined in one dbt model can't be imported and reused in other models. This is something dbt Labs would like to support, so there are two patterns we're considering:
+現在、1 つの dbt モデルで定義された Python 関数を他のモデルにインポートして再利用することはできません。これは dbt Labs がサポートしたいと考えていることであり、検討しているパターンは 2 つあります。
 
-- Creating and registering **"named" UDFs** &mdash; This process is different across data platforms and has some performance limitations. For example, Snowpark supports [vectorized UDFs](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-batch.html) for pandas-like functions that you can execute in parallel.
-- **Private Python packages** &mdash; In addition to importing reusable functions from public PyPI packages, many data platforms support uploading custom Python assets and registering them as packages. The upload process looks different across platforms, but your code’s actual `import` looks the same.
+- **「名前付き」UDF** の作成と登録 - このプロセスはデータ プラットフォームごとに異なり、パフォーマンス上の制限もあります。たとえば、Snowpark は、並列実行できる pandas のような関数の [ベクトル化された UDF](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-batch.html) をサポートしています。
+- **プライベート Python パッケージ** - パブリック PyPI パッケージから再利用可能な関数をインポートすることに加えて、多くのデータ プラットフォームでは、カスタム Python アセットをアップロードしてパッケージとして登録することがサポートされています。アップロード プロセスはプラットフォームごとに異なりますが、コードの実際の `import` は同じです。
 
-:::note ❓ dbt questions
+:::note ❓ dbt の質問
 
-- Should dbt have a role in abstracting over UDFs? Should dbt support a new type of DAG node, `function`? Would the primary use case be code reuse across Python models or defining Python-language functions that can be called from SQL models?
-- How can dbt help users when uploading or initializing private Python assets? Is this a new form of `dbt deps`?
-- How can dbt support users who want to test custom functions? If defined as UDFs: "unit testing" in the database? If "pure" functions in packages: encourage adoption of `pytest`?
+- dbt は UDF を抽象化する役割を持つべきでしょうか? dbt は新しいタイプの DAG ノードである `function` をサポートすべきでしょうか? 主な使用例は、Python モデル間でのコードの再利用でしょうか、それとも SQL モデルから呼び出せる Python 言語関数の定義でしょうか?
+- プライベート Python アセットをアップロードまたは初期化するときに、dbt はユーザーをどのようにサポートできますか? これは `dbt deps` の新しい形式でしょうか?
+- カスタム関数をテストしたいユーザーを dbt はどのようにサポートできますか? UDF として定義されている場合: データベースで「ユニット テスト」? パッケージ内の「純粋な」関数の場合: `pytest` の採用を推奨?
 
-💬 Discussion: ["Python models: package, artifact/object storage, and UDF management in dbt"](https://github.com/dbt-labs/dbt-core/discussions/5741)
+💬 ディスカッション: ["Python モデル: dbt でのパッケージ、アーティファクト/オブジェクト ストレージ、および UDF 管理"](https://github.com/dbt-labs/dbt-core/discussions/5741)
 :::
 
-### DataFrame API and syntax
+### DataFrame APIと構文
 
-Over the past decade, most people writing [data transformations](https://www.getdbt.com/analytics-engineering/transformation/) in Python have adopted <Term id="dataframe">DataFrame</Term> as their common abstraction. dbt follows this convention by returning `ref()` and `source()` as DataFrames, and it expects all Python models to return a DataFrame.
+過去 10 年間、Python で [データ変換](https://www.getdbt.com/analytics-engineering/transformation/) を記述するほとんどの人は、共通の抽象化として <Term id="dataframe">DataFrame</Term> を採用してきました。dbt はこの規則に従い、`ref()` と `source()` を DataFrame として返します。また、すべての Python モデルが DataFrame を返すことを期待しています。
 
-A DataFrame is a two-dimensional data structure (rows and columns). It supports convenient methods for transforming that data and creating new columns from calculations performed on existing columns. It also offers convenient ways for previewing data while developing locally or in a notebook.
+DataFrame は 2 次元データ構造 (行と列) です。そのデータを変換したり、既存の列に対して実行された計算から新しい列を作成したりするための便利なメソッドをサポートしています。また、ローカルまたはノートブックで開発中にデータをプレビューするための便利な方法も提供します。
 
-That's about where the agreement ends. There are numerous frameworks with their own syntaxes and APIs for DataFrames. The [pandas](https://pandas.pydata.org/docs/) library offered one of the original DataFrame APIs, and its syntax is the most common to learn for new data professionals. Most newer DataFrame APIs are compatible with pandas-style syntax, though few can offer perfect interoperability. This is true for Snowpark and PySpark, which have their own DataFrame APIs.
+合意はそこで終わります。DataFrame には独自の構文と API を持つフレームワークが多数あります。[pandas](https://pandas.pydata.org/docs/) ライブラリはオリジナルの DataFrame API の 1 つを提供し、その構文は新しいデータ プロフェッショナルが習得する最も一般的なものです。新しい DataFrame API のほとんどは pandas スタイルの構文と互換性がありますが、完全な相互運用性を提供できるものはほとんどありません。これは、独自の DataFrame API を持つ Snowpark と PySpark にも当てはまります。
 
-When developing a Python model, you will find yourself asking these questions:
+Python モデルを開発するときに、次のような疑問が湧いてくるでしょう。
 
-**Why pandas?** &mdash; It's the most common API for DataFrames. It makes it easy to explore sampled data and develop transformations locally. You can “promote” your code as-is into dbt models and run it in production for small datasets.
+**なぜ pandas か?** &mdash; これは DataFrames の最も一般的な API です。これにより、サンプリングされたデータを簡単に探索し、ローカルで変換を開発できます。コードをそのまま dbt モデルに「昇格」し、小規模なデータセットの運用環境で実行できます。
 
-**Why _not_ pandas?** &mdash; Performance. pandas runs "single-node" transformations, which cannot benefit from the parallelism and distributed computing offered by modern data warehouses. This quickly becomes a problem as you operate on larger datasets. Some data platforms support optimizations for code written using pandas DataFrame API, preventing the need for major refactors. For example, [pandas on PySpark](https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_ps.html) offers support for 95% of pandas functionality, using the same API while still leveraging parallel processing.
+**なぜ pandas ではないか?** &mdash; パフォーマンス。pandas は「単一ノード」変換を実行しますが、これは最新のデータ ウェアハウスが提供する並列処理と分散コンピューティングのメリットを享受できません。これは、大規模なデータセットを操作するときにすぐに問題になります。一部のデータ プラットフォームでは、pandas DataFrame API を使用して記述されたコードの最適化がサポートされているため、大幅なリファクタリングは必要ありません。たとえば、[PySpark 上の pandas](https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_ps.html) は、並列処理を活用しながら同じ API を使用して、pandas 機能の 95% をサポートします。
 
-:::note ❓ dbt questions
-- When developing a new dbt Python model, should we recommend pandas-style syntax for rapid iteration and then refactor?
-- Which open source libraries provide compelling abstractions across different data engines and vendor-specific APIs?
-- Should dbt attempt to play a longer-term role in standardizing across them?
+:::note ❓ dbt の質問
+- 新しい dbt Python モデルを開発する場合、迅速な反復とリファクタリングのために pandas スタイルの構文を推奨すべきでしょうか?
+- さまざまなデータ エンジンとベンダー固有の API にわたって魅力的な抽象化を提供するオープン ソース ライブラリはどれですか?
+- dbt は、それら全体にわたる標準化において長期的な役割を果たすことを試みるべきでしょうか?
 
-💬 Discussion: ["Python models: the pandas problem (and a possible solution)"](https://github.com/dbt-labs/dbt-core/discussions/5738)
+💬 ディスカッション: ["Python モデル: pandas の問題 (および可能な解決策)"](https://github.com/dbt-labs/dbt-core/discussions/5738)
 :::
 
-## Limitations
+## 制限事項
 
-Python models have capabilities that SQL models do not. They also have some drawbacks compared to SQL models:
+Python モデルには、SQL モデルにはない機能があります。また、SQL モデルと比較していくつかの欠点もあります。
 
-- **Time and cost.** Python models are slower to run than SQL models, and the cloud resources that run them can be more expensive. Running Python requires more general-purpose compute. That compute might sometimes live on a separate service or architecture from your SQL models. **However:** We believe that deploying Python models via dbt—with unified lineage, testing, and documentation—is, from a human standpoint, **dramatically** faster and cheaper. By comparison, spinning up separate infrastructure to orchestrate Python transformations in production and different tooling to integrate with dbt is much more time-consuming and expensive.
-- **Syntax differences** are even more pronounced. Over the years, dbt has done a lot, via dispatch patterns and packages such as `dbt_utils`, to abstract over differences in SQL dialects across popular data warehouses. Python offers a **much** wider field of play. If there are five ways to do something in SQL, there are 500 ways to write it in Python, all with varying performance and adherence to standards. Those options can be overwhelming. As the maintainers of dbt, we will be learning from state-of-the-art projects tackling this problem and sharing guidance as we develop it.
-- **These capabilities are very new.** As data warehouses develop new features, we expect them to offer cheaper, faster, and more intuitive mechanisms for deploying Python transformations. **We reserve the right to change the underlying implementation for executing Python models in future releases.** Our commitment to you is around the code in your model `.py` files, following the documented capabilities and guidance we're providing here.
-- **Lack of `print()` support.** The data platform runs and compiles your Python model without dbt's oversight. This means it doesn't display the output of commands such as Python's built-in [`print()`](https://docs.python.org/3/library/functions.html#print) function in dbt's logs.
+- **時間とコスト。** Python モデルは SQL モデルよりも実行速度が遅く、それらを実行するクラウド リソースは高価になる場合があります。Python を実行するには、より汎用的なコンピューティングが必要です。そのコンピューティングは、SQL モデルとは別のサービスまたはアーキテクチャに存在する場合があります。**ただし、** 統一された系統、テスト、およびドキュメントを備えた dbt を介して Python モデルを展開することは、人間の観点から、**劇的に**高速で安価であると考えています。比較すると、本番環境で Python 変換を調整するために別のインフラストラクチャを立ち上げ、dbt と統合するためのさまざまなツールを構築すると、はるかに時間がかかり、コストがかかります。
+- **構文の違い** はさらに顕著です。長年にわたり、dbt はディスパッチ パターンや `dbt_utils` などのパッケージを介して、一般的なデータ ウェアハウス間の SQL 方言の違いを抽象化するために多くのことを行ってきました。Python は **はるかに** 広い分野を提供します。 SQL で何かを実行する方法が 5 つある場合、Python でそれを記述する方法は 500 通りあり、パフォーマンスや標準への準拠はそれぞれ異なります。これらのオプションは圧倒的です。dbt のメンテナーとして、私たちはこの問題に取り組む最先端のプロジェクトから学び、開発しながらガイダンスを共有していきます。
+- **これらの機能は非常に新しいものです。** データ ウェアハウスが新しい機能を開発するにつれて、Python 変換を展開するためのより安価で高速で直感的なメカニズムが提供されると予想されます。**将来のリリースで Python モデルを実行するための基盤となる実装を変更する権利を留保します。** お客様に対する私たちのコミットメントは、ここで提供しているドキュメント化された機能とガイダンスに従って、モデルの `.py` ファイル内のコードに関するものです。
+- **`print()` サポートがありません。** データ プラットフォームは、dbt の監視なしに Python モデルを実行してコンパイルします。つまり、Python の組み込み [`print()`](https://docs.python.org/3/library/functions.html#print) 関数などのコマンドの出力は dbt のログに表示されません。
 
-- <Expandable alt_header="Alternatives to using print() in Python models">
+- <Expandable alt_header="Python モデルで print() を使用する代わりに">
 
-    The following explains other methods you can use for debugging, such as writing messages to a dataframe column:
-    
-    - Using platform logs: Use your data platform's logs to debug your Python models.
-    - Return logs as a dataframe: Create a dataframe containing your logs and build it into the warehouse.
-    - Develop locally with DuckDB: Test and debug your models locally using DuckDB before deploying them.
-    
-    Here's an example of debugging in a Python model:
+    以下では、データフレーム列へのメッセージの書き込みなど、デバッグに使用できるその他の方法について説明します。
+
+    - プラットフォーム ログの使用: データ プラットフォームのログを使用して、Python モデルをデバッグします。
+
+    - ログをデータフレームとして返す: ログを含むデータフレームを作成し、ウェアハウスに組み込みます。
+
+    - DuckDB を使用してローカルで開発する: デプロイする前に、DuckDB を使用してローカルでモデルをテストおよびデバッグします。
+
+    Python モデルでのデバッグの例を次に示します。
 
     ```python
     def model(dbt, session):
@@ -626,21 +628,21 @@ Python models have capabilities that SQL models do not. They also have some draw
     ```
     </Expandable>
 
-As a general rule, if there's a transformation you could write equally well in SQL or Python, we believe that well-written SQL is preferable: it's more accessible to a greater number of colleagues, and it's easier to write code that's performant at scale. If there's a transformation you _can't_ write in SQL, or where ten lines of elegant and well-annotated Python could save you 1000 lines of hard-to-read Jinja-SQL, Python is the way to go.
+一般的なルールとして、SQL と Python のどちらでも同じようにうまく記述できる変換がある場合、適切に記述された SQL の方が望ましいと考えられます。SQL の方が、より多くの同僚がアクセスしやすく、大規模にパフォーマンスの高いコードを簡単に記述できます。SQL では記述できない変換がある場合、または 10 行のエレガントで適切に注釈が付けられた Python によって 1000 行の読みにくい Jinja-SQL を節約できる場合は、Python を使用することをお勧めします。
 
-## Specific data platforms {#specific-data-platforms}
+## 特定のデータプラットフォーム {#specific-data-platforms}
 
-Python models are supported on many of our adapters, including Snowflake, Databricks, and BigQuery/GCP (via Dataproc). Both Databricks and GCP's Dataproc use PySpark as the processing framework. Snowflake uses its own framework, Snowpark, which has many similarities to PySpark.
+Python モデルは、Snowflake、Databricks、BigQuery/GCP (Dataproc 経由) など、多くのアダプタでサポートされています。Databricks と GCP の Dataproc はどちらも、処理フレームワークとして PySpark を使用します。Snowflake は独自のフレームワークである Snowpark を使用しますが、これは PySpark と多くの類似点があります。
 
 <Tabs>
 
 <TabItem value="Snowflake">
 
-**Additional setup:** You will need to [acknowledge and accept Snowflake Third Party Terms](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-packages.html#getting-started) to use Anaconda packages.
+**追加の設定:** Anaconda パッケージを使用するには、[Snowflake サードパーティ規約を承認して同意する](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-packages.html#getting-started)必要があります。
 
-**Installing packages:** Snowpark supports several popular packages via Anaconda. Refer to the [complete list](https://repo.anaconda.com/pkgs/snowflake/) for more details. Packages are installed when your model is run. Different models can have different package dependencies. If you use third-party packages, Snowflake recommends using a dedicated virtual warehouse for best performance rather than one with many concurrent users.
+**パッケージのインストール:** Snowpark は、Anaconda を介していくつかの一般的なパッケージをサポートしています。詳細については、[完全なリスト](https://repo.anaconda.com/pkgs/snowflake/)を参照してください。パッケージは、モデルの実行時にインストールされます。モデルによってパッケージの依存関係が異なる場合があります。サードパーティのパッケージを使用する場合、Snowflake では、同時ユーザー数が多いウェアハウスではなく、専用の仮想ウェアハウスを使用して最高のパフォーマンスを得ることをお勧めします。
 
-**Python version:** To specify a different python version, use the following configuration:
+**Python バージョン:** 別の Python バージョンを指定するには、次の構成を使用します。
 
 ```python
 def model(dbt, session):
@@ -650,11 +652,11 @@ def model(dbt, session):
     )
 ```
 
-You can use the `python_version` config to run a Snowpark model with [Python versions](https://docs.snowflake.com/en/developer-guide/snowpark/python/setup) 3.9, 3.10, or 3.11.
+`python_version` 構成を使用すると、[Python バージョン](https://docs.snowflake.com/en/developer-guide/snowpark/python/setup) 3.9、3.10、または 3.11 で Snowpark モデルを実行できます。
 
 <VersionBlock firstVersion="1.8">
 
-**External access integrations and secrets**: To query external APIs within dbt Python models, use Snowflake’s [external access](https://docs.snowflake.com/en/developer-guide/external-network-access/external-network-access-overview) together with [secrets](https://docs.snowflake.com/en/developer-guide/external-network-access/secret-api-reference). Here are some additional configurations you can use:
+**外部アクセスの統合とシークレット**: dbt Python モデル内で外部 API をクエリするには、Snowflake の [外部アクセス](https://docs.snowflake.com/en/developer-guide/external-network-access/external-network-access-overview) と [シークレット](https://docs.snowflake.com/en/developer-guide/external-network-access/secret-api-reference) を併用します。使用できる追加の構成を次に示します。
 
 ```python
 import pandas
@@ -676,13 +678,13 @@ def model(dbt, session: snowpark.Session):
 
 </VersionBlock>
 
-**Docs:** ["Developer Guide: Snowpark Python"](https://docs.snowflake.com/en/developer-guide/snowpark/python/index.html)
+**ドキュメント:** ["開発者ガイド: Snowpark Python"](https://docs.snowflake.com/en/developer-guide/snowpark/python/index.html)
 
-#### Third-party Snowflake packages
+#### サードパーティのSnowflakeパッケージ
 
-To use a third-party Snowflake package that isn't available in Snowflake Anaconda, upload your package by following [this example](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-packages#importing-packages-through-a-snowflake-stage), and then configure the `imports` setting in the dbt Python model to reference to the zip file in your Snowflake staging.
+Snowflake Anaconda で利用できないサードパーティの Snowflake パッケージを使用するには、[この例](https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-packages#importing-packages-through-a-snowflake-stage) に従ってパッケージをアップロードし、dbt Python モデルの `imports` 設定を構成して、Snowflake ステージングの zip ファイルを参照するようにします。
 
-Here’s a complete example configuration using a zip file, including using `imports` in a Python model:
+以下は、Python モデルでの `imports` の使用を含む、zip ファイルを使用した完全な構成例です:
 
 ```python
 
@@ -709,20 +711,20 @@ def model(dbt, session):
 
 ```
 
-For more information on using this configuration, refer to [Snowflake's documentation](https://community.snowflake.com/s/article/how-to-use-other-python-packages-in-snowpark) on uploading and using other python packages in Snowpark not published on Snowflake's Anaconda channel.
+この構成の使用に関する詳細については、Snowflake の Anaconda チャネルで公開されていない他の Python パッケージを Snowpark にアップロードして使用する方法については、[Snowflake のドキュメント](https://community.snowflake.com/s/article/how-to-use-other-python-packages-in-snowpark)を参照してください。
 
 
 </TabItem>
 
 <TabItem value="Databricks">
 
-**Submission methods:** Databricks supports a few different mechanisms to submit PySpark code, each with relative advantages. Some are better for supporting iterative development, while others are better for supporting lower-cost production deployments. The options are:
-- `all_purpose_cluster` (default): dbt will run your Python model using the cluster ID configured as `cluster` in your connection profile or for this specific model. These clusters are more expensive but also much more responsive. We recommend using an interactive all-purpose cluster for quicker iteration in development.
-  - `create_notebook: True`: dbt will upload your model's compiled PySpark code to a notebook in the namespace `/Shared/dbt_python_model/{schema}`, where `{schema}` is the configured schema for the model, and execute that notebook to run using the all-purpose cluster. The appeal of this approach is that you can easily open the notebook in the Databricks UI for debugging or fine-tuning right after running your model. Remember to copy any changes into your dbt `.py` model code before re-running.
-  - `create_notebook: False` (default): dbt will use the [Command API](https://docs.databricks.com/dev-tools/api/1.2/index.html#run-a-command), which is slightly faster.
-- `job_cluster`: dbt will upload your model's compiled PySpark code to a notebook in the namespace `/Shared/dbt_python_model/{schema}`, where `{schema}` is the configured schema for the model, and execute that notebook to run using a short-lived jobs cluster. For each Python model, Databricks will need to spin up the cluster, execute the model's PySpark transformation, and then spin down the cluster. As such, job clusters take longer before and after model execution, but they're also less expensive, so we recommend these for longer-running Python models in production. To use the `job_cluster` submission method, your model must be configured with `job_cluster_config`, which defines key-value properties for `new_cluster`, as defined in the [JobRunsSubmit API](https://docs.databricks.com/dev-tools/api/latest/jobs.html#operation/JobsRunsSubmit).
+**送信方法:** Databricks は、それぞれ相対的な利点を持つ、PySpark コードを送信するためのいくつかの異なるメカニズムをサポートしています。反復的な開発をサポートするのに適したものもあれば、低コストの運用展開をサポートするのに適したものもあります。オプションは次のとおりです:
+- `all_purpose_cluster` (デフォルト): dbt は、接続プロファイルまたはこの特定のモデルで `cluster` として構成されたクラスター ID を使用して、Python モデルを実行します。これらのクラスターはコストがかかりますが、応答性もはるかに高くなります。開発の反復を高速化するには、対話型の汎用クラスターを使用することをお勧めします。
+  - `create_notebook: True`: dbt は、モデルのコンパイル済み PySpark コードを名前空間 `/Shared/dbt_python_model/{schema}` のノートブックにアップロードします。ここで、`{schema}` はモデル用に構成されたスキーマです。そして、そのノートブックを実行して、多目的クラスターを使用して実行します。この方法の利点は、モデルを実行した直後に、Databricks UI でノートブックを簡単に開いてデバッグや微調整を行えることです。再実行する前に、変更内容を dbt `.py` モデル コードにコピーすることを忘れないでください。
+  - `create_notebook: False` (既定値): dbt は [コマンド API](https://docs.databricks.com/dev-tools/api/1.2/index.html#run-a-command) を使用します。これは若干高速です。
+- `job_cluster`: dbt は、モデルのコンパイル済み PySpark コードを名前空間 `/Shared/dbt_python_model/{schema}` のノートブックにアップロードします。ここで、`{schema}` はモデル用に構成されたスキーマです。そして、そのノートブックを実行して、短期間のジョブ クラスターを使用して実行します。Python モデルごとに、Databricks はクラスターを起動し、モデルの PySpark 変換を実行してから、クラスターを停止する必要があります。そのため、ジョブ クラスターはモデル実行の前後に時間がかかりますが、コストも低いため、運用環境で長時間実行される Python モデルにはこれをお勧めします。 `job_cluster` 送信方法を使用するには、[JobRunsSubmit API](https://docs.databricks.com/dev-tools/api/latest/jobs.html#operation/JobsRunsSubmit) で定義されているように、`new_cluster` のキー値プロパティを定義する `job_cluster_config` を使用してモデルを構成する必要があります。
 
-You can configure each model's `submission_method` in all the standard ways you supply configuration:
+各モデルの「送信方法」は、設定を提供するすべての標準的な方法で設定できます:
 
 ```python
 def model(dbt, session):
@@ -754,35 +756,35 @@ models:
       +cluster_id: abcd-1234-wxyz
 ```
 
-If not configured, `dbt-spark` will use the built-in defaults: the all-purpose cluster (based on `cluster` in your connection profile) without creating a notebook. The `dbt-databricks` adapter will default to the cluster configured in `http_path`. We encourage explicitly configuring the clusters for Python models in Databricks projects.
+構成されていない場合、`dbt-spark` は組み込みのデフォルト、つまりノートブックを作成せずに (接続プロファイルの `cluster` に基づく) 汎用クラスターを使用します。`dbt-databricks` アダプターは、`http_path` で構成されたクラスターをデフォルトとして使用します。Databricks プロジェクトでは、Python モデルのクラスターを明示的に構成することをお勧めします。
 
-**Installing packages:** When using all-purpose clusters, we recommend installing packages which you will be using to run your Python models.
+**パッケージのインストール:** 汎用クラスターを使用する場合は、Python モデルの実行に使用するパッケージをインストールすることをお勧めします。
 
-**Docs:**
-- [PySpark DataFrame syntax](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)
-- [Databricks: Introduction to DataFrames - Python](https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html)
+**ドキュメント:**
+- [PySpark DataFrame 構文](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)
+- [Databricks: DataFrame の概要 - Python](https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html)
 
 </TabItem>
 
 <TabItem value="BigQuery">
 
-The `dbt-bigquery` adapter uses a service called Dataproc to submit your Python models as PySpark jobs. That Python/PySpark code will read from your tables and views in BigQuery, perform all computation in Dataproc, and write the final result back to BigQuery.
+`dbt-bigquery` アダプタは、Dataproc というサービスを使用して、Python モデルを PySpark ジョブとして送信します。その Python/PySpark コードは、BigQuery のテーブルとビューから読み取り、Dataproc ですべての計算を実行し、最終結果を BigQuery に書き戻します。
 
-**Submission methods.** Dataproc supports two submission methods: `serverless` and `cluster`. Dataproc Serverless does not require a ready cluster, which saves on hassle and cost—but it is slower to start up, and much more limited in terms of available configuration. For example, Dataproc Serverless supports only a small set of Python packages, though it does include `pandas`, `numpy`, and `scikit-learn`. (See the full list [here](https://cloud.google.com/dataproc-serverless/docs/guides/custom-containers#example_custom_container_image_build), under "The following packages are installed in the default image"). Whereas, by creating a Dataproc Cluster in advance, you can fine-tune the cluster's configuration, install any PyPI packages you want, and benefit from faster, more responsive runtimes.
+**送信方法。** Dataproc は、`serverless` と `cluster` の 2 つの送信方法をサポートしています。Dataproc Serverless では、準備済みのクラスタが不要なため、手間とコストを節約できますが、起動に時間がかかり、使用可能な構成の点ではるかに制限されています。たとえば、Dataproc Serverless は、`pandas`、`numpy`、`scikit-learn` は含まれていますが、Python パッケージの小さなセットのみをサポートしています。(完全なリストについては、[こちら](https://cloud.google.com/dataproc-serverless/docs/guides/custom-containers#example_custom_container_image_build) の「次のパッケージは、デフォルトのイメージにインストールされています」を参照してください)。一方、事前に Dataproc クラスタを作成しておくと、クラスタの構成を微調整し、必要な PyPI パッケージをインストールして、より高速で応答性の高いランタイムのメリットを享受できます。
 
-Use the `cluster` submission method with dedicated Dataproc clusters you or your organization manage. Use the `serverless` submission method to avoid managing a Spark cluster. The latter may be quicker for getting started, but both are valid for production.
+自分または組織が管理する専用の Dataproc クラスタでは、`cluster` 送信方法を使用します。Spark クラスタの管理を回避するには、`serverless` 送信方法を使用します。後者の方が開始が早いかもしれませんが、どちらも本番環境で有効です。
 
-**Additional setup:**
-- Create or use an existing [Cloud Storage bucket](https://cloud.google.com/storage/docs/creating-buckets)
-- Enable Dataproc APIs for your project + region
-- If using the `cluster` submission method: Create or use an existing [Dataproc cluster](https://cloud.google.com/dataproc/docs/guides/create-cluster) with the [Spark BigQuery connector initialization action](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/connectors#bigquery-connectors). (Google recommends copying the action into your own Cloud Storage bucket, rather than using the example version shown in the screenshot)
+**追加の設定:**
+- [Cloud Storage バケット](https://cloud.google.com/storage/docs/creating-buckets) を作成するか、既存のものを使用します
+- プロジェクト + リージョンで Dataproc API を有効にします
+- `cluster` 送信方法を使用する場合: [Spark BigQuery コネクタ初期化アクション](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/connectors#bigquery-connectors) を使用して、[Dataproc クラスタ](https://cloud.google.com/dataproc/docs/guides/create-cluster) を作成するか、既存のものを使用します。(Google では、スクリーンショットに示されているサンプル バージョンを使用するのではなく、アクションを独自の Cloud Storage バケットにコピーすることを推奨しています)
 
 <Lightbox src="/img/docs/building-a-dbt-project/building-models/python-models/dataproc-connector-initialization.png" title="Add the Spark BigQuery connector as an initialization action"/>
 
-The following configurations are needed to run Python models on Dataproc. You can add these to your [BigQuery profile](/docs/core/connect-data-platform/bigquery-setup#running-python-models-on-dataproc) or configure them on specific Python models:
-- `gcs_bucket`: Storage bucket to which dbt will upload your model's compiled PySpark code.
-- `dataproc_region`: GCP region in which you have enabled Dataproc (for example `us-central1`).
-- `dataproc_cluster_name`: Name of Dataproc cluster to use for running Python model (executing PySpark job). Only required if `submission_method: cluster`.
+Dataproc で Python モデルを実行するには、次の構成が必要です。これらを [BigQuery プロファイル](/docs/core/connect-data-platform/bigquery-setup#running-python-models-on-dataproc) に追加するか、特定の Python モデルで構成できます。
+- `gcs_bucket`: dbt がモデルのコンパイル済み PySpark コードをアップロードするストレージ バケット。
+- `dataproc_region`: Dataproc を有効にした GCP リージョン (例: `us-central1`)。
+- `dataproc_cluster_name`: Python モデルの実行 (PySpark ジョブの実行) に使用する Dataproc クラスタの名前。`submission_method: cluster` の場合にのみ必要です。
 
 ```python
 def model(dbt, session):
@@ -800,9 +802,9 @@ models:
       submission_method: serverless
 ```
 
-Python models running on Dataproc Serverless can be further configured in your [BigQuery profile](/docs/core/connect-data-platform/bigquery-setup#running-python-models-on-dataproc).
+Dataproc Serverless で実行される Python モデルは、[BigQuery プロファイル](/docs/core/connect-data-platform/bigquery-setup#running-python-models-on-dataproc) でさらに構成できます。
 
-Any user or service account that runs dbt Python models will need the following permissions(in addition to the required BigQuery permissions) ([docs](https://cloud.google.com/dataproc/docs/concepts/iam/iam)):
+dbt Python モデルを実行するすべてのユーザーまたはサービス アカウントには、必要な BigQuery 権限に加えて、次の権限が必要です ([ドキュメント](https://cloud.google.com/dataproc/docs/concepts/iam/iam)):
 ```
 dataproc.batches.create
 dataproc.clusters.use
@@ -815,17 +817,17 @@ storage.objects.create
 storage.objects.delete
 ```
 
-**Installing packages:** 
+**パッケージのインストール:**
 
-Installation of third-party packages on Dataproc varies depending on whether it's a [cluster](https://cloud.google.com/dataproc/docs/guides/create-cluster) or [serverless](https://cloud.google.com/dataproc-serverless/docs).  
+Dataproc へのサードパーティ パッケージのインストールは、[クラスタ](https://cloud.google.com/dataproc/docs/guides/create-cluster) か [サーバーレス](https://cloud.google.com/dataproc-serverless/docs) かによって異なります。
 
-- **Dataproc Cluster** &mdash; Google recommends installing Python packages while creating the cluster via initialization actions:  
-    - [How initialization actions are used](https://github.com/GoogleCloudDataproc/initialization-actions/blob/master/README.md#how-initialization-actions-are-used)  
-    - [Actions for installing via `pip` or `conda`](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/python)
+- **Dataproc クラスタ** - Google では、初期化アクションを介してクラスタを作成するときに Python パッケージをインストールすることを推奨しています:
+    - [初期化アクションの使用方法](https://github.com/GoogleCloudDataproc/initialization-actions/blob/master/README.md#how-initialization-actions-are-used)
+    - [`pip` または `conda` 経由でインストールするためのアクション](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/python)
 
-    You can also install packages at cluster creation time by [defining cluster properties](https://cloud.google.com/dataproc/docs/tutorials/python-configuration#image_version_20): `dataproc:pip.packages` or `dataproc:conda.packages`.  
+    [クラスタ プロパティを定義](https://cloud.google.com/dataproc/docs/tutorials/python-configuration#image_version_20): `dataproc:pip.packages` または `dataproc:conda.packages` することで、クラスタ作成時にパッケージをインストールすることもできます。
 
-- **Dataproc Serverless** &mdash; Google recommends using a [custom docker image](https://cloud.google.com/dataproc-serverless/docs/guides/custom-containers) to install thrid-party packages. The image needs to be hosted in [Google Artifact Registry](https://cloud.google.com/artifact-registry/docs). It can then be used by providing the image path in dbt profiles:
+- **Dataproc Serverless** - Google では、サードパーティ パッケージをインストールするには [カスタム Docker イメージ](https://cloud.google.com/dataproc-serverless/docs/guides/custom-containers) を使用することをおすすめしています。イメージは [Google Artifact Registry](https://cloud.google.com/artifact-registry/docs) でホストする必要があります。その後、dbt プロファイルでイメージ パスを指定することで使用できます:
     
     <File name='profiles.yml'>
     ```yml
@@ -852,12 +854,12 @@ Installation of third-party packages on Dataproc varies depending on whether it'
 
 <Lightbox src="/img/docs/building-a-dbt-project/building-models/python-models/dataproc-pip-packages.png" title="Adding packages to install via pip at cluster startup"/>
 
-**Docs:**
+**ドキュメント:**
 
-- [Dataproc overview](https://cloud.google.com/dataproc/docs/concepts/overview)
-- [Create a Dataproc cluster](https://cloud.google.com/dataproc/docs/guides/create-cluster)
-- [Create a Cloud Storage bucket](https://cloud.google.com/storage/docs/creating-buckets)
-- [PySpark DataFrame syntax](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)
+- [Dataproc の概要](https://cloud.google.com/dataproc/docs/concepts/overview)
+- [Dataproc クラスタを作成する](https://cloud.google.com/dataproc/docs/guides/create-cluster)
+- [Cloud Storage バケットを作成する](https://cloud.google.com/storage/docs/creating-buckets)
+- [PySpark DataFrame 構文](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)
 
 </TabItem>
 

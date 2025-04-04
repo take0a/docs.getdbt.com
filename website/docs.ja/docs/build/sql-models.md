@@ -1,37 +1,37 @@
 ---
-title: "SQL models"
+title: "SQL モデル"
 description: "SQL models are the building blocks of your dbt project."
 id: "sql-models"
 ---
 
-## Related reference docs
-* [Model configurations](/reference/model-configs)
-* [Model properties](/reference/model-properties)
-* [`run` command](/reference/commands/run)
-* [`ref` function](/reference/dbt-jinja-functions/ref)
+## 関連リファレンスドキュメント
+* [モデル構成](/reference/model-configs)
+* [モデル プロパティ](/reference/model-properties)
+* [`run` コマンド](/reference/commands/run)
+* [`ref` 関数](/reference/dbt-jinja-functions/ref)
 
-## Getting started
+## はじめる
 
-:::info Building your first models
+:::info 最初のモデルの構築
 
-If you're new to dbt, we recommend that you read a [quickstart guide](/guides) to build your first dbt project with models.
+dbt を初めて使用する場合は、[クイックスタート ガイド](/guides)を読んで、モデルを使用して最初の dbt プロジェクトを構築することをお勧めします。
 
 :::
 
-dbt's Python capabilities are an extension of its capabilities with SQL models. If you're new to dbt, we recommend that you read this page first, before reading: ["Python Models"](/docs/build/python-models)
+dbt の Python 機能は、SQL モデルの機能の拡張です。dbt を初めて使用する場合は、次のページを読む前に、まずこのページを読むことをお勧めします: ["Python モデル"](/docs/build/python-models)
 
 
-A SQL model is a `select` statement. Models are defined in `.sql` files (typically in your `models` directory):
-- Each `.sql` file contains one model / `select` statement
-- The model name is inherited from the filename and must match the _filename_ of a model &mdash; including case sensitivity. Any mismatched casing can prevent dbt from applying configurations correctly and may affect metadata in [dbt Explorer](/docs/collaborate/explore-projects).
-- We strongly recommend using underscores for model names, not dots. For example, use `models/my_model.sql` instead of `models/my.model.sql`.
-- Models can be nested in subdirectories within the `models` directory.
+SQL モデルは `select` ステートメントです。モデルは `.sql` ファイル (通常は `models` ディレクトリ内) で定義されます:
+- 各 `.sql` ファイルには 1 つのモデル / `select` ステートメントが含まれます
+- モデル名はファイル名から継承され、モデルの _filename_ と一致する必要があります (大文字と小文字の区別を含む)。大文字と小文字が一致しないと、dbt が構成を正しく適用できず、[dbt Explorer](/docs/collaborate/explore-projects) のメタデータに影響する可能性があります。
+- モデル名にはドットではなくアンダースコアを使用することを強くお勧めします。たとえば、`models/my.model.sql` ではなく `models/my_model.sql` を使用します。
+- モデルは `models` ディレクトリ内のサブディレクトリにネストできます。
 
-Refer to [How we style our dbt models](/best-practices/how-we-style/1-how-we-style-our-dbt-models) for details on how we recommend you name your models.
+モデルの命名方法については、[dbt モデルのスタイル設定方法](/best-practices/how-we-style/1-how-we-style-our-dbt-models) を参照してください。
 
-When you execute the [`dbt run` command](/reference/commands/run), dbt will build this model <Term id="data-warehouse" /> by wrapping it in a `create view as` or `create table as` statement.
+[`dbt run` コマンド](/reference/commands/run) を実行すると、dbt はこのモデルを `create view as` または `create table as` ステートメントでラップして <Term id="data-warehouse" /> 構築します。
 
-For example, consider this `customers` model:
+たとえば、次の `customers` モデルを考えてみましょう:
 
 <File name='models/customers.sql'>
 
@@ -63,7 +63,7 @@ left join customer_orders using (customer_id)
 
 </File>
 
-When you execute `dbt run`, dbt will build this as a _view_ named `customers` in your target schema:
+`dbt run` を実行すると、dbt はこれをターゲット スキーマ内に `customers` という名前の _view_ として構築します。
 
 ```sql
 create view dbt_alice.customers as (
@@ -93,12 +93,12 @@ create view dbt_alice.customers as (
 )
 ```
 
-Why a _view_ named `dbt_alice.customers`? By default dbt will:
-* Create models as <Term id="view">views</Term>
-* Build models in a target schema you define
-* Use your file name as the view or <Term id="table" /> name in the database
+なぜ _view_ が `dbt_alice.customers` という名前なのでしょうか? デフォルトでは、dbt は次の処理を行います:
+* モデルを <Term id="view">views</Term> として作成します
+* 定義したターゲット スキーマでモデルを構築します
+* ファイル名をデータベースのビューまたは <Term id="table" /> 名として使用します
 
-You can use _configurations_ to change any of these behaviors — more on that later.
+_configurations_ を使用してこれらの動作を変更できます。これについては後で詳しく説明します。
 
 ### FAQs
 <FAQ path="Runs/checking-logs" />
@@ -107,14 +107,16 @@ You can use _configurations_ to change any of these behaviors — more on that l
 <FAQ path="Troubleshooting/sql-errors" />
 <FAQ path="Models/sql-dialect" />
 
-## Configuring models
-Configurations are "model settings"  that can be set in your `dbt_project.yml` file, _and_ in your model file using a `config` block. Some example configurations include:
+## モデルの構成
+構成は「モデル設定」であり、`dbt_project.yml` ファイルと `config` ブロックを使用してモデル ファイルで設定できます。構成の例には次のものがあります:
 
-* Changing the <Term id="materialization" /> that a model uses &mdash; a [materialization](/docs/build/materializations) determines the SQL that dbt uses to create the model in your warehouse.
-* Build models into separate [schemas](/docs/build/custom-schemas).
-* Apply [tags](/reference/resource-configs/tags) to a model.
+* モデルが使用する <Term id="materialization" /> を変更する - [materialization](/docs/build/materializations) によって、dbt がウェアハウスにモデルを作成するために使用する SQL が決まります。
 
-Here's an example of model configuration:
+* モデルを個別の [schemas](/docs/build/custom-schemas) にビルドします。
+
+* モデルに [tags](/reference/resource-configs/tags) を適用します。
+
+モデル構成の例を次に示します:
 
 <File name='dbt_project.yml'>
 
@@ -151,17 +153,17 @@ with customer_orders as ...
 
 </File>
 
-It is important to note that configurations are applied hierarchically — a configuration applied to a subdirectory will override any general configurations.
+設定は階層的に適用されることに注意してください。サブディレクトリに適用された設定は、一般的な設定を上書きします。
 
-You can learn more about configurations in the [reference docs](/reference/model-configs).
+設定の詳細については、[リファレンス ドキュメント](/reference/model-configs) を参照してください。
 
 ### FAQs
 <FAQ path="Models/available-materializations" />
 <FAQ path="Models/available-configurations" />
 
 
-## Building dependencies between models
-You can build dependencies between models by using the [`ref` function](/reference/dbt-jinja-functions/ref) in place of table names in a query. Use the name of another model as the argument for `ref`.
+## モデル間の依存関係の構築
+クエリ内のテーブル名の代わりに [`ref` 関数](/reference/dbt-jinja-functions/ref) を使用することで、モデル間の依存関係を構築できます。`ref` の引数として別のモデルの名前を使用します。
 
 <Tabs
   defaultValue="model"
@@ -250,17 +252,17 @@ create view analytics.customers as (
 </Tabs>
 
 
-dbt uses the `ref` function to:
-* Determine the order to run the models by creating a dependent acyclic graph (DAG).
+dbt は `ref` 関数を使用して次の操作を行います:
+* 従属非巡回グラフ (DAG) を作成して、モデルを実行する順序を決定します。
 <Lightbox src="/img/dbt-dag.png" title="The DAG for our dbt project" />
 
-* Manage separate environments &mdash; dbt will replace the model specified in the `ref` function with the database name for the <Term id="table" /> (or view). Importantly, this is environment-aware &mdash; if you're running dbt with a target schema named `dbt_alice`, it will select from an upstream table in the same schema. Check out the tabs above to see this in action.
+* 個別の環境を管理します - dbt は、`ref` 関数で指定されたモデルを <Term id="table" /> (またはビュー) のデータベース名に置き換えます。重要なのは、これが環境対応であることです - `dbt_alice` という名前のターゲット スキーマで dbt を実行している場合、同じスキーマ内の上流テーブルから選択されます。上のタブをチェックして、これが実際にどのように機能するかを確認してください。
 
-Additionally, the `ref` function encourages you to write modular transformations, so that you can re-use models, and reduce repeated code.
+さらに、`ref` 関数は、モデルを再利用して繰り返しコードを削減できるように、モジュール変換を記述することを推奨します。
 
-## Testing and documenting models
+## モデルのテストと文書化
 
-You can also document and test models &mdash; skip ahead to the section on [testing](/docs/build/data-tests) and [documentation](/docs/build/documentation) for more information.
+モデルをドキュメント化してテストすることもできます。詳細については、[テスト](/docs/build/data-tests)と[ドキュメント](/docs/build/documentation)のセクションに進んでください。
 
 ## Additional FAQs
 <FAQ path="Project/example-projects" alt_header="Are there any example dbt models?" />
