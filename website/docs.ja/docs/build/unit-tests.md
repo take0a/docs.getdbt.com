@@ -1,5 +1,5 @@
 ---
-title: "Unit tests"
+title: "ユニットテスト"
 sidebar_label: "Unit tests"
 description: "Implement unit tests to validate your dbt code."
 search_weight: "heavy"
@@ -10,53 +10,53 @@ keywords:
 
 <VersionCallout version="1.8" />
 
-Historically, dbt's test coverage was confined to [“data” tests](/docs/build/data-tests), assessing the quality of input data or resulting datasets' structure. However, these tests could only be executed _after_ building a model. 
+これまで、dbt のテスト範囲は [“データ” テスト](/docs/build/data-tests) に限定されており、入力データの品質や結果のデータセットの構造を評価していました。ただし、これらのテストはモデルの構築後にしか実行できませんでした。
 
-Starting in dbt Core v1.8, we have introduced an additional type of test to dbt - unit tests. In software programming, unit tests validate small portions of your functional code, and they work much the same way here. Unit tests allow you to validate your SQL modeling logic on a small set of static inputs _before_ you materialize your full model in production. Unit tests enable test-driven development, benefiting developer efficiency and code reliability. 
+dbt Core v1.8 以降、dbt にユニット テストという追加のテスト タイプが導入されました。ソフトウェア プログラミングでは、ユニット テストは機能コードの小さな部分を検証しますが、ここでもほぼ同じように機能します。ユニット テストを使用すると、完全なモデルを本番環境で実現する前に、静的入力の小さなセットで SQL モデリング ロジックを検証できます。ユニット テストにより、テスト駆動開発が可能になり、開発者の効率とコードの信頼性が向上します。
 
-## Before you begin
+## 始める前に
 
-- We currently only support unit testing SQL models.
-- We currently only support adding unit tests to models in your _current_ project.
-- We currently _don't_ support unit testing models that use the [`materialized view`](/docs/build/materializations#materialized-view) materialization.
-- We currently _don't_ support unit testing models that use recursive SQL.
-- We currently _don't_ support unit testing models that use introspective queries.
-- If your model has multiple versions, by default the unit test will run on *all* versions of your model. Read [unit testing versioned models](/reference/resource-properties/unit-testing-versions) for more information.
-- Unit tests must be defined in a YML file in your [`models/` directory](/reference/project-configs/model-paths).
-- Table names must be aliased in order to unit test `join` logic.
-- Include all [`ref`](/reference/dbt-jinja-functions/ref) or [`source`](/reference/dbt-jinja-functions/source) model references in the unit test configuration as `input`s to avoid "node not found" errors during compilation.
+- 現在、SQL モデルの単体テストのみをサポートしています。
+- 現在、_現在の_プロジェクトのモデルへの単体テストの追加のみをサポートしています。
+- 現在、[`マテリアライズド ビュー`](/docs/build/materializations#materialized-view) マテリアライゼーションを使用するモデルの単体テストはサポートしていません。
+- 現在、再帰 SQL を使用するモデルの単体テストはサポートしていません。
+- 現在、イントロスペクト クエリを使用するモデルの単体テストはサポートしていません。
+- モデルに複数のバージョンがある場合、デフォルトでは、モデルの *すべての* バージョンで単体テストが実行されます。詳細については、[バージョン管理されたモデルの単体テスト](/reference/resource-properties/unit-testing-versions) を参照してください。
+- 単体テストは、[`models/` ディレクトリ](/reference/project-configs/model-paths) の YML ファイルで定義する必要があります。
+- `join` ロジックを単体テストするには、テーブル名にエイリアスを付ける必要があります。
+- コンパイル中に「ノードが見つかりません」というエラーが発生しないように、ユニット テスト構成にすべての [`ref`](/reference/dbt-jinja-functions/ref) または [`source`](/reference/dbt-jinja-functions/source) モデル参照を `input` として含めます。
 
-#### Adapter-specific caveats
-- You must specify all fields in a BigQuery `STRUCT` in a unit test. You cannot use only a subset of fields in a `STRUCT`.
-- Redshift customers need to be aware of a [limitation when building unit tests](/reference/resource-configs/redshift-configs#unit-test-limitations) that requires a workaround.
+#### アダプタ固有の注意事項
+- ユニット テストでは、BigQuery の `STRUCT` 内のすべてのフィールドを指定する必要があります。`STRUCT` 内のフィールドのサブセットのみを使用することはできません。
+- Redshift のお客様は、回避策が必要な [ユニット テストを構築する際の制限](/reference/resource-configs/redshift-configs#unit-test-limitations) に注意する必要があります。
 
-Read the [reference doc](/reference/resource-properties/unit-tests) for more details about formatting your unit tests.
+ユニット テストのフォーマットの詳細については、[リファレンス ドキュメント](/reference/resource-properties/unit-tests) をお読みください。
 
-### When to add a unit test to your model
+### モデルにユニットテストを追加するタイミング
 
-You should unit test a model:
-- When your SQL contains complex logic:
+モデルのユニットテストを行う必要があります:
+- SQL に複雑なロジックが含まれている場合:
     - Regex
     - Date math
     - Window functions
     - `case when` statements when there are many `when`s
     - Truncation
-- When you're writing custom logic to process input data, similar to creating a function.
-- We don't recommend conducting unit testing for functions like `min()` since these functions are tested extensively by the warehouse. If an unexpected issue arises, it's more likely a result of issues in the underlying data rather than the function itself. Therefore, fixture data in the unit test won't provide valuable information.
-- Logic for which you had bugs reported before.
-- Edge cases not yet seen in your actual data that you want to handle.
-- Prior to refactoring the transformation logic (especially if the refactor is significant).
-- Models with high "criticality" (public, contracted models or models directly upstream of an exposure).
+- 関数の作成と同様に、入力データを処理するためのカスタム ロジックを記述する場合。
+- `min()` などの関数はウェアハウスによって広範囲にテストされているため、これらの関数の単体テストを実施することはお勧めしません。予期しない問題が発生した場合、関数自体の問題ではなく、基礎となるデータの問題が原因である可能性が高くなります。したがって、単体テストのフィクスチャ データは貴重な情報を提供しません。
+- 以前にバグが報告されたロジック。
+- 処理したい実際のデータではまだ見られないエッジ ケース。
+- 変換ロジックをリファクタリングする前 (特にリファクタリングが重要な場合)。
+- 「重要度」の高いモデル (パブリック、契約モデル、またはエクスポージャーの直接上流のモデル)。
 
-### When to run unit tests
+### ユニットテストを実行するタイミング
 
-dbt Labs strongly recommends only running unit tests in development or CI environments. Since the inputs of the unit tests are static, there's no need to use additional compute cycles running them in production. Use them in development for a test-driven approach and CI to ensure changes don't break them. 
+dbt Labs では、開発環境または CI 環境でのみユニット テストを実行することを強く推奨しています。ユニット テストの入力は静的であるため、本番環境で実行する際に追加のコンピューティング サイクルを使用する必要はありません。開発環境ではテスト駆動型アプローチに使用し、CI では変更によってユニット テストが壊れないようにします。
 
-Use the [resource type](/reference/global-configs/resource-type) flag `--exclude-resource-type` or the `DBT_EXCLUDE_RESOURCE_TYPES` environment variable to exclude unit tests from your production builds and save compute. 
+[リソース タイプ](/reference/global-configs/resource-type) フラグ `--exclude-resource-type` または `DBT_EXCLUDE_RESOURCE_TYPES` 環境変数を使用して、本番ビルドからユニット テストを除外し、コンピューティングを節約します。
 
-## Unit testing a model
+## モデルのユニットテスト
 
-This example creates a new `dim_customers` model with a field `is_valid_email_address` that calculates whether or not the customer’s email is valid: 
+この例では、顧客の電子メールが有効かどうかを計算するフィールド `is_valid_email_address` を持つ新しい `dim_customers` モデルを作成します:
 
 <file name='dim_customers.sql'>
 
@@ -96,7 +96,7 @@ select * from check_valid_emails
 ```
 </file>
 
-The logic posed in this example can be challenging to validate. You can add a unit test to this model to ensure the `is_valid_email_address` logic captures all known edge cases: emails without `.`, emails without `@`, and emails from invalid domains.
+この例で提示されているロジックは、検証が難しい場合があります。このモデルに単体テストを追加して、`is_valid_email_address` ロジックが、`.` のないメール、`@` のないメール、無効なドメインからのメールなど、すべての既知のエッジ ケースをキャプチャすることを確認できます。
 
 <file name='dbt_project.yml'> 
 
@@ -126,15 +126,15 @@ unit_tests:
 ```
 </file>
 
-The previous example defines the mock data using the inline `dict` format, but you can also use `csv` or `sql` either inline or in a separate fixture file. Store your fixture files in a `fixtures` subdirectory in any of your [test paths](/reference/project-configs/test-paths). For example, `tests/fixtures/my_unit_test_fixture.sql`. 
+前の例では、インライン `dict` 形式を使用してモック データを定義していますが、インラインまたは別のフィクスチャ ファイルで `csv` または `sql` を使用することもできます。フィクスチャ ファイルを、任意の [テスト パス](/reference/project-configs/test-paths) の `fixtures` サブディレクトリに保存します。たとえば、`tests/fixtures/my_unit_test_fixture.sql` です。
 
-When using the `dict` or `csv` format, you only have to define the mock data for the columns relevant to you. This enables you to write succinct and _specific_ unit tests.
+`dict` または `csv` 形式を使用する場合は、関連する列のモック データのみを定義する必要があります。これにより、簡潔で具体的な単体テストを作成できます。
 
 :::note
 
-The direct parents of the model that you’re unit testing (in this example, `stg_customers` and `top_level_email_domains`) need to exist in the warehouse before you can execute the unit test.
+単体テストを実行する前に、単体テストするモデルの直接の親 (この例では、`stg_customers` と `top_level_email_domains`) がウェアハウス内に存在している必要があります。
 
-Use the [`--empty`](/reference/commands/build#the---empty-flag) flag to build an empty version of the models to save warehouse spend. 
+ウェアハウスの費用を節約するために、[`--empty`](/reference/commands/build#the---empty-flag) フラグを使用してモデルの空のバージョンを構築します。
 
 ```bash
 
@@ -142,15 +142,15 @@ dbt run --select "stg_customers top_level_email_domains" --empty
 
 ```
 
-Alternatively, use `dbt build` to, in lineage order:
+あるいは、`dbt build` を使用して、系統順に次の操作を実行します。
 
-- Run the unit tests on your model.
-- Materialize your model in the warehouse.
-- Run the data tests on your model.
+- モデルでユニット テストを実行します。
+- ウェアハウスでモデルをマテリアライズします。
+- モデルでデータ テストを実行します。
 
 :::
 
-Now you’re ready to run this unit test. You have a couple of options for commands depending on how specific you want to be: 
+これで、このユニット テストを実行する準備が整いました。どの程度具体的にするかに応じて、コマンドにはいくつかのオプションがあります:
 
 - `dbt test --select dim_customers` runs _all_ of the tests on `dim_customers`.
 - `dbt test --select "dim_customers,test_type:unit"` runs all of the _unit_ tests on `dim_customers`.
@@ -190,9 +190,9 @@ actual differs from expected:
 
 ```
 
-The clever regex statement wasn’t as clever as initially thought, as the model incorrectly flagged `cool@example.com` as an invalid email address.
+巧妙な正規表現ステートメントは当初考えていたほど巧妙ではなく、モデルは誤って「cool@example.com」を無効なメールアドレスとしてフラグ付けしました。
 
-Updating the regex logic to `'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'` (those pesky escape characters) and rerunning the unit test solves the problem:
+正規表現ロジックを `'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'`（厄介なエスケープ文字）に更新し、ユニットテストを再実行すると、問題は解決します。
 
 ```shell
 
@@ -214,25 +214,25 @@ dbt test --select test_is_valid_email_address
 
 ```
 
-Your model is now ready for production! Adding this unit test helped catch an issue with the SQL logic _before_ you materialized `dim_customers` in your warehouse and will better ensure the reliability of this model in the future. 
+これで、モデルを本番環境で使用する準備ができました。このユニット テストを追加することで、ウェアハウスで `dim_customers` をマテリアライズする _前に_ SQL ロジックの問題を検出でき、将来的にこのモデルの信頼性がさらに高まります。
 
-## Unit testing incremental models
+## 増分モデルのユニットテスト
 
-When configuring your unit test, you can override the output of macros, vars, or environment variables. This enables you to unit test your incremental models in "full refresh" and "incremental" modes.
+ユニット テストを構成するときに、マクロ、変数、または環境変数の出力をオーバーライドできます。これにより、増分モデルを「フル リフレッシュ」モードと「増分」モードでユニット テストできるようになります。
 
 :::note
-Incremental models need to exist in the database first before running unit tests or doing a `dbt build`. Use the [`--empty` flag](/reference/commands/build#the---empty-flag) to build an empty version of the models to save warehouse spend. You can also optionally select only your incremental models using the [`--select` flag](/reference/node-selection/syntax#shorthand).
+ユニット テストを実行したり、`dbt build` を実行したりする前に、まず増分モデルがデータベース内に存在している必要があります。ウェアハウスのコストを節約するために、[`--empty` フラグ](/reference/commands/build#the---empty-flag) を使用してモデルの空バージョンを構築します。また、必要に応じて、[`--select` フラグ](/reference/node-selection/syntax#shorthand) を使用して増分モデルのみを選択することもできます。
 
   ```shell
   dbt run --select "config.materialized:incremental" --empty
   ```
 
-  After running the command, you can then perform a regular `dbt build` for that model and then run your unit test.
+  コマンドを実行した後、そのモデルに対して通常の `dbt build` を実行し、ユニット テストを実行できます。
 :::
 
-When testing an incremental model, the expected output is the __result of the materialization__ (what will be merged/inserted), not the resulting model itself (what the final table will look like after the merge/insert).
+増分モデルをテストする場合、期待される出力は、結果のモデル自体 (マージ/挿入後の最終テーブルがどのようになるか) ではなく、__マテリアライゼーションの結果__ (マージ/挿入されるもの) です。
 
-For example, say you have an incremental model in your project:
+たとえば、プロジェクトに増分モデルがあるとします:
 
 <File name='my_incremental_model.sql'>
 
@@ -253,7 +253,7 @@ where event_time > (select max(event_time) from {{ this }})
 
 </File>
 
-You can define unit tests on `my_incremental_model` to ensure your incremental logic is working as expected:
+増分ロジックが期待どおりに動作していることを保証するために、`my_incremental_model` で単体テストを定義できます:
 
 ```yml
 
@@ -296,11 +296,11 @@ unit_tests:
 
 ```
 
-There is currently no way to unit test whether the dbt framework inserted/merged the records into your existing model correctly, but [we're investigating support for this in the future](https://github.com/dbt-labs/dbt-core/issues/8664).
+現在、dbt フレームワークが既存のモデルにレコードを正しく挿入/マージしたかどうかを単体テストする方法はありませんが、[将来的にこれをサポートすることを検討しています](https://github.com/dbt-labs/dbt-core/issues/8664)。
 
-## Unit testing a model that depends on ephemeral model(s)
+## 一時的なモデルに依存するモデルのユニットテスト
 
-If you want to unit test a model that depends on an ephemeral model, you must use `format: sql` for that input.
+一時的なモデルに依存するモデルを単体テストする場合は、その入力に `format: sql` を使用する必要があります。
 
 ```yml
 unit_tests:
@@ -317,22 +317,22 @@ unit_tests:
 ```
 
 
-## Unit test exit codes
+## ユニットテスト終了コード
 
-Unit test successes and failures are represented by two exit codes:
-- Pass (0)
-- Fail (1)
+ユニット テストの成功と失敗は、次の 2 つの終了コードで表されます。
+- 合格 (0)
+- 不合格 (1)
 
-Exit codes differ from data test success and failure outputs because they don't directly reflect failing data tests. Data tests are queries designed to check specific conditions in your data, and they return one row per failed test case (for example, the number of values with duplicates for the `unique` test). dbt reports the number of failing records as failures. Whereas, each unit test represents one 'test case', so results are always 0 (pass) or 1 (fail) regardless of how many records failed within that test case.
+終了コードは、失敗したデータ テストを直接反映しないため、データ テストの成功と失敗の出力とは異なります。データ テストは、データ内の特定の条件を確認するように設計されたクエリで、失敗したテスト ケースごとに 1 行を返します (たとえば、`unique` テストの重複する値の数)。dbt は、失敗したレコードの数を失敗として報告します。一方、各ユニット テストは 1 つの「テスト ケース」を表すため、そのテスト ケース内で失敗したレコードの数に関係なく、結果は常に 0 (合格) または 1 (不合格) になります。
 
-Learn about [exit codes](/reference/exit-codes) for more information.
+詳細については、[終了コード](/reference/exit-codes) を参照してください。
 
 
-## Additional resources
+## 追加リソース
 
-- [Unit testing reference page](/reference/resource-properties/unit-tests)
-- [Supported data formats for mock data](/reference/resource-properties/data-formats)
-- [Unit testing versioned models](/reference/resource-properties/unit-testing-versions)
-- [Unit test inputs](/reference/resource-properties/unit-test-input)
-- [Unit test overrides](/reference/resource-properties/unit-test-overrides)
-- [Platform-specific data types](/reference/resource-properties/data-types)
+- [ユニット テストのリファレンス ページ](/reference/resource-properties/unit-tests)
+- [モック データでサポートされているデータ形式](/reference/resource-properties/data-formats)
+- [ユニット テストのバージョン管理されたモデル](/reference/resource-properties/unit-testing-versions)
+- [ユニット テストの入力](/reference/resource-properties/unit-test-input)
+- [ユニット テストのオーバーライド](/reference/resource-properties/unit-test-overrides)
+- [プラットフォーム固有のデータ型](/reference/resource-properties/data-types)

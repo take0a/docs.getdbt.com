@@ -1,7 +1,7 @@
-Before moving on from building your first models, make a change and see how it affects your results:
+最初のモデルの構築から先に進む前に、変更を加えて結果にどのような影響があるかを確認します。
 
-* Write some bad SQL to cause an error — can you debug the error?
-* Run only a single model at a time. For more information, see [Syntax overview](/reference/node-selection/syntax).
-* Group your models with a `stg_` prefix into a `staging` subdirectory. For example,  `models/staging/stg_customers.sql`.
-  * Configure your `staging` models to be views.
-  * Run only the `staging` models.
+* エラーを引き起こす不適切な SQL を記述します。エラーをデバッグできますか?
+* 一度に 1 つのモデルのみを実行します。詳細については、[構文の概要](/reference/node-selection/syntax) を参照してください。
+* `stg_` プレフィックスを持つモデルを `staging` サブディレクトリにグループ化します。たとえば、`models/staging/stg_customers.sql` です。
+  * `staging` モデルをビューとして構成します。
+  * `staging` モデルのみを実行します。

@@ -1,5 +1,5 @@
 ---
-title: Quickstart for dbt Core using DuckDB
+title: DuckDB を使用した dbt Core のクイックスタート
 id: duckdb
 description: "Learn to use dbt Core using DuckDB."
 hoverSnippet: "Learn to use dbt Core using DuckDB."
@@ -12,44 +12,44 @@ tags: ['dbt Core','Quickstart']
 
 <div style={{maxWidth: '900px'}}>
 
-## Introduction
+## はじめに
 
-In this quickstart guide, you'll learn how to use dbt Core with DuckDB, enabling you to get set up quickly and efficiently. [DuckDB](https://duckdb.org/) is an open-source database management system which is designed for analytical workloads. It is designed to provide fast and easy access to large datasets, making it well-suited for data analytics tasks. 
-
-
-This guide will demonstrate how to: 
-
-- [Create a virtual development environment](/docs/core/pip-install#using-virtual-environments) using a template provided by dbt Labs.
-- We will set up a fully functional dbt environment with an operational and executable project. The codespace automatically connects to the DuckDB database and loads a year's worth of data from our fictional Jaffle Shop café, which sells food and beverages in several US cities.
-- Run through the steps outlined in the `jaffle_shop_duck_db` repository, but if you want to dig into the underlying code further, refer to the [README](https://github.com/dbt-labs/jaffle_shop_duckdb/blob/duckdb/README.md) for the Jaffle Shop template.
-- Run any dbt command from the environment’s terminal. 
-- Generate a larger dataset for the Jaffle Shop café (for example, five years of data instead of just one).
-
-You can learn more through high-quality [dbt Learn courses and workshops](https://learn.getdbt.com). 
+このクイックスタート ガイドでは、dbt Core を DuckDB とともに使用して、迅速かつ効率的にセットアップする方法を学びます。[DuckDB](https://duckdb.org/) は、分析ワークロード向けに設計されたオープンソースのデータベース管理システムです。大規模なデータセットに迅速かつ簡単にアクセスできるように設計されているため、データ分析タスクに最適です。
 
 
-### Related content
+このガイドでは、次の方法を説明します。
+
+- dbt Labs が提供するテンプレートを使用して、[仮想開発環境を作成する](/docs/core/pip-install#using-virtual-environments)。
+- 運用可能で実行可能なプロジェクトを使用して、完全に機能する dbt 環境をセットアップします。コードスペースは DuckDB データベースに自動的に接続し、米国の複数の都市で食品や飲料を販売している架空のカフェ Jaffle Shop から 1 年分のデータを読み込みます。
+- `jaffle_shop_duck_db` リポジトリで説明されている手順を実行しますが、基礎となるコードをさらに詳しく調べる場合は、Jaffle Shop テンプレートの [README](https://github.com/dbt-labs/jaffle_shop_duckdb/blob/duckdb/README.md) を参照してください。
+- 環境のターミナルから任意の dbt コマンドを実行します。
+- Jaffle Shop カフェ用に、より大きなデータセットを生成します (たとえば、1 年分ではなく 5 年分のデータ)。
+
+高品質の [dbt Learn コースとワークショップ](https://learn.getdbt.com) を通じて、さらに詳しく学ぶことができます。
 
 
-- [DuckDB setup](/docs/core/connect-data-platform/duckdb-setup)
-- [Create a GitHub repository](/guides/manual-install?step=2)
-- [Build your first models](/guides/manual-install?step=3)
-- [Test and document your project](/guides/manual-install?step=4)
+### 関連コンテンツ
 
 
-## Prerequisites
+- [DuckDB のセットアップ](/docs/core/connect-data-platform/duckdb-setup)
+- [GitHub リポジトリの作成](/guides/manual-install?step=2)
+- [最初のモデルの構築](/guides/manual-install?step=3)
+- [プロジェクトのテストとドキュメント化](/guides/manual-install?step=4)
 
-- When using DuckDB with dbt Core, you'll need to use the dbt command-line interface (CLI). Currently, DuckDB is not supported in dbt Cloud.
-- It's important that you know some basics of the terminal. In particular, you should understand `cd`, `ls` , and `pwd` to navigate through the directory structure of your computer easily.
-- You have a [GitHub account](https://github.com/join).
 
-## Set up DuckDB for dbt Core
+## 前提条件
 
-This section will provide a step-by-step guide for setting up DuckDB for use in local (Mac and Windows) environments and web browsers.
+- DuckDB を dbt Core で使用する場合は、dbt コマンドライン インターフェース (CLI) を使用する必要があります。現在、DuckDB は dbt Cloud ではサポートされていません。
+- ターミナルの基本を理解しておくことが重要です。特に、コンピューターのディレクトリ構造を簡単にナビゲートするには、`cd`、`ls`、`pwd` を理解しておく必要があります。
+- [GitHub アカウント](https://github.com/join) を持っていること。
 
-In the repository, there's a [`requirements.txt`](https://github.com/dbt-labs/jaffle_shop_duckdb/blob/duckdb/requirements.txt) file which is used to install dbt Core, DuckDB, and all other necessary dependencies. You can check this file to see what will be installed on your machine. It's typically located in the root directory of your project alongside other key files like `dbt_project.yml`. Otherwise, we will show you how in later steps.
+## dbt Core 用に DuckDB を設定する
 
-Below is an example of the `requirements.txt` file alongside other key files like `dbt_project.yml`:
+このセクションでは、ローカル (Mac および Windows) 環境と Web ブラウザーで使用するために DuckDB を設定するための手順を順を追って説明します。
+
+リポジトリには、dbt Core、DuckDB、およびその他の必要な依存関係をインストールするために使用される [`requirements.txt`](https://github.com/dbt-labs/jaffle_shop_duckdb/blob/duckdb/requirements.txt) ファイルがあります。このファイルを確認すると、マシンにインストールされる内容を確認できます。通常、このファイルは、`dbt_project.yml` などの他の重要なファイルとともに、プロジェクトのルート ディレクトリにあります。それ以外の場合は、後の手順でその方法を説明します。
+
+以下は、`dbt_project.yml` などの他の重要なファイルとともに、`requirements.txt` ファイルの例です:
 
 
 ```shell
@@ -64,13 +64,13 @@ Below is an example of the `requirements.txt` file alongside other key files lik
 
 ```
 
-For more information, refer to the [DuckDB setup](/docs/core/connect-data-platform/duckdb-setup).
+詳細については、[DuckDB セットアップ](/docs/core/connect-data-platform/duckdb-setup)を参照してください。
 
 <Tabs>
   <TabItem value="local" label="Local">
 
 
-1. First, [clone](https://git-scm.com/docs/git-clone) the Jaffle Shop git repository by running the following command in your terminal:
+1. まず、ターミナルで次のコマンドを実行して、Jaffle Shop の git リポジトリを [クローン](https://git-scm.com/docs/git-clone) します:
 
 
 
@@ -79,7 +79,7 @@ For more information, refer to the [DuckDB setup](/docs/core/connect-data-platfo
 
     ```
 
-2. Change into the docs-duckdb directory from the command line:
+2. コマンドラインから docs-duckdb ディレクトリに移動します:
 
     ```shell
 
@@ -88,7 +88,7 @@ For more information, refer to the [DuckDB setup](/docs/core/connect-data-platfo
     ```
 
 
-3. Install dbt Core and DuckDB in a virtual environment.
+3. 仮想環境に dbt Core と DuckDB をインストールします。
 
     <Expandable alt_header="Example for Mac" >
 
@@ -131,19 +131,19 @@ For more information, refer to the [DuckDB setup](/docs/core/connect-data-platfo
     </Expandable>
 
 
-4. Ensure your profile is setup correctly from the command line by running the following [dbt commands](/reference/dbt-commands).
+4. 次の [dbt コマンド](/reference/dbt-commands) を実行して、コマンド ラインからプロファイルが正しく設定されていることを確認します。
 
 
-    - [dbt compile](/reference/commands/compile) &mdash; generates executable SQL from your project source files
-    - [dbt run](https://docs.getdbt.com/reference/commands/run) &mdash; compiles and runs your project
-    - [dbt test](https://docs.getdbt.com/reference/commands/test) &mdash; compiles and tests your project
-    - [dbt build](https://docs.getdbt.com/reference/commands/build) &mdash; compiles, runs, and tests your project
-    - [dbt docs generate](/reference/commands/cmd-docs#dbt-docs-generate) &mdash; generates your project's documentation.
-    - [dbt docs serve](/reference/commands/cmd-docs#dbt-docs-serve) &mdash; starts a webserver on port 8080 to serve your documentation locally and opens the documentation site in your default browser.
+    - [dbt compile](/reference/commands/compile) &mdash; プロジェクトのソースファイルから実行可能なSQLを生成します
+    - [dbt run](https://docs.getdbt.com/reference/commands/run) &mdash; プロジェクトをコンパイルして実行する
+    - [dbt test](https://docs.getdbt.com/reference/commands/test) &mdash; プロジェクトをコンパイルしてテストします
+    - [dbt build](https://docs.getdbt.com/reference/commands/build) &mdash; プロジェクトをコンパイル、実行、テストします
+    - [dbt docs generate](/reference/commands/cmd-docs#dbt-docs-generate) &mdash; プロジェクトのドキュメントを生成します。
+    - [dbt docs serve](/reference/commands/cmd-docs#dbt-docs-serve) &mdash; ポート 8080 で Web サーバーを起動してドキュメントをローカルで提供し、デフォルトのブラウザーでドキュメント サイトを開きます。
 
-For complete details, refer to the [dbt command reference](/reference/dbt-commands).
+詳細については、[dbt コマンド リファレンス](/reference/dbt-commands) を参照してください。
 
-Here's what a successful output will look like:
+成功した場合の出力は次のようになります:
 
 ```jinja
 
@@ -168,15 +168,15 @@ Here's what a successful output will look like:
 15:10:15  Done. PASS=28 WARN=0 ERROR=0 SKIP=0 TOTAL=28
 
 ```
-To query data, some useful commands you can run from the command line: 
+データをクエリするには、コマンドラインから実行できる便利なコマンドがいくつかあります:
 
-- `dbt show --select "raw_orders"` &mdash; run a query against the data warehouse and preview the results in the terminal.
-- [`dbt source`](/reference/commands/source) &mdash; provides subcommands such as [`dbt source freshness`](/reference/commands/source#dbt-source-freshness) that are useful when working with source data. 
-   - `dbt source freshness` &mdash; checks the freshness (how up to date) a specific source table is.
+- `dbt show --select "raw_orders"` - データ ウェアハウスに対してクエリを実行し、ターミナルで結果をプレビューします。
+- [`dbt source`](/reference/commands/source) - ソース データの操作時に便利な [`dbt source freshness`](/reference/commands/source#dbt-source-freshness) などのサブコマンドを提供します。
+    - `dbt source freshness` - 特定のソース テーブルの鮮度 (最新度) を確認します。
 
 :::note
 
-The steps will fail if you decide to run this project in your data warehouse (outside of this DuckDB demo). You will need to reconfigure the project files for your warehouse. Definitely consider this if you are using a community-contributed adapter.
+このプロジェクトをデータ ウェアハウス (この DuckDB デモ以外) で実行することにした場合、手順は失敗します。ウェアハウス用にプロジェクト ファイルを再構成する必要があります。コミュニティ提供のアダプターを使用している場合は、必ずこれを考慮してください。
 
 :::
 
@@ -191,9 +191,9 @@ The steps will fail if you decide to run this project in your data warehouse (ou
 
     ```
 
-    This is a known issue in DuckDB. Try disconnecting from any sessions that are locking the database. If you are using DBeaver, this means shutting down DBeaver (disconnecting doesn't always work).
+    これは DuckDB の既知の問題です。データベースをロックしているセッションから切断してみてください。DBeaver を使用している場合は、DBeaver をシャットダウンする必要があります (切断が常に機能するとは限りません)。
 
-    As a last resort, deleting the database file will get you back in action (_but_ you will lose all your data).
+    最後の手段として、データベース ファイルを削除すると、再び動作できるようになります (ただし、すべてのデータが失われます)。
 
     </Expandable>
 
@@ -202,30 +202,30 @@ The steps will fail if you decide to run this project in your data warehouse (ou
  
   <TabItem value="web" label="Web browser">
 
-1. Go to the `jaffle-shop-template` [repository](https://github.com/dbt-labs/jaffle_shop_duckdb) after you log in to your GitHub account. 
-1. Click **Use this template** at the top of the page and choose **Create new repository**.
-1. Click **Create repository from template** when you’re done setting the options for your new repository.
-1. Click **Code** (at the top of the new repository’s page). Under the **Codespaces** tab,  choose **Create codespace on main**. Depending on how you've configured your computer's settings, this either opens a new browser tab with the Codespace development environment with VSCode running in it or opens a new VSCode window with the codespace in it. 
-1. Wait for the codespace to finish building by waiting for the `postCreateCommand` command to complete; this can take several minutes:
+1. GitHub アカウントにログインした後、`jaffle-shop-template` [リポジトリ](https://github.com/dbt-labs/jaffle_shop_duckdb) に移動します。
+1. ページ上部の **Use this template** をクリックし、**Create new repository** を選択します。
+1. 新しいリポジトリのオプションの設定が完了したら、**Create repository from template** をクリックします。
+1. **Code** をクリックします (新しいリポジトリのページ上部)。**Codespaces** タブで、**Create codespace on main** を選択します。コンピューターの設定に応じて、VSCode が実行されているコードスペース開発環境の新しいブラウザー タブが開くか、コードスペースを含む新しい VSCode ウィンドウが開きます。
+1. `postCreateCommand` コマンドが完了するまで待機して、コードスペースのビルドが完了するまで待機します。これには数分かかる場合があります。
 
     <Lightbox src="/img/codespace-quickstart/postCreateCommand.png" title="Wait for postCreateCommand to complete" />
 
-    When this command completes, you can start using the codespace development environment. The terminal the command ran in will close and you will get a prompt in a brand new terminal. 
+    このコマンドが完了すると、コードスペース開発環境の使用を開始できます。コマンドを実行したターミナルは閉じられ、新しいターミナルにプロンプ​​トが表示されます。
 
-1. At the terminal's prompt, you can execute any dbt command you want. For example:
+1. ターミナルのプロンプトで、任意の dbt コマンドを実行できます。例:
 
     ```shell
     /workspaces/test (main) $ dbt build
     ```
 
-    You can also use the [duckcli](https://duckdb.org/docs/api/cli/overview.html) to write SQL against the warehouse from the command line or build reports in the [Evidence](https://evidence.dev/) project provided in the `reports` directory.
+    また、[duckcli](https://duckdb.org/docs/api/cli/overview.html) を使用して、コマンドラインからウェアハウスに対して SQL を記述したり、`reports` ディレクトリに用意されている [Evidence](https://evidence.dev/) プロジェクトでレポートを作成したりすることもできます。
     
-    For complete information, refer to the [dbt command reference](https://docs.getdbt.com/reference/dbt-commands). Common commands are:
+    詳細については、[dbt コマンド リファレンス](https://docs.getdbt.com/reference/dbt-commands) を参照してください。一般的なコマンドは次のとおりです。
     
-    - [dbt compile](/reference/commands/compile) &mdash; generates executable SQL from your project source files
-    - [dbt run](https://docs.getdbt.com/reference/commands/run) &mdash; compiles and runs your project
-    - [dbt test](https://docs.getdbt.com/reference/commands/test) &mdash; compiles and tests your project
-    - [dbt build](https://docs.getdbt.com/reference/commands/build) &mdash; compiles, runs, and tests your project
+    - [dbt compile](/reference/commands/compile) &mdash; プロジェクトのソースファイルから実行可能なSQLを生成します
+    - [dbt run](https://docs.getdbt.com/reference/commands/run) &mdash; プロジェクトをコンパイルして実行する
+    - [dbt test](https://docs.getdbt.com/reference/commands/test) &mdash; プロジェクトをコンパイルしてテストします
+    - [dbt build](https://docs.getdbt.com/reference/commands/build) &mdash; プロジェクトをコンパイル、実行、テストします
 
 
   </TabItem>
@@ -238,48 +238,48 @@ The steps will fail if you decide to run this project in your data warehouse (ou
 
 
 
-## Generate a larger data set
+## より大きなデータセットを生成する
 
-If you'd like to work with a larger selection of Jaffle Shop data, you can generate an arbitrary number of years of fictitious data from within your codespace. 
+より大規模な Jaffle Shop データを扱いたい場合は、コードスペース内から任意の年数の架空のデータを生成できます。
 
-1. Install the Python package called [jafgen](https://pypi.org/project/jafgen/). At the terminal's prompt, run:
+1. [jafgen](https://pypi.org/project/jafgen/) という Python パッケージをインストールします。ターミナルのプロンプトで、次のコマンドを実行します。
 
     ```shell
     python -m pip install jafgen
     ```
 
-1. When installation is done, run:
+1. インストールが完了したら、次を実行します:
     ```shell
     jafgen [number of years to generate] # e.g. jafgen 6
     ``` 
-    Replace `NUMBER_OF_YEARS` with the number of years you want to simulate. For example, to generate data for 6 years, you would run: `jafgen --years 6`. This command builds the CSV files and stores them in the `jaffle-data` folder, and is automatically sourced based on the `sources.yml` file and the [dbt-duckdb](/docs/core/connect-data-platform/duckdb-setup) adapter.
+    `NUMBER_OF_YEARS` を、シミュレートする年数に置き換えます。たとえば、6 年間のデータを生成するには、`jafgen --years 6` を実行します。このコマンドは、CSV ファイルを構築して `jaffle-data` フォルダーに保存し、`sources.yml` ファイルと [dbt-duckdb](/docs/core/connect-data-platform/duckdb-setup) アダプターに基づいて自動的にソース化されます。
 
-As you increase the number of years, it takes exponentially more time to generate the data because the Jaffle Shop stores grow in size and number. For a good balance of data size and time to build, dbt Labs suggests a maximum of 6 years.
-## Next steps
+年数を増やすと、Jaffle Shop の店舗数と規模が拡大するため、データの生成にかかる時間は飛躍的に増加します。データ サイズと構築時間のバランスを適切に保つために、dbt Labs では最大 6 年を推奨しています。
+## 次のステップ
 
-Now that you have dbt Core, DuckDB, and the Jaffle Shop data up and running, you can explore dbt's capabilities. Refer to these materials to get a better understanding of dbt projects and commands:
+dbt Core、DuckDB、Jaffle Shop データが稼働しているので、dbt の機能を調べることができます。dbt プロジェクトとコマンドについて理解を深めるには、次の資料を参照してください。
 
-- The [About projects](/docs/build/projects) page guides you through the structure of a dbt project and its components.
-- [dbt command reference](/reference/dbt-commands) explains the various commands available and what they do.
-- [dbt Labs courses](https://courses.getdbt.com/collections) offer a variety of beginner, intermediate, and advanced learning modules designed to help you become a dbt expert. 
-- Once you see the potential of dbt and what it can do for your organization, sign up for a free trial of [dbt Cloud](https://www.getdbt.com/signup). It's the fastest and easiest way to deploy dbt today!
-- Check out the other [quickstart guides](/guides?tags=Quickstart) to begin integrating into your existing data warehouse.
+- [プロジェクトについて](/docs/build/projects) ページでは、dbt プロジェクトの構造とそのコンポーネントについて説明します。
+- [dbt コマンド リファレンス](/reference/dbt-commands) では、使用可能なさまざまなコマンドとその機能について説明します。
+- [dbt Labs コース](https://courses.getdbt.com/collections) では、dbt エキスパートになるために役立つように設計された、さまざまな初級、中級、上級の学習モジュールを提供しています。
+- dbt の可能性と組織で何ができるかがわかったら、[dbt Cloud](https://www.getdbt.com/signup) の無料トライアルにサインアップしてください。これは、今日 dbt を展開する最も速くて簡単な方法です。
+- 既存のデータ ウェアハウスへの統合を開始するには、他の [クイックスタート ガイド](/guides?tags=Quickstart) を確認してください。
 
-Additionally, with your new understanding of the basics of using DuckDB, consider optimizing your setup by [documenting your project](/guides/duckdb#document-your-project), [commit your changes](/guides/duckdb#commit-your-changes) and, [schedule a job](/guides/duckdb#schedule-a-job). 
+さらに、DuckDB の使用の基本を新たに理解したら、[プロジェクトを文書化](/guides/duckdb#document-your-project)、[変更をコミット](/guides/duckdb#commit-your-changes)、[ジョブをスケジュール](/guides/duckdb#schedule-a-job)してセットアップを最適化することを検討してください。
 
-### Document your project
+### プロジェクトを文書化する
 
-To document your dbt projects with DuckDB, follow the steps:
+DuckDB を使用して dbt プロジェクトをドキュメント化するには、次の手順に従います。
 
-- Use the `dbt docs generate` command to compile information about your dbt project and warehouse into `manifest.json` and `catalog.json` files
-- Run the [`dbt docs serve`](/reference/commands/cmd-docs#dbt-docs-serve) command to create a local website using the generated `.json` files. This allows you to view your project's documentation in a web browser.
-- Enhance your documentation by adding [descriptions](/reference/resource-properties/description) to models, columns, and sources using the `description` key in your YAML files.
+- `dbt docs generate` コマンドを使用して、dbt プロジェクトとウェアハウスに関する情報を `manifest.json` ファイルと `catalog.json` ファイルにコンパイルします。
+- [`dbt docs serve`](/reference/commands/cmd-docs#dbt-docs-serve) コマンドを実行して、生成された `.json` ファイルを使用してローカル Web サイトを作成します。これにより、プロジェクトのドキュメントを Web ブラウザーで表示できます。
+- YAML ファイルの `description` キーを使用して、モデル、列、ソースに [descriptions](/reference/resource-properties/description) を追加して、ドキュメントを強化します。
 
-### Commit your changes
+### 変更をコミットする
 
-Commit your changes to ensure the repository is up to date with the latest code.
+変更をコミットして、リポジトリが最新のコードで更新されていることを確認します。
 
-1. In the GitHub repository you created for your project, run the following commands in the terminal:
+1. プロジェクト用に作成した GitHub リポジトリで、ターミナルで次のコマンドを実行します:
 
 ```shell
 git add 
@@ -287,19 +287,19 @@ git commit -m "Your commit message"
 git push
 ```
 
-2. Go back to your GitHub repository to verify your new files have been added.
+2. GitHub リポジトリに戻り、新しいファイルが追加されたことを確認します。
 
-### Schedule a job
+### ジョブをスケジュールする
 
-1. Ensure dbt Core is installed and configured to connect to your DuckDB instance.
-2. Create a dbt project and define your [`models`](/docs/build/models), [`seeds`](/reference/seed-properties), and [`tests`](/reference/commands/test).
-3. Use a scheduler such [Prefect](/docs/deploy/deployment-tools#prefect) to schedule your dbt runs. You can create a DAG (Directed Acyclic Graph) that triggers dbt commands at specified intervals.
-4. Write a script that runs your dbt commands, such as [`dbt run`](/reference/commands/run), `dbt test` and more so.
-5. Use your chosen scheduler to run the script at your desired frequency.
+1. dbt Core がインストールされ、DuckDB インスタンスに接続するように構成されていることを確認します。
+2. dbt プロジェクトを作成し、[`models`](/docs/build/models)、[`seeds`](/reference/seed-properties)、[`tests`](/reference/commands/test) を定義します。
+3. [Prefect](/docs/deploy/deployment-tools#prefect) などのスケジューラを使用して、dbt の実行をスケジュールします。指定した間隔で dbt コマンドをトリガーする DAG (有向非巡回グラフ) を作成できます。
+4. [`dbt run`](/reference/commands/run)、`dbt test` などの dbt コマンドを実行するスクリプトを作成します。
+5. 選択したスケジューラを使用して、必要な頻度でスクリプトを実行します。
 
 <ConfettiTrigger>
 
-Congratulations on making it through the guide 🎉!
+Cガイドを最後までお読みいただき、ありがとうございます 🎉!
 
 </ConfettiTrigger>
 

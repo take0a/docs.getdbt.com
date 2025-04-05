@@ -1,31 +1,31 @@
 ---
-title: "Add snapshots to your DAG"
+title: "DAG にスナップショットを追加する"
 sidebar_label: "Snapshots"
 description: "Configure snapshots in dbt to track changes to your data over time."
 id: "snapshots"
 ---
 
-## Related documentation
-* [Snapshot configurations](/reference/snapshot-configs)
-* [Snapshot properties](/reference/snapshot-properties)
-* [`snapshot` command](/reference/commands/snapshot)
+## 関連ドキュメント
+* [スナップショット設定](/reference/snapshot-configs)
+* [スナップショット プロパティ](/reference/snapshot-properties)
+* [`snapshot` コマンド](/reference/commands/snapshot)
 
-## What are snapshots?
-Analysts often need to "look back in time" at previous data states in their mutable tables. While some source data systems are built in a way that makes accessing historical data possible, this is not always the case. dbt provides a mechanism, **snapshots**, which records changes to a mutable <Term id="table" /> over time.
+## スナップショットとは何ですか?
+アナリストは、多くの場合、可変テーブル内の以前のデータ状態を「過去にさかのぼって」確認する必要があります。一部のソース データ システムは、履歴データへのアクセスを可能にする方法で構築されていますが、常にそうであるとは限りません。dbt は、可変 <Term id="table" /> への変更を時間の経過とともに記録するメカニズム (**スナップショット**) を提供します。
 
-Snapshots implement [type-2 Slowly Changing Dimensions](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) over mutable source tables. These Slowly Changing Dimensions (or SCDs) identify how a row in a table changes over time. Imagine you have an `orders` table where the `status` field can be overwritten as the order is processed.
+スナップショットは、可変ソース テーブルに対して [type-2 緩やかに変化するディメンション](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) を実装します。これらの緩やかに変化するディメンション (または SCD) は、テーブル内の行が時間の経過とともにどのように変化するかを識別します。注文が処理されると `status` フィールドが上書きされる可能性がある `orders` テーブルがあるとします。
 
 | id | status | updated_at |
 | -- | ------ | ---------- |
 | 1 | pending | 2024-01-01 |
 
-Now, imagine that the order goes from "pending" to "shipped". That same record will now look like:
+ここで、注文が「保留中」から「発送済み」に変わったとします。同じレコードは次のようになります:
 
 | id | status | updated_at |
 | -- | ------ | ---------- |
 | 1 | shipped | 2024-01-02 |
 
-This order is now in the "shipped" state, but we've lost the information about when the order was last in the "pending" state. This makes it difficult (or impossible) to analyze how long it took for an order to ship. dbt can "snapshot" these changes to help you understand how values in a row change over time. Here's an example of a snapshot table for the previous example:
+この注文は現在「発送済み」状態ですが、注文が最後に「保留中」状態だった時期に関する情報が失われています。このため、注文の発送にかかった時間を分析することが困難 (または不可能) になります。dbt はこれらの変更を「スナップショット」して、行の値が時間の経過とともにどのように変化するかを理解するのに役立ちます。前の例のスナップショット テーブルの例を次に示します:
 
 | id | status | updated_at | dbt_valid_from | dbt_valid_to |
 | -- | ------ | ---------- | -------------- | ------------ |
@@ -33,7 +33,7 @@ This order is now in the "shipped" state, but we've lost the information about w
 | 1 | shipped | 2024-01-02 | 2024-01-02 | `null` |
 
 
-## Configuring snapshots
+## スナップショットの設定
 
 <VersionBlock lastVersion="1.8" >
 
@@ -212,7 +212,7 @@ select * from {{ ref('orders_snapshot') }}
 
 <VersionBlock firstVersion="1.9">
 
-Configure your snapshots in YAML files to tell dbt how to detect record changes. Define snapshots configurations in YAML files, alongside your models, for a cleaner, faster, and more consistent set up. Place snapshot YAML files in the models directory or in a snapshots directory. 
+YAML ファイルでスナップショットを構成して、dbt にレコードの変更を検出する方法を指示します。よりクリーンで高速、かつ一貫性のあるセットアップを実現するために、モデルとともに YAML ファイルでスナップショット構成を定義します。スナップショット YAML ファイルをモデル ディレクトリまたはスナップショット ディレクトリに配置します。
 
 <File name='snapshots/orders_snapshot.yml'>
 
@@ -236,31 +236,31 @@ snapshots:
 
 </File>
 
-The following table outlines the configurations available for snapshots:
+次の表は、スナップショットに使用できる構成の概要を示しています:
 
 | Config | Description | Required? | Example |
 | ------ | ----------- | --------- | ------- |
-| [database](/reference/resource-configs/database) | Specify a custom database for the snapshot | No | analytics |
-| [schema](/reference/resource-configs/schema) | Specify a custom schema for the snapshot | No | snapshots |
-| [alias](/reference/resource-configs/alias)   | Specify an alias for the snapshot | No | your_custom_snapshot |
-| [strategy](/reference/resource-configs/strategy) | The snapshot strategy to use. Valid values: `timestamp` or `check` | Yes | timestamp |
-| [unique_key](/reference/resource-configs/unique_key) | A <Term id="primary-key" /> column(s) (string or array) or expression for the record | Yes |  `id` or `[order_id, product_id]` |
-| [check_cols](/reference/resource-configs/check_cols) | If using the `check` strategy, then the columns to check | Only if using the `check` strategy | ["status"] |
-| [updated_at](/reference/resource-configs/updated_at) | A column in your snapshot query results that indicates when each record was last updated, used in the `timestamp` strategy. May support ISO date strings and unix epoch integers, depending on the data platform you use. | Only if using the `timestamp` strategy | updated_at |
-| [dbt_valid_to_current](/reference/resource-configs/dbt_valid_to_current) | Set a custom indicator for the value of `dbt_valid_to` in current snapshot records (like a future date). By default, this value is `NULL`. When configured, dbt will use the specified value instead of `NULL` for `dbt_valid_to` for current records in the snapshot table.| No | string |
-| [snapshot_meta_column_names](/reference/resource-configs/snapshot_meta_column_names) | Customize the names of the snapshot meta fields | No | dictionary |
-| [hard_deletes](/reference/resource-configs/hard-deletes) | Specify how to handle deleted rows from the source. Supported options are `ignore` (default), `invalidate` (replaces the legacy `invalidate_hard_deletes=true`), and `new_record`.| No | string |
+| [database](/reference/resource-configs/database) | スナップショット用のカスタムデータベースを指定する | No | analytics |
+| [schema](/reference/resource-configs/schema) | スナップショットのカスタムスキーマを指定する | No | snapshots |
+| [alias](/reference/resource-configs/alias)   | スナップショットのエイリアスを指定する | No | your_custom_snapshot |
+| [strategy](/reference/resource-configs/strategy) | 使用するスナップショット戦略。有効な値: `timestamp` または `check` | Yes | timestamp |
+| [unique_key](/reference/resource-configs/unique_key) | レコードの <Term id="primary-key" /> 列 (文字列または配列) または式 | Yes |  `id` or `[order_id, product_id]` |
+| [check_cols](/reference/resource-configs/check_cols) | `check`戦略を使用する場合、チェックする列 | `check`戦略を使用する場合のみ | ["status"] |
+| [updated_at](/reference/resource-configs/updated_at) | スナップショット クエリ結果の列で、各レコードが最後に更新された日時を示します。これは、`timestamp` 戦略で使用されます。使用するデータ プラットフォームに応じて、ISO 日付文字列と UNIX エポック整数をサポートする場合があります。 | `timestamp`戦略を使用する場合のみ | updated_at |
+| [dbt_valid_to_current](/reference/resource-configs/dbt_valid_to_current) | 現在のスナップショット レコードの `dbt_valid_to` の値 (将来の日付など) のカスタム インジケーターを設定します。デフォルトでは、この値は `NULL` です。設定すると、dbt はスナップショット テーブル内の現在のレコードの `dbt_valid_to` に `NULL` ではなく指定された値を使用します。| No | string |
+| [snapshot_meta_column_names](/reference/resource-configs/snapshot_meta_column_names) | スナップショットのメタフィールドの名前をカスタマイズする | No | dictionary |
+| [hard_deletes](/reference/resource-configs/hard-deletes) | ソースから削除された行を処理する方法を指定します。サポートされているオプションは、`ignore` (デフォルト)、`invalidate` (従来の `invalidate_hard_deletes=true` を置き換えます)、および `new_record` です。| No | string |
 
-- In v1.9, `target_schema` became optional, allowing snapshots to be environment-aware. By default, without `target_schema` or `target_database` defined, snapshots now use the `generate_schema_name` or `generate_database_name` macros to determine where to build.
-- Developers can still set a custom location with [`schema`](/reference/resource-configs/schema) and [`database`](/reference/resource-configs/database)  configs, consistent with other resource types.
-- A number of other configurations are also supported (for example, `tags` and `post-hook`). For the complete list, refer to [Snapshot configurations](/reference/snapshot-configs).
-- You can configure snapshots from both the `dbt_project.yml` file and a `config` block. For more information, refer to the [configuration docs](/reference/snapshot-configs).
+- v1.9 では、`target_schema` がオプションになり、スナップショットが環境を認識できるようになりました。デフォルトでは、`target_schema` または `target_database` が定義されていない場合、スナップショットは `generate_schema_name` または `generate_database_name` マクロを使用してビルドする場所を決定します。
+- 開発者は、他のリソース タイプと一貫性を保ちながら、[`schema`](/reference/resource-configs/schema) および [`database`](/reference/resource-configs/database) 構成を使用してカスタムの場所を設定できます。
+- その他の構成もいくつかサポートされています (たとえば、`tags` や `post-hook`)。完全なリストについては、[スナップショット構成](/reference/snapshot-configs) を参照してください。
+- `dbt_project.yml` ファイルと `config` ブロックの両方からスナップショットを構成できます。詳細については、[構成ドキュメント](/reference/snapshot-configs)を参照してください。
 
-### Add a snapshot to your project
+### プロジェクトにスナップショットを追加する
 
-To add a snapshot to your project follow these steps. For users on versions 1.8 and earlier, refer to [Legacy snapshot configurations](/reference/resource-configs/snapshots-jinja-legacy). 
+プロジェクトにスナップショットを追加するには、次の手順に従います。バージョン 1.8 以前のユーザーの場合は、[レガシー スナップショット構成](/reference/resource-configs/snapshots-jinja-legacy) を参照してください。
 
-1. Create a YAML file in your `snapshots` directory: `snapshots/orders_snapshot.yml` and add your configuration details. You can also configure your snapshot from your `dbt_project.yml` file ([docs](/reference/snapshot-configs)).
+1. `snapshots` ディレクトリに YAML ファイル `snapshots/orders_snapshot.yml` を作成し、構成の詳細を追加します。`dbt_project.yml` ファイル ([docs](/reference/snapshot-configs)) からスナップショットを構成することもできます。
 
     <File name='snapshots/orders_snapshot.yml'>
 
@@ -279,7 +279,7 @@ To add a snapshot to your project follow these steps. For users on versions 1.8 
     ```
     </File>
 
-2. Since snapshots focus on configuration, the transformation logic is minimal. Typically, you'd select all data from the source. If you need to apply transformations (like filters, deduplication), it's best practice to define an ephemeral model and reference it in your snapshot configuration.
+2. スナップショットは構成に重点を置いているため、変換ロジックは最小限です。通常は、ソースからすべてのデータを選択します。変換 (フィルター、重複排除など) を適用する必要がある場合は、一時モデルを定義してスナップショット構成で参照するのがベスト プラクティスです。
 
     <File name="models/ephemeral_orders.sql" >
 
@@ -290,10 +290,9 @@ To add a snapshot to your project follow these steps. For users on versions 1.8 
     ```
     </File>
 
-3. Check whether the result set of your query includes a reliable timestamp column that indicates when a record was last updated. For our example, the `updated_at` column reliably indicates record changes, so we can use the `timestamp` strategy. If your query result set does not have a reliable timestamp, you'll need to instead use the `check` strategy — more details on this below.
+3. クエリの結果セットに、レコードが最後に更新された日時を示す信頼性の高いタイムスタンプ列が含まれているかどうかを確認します。この例では、`updated_at` 列がレコードの変更を確実に示しているため、`timestamp` 戦略を使用できます。クエリの結果セットに信頼性の高いタイムスタンプが含まれていない場合は、代わりに `check` 戦略を使用する必要があります。詳細については、以下を参照してください。
 
-4. Run the `dbt snapshot` [command](/reference/commands/snapshot)  &mdash; for our example, a new table will be created at `analytics.snapshots.orders_snapshot`. The [`schema`](/reference/resource-configs/schema) config will utilize the `generate_schema_name` macro.
-
+4. `dbt snapshot` [コマンド](/reference/commands/snapshot) を実行します。この例では、`analytics.snapshots.orders_snapshot` に新しいテーブルが作成されます。[`schema`](/reference/resource-configs/schema) 構成では、`generate_schema_name` マクロが使用されます。
     ```
     $ dbt snapshot
     Running with dbt=1.9.0
@@ -310,11 +309,11 @@ To add a snapshot to your project follow these steps. For users on versions 1.8 
     Done. PASS=2 ERROR=0 SKIP=0 TOTAL=1
     ```
 
-5. Inspect the results by selecting from the table dbt created (`analytics.snapshots.orders_snapshot`). After the first run, you should see the results of your query, plus the [snapshot meta fields](#snapshot-meta-fields) as described later on.
+5. dbt が作成したテーブル (`analytics.snapshots.orders_snapshot`) から選択して結果を確認します。最初の実行後、クエリの結果と、後で説明する [スナップショット メタ フィールド](#snapshot-meta-fields) が表示されます。
 
-6. Run the `dbt snapshot` command again and inspect the results. If any records have been updated, the snapshot should reflect this.
+6. `dbt snapshot` コマンドを再度実行して結果を確認します。レコードが更新されている場合は、スナップショットにそれが反映されているはずです。
 
-7. Select from the `snapshot` in downstream models using the `ref` function.
+7. `ref` 関数を使用して、ダウンストリーム モデルの `snapshot` から選択します。
 
     <File name='models/changed_orders.sql'>
 
@@ -323,11 +322,11 @@ To add a snapshot to your project follow these steps. For users on versions 1.8 
     ```
     </File>
 
-8.  Snapshots are only useful if you run them frequently &mdash; schedule the `dbt snapshot` command to run regularly.
+8. スナップショットは頻繁に実行する場合にのみ役立ちます - `dbt snapshot` コマンドを定期的に実行するようにスケジュールします。
 
 </VersionBlock>
 
-### Configuration best practices
+### 構成のベストプラクティス
 
 <Expandable alt_header="Use the timestamp strategy where possible">
 

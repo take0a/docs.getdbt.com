@@ -1,5 +1,5 @@
 ---
-title: "DuckDB setup"
+title: "DuckDBのセットアップ"
 description: "Read this guide to learn about the DuckDB warehouse setup in dbt."
 meta:
   maintained_by: Community
@@ -15,26 +15,26 @@ meta:
   config_page: '/reference/resource-configs/no-configs'
 ---
 
-:::info Community plugin
+:::info コミュニティプラグイン
 
-Some core functionality may be limited. If you're interested in contributing, check out the source code for each repository listed below.
+一部のコア機能は制限される可能性があります。貢献に興味がある場合は、以下にリストされている各リポジトリのソース コードを確認してください。
 
 :::
 
-import SetUpPages from '/snippets/_setup-pages-intro.md';
+import SetUpPages from '/snippets.ja/_setup-pages-intro.md';
 
 <SetUpPages meta={frontMatter.meta} />
 
 
-## Connecting to DuckDB with dbt-duckdb
+## dbt-duckdb を使用して DuckDB に接続する
 
-[DuckDB](http://duckdb.org) is an embedded database, similar to SQLite, but designed for OLAP-style analytics instead of OLTP. The only configuration parameter that is required in your profile (in addition to `type: duckdb`) is the `path` field, which should refer to a path on your local filesystem where you would like the DuckDB database file (and it's associated write-ahead log) to be written. You can also specify the `schema` parameter if you would like to use a schema besides the default (which is called `main`).
+[DuckDB](http://duckdb.org) は SQLite に似た組み込みデータベースですが、OLTP ではなく OLAP スタイルの分析用に設計されています。プロファイルで必要な構成パラメータは (`type: duckdb` に加えて) `path` フィールドのみです。これは、DuckDB データベース ファイル (および関連する先行書き込みログ) を書き込むローカル ファイル システム上のパスを参照する必要があります。デフォルト (`main` と呼ばれます) 以外のスキーマを使用する場合は、`schema` パラメータを指定することもできます。
 
-There is also a `database` field defined in the `DuckDBCredentials` class for consistency with the parent `Credentials` class, but it defaults to `main` and setting it to be something else will likely cause strange things to happen that cannot be fully predicted, so please avoid changing it.
+`DuckDBCredentials` クラスには、親の `Credentials` クラスとの一貫性を保つために `database` フィールドも定義されていますが、デフォルトは `main` であり、別の値に設定すると完全に予測できない異常な事態が発生する可能性があるため、変更は避けてください。
 
-As of version 1.2.3, you can load any supported [DuckDB extensions](https://duckdb.org/docs/extensions/overview) by listing them in the `extensions` field in your profile. You can also set any additional [DuckDB configuration options](https://duckdb.org/docs/sql/configuration) via the `settings` field, including options that are supported in any loaded extensions. 
+バージョン 1.2.3 以降では、プロファイルの `extensions` フィールドにリストすることで、サポートされている [DuckDB 拡張機能](https://duckdb.org/docs/extensions/overview) をすべてロードできます。また、ロードされた拡張機能でサポートされているオプションを含む、追加の [DuckDB 構成オプション](https://duckdb.org/docs/sql/configuration) を `settings` フィールドで設定することもできます。
 
-For example, to be able to connect to `s3` and read/write `parquet` files using an AWS access key and secret, your profile would look something like this:
+たとえば、AWS アクセス キーとシークレットを使用して `s3` に接続し、`parquet` ファイルの読み取り/書き込みを行うには、プロファイルは次のようになります:
 
 <File name='profiles.yml'>
 

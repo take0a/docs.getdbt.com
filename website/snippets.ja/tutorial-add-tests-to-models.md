@@ -1,9 +1,9 @@
-Adding [tests](/docs/build/data-tests) to a project helps validate that your models are working correctly.
+プロジェクトに [テスト](/docs/build/data-tests) を追加すると、モデルが正しく動作していることを検証できます。
 
-To add tests to your project:
+プロジェクトにテストを追加するには:
 
-1. Create a new YAML file in the `models` directory, named `models/schema.yml`
-2. Add the following contents to the file:
+1. `models` ディレクトリに `models/schema.yml` という名前の新しい YAML ファイルを作成します。
+2. ファイルに次の内容を追加します:
 
     <File name='models/schema.yml'>
 
@@ -46,9 +46,9 @@ To add tests to your project:
 
     </File>
 
-3. Run `dbt test`, and confirm that all your tests passed.
+3. `dbt test` を実行し、すべてのテストが成功したことを確認します。
 
-When you run `dbt test`, dbt iterates through your YAML files, and constructs a query for each test. Each query will return the number of records that fail the test. If this number is 0, then the test is successful.
+`dbt test` を実行すると、dbt は YAML ファイルを反復処理し、各テストのクエリを構築します。各クエリは、テストに失敗したレコードの数を返します。この数が 0 の場合、テストは成功です。
 
 #### FAQs
 

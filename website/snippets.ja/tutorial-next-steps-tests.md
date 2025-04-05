@@ -1,5 +1,5 @@
-Before moving on from testing, make a change and see how it affects your results:
+テストから先に進む前に、変更を加えて結果にどのような影響があるかを確認します。
 
-* Write a test that fails, for example, omit one of the order statuses in the `accepted_values` list. What does a failing test look like? Can you debug the failure?
-* Run the tests for one model only. If you grouped your `stg_` models into a directory, try running the tests for all the models in that directory.
-* Use a [docs block](/docs/build/documentation#using-docs-blocks) to add a Markdown description to a model.
+* 失敗するテストを作成します。たとえば、`accepted_values` リストの注文ステータスの 1 つを省略します。失敗するテストはどのようなものですか? 失敗をデバッグできますか?
+* 1 つのモデルのみに対してテストを実行します。`stg_` モデルを 1 つのディレクトリにグループ化した場合は、そのディレクトリ内のすべてのモデルに対してテストを実行してみてください。
+* [docs ブロック](/docs/build/documentation#using-docs-blocks) を使用して、モデルに Markdown の説明を追加します。

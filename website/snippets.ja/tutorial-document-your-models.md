@@ -1,6 +1,6 @@
-Adding [documentation](/docs/build/documentation) to your project allows you to describe your models in rich detail, and share that information with your team. Here, we're going to add some basic documentation to our project.
+プロジェクトに [ドキュメント](/docs/build/documentation) を追加すると、モデルを詳細に記述し、その情報をチームと共有できます。ここでは、プロジェクトに基本的なドキュメントを追加します。
 
-1. Update your `models/schema.yml` file to include some descriptions, such as those below.
+1. `models/schema.yml` ファイルを更新して、以下のような説明を追加します。
 
     <File name='models/schema.yml'>
 
@@ -50,4 +50,4 @@ Adding [documentation](/docs/build/documentation) to your project allows you to 
 
     </File>
 
-2. Run `dbt docs generate` to generate the documentation for your project. dbt introspects your project and your warehouse to generate a <Term id="json" /> file with rich documentation about your project.
+2. `dbt docs generate` を実行して、プロジェクトのドキュメントを生成します。dbt はプロジェクトとウェアハウスをイントロスペクトして、プロジェクトに関する豊富なドキュメントを含む <Term id="json" /> ファイルを生成します。

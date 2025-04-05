@@ -1,5 +1,5 @@
-As a best practice in SQL, you should separate logic that cleans up your data from logic that transforms your data. You have already started doing this in the existing query by using common table expressions (CTEs).
+SQL のベスト プラクティスとして、データをクリーンアップするロジックとデータを変換するロジックを分離する必要があります。既存のクエリでは、共通テーブル式 (CTE) を使用して既にこの作業を開始しています。
 
-Now you can experiment by separating the logic out into separate models and using the [ref](/reference/dbt-jinja-functions/ref) function to build models on top of other models:
+ロジックを個別のモデルに分離し、[ref](/reference/dbt-jinja-functions/ref) 関数を使用して他のモデルの上にモデルを構築することで、実験を行うことができます。
 
 <Lightbox src="/img/dbt-dag.png" title="The DAG we want for our dbt project" />
