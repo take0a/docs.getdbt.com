@@ -12,7 +12,7 @@ hoverSnippet: Learn how we structure our dbt projects.
 
 優れた dbt プロジェクトの構築は、本質的に共同作業であり、各部門の専門知識を結集して会社全体の目標とストーリーをマッピングします。そのため、できるだけ多くの人がそれぞれの専門知識を積極的に活用できるようにし、組織が拡大してもプロジェクトが取り組みやすく維持しやすい状態を保つために、深く幅広いパターンを確立することが特に重要です。
 
-有名な話だが、スティーブ・ジョブズは[毎日同じ服を着ていた](https://images.squarespace-cdn.com/content/v1/5453c539e4b02ab5398ffc8f/1580381503218-E56FQDNFL1P4OBLQWHWW/ke17ZwdGBToddI8pDm48kJKedFpub2aPqa33K4gNUDwUqsxRU qqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYxCRW4BPu10St3TBAUQYVKcxb5ZTIyC_D49_DDQq2Sj8YVGtM7O1i4h5tvKa2lazN4nGUQWMS_WcPM-ztWbVr-c/steve_jobs_outfit.jpg) は、意思決定の疲労を軽減します。このガイドは、会社の dbt プロジェクト用の黒のタートルネックと New Balance のスニーカーと同じようなものと考えることができます。dbt プロジェクトのパワー アウトフィット、またはより正確にはその構造は、ファブリックではなく、ファイル、フォルダー、命名規則、およびプログラミング パターンで構成されます。物事にラベルを付ける方法、グループ化する方法、分割する方法、まとめる方法、つまり、dbt プロジェクトにエンコードされた [データ変換](https://www.getdbt.com/analytics-engineering/transformation/) を整理するために使用するシステム、これがプロジェクトの構造です。
+有名な話だが、スティーブ・ジョブズは[毎日同じ服を着ていた](https://images.squarespace-cdn.com/content/v1/5453c539e4b02ab5398ffc8f/1580381503218-E56FQDNFL1P4OBLQWHWW/ke17ZwdGBToddI8pDm48kJKedFpub2aPqa33K4gNUDwUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYxCRW4BPu10St3TBAUQYVKcxb5ZTIyC_D49_DDQq2Sj8YVGtM7O1i4h5tvKa2lazN4nGUQWMS_WcPM-ztWbVr-c/steve_jobs_outfit.jpg) は、意思決定の疲労を軽減します。このガイドは、会社の dbt プロジェクト用の黒のタートルネックと New Balance のスニーカーと同じようなものと考えることができます。dbt プロジェクトのパワー アウトフィット、またはより正確にはその構造は、ファブリックではなく、ファイル、フォルダー、命名規則、およびプログラミング パターンで構成されます。物事にラベルを付ける方法、グループ化する方法、分割する方法、まとめる方法、つまり、dbt プロジェクトにエンコードされた [データ変換](https://www.getdbt.com/analytics-engineering/transformation/) を整理するために使用するシステム、これがプロジェクトの構造です。
 
 このガイドは単なる出発点にすぎません。プロジェクトでは、ジョブズ流のミニマリズムよりもビルケンシュトックや紫のパーカーの方がいいと決めるかもしれません。それは構いません。重要なのは、組織内でそれらの変更の理由をよく考え、すべての貢献者が理解しやすい方法で明確に宣言し、何よりも _一貫性を保つ_ ことです。
 
