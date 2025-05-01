@@ -1,22 +1,23 @@
 ---
 title: Measures
 id: measures
-description: "Measures are aggregations performed on columns in your model."
+description: "メジャーは、モデル内の列に対して実行される集計です。"
 sidebar_label: "Measures"
 tags: [Metrics, Semantic Layer]
 ---
 
-Measures are aggregations performed on columns in your model. They can be used as final metrics or as building blocks for more complex metrics. 
+メジャーとは、モデル内の列に対して実行される集計です。最終的な指標として使用することも、より複雑な指標の構成要素として使用することもできます。
 
-Measures have several inputs, which are described in the following table along with their field types.
+メジャーには複数の入力があり、それらのフィールドタイプと合わせて次の表で説明します。
 
 import MeasuresParameters from '/snippets/_sl-measures-parameters.md';
 
 <MeasuresParameters />
 
-## Measure spec
+## メジャー仕様
 
-An example of the complete YAML measures spec is below. The actual configuration of your measures will depend on the aggregation you're using.
+YAML 形式のメジャー仕様の完全な例を以下に示します。
+メジャーの実際の構成は、使用する集計方法によって異なります。
 
 <VersionBlock firstVersion="1.9">
 
@@ -56,33 +57,34 @@ semantic_models:
 
 ### Name
 
-When you create a measure, you can either give it a custom name or use the `name` of the data platform column directly. If the measure's `name` differs from the column name, you need to add an `expr` to specify the column name. The `name` of the measure is used when creating a metric. 
+メジャーを作成する際は、カスタム名を付けることも、データプラットフォーム列の「name」を直接使用することもできます。メジャーの「name」が列名と異なる場合は、「expr」を追加して列名を指定する必要があります。メジャーの「name」は、メトリックを作成する際に使用されます。
 
-Measure names must be unique across all semantic models in a project and can not be the same as an existing `entity` or `dimension` within that same model.
+メジャー名は、プロジェクト内のすべてのセマンティックモデルで一意である必要があり、同じモデル内の既存の「entity」または「dimension」と同じ名前にすることはできません。
 
 ### Description
 
-The description describes the calculated measure. It's strongly recommended you create verbose and human-readable descriptions in this field.
+説明は、計算されたメジャーについて説明します。このフィールドには、詳細かつ人間が判読できる説明を入力することを強くお勧めします。
 
 ### Aggregation
 
-The aggregation determines how the field will be aggregated. For example, a `sum` aggregation type over a granularity of `day` would sum the values across a given day.
+集計方法は、フィールドの集計方法を決定します。例えば、粒度が「日」の「合計」集計タイプは、特定の日における値を合計します。
 
-Supported aggregations include:
+サポートされている集計方法は次のとおりです:
 
 | Aggregation types | Description              |
 |-------------------|--------------------------|
-| sum               | Sum across the values    |
-| min               | Minimum across the values|
-| max               | Maximum across the values|
-| average           | Average across the values |
-| sum_boolean       | A sum for a boolean type |
-| count_distinct    | Distinct count of values |
-| median           | Median (p50) calculation across the values |
-| percentile        | Percentile calculation across the values. |
+| sum               | 値の合計 |
+| min               | 値全体の最小値 |
+| max               | 値全体の最大値 |
+| average           | 値の平均 |
+| sum_boolean       | ブール型の合計 |
+| count_distinct    | 値の個別のカウント |
+| median            | 値全体の中央値（p50）の計算 |
+| percentile        | 値全体のパーセンタイル計算。 |
 
 #### Percentile aggregation example
-If you're using the `percentile` aggregation, you must use the `agg_params` field to specify details for the percentile aggregation (such as what percentile to calculate and whether to use discrete or continuous calculations).
+
+`percentile` 集計を使用する場合は、`agg_params` フィールドを使用してパーセンタイル集計の詳細 (計算するパーセンタイルや、離散計算と連続計算のどちらを使用するかなど) を指定する必要があります。
 
 ```yaml
 name: p99_transaction_value
@@ -95,7 +97,8 @@ agg_params:
 ```
 
 #### Percentile across supported engine types
-The following table lists which SQL engine supports continuous, discrete, approximate, continuous, and approximate discrete percentiles.
+
+次の表は、連続パーセンタイル、離散パーセンタイル、近似パーセンタイル、連続パーセンタイル、および近似離散パーセンタイルをサポートする SQL エンジンを示しています。
 
 |  | Cont. | Disc. | Approx. cont | Approx. disc |
 | -- | -- | -- | -- | -- |
@@ -108,14 +111,14 @@ The following table lists which SQL engine supports continuous, discrete, approx
 
 ### Expr
 
-If the `name` you specified for a measure doesn't match a column name in your model, you can use the `expr` parameter instead. This allows you to use any valid SQL to manipulate an underlying column name into a specific output. The `name` parameter then serves as an alias for your measure.
+メジャーに指定した「name」がモデル内の列名と一致しない場合は、代わりに「expr」パラメータを使用できます。これにより、有効なSQLを使用して、基になる列名を操作し、特定の出力を作成できます。「name」パラメータは、メジャーのエイリアスとして機能します。
 
-**Notes**: When using SQL functions in the `expr` parameter, **always use data platform-specific SQL**. This is because outputs may differ depending on your specific data platform.
+**注**: 「expr」パラメータでSQL関数を使用する場合は、**必ずデータプラットフォーム固有のSQLを使用してください**。出力はデータプラットフォームによって異なる可能性があるためです。
 
-:::tip For Snowflake users
-For Snowflake users, if you use a week-level function in the `expr` parameter, it'll now return Monday as the default week start day based on ISO standards. If you have any account or session level overrides for the `WEEK_START` parameter that fixes it to a value other than 0 or 1, you will still see Monday as the week starts. 
+:::tip Snowflake ユーザーの皆様へ
+Snowflake ユーザーの皆様、`expr` パラメータで週レベルの関数を使用すると、ISO 標準に基づき、デフォルトの週開始日として月曜日が返されるようになりました。アカ​​ウントレベルまたはセッションレベルで `WEEK_START` パラメータを 0 または 1 以外の値に固定するオーバーライドを設定している場合でも、週の開始日は月曜日になります。
 
-If you use the `dayofweek` function in the `expr` parameter with the legacy Snowflake default of `WEEK_START = 0`, it will now return ISO-standard values of 1 (Monday) through 7 (Sunday) instead of Snowflake's legacy default values of 0 (Monday) through 6 (Sunday).
+`expr` パラメータで `dayofweek` 関数を使用し、Snowflake の従来のデフォルト値である `WEEK_START = 0` を使用すると、Snowflake の従来のデフォルト値である 0 (月曜日) から 6 (日曜日) ではなく、ISO 標準値の 1 (月曜日) から 7 (日曜日) が返されるようになりました。
 :::
 
 
@@ -294,24 +297,24 @@ semantic_models:
 ```
 </VersionBlock>
 
-### Non-additive dimensions
+### 非加算ディメンション
 
-Some measures cannot be aggregated over certain dimensions, like time, because it could result in incorrect outcomes. Examples include bank account balances where it does not make sense to carry over balances month-to-month, and monthly recurring revenue where daily recurring revenue cannot be summed up to achieve monthly recurring revenue. You can specify non-additive dimensions to handle this, where certain dimensions are excluded from aggregation.
+一部のメジャーは、時間などの特定のディメンションで集計できません。これは、結果が不正確になる可能性があるためです。例えば、銀行口座の残高のように月次で繰り越すのが適切でないデータや、日次で発生する経常収益を合計しても月次経常収益にならない月次経常収益などが挙げられます。このような状況に対処するために、特定のディメンションを集計から除外する非加算ディメンションを指定できます。
 
-To demonstrate the configuration for non-additive measures, consider a subscription table that includes one row per date of the registered user, the user's active subscription plan(s), and the plan's subscription value (revenue) with the following columns:
+非加算メジャーの設定例を説明するために、登録ユーザーの日付ごとに1行、ユーザーのアクティブなサブスクリプションプラン、およびプランのサブスクリプション額（収益）を含む、以下の列を持つサブスクリプションテーブルを考えてみましょう。
 
-- `date_transaction`: The daily date-spine.
-- `user_id`: The ID of the registered user.
-- `subscription_plan`: A column to indicate the subscription plan ID.
-- `subscription_value`: A column to indicate the monthly subscription value (revenue) of a particular subscription plan ID.
+- `date_transaction`: 日次日付。
+- `user_id`: 登録ユーザーのID。
+- `subscription_plan`: サブスクリプションプランIDを示す列。
+- `subscription_value`: 特定のサブスクリプションプランIDの月次サブスクリプション額（収益）を示す列。
 
-Parameters under the `non_additive_dimension` will specify dimensions that the measure should not be aggregated over.
+`non_additive_dimension` の下のパラメータは、メジャーを集計しないディメンションを指定します。
 
 | Parameter | Description | Field type |
 | --- | --- | --- |
-| `name`| This will be the name of the time dimension (that has already been defined in the data source) that the measure should not be aggregated over. | Required |
-| `window_choice` | Choose either `min` or `max`, where `min` reflects the beginning of the time period and `max` reflects the end of the time period. | Required |
-| `window_groupings` | Provide the entities that you would like to group by. | Optional |
+| `name`| これは、メジャーを集計しない時間ディメンション (データ ソースで既に定義されている) の名前になります。 | Required |
+| `window_choice` | 「min」または「max」のいずれかを選択します。「min」は期間の開始を反映し、「max」は期間の終了を反映します。 | Required |
+| `window_groupings` | グループ化するエンティティを指定します。 | Optional |
 
 
 ```yaml
@@ -366,7 +369,7 @@ metrics:
         measure: mrr
 ```
 
-We can query the semi-additive metrics using the following syntax:
+次の構文を使用して、半加法メトリックをクエリできます:
 
 For dbt Cloud:
 

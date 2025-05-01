@@ -1,53 +1,65 @@
 ---
-title: Entities
+title: エンティティ
 id: entities
 description: "Entities are real-world concepts that correspond to key parts of your business, such as customers, transactions, and ad campaigns."
 sidebar_label: "Entities"
 tags: [Metrics, Semantic Layer]
 ---
 
-Entities are real-world concepts in a business such as customers, transactions, and ad campaigns. We often focus our analyses around specific entities, such as customer churn or annual recurring revenue modeling. We represent entities in our semantic models using id columns that serve as join keys to other semantic models in your semantic graph.
+エンティティとは、顧客、取引、広告キャンペーンなど、ビジネスにおける現実世界の概念です。
+私たちは多くの場合、顧客離脱や年間経常収益モデリングなど、特定のエンティティを中心に分析を行います。
+セマンティックモデルでは、エンティティをID列で表します。ID列は、セマンティックグラフ内の他のセマンティックモデルへの結合キーとして機能します。
 
-Within a semantic graph, the required parameters for an entity are `name` and `type`. The `name` refers to either the key column name from the underlying data table, or it may serve as an alias with the column name referenced in the `expr` parameter. The `name` for your entity must be unique to the semantic model and can not be the same as an existing `measure` or `dimension` within that same model.
+セマンティックグラフ内では、エンティティに必要なパラメータは「name」と「type」です。
+「name」は、基になるデータテーブルのキー列名を参照するか、「expr」パラメータで参照される列名のエイリアスとして機能する場合があります。
+エンティティの「name」は、セマンティックモデル内で一意である必要があり、同じモデル内の既存の「measure」または「dimension」と同じにすることはできません。
 
-Entities can be specified with a single column or multiple columns. Entities (join keys) in a semantic model are identified by their name. Each entity name must be unique within a semantic model, but it doesn't have to be unique across different semantic models. 
+エンティティは、1つの列または複数の列で指定できます。セマンティックモデル内のエンティティ（結合キー）は、名前で識別されます。
+各エンティティ名はセマンティック モデル内では一意である必要がありますが、異なるセマンティック モデル間では一意である必要はありません。
 
-There are four entity types: 
-- [Primary](#primary) &mdash; Has only one record for each row in the table and includes every record in the data platform. This key uniquely identifies each record in the table.
-- [Unique](#unique) &mdash;  Contains only one record per row in the table and allows for null values. May have a subset of records in the data warehouse. 
-- [Foreign](#foreign) &mdash; A field (or a set of fields) in one table that uniquely identifies a row in another table. This key establishes a link between tables.
-- [Natural](#natural) &mdash; Columns or combinations of columns in a table that uniquely identify a record based on real-world data. This key is derived from actual data attributes.
+エンティティタイプには次の4種類があります:
+- [Primary](#primary) - テーブルの各行にレコードが1つだけ含まれ、データプラットフォーム内のすべてのレコードが含まれます。
+このキーはテーブル内の各レコードを一意に識別します。
+- [Unique](#unique) - テーブルの各行にレコードが1つだけ含まれ、null値が許容されます。
+データウェアハウス内にレコードのサブセットが存在する場合があります。
+- [Foreign](#foreign) - あるテーブル内のフィールド（またはフィールドセット）で、別のテーブルの行を一意に識別します。
+このキーはテーブル間のリンクを確立します。
+- [Natural](#natural) - 実際のデータに基づいてレコードを一意に識別する、テーブル内の列または列の組み合わせ。
+このキーは実際のデータ属性から派生します。
 
-:::tip Use entities as dimensions
-You can also use entities as dimensions, which allows you to aggregate a metric to the granularity of that entity.
+:::tip エンティティをディメンションとして使用する
+エンティティをディメンションとして使用することもできます。これにより、エンティティの粒度でメトリックを集計できます。
 :::
 
 ## Entity types
 
-MetricFlow's join logic depends on the entity `type` you use and determines how to join semantic models. Refer to [Joins](/docs/build/join-logic) for more info on how to construct joins.
+MetricFlow の結合ロジックは、使用するエンティティ `type` に依存し、セマンティックモデルの結合方法を決定します。結合の構築方法の詳細については、[結合](/docs/build/join-logic) を参照してください。
 
 ### Primary
-A primary key has _only one_ record for each row in the table and includes every record in the data platform. It must contain unique values and can't contain null values. Use the primary key to ensure that each record in the table is distinct and identifiable.
+
+主キーは、テーブルの各行に1つのレコードのみを持ち、データプラットフォーム内のすべてのレコードを含みます。主キーは一意の値を持つ必要があり、null値を含めることはできません。主キーを使用することで、テーブル内の各レコードが一意かつ識別可能であることを保証します。
 
 <Expandable alt_header="Primary key example">
 
-For example, consider a table of employees with the following columns:
+たとえば、次の列を持つ従業員のテーブルを考えます:
 
 ```sql
 employee_id (primary key)
 first_name
 last_name
 ```
-In this case, `employee_id` is the primary key. Each `employee_id` is unique and represents one specific employee. There can be no duplicate `employee_id` and can't be null.
+この場合、`employee_id` が主キーです。各 `employee_id` は一意であり、特定の従業員を表します。
+`employee_id` は重複することはできず、null にすることもできません。
 
 </Expandable>
 
 ### Unique
-A unique key contains _only one_ record per row in the table but may have a subset of records in the data warehouse. However, unlike the primary key, a unique key allows for null values. The unique key ensures that the column's values are distinct, except for null values.
+
+ユニークキーは、テーブル内の行ごとに1つのレコードのみを含みますが、データウェアハウス内のレコードのサブセットを含む場合があります。ただし、主キーとは異なり、ユニークキーではNULL値が許容されます。ユニークキーは、NULL値を除き、列の値が一意であることを保証します。
 
 <Expandable alt_header="Unique key example">
 
-For example, consider a table of students with the following columns:
+たとえば、次の列を持つ学生のテーブルを考えます:
 
 ```sql
 student_id (primary key)
@@ -56,17 +68,17 @@ first_name
 last_name
 ```
 
-In this example, `email` is defined as a unique key. Each email address must be unique; however, multiple students can have null email addresses. This is because the unique key constraint allows for one or more null values, but non-null values must be unique. This then creates a set of records with unique emails (non-null) that could be a subset of the entire table, which includes all students.
+この例では、「email」が一意キーとして定義されています。各メールアドレスは一意である必要がありますが、複数の学生がnullのメールアドレスを持つことができます。これは、一意キー制約により1つ以上のnull値が許容される一方で、null以外の値は一意でなければならないためです。これにより、一意のメールアドレス（null以外）を持つレコードセットが作成され、これはすべての学生を含むテーブル全体のサブセットとなる可能性があります。
 
 </Expandable>
 
 ### Foreign
-A foreign key is a field (or a set of fields) in one table that uniquely identifies a row in another table. The foreign key establishes a link between the data in two tables.
-It can include zero, one, or multiple instances of the same record. It can also contain null values.
+
+外部キーとは、あるテーブル内のフィールド（またはフィールドセット）で、別のテーブルの行を一意に識別するものです。外部キーは、2つのテーブルのデータ間のリンクを確立します。外部キーには、同じレコードのインスタンスが0個、1個、または複数個含まれる場合があります。また、NULL値を含めることもできます。
 
 <Expandable alt_header="Foreign key example">
 
-For example, consider you have two tables, `customers` and `orders`:
+たとえば、`customers` と `orders` という 2 つのテーブルがあるとします。
 
 customers table:
 
@@ -83,17 +95,17 @@ order_date
 customer_id (foreign key)
 ```
 
-In this example, the `customer_id` in the `orders` table is a foreign key that references the `customer_id` in the `customers` table. This link means each order is associated with a specific customer. However, not every order must have a customer; the `customer_id` in the orders table can be null or have the same `customer_id` for multiple orders.
+この例では、`orders` テーブルの `customer_id` は、`customers` テーブルの `customer_id` を参照する外部キーです。このリンクは、各注文が特定の顧客に関連付けられていることを意味します。ただし、すべての注文に顧客が関連付けられる必要はありません。orders テーブルの `customer_id` は、複数の注文で null または同じ `customer_id` を持つことができます。
 
 </Expandable>
 
 ### Natural
 
-Natural keys are columns or combinations of columns in a table that uniquely identify a record based on real-world data. For instance, if you have a `sales_person_department` dimension table, the `sales_person_id` can serve as a natural key. You can only use natural keys for [SCD type II dimensions](/docs/build/dimensions#scd-type-ii).
+自然キーとは、テーブル内の列または列の組み合わせであり、実世界のデータに基づいてレコードを一意に識別します。例えば、「sales_person_department」ディメンションテーブルの場合、「sales_person_id」を自然キーとして使用できます。自然キーは[SCDタイプIIディメンション](/docs/build/dimensions#scd-type-ii)でのみ使用できます。
 
 ## Entities configuration
 
-The following is the complete spec for entities:
+以下はエンティティの完全な仕様です:
 
 <VersionBlock firstVersion="1.9">
 
@@ -127,7 +139,7 @@ semantic_models:
 ```
 </VersionBlock>
 
-Here's an example of how to define entities in a semantic model:
+セマンティック モデルでエンティティを定義する方法の例を次に示します:
 
 <VersionBlock firstVersion="1.9"> 
 
@@ -176,9 +188,9 @@ entities:
 ```
 </VersionBlock>
 
-## Combine columns with a key
+## 列をキーで結合する
 
-If a table doesn't have any key (like a primary key), use _surrogate combination_ to form a key that will help you identify a record by combining two columns. This applies to any [entity type](/docs/build/entities#entity-types). For example, you can combine `date_key` and `brand_code` from the `raw_brand_target_weekly` table to form a _surrogate key_. The following example creates a surrogate key by joining `date_key` and `brand_code` using a pipe (`|`) as a separator.
+テーブルにキー（主キーなど）がない場合は、_代理キーの組み合わせ_を使用して、2つの列を組み合わせることでレコードを識別するためのキーを作成します。これは、すべての[エンティティタイプ](/docs/build/entities#entity-types)に適用されます。たとえば、`raw_brand_target_weekly`テーブルの`date_key`と`brand_code`を組み合わせて_代理キー_を作成できます。次の例では、`date_key`と`brand_code`をパイプ（`|`）で区切って結合し、代理キーを作成しています。
 
 ```yaml
 

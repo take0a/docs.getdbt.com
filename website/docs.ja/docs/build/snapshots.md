@@ -328,24 +328,24 @@ snapshots:
 
 ### 構成のベストプラクティス
 
-<Expandable alt_header="Use the timestamp strategy where possible">
+<Expandable alt_header="可能な場合はタイムスタンプ戦略を使用する">
 
-This strategy handles column additions and deletions better than the `check` strategy.
-
-</Expandable>
-
-
-<Expandable alt_header="Use dbt_valid_to_current for easier date range queries">
-
-By default, `dbt_valid_to` is `NULL` for current records. However, if you set the [`dbt_valid_to_current` configuration](/reference/resource-configs/dbt_valid_to_current) (available in dbt Core v1.9+), `dbt_valid_to` will be set to your specified value (such as `9999-12-31`) for current records.
-
-This allows for straightforward date range filtering.
+この戦略は、列の追加と削除を `check` 戦略よりも適切に処理します。
 
 </Expandable>
 
-<Expandable alt_header="Ensure your unique key is really unique">
 
-The unique key is used by dbt to match rows up, so it's extremely important to make sure this key is actually unique! If you're snapshotting a source, I'd recommend adding a uniqueness test to your source ([example](https://github.com/dbt-labs/jaffle_shop/blob/8e7c853c858018180bef1756ec93e193d9958c5b/models/staging/schema.yml#L26)).
+<Expandable alt_header="日付範囲のクエリを簡単にするには、dbt_valid_to_current を使用します。">
+
+デフォルトでは、現在のレコードの `dbt_valid_to` は `NULL` です。ただし、[`dbt_valid_to_current` 設定](/reference/resource-configs/dbt_valid_to_current) (dbt Core v1.9 以降で利用可能) を設定すると、現在のレコードの `dbt_valid_to` は指定した値 (`9999-12-31` など) に設定されます。
+
+これにより、日付範囲によるフィルタリングが簡単になります。
+
+</Expandable>
+
+<Expandable alt_header="ユニークキーが本当にユニークであることを確認する">
+
+dbt は行を照合するためにこの一意のキーを使用するため、このキーが実際に一意であることを確認することが非常に重要です。ソースのスナップショットを作成する場合は、ソースに一意性テストを追加することをお勧めします ([例](https://github.com/dbt-labs/jaffle_shop/blob/8e7c853c858018180bef1756ec93e193d9958c5b/models/staging/schema.yml#L26))。
 </Expandable>
 
 <VersionBlock lastVersion="1.8">
@@ -359,52 +359,52 @@ Snapshots cannot be rebuilt. As such, it's a good idea to put snapshots in a sep
 
 <VersionBlock firstVersion="1.9">
 
-<Expandable alt_header="Use a schema that is separate to your models' schema">
+<Expandable alt_header="モデルのスキーマとは別のスキーマを使用する">
 
-Snapshots can't be rebuilt. Because of this, it's a good idea to put snapshots in a separate schema so end users know they're special. From there, you may want to set different privileges on your snapshots compared to your models, and even run them as a different user (or role, depending on your warehouse) to make it very difficult to drop a snapshot unless you really want to.
+スナップショットは再構築できません。そのため、エンドユーザーにスナップショットが特別なものであることを認識してもらうために、スナップショットを別のスキーマに配置することをお勧めします。さらに、モデルとは異なる権限をスナップショットに設定したり、別のユーザー（またはウェアハウスによってはロール）で実行したりすることで、本当に必要な場合を除き、スナップショットの削除を非常に困難にすることができます。
 
 </Expandable>
 
-<Expandable alt_header="Use ephemeral model to clean or transform data before snapshotting">
+<Expandable alt_header="スナップショットを作成する前に、一時モデルを使用してデータをクリーンアップまたは変換します。">
 
- If you need to clean or transform your data before snapshotting, create an ephemeral model or a staging model that applies the necessary transformations. Then, reference this model in your snapshot configuration. This approach keeps your snapshot definitions clean and allows you to test and run transformations separately.
+スナップショットを作成する前にデータのクリーンアップや変換が必要な場合は、必要な変換を適用する一時モデルまたはステージングモデルを作成します。そして、このモデルをスナップショット設定で参照します。この方法により、スナップショット定義がクリーンな状態を維持し、変換を個別にテストおよび実行できます。
 
 </Expandable>
 </VersionBlock>
 
-### How snapshots work
+### スナップショットの仕組み
 
-When you run the [`dbt snapshot` command](/reference/commands/snapshot):
-* **On the first run:** dbt will create the initial snapshot table — this will be the result set of your `select` statement, with additional columns including `dbt_valid_from` and `dbt_valid_to`. All records will have a `dbt_valid_to = null` or the value specified in [`dbt_valid_to_current`](/reference/resource-configs/dbt_valid_to_current) (available in dbt Core 1.9+) if configured.
-* **On subsequent runs:** dbt will check which records have changed or if any new records have been created:
-  - The `dbt_valid_to` column will be updated for any existing records that have changed.
-  - The updated record and any new records will be inserted into the snapshot table. These records will now have `dbt_valid_to = null` or the value configured in `dbt_valid_to_current` (available in dbt Core v1.9+).
+[`dbt snapshot` コマンド](/reference/commands/snapshot) を実行すると、以下の処理が行われます。
+* **初回実行時:** dbt は初期スナップショット テーブルを作成します。これは `select` ステートメントの結果セットで、`dbt_valid_from` や `dbt_valid_to` などの列が追加されます。すべてのレコードの `dbt_valid_to = null` または [`dbt_valid_to_current`](/reference/resource-configs/dbt_valid_to_current) (dbt Core 1.9 以降で使用可能) で指定された値 (設定されている場合) になります。
+* **2 回目以降の実行時:** dbt は、変更されたレコード、または新しいレコードが作成されたかどうかを確認します。
+  - 変更された既存のレコードがある場合は、`dbt_valid_to` 列が更新されます。
+  - 更新されたレコードと新しいレコードがスナップショット テーブルに挿入されます。これらのレコードには、`dbt_valid_to = null` または `dbt_valid_to_current` (dbt Core v1.9 以降で使用可能) で構成された値が設定されます。
 
 <VersionBlock firstVersion="1.9">
 
-#### Note 
-- These column names can be customized to your team or organizational conventions using the [snapshot_meta_column_names](#snapshot-meta-fields) config.
-- Use the `dbt_valid_to_current` config to set a custom indicator for the value of `dbt_valid_to` in current snapshot records (like a future date such as `9999-12-31`). By default, this value is `NULL`. When set, dbt will use this specified value instead of `NULL` for `dbt_valid_to` for current records in the snapshot table.
-- Use the [`hard_deletes`](/reference/resource-configs/hard-deletes) config to track hard deletes by adding a new record when row become "deleted" in source. Supported options are `ignore`, `invalidate`, and `new_record`.
+#### 注
+- これらの列名は、[snapshot_meta_column_names](#snapshot-meta-fields) 設定を使用して、チームまたは組織の慣例に合わせてカスタマイズできます。
+- `dbt_valid_to_current` 設定を使用して、現在のスナップショットレコードの `dbt_valid_to` の値にカスタムインジケーター（`9999-12-31` などの未来の日付など）を設定します。デフォルトでは、この値は `NULL` です。設定すると、dbt はスナップショットテーブル内の現在のレコードの `dbt_valid_to` に `NULL` ではなく、この指定された値を使用します。
+- [`hard_deletes`](/reference/resource-configs/hard-deletes) 設定を使用して、ソースで行が「削除」されたときに新しいレコードを追加することで、ハード削除を追跡します。サポートされているオプションは `ignore`、`invalidate`、および `new_record` です。
 </VersionBlock>
 
-Snapshots can be referenced in downstream models the same way as referencing models — by using the [ref](/reference/dbt-jinja-functions/ref) function.
+スナップショットは、[ref](/reference/dbt-jinja-functions/ref) 関数を使用して、参照モデルと同じ方法で下流モデルで参照できます。
 
-## Detecting row changes
-Snapshot "strategies" define how dbt knows if a row has changed. There are two strategies built-in to dbt:
-- [Timestamp](#timestamp-strategy-recommended) &mdash; Uses an `updated_at` column to determine if a row has changed.
-- [Check](#check-strategy) &mdash; Compares a list of columns between their current and historical values to determine if a row has changed.
+## 行の変更の検出
+スナップショットの「戦略」は、dbt が行の変更を認識する方法を定義します。dbt には次の 2 つの戦略が組み込まれています。
+- [Timestamp](#timestamp-strategy-recommended) - `updated_at` 列を使用して行の変更の有無を判断します。
+- [Check](#check-strategy) - 列リストの現在の値と履歴値を比較して、行の変更の有無を判断します。
 
-### Timestamp strategy (recommended)
-The `timestamp` strategy uses an `updated_at` field to determine if a row has changed. If the configured `updated_at` column for a row is more recent than the last time the snapshot ran, then dbt will invalidate the old record and record the new one. If the timestamps are unchanged, then dbt will not take any action.
+### タイムスタンプ戦略（推奨）{#timestamp-strategy-recommended}
+`timestamp` 戦略では、`updated_at` フィールドを使用して行が変更されたかどうかを判断します。行に設定された `updated_at` 列が、スナップショットを最後に実行した時点よりも新しい場合、dbt は古いレコードを無効にし、新しいレコードを記録します。タイムスタンプが変更されていない場合、dbt は何もアクションを実行しません。
 
-The `timestamp` strategy requires the following configurations:
+`timestamp` 戦略には次の構成が必要です。
 
 | Config | Description | Example |
 | ------ | ----------- | ------- |
-| updated_at | A column which represents when the source row was last updated. May support ISO date strings and unix epoch integers, depending on the data platform you use. | `updated_at` |
+| updated_at | ソース行が最後に更新された日時を表す列。使用するデータプラットフォームに応じて、ISO日付文字列とUnixエポック整数がサポートされる場合があります。 | `updated_at` |
 
-**Example usage:**
+**使用例:**
 
 <VersionBlock lastVersion="1.8">
 
@@ -448,22 +448,22 @@ snapshots:
 </File>
 </VersionBlock>
 
-### Check strategy
-The `check` strategy is useful for tables which do not have a reliable `updated_at` column. This strategy works by comparing a list of columns between their current and historical values. If any of these columns have changed, then dbt will invalidate the old record and record the new one. If the column values are identical, then dbt will not take any action.
+### チェック戦略
+`check` 戦略は、信頼できる `updated_at` 列を持たないテーブルに役立ちます。この戦略は、列のリストを現在の値と履歴値で比較することで機能します。これらの列のいずれかが変更されている場合、dbt は古いレコードを無効にし、新しいレコードを記録します。列の値が同一の場合、dbt は何も処理しません。
 
-The `check` strategy requires the following configurations:
+`check` 戦略には、以下の設定が必要です:
 
 | Config | Description | Example |
 | ------ | ----------- | ------- |
-| check_cols | A list of columns to check for changes, or `all` to check all columns | `["name", "email"]` |
+| check_cols | 変更をチェックする列のリスト、またはすべての列をチェックする場合は「all」 | `["name", "email"]` |
 
 :::caution check_cols = 'all'
 
-The `check` snapshot strategy can be configured to track changes to _all_ columns by supplying `check_cols = 'all'`. It is better to explicitly enumerate the columns that you want to check. Consider using a <Term id="surrogate-key" /> to condense many columns into a single column.
+`check` スナップショット戦略は、`check_cols = 'all'` を指定することで、_すべての_列の変更を追跡するように設定できます。チェックする列を明示的に列挙することをお勧めします。<Term id="surrogate-key" /> を使用して、多数の列を 1 つの列にまとめることを検討してください。
 
 :::
 
-#### Example usage
+#### 使用例
 
 <VersionBlock lastVersion="1.8">
 
@@ -511,14 +511,14 @@ snapshots:
 
 </VersionBlock>
 
-####  Example usage with `updated_at`
+####  `updated_at` の使用例
 
-When using the `check` strategy, dbt tracks changes by comparing values in `check_cols`. By default, dbt uses the timestamp to update `dbt_updated_at`, `dbt_valid_from` and `dbt_valid_to` fields. Optionally you can set an `updated_at` column:
+`check` 戦略を使用する場合、dbt は `check_cols` の値を比較することで変更を追跡します。デフォルトでは、dbt はタイムスタンプを使用して `dbt_updated_at`、`dbt_valid_from`、`dbt_valid_to` フィールドを更新します。オプションで `updated_at` 列を設定できます:
 
-- If `updated_at` is configured, the `check` strategy uses this column instead, as with the timestamp strategy.
-- If `updated_at` value is null, dbt defaults to using the current timestamp.
+- `updated_at` が設定されている場合、`check` 戦略はタイムスタンプ戦略と同様に、代わりにこの列を使用します。
+- `updated_at` 値が null の場合、dbt はデフォルトで現在のタイムスタンプを使用します。
 
-Check out the following example, which shows how to use the `check` strategy with `updated_at`:
+次の例は、`updated_at` で `check` 戦略を使用する方法を示しています:
 
 ```yaml
 snapshots:
@@ -534,30 +534,31 @@ snapshots:
       updated_at: updated_at
 ```
 
-In this example:
+この例では:
 
-- If at least one of the specified `check_cols `changes, the snapshot creates a new row. If the `updated_at` column has a value (is not null), the snapshot uses it; otherwise, it defaults to the timestamp.
-- If `updated_at` isn’t set, then dbt automatically falls back to [using the current timestamp](#sample-results-for-the-check-strategy) to track changes.
-- Use this approach when your `updated_at` column isn't reliable for tracking record updates, but you still want to use it &mdash; rather than the snapshot's execution time &mdash; whenever row changes are detected.
+- 指定された `check_cols` の少なくとも 1 つが変更されると、スナップショットは新しい行を作成します。`updated_at` 列に値（null 以外）がある場合、スナップショットはその値を使用します。それ以外の場合は、デフォルトのタイムスタンプを使用します。
+- `updated_at` が設定されていない場合、dbt は自動的に [現在のタイムスタンプを使用](#チェック戦略のサンプル結果) して変更を追跡します。
+- この方法は、レコードの更新を追跡するのに `updated_at` 列を信頼できないが、行の変更が検出されるたびにスナップショットの実行時間ではなく、この列を使用したい場合に使用します。
 
-### Hard deletes (opt-in)
+### ハード削除（オプトイン）
 
 <VersionBlock firstVersion="1.9">
 
-In dbt v1.9 and higher, the [`hard_deletes`](/reference/resource-configs/hard-deletes) config replaces the `invalidate_hard_deletes` config to give you more control on how to handle deleted rows from the source. The `hard_deletes` config is not a separate strategy but an additional opt-in feature that can be used with any snapshot strategy.
+dbt v1.9 以降では、[`hard_deletes`](/reference/resource-configs/hard-deletes) 構成が `invalidate_hard_deletes` 構成に代わり、ソースから削除された行の処理方法をより細かく制御できるようになりました。`hard_deletes` 構成は独立した戦略ではなく、任意のスナップショット戦略で使用できる追加のオプトイン機能です。
 
-The `hard_deletes` config has three options/fields:
+`hard_deletes` 構成には、次の 3 つのオプション/フィールドがあります:
+
 | Field | Description |
 | --------- | ----------- |
-| `ignore` (default) | No action for deleted records. |
-| `invalidate` | Behaves the same as the existing `invalidate_hard_deletes=true`, where deleted records are invalidated by setting `dbt_valid_to`. |
-| `new_record` | Tracks deleted records as new rows using the `dbt_is_deleted` [meta field](#snapshot-meta-fields) when records are deleted.|
+| `ignore` (default) | 削除されたレコードに対してはアクションはありません。 |
+| `invalidate` | 既存の `invalidate_hard_deletes=true` と同じように動作し、削除されたレコードは `dbt_valid_to` を設定することで無効化されます。 |
+| `new_record` | レコードが削除されたときに、`dbt_is_deleted` [メタフィールド](#snapshot-meta-fields) を使用して、削除されたレコードを新しい行として追跡します。 |
 
 import HardDeletes from '/snippets/_hard-deletes.md';
 
 <HardDeletes />
 
-#### Example usage
+#### 使用例
 
 <File name='snapshots/orders_snapshot.yml'>
 
@@ -575,10 +576,10 @@ snapshots:
 
 </File>
 
-In this example, the `hard_deletes: new_record` config will add a new row for deleted records with the `dbt_is_deleted` column set to `True`.
-Any restored records are added as new rows with the `dbt_is_deleted` field set to `False`.
+この例では、`hard_deletes: new_record` 設定により、削除されたレコードに対して `dbt_is_deleted` 列が `True` に設定された新しい行が追加されます。
+復元されたレコードは、`dbt_is_deleted` フィールドが `False` に設定された新しい行として追加されます。
 
-The resulting table will look like this:
+結果のテーブルは次のようになります:
 
 | id | status | updated_at | dbt_valid_from | dbt_valid_to | dbt_is_deleted |
 | -- | ------ | ---------- | -------------- | ------------ | -------------- |
@@ -625,58 +626,58 @@ Note, in v1.9 and higher, the [`hard_deletes`](/reference/resource-configs/hard-
 
 </VersionBlock>
 
-## Snapshot meta-fields
+## スナップショットのメタフィールド
 
-Snapshot <Term id="table">tables</Term> will be created as a clone of your source dataset, plus some additional meta-fields*.
+スナップショット <Term id="table">テーブル</Term> は、ソースデータセットのクローンとして作成され、追加のメタフィールド* が追加されます。
 
-In dbt Core v1.9+ (or available sooner in [the "Latest" release track in dbt Cloud](/docs/dbt-versions/cloud-release-tracks)):
-- These column names can be customized to your team or organizational conventions using the [`snapshot_meta_column_names`](/reference/resource-configs/snapshot_meta_column_names) config.
-- Use the [`dbt_valid_to_current` config](/reference/resource-configs/dbt_valid_to_current) to set a custom indicator for the value of `dbt_valid_to` in current snapshot records (like a future date such as `9999-12-31`). By default, this value is `NULL`. When set, dbt will use this specified value instead of `NULL` for `dbt_valid_to` for current records in the snapshot table.
-- Use the [`hard_deletes`](/reference/resource-configs/hard-deletes) config to track deleted records as new rows with the `dbt_is_deleted` meta field when using the `hard_deletes='new_record'` field.
+dbt Core v1.9 以降（または [dbt Cloud の「最新」リリーストラック](/docs/dbt-versions/cloud-release-tracks) でより早く利用可能）では、次のようになります。
+- これらの列名は、[`snapshot_meta_column_names`](/reference/resource-configs/snapshot_meta_column_names) 設定を使用して、チームまたは組織の慣例に合わせてカスタマイズできます。
+- [`dbt_valid_to_current` 設定](/reference/resource-configs/dbt_valid_to_current) を使用して、現在のスナップショットレコードの `dbt_valid_to` の値にカスタムインジケーター（`9999-12-31` などの将来の日付など）を設定できます。デフォルトでは、この値は `NULL` です。設定すると、dbt はスナップショットテーブル内の現在のレコードの `dbt_valid_to` に `NULL` ではなくこの指定された値を使用します。
+- `hard_deletes='new_record'` フィールドを使用する場合、削除されたレコードを `dbt_is_deleted` メタフィールドの新しい行として追跡するには、[`hard_deletes`](/reference/resource-configs/hard-deletes) 設定を使用します。
 
 
 | Field          | <div style={{width:'250px'}}>Meaning</div> | Notes | Example|
 | -------------- | ------- | ----- | ------- |
-| `dbt_valid_from` | The timestamp when this snapshot row was first inserted and became valid. | This column can be used to order the different "versions" of a record. | `snapshot_meta_column_names: {dbt_valid_from: start_date}` |
-| `dbt_valid_to`   | The timestamp when this row became invalidated. For current records, this is `NULL` by default or the value specified in `dbt_valid_to_current`. | The most recent snapshot record will have `dbt_valid_to` set to `NULL` or the specified value.  | `snapshot_meta_column_names: {dbt_valid_to: end_date}` |
-| `dbt_scd_id`     | A unique key generated for each snapshot row. | This is used internally by dbt. | `snapshot_meta_column_names: {dbt_scd_id: scd_id}` |
-| `dbt_updated_at` | The `updated_at` timestamp of the source record when this snapshot row was inserted. | This is used internally by dbt. | `snapshot_meta_column_names: {dbt_updated_at: modified_date}` |
-| `dbt_is_deleted` | A string value indicating if the record has been deleted. (`True` if deleted, `False` if not deleted). |Added when `hard_deletes='new_record'` is configured.  | `snapshot_meta_column_names: {dbt_is_deleted: is_deleted}` |
+| `dbt_valid_from` | このスナップショット行が最初に挿入され、有効になったときのタイムスタンプ。 | この列は、レコードのさまざまな「バージョン」を順序付けるために使用できます。 | `snapshot_meta_column_names: {dbt_valid_from: start_date}` |
+| `dbt_valid_to`   | この行が無効化されたときのタイムスタンプ。現在のレコードの場合、これはデフォルトで `NULL` または `dbt_valid_to_current` で指定された値になります。| 最新のスナップショットレコードの場合、`dbt_valid_to` は `NULL` または指定された値に設定されます。  | `snapshot_meta_column_names: {dbt_valid_to: end_date}` |
+| `dbt_scd_id`     | 各スナップショット行に対して生成される一意のキー。| これは dbt によって内部的に使用されます。| `snapshot_meta_column_names: {dbt_scd_id: scd_id}` |
+| `dbt_updated_at` | このスナップショット行が挿入されたときのソース レコードの `updated_at` タイムスタンプ。 | これは dbt によって内部的に使用されます。 | `snapshot_meta_column_names: {dbt_updated_at: modified_date}` |
+| `dbt_is_deleted` | レコードが削除されたかどうかを示す文字列値。(削除された場合は `True`、削除されていない場合は `False`)。|`hard_deletes='new_record'` が設定されている場合に追加されます。 | `snapshot_meta_column_names: {dbt_is_deleted: is_deleted}` |
 
-All of these column names can be customized using the `snapshot_meta_column_names` config. Refer to this [example](/reference/resource-configs/snapshot_meta_column_names#example) for more details.
+これらの列名はすべて、`snapshot_meta_column_names` 設定を使用してカスタマイズできます。詳細については、こちらの [例](/reference/resource-configs/snapshot_meta_column_names#example) を参照してください。
 
-*The timestamps used for each column are subtly different depending on the strategy you use:
+*各列に使用されるタイムスタンプは、使用する戦略によって微妙に異なります。
 
-- For the `timestamp` strategy, the configured `updated_at` column is used to populate the `dbt_valid_from`, `dbt_valid_to` and `dbt_updated_at` columns.
+- `timestamp` 戦略の場合、設定された `updated_at` 列は、`dbt_valid_from`、`dbt_valid_to`、`dbt_updated_at` 列に入力するために使用されます。
 
-  <Expandable alt_header="Sample results for the timestamp strategy">
+  <Expandable alt_header="タイムスタンプ戦略のサンプル結果">
 
-  Snapshot query results at `2024-01-01 11:00`
+  \`2024-01-01 11:00` のスナップショットクエリ結果
 
   | id | status  | updated_at       |
   | -- | ------- | ---------------- |
   | 1        | pending | 2024-01-01 10:47 |
 
-  Snapshot results (note that `11:00` is not used anywhere):
+  スナップショットの結果 (`11:00` はどこにも使用されていないことに注意してください):
 
   | id | status  | updated_at       | dbt_valid_from   | dbt_valid_to     | dbt_updated_at   |
   | -- | ------- | ---------------- | ---------------- | ---------------- | ---------------- |
   | 1        | pending | 2024-01-01 10:47 | 2024-01-01 10:47 |                  | 2024-01-01 10:47 |
 
-  Query results at `2024-01-01 11:30`:
+  \`2024-01-01 11:30` のクエリ結果:
 
   | id | status  | updated_at       |
   | -- | ------- | ---------------- |
   | 1  | shipped | 2024-01-01 11:05 |
 
-  Snapshot results (note that `11:30` is not used anywhere):
+  スナップショットの結果 (`11:30` はどこにも使用されていないことに注意してください):
 
   | id | status  | updated_at       | dbt_valid_from   | dbt_valid_to     | dbt_updated_at   |
   | -- | ------- | ---------------- | ---------------- | ---------------- | ---------------- |
   | 1  | pending | 2024-01-01 10:47 | 2024-01-01 10:47 | 2024-01-01 11:05 | 2024-01-01 10:47 |
   | 1  | shipped | 2024-01-01 11:05 | 2024-01-01 11:05 |                  | 2024-01-01 11:05 |
 
-  Snapshot results with `hard_deletes='new_record'`:
+  \`hard_deletes='new_record'` を使用したスナップショットの結果:
 
   | id | status  | updated_at       | dbt_valid_from   | dbt_valid_to     | dbt_updated_at   | dbt_is_deleted |
   |----|---------|------------------|------------------|------------------|------------------|----------------|
@@ -687,36 +688,36 @@ All of these column names can be customized using the `snapshot_meta_column_name
 
   </Expandable>
 
-- For the `check` strategy, the current timestamp is used to populate each column. If configured, the `check` strategy uses the `updated_at` column instead, as with the timestamp strategy.
+- `check`戦略では、各列に現在のタイムスタンプが設定されます。設定されている場合、`check`戦略はタイムスタンプ戦略と同様に、代わりに`updated_at`列を使用します。
 
-  <Expandable alt_header="Sample results for the check strategy">
+  <Expandable alt_header="チェック戦略のサンプル結果">
 
-  Snapshot query results at `2024-01-01 11:00`
+  `2024-01-01 11:00` のスナップショットクエリ結果
 
   | id | status  |
   | -- | ------- |
   | 1  | pending |
 
-  Snapshot results:
+  スナップショットの結果:
 
   | id | status  | dbt_valid_from   | dbt_valid_to     | dbt_updated_at   |
   | -- | ------- | ---------------- | ---------------- | ---------------- |
   | 1  | pending | 2024-01-01 11:00 |                  | 2024-01-01 11:00 |
 
-  Query results at `2024-01-01 11:30`:
+  `2024-01-01 11:30` のクエリ結果:
 
   | id | status  |
   | -- | ------- |
   | 1  | shipped |
 
-  Snapshot results:
+  スナップショットの結果:
 
   | id | status  | dbt_valid_from   | dbt_valid_to     | dbt_updated_at   |
   | --- | ------- | ---------------- | ---------------- | ---------------- |
   | 1   | pending | 2024-01-01 11:00 | 2024-01-01 11:30 | 2024-01-01 11:00 |
   | 1   | shipped | 2024-01-01 11:30 |                  | 2024-01-01 11:30 |
 
-  Snapshot results with `hard_deletes='new_record'`:
+  `hard_deletes='new_record'` を使用したスナップショットの結果:
 
   | id | status  |  dbt_valid_from   | dbt_valid_to     | dbt_updated_at   | dbt_is_deleted |
   |----|---------|------------------|------------------|------------------|----------------|

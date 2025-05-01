@@ -1,35 +1,34 @@
 ---
-title: "Add Seeds to your DAG"
+title: "DAGにシードを追加する"
 sidebar_label: "Seeds"
-description: "Provide seed data files for your dbt models."
+description: "dbt モデル用のシード データ ファイルを提供します。"
 id: "seeds"
 ---
-## Related reference docs
-* [Seed configurations](/reference/seed-configs)
-* [Seed properties](/reference/seed-properties)
-* [`seed` command](/reference/commands/seed)
+## 関連リファレンスドキュメント
+* [シード設定](/reference/seed-configs)
+* [シードプロパティ](/reference/seed-properties)
+* [`seed` コマンド](/reference/commands/seed)
 
-## Overview
-Seeds are CSV files in your dbt project (typically in your `seeds` directory), that dbt can load into your <Term id="data-warehouse" /> using the `dbt seed` command.
+## 概要
+シードは、dbt プロジェクト（通常は `seeds` ディレクトリ）内の CSV ファイルで、dbt は `dbt seed` コマンドを使用してこれを <Term id="data-warehouse" /> に読み込むことができます。
 
-Seeds can be referenced in downstream models the same way as referencing models — by using the [`ref` function](/reference/dbt-jinja-functions/ref).
+シードは、モデルの参照と同様に、下流のモデルから [`ref` 関数](/reference/dbt-jinja-functions/ref) を使用して参照できます。
 
-Because these CSV files are located in your dbt repository, they are version controlled and code reviewable. Seeds are best suited to static data which changes infrequently.
+これらの CSV ファイルは dbt リポジトリに保存されるため、バージョン管理され、コードレビューが可能です。シードは、変更頻度の低い静的データに最適です。
 
-Good use-cases for seeds:
-* A list of mappings of country codes to country names
-* A list of test emails to exclude from analysis
-* A list of employee account IDs
+シードの適切な使用例:
+* 国コードと国名のマッピングリスト
+* 分析から除外するテストメールのリスト
+* 従業員アカウント ID のリスト
 
-Poor use-cases of dbt seeds:
-* Loading raw data that has been exported to CSVs
-* Any kind of production data containing sensitive information. For example
-personal identifiable information (PII) and passwords.
+dbt シードの不適切な使用例:
+* CSV にエクスポートされた生データの読み込み
+* 機密情報を含むあらゆる種類の本番環境データ
+たとえば、個人を特定できる情報 (PII) やパスワードなどです。
 
-
-## Example
-To load a seed file in your dbt project:
-1. Add the file to your `seeds` directory, with a `.csv` file extension, e.g. `seeds/country_codes.csv`
+## 例
+dbt プロジェクトにシードファイルを読み込むには:
+1. `seeds` ディレクトリに、`.csv` ファイル拡張子を付けたファイルを追加します (例: `seeds/country_codes.csv`)
 
 <File name='seeds/country_codes.csv'>
 
@@ -43,7 +42,7 @@ GB,United Kingdom
 
 </File>
 
-2. Run the `dbt seed` [command](/reference/commands/seed) — a new <Term id="table" /> will be created in your warehouse in your target schema, named `country_codes`
+2. `dbt seed` [コマンド](/reference/commands/seed) を実行します。新しい <Term id="table" /> がウェアハウスのターゲットスキーマに作成され、`country_codes` という名前になります。
 ```
 $ dbt seed
 
@@ -61,7 +60,7 @@ Completed successfully
 Done. PASS=1 ERROR=0 SKIP=0 TOTAL=1
 ```
 
-3. Refer to seeds in downstream models using the `ref` function.
+3. `ref` 関数を使用して下流モデルのシード値を参照します。
 
 <File name='models/orders.sql'>
 
@@ -72,12 +71,12 @@ select * from {{ ref('country_codes') }}
 
 </File>
 
-## Configuring seeds
-Seeds are configured in your `dbt_project.yml`, check out the [seed configurations](reference/seed-configs.md) docs for a full list of available configurations.
+## シードの設定
+シードは `dbt_project.yml` で設定されます。利用可能な設定の完全なリストについては、[シード設定](reference/seed-configs.md) ドキュメントをご覧ください。
 
 
-## Documenting and testing seeds
-You can document and test seeds in YAML by declaring properties — check out the docs on [seed properties](/reference/seed-properties) for more information.
+## シードのドキュメント化とテスト
+YAMLでプロパティを宣言することで、シードをドキュメント化およびテストできます。詳細については、[シードのプロパティ](/reference/seed-properties)のドキュメントをご覧ください。
 
 ## FAQs
 <FAQ path="Seeds/load-raw-data-with-seed" />

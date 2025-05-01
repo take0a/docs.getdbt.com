@@ -1,22 +1,24 @@
 ---
-title: "Add Exposures to your DAG"
+title: "DAGにエクスポージャーを追加する"
 sidebar_label: "Exposures"
 id: "exposures"
 ---
 
-Exposures make it possible to define and describe a downstream use of your dbt project, such as in a dashboard, application, or data science pipeline. By defining exposures, you can then:
-- run, test, and list resources that feed into your exposure
-- populate a dedicated page in the auto-generated [documentation](/docs/build/documentation) site with context relevant to data consumers
+エクスポージャーを使用すると、ダッシュボード、アプリケーション、データサイエンス パイプラインなど、dbt プロジェクトの下流での使用を定義および記述できます。エクスポージャーを定義することで、次のことが可能になります。
+- エクスポージャーにフィードされるリソースを実行、テスト、および一覧表示する
+- 自動生成された [ドキュメント](/docs/build/documentation) サイトに、データ コンシューマーに関連するコンテキストを専用ページとして表示する
 
-Exposures can be defined in two ways:
-- Manual &mdash; Declared [explicitly](/docs/build/exposures#declaring-an-exposure) in your project’s YAML files.
-- Automatic &mdash;  dbt Cloud [creates and visualizes downstream exposures](/docs/cloud-integrations/downstream-exposures) automatically for supported integrations, removing the need for manual YAML definitions. These downstream exposures are stored in dbt’s metadata system, appear in [dbt Explorer](/docs/collaborate/explore-projects), and behave like manual exposures. However, they don’t exist in YAML files.
+エクスポージャーは、以下の 2 つの方法で定義できます。
+- 手動 - プロジェクトの YAML ファイルで [明示的に](/docs/build/exposures#declaring-an-exposure) 宣言します。
+- 自動 - dbt Cloud は、サポートされている統合に対して [ダウンストリーム エクスポージャーを自動的に作成および視覚化](/docs/cloud-integrations/downstream-exposures) するため、手動での YAML 定義は不要になります。
+これらのダウンストリーム エクスポージャーは、dbt のメタデータ システムに保存され、[dbt Explorer](/docs/collaborate/explore-projects) に表示され、手動で定義したエクスポージャーと同様に動作します。
+ただし、YAML ファイルには存在しません。
 
-### Declaring an exposure
+### エクスポージャーの宣言
 
-Exposures are defined in `.yml` files nested under an `exposures:` key.
+エクスポージャーは、`exposures:` キーの下にネストされた `.yml` ファイルで定義されます。
 
-The following example shows an exposure definition in a `models/<filename>.yml` file:
+次の例は、`models/<filename>.yml` ファイル内のエクスポージャー定義を示しています:
 
 <File name='models/<filename>.yml'>
 
@@ -46,44 +48,47 @@ exposures:
 
 </File>
 
-### Available properties
+### 使用可能なプロパティ
 
-_Required:_
-- **name**: a unique exposure name written in [snake case](https://en.wikipedia.org/wiki/Snake_case)
-- **type**: one of `dashboard`, `notebook`, `analysis`, `ml`, `application` (used to organize in docs site)
-- **owner**: `name` or `email` required; additional properties allowed
+_必須:_
+- **name**: [スネークケース](https://en.wikipedia.org/wiki/Snake_case)で記述された一意のエクスポージャー名
+- **type**: `dashboard`、`notebook`、`analysis`、`ml`、`application` のいずれか（ドキュメントサイトでの整理に使用）
+- **owner**: `name` または `email` が必須。追加のプロパティも指定可能
 
-_Expected:_
-- **depends_on**: list of refable nodes, including `metric`, `ref`, and `source`. While possible, it is highly unlikely you will ever need an `exposure` to depend on a `source` directly.
+_推奨:_
+- **depends_on**: `metric`、`ref`、`source` を含む参照可能なノードのリスト。`exposure` が `source` に直接依存することは可能ですが、ほとんどありません。
 
-_Optional:_
-- **label**:  May contain spaces, capital letters, or special characters.
-- **url**:  Activates and populates the link to **View this exposure** in the upper right corner of the generated documentation site
-- **maturity**: Indicates the level of confidence or stability in the exposure. One of `high`, `medium`, or `low`. For example, you could use `high` maturity for a well-established dashboard, widely used and trusted within your organization. Use `low` maturity for a new or experimental analysis.
+_省略可能:_
+- **label**: スペース、大文字、または特殊文字を含めることができます。
+- **url**: 生成されたドキュメントサイトの右上隅にある「**このエクスポージャーを表示**」へのリンクを有効化して表示します。
+- **maturity**: エクスポージャーの信頼性または安定性のレベルを示します。「高」、「中」、「低」のいずれかになります。
+例えば、組織内で広く使用され、信頼されている、確立されたダッシュボードには「高」成熟度を使用できます。
+新しい分析や実験的な分析には「低」成熟度を使用します。
 
 _General properties (optional)_
 
 - [**description**](/reference/resource-properties/description)
 - [**tags**](/reference/resource-configs/tags)
 - [**meta**](/reference/resource-configs/meta)
-- [**enabled**](/reference/resource-configs/enabled) &mdash; You can set this property at the exposure level or at the project level in the [`dbt_project.yml`](/reference/dbt_project.yml) file.
+- [**enabled**](/reference/resource-configs/enabled) &mdash; このプロパティは、[`dbt_project.yml`](/reference/dbt_project.yml) ファイル内の公開レベルまたはプロジェクト レベルで設定できます。
 
-### Referencing exposures
+### エクスポージャーの参照
 
-Once an exposure is defined, you can run commands that reference it:
+エクスポージャーを定義したら、それを参照するコマンドを実行できます：
+
 ```
 dbt run -s +exposure:weekly_jaffle_report
 dbt test -s +exposure:weekly_jaffle_report
 
 ```
 
-When we generate the [dbt Explorer site](/docs/collaborate/explore-projects), you'll see the exposure appear:
+[dbt Explorer サイト](/docs/collaborate/explore-projects) を生成すると、公開内容が表示されます:
 
 <Lightbox src="/img/docs/building-a-dbt-project/dbt-explorer-exposures.jpg" title="Exposures has a dedicated section, under the 'Resources' tab in dbt Explorer,  which lists each exposure in your project."/>
 <Lightbox src="/img/docs/building-a-dbt-project/dag-exposures.png" title="Exposures appear as nodes in the dbt Explorer DAG. It displays an orange 'EXP' indicator within the node. "/>
 
-## Related docs
+## 関連ドキュメント
 
-* [Exposure properties](/reference/exposure-properties)
-* [`exposure:` selection method](/reference/node-selection/methods#exposure)
-* [Data health tiles](/docs/collaborate/data-tile)
+* [エクスポージャープロパティ](/reference/exposure-properties)
+* [`exposure:` 選択方法](/reference/node-selection/methods#exposure)
+* [データヘルスタイル](/docs/collaborate/data-tile)

@@ -1,7 +1,7 @@
 ---
-title: "Quickstart for the dbt Cloud Semantic Layer and Snowflake"
+title: "dbt Cloud セマンティック レイヤーと Snowflake のクイックスタート"
 id: sl-snowflake-qs
-description: "Use this guide to build and define metrics, set up the dbt Cloud Semantic Layer, and query them using Google Sheets."
+description: "このガイドを使用して、指標を構築および定義し、dbt Cloud Semantic Layer を設定し、Google スプレッドシートを使用してクエリを実行します。"
 sidebar_label: "Quickstart with the dbt Semantic Layer and Snowflake"
 meta:
   api_name: dbt Semantic Layer APIs
@@ -22,112 +22,122 @@ import ConnectQueryAPI from '/snippets/_sl-connect-and-query-api.md';
 import RunProdJob from '/snippets/_sl-run-prod-job.md';
 import SlSetUp from '/snippets/_new-sl-setup.md'; 
 
-## Introduction
+## はじめに
 
-The [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl), powered by [MetricFlow](/docs/build/about-metricflow), simplifies the setup of key business metrics. It centralizes definitions, avoids duplicate code, and ensures easy access to metrics in downstream tools. MetricFlow helps manage company metrics easier, allowing you to define metrics in your dbt project and query them in dbt Cloud with [MetricFlow commands](/docs/build/metricflow-commands).
+[MetricFlow](/docs/build/about-metricflow) を基盤とする [dbt セマンティックレイヤー](/docs/use-dbt-semantic-layer/dbt-sl) は、主要なビジネスメトリクスの設定を簡素化します。
+定義を一元化し、コードの重複を回避し、下流ツールからメトリクスに簡単にアクセスできるようにします。
+MetricFlow は、dbt プロジェクトでメトリクスを定義し、[MetricFlow コマンド](/docs/build/metricflow-commands) を使用して dbt Cloud でクエリを実行できるため、企業のメトリクス管理を容易にします。
 
 import SLCourses from '/snippets/_sl-course.md';
 
 <SLCourses/>
 
-This quickstart guide is designed for dbt Cloud users using Snowflake as their data platform. It focuses on building and defining metrics, setting up the dbt Semantic Layer in a dbt Cloud project, and querying metrics in Google Sheets. 
+このクイックスタートガイドは、Snowflakeをデータプラットフォームとして使用しているdbt Cloudユーザー向けに設計されています。
+指標の構築と定義、dbt Cloudプロジェクトでのdbtセマンティックレイヤーの設定、Googleスプレッドシートでの指標のクエリに焦点を当てています。
 
-If you're on different data platforms, you can also follow this guide and will need to modify the setup for the specific platform. See the [users on different platforms](#for-users-on-different-data-platforms) section for more information.
+異なるデータプラットフォームを使用している場合も、このガイドに従うことができますが、特定のプラットフォームに合わせて設定を変更する必要があります。
+詳細については、[異なるプラットフォームのユーザー](#for-users-on-different-data-platforms)セクションをご覧ください。
 
-### Prerequisites
+### 前提条件
 
-- You need a [dbt Cloud](https://www.getdbt.com/signup/) Trial, Team, or Enterprise account for all deployments. 
-- Have the correct [dbt Cloud license](/docs/cloud/manage-access/seats-and-users) and [permissions](/docs/cloud/manage-access/enterprise-permissions) based on your plan:
-  <DetailsToggle alt_header="More info on license and permissions">  
+- すべてのデプロイメントには、[dbt Cloud](https://www.getdbt.com/signup/) トライアル、チーム、またはエンタープライズアカウントが必要です。
+- プランに応じた適切な [dbt Cloud ライセンス](/docs/cloud/manage-access/seats-and-users) と [権限](/docs/cloud/manage-access/enterprise-permissions) が必要です。
+
+  <DetailsToggle alt_header="ライセンスと権限に関する詳細情報">  
   
-  - Enterprise &mdash; Developer license with Account Admin permissions. Or "Owner" with a Developer license, assigned Project Creator, Database Admin, or Admin permissions.
-  - Team &mdash; "Owner" access with a Developer license.
-  - Trial &mdash; Automatic "Owner" access under a Team plan trial.
+  - エンタープライズ - アカウント管理者権限を持つ開発者ライセンス。
+  または、開発者ライセンスを持ち、プロジェクト作成者、データベース管理者、または管理者権限が割り当てられた「オーナー」。
+  - チーム - 開発者ライセンスを持つ「オーナー」アクセス。
+  - トライアル - チームプランのトライアルでは自動的に「オーナー」アクセスが付与されます。
   
   </DetailsToggle>
 
-- Create a [trial Snowflake account](https://signup.snowflake.com/):
-  - Select the Enterprise Snowflake edition with ACCOUNTADMIN access. Consider organizational questions when choosing a cloud provider, and refer to Snowflake's [Introduction to Cloud Platforms](https://docs.snowflake.com/en/user-guide/intro-cloud-platforms).
-  - Select a cloud provider and region. All cloud providers and regions will work so choose whichever you prefer.
-- Basic understanding of SQL and dbt. For example, you've used dbt before or have completed the [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals) course.
+- [Snowflakeのトライアルアカウント](https://signup.snowflake.com/)を作成します。
+  - ACCOUNTADMINアクセス権を持つEnterprise Snowflakeエディションを選択します。
+  クラウドプロバイダーを選択する際には、組織に関する問題を考慮し、Snowflakeの[クラウドプラットフォームの概要](https://docs.snowflake.com/en/user-guide/intro-cloud-platforms)を参照してください。
+  - クラウドプロバイダーとリージョンを選択します。
+  すべてのクラウドプロバイダーとリージョンが利用可能ですので、お好みのものを選択してください。
+- SQLとdbtの基本的な知識。
+例えば、以前にdbtを使用したことがある、または[dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals)コースを修了しているなどです。
 
 
-### For users on different data platforms
+### 異なるデータプラットフォームをご利用のお客様へ
 
-If you're using a data platform other than Snowflake, this guide is also applicable to you. You can adapt the setup for your specific platform by following the account setup and data loading instructions detailed in the following tabs for each respective platform.
+Snowflake以外のデータプラットフォームをご利用の場合も、このガイドは適用されます。
+各プラットフォームの以下のタブに記載されているアカウント設定とデータロードの手順に従って、お使いのプラットフォームに合わせて設定を調整してください。
 
-The rest of this guide applies universally across all supported platforms, ensuring you can fully leverage the dbt Semantic Layer.
+このガイドの残りの部分は、サポートされているすべてのプラットフォームに共通に適用され、dbtセマンティックレイヤーを最大限に活用できるようにします。
 
 <Tabs>
 
 <TabItem value="bq" label="BigQuery">
 
-Open a new tab and follow these quick steps for account setup and data loading instructions:
+新しいタブを開き、アカウントの設定とデータの読み込み手順については、以下の簡単な手順に従ってください:
 
-- [Step 2: Create a new GCP project](https://docs.getdbt.com/guides/bigquery?step=2)
-- [Step 3: Create BigQuery dataset](https://docs.getdbt.com/guides/bigquery?step=3)
-- [Step 4: Generate BigQuery credentials](https://docs.getdbt.com/guides/bigquery?step=4)
-- [Step 5: Connect dbt Cloud to BigQuery](https://docs.getdbt.com/guides/bigquery?step=5)
+- [ステップ 2: 新しい GCP プロジェクトを作成する](https://docs.getdbt.com/guides/bigquery?step=2)
+- [ステップ 3: BigQuery データセットを作成する](https://docs.getdbt.com/guides/bigquery?step=3)
+- [ステップ 4: BigQuery 認証情報を生成する](https://docs.getdbt.com/guides/bigquery?step=4)
+- [ステップ 5: dbt Cloud を BigQuery に接続する](https://docs.getdbt.com/guides/bigquery?step=5)
 
 </TabItem>
 
 <TabItem value="databricks" label="Databricks">
 
-Open a new tab and follow these quick steps for account setup and data loading instructions:
+新しいタブを開き、アカウントの設定とデータの読み込み手順については、以下の簡単な手順に従ってください:
 
-- [Step 2: Create a Databricks workspace](https://docs.getdbt.com/guides/databricks?step=2)
-- [Step 3: Load data](https://docs.getdbt.com/guides/databricks?step=3)
-- [Step 4: Connect dbt Cloud to Databricks](https://docs.getdbt.com/guides/databricks?step=4)
+- [ステップ 2: Databricks ワークスペースを作成する](https://docs.getdbt.com/guides/databricks?step=2)
+- [ステップ 3: データを読み込む](https://docs.getdbt.com/guides/databricks?step=3)
+- [ステップ 4: dbt Cloud を Databricks に接続する](https://docs.getdbt.com/guides/databricks?step=4)
 
 </TabItem>
 
 <TabItem value="msfabric" label="Microsoft Fabric">
 
-Open a new tab and follow these quick steps for account setup and data loading instructions:
+新しいタブを開き、以下の簡単な手順に従ってアカウントの設定とデータの読み込みを行ってください:
 
-- [Step 2: Load data into your Microsoft Fabric warehouse](https://docs.getdbt.com/guides/microsoft-fabric?step=2)
-- [Step 3: Connect dbt Cloud to Microsoft Fabric](https://docs.getdbt.com/guides/microsoft-fabric?step=3)
+- [ステップ 2: Microsoft Fabric ウェアハウスにデータを読み込む](https://docs.getdbt.com/guides/microsoft-fabric?step=2)
+- [ステップ 3: dbt Cloud を Microsoft Fabric に接続する](https://docs.getdbt.com/guides/microsoft-fabric?step=3)
 
 </TabItem>
 
 <TabItem value="redshift" label="Redshift">
 
-Open a new tab and follow these quick steps for account setup and data loading instructions:
+新しいタブを開き、アカウントの設定とデータの読み込み手順については、以下の簡単な手順に従ってください:
 
-- [Step 2: Create a Redshift cluster](https://docs.getdbt.com/guides/redshift?step=2)
-- [Step 3: Load data](https://docs.getdbt.com/guides/redshift?step=3)
-- [Step 4: Connect dbt Cloud to Redshift](https://docs.getdbt.com/guides/redshift?step=3)
+- [ステップ 2: Redshift クラスターを作成する](https://docs.getdbt.com/guides/redshift?step=2)
+- [ステップ 3: データを読み込む](https://docs.getdbt.com/guides/redshift?step=3)
+- [ステップ 4: dbt Cloud を Redshift に接続する](https://docs.getdbt.com/guides/redshift?step=3)
 
 </TabItem>
 
 <TabItem value="starburst" label="Starburst Galaxy">
 
-Open a new tab and follow these quick steps for account setup and data loading instructions:
+新しいタブを開き、アカウントの設定とデータのロード手順については、以下の簡単な手順に従ってください:
 
-- [Step 2: Load data to an Amazon S3 bucket](https://docs.getdbt.com/guides/starburst-galaxy?step=2)
-- [Step 3: Connect Starburst Galaxy to Amazon S3 bucket data](https://docs.getdbt.com/guides/starburst-galaxy?step=3)
-- [Step 4: Create tables with Starburst Galaxy](https://docs.getdbt.com/guides/starburst-galaxy?step=4)
-- [Step 5: Connect dbt Cloud to Starburst Galaxy](https://docs.getdbt.com/guides/starburst-galaxy?step=5)
+- [ステップ 2: Amazon S3 バケットにデータをロードする](https://docs.getdbt.com/guides/starburst-galaxy?step=2)
+- [ステップ 3: Starburst Galaxy を Amazon S3 バケットのデータに接続する](https://docs.getdbt.com/guides/starburst-galaxy?step=3)
+- [ステップ 4: Starburst Galaxy を使用してテーブルを作成する](https://docs.getdbt.com/guides/starburst-galaxy?step=4)
+- [ステップ 5: dbt Cloud を Starburst Galaxy に接続する](https://docs.getdbt.com/guides/starburst-galaxy?step=5)
 
 </TabItem>
 
 </Tabs>
 
-## Create new Snowflake worksheet and set up environment
+## 新しいSnowflakeワークシートを作成し、環境を設定します。
 
-1. Log in to your [trial Snowflake account](https://signup.snowflake.com).
-2. In the Snowflake user interface (UI), click **+ Worksheet** in the upper right corner.
-3. Select **SQL Worksheet** to create a new worksheet.
+1. [トライアル版Snowflakeアカウント](https://signup.snowflake.com)にログインします。
+2. Snowflakeユーザーインターフェース（UI）で、右上にある**+ワークシート**をクリックします。
+3. **SQLワークシート** を選択して、新しいワークシートを作成します。
 
-### Set up Snowflake environment
+### Snowflake 環境の設定
 
-The data used here is stored as CSV files in a public S3 bucket and the following steps will guide you through how to prepare your Snowflake account for that data and upload it.
+ここで使用するデータは、CSV ファイルとしてパブリック S3 バケットに保存されています。以下の手順に従って、Snowflake アカウントでそのデータを準備し、アップロードしてください。
 
-Create a new virtual warehouse, two new databases (one for raw data, the other for future dbt development), and two new schemas (one for `jaffle_shop` data, the other for `stripe` data).
+新しい仮想ウェアハウス、2 つの新しいデータベース（1 つは生データ用、もう 1 つは将来の dbt 開発用）、2 つの新しいスキーマ（1 つは `jaffle_shop` データ用、もう 1 つは `stripe` データ用）を作成します。
 
-1. Run the following SQL commands one by one by typing them into the Editor of your new Snowflake SQL worksheet to set up your environment.
+1. 新しい Snowflake SQL ワークシートのエディターに次の SQL コマンドを 1 つずつ入力して実行し、環境を設定します。
 
-2. Click **Run** in the upper right corner of the UI for each one:
+2. 各コマンドの UI 右上隅にある [実行] をクリックします:
 
 ```sql
 -- Create a virtual warehouse named 'transforming'
@@ -142,10 +152,13 @@ create schema raw.jaffle_shop;
 create schema raw.stripe;
 ```
 
-### Load data into Snowflake
-Now that your environment is set up, you can start loading data into it. You will be working within the raw database, using the `jaffle_shop` and stripe schemas to organize your tables.
+### Snowflakeへのデータのロード
 
-1. Create customer table. First, delete all contents (empty) in the Editor of the Snowflake worksheet. Then, run this SQL command to create the customer table in the `jaffle_shop` schema:
+環境設定が完了したら、データのロードを開始できます。
+「jaffle_shop」スキーマとストライプスキーマを使用して、生のデータベース内で作業を行います。
+
+1. 顧客テーブルを作成します。まず、Snowflakeワークシートのエディターですべてのコンテンツを削除（空の状態）します。
+次に、次のSQLコマンドを実行して、「jaffle_shop」スキーマに顧客テーブルを作成します:
 
   ```sql
   create table raw.jaffle_shop.customers
@@ -155,9 +168,10 @@ Now that your environment is set up, you can start loading data into it. You wil
   );
   ```
 
-  You should see a ‘Table `CUSTOMERS` successfully created.’ message.
+  「テーブル `CUSTOMERS` が正常に作成されました。」というメッセージが表示されます。
 
-2. Load data. After creating the table, delete all contents in the Editor. Run this command to load data from the S3 bucket into the customer table:
+2. データをロードします。テーブルを作成したら、エディタ内のすべてのコンテンツを削除します。
+以下のコマンドを実行して、S3バケットから顧客テーブルにデータをロードします:
 
   ```sql
   copy into raw.jaffle_shop.customers (id, first_name, last_name)
@@ -169,9 +183,9 @@ Now that your environment is set up, you can start loading data into it. You wil
       );
   ```
 
-  You should see a confirmation message after running the command.
+  コマンドを実行すると確認メッセージが表示されます。
 
-3. Create `orders` table. Delete all contents in the Editor. Run the following command to create…
+3. `orders` テーブルを作成します。エディタ内の内容をすべて削除します。以下のコマンドを実行して作成します。
 
   ```sql
   create table raw.jaffle_shop.orders
@@ -183,9 +197,9 @@ Now that your environment is set up, you can start loading data into it. You wil
   );
   ```
 
-  You should see a confirmation message after running the command.
+  コマンドを実行すると確認メッセージが表示されます。
 
-4. Load data. Delete all contents in the Editor, then run this command to load data into the orders table:
+4. データをロードします。エディター内のすべてのコンテンツを削除し、次のコマンドを実行してデータをordersテーブルにロードします。
 
   ```sql
   copy into raw.jaffle_shop.orders (id, user_id, order_date, status)
@@ -197,9 +211,9 @@ Now that your environment is set up, you can start loading data into it. You wil
       );
   ```
 
-  You should see a confirmation message after running the command.
+  コマンドを実行すると確認メッセージが表示されます。
 
-5. Create `payment` table. Delete all contents in the Editor. Run the following command to create the payment table:
+5. `payment`テーブルを作成します。エディタ内の内容をすべて削除します。以下のコマンドを実行してpaymentテーブルを作成します。
 
   ```sql
   create table raw.stripe.payment
@@ -213,9 +227,9 @@ Now that your environment is set up, you can start loading data into it. You wil
   );
   ```
 
-  You should see a confirmation message after running the command.
+  コマンドを実行すると確認メッセージが表示されます。
 
-6. Load data. Delete all contents in the Editor. Run the following command to load data into the payment table:
+6. データをロードします。エディター内のすべてのコンテンツを削除します。以下のコマンドを実行して、支払いテーブルにデータをロードします。
 
   ```sql
   copy into raw.stripe.payment (id, orderid, paymentmethod, status, amount, created)
@@ -227,9 +241,9 @@ Now that your environment is set up, you can start loading data into it. You wil
       );
   ```
 
-  You should see a confirmation message after running the command.
+  コマンドを実行すると確認メッセージが表示されます。
 
-7. Verify data. Verify that the data is loaded by running these SQL queries. Confirm that you can see output for each one, like the following confirmation image.
+7. データを検証します。これらのSQLクエリを実行して、データがロードされていることを確認します。それぞれの出力が以下の確認画像のように表示されることを確認してください。
 
   ```sql
   select * from raw.jaffle_shop.customers;
@@ -239,42 +253,46 @@ Now that your environment is set up, you can start loading data into it. You wil
 
   <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-snowflake-confirm.jpg" width="90%" title="The image displays Snowflake's confirmation output when data loaded correctly in the Editor." />
 
-## Connect dbt Cloud to Snowflake
+## dbt Cloud を Snowflake に接続する
 
-There are two ways to connect dbt Cloud to Snowflake. The first option is Partner Connect, which provides a streamlined setup to create your dbt Cloud account from within your new Snowflake trial account. The second option is to create your dbt Cloud account separately and build the Snowflake connection yourself (connect manually). If you want to get started quickly, dbt Labs recommends using Partner Connect. If you want to customize your setup from the very beginning and gain familiarity with the dbt Cloud setup flow, dbt Labs recommends connecting manually.
+dbt Cloud を Snowflake に接続するには 2 つの方法があります。
+1 つ目は Partner Connect です。これは、新しい Snowflake トライアルアカウントから dbt Cloud アカウントを簡単に作成できる方法です。
+2 つ目は、dbt Cloud アカウントを別途作成し、Snowflake への接続を自分で構築する方法です（手動で接続）。
+すぐに使い始めたい場合は、dbt Labs では Partner Connect のご利用を推奨しています。
+最初から設定をカスタマイズし、dbt Cloud のセットアップフローに慣れたい場合は、手動で接続することを推奨しています。
 
 <Tabs>
 <TabItem value="partner-connect" label="Use Partner Connect" default>
 
-Using Partner Connect allows you to create a complete dbt account with your [Snowflake connection](/docs/cloud/connect-data-platform/connect-snowflake), [a managed repository](/docs/cloud/git/managed-repository), [environments](/docs/build/custom-schemas#managing-environments), and credentials.
+Partner Connect を使用すると、[Snowflake 接続](/docs/cloud/connect-data-platform/connect-snowflake)、[マネージドリポジトリ](/docs/cloud/git/managed-repository)、[環境](/docs/build/custom-schemas#managing-environments)、および認証情報を使用して、完全な dbt アカウントを作成できます。
 
-1. In the Snowflake UI, click on the home icon in the upper left corner. In the left sidebar, select **Data Products**. Then, select **Partner Connect**. Find the dbt tile by scrolling or by searching for dbt in the search bar. Click the tile to connect to dbt.
+1. Snowflake UI で、左上隅のホームアイコンをクリックします。左側のサイドバーで [**Data Products**] を選択します。次に、[**Partner Connect**] を選択します。スクロールするか、検索バーで「dbt」を検索して、dbt タイルを見つけます。タイルをクリックして dbt に接続します。
 
     <Lightbox src="/img/snowflake_tutorial/snowflake_partner_connect_box.png" title="Snowflake Partner Connect Box" />
 
-    If you’re using the classic version of the Snowflake UI, you can click the **Partner Connect** button in the top bar of your account. From there, click on the dbt tile to open up the connect box. 
+    Snowflake UIのクラシックバージョンをご利用の場合は、アカウント上部のバーにある**Partner Connect**ボタンをクリックしてください。そこからdbtタイルをクリックすると、接続ボックスが開きます。
 
     <Lightbox src="/img/snowflake_tutorial/snowflake_classic_ui_partner_connect.png" title="Snowflake Classic UI - Partner Connect" />
 
-2. In the **Connect to dbt** popup, find the **Optional Grant** option and select the **RAW** and **ANALYTICS** databases. This will grant access for your new dbt user role to each selected database. Then, click **Connect**.
+2. 「**dbt に接続**」ポップアップで「**オプションの付与**」オプションを見つけ、「**RAW**」と「**ANALYTICS**」データベースを選択します。これにより、新しい dbt ユーザーロールに、選択した各データベースへのアクセスが許可されます。「**接続**」をクリックします。
 
     <Lightbox src="/img/snowflake_tutorial/snowflake_classic_ui_connection_box.png" title="Snowflake Classic UI - Connection Box" />
 
     <Lightbox src="/img/snowflake_tutorial/snowflake_new_ui_connection_box.png" title="Snowflake New UI - Connection Box" />
 
-3. Click **Activate** when a popup appears: 
+3. ポップアップが表示されたら、[**アクティブ化**] をクリックします:
 
 <Lightbox src="/img/snowflake_tutorial/snowflake_classic_ui_activation_window.png" title="Snowflake Classic UI - Actviation Window" />
 
 <Lightbox src="/img/snowflake_tutorial/snowflake_new_ui_activation_window.png" title="Snowflake New UI - Activation Window" />
 
-4. After the new tab loads, you will see a form. If you already created a dbt Cloud account, you will be asked to provide an account name. If you haven't created an account, you will be asked to provide an account name and password.
+4. 新しいタブが読み込まれると、フォームが表示されます。dbt Cloudアカウントを既に作成済みの場合は、アカウント名の入力を求められます。アカウントを作成していない場合は、アカウント名とパスワードの入力を求められます。
 
 <Lightbox src="/img/snowflake_tutorial/dbt_cloud_account_info.png" title="dbt Cloud - Account Info" />
 
-5. After you have filled out the form and clicked **Complete Registration**, you will be logged into dbt Cloud automatically.
+5. フォームに記入し、「**登録完了**」をクリックすると、dbt Cloud に自動的にログインします。
 
-6. Click your account name in the left side menu and select **Account settings**, choose the "Partner Connect Trial" project, and select **snowflake** in the overview table. Select **Edit** and update the **Database** field to `analytics` and the **Warehouse** field to `transforming`.
+6. 左側のメニューでアカウント名をクリックし、「**アカウント設定**」を選択します。「Partner Connect Trial」プロジェクトを選択し、概要テーブルで「**snowflake**」を選択します。「**編集**」を選択し、「**データベース**」フィールドを「analytics」に、「**ウェアハウス**」フィールドを「transforming」に更新します。
 
 <Lightbox src="/img/snowflake_tutorial/dbt_cloud_snowflake_project_overview.png" title="dbt Cloud - Snowflake Project Overview" />
 
@@ -284,80 +302,79 @@ Using Partner Connect allows you to create a complete dbt account with your [Sno
 <TabItem value="manual-connect" label="Connect manually">
 
 
-1. Create a new project in dbt Cloud. Navigate to **Account settings** (by clicking on your account name in the left side menu), and click **+ New Project**.
-2. Enter a project name and click **Continue**.
-3. For the warehouse, click **Snowflake** then **Next** to set up your connection.
+1. dbt Cloud で新しいプロジェクトを作成します。左側のメニューでアカウント名をクリックして [**アカウント設定**] に移動し、[**+ 新しいプロジェクト**] をクリックします。
+2. プロジェクト名を入力し、[**続行**] をクリックします。
+3. ウェアハウスの場合は、[**Snowflake**] をクリックし、[**次へ**] をクリックして接続を設定します。
 
     <Lightbox src="/img/snowflake_tutorial/dbt_cloud_setup_snowflake_connection_start.png" title="dbt Cloud - Choose Snowflake Connection" />
 
-4. Enter your **Settings** for Snowflake with: 
-    * **Account** &mdash; Find your account by using the Snowflake trial account URL and removing `snowflakecomputing.com`. The order of your account information will vary by Snowflake version. For example, Snowflake's Classic console URL might look like: `oq65696.west-us-2.azure.snowflakecomputing.com`. The AppUI or Snowsight URL might look more like: `snowflakecomputing.com/west-us-2.azure/oq65696`. In both examples, your account will be: `oq65696.west-us-2.azure`. For more information, see [Account Identifiers](https://docs.snowflake.com/en/user-guide/admin-account-identifier.html) in the Snowflake docs.  
+4. Snowflake の **設定** を入力します。
+    * **アカウント** &mdash; Snowflake トライアルアカウントの URL から `snowflakecomputing.com` を削除して、アカウントを見つけます。アカウント情報の順序は、Snowflake のバージョンによって異なります。たとえば、Snowflake の Classic コンソールの URL は `oq65696.west-us-2.azure.snowflakecomputing.com` のようになります。AppUI または Snowsight の URL は `snowflakecomputing.com/west-us-2.azure/oq65696` のようになります。どちらの例でも、アカウントは `oq65696.west-us-2.azure` になります。詳細については、Snowflake ドキュメントの [アカウント識別子](https://docs.snowflake.com/en/user-guide/admin-account-identifier.html) を参照してください。
 
         <Snippet path="snowflake-acct-name" />
     
-    * **Role** &mdash; Leave blank for now. You can update this to a default Snowflake role later.
-    * **Database** &mdash; `analytics`.  This tells dbt to create new models in the analytics database.
-    * **Warehouse** &mdash; `transforming`. This tells dbt to use the transforming warehouse that was created earlier.
+    * **ロール** - 今は空白のままにしておきます。後でデフォルトのSnowflakeロールに更新できます。
+    * **データベース** - `analytics`。これは、dbtに分析データベースに新しいモデルを作成するように指示します。
+    * **ウェアハウス** - `transforming`。これは、dbtに、先ほど作成した変換ウェアハウスを使用するように指示します。
 
     <Lightbox src="/img/snowflake_tutorial/dbt_cloud_snowflake_account_settings.png" title="dbt Cloud - Snowflake Account Settings" />
 
-5. Enter your **Development Credentials** for Snowflake with: 
-    * **Username** &mdash; The username you created for Snowflake. The username is not your email address and is usually your first and last name together in one word. 
-    * **Password** &mdash; The password you set when creating your Snowflake account.
-    * **Schema** &mdash; You’ll notice that the schema name has been auto-created for you. By convention, this is `dbt_<first-initial><last-name>`. This is the schema connected directly to your development environment, and it's where your models will be built when running dbt within the Cloud IDE.
-    * **Target name** &mdash; Leave as the default.
-    * **Threads** &mdash; Leave as 4. This is the number of simultaneous connects that dbt Cloud will make to build models concurrently.
+5. Snowflake の**開発認証情報**を入力します:
+    * **ユーザー名** - Snowflake 用に作成したユーザー名です。ユーザー名はメールアドレスではなく、通常は名と姓を組み合わせた単語です。
+    * **パスワード** - Snowflake アカウント作成時に設定したパスワードです。
+    * **スキーマ** - スキーマ名は自動作成されています。慣例により、これは `dbt_<first-initial><last-name>` です。これは開発環境に直接接続されたスキーマであり、Cloud IDE 内で dbt を実行するときにモデルが構築される場所です。
+    * **ターゲット名** - デフォルトのままにします。
+    * **スレッド** - 4 のままにします。これは、dbt Cloud がモデルを同時に構築するために行う同時接続の数です。
 
     <Lightbox src="/img/snowflake_tutorial/dbt_cloud_snowflake_development_credentials.png" title="dbt Cloud - Snowflake Development Credentials" />
 
-6. Click **Test Connection**. This verifies that dbt Cloud can access your Snowflake account.
-7. If the connection test succeeds, click **Next**. If it fails, you may need to check your Snowflake settings and credentials.
-
+6. **「接続テスト」** をクリックします。これにより、dbt Cloud が Snowflake アカウントにアクセスできることが確認されます。
+7. 接続テストが成功した場合は、**「次へ」** をクリックします。失敗した場合は、Snowflake の設定と認証情報を確認する必要がある場合があります。
 </TabItem>
 </Tabs>
 
-## Set up dbt Cloud project
+## dbt Cloud プロジェクトのセットアップ
 
-In this section, you will set up a dbt Cloud managed repository and initialize your dbt project to start developing.
+このセクションでは、dbt Cloud 管理リポジトリをセットアップし、dbt プロジェクトを初期化して開発を開始します。
 
-### Set up a dbt Cloud managed repository 
-If you used Partner Connect, you can skip to [initializing your dbt project](#initialize-your-dbt-project-and-start-developing) as Partner Connect provides you with a [managed repository](/docs/cloud/git/managed-repository). Otherwise, you will need to create your repository connection. 
+### dbt Cloud マネージドリポジトリを設定する
+Partner Connect をご利用の場合は、[マネージドリポジトリ](/docs/cloud/git/managed-repository) が提供されるため、[dbt プロジェクトの初期化](#dbt プロジェクトを初期化して開発を開始) までスキップできます。それ以外の場合は、リポジトリ接続を作成する必要があります。
 
 <Snippet path="tutorial-managed-repo" />
 
-### Initialize your dbt project
-This guide assumes you use the [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) to develop your dbt project, define metrics, and query and preview metrics using [MetricFlow commands](/docs/build/metricflow-commands).
+### dbt プロジェクトを初期化する
+このガイドでは、[dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) を使用して dbt プロジェクトを開発し、指標を定義し、[MetricFlow コマンド](/docs/build/metricflow-commands) を使用して指標をクエリおよびプレビューすることを前提としています。
 
-Now that you have a repository configured, you can initialize your project and start development in dbt Cloud using the IDE:
+リポジトリの設定が完了したら、IDE を使用してプロジェクトを初期化し、dbt Cloud で開発を開始できます。
 
-1. Click **Start developing in the dbt Cloud IDE**. It might take a few minutes for your project to spin up for the first time as it establishes your git connection, clones your repo, and tests the connection to the warehouse.
-2. Above the file tree to the left, click **Initialize your project**. This builds out your folder structure with example models.
-3. Make your initial commit by clicking **Commit and sync**. Use the commit message `initial commit`. This creates the first commit to your managed repo and allows you to open a branch where you can add a new dbt code.
-4. You can now directly query data from your warehouse and execute `dbt run`. You can try this out now:
-    - Delete the models/examples folder in the **File Explorer**.
-    - Click **+ Create new file**, add this query to the new file, and click **Save as** to save the new file:
-      ```sql
-      select * from raw.jaffle_shop.customers
-      ```
-    - In the command line bar at the bottom, enter dbt run and click Enter. You should see a dbt run succeeded message.
+1. **[dbt Cloud IDE で開発を開始]** をクリックします。Git 接続の確立、リポジトリのクローン作成、ウェアハウスへの接続テストが行​​われるため、プロジェクトの初回起動には数分かかる場合があります。
+2. 左側のファイルツリーの上にある [**プロジェクトの初期化]** をクリックします。これにより、サンプルモデルを含むフォルダ構造が構築されます。
+3. [**コミットして同期]** をクリックして、最初のコミットを実行します。コミットメッセージには「initial commit」を使用します。これにより、マネージドリポジトリへの最初のコミットが作成され、新しい dbt コードを追加できるブランチが開きます。
+4. これで、ウェアハウスから直接データをクエリし、`dbt run` を実行できるようになりました。今すぐ試してみましょう。
+  - **ファイルエクスプローラー** で models/examples フォルダを削除します。
+  - 「**+ 新しいファイルを作成**」をクリックし、次のクエリを新しいファイルに追加して、「**名前を付けて保存**」をクリックして新しいファイルを保存します。 
+  ```sql
+  select * from raw.jaffle_shop.customers
+  ```
+  - 下部のコマンドラインバーに「dbt run」と入力し、Enterキーを押します。「dbt run が成功しました」というメッセージが表示されます。
 
-## Build your dbt project
-The next step is to build your project. This involves adding sources, staging models, business-defined entities, and packages to your project.
+## dbt プロジェクトをビルドする
+次のステップは、プロジェクトをビルドすることです。これには、ソース、ステージングモデル、ビジネス定義エンティティ、パッケージをプロジェクトに追加することが含まれます。
 
-### Add sources
+### ソースを追加する
 
-[Sources](/docs/build/sources) in dbt are the raw data tables you'll transform. By organizing your source definitions, you document the origin of your data. It also makes your project and transformation more reliable, structured, and understandable.
+dbt の [ソース](/docs/build/sources) は、変換する生データテーブルです。ソース定義を整理することで、データの出所を文書化できます。また、プロジェクトと変換の信頼性、構造、理解度が向上します。
 
-You have two options for working with files in the dbt Cloud IDE:
+dbt Cloud IDE でファイルを操作するには、次の 2 つの方法があります:
 
-- **Create a new branch (recommended)** &mdash; Create a new branch to edit and commit your changes. Navigate to **Version Control** on the left sidebar and click **Create branch**.
-- **Edit in the protected primary branch** &mdash; If you prefer to edit, format, or lint files and execute dbt commands directly in your primary git branch, use this option. The dbt Cloud IDE prevents commits to the protected branch so you'll be prompted to commit your changes to a new branch.
+- **新しいブランチを作成する（推奨）** - 変更を編集してコミットするための新しいブランチを作成します。左側のサイドバーの [**バージョン管理**] に移動し、[**ブランチを作成**] をクリックします。
+- **保護されたプライマリブランチで編集する** - ファイルの編集、フォーマット、または lint を実行し、プライマリ Git ブランチで直接 dbt コマンドを実行する場合は、このオプションを使用します。dbt Cloud IDE は保護されたブランチへのコミットを防ぐため、変更を新しいブランチにコミットするように求められます。
 
-Name the new branch `build-project`.
+新しいブランチに「build-project」という名前を付けます。
 
-1. Hover over the `models` directory and click the three-dot menu (**...**), then select **Create file**.
-2. Name the file `staging/jaffle_shop/src_jaffle_shop.yml` , then click **Create**.
-3. Copy the following text into the file and click **Save**.
+1. 「models」ディレクトリにマウスを移動し、3 点メニュー (**...**) をクリックして、[**ファイルを作成**] を選択します。
+2. ファイルに「staging/jaffle_shop/src_jaffle_shop.yml」という名前を付け、[**作成**] をクリックします。
+3. 次のテキストをファイルにコピーし、[**保存**] をクリックします。
 
 <File name='models/staging/jaffle_shop/src_jaffle_shop.yml'>
 
@@ -376,12 +393,12 @@ sources:
 </File>
 
 :::tip
-In your source file, you can also use the **Generate model** button to create a new model file for each source. This creates a new file in the `models` directory with the given source name and fill in the SQL code of the source definition.
+ソースファイルでは、**モデル生成** ボタンを使用して、各ソースに対して新しいモデルファイルを作成することもできます。これにより、`models` ディレクトリに指定されたソース名の新しいファイルが作成され、ソース定義のSQLコードが埋め込まれます。
 :::
 
-4. Hover over the `models` directory and click the three dot menu (**...**), then select **Create file**.
-5. Name the file `staging/stripe/src_stripe.yml` , then click **Create**.
-6. Copy the following text into the file and click **Save**.
+4. `models` ディレクトリにマウスを移動し、3 つのドットのメニュー (**...**) をクリックして、**ファイルの作成** を選択します。
+5. ファイルに「staging/stripe/src_stripe.yml」という名前を付け、**作成** をクリックします。
+6. 次のテキストをファイルにコピーし、**保存** をクリックします。
 
 <File name='models/staging/stripe/src_stripe.yml'>
 
@@ -397,11 +414,11 @@ sources:
 ```
 </File>
 
-### Add staging models
-[Staging models](/best-practices/how-we-structure/2-staging) are the first transformation step in dbt. They clean and prepare your raw data, making it ready for more complex transformations and analyses. Follow these steps to add your staging models to your project.
+### ステージングモデルの追加
+[ステージングモデル](/best-practices/how-we-structure/2-staging)は、dbtにおける最初の変換ステップです。生データをクレンジングして準備し、より複雑な変換や分析に備えます。以下の手順に従って、ステージングモデルをプロジェクトに追加してください。
 
-1. In the `jaffle_shop` sub-directory, create the file `stg_customers.sql`. Or, you can use the **Generate model** button to create a new model file for each source.
-2. Copy the following query into the file and click **Save**.
+1. `jaffle_shop` サブディレクトリに、`stg_customers.sql` ファイルを作成します。または、[**モデルの生成**] ボタンを使用して、ソースごとに新しいモデルファイルを作成することもできます。
+2. 次のクエリをファイルにコピーし、[**保存**] をクリックします。
 
 <File name='models/staging/jaffle_shop/stg_customers.sql'>
 
@@ -415,8 +432,8 @@ from {{ source('jaffle_shop', 'customers') }}
 
 </File>
 
-3. In the same `jaffle_shop` sub-directory, create the file `stg_orders.sql`
-4. Copy the following query into the file and click **Save**.
+3. 同じ「jaffle_shop」サブディレクトリに「stg_orders.sql」ファイルを作成します。
+4. 次のクエリをファイルにコピーし、「**保存**」をクリックします。
 
 <File name='models/staging/jaffle_shop/stg_orders.sql'>
 
@@ -431,8 +448,8 @@ from {{ source('jaffle_shop', 'customers') }}
 
 </File>
 
-5. In the `stripe` sub-directory, create the file `stg_payments.sql`.
-6. Copy the following query into the file and click **Save**.
+5. `stripe` サブディレクトリに、ファイル `stg_payments.sql` を作成します。
+6. 次のクエリをファイルにコピーし、**[保存]** をクリックします。
 
 <File name='models/staging/stripe/stg_payments.sql'>
 
@@ -452,16 +469,16 @@ from {{ source('stripe', 'payment') }}
 
 </File>
 
-7. Enter `dbt run` in the command prompt at the bottom of the screen. You should get a successful run and see the three models.
+7. 画面下部のコマンドプロンプトに「dbt run」と入力します。実行が成功し、3つのモデルが表示されます。
 
-### Add business-defined entities
+### ビジネス定義エンティティの追加
 
-This phase involves creating [models that serve as the entity layer or concept layer of your dbt project](/best-practices/how-we-structure/4-marts), making the data ready for reporting and analysis.  It also includes adding [packages](/docs/build/packages) and the [MetricFlow time spine](/docs/build/metricflow-time-spine) that extend dbt's functionality.
+このフェーズでは、[dbt プロジェクトのエンティティレイヤーまたはコンセプトレイヤーとして機能するモデル](/best-practices/how-we-structure/4-marts)を作成し、レポート作成と分析のためのデータ準備を行います。また、dbt の機能を拡張する[パッケージ](/docs/build/packages)と[MetricFlow タイムスパイン](/docs/build/metricflow-time-spine)の追加も含まれます。
 
-This phase is the [marts layer](/best-practices/how-we-structure/1-guide-overview#guide-structure-overview), which brings together modular pieces into a wide, rich vision of the entities an organization cares about.
+このフェーズは[marts レイヤー](/best-practices/how-we-structure/1-guide-overview#guide-structure-overview)であり、モジュール化された要素を統合して、組織が重視するエンティティの幅広く豊富なビジョンを構築します。
 
-1. Create the file `models/marts/fct_orders.sql`.
-2. Copy the following query into the file and click **Save**.
+1. ファイル `models/marts/fct_orders.sql` を作成します。
+2. 次のクエリをファイルにコピーし、[**保存**] をクリックします。
 
 <File name='models/marts/fct_orders.sql'>
 
@@ -508,8 +525,8 @@ select * from final
 
 </File>
 
-3. In the `models/marts` directory, create the file `dim_customers.sql`.
-4. Copy the following query into the file and click **Save**.
+3. `models/marts` ディレクトリに、ファイル `dim_customers.sql` を作成します。
+4. 次のクエリをファイルにコピーし、**[保存]** をクリックします。
 
 <File name='models/marts/dim_customers.sql'>
 
@@ -547,8 +564,8 @@ select * from final
 
 </File>
 
-5. In your main directory, create the file `packages.yml`.
-6. Copy the following text into the file and click **Save**.
+5. メインディレクトリに、`packages.yml` ファイルを作成します。
+6. 次のテキストをファイルにコピーし、[**保存**] をクリックします。
 
 <File name='packages.yml'>
 
@@ -560,8 +577,8 @@ packages:
 
 </File>
 
-7. In the `models` directory, create the file `metrics/metricflow_time_spine.sql` in your main directory.
-8. Copy the following query into the file and click **Save**.
+7. `models` ディレクトリ内のメインディレクトリに、ファイル `metrics/metricflow_time_spine.sql` を作成します。
+8. 次のクエリをファイルにコピーし、[**保存**] をクリックします。
 
 <File name='models/metrics/metricflow_time_spine.sql'>
 
@@ -590,31 +607,31 @@ select * from final
 
 </File>
 
-9. Enter `dbt run` in the command prompt at the bottom of the screen. You should get a successful run message and also see in the run details that dbt has successfully built five models.
+9. 画面下部のコマンドプロンプトに「dbt run」と入力します。実行成功のメッセージが表示され、実行の詳細画面でdbtが5つのモデルを正常に構築したことを確認できます。
 
-## Create semantic models
+## セマンティックモデルの作成
 
-In this section, you'll learn about [semantic model](https://docs.getdbt.com/guides/sl-snowflake-qs?step=6#about-semantic-models), [their components](https://docs.getdbt.com/guides/sl-snowflake-qs?step=6#semantic-model-components), and [how to configure a time spine](https://docs.getdbt.com/guides/sl-snowflake-qs?step=6#configure-a-time-spine).
+このセクションでは、[セマンティックモデル](https://docs.getdbt.com/guides/sl-snowflake-qs?step=6#about-semantic-models)、[そのコンポーネント](https://docs.getdbt.com/guides/sl-snowflake-qs?step=6#semantic-model-components)、および[タイムスパインの設定方法](https://docs.getdbt.com/guides/sl-snowflake-qs?step=6#configure-a-time-spine)について学習します。
 
 
-### About semantic models
+### セマンティックモデルについて
 
-[Semantic models](/docs/build/semantic-models) contain many object types (such as entities, measures, and dimensions) that allow MetricFlow to construct the queries for metric definitions.
+[セマンティックモデル](/docs/build/semantic-models)には、MetricFlowがメトリック定義のクエリを構築するために必要な多くのオブジェクトタイプ（エンティティ、メジャー、ディメンションなど）が含まれています。
 
-- Each semantic model will be 1:1 with a dbt SQL/Python model.
-- Each semantic model will contain (at most) 1 primary or natural entity.
-- Each semantic model will contain zero, one, or many foreign or unique entities used to connect to other entities.
-- Each semantic model may also contain dimensions, measures, and metrics. This is what actually gets fed into and queried by your downstream BI tool.
+- 各セマンティックモデルは、dbt SQL/Pythonモデルと1対1で対応します。
+- 各セマンティックモデルには、（最大で）1つのプライマリエンティティまたはナチュラルエンティティが含まれます。
+- 各セマンティックモデルには、他のエンティティへの接続に使用される0個、1個、または複数の外部エンティティまたは一意のエンティティが含まれます。
+- 各セマンティックモデルには、ディメンション、メジャー、メトリックが含まれる場合もあります。これらは、下流のBIツールに実際に入力され、クエリされるものです。
 
-In the following steps, semantic models enable you to define how to interpret the data related to orders. It includes entities (like ID columns serving as keys for joining data), dimensions (for grouping or filtering data), and measures (for data aggregations).
+次の手順では、セマンティックモデルを使用して、注文に関連するデータの解釈方法を定義できます。これには、エンティティ（データの結合キーとして機能するID列など）、ディメンション（データのグループ化またはフィルタリング用）、メジャー（データ集計用）が含まれます。
 
-1. In the `metrics` sub-directory, create a new file `fct_orders.yml`.
+1. `metrics` サブディレクトリに、新しいファイル `fct_orders.yml` を作成します。
 
 :::tip 
-Make sure to save all semantic models and metrics under the directory defined in the [`model-paths`](/reference/project-configs/model-paths) (or a subdirectory of it, like `models/semantic_models/`). If you save them outside of this path, it will result in an empty `semantic_manifest.json` file, and your semantic models or metrics won't be recognized.
+すべてのセマンティックモデルとメトリクスは、[`model-paths`](/reference/project-configs/model-paths) で定義されたディレクトリ（または `models/semantic_models/` のようなそのサブディレクトリ）に保存してください。このパス以外に保存すると、空の `semantic_manifest.json` ファイルが作成され、セマンティックモデルやメトリクスが認識されなくなります。
 :::
 
-2. Add the following code to that newly created file:
+2. 新しく作成したファイルに次のコードを追加します:
 
 <File name='models/metrics/fct_orders.yml'>
 
@@ -630,20 +647,20 @@ semantic_models:
 
 </File>
 
-### Semantic model components
+### セマンティックモデルの構成要素
 
-The following sections explain [dimensions](/docs/build/dimensions), [entities](/docs/build/entities), and [measures](/docs/build/measures) in more detail, showing how they each play a role in semantic models.
+以下のセクションでは、[ディメンション](/docs/build/dimensions)、[エンティティ](/docs/build/entities)、[メジャー](/docs/build/measures) について詳しく説明し、それぞれがセマンティックモデルでどのような役割を果たすかを示します。
 
-- [Entities](#entities) act as unique identifiers (like ID columns) that link data together from different tables.
-- [Dimensions](#dimensions) categorize and filter data, making it easier to organize.
-- [Measures](#measures) calculates data, providing valuable insights through aggregation.
+- [エンティティ](#entities) は、異なるテーブルのデータをリンクする一意の識別子（ID 列など）として機能します。
+- [ディメンション](#dimensions) は、データを分類およびフィルタリングして、整理を容易にします。
+- [メジャー](#measures) は、データを計算し、集計を通じて貴重な洞察を提供します。
 
 
-### Entities
+### エンティティ
 
-[Entities](/docs/build/semantic-models#entities) are a real-world concept in a business, serving as the backbone of your semantic model. These are going to be ID columns (like `order_id`) in our semantic models. These will serve as join keys to other semantic models.
+[エンティティ](/docs/build/semantic-models#entities)は、ビジネスにおける現実世界の概念であり、セマンティックモデルのバックボーンとして機能します。これらは、セマンティックモデルにおいてID列（`order_id`など）として機能します。また、他のセマンティックモデルへの結合キーとして機能します。
 
-Add entities to your `fct_orders.yml` semantic model file:
+`fct_orders.yml`セマンティックモデルファイルにエンティティを追加します。
 
 <File name='models/metrics/fct_orders.yml'>
 
@@ -666,11 +683,11 @@ semantic_models:
 
 </File>
 
-### Dimensions
+### ディメンション
 
-[Dimensions](/docs/build/semantic-models#entities) are a way to group or filter information based on categories or time. 
+[ディメンション](/docs/build/semantic-models#entities)は、カテゴリや時間に基づいて情報をグループ化またはフィルタリングする方法です。
 
-Add dimensions to your `fct_orders.yml` semantic model file:
+`fct_orders.yml` セマンティックモデルファイルにディメンションを追加します。
 
 <File name='models/metrics/fct_orders.yml'>
 
@@ -698,11 +715,11 @@ semantic_models:
 
 </File>
 
-### Measures
+### メジャー
 
-[Measures](/docs/build/semantic-models#measures) are aggregations performed on columns in your model. Often, you’ll find yourself using them as final metrics themselves. Measures can also serve as building blocks for more complicated metrics.
+[メジャー](/docs/build/semantic-models#measures) は、モデル内の列に対して実行される集計です。多くの場合、メジャー自体を最終的なメトリクスとして使用します。また、メジャーはより複雑なメトリクスの構成要素としても機能します。
 
-Add measures to your `fct_orders.yml` semantic model file:
+`fct_orders.yml` セマンティックモデルファイルにメジャーを追加します。
 
 <File name='models/metrics/fct_orders.yml'>
 
@@ -749,37 +766,37 @@ semantic_models:
 
 </File>
 
-### Configure a time spine
+### タイムスパインの設定
 
-To ensure accurate time-based aggregations, you must configure a [time spine](/docs/build/metricflow-time-spine). The time spine allows you to have accurate metric calculations over different time granularities.
+正確な時間ベースの集計を行うには、[タイムスパイン](/docs/build/metricflow-time-spine)を設定する必要があります。タイムスパインを使用すると、さまざまな時間粒度で正確なメトリック計算を行うことができます。
 
-1. Add a time spine model to your project at whichever granularity needed for your metrics (like daily or hourly).
-2. Configure each time spine in a YAML file to define how MetricFlow recognizes and uses its columns. Follow the instructions in [Configuring time spine in YAML](/docs/build/metricflow-time-spine#configuring-time-spine-in-yaml) documenation.
+1. メトリックに必要な粒度（日次、時間別など）で、プロジェクトにタイムスパインモデルを追加します。
+2. YAMLファイルで各タイムスパインを設定し、MetricFlowが列を認識して使用する方法を定義します。[YAMLでのタイムスパインの設定](/docs/build/metricflow-time-spine#configuring-time-spine-in-yaml)ドキュメントの手順に従ってください。
 
-For a step-by-step guide, refer to [MetricFlow time spine guide](/guides/mf-time-spine?step=1).
+詳細な手順については、[MetricFlow タイムスパインガイド](/guides/mf-time-spine?step=1)を参照してください。
 
-## Define metrics and add a second semantic model
+## メトリクスを定義し、2つ目のセマンティックモデルを追加する
 
-In this section, you will [define metrics](#define-metrics) and [add a second semantic model](#add-second-semantic-model-to-your-project) to your project.
+このセクションでは、[メトリクスを定義](#define-metrics)し、[2つ目のセマンティックモデルをプロジェクトに追加](#add-second-semantic-model-to-your-project)します。
 
-### Define metrics
+### 指標の定義
 
-[Metrics](/docs/build/metrics-overview) are the language your business users speak and measure business performance. They are an aggregation over a column in your warehouse that you enrich with dimensional cuts.
+[指標](/docs/build/metrics-overview) は、ビジネスユーザーがビジネスパフォーマンスを測定するための言語です。これは、ウェアハウス内の列を集計したもので、ディメンションカットによって拡張されます。
 
-There are different types of metrics you can configure:
+設定できる指標には、以下の種類があります。
 
-- [Conversion metrics](/docs/build/conversion) &mdash; Track when a base event and a subsequent conversion event occur for an entity within a set time period.
-- [Cumulative metrics](/docs/build/metrics-overview#cumulative-metrics) &mdash; Aggregate a measure over a given window. If no window is specified, the window will accumulate the measure over all of the recorded time period. Note that you must create the time spine model before you add cumulative metrics.
-- [Derived metrics](/docs/build/metrics-overview#derived-metrics) &mdash; Allows you to do calculations on top of metrics.
-- [Simple metrics](/docs/build/metrics-overview#simple-metrics) &mdash; Directly reference a single measure without any additional measures involved.
-- [Ratio metrics](/docs/build/metrics-overview#ratio-metrics) &mdash; Involve a numerator metric and a denominator metric. A constraint string can be applied to both the numerator and denominator or separately to the numerator or denominator.
+- [コンバージョン指標](/docs/build/conversion) - 設定された期間内に、エンティティのベースイベントとそれに続くコンバージョンイベントがいつ発生したかを追跡します。
+- [累積指標](/docs/build/metrics-overview#cumulative-metrics) - 指定された期間の指標を集計します。期間が指定されていない場合、その期間は記録された期間全体にわたって指標を累積します。累積指標を追加する前に、タイムスパインモデルを作成する必要があることに注意してください。
+- [派生指標](/docs/build/metrics-overview#derived-metrics) - 指標に基づいて計算を行うことができます。
+- [シンプルメトリクス](/docs/build/metrics-overview#simple-metrics) - 追加のメトリクスを使用せずに、単一のメトリクスを直接参照します。
+- [比率メトリクス](/docs/build/metrics-overview#ratio-metrics) - 分子メトリクスと分母メトリクスを使用します。制約文字列は、分子と分母の両方に適用することも、分子または分母に個別に適用することもできます。
 
-Once you've created your semantic models, it's time to start referencing those measures you made to create some metrics:
+セマンティックモデルを作成したら、作成したメジャーを参照してメトリクスを作成します。
 
-1. Add metrics to your `fct_orders.yml` semantic model file:
+1. `fct_orders.yml` セマンティックモデルファイルにメトリクスを追加します。
 
 :::tip 
-Make sure to save all semantic models and metrics under the directory defined in the [`model-paths`](/reference/project-configs/model-paths) (or a subdirectory of it, like `models/semantic_models/`). If you save them outside of this path, it will result in an empty `semantic_manifest.json` file, and your semantic models or metrics won't be recognized.
+すべてのセマンティックモデルとメトリクスは、[`model-paths`](/reference/project-configs/model-paths) で定義されたディレクトリ（または `models/semantic_models/` のようなそのサブディレクトリ）に保存してください。このパス以外に保存すると、空の `semantic_manifest.json` ファイルが作成され、セマンティックモデルやメトリクスが認識されなくなります。
 :::
 
 <File name='models/metrics/fct_orders.yml'>
@@ -881,16 +898,16 @@ metrics:
 
 </File>
 
-### Add second semantic model to your project
+### プロジェクトに2つ目のセマンティックモデルを追加しましょう
 
-Great job, you've successfully built your first semantic model! It has all the required elements: entities, dimensions, measures, and metrics.
+おめでとうございます！最初のセマンティックモデルの構築に成功しました！エンティティ、ディメンション、メジャー、メトリックなど、必要な要素がすべて揃っています。
 
-Let’s expand your project's analytical capabilities by adding another semantic model in your other marts model, such as: `dim_customers.yml`.
+もう1つのマートモデル（`dim_customers.yml` など）にセマンティックモデルを追加して、プロジェクトの分析機能を拡張しましょう。
 
-After setting up your orders model:
+注文モデルの設定後：
 
-1. In the `metrics` sub-directory, create the file `dim_customers.yml`.
-2. Copy the following query into the file and click **Save**.
+1. `metrics` サブディレクトリに、`dim_customers.yml` ファイルを作成します。
+2. 次のクエリをファイルにコピーし、**[保存]** をクリックします。
 
 <File name='models/metrics/dim_customers.yml'>
 
@@ -943,7 +960,7 @@ metrics:
 
 </File>
 
-This semantic model uses simple metrics to focus on customer metrics and emphasizes customer dimensions like name, type, and order dates. It uniquely analyzes customer behavior, lifetime value, and order patterns.
+このセマンティックモデルは、シンプルな指標を用いて顧客指標に焦点を当て、氏名、タイプ、注文日といった顧客ディメンションを重視します。顧客行動、生涯価値、注文パターンを独自に分析します。
 
 ## Test and query metrics
 
@@ -964,15 +981,15 @@ https://github.com/dbt-labs/docs.getdbt.com/blob/current/website/snippets/_sl-ru
 <RunProdJob/>
 
 
-## Set up dbt Semantic Layer
+## dbt セマンティックレイヤーの設定
 
-In this section, you will learn how to set up the dbt Semantic Layer, add credentials, and create service tokens. This section goes over the following topics:
+このセクションでは、dbt セマンティックレイヤーの設定、認証情報の追加、サービストークンの作成方法を学習します。このセクションでは、以下のトピックについて説明します。
 
-- [Select environment](#1-select-environment)
-- [Add a credential and create service tokens](#2-add-a-credential-and-create-service-tokens)
-- [View connection detail](#3-view-connection-detail)
-- [Add more credentials](#4-add-more-credentials)
-- [Delete configuration](#delete-configuration)
+- [環境の選択](#1-select-environment)
+- [認証情報の追加とサービストークンの作成](#2-add-a-credential-and-create-service-tokens)
+- [接続の詳細の表示](#3-view-connection-detail)
+- [認証情報の追加](#4-add-more-credentials)
+- [構成の削除](#delete-configuration)
 
 <!-- The below snippets (or reusables) can be found in the following file locations in the docs code repository) 
 
@@ -981,16 +998,16 @@ https://github.com/dbt-labs/docs.getdbt.com/blob/current/website/snippets/_new-s
 
 <SlSetUp/>
 
-## Query the Semantic Layer
+## セマンティックレイヤーへのクエリ
 
-This page will guide you on how to connect and use the following integrations to query your metrics:
+このページでは、以下の統合機能に接続してメトリクスのクエリを実行する方法について説明します。
 
-- [Connect and query with Google Sheets](#connect-and-query-with-google-sheets)
-- [Connect and query with Hex](#connect-and-query-with-hex)
+- [Google スプレッドシートに接続してクエリを実行する](#connect-and-query-with-google-sheets)
+- [Hex に接続してクエリを実行する](#connect-and-query-with-hex)
 
-The dbt Semantic Layer enables you to connect and query your metric with various available tools like Google Sheets, Hex, Tableau, and more. 
+dbt セマンティックレイヤーを使用すると、Google スプレッドシート、Hex、Tableau などのさまざまなツールに接続してメトリクスのクエリを実行できます。
 
-Query metrics using other tools such as [first-class integrations](/docs/cloud-integrations/avail-sl-integrations), [Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview), and [exports](/docs/use-dbt-semantic-layer/exports) to expose tables of metrics and dimensions in your data platform and create a custom integration with tools like PowerBI.
+[ファーストクラス統合](/docs/cloud-integrations/avail-sl-integrations)、[セマンティックレイヤー API](/docs/dbt-cloud-apis/sl-api-overview)、[エクスポート](/docs/use-dbt-semantic-layer/exports)などのツールを使用してメトリクスのクエリを実行し、データプラットフォーム内のメトリクスとディメンションのテーブルを公開して、PowerBI などのツールとのカスタム統合を作成できます。
 
  ### Connect and query with Google Sheets
 
@@ -1001,92 +1018,100 @@ https://github.com/dbt-labs/docs.getdbt.com/blob/current/website/snippets/_sl-co
 
 <ConnectQueryAPI/>
 
-### Connect and query with Hex
-This section will guide you on how to use the Hex integration to query your metrics using Hex. Select the appropriate tab based on your connection method:
+### Hex に接続してクエリを実行する
+このセクションでは、Hex 統合を使用して Hex でメトリクスをクエリする方法について説明します。接続方法に応じて適切なタブを選択してください。
 
 <Tabs>
 <TabItem value="partner-connect" label="Query Semantic Layer with Hex" default>
 
-1. Navigate to the [Hex login page](https://app.hex.tech/login). 
-2. Sign in or make an account (if you don’t already have one). 
-  - You can make Hex free trial accounts with your work email or a .edu email.
-3. In the top left corner of your page, click on the **HEX** icon to go to the home page.
-4. Then, click the **+ New project** button on the top right.
+1. [Hex ログインページ](https://app.hex.tech/login) に移動します。
+2. ログインするか、アカウントを作成します（まだアカウントをお持ちでない場合）。
+- 職場のメールアドレスまたは .edu メールアドレスで、Hex の無料トライアルアカウントを作成できます。
+3. ページの左上にある **HEX** アイコンをクリックして、ホームページに移動します。
+4. 次に、右上にある **+ 新しいプロジェクト** ボタンをクリックします。
+
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_new.png" width="50%" title="Click the '+ New project' button on the top right"/>
-5. Go to the menu on the left side and select **Data browser**. Then select **Add a data connection**. 
-6. Click **Snowflake**. Provide your data connection a name and description. You don't need to your data warehouse credentials to use the Semantic Layer.
+
+5. 左側のメニューに移動し、**データブラウザ**を選択します。次に、**データ接続の追加**を選択します。
+6. **Snowflake**をクリックします。データ接続の名前と説明を入力します。セマンティックレイヤーを使用するのに、データウェアハウスの認証情報は必要ありません。
+
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_new_data_connection.png" width="50%" title="Select 'Data browser' and then 'Add a data connection' to connect to Snowflake."/>
-7. Under **Integrations**, toggle the dbt switch to the right to enable the dbt integration.
+
+7. [**統合**] の下で、dbt スイッチを右に切り替えて、dbt 統合を有効にします。
+
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_dbt_toggle.png" width="50%" title="Click on the dbt toggle to enable the integration. "/>
 
-8. Enter the following information:
-   * Select your version of dbt as 1.6 or higher
-   * Enter your environment id 
-   * Enter your service token 
-   * Make sure to click on the **Use Semantic Layer** toggle. This way, all queries are routed through dbt.
-   * Click **Create connection** in the bottom right corner.
-9. Hover over **More** on the menu shown in the following image and select **dbt Semantic Layer**.
+8. 以下の情報を入力します。
+    * dbt のバージョンとして 1.6 以上を選択します。
+    * 環境 ID を入力します。
+    * サービストークンを入力します。
+    * **「セマンティック レイヤーを使用する」** トグルを必ずクリックしてください。これにより、すべてのクエリが dbt を経由するようになります。
+    * 右下にある **接続を作成** をクリックします。
+9. 次の画像に示すメニューの **詳細** にマウスを移動し、**dbt セマンティック レイヤー** を選択します。
+
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_make_sl_cell.png" width="90%" title="Hover over 'More' on the menu and select 'dbt Semantic Layer'."/>
 
-10. Now, you should be able to query metrics using Hex! Try it yourself: 
-    - Create a new cell and pick a metric. 
-    - Filter it by one or more dimensions.
-    - Create a visualization.
+10. これで、Hex を使ってメトリクスをクエリできるようになりました！ぜひお試しください。
+    - 新しいセルを作成し、メトリクスを選択します。
+    - 1 つ以上のディメンションでフィルタリングします。
+    - ビジュアライゼーションを作成します。
 
 </TabItem>
 <TabItem value="manual-connect" label="Getting started with the Semantic Layer workshop">
 
-1. Click on the link provided to you in the workshop’s chat. 
-   - Look at the **Pinned message** section of the chat if you don’t see it right away.
-2. Enter your email address in the textbox provided. Then, select **SQL and Python** to be taken to Hex’s home screen.
+1. ワークショップのチャットで提供されたリンクをクリックしてください。
+    - すぐに表示されない場合は、チャットの**ピン留めされたメッセージ**セクションをご覧ください。
+2. 指定されたテキストボックスにメールアドレスを入力してください。次に、**SQLとPython**を選択すると、Hexのホーム画面に移動します。
+
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/welcome_to_hex.png" width="70%" title="The 'Welcome to Hex' homepage."/>
 
-3. Then click the purple Hex button in the top left corner.
-4. Click the **Collections** button on the menu on the left.
-5. Select the **Semantic Layer Workshop** collection. 
-6. Click the **Getting started with the dbt Semantic Layer** project collection.
+3. 次に、左上隅にある紫色のHexボタンをクリックします。
+4. 左側のメニューで**Collections**ボタンをクリックします。
+5. **Semantic Layer Workshop**コレクションを選択します。
+6. **Getting started with the dbt Semantic Layer**プロジェクトコレクションをクリックします。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_collections.png" width="80%" title="Click 'Collections' to select the 'Semantic Layer Workshop' collection."/>
 
-7. To edit this Hex notebook, click the **Duplicate** button from the project dropdown menu (as displayed in the following image). This creates a new copy of the Hex notebook that you own.
+7. このHexノートブックを編集するには、プロジェクトのドロップダウンメニュー（次の画像を参照）から**複製**ボタンをクリックします。これにより、所有しているHexノートブックの新しいコピーが作成されます。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_duplicate.png" width="80%" title="Click the 'Duplicate' button from the project dropdown menu to create a Hex notebook copy."/>
 
-8. To make it easier to find, rename your copy of the Hex project to include your name.
+8. 見つけやすくするために、Hex プロジェクトのコピーの名前を自分の名前を含むように変更します。
+
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_rename.png" width="60%" title="Rename your Hex project to include your name."/>
 
-9. Now, you should be able to query metrics using Hex! Try it yourself with the following example queries:
+9. これで、Hex を使ってメトリクスをクエリできるようになりました。以下のサンプルクエリを実際に試してみてください。
 
-   - In the first cell, you can see a table of the `order_total` metric over time. Add the `order_count` metric to this table.
-   - The second cell shows a line graph of the `order_total` metric over time. Play around with the graph! Try changing the time grain using the **Time unit** drop-down menu.
-   - The next table in the notebook, labeled “Example_query_2”, shows the number of customers who have made their first order on a given day. Create a new chart cell. Make a line graph of `first_ordered_at` vs `customers` to see how the number of new customers each day changes over time.
-   - Create a new semantic layer cell and pick one or more metrics. Filter your metric(s) by one or more dimensions.
+    - 最初のセルには、`order_total` メトリクスの推移を示す表が表示されています。この表に `order_count` メトリクスを追加してみましょう。
+    - 2 番目のセルには、`order_total` メトリクスの推移を示す折れ線グラフが表示されています。グラフを操作してみましょう。**時間単位** ドロップダウンメニューを使って、時間粒度を変更してみましょう。
+    - ノートブックの次の表「Example_query_2」には、特定の日に初めて注文した顧客の数が表示されています。新しいグラフセ​​ルを作成します。`first_ordered_at` と `customers` の折れ線グラフを作成し、毎日の新規顧客数が時間とともにどのように変化しているかを確認します。
+    - 新しいセマンティックレイヤーセルを作成し、1 つ以上のメトリクスを選択します。1 つ以上のディメンションでメトリクスをフィルタリングします。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/hex_make_sl_cell.png" width="90%" title="Query metrics using Hex "/>
 
 </TabItem>
 </Tabs>
 
-## What's next
+## 次は何？
 
 <ConfettiTrigger>
 
-Great job on completing the comprehensive dbt Semantic Layer guide 🎉! You should hopefully have gained a clear understanding of what the dbt Semantic Layer is, its purpose, and when to use it in your projects.
+包括的なdbtセマンティックレイヤーガイドの完成、おめでとうございます🎉！dbtセマンティックレイヤーとは何か、その目的、そしてプロジェクトでいつ使用するのかについて、明確に理解していただけたかと思います。
 
-You've learned how to:
+学習内容：
 
-- Set up your Snowflake environment and dbt Cloud, including creating worksheets and loading data.
-- Connect and configure dbt Cloud with Snowflake.
-- Build, test, and manage dbt Cloud projects, focusing on metrics and semantic layers.
-- Run production jobs and query metrics with our available integrations.
+- Snowflake環境とdbt Cloudの設定（ワークシートの作成とデータのロードを含む）。
+- dbt CloudをSnowflakeに接続して構成する。
+- メトリクスとセマンティックレイヤーに焦点を当て、dbt Cloudプロジェクトの構築、テスト、管理を行う。
+- 利用可能な統合機能を使用して、本番環境ジョブを実行し、メトリクスをクエリする。
 
-For next steps, you can start defining your own metrics and learn additional configuration options such as [exports](/docs/use-dbt-semantic-layer/exports), [fill null values](/docs/build/advanced-topics), [implementing dbt Mesh with the Semantic Layer](/docs/use-dbt-semantic-layer/sl-faqs#how-can-i-implement-dbt-mesh-with-the-dbt-semantic-layer), and more.
+次のステップでは、独自のメトリックの定義を開始し、[エクスポート](/docs/use-dbt-semantic-layer/exports)、[null 値の入力](/docs/build/advanced-topics)、[セマンティック レイヤーを使用した dbt Mesh の実装](/docs/use-dbt-semantic-layer/sl-faqs#how-can-i-implement-dbt-mesh-with-the-dbt-semantic-layer) などの追加の構成オプションについて学習できます。
 
-Here are some additional resources to help you continue your journey:
+引き続き学習を進める上で役立つ追加リソースをご紹介します。
 
-- [dbt Semantic Layer FAQs](/docs/use-dbt-semantic-layer/sl-faqs)
-- [Available integrations](/docs/cloud-integrations/avail-sl-integrations)
-- Demo on [how to define and query metrics with MetricFlow](https://www.loom.com/share/60a76f6034b0441788d73638808e92ac?sid=861a94ac-25eb-4fd8-a310-58e159950f5a)
-- [Join our live demos](https://www.getdbt.com/resources/webinars/dbt-cloud-demos-with-experts)
+- [dbt セマンティックレイヤーに関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)
+- [利用可能な統合](/docs/cloud-integrations/avail-sl-integrations)
+- [MetricFlow でメトリクスを定義およびクエリする方法](https://www.loom.com/share/60a76f6034b0441788d73638808e92ac?sid=861a94ac-25eb-4fd8-a310-58e159950f5a) のデモ
+- [ライブデモに参加する](https://www.getdbt.com/resources/webinars/dbt-cloud-demos-with-experts)
 
 </ConfettiTrigger>

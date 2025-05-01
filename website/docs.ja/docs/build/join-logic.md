@@ -1,37 +1,42 @@
 ---
-title: Joins
+title: 結合
 id: join-logic
-description: "Joins allow you to combine data from different tables and create new metrics"
+description: "結合を使用すると、異なるテーブルのデータを組み合わせて新しいメトリックを作成できます。"
 sidebar_label: "Joins"
 tags: [Metrics, Semantic Layer]
 ---
 
-Joins are a powerful part of MetricFlow and simplify the process of making all valid dimensions available for your metrics at query time, regardless of where they are defined in different semantic models. With Joins, you can also create metrics using measures from different semantic models.
+結合はMetricFlowの強力な機能であり、異なるセマンティックモデルで定義されている場所に関係なく、クエリ時にすべての有効なディメンションをメトリクスで使用できるようにするプロセスを簡素化します。
+結合を使用すると、異なるセマンティックモデルのメジャーを使用してメトリクスを作成することもできます。
 
-Joins use `entities` defined in your semantic model configs as the join keys between tables. Assuming entities are defined in the semantic model, MetricFlow creates a graph using the semantic models as nodes and the join paths as edges to perform joins automatically. MetricFlow chooses the appropriate join type and avoids fan-out or chasm joins with other tables based on the entity types.
+結合では、セマンティックモデル構成で定義された「エンティティ」をテーブル間の結合キーとして使用します。
+セマンティックモデルでエンティティが定義されていると仮定すると、MetricFlowはセマンティックモデルをノード、結合パスをエッジとして使用してグラフを作成し、自動的に結合を実行します。
+MetricFlowは、エンティティタイプに基づいて適切な結合タイプを選択し、他のテーブルとのファンアウト結合やキャズム結合を回避します。
 
-<Expandable alt_header="What are fan-out or chasm joins?" >
--  Fan-out joins are when one row in a table is joined to multiple rows in another table, resulting in more output rows than input rows.
--  Chasm joins are when two tables have a many-to-many relationship through an intermediate table, and the join results in duplicate or missing data.
+<Expandable alt_header="ファンアウト結合またはキャズム結合とは何ですか?" >
+- ファンアウト結合とは、あるテーブルの 1 つの行が別のテーブルの複数の行に結合され、入力行よりも出力行が多くなる結合です。
+- キャズム結合とは、2 つのテーブルが中間テーブルを介して多対多の関係にあり、結合の結果データが重複または欠落する場合です。
 </Expandable>
 
-## Types of joins
+## 結合の種類
 
 :::tip Joins are auto-generated
-MetricFlow automatically generates the necessary joins to the defined semantic objects, eliminating the need for you to create new semantic models or configuration files.
+MetricFlow は、定義されたセマンティックオブジェクトに必要な結合を自動的に生成するため、新しいセマンティックモデルや設定ファイルを作成する必要はありません。
 
-This section explains the different types of joins that can be used with entities and how to query them.
+このセクションでは、エンティティで使用できるさまざまな種類の結合と、それらをクエリする方法について説明します。
 :::
 
-Metricflow uses these specific join strategies:
+Metricflow は、以下の特定の結合戦略を使用します。
 
-- Primarily uses left joins when joining `fct` and `dim` models. Left joins make sure all rows from the "base" table are retained, while matching rows are included from the joined table.
-- For queries that involve multiple `fct` models, MetricFlow uses full outer joins to ensure all data points are captured, even when some `dim` or `fct` models are missing in certain tables. 
-- MetricFlow restricts the use of fan-out and chasm joins. 
+- `fct` モデルと `dim` モデルを結合する際には、主に左結合を使用します。左結合では、「ベース」テーブルのすべての行が保持され、結合先のテーブルから一致する行が含まれます。
+- 複数の `fct` モデルを含むクエリの場合、MetricFlow は完全外部結合を使用して、特定のテーブルで一部の `dim` モデルまたは `fct` モデルが欠落している場合でも、すべてのデータポイントが確実に取得されるようにします。
+- MetricFlow は、ファンアウト結合とキャズム結合の使用を制限します。
 
-Refer to [SQL examples](#sql-examples) for more information on how MetricFlow handles joins in practice.
+MetricFlow が実際に結合を処理する方法の詳細については、[SQL の例](#sql-examples) を参照してください。
 
-The following table identifies which joins are allowed based on specific entity types to prevent the creation of risky joins. This table primarily represents left joins unless otherwise specified. For scenarios involving multiple `fct` models, MetricFlow uses full outer joins.
+次の表は、リスクの高い結合の作成を防ぐために、特定のエンティティタイプに基づいて許可される結合を示しています。
+この表は、特に指定がない限り、主に左結合を表しています。
+複数の `fct` モデルが関係するシナリオでは、MetricFlow は完全外部結合を使用します。
 
 | entity type - Table A | entity type - Table B | Join type            |
 |---------------------------|---------------------------|----------------------|
@@ -45,19 +50,20 @@ The following table identifies which joins are allowed based on specific entity 
 | Foreign                   | Unique                    | ✅ Left                 |
 | Foreign                   | Foreign                   | ❌ Fan-out (Not allowed) |
 
-### Semantic validation
+### セマンティック検証
 
-MetricFlow performs semantic validation by executing `explain` queries in the data platform to ensure that the generated SQL gets executed without errors. This validation includes:
+MetricFlow は、データプラットフォームで `explain` クエリを実行することでセマンティック検証を行い、生成された SQL がエラーなく実行されることを確認します。この検証には以下の内容が含まれます。
 
-- Verifying that all referenced tables and columns exist.
-- Ensuring the data platform supports SQL functions, such as `date_diff(x, y)`.
-- Checking for ambiguous joins or paths in multi-hop joins.
+- 参照されているすべてのテーブルと列が存在することの確認。
+- データプラットフォームが `date_diff(x, y)` などの SQL 関数をサポートしていることの確認。
+- マルチホップ結合における曖昧な結合やパスのチェック。
 
-If validation fails, MetricFlow surfaces errors for users to address before executing the query.
+検証に失敗した場合、MetricFlow はクエリ実行前にユーザーが対処すべきエラーを表示します。
 
-## Example
+## 例
 
-The following example uses two semantic models with a common entity and shows a MetricFlow query that requires a join between the two semantic models. The two semantic models are:
+次の例では、共通のエンティティを持つ2つのセマンティックモデルを使用し、2つのセマンティックモデル間の結合を必要とするMetricFlowクエリを示します。
+2つのセマンティックモデルは次のとおりです。
 - `transactions`
 - `user_signup`
 
@@ -84,10 +90,10 @@ semantic_models:
         type: categorical
 ```
 
-- MetricFlow uses `user_id` as the join key to link two semantic models, `transactions` and `user_signup`. This allows you to query the `average_purchase_price` metric in the `transactions` semantic model, grouped by the `type` dimension in the `user_signup` semantic model.
-  - Note that the `average_purchase_price` measure is defined in `transactions`, where `user_id` is a foreign entity. However, `user_signup` has `user_id` as a primary entity. 
-- Since `user_id` is a foreign key in `transactions` and a primary key in `user_signup`, MetricFlow performs a left join where `transactions` joins `user_signup` to access the `average_purchase_price` measure defined in `transactions`.
-- To query dimensions from different semantic models, add a double underscore (or dunder) to the dimension name after joining the entity in your editing tool. The following query, `user_id__type` is included as a dimension using the `--group-by` flag (`type` is the dimension).
+- MetricFlow は、`user_id` を結合キーとして使用し、2 つのセマンティックモデル `transactions` と `user_signup` をリンクします。これにより、`transactions` セマンティックモデルの `average_purchase_price` メトリクスを、`user_signup` セマンティックモデルの `type` ディメンションでグループ化された状態でクエリできます。
+- `average_purchase_price` メジャーは `transactions` で定義されており、`user_id` は外部エンティティです。一方、`user_signup` は `user_id` をプライマリエンティティとして持っています。
+- `user_id` は `transactions` では外部キーであり、`user_signup` ではプライマリキーであるため、MetricFlow は `transactions` と `user_signup` を結合する左結合を実行し、`transactions` で定義された `average_purchase_price` メジャーにアクセスします。
+- 異なるセマンティックモデルからディメンションをクエリするには、編集ツールでエンティティを結合した後、ディメンション名に二重アンダースコア（またはdunder）を追加します。次のクエリでは、「user_id__type」が「--group-by」フラグを使用してディメンションとして追加されています（「type」がディメンションです）。
 
 ```yaml 
 dbt sl query --metrics average_purchase_price --group-by metric_time,user_id__type # In dbt Cloud
@@ -97,14 +103,14 @@ dbt sl query --metrics average_purchase_price --group-by metric_time,user_id__ty
 mf query --metrics average_purchase_price --group-by metric_time,user_id__type # In dbt Core
 ```
 
-#### SQL examples
+#### SQL の例
 
-These SQL examples show how MetricFlow handles both left join and full outer join scenarios in practice:
+以下の SQL の例は、MetricFlow が左結合と完全外部結合の両方のシナリオを実際にどのように処理するかを示しています。
 
 <Tabs>
-<TabItem value="SQL example for left join"> 
+<TabItem value="左結合のSQL例"> 
 
-Using the previous example for `transactions` and `user_signup` semantic models, this shows a left join between those two semantic models.
+前の例の `transactions` および `user_signup` セマンティック モデルを使用すると、これら 2 つのセマンティック モデル間の左結合が示されます。
 
 ```sql
 select
@@ -121,11 +127,11 @@ group by
 ```
 </TabItem>
 
-<TabItem value="SQL example for outer joins"> 
+<TabItem value="外部結合のSQL例"> 
 
-If you have multiple `fct` models, let's say `sales` and `returns`, MetricFlow uses full outer joins to ensure all data points are captured. 
+複数の「fct」モデル（例えば「sales」と「returns」）がある場合、MetricFlowは完全外部結合を使用してすべてのデータポイントを確実に取得します。
 
-This example shows a full outer join between the `sales` and `returns` semantic models.
+この例は、「sales」セマンティックモデルと「returns」セマンティックモデル間の完全外部結合を示しています。
 
 ```sql
 select
@@ -141,21 +147,22 @@ where sales.user_id is not null or returns.user_id is not null;
 </TabItem>
 </Tabs>
 
-## Multi-hop joins
+## マルチホップ結合
 
-MetricFlow allows users to join measures and dimensions across a graph of entities by moving from one table to another within a graph. This is referred to as "multi-hop join". 
+MetricFlow では、エンティティのグラフ内のあるテーブルから別のテーブルに移動することで、グラフ全体にわたってメジャーとディメンションを結合できます。
+これは「マルチホップ結合」と呼ばれます。
 
-MetricFlow can join up to three tables, supporting multi-hop joins with a limit of two hops. This does the following:
-- Enables complex data analysis without ambiguous paths.
-- Supports navigating through data models, like moving from `orders` to `customers` to `country` tables.
+MetricFlow は最大 3 つのテーブルを結合でき、最大 2 ホップまでのマルチホップ結合をサポートしています。これにより、以下のことが可能になります。
+- 曖昧なパスのない複雑なデータ分析が可能になります。
+- 「注文」テーブルから「顧客」テーブル、そして「国」テーブルへと移動するなど、データモデル内のナビゲーションをサポートします。
 
-While direct three-hop paths are limited to prevent confusion from multiple routes to the same data, MetricFlow does allow joining more than three tables if the joins don’t exceed two hops to reach a dimension. 
+同じデータへの複数のルートによる混乱を防ぐため、直接の3ホップパスは制限されていますが、MetricFlowでは、結合が2ホップを超えずにディメンションに到達できる場合、3つ以上のテーブルを結合できます。
 
-For example, if you have two models, `country` and `region`, where customers are linked to countries, which in turn are linked to regions, you can join all of them in a single SQL query and can dissect `orders` by `customer__country_country_name` but not by `customer__country__region_name`.
+例えば、「country」と「region」という2つのモデルがあり、顧客が国にリンクされ、国が地域にリンクされている場合、これらすべてを1つのSQLクエリで結合し、「customer__country_country_name」で「orders」を分析できますが、「customer__country__region_name」では分析できません。
 
 ![Multi-Hop-Join](/img/docs/building-a-dbt-project/multihop-diagram.png "Example schema for reference")
 
-Notice how the schema can be translated into the following three MetricFlow semantic models to create the metric 'Average purchase price by country' using the `purchase_price` measure from the sales table and the `country_name` dimension from the `country_dim` table.
+スキーマを次の 3 つの MetricFlow セマンティック モデルに変換し、売上テーブルの `purchase_price` メジャーと `country_dim` テーブルの `country_name` ディメンションを使用してメトリック「国別の平均購入価格」を作成する方法に注目してください。
 
 ```yaml
 semantic_models:
@@ -195,10 +202,9 @@ semantic_models:
         type: categorical
 ```
 
-### Query multi-hop joins
+### マルチホップ結合のクエリ
 
+マルチホップ結合を使用せずにディメンションをクエリするには、`entity__dimension` のように、エンティティダブルアンダースコア（dunder）ディメンション構文で完全修飾ディメンション名を使用できます。
 
-To query dimensions _without_ a multi-hop join involved, you can use the fully qualified dimension name with the syntax entity double underscore (dunder) dimension, like `entity__dimension`. 
-
-For dimensions retrieved by a multi-hop join, you need to additionally provide the entity path as a list, like `user_id`.
+マルチホップ結合によって取得されるディメンションの場合は、`user_id` のように、エンティティパスをリストとして追加で指定する必要があります。
 

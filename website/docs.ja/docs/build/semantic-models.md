@@ -1,5 +1,5 @@
 ---
-title: "Semantic models"
+title: "セマンティックモデル"
 id: "semantic-models"
 description: "Semantic models are yml abstractions on top of a dbt mode, connected via joining keys as edges"
 keywords:
@@ -13,14 +13,14 @@ import CopilotBeta from '/snippets/_dbt-copilot-avail.md';
 
 <CopilotBeta resource='semantic models' />
 
-Semantic models are the foundation for data definition in MetricFlow, which powers the dbt Semantic Layer:
+セマンティックモデルは、MetricFlow におけるデータ定義の基盤であり、dbt セマンティックレイヤーの基盤となります。
 
-- Think of semantic models as nodes connected by entities in a semantic graph.
-- MetricFlow uses YAML configuration files to create this graph for querying metrics.
-- Each semantic model corresponds to a dbt model in your DAG, requiring a unique YAML configuration for each semantic model.
-- You can create multiple semantic models from a single dbt model (SQL or Python), as long as you give each semantic model a unique name.
-- Configure semantic models in a YAML file within your dbt project directory. Refer to the [best practices guide](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro) for more info on project structuring.
-- Organize them under a `metrics:` folder or within project sources as needed.
+- セマンティックモデルは、セマンティックグラフ内のエンティティによって接続されたノードと考えてください。
+- MetricFlow は、メトリクスのクエリを実行するために、YAML 構成ファイルを使用してこのグラフを作成します。
+- 各セマンティックモデルは DAG 内の dbt モデルに対応しており、各セマンティックモデルには固有の YAML 構成が必要です。
+- 各セマンティックモデルに一意の名前を付ければ、1 つの dbt モデル（SQL または Python）から複数のセマンティックモデルを作成できます。
+- セマンティックモデルは、dbt プロジェクトディレクトリ内の YAML ファイルで構成します。プロジェクト構造の詳細については、[ベストプラクティスガイド](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro) を参照してください。
+- 必要に応じて、`metrics:` フォルダ内またはプロジェクトソース内に整理します。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/semantic_foundation.jpg" width="70%" title="A semantic model is made up of different components: Entities, Measures, and Dimensions."/>
 
@@ -28,24 +28,24 @@ import SLCourses from '/snippets/\_sl-course.md';
 
 <SLCourses/>
 
-Here we describe the Semantic model components with examples:
+ここでは、セマンティック モデルのコンポーネントを例とともに説明します:
 
 | Component    | Description      | Required     |  Type     | 
 | ------------ | ---------------- | -------- | -------- | 
-| [Name](#name)     | Choose a unique name for the semantic model. Avoid using double underscores (\_\_) in the name as they're not supported.   | Required | String |
-| [Description](#description)    | 	Includes important details in the description.   | Optional | String |
-| [Model](#model)     | Specifies the dbt model for the semantic model using the `ref` function.    | Required | String |
-| [Defaults](#defaults)      | The defaults for the model, currently only `agg_time_dimension` is supported.    | Required |  Dict |
-| [Entities](#entities)         | Uses the columns from entities as join keys and indicate their type as primary, foreign, or unique keys with the `type` parameter.  | Required | List | 
-| [Primary Entity](#primary-entity) | If a primary entity exists, this component is Optional. If the semantic model has no primary entity, then this property is required.    | Optional | String | 
-| [Dimensions](#dimensions)     | Different ways to group or slice data for a metric, they can be `time` or `categorical`.  | Required | List |
-| [Measures](#measures)     | Aggregations applied to columns in your data model. They can be the final metric or used as building blocks for more complex metrics.  | Optional | List |
-| [Label](#label)     | The display name for your semantic model `node`, `dimension`, `entity`, and/or `measures`.   | Optional | String |
-| `config`   | Use the [`config`](/reference/resource-properties/config) property to specify configurations for your metric. Supports [`meta`](/reference/resource-configs/meta), [`group`](/reference/resource-configs/group), and [`enabled`](/reference/resource-configs/enabled) configs. | Optional | Dict |
+| [Name](#name)     | セマンティックモデルには一意の名前を選択してください。名前に二重アンダースコア (\_\_) を使用することはサポートされていないため、避けてください。   | Required | String |
+| [Description](#description)    | 	説明に重要な詳細が含まれています。   | Optional | String |
+| [Model](#model)     | `ref` 関数を使用して、セマンティック モデルの dbt モデルを指定します。 | Required | String |
+| [Defaults](#defaults)      | モデルのデフォルトでは、現在は `agg_time_dimension` のみがサポートされています。   | Required |  Dict |
+| [Entities](#entities)         | エンティティの列を結合キーとして使用し、`type` パラメータを使用してそのタイプを主キー、外部キー、または一意キーとして指定します。  | Required | List | 
+| [Primary Entity](#primary-entity) | プライマリエンティティが存在する場合、このコンポーネントはオプションです。セマンティックモデルにプライマリエンティティが存在しない場合は、このプロパティは必須です。 | Optional | String | 
+| [Dimensions](#dimensions)     | メトリックのデータをグループ化またはスライスするさまざまな方法。`time` または `categorical` になります。 | Required | List |
+| [Measures](#measures)     | データモデルの列に適用される集計。最終的な指標として使用することも、より複雑な指標の構成要素として使用することもできます。  | Optional | List |
+| [Label](#label)     | セマンティック モデルの `node`、`dimension`、`entity`、および/または `measures` の表示名。  | Optional | String |
+| `config`   | メトリックの設定を指定するには、[`config`](/reference/resource-properties/config) プロパティを使用します。[`meta`](/reference/resource-configs/meta)、[`group`](/reference/resource-configs/group)、[`enabled`](/reference/resource-configs/enabled) 設定をサポートしています。 | Optional | Dict |
 
-## Semantic models components
+## セマンティックモデルのコンポーネント
 
-The complete spec for semantic models is below:
+セマンティックモデルの完全な仕様は以下の通りです:
 
 ```yaml
 semantic_models:
@@ -64,9 +64,9 @@ semantic_models:
       if the semantic model has no primary entity, then this property is required. #Optional if a primary entity exists, otherwise Required
 ```
 
-You can refer to the [best practices guide](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro) for more info on project structuring.
+プロジェクト構造の詳細については、[ベストプラクティスガイド](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro)を参照してください。
 
-The following example displays a complete configuration and detailed descriptions of each field:
+以下の例は、完全な構成と各フィールドの詳細な説明を示しています:
 
 ```yaml
 semantic_models:
@@ -123,9 +123,9 @@ semantic_models:
         type: categorical
 ```
 
-Semantic models support [`meta`](/reference/resource-configs/meta), [`group`](/reference/resource-configs/group), and [`enabled`](/reference/resource-configs/enabled) [`config`](/reference/resource-properties/config) property in either the schema file or at the project level:
+セマンティック モデルは、スキーマ ファイルまたはプロジェクト レベルで [`meta`](/reference/resource-configs/meta)、[`group`](/reference/resource-configs/group)、および [`enabled`](/reference/resource-configs/enabled) [`config`](/reference/resource-properties/config) プロパティをサポートします:
 
-- Semantic model config in `models/semantic.yml`:
+- `models/semantic.yml` 内のセマンティック モデル構成:
 
   ```yml
   semantic_models:
@@ -137,7 +137,7 @@ Semantic models support [`meta`](/reference/resource-configs/meta), [`group`](/r
           some_key: some_value
   ```
 
-- Semantic model config in `dbt_project.yml`:
+- `dbt_project.yml` 内のセマンティック モデル構成:
 
   ```yml
   semantic-models:
@@ -148,33 +148,45 @@ Semantic models support [`meta`](/reference/resource-configs/meta), [`group`](/r
         some_key: some_value
   ```
 
-For more information on `dbt_project.yml` and config naming conventions, see the [dbt_project.yml reference page](/reference/dbt_project.yml#naming-convention).
+`dbt_project.yml` と設定の命名規則の詳細については、[dbt_project.yml リファレンス ページ](/reference/dbt_project.yml#naming-convention) を参照してください。
 
 ### Name
 
-Define the name of the semantic model. You must define a unique name for the semantic model. The semantic graph will use this name to identify the model, and you can update it at any time. Avoid using double underscores (\_\_) in the name as they're not supported.
+セマンティックモデルの名前を定義します。
+セマンティックモデルには一意の名前を定義する必要があります。
+セマンティックグラフはこの名前を使用してモデルを識別します。この名前はいつでも更新できます。
+名前に二重アンダースコア (\_\_) を使用しないでください。サポートされていません。
 
 ### Description
 
-Includes important details in the description of the semantic model. This description will primarily be used by other configuration contributors. You can use the pipe operator `(|)` to include multiple lines in the description.
+セマンティックモデルの説明に重要な詳細が含まれます。
+この説明は主に他の設定コントリビューターによって使用されます。
+パイプ演算子 `(|)` を使用して、説明に複数行を含めることができます。
 
 ### Model
 
-Specify the dbt model for the semantic model using the [`ref` function](/reference/dbt-jinja-functions/ref).
+[`ref` 関数](/reference/dbt-jinja-functions/ref)を使用して、セマンティック モデルの dbt モデルを指定します。
 
 ### Defaults
 
-Defaults for the semantic model. Currently only `agg_time_dimension`. `agg_time_dimension` represents the default time dimensions for measures. This can be overridden by adding the `agg_time_dimension` key directly to a measure - see [Dimensions](/docs/build/dimensions) for examples.
+セマンティックモデルのデフォルト。
+現在は `agg_time_dimension` のみです。
+`agg_time_dimension` は、メジャーのデフォルトの時間ディメンションを表します。
+これは、メジャーに `agg_time_dimension` キーを直接追加することで上書きできます。
+例については [Dimensions](/docs/build/dimensions) を参照してください。
 
 ### Entities
 
-To specify the [entities](/docs/build/entities) in your model, use their columns as join keys and indicate their `type` as primary, foreign, or unique keys with the type parameter.
+モデル内の [エンティティ](/docs/build/entities) を指定するには、列を結合キーとして使用し、type パラメータを使用して、その `type` を主キー、外部キー、または一意キーとして指定します。
 
 ### Primary entity
 
-MetricFlow requires that all dimensions be tied to an entity. This is to guarantee unique dimension names. If your data source doesn't have a primary entity, you need to assign the entity a name using the `primary_entity: entity_name` key. It doesn't necessarily have to map to a column in that table and assigning the name doesn't affect query generation.
+MetricFlow では、すべてのディメンションをエンティティに関連付ける必要があります。
+これは、ディメンション名の一意性を保証するためです。
+データソースにプライマリエンティティがない場合は、`primary_entity: entity_name` キーを使用してエンティティに名前を割り当てる必要があります。
+必ずしもそのテーブル内の列にマッピングする必要はなく、名前を割り当ててもクエリ生成には影響しません。
 
-You can define a primary entity using the following configs:
+プライマリエンティティは、次の設定を使用して定義できます:
 
 ```yaml
 semantic_model:
@@ -194,19 +206,23 @@ semantic_model:
 
 <TabItem value="entitytypes" value="Entity types">
 
-Here are the types of keys:
+キーの種類は次のとおりです。
 
-- **Primary** &mdash; Only one record per row in the table, and it includes every record in the data platform.
-- **Unique** &mdash; Only one record per row in the table, but it may have a subset of records in the data platform. Null values may also be present.
-- **Foreign** &mdash; Can have zero, one, or multiple instances of the same record. Null values may also be present.
-- **Natural** &mdash; A column or combination of columns in a table that uniquely identifies a record based on real-world data. For example, the `sales_person_id` can serve as a natural key in a `sales_person_department` dimension table.
+- **主キー** - テーブル内の行ごとに1つのレコードのみが存在し、データプラットフォーム内のすべてのレコードが含まれます。
+- **一意キー** - テーブル内の行ごとに1つのレコードのみが存在しますが、データプラットフォーム内のレコードのサブセットが含まれる場合があります。
+null値が含まれる場合もあります。
+- **外部キー** - 同じレコードが0個、1個、または複数個存在する場合があります。
+null値が含まれる場合もあります。
+- **自然キー** - 実際のデータに基づいてレコードを一意に識別する、テーブル内の列または列の組み合わせ。
+たとえば、`sales_person_id` は `sales_person_department` ディメンションテーブルで自然キーとして機能します。
 
 </TabItem>
 <TabItem value="sample" label="Sample config">
 
-This example shows a semantic model with three entities and their entity types: `transaction` (primary), `order` (foreign), and `user` (foreign).
+この例では、3つのエンティティとそのエンティティタイプ（`transaction`（プライマリ）、`order`（外部）、`user`（外部））を持つセマンティックモデルを示しています。
 
-To reference a desired column, use the actual column name from the model in the `name` parameter. You can also use `name` as an alias to rename the column, and the `expr` parameter to refer to the original column name or a SQL expression of the column.
+目的の列を参照するには、モデルの実際の列名を`name`パラメータに指定します。
+また、`name`をエイリアスとして使用して列名を変更したり、`expr`パラメータを使用して元の列名または列のSQL式を参照したりすることもできます。
 
 ```yaml
 entity:
@@ -220,34 +236,45 @@ entity:
     expr: substring(id_order FROM 2)
 ```
 
-You can refer to entities (join keys) in a semantic model using the `name` parameter. Entity names must be unique within a semantic model, and identifier names can be non-unique across semantic models since MetricFlow uses them for [joins](/docs/build/join-logic). <!--You can also create [composite keys](/docs/build/entities#composite-keys), like in event logs where a unique ID is a combination of timestamp, event type keys, and machine IDs.-->
+セマンティックモデル内のエンティティ（結合キー）は、`name` パラメータを使用して参照できます。
+エンティティ名はセマンティックモデル内で一意である必要があります。また、識別子名は MetricFlow が [結合](/docs/build/join-logic) に使用するため、セマンティックモデル間で一意でなくても構いません。 <!--You can also create [composite keys](/docs/build/entities#composite-keys), like in event logs where a unique ID is a combination of timestamp, event type keys, and machine IDs.-->
 
 </TabItem>
 </Tabs>
 
 ### Dimensions
 
-[Dimensions](/docs/build/dimensions) are different ways to organize or look at data. They are effectively the group by parameters for metrics. For example, you might group data by things like region, country, or job title.
+[ディメンション](/docs/build/dimensions) は、データを整理したり表示したりする様々な方法です。
+これらは、実質的にはメトリクスのグループ化パラメータです。
+たとえば、地域、国、役職などでデータをグループ化できます。
 
-MetricFlow takes a dynamic approach when making dimensions available for metrics. Instead of trying to figure out all the possible groupings ahead of time, MetricFlow lets you ask for the dimensions you need and constructs any joins necessary to reach the requested dimensions at query time. The advantage of this approach is that you don't need to set up a system that pre-materializes every possible way to group data, which can be time-consuming and prone to errors. Instead, you define the dimensions (group by parameters) you're interested in within the semantic model, and they will automatically be made available for valid metrics.
+MetricFlow は、メトリクスでディメンションを利用できるようにする際、動的なアプローチを採用しています。
+MetricFlow では、事前にすべてのグループ化の可能性を把握するのではなく、必要なディメンションを要求し、クエリ時に要求されたディメンションに到達するために必要な結合を構築します。
+このアプローチの利点は、データのグループ化のあらゆる方法を事前に実現するシステムをセットアップする必要がないことです。これは時間がかかり、エラーが発生しやすくなります。
+代わりに、セマンティックモデル内で必要なディメンション（グループ化パラメータ）を定義すると、有効なメトリクスで自動的に利用できるようになります。
 
-Dimensions have the following characteristics:
+ディメンションには以下の特性があります。
 
-- There are two types of dimensions: categorical and time. Categorical dimensions are for things you can't measure in numbers, while time dimensions represent dates and timestamps.
-- Dimensions are bound to the primary entity of the semantic model in which they are defined. For example, if a dimension called `full_name` is defined in a model with `user` as a primary entity, then `full_name` is scoped to the `user` entity. To reference this dimension, you would use the fully qualified dimension name `user__full_name`.
-- The naming of dimensions must be unique in each semantic model with the same primary entity. Dimension names can be repeated if defined in semantic models with a different primary entity.
+- ディメンションには、カテゴリディメンションと時間ディメンションの2種類があります。
+カテゴリディメンションは数値で測定できないものを対象とし、時間ディメンションは日付やタイムスタンプを表します。
+- ディメンションは、定義されているセマンティックモデルのプライマリエンティティにバインドされます。
+例えば、プライマリエンティティとして「user」を持つモデルで「full_name」というディメンションが定義されている場合、「full_name」のスコープは「user」エンティティに限定されます。
+このディメンションを参照するには、完全修飾ディメンション名「user__full_name」を使用します。
+- ディメンションの名前は、同じプライマリエンティティを持つ各セマンティックモデル内で一意である必要があります。
+異なるプライマリエンティティを持つセマンティックモデルで定義されている場合、ディメンション名は重複しても構いません。
 
 
-:::info For time groups
+:::info 時間グループの場合
 
-For semantic models with a measure, you must have a [primary time group](/docs/build/dimensions#time).
+メジャーを含むセマンティックモデルの場合、[プライマリ時間グループ](/docs/build/dimensions#time)が必要です。
 :::
 
 ### Measures
 
-[Measures](/docs/build/measures) are aggregations applied to columns in your data model. They can be used as the foundational building blocks for more complex metrics, or be the final metric itself.
+[メジャー](/docs/build/measures) は、データモデルの列に適用される集計です。
+より複雑な指標の基礎となる構成要素として使用することも、最終的な指標そのものとして使用することもできます。
 
-Measures have various parameters which are listed in a table along with their descriptions and types.
+メジャーには様々なパラメータがあり、その説明とタイプとともに表形式で一覧表示されます。
 
 import MeasuresParameters from '/snippets/\_sl-measures-parameters.md';
 

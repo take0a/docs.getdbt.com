@@ -1,70 +1,98 @@
 ---
-title: "The dbt Viewpoint"
+title: "dbtの視点"
 id: "viewpoint"
 ---
 
-:::info Building a Mature Analytics Workflow: The dbt Viewpoint!
+:::info 成熟した分析ワークフローの構築: dbt の視点!
 
-In 2015-2016, a team of folks at RJMetrics had the opportunity to observe, and participate in, a significant evolution of the analytics ecosystem. The seeds of dbt were conceived in this environment, and the viewpoint below was written to reflect what we had learned and how we believed the world should be different. **dbt is our attempt to address the workflow challenges we observed, and as such, this viewpoint is the most foundational statement of the dbt project's goals.**
+2015年から2016年にかけて、RJMetricsのチームは分析エコシステムの大きな進化を目の当たりにし、その過程に参加する機会を得ました。
+dbtの種はこの環境から生まれ、以下の視点は、私たちが学んだこと、そして世界はどのように変わるべきなのかという私たちの考えを反映したものです。
+**dbtは、私たちが観察したワークフローの課題に対処するための試みであり、したがって、この視点はdbtプロジェクトの目標を最も基礎的に表現したものです。**
 
-The remainder of this document is largely unedited from [the original post](https://getdbt.com/blog/building-a-mature-analytics-workflow).
+この文書の残りの部分は、[元の投稿](https://getdbt.com/blog/building-a-mature-analytics-workflow)からほぼそのまま引用しています。
 
 :::
 
-## Analytics today
+## 今日の分析
 
-The center of gravity in mature analytics organizations has shifted away from proprietary, end-to-end tools towards more composable solutions made up of:
+成熟した分析組織では、分析の中心は、独自のエンドツーエンドツールから、よりコンポーザブルなソリューションへと移行しています。これらのソリューションは、以下の要素から構成されます。
 
-- data integration scripts and/or tools,
-- high-performance analytic databases,
-- SQL, R, and/or Python, and
-- visualization tools.
+- データ統合スクリプトおよび/またはツール、
+- 高性能分析データベース、
+- SQL、R、またはPython、
+- 可視化ツール。
 
-This change has unlocked significant possibility, but analytics teams (ours included) have still faced challenges in consistently delivering high-quality, low-latency analytics.
+この変化は大きな可能性を解き放ちましたが、分析チーム（私たちも含め）は依然として、高品質で低レイテンシの分析を一貫して提供するという課題に直面しています。
 
-We believe that analytics teams have a workflow problem. Too often, analysts operate in isolation, and this creates suboptimal outcomes. Knowledge is siloed. We too often rewrite analyses that a colleague had already written. We fail to grasp the nuances of datasets that we’re less familiar with. We differ in our calculations of a shared metric.
+分析チームにはワークフローの問題があると考えています。
+アナリストが孤立して作業することがあまりにも多く、これが最適な結果につながっていないのです。
+知識がサイロ化しています。
+同僚が既に作成した分析を書き換えてしまうことが多すぎます。
+あまり馴染みのないデータセットのニュアンスを理解できません。
+共通の指標の計算方法が異なります。
 
-We have convinced ourselves after hundreds of conversations that these conditions are by and large the status quo for even sophisticated analytics teams. As a result, organizations suffer from reduced decision speed and reduced decision quality.
+何百回もの対話を経て、私たちは、これらの状況が、高度な分析チームでさえ概ね現状であると確信しました。
+その結果、組織は意思決定のスピードと質の低下に悩まされています。
 
-Analytics doesn’t have to be this way. In fact, the playbook for solving these problems already exists — on our software engineering teams. The same techniques that software engineering teams use to collaborate on the rapid creation of quality applications can apply to analytics. We believe it’s time to build an open set of tools and processes to make that happen.
+分析は必ずしもこうである必要はありません。
+実際、これらの問題を解決するためのプレイブックは、既に私たちのソフトウェアエンジニアリングチームの中に存在しています。
+ソフトウェアエンジニアリングチームが高品質なアプリケーションを迅速に開発するために共同作業を行うのと同じ手法を、分析にも適用できます。
+私たちは、それを実現するために、オープンなツールとプロセスを構築する時が来たと考えています。
 
-## Analytics is collaborative
-We believe a mature analytics team’s techniques and workflow should have the following collaboration features:
+## 分析はコラボレーションです
+成熟した分析チームの技術とワークフローには、次のようなコラボレーション機能が備わっているべきだと考えています。
 
-### Version Control
-Analytic code — whether it’s Python, SQL, Java, or anything else — should be version controlled. Analysis changes as data and businesses evolve, and it’s important to know who changed what, when.
+### バージョン管理
+分析コードは、Python、SQL、Javaなど、どんな言語であってもバージョン管理する必要があります。
+分析はデータやビジネスの進化に合わせて変化するため、誰がいつ何を変更したかを把握することが重要です。
 
-### Quality Assurance
-Bad data can lead to bad analyses, and bad analyses can lead to bad decisions. Any code that generates data or analysis should be reviewed and tested.
+### 品質保証
+不適切なデータは不適切な分析につながり、不適切な分析は不適切な意思決定につながる可能性があります。
+データや分析を生成するコードはすべてレビューとテストが必要です。
 
-### Documentation
-Your analysis is a software application, and, like every other software application, people are going to have questions about how to use it. Even though it might seem simple, in reality the “Revenue” line you’re showing could mean dozens of things. Your code should come packaged with a basic description of how it should be interpreted, and your team should be able to add to that documentation as additional questions arise.
+### ドキュメント
+分析はソフトウェアアプリケーションであり、他のソフトウェアアプリケーションと同様に、使い方について疑問を持つ人が出てくるものです。
+一見シンプルに見えますが、実際には表示される「収益」という行には、さまざまな意味が込められている可能性があります。
+コードには、その解釈方法に関する基本的な説明が同梱されている必要があります。そして、追加の質問が生じた場合、チームはそのドキュメントに追加情報を追加できるようにする必要があります。
 
-### Modularity
-If you build a series of analyses about your company’s revenue, and your colleague does as well, you should use the same input data. Copy-paste is not a good approach here — if the definition of the underlying set changes, it will need to be updated everywhere it was used. Instead, think of the schema of a data set as its public interface. Create tables, <Term id="view">views</Term>, or other data sets that expose a consistent schema and can be modified if business logic changes.
+### モジュール性
+会社の収益に関する一連の分析を同僚と共同で行う場合、同じ入力データを使用する必要があります。
+コピー＆ペーストはここでは適切なアプローチではありません。基になるデータセットの定義が変更された場合、使用されているすべての場所で更新する必要があります。
+代わりに、データセットのスキーマをパブリックインターフェースと考えてください。一貫したスキーマを公開し、ビジネスロジックの変更に応じて変更できるテーブル、<Term id="view">ビュー</Term>、またはその他のデータセットを作成してください。
 
-## Analytic code is an asset
-The code, processes, and tooling required to produce that analysis are core organizational investments. We believe a mature analytics organization’s workflow should have the following characteristics so as to protect and grow that investment:
+## 分析コードは資産です
+分析を行うために必要なコード、プロセス、そしてツールは、組織にとって中核的な投資です。
+成熟した分析組織のワークフローは、その投資を守り、成長させるために、以下の特性を備えているべきだと私たちは考えています。
 
-### Environments
-Analytics requires multiple environments. Analysts need the freedom to work without impacting users, while users need service level guarantees so that they can trust the data they rely on to do their jobs.
+### 環境
+分析には複数の環境が必要です。
+アナリストはユーザーに影響を与えることなく自由に作業できる必要がありますが、ユーザーは業務を遂行するために使用するデータを信頼できるよう、サービスレベルの保証が必要です。
 
-### Service level guarantees
-Analytics teams should stand behind the accuracy of all analysis that has been promoted to production. Errors should be treated with the same level of urgency as bugs in a production product. Any code being retired from production should go through a deprecation process.
+### サービスレベルの保証
+分析チームは、本番環境に導入されたすべての分析の精度を保証する必要があります。
+エラーは、本番環境のバグと同等の緊急性で対処する必要があります。
+本番環境から廃止されるコードは、廃止プロセスを経る必要があります。
 
-### Design for maintainability
-Most of the cost involved in software development is in the maintenance phase. Because of this, software engineers write code with an eye towards maintainability. Analytic code, however, is often fragile. Changes in underlying data break most analytic code in ways that are hard to predict and to fix.
+### 保守性を考慮した設計
+ソフトウェア開発にかかるコストの大部分は、保守フェーズで発生します。
+そのため、ソフトウェアエンジニアは保守性を考慮してコードを作成します。
+しかし、分析コードは脆弱になりがちです。
+基盤となるデータの変更は、ほとんどの分析コードを予測・修正困難な方法で破壊します。
 
-Analytic code should be written with an eye towards maintainability. Future changes to the schema and data should be anticipated and code should be written to minimize the corresponding impact.
+分析コードは保守性を考慮して作成する必要があります。
+スキーマとデータへの将来の変更を予測し、それに伴う影響を最小限に抑えるようにコードを記述する必要があります。
 
-## Analytics workflows require automated tools
-Frequently, much of an analytic workflow is manual. Piping data from source to destination, from stage to stage, can eat up a majority of an analyst’s time. Software engineers build extensive tooling to support the manual portions of their jobs. In order to implement the analytics workflows we are suggesting, similar tools will be required.
+## 分析ワークフローには自動化ツールが必要です
+多くの場合、分析ワークフローの多くは手動で行われます。
+ソースから宛先へ、ステージからステージへとデータをパイプ処理するだけで、アナリストの時間の大部分が消費される可能性があります。
+ソフトウェアエンジニアは、業務の手作業部分をサポートするために、大規模なツールを構築します。
+ここで提案する分析ワークフローを実装するには、同様のツールが必要になります。
 
-Here’s one example of an automated workflow:
+自動化されたワークフローの一例を以下に示します。
 
-- models and analysis are downloaded from multiple source control repositories,
-- code is configured for the given environment,
-- code is tested, and
-- code is deployed.
+- モデルと分析は複数のソース管理リポジトリからダウンロードされます。
+- コードは特定の環境に合わせて構成されます。
+- コードはテストされ、
+- コードはデプロイされます。
 
-Workflows like this should be built to execute with a single command.
+このようなワークフローは、単一のコマンドで実行できるように構築する必要があります。

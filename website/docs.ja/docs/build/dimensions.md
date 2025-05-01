@@ -6,25 +6,29 @@ sidebar_label: "Dimensions"
 tags: [Metrics, Semantic Layer]
 ---
 
-Dimensions represent the non-aggregatable columns in your data set, which are the attributes, features, or characteristics that describe or categorize data. In the context of the dbt Semantic Layer, dimensions are part of a larger structure called a semantic model. They are created along with other elements like [entities](/docs/build/entities) and [measures](/docs/build/measures) and used to add more details to your data. In SQL, dimensions are typically included in the `group by` clause of your SQL query.
+ディメンションは、データセット内の集計不可能な列を表します。ディメンションは、データを説明または分類する属性、特徴、または特性です。
+dbt セマンティック レイヤーのコンテキストでは、ディメンションはセマンティック モデルと呼ばれるより大きな構造の一部です。
+ディメンションは、[エンティティ](/docs/build/entities) や [メジャー](/docs/build/measures) などの他の要素とともに作成され、データに詳細情報を追加するために使用されます。
+SQL では、ディメンションは通常、SQL クエリの `group by` 句に含まれます。
 
 <!--dimensions are non-aggregatable expressions that define the level of aggregation for a metric used to define how data is sliced or grouped in a metric. Since groups can't be aggregated, they're considered to be a property of the primary or unique entity of the table.
 
 Groups are defined within semantic models, alongside entities and measures, and correspond to non-aggregatable columns in your dbt model that provides categorical or time-based context. In SQL, dimensions  is typically included in the GROUP BY clause.-->
 
-All dimensions require a `name`, `type`, and can optionally include an `expr` parameter. The `name` for your Dimension must be unique within the same semantic model.
+すべてのディメンションには「name」と「type」が必要で、オプションで「expr」パラメータを含めることができます。
+ディメンションの「name」は、同じセマンティックモデル内で一意である必要があります。
 
 | Parameter | Description | Required | Type |
 | --------- | ----------- | ---- | ---- |
-| `name` |  Refers to the name of the group that will be visible to the user in downstream tools. It can also serve as an alias if the column name or SQL query reference is different and provided in the `expr` parameter. <br /><br /> Dimension names should be unique within a semantic model, but they can be non-unique across different models as MetricFlow uses [joins](/docs/build/join-logic) to identify the right dimension. | Required | String |
-| `type` | Specifies the type of group created in the semantic model. There are two types:<br /><br />- **Categorical**: Describe attributes or features like geography or sales region. <br />- **Time**: Time-based dimensions like timestamps or dates. | Required | String |  
-| `type_params` | Specific type params such as if the time is primary or used as a partition. | Required | Dict |
-| `description` | A clear description of the dimension. | Optional | String |  
-| `expr` | Defines the underlying column or SQL query for a dimension. If no `expr` is specified, MetricFlow will use the column with the same name as the group. You can use the column name itself to input a SQL expression. | Optional | String |
-| `label` | Defines the display value in downstream tools. Accepts plain text, spaces, and quotes (such as `orders_total` or `"orders_total"`).  | Optional | String |
-| [`meta`](/reference/resource-configs/meta) |  Set metadata for a resource and organize resources. Accepts plain text, spaces, and quotes. | Optional | Dictionary | 
+| `name` |  下流ツールでユーザーに表示されるグループ名を指します。列名またはSQLクエリ参照が異なり、`expr`パラメータで指定されている場合は、エイリアスとしても機能します。<br /><br /> ディメンション名はセマンティックモデル内で一意である必要がありますが、MetricFlowは[結合](/docs/build/join-logic)を使用して適切なディメンションを識別するため、異なるモデル間では一意でない場合があります。 | Required | String |
+| `type` | セマンティックモデルで作成されるグループのタイプを指定します。次の2つのタイプがあります。<br /><br />- **カテゴリ**: 地理や販売地域などの属性や特徴を記述します。<br />- **時間**: タイムスタンプや日付などの時間ベースのディメンション。 | Required | String |  
+| `type_params` | 時間がプライマリであるか、パーティションとして使用されているかなどの特定のタイプのパラメータ。 | Required | Dict |
+| `description` | ディメンションの明確な説明。 | Optional | String |  
+| `expr` | ディメンションの基になる列またはSQLクエリを定義します。`expr` が指定されていない場合、MetricFlowはグループと同じ名前の列を使用します。列名自体を使用してSQL式を入力できます。 | Optional | String |
+| `label` | 下流ツールでの表示値を定義します。プレーンテキスト、スペース、引用符（例：`orders_total` または `"orders_total"`）が使用できます。 | Optional | String |
+| [`meta`](/reference/resource-configs/meta) |  リソースのメタデータを設定し、リソースを整理します。プレーンテキスト、スペース、引用符が使用できます。 | Optional | Dictionary | 
 
-Refer to the following for the complete specification for dimensions:
+ディメンジョンの完全な仕様については以下を参照してください。
 
 ```yaml
 dimensions:
@@ -36,7 +40,7 @@ dimensions:
     expr: The column name or expression. If not provided the default is the dimension name # Optional
 ```
 
-Refer to the following example to see how dimensions are used in a semantic model:
+セマンティック モデルでディメンションがどのように使用されるかについては、次の例を参照してください:
 
 <VersionBlock firstVersion="1.9">
 
@@ -107,9 +111,14 @@ semantic_models:
 ```
 </VersionBlock>
 
-Dimensions are bound to the primary entity of the semantic model they are defined in. For example the dimension `type` is defined in a model that has `transaction` as a primary entity. `type` is scoped to the `transaction` entity, and to reference this dimension you would use the fully qualified dimension name i.e `transaction__type`. 
+ディメンションは、それが定義されているセマンティックモデルのプライマリエンティティにバインドされます。
+例えば、ディメンション「type」は、「transaction」をプライマリエンティティとして持つモデルで定義されています。
+「type」は「transaction」エンティティにスコープ指定されており、このディメンションを参照するには、完全修飾ディメンション名（例：「transaction__type」）を使用します。
 
-MetricFlow requires that all semantic models have a primary entity. This is to guarantee unique dimension names. If your data source doesn't have a primary entity, you need to assign the entity a name using the `primary_entity` key. It doesn't necessarily have to map to a column in that table and assigning the name doesn't affect query generation. We recommend making these "virtual primary entities" unique across your semantic model. An example of defining a primary entity for a data source that doesn't have a primary entity column is below:
+MetricFlow では、すべてのセマンティックモデルにプライマリエンティティが必要です。
+これは、ディメンション名が一意であることを保証するためです。
+データソースにプライマリエンティティがない場合は、「primary_entity」キーを使用してエンティティに名前を割り当てる必要があります。
+エンティティは必ずしもそのテーブルの列にマッピングする必要はなく、名前を割り当ててもクエリ生成には影響しません。これらの「仮想プライマリエンティティ」は、セマンティックモデル全体で一意にすることをお勧めします。プライマリエンティティ列を持たないデータソースにプライマリエンティティを定義する例を以下に示します:
 
 ```yaml
 semantic_model:
@@ -126,7 +135,8 @@ semantic_model:
 ```
 
 ## Dimensions types
-This section further explains the dimension definitions, along with examples. Dimensions have the following types:
+このセクションでは、ディメンションの定義について、例を挙げながら詳しく説明します。
+ディメンションには以下の種類があります:
 
 - [Dimensions types](#dimensions-types)
 - [Categorical](#categorical)
@@ -139,7 +149,10 @@ This section further explains the dimension definitions, along with examples. Di
 
 ## Categorical
 
-Categorical dimensions are used to group metrics by different attributes, features, or characteristics such as product type. They can refer to existing columns in your dbt model or be calculated using a SQL expression with the `expr` parameter. An example of a categorical dimension is `is_bulk_transaction`, which is a group created by applying a case statement to the underlying column `quantity`. This allows users to group or filter the data based on bulk transactions.
+カテゴリディメンションは、製品タイプなどの異なる属性、機能、特性ごとに指標をグループ化するために使用されます。
+dbtモデル内の既存の列を参照したり、`expr`パラメータを指定したSQL式を使用して計算したりできます。
+カテゴリディメンションの例としては、`is_bulk_transaction`があります。これは、基になる列`quantity`にcaseステートメントを適用することで作成されたグループです。
+これにより、ユーザーは一括取引に基づいてデータをグループ化またはフィルタリングできます。
 
 <VersionBlock firstVersion="1.9">
 
@@ -166,9 +179,11 @@ dimensions:
 
 ## Time
 
-Time has additional parameters specified under the `type_params` section. When you query one or more metrics, the default time dimension for each metric is the aggregation time dimension, which you can refer to as `metric_time` or use the dimension's name. 
+時間には、`type_params` セクションで指定される追加パラメータがあります。
+1 つ以上のメトリクスをクエリする場合、各メトリクスのデフォルトの時間ディメンションは集計時間ディメンションです。これは `metric_time` として参照するか、ディメンション名を使用できます。
 
-You can use multiple time groups in separate metrics. For example, the `users_created` metric uses `created_at`, and the `users_deleted` metric uses `deleted_at`:
+複数の時間グループを別々のメトリクスで使用できます。
+たとえば、`users_created` メトリクスは `created_at` を使用し、`users_deleted` メトリクスは `deleted_at` を使用します。
 
 ```bash
 # dbt Cloud users
@@ -184,7 +199,10 @@ You can set `is_partition` for time to define specific time spans. Additionally,
 
 <TabItem value="is_partition" label="is_partition">
 
-Use `is_partition: True` to show that a dimension exists over a specific time window. For example, a date-partitioned dimensional table. When you query metrics from different tables, the dbt Semantic Layer uses this parameter to ensure that the correct dimensional values are joined to measures. 
+特定の期間にディメンションが存在することを示すには、`is_partition: True` を使用します。
+
+たとえば、日付でパーティション分割されたディメンションテーブルなどです。
+異なるテーブルからメトリクスをクエリする場合、dbt セマンティックレイヤーはこのパラメータを使用して、正しいディメンション値がメジャーに結合されていることを確認します。
 
 <VersionBlock firstVersion="1.9">
 
@@ -255,9 +273,13 @@ measures:
 
 <VersionBlock firstVersion="1.9">
 
-`time_granularity` specifies the grain of a time dimension. MetricFlow will transform the underlying column to the specified granularity. For example, if you add hourly granularity to a time dimension column, MetricFlow will run a `date_trunc` function to convert the timestamp to hourly. You can easily change the time grain at query time and aggregate it to a coarser grain, for example, from hourly to monthly. However, you can't go from a coarser grain to a finer grain (monthly to hourly).
+`time_granularity` は、時間ディメンションの粒度を指定します。
+MetricFlow は、基になる列を指定された粒度に変換します。
+たとえば、時間ディメンション列に時間単位の粒度を追加すると、MetricFlow は `date_trunc` 関数を実行してタイムスタンプを時間単位に変換します。
+クエリ時に時間粒度を簡単に変更し、より粗い粒度に集計できます。たとえば、時間単位から月単位に集計できます。
+ただし、粗い粒度からより細かい粒度（月単位から時間単位）に変更することはできません。
 
-Our supported granularities are:
+サポートされている粒度は次のとおりです:
 * nanosecond (Snowflake only)
 * microsecond 
 * millisecond
@@ -270,7 +292,8 @@ Our supported granularities are:
 * quarter
 * year
 
-Aggregation between metrics with different granularities is possible, with the Semantic Layer returning results at the coarsest granularity by default. For example, when querying two metrics with daily and monthly granularity, the resulting aggregation will be at the monthly level.
+粒度の異なるメトリクス間の集計が可能です。セマンティックレイヤーは、デフォルトで最も粗い粒度で結果を返します。
+例えば、日次と月次の粒度で2つのメトリクスをクエリした場合、結果として得られる集計は月次レベルになります。
 
 ```yaml
 dimensions: 
@@ -350,34 +373,39 @@ measures:
 ### SCD Type II
 
 :::caution
-Currently, semantic models with SCD Type II dimensions cannot contain measures.
+現在、SCD タイプ II ディメンションを持つセマンティック モデルにはメジャーを含めることができません。
 :::
 
-MetricFlow supports joins against dimensions values in a semantic model built on top of a slowly changing dimension (SCD) Type II table. This is useful when you need a particular metric sliced by a group that changes over time, such as the historical trends of sales by a customer's country.
+MetricFlowは、緩やかに変化するディメンション（SCD）タイプIIテーブル上に構築されたセマンティックモデル内のディメンション値に対する結合をサポートしています。
+これは、顧客の国別の売上の履歴傾向など、時間の経過とともに変化するグループごとに特定のメトリックをスライスする必要がある場合に便利です。
 
-#### Basic structure
+#### 基本構造
 
-SCD Type II are groups that change values at a coarser time granularity. SCD Type II tables typically have two time columns that indicate the validity period of a dimension: `valid_from` (or `tier_start`) and `valid_to` (or `tier_end`). This creates a range of valid rows with different dimension values for a metric or measure.
+SCD タイプ II は、より粗い時間粒度で値が変化するグループです。
+SCD タイプ II テーブルには通常、ディメンションの有効期間を示す 2 つの時間列（「valid_from」（または「tier_start」）と「valid_to」（または「tier_end」））があります。
+これにより、メトリックまたはメジャーに対して、異なるディメンション値を持つ有効な行の範囲が作成されます。
 
-MetricFlow associates the metric with the earliest available dimension value within a coarser time window, such as a month. By default, it uses the group valid at the start of this time granularity.
+MetricFlow は、1 か月などのより粗い時間枠内で利用可能な最も古いディメンション値にメトリックを関連付けます。
 
-MetricFlow supports the following basic structure of an SCD Type II data platform table:
+デフォルトでは、この時間粒度の開始時に有効なグループが使用されます。
+
+MetricFlow は、SCD タイプ II データ プラットフォーム テーブルの次の基本構造をサポートしています:
 
 | entity_key | dimensions_1 | dimensions_2 | ... | dimensions_x | valid_from | valid_to |
 |------------|-------------|-------------|-----|-------------|------------|----------|  
 
-* `entity_key` (required): A unique identifier for each row in the table, such as a primary key or another unique identifier specific to the entity.
-* `valid_from`  (required): Start date timestamp for when the dimension is valid. Use `validity_params: is_start: True` in the semantic model to specify this.
-* `valid_to`  (required): End date timestamp for when the dimension is valid. Use `validity_params: is_end: True` in the semantic model to specify this.
+* `entity_key` (必須): テーブル内の各行の一意の識別子（主キーやエンティティ固有の一意の識別子など）。
+* `valid_from` (必須): ディメンションの有効期間の開始日を表すタイムスタンプ。セマンティックモデルで `validity_params: is_start: True` を使用して指定します。
+* `valid_to` (必須): ディメンションの有効期間の終了日を表すタイムスタンプ。セマンティックモデルで `validity_params: is_end: True` を使用して指定します。
 
-#### Semantic model parameters and keys
-When configuring an SCD Type II table in a semantic model, use `validity_params` to specify the start (`valid_from`) and end (`valid_to`) of the validity window for each dimension. 
+#### セマンティックモデルのパラメータとキー
+セマンティックモデルでSCDタイプIIテーブルを構成する際は、`validity_params`を使用して、各ディメンションの有効期間の開始（`valid_from`）と終了（`valid_to`）を指定します。
 
-- `validity_params`: Parameters that define the validity window.
-  - `is_start: True`: Indicates the start of the validity period. Displayed as `valid_from` in the SCD table.
-  - `is_end: True`: Indicates the end of the validity period. Displayed as `valid_to` in the SCD table.
+- `validity_params`: 有効期間を定義するパラメータ。
+  - `is_start: True`: 有効期間の開始を示します。SCDテーブルでは`valid_from`として表示されます。
+  - `is_end: True`: 有効期間の終了を示します。SCDテーブルでは`valid_to`として表示されます。
 
-Here’s an example configuration:
+設定例を以下に示します。
 
 ```yaml
 - name: tier_start #  The name of the dimension.
@@ -398,22 +426,23 @@ Here’s an example configuration:
       is_end: True # Indicates the end of the validity period.
 ```
 
-SCD Type II tables have a specific dimension with a start and end date. To join tables:
-- Set the additional [entity `type`](/docs/build/entities#entity-types) parameter to the `natural` key. 
-- Use a `natural` key as an [entity `type`](/docs/build/entities#entity-types), which means you don't need a `primary` key.
-- In most instances, SCD tables don't have a logically usable `primary` key because `natural` keys map to multiple rows.
+SCD タイプ II テーブルには、開始日と終了日を持つ特定のディメンションがあります。
+テーブルを結合するには、次の手順に従ってください。
+- 追加の [entity `type`](/docs/build/entities#entity-types) パラメータを `natural` キーに設定します。
+- `natural` キーを [entity `type`](/docs/build/entities#entity-types) として使用します。つまり、`primary` キーは必要ありません。
+- ほとんどの場合、SCD テーブルには論理的に使用可能な `primary` キーがありません。これは、`natural` キーが複数の行にマッピングされるためです。
 
-#### Implementation
+#### 実装
 
-Here are some guidelines to follow when implementing SCD Type II tables:
+SCD タイプ II テーブルを実装する際のガイドラインを以下に示します。
 
-- The SCD table must have `valid_to` and `valid_from` time dimensions, which are logical constructs.
-- The `valid_from` and `valid_to` properties must be specified exactly once per SCD table configuration.
-- The `valid_from` and `valid_to` properties shouldn't be used or specified on the same time dimension.
-- The `valid_from` and `valid_to` time dimensions must cover a non-overlapping period where one row matches each natural key value (meaning they must not overlap and should be distinct).
-- We recommend defining the underlying dbt model with [dbt snapshots](/docs/build/snapshots). This supports the SCD Type II table layout and ensures that the table is updated with the latest data.
+- SCD テーブルには、論理構造である `valid_to` および `valid_from` 時間ディメンションが必要です。
+- `valid_from` プロパティと `valid_to` プロパティは、SCD テーブル設定ごとに 1 つだけ指定する必要があります。
+- `valid_from` プロパティと `valid_to` プロパティは、同じ時間ディメンションで使用または指定しないでください。
+- `valid_from` および `valid_to` 時間ディメンションは、重複しない期間をカバーし、各自然キー値に 1 つの行が一致するようにする必要があります（つまり、重複してはならず、異なる値である必要があります）。
+- 基盤となる dbt モデルは、[dbt スナップショット](/docs/build/snapshots) を使用して定義することをお勧めします。これにより、SCD タイプ II テーブルレイアウトがサポートされ、テーブルが最新のデータで更新されます。
 
-This is an example of SQL code that shows how a sample metric called `num_events` is joined with versioned dimensions data (stored in a table called `scd_dimensions`) using a primary key made up of the `entity_key` and `timestamp` columns. 
+これは、`entity_key` 列と `timestamp` 列で構成される主キーを使用して、`num_events` というサンプル メトリックがバージョン管理されたディメンション データ (`scd_dimensions` というテーブルに保存されている) と結合される方法を示す SQL コードの例です。
 
 ```sql
 select metric_time, dimensions_1, sum(1) as num_events
@@ -426,13 +455,15 @@ on
 group by 1, 2
 ```
 
-#### SCD examples
+#### SCD の例
 
-The following are examples of how to use SCD Type II tables in a semantic model:
+以下は、セマンティックモデルで SCD タイプ II テーブルを使用する例です:
 
-<Expandable alt_header="SCD dimensions for sales tiers and the time length of that tier.">
+<Expandable alt_header="販売階層とその階層の時間の長さの SCD ディメンション。">
 
-This example shows how to create slowly changing dimensions (SCD) using a semantic model. The SCD table contains information about salespersons' tier and the time length of that tier. Suppose you have the underlying SCD table:
+この例では、セマンティックモデルを使用して緩やかに変化するディメンション（SCD）を作成する方法を示します。
+SCDテーブルには、営業担当者の階層とその階層の期間に関する情報が含まれています。
+次のようなSCDテーブルがあるとします:
 
 | sales_person_id | tier | start_date | end_date | 
 |-----------------|------|------------|----------|
@@ -442,11 +473,11 @@ This example shows how to create slowly changing dimensions (SCD) using a semant
 | 333             | 2    | 2020-08-19 | 2021-10-22| 
 | 333             | 3    | 2021-10-22 | 2048-01-01|  
 
-As mentioned earlier, the `validity_params` include two important arguments that specify the columns in the SCD table that mark the start and end dates (or timestamps) for each tier or dimension:
+前述のように、`validity_params` には、SCD テーブル内の各階層またはディメンションの開始日と終了日（またはタイムスタンプ）を示す列を指定する 2 つの重要な引数が含まれています。
 - `is_start`
 - `is_end`
 
-Additionally, the entity is tagged as `natural` to differentiate it from a `primary` entity. In a `primary` entity, each entity value has one row. In contrast, a `natural` entity has one row for each combination of entity value and its validity period.
+さらに、エンティティは `natural` としてタグ付けされ、`primary` エンティティと区別されます。`primary` エンティティでは、各エンティティ値に 1 行が割り当てられます。一方、`natural` エンティティでは、エンティティ値とその有効期間の組み合わせごとに 1 行が割り当てられます。
 
 ```yaml 
 semantic_models:
@@ -484,7 +515,7 @@ semantic_models:
         expr: sales_person_id
 ```
 
-The following code represents a separate semantic model that holds a fact table for `transactions`:  
+次のコードは、`transactions` のファクト テーブルを保持する別のセマンティック モデルを表しています:
 
 ```yaml
 semantic_models: 
@@ -533,15 +564,17 @@ semantic_models:
         type: categorical
 ```
 
-You can now access the metrics in the `transactions` semantic model organized by the slowly changing dimension of `tier`. 
+これで、緩やかに変化する「tier」ディメンションによって整理された「transactions」セマンティックモデルのメトリクスにアクセスできるようになりました。
 
-In the sales tier example,  For instance, if a salesperson was Tier 1 from 2022-03-01 to 2022-03-12, and gets promoted to Tier 2 from 2022-03-12 onwards, all transactions from March would be categorized under Tier 1 since the dimensions value of Tier 1 comes earlier (and is the default starting point), even though the salesperson was promoted to Tier 2 on 2022-03-12.
+例えば、営業担当者が2022年3月1日から2022年3月12日までTier 1に所属し、2022年3月12日以降にTier 2に昇格した場合、営業担当者が2022年3月12日にTier 2に昇格したにもかかわらず、Tier 1のディメンション値がそれより前（デフォルトの開始点）であるため、3月以降のすべての取引はTier 1に分類されます。
 
 </Expandable>
 
-<Expandable alt_header="SCD dimensions with sales tiers and group transactions by month when tiers are missing">
+<Expandable alt_header="販売階層と、階層が欠落している場合の月別のグループ取引を含む SCD ディメンション">
 
-This example shows how to create slowly changing dimensions (SCD) using a semantic model. The SCD table contains information about salespersons' tier and the time length of that tier. Suppose you have the underlying SCD table:
+この例では、セマンティックモデルを用いて緩やかに変化するディメンション（SCD）を作成する方法を示します。
+SCDテーブルには、営業担当者の階層とその階層の期間に関する情報が含まれています。
+以下のSCDテーブルがあるとします:
 
 | sales_person_id | tier | start_date | end_date | 
 |-----------------|------|------------|----------|
@@ -551,9 +584,9 @@ This example shows how to create slowly changing dimensions (SCD) using a semant
 | 333             | 2    | 2020-08-19 | 2021-10-22| 
 | 333             | 3    | 2021-10-22 | 2048-01-01|  
 
-In the sales tier example, if sales_person_id 456 is Tier 2 from 2022-03-08 onwards, but there is no associated tier level dimension for this person from 2022-03-01 to 2022-03-08, then all transactions associated with sales_person_id 456 for the month of March will be grouped under 'NA' since no tier is present prior to Tier 2.
+営業階層の例では、sales_person_id 456 が 2022-03-08 以降は Tier 2 であるものの、2022-03-01 から 2022-03-08 まではこの人物に関連付けられた Tier レベルのディメンションが存在しない場合、Tier 2 より前には Tier が存在しないため、3 月の sales_person_id 456 に関連付けられたすべてのトランザクションは「NA」にグループ化されます。
 
-The following command or code represents how to return the count of transactions generated by each sales tier per month:
+次のコマンドまたはコードは、各営業階層で生成されたトランザクション数を月ごとに返す方法を示しています:
 
 ```bash
 # dbt Cloud users

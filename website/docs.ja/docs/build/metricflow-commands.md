@@ -1,38 +1,43 @@
 ---
-title: MetricFlow commands
+title: MetricFlow コマンド
 id: metricflow-commands
-description: "Query metrics and metadata in your dbt project with the MetricFlow commands."
+description: "MetricFlow コマンドを使用して、dbt プロジェクト内のメトリックとメタデータをクエリします。"
 sidebar_label: "MetricFlow commands"
 tags: [Metrics, Semantic Layer]
 ---
 
-Once you define metrics in your dbt project, you can query metrics, dimensions, and dimension values, and validate your configs using the MetricFlow commands. 
+dbt プロジェクトでメトリクスを定義すると、MetricFlow コマンドを使用してメトリクス、ディメンション、ディメンション値のクエリを実行し、構成を検証できるようになります。
 
-MetricFlow allows you to define and query metrics in your dbt project in the [dbt Cloud](/docs/cloud/about-develop-dbt) or [dbt Core](/docs/core/installation-overview). To experience the power of the universal [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) and dynamically query those metrics in downstream tools, you'll need a dbt Cloud [Team or Enterprise](https://www.getdbt.com/pricing/) account. 
+MetricFlow を使用すると、[dbt Cloud](/docs/cloud/about-develop-dbt) または [dbt Core](/docs/core/installation-overview) で dbt プロジェクト内のメトリクスを定義およびクエリできます。
+ユニバーサルな [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) のパワーを活用し、下流ツールでそれらのメトリクスを動的にクエリするには、dbt Cloud [Team または Enterprise](https://www.getdbt.com/pricing/) アカウントが必要です。
 
-MetricFlow is compatible with Python versions 3.8, 3.9, 3.10, and 3.11.
+MetricFlow は、Python バージョン 3.8、3.9、3.10、3.11 と互換性があります。
 
 ## MetricFlow
 
-MetricFlow is a dbt package that allows you to define and query metrics in your dbt project. You can use MetricFlow to query metrics in your dbt project in the dbt Cloud CLI, dbt Cloud IDE, or dbt Core.
+MetricFlow は、dbt プロジェクトでメトリクスの定義とクエリを実行できる dbt パッケージです。
+MetricFlow を使用すると、dbt Cloud CLI、dbt Cloud IDE、または dbt Core で dbt プロジェクト内のメトリクスをクエリできます。
 
-Using MetricFlow with dbt Cloud means you won't need to manage versioning &mdash; your dbt Cloud account will automatically manage the versioning.
+MetricFlow を dbt Cloud と併用すると、バージョン管理が不要になります。dbt Cloud アカウントが自動的にバージョン管理を行います。
 
-dbt Cloud jobs support the `dbt sl validate` command to [automatically test your semantic nodes](/docs/deploy/ci-jobs#semantic-validations-in-ci). You can also add MetricFlow validations with your git provider (such as GitHub Actions) by installing MetricFlow (`python -m pip install metricflow`). This allows you to run MetricFlow commands as part of your continuous integration checks on PRs.
+dbt Cloud ジョブは、`dbt sl validate` コマンドをサポートしており、[セマンティックノードを自動的にテスト](/docs/deploy/ci-jobs#semantic-validations-in-ci) します。
+また、MetricFlow をインストール (`python -m pip install metricflow`) することで、git プロバイダー (GitHub Actions など) で MetricFlow 検証を追加することもできます。
+これにより、PR の継続的インテグレーション チェックの一環として MetricFlow コマンドを実行できます。
 
 <Tabs>
 
 <TabItem value="cloud" label="MetricFlow with dbt Cloud">
 
-In dbt Cloud, run MetricFlow commands directly in the [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) or in the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation). 
+dbt Cloud では、[dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) または [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) で MetricFlow コマンドを直接実行できます。
 
-For dbt Cloud CLI users, MetricFlow commands are embedded in the dbt Cloud CLI, which means you can immediately run them once you install the dbt Cloud CLI and don't need to install MetricFlow separately. You don't need to manage versioning because your dbt Cloud account will automatically manage the versioning for you.
+dbt Cloud CLI ユーザーの場合、MetricFlow コマンドは dbt Cloud CLI に組み込まれているため、dbt Cloud CLI をインストールするとすぐに実行でき、MetricFlow を別途インストールする必要はありません。
+dbt Cloud アカウントが自動的にバージョン管理を行うため、バージョン管理は不要です。
 
 </TabItem>
 
 <TabItem value="core" label="MetricFlow with dbt Core">  
 
-You can install [MetricFlow](https://github.com/dbt-labs/metricflow#getting-started) from [PyPI](https://pypi.org/project/dbt-metricflow/). You need to use `pip` to install MetricFlow on Windows or Linux operating systems:
+[MetricFlow](https://github.com/dbt-labs/metricflow#getting-started)は[PyPI](https://pypi.org/project/dbt-metricflow/)からインストールできます。WindowsまたはLinuxオペレーティングシステムにMetricFlowをインストールするには、`pip`を使用する必要があります:
 
 <VersionBlock lastVersion="1.7">
  
@@ -44,43 +49,43 @@ You can install [MetricFlow](https://github.com/dbt-labs/metricflow#getting-star
 
 <VersionBlock firstVersion="1.8">
  
-1. Create or activate your virtual environment `python -m venv venv`
-2. Run `pip install dbt-metricflow`
-  * You can install MetricFlow using PyPI as an extension of your dbt adapter in the command line. To install the adapter, run `python -m pip install "dbt-metricflow[adapter_package_name]"` and add the adapter name at the end of the command. For example, for a Snowflake adapter run `python -m pip install "dbt-metricflow[dbt-snowflake]"`
+1. 仮想環境を作成またはアクティブ化します `python -m venv venv`
+2. `pip install dbt-metricflow` を実行します
+* コマンドラインで、PyPI を使用して MetricFlow を dbt アダプタの拡張機能としてインストールできます。アダプタをインストールするには、`python -m pip install "dbt-metricflow[adapter_package_name]"` を実行し、コマンドの末尾にアダプタ名を追加します。例えば、Snowflake アダプタの場合は、`python -m pip install "dbt-metricflow[dbt-snowflake]"` を実行します。
 
 </VersionBlock>
 
-**Note**, you'll need to manage versioning between dbt Core, your adapter, and MetricFlow.
+**注意**: dbt Core、アダプタ、MetricFlow 間のバージョン管理が必要になります。
 
-Something to note, MetricFlow `mf` commands return an error if you have a Metafont latex package installed. To run `mf` commands, uninstall the package.
+Metafont LaTeX パッケージがインストールされている場合、MetricFlow の `mf` コマンドはエラーを返しますのでご注意ください。`mf` コマンドを実行するには、パッケージをアンインストールしてください。
 
 </TabItem>
 </Tabs>
 
-## MetricFlow commands
+## MetricFlow コマンド
 
-MetricFlow provides the following commands to retrieve metadata and query metrics. 
+MetricFlow は、メタデータの取得とメトリクスのクエリを実行するための次のコマンドを提供します。
 
 <Tabs>
 <TabItem value="cloudcommands" label="Commands for dbt Cloud">
 
-You can use the `dbt sl` prefix before the command name to execute them in the dbt Cloud IDE or dbt Cloud CLI. For example, to list all metrics, run `dbt sl list metrics`. 
+コマンド名の前に「dbt sl」プレフィックスを付けると、dbt Cloud IDE または dbt Cloud CLI で実行できます。たとえば、すべてのメトリックを一覧表示するには、「dbt sl list metrics」を実行します。
 
-dbt Cloud CLI users can run `dbt sl --help` in the terminal for a complete list of the MetricFlow commands and flags.
+dbt Cloud CLI ユーザーは、ターミナルで「dbt sl --help」を実行すると、MetricFlow のコマンドとフラグの完全な一覧が表示されます。
 
-The following table lists the commands compatible with the dbt Cloud IDE and dbt Cloud CLI:
+次の表は、dbt Cloud IDE および dbt Cloud CLI と互換性のあるコマンドの一覧です:
 
 | <div style={{width:'250px'}}>Command</div>  | <div style={{width:'100px'}}>Description</div> | dbt Cloud IDE | dbt Cloud CLI |
 |---------|-------------|---------------|---------------|
-| [`list metrics`](#list-metrics) | Lists metrics with dimensions. |  ✅ | ✅ |
-| [`list dimensions`](#list) | Lists unique dimensions for metrics. |  ✅  | ✅ |
-| [`list dimension-values`](#list-dimension-values) | List dimensions with metrics. | ✅ | ✅ |
-| [`list entities`](#list-entities) | Lists all unique entities.  |  ✅  | ✅ |
-| [`list saved-queries`](#list-saved-queries) | Lists available saved queries. Use the `--show-exports` flag to display each export listed under a saved query or `--show-parameters` to show the full query parameters each saved query uses. |  ✅ | ✅ |
-| [`query`](#query) | Query metrics, saved queries, and dimensions you want to see in the command line interface. Refer to [query examples](#query-examples) to query metrics and dimensions (such as querying metrics, using the `where` filter, adding an `order`, and more).  |  ✅ | ✅ |
-| [`validate`](#validate) | Validates semantic model configurations. |  ✅ | ✅ |
-| [`export`](#export) |  Runs exports for a singular saved query for testing and generating exports in your development environment. You can also use the `--select` flag to specify particular exports from a saved query. |  ❌ | ✅ |
-| [`export-all`](#export-all) | Runs exports for multiple saved queries at once, saving time and effort. |  ❌ | ✅ |
+| [`list metrics`](#list-metrics) | ディメンションを含むメトリックを一覧表示します。 |  ✅ | ✅ |
+| [`list dimensions`](#list) | メトリックの一意のディメンションを一覧表示します。 |  ✅  | ✅ |
+| [`list dimension-values`](#list-dimension-values) | メトリックを含むディメンションをリストします。 | ✅ | ✅ |
+| [`list entities`](#list-entities) | すべての一意のエンティティを一覧表示します。  |  ✅  | ✅ |
+| [`list saved-queries`](#list-saved-queries) | 利用可能な保存済みクエリを一覧表示します。保存済みクエリの下にリストされている各エクスポートを表示するには `--show-exports` フラグを使用し、各保存済みクエリで使用される完全なクエリパラメータを表示するには `--show-parameters` フラグを使用します。 |  ✅ | ✅ |
+| [`query`](#query) | コマンドラインインターフェースで表示するメトリクス、保存済みクエリ、ディメンションをクエリします。メトリクスとディメンションのクエリを実行するには、[クエリ例](#query-examples)を参照してください（メトリクスのクエリ、`where` フィルターの使用、`order` の追加など）。  |  ✅ | ✅ |
+| [`validate`](#validate) | セマンティック モデルの構成を検証します。 |  ✅ | ✅ |
+| [`export`](#export) |  開発環境でのテストとエクスポート生成のために、保存済みの単一のクエリに対してエクスポートを実行します。また、`--select` フラグを使用して、保存済みのクエリから特定のエクスポートを指定することもできます。 |  ❌ | ✅ |
+| [`export-all`](#export-all) | 保存された複数のクエリのエクスポートを一度に実行し、時間と労力を節約します。 |  ❌ | ✅ |
 
 
 <!--below commands aren't supported in dbt cloud yet
@@ -88,13 +93,15 @@ The following table lists the commands compatible with the dbt Cloud IDE and dbt
 - [`tutorial`](#tutorial) &mdash; Dedicated MetricFlow tutorial to help get you started.
 -->
 
-:::tip Run dbt parse to reflect metric changes
-When you make changes to metrics, make sure to run `dbt parse` at a minimum to update the dbt Semantic Layer. This updates the `semantic_manifest.json` file, reflecting your changes when querying metrics. By running `dbt parse`, you won't need to rebuild all the models.
+:::tip メトリックの変更を反映するために dbt parse を実行します
+指標に変更を加える際は、少なくとも `dbt parse` を実行して dbt セマンティックレイヤーを更新してください。
+これにより `semantic_manifest.json` ファイルが更新され、指標のクエリ時に変更が反映されます。
+`dbt parse` を実行することで、すべてのモデルを再構築する必要がなくなります。
 ::: 
 
-<Expandable alt_header="How can I query or preview metrics with the dbt Cloud CLI?">
+<Expandable alt_header="dbt Cloud CLI を使用してメトリックをクエリまたはプレビューするにはどうすればよいですか?">
 
-Check out the following video for a short video demo of how to query or preview metrics with the dbt Cloud CLI:
+dbt Cloud CLI を使用してメトリックをクエリまたはプレビューする方法については、次の短いビデオ デモをご覧ください:
 
 <LoomVideo id='09e2b287f063497d888f4bed91469d79' />
 
@@ -102,24 +109,25 @@ Check out the following video for a short video demo of how to query or preview 
 
 </TabItem>
 
-<TabItem value="corecommands" label="Commands for dbt Core">
+<TabItem value="corecommands" label="dbt Core のコマンド">
 
-Use the `mf` prefix before the command name to execute them in dbt Core. For example, to list all metrics, run `mf list metrics`.
+dbt Core で実行するには、コマンド名の前に `mf` プレフィックスを付けます。
+たとえば、すべてのメトリックを一覧表示するには、`mf list metrics` を実行します。
 
-- [`list metrics`](#list-metrics) &mdash; Lists metrics with dimensions.
-- [`list dimensions`](#list) &mdash; Lists unique dimensions for metrics.
-- [`list dimension-values`](#list-dimension-values) &mdash; List dimensions with metrics.
-- [`list entities`](#list-entities) &mdash; Lists all unique entities.
-- [`validate-configs`](#validate-configs) &mdash; Validates semantic model configurations.
-- [`health-checks`](#health-checks) &mdash; Performs data platform health check.
-- [`tutorial`](#tutorial) &mdash; Dedicated MetricFlow tutorial to help get you started.
-- [`query`](#query) &mdash; Query metrics and dimensions you want to see in the command line interface. Refer to [query examples](#query-examples) to help you get started.
+- [`list metrics`](#list-metrics) &mdash; ディメンションを含むメトリックを一覧表示します。
+- [`list dimensions`](#list) &mdash; メトリックの一意のディメンションを一覧表示します。
+- [`list dimension-values`](#list-dimension-values) &mdash; メトリックを含むディメンションを一覧表示します。
+- [`list entities`](#list-entities) &mdash; すべての一意のエンティティを一覧表示します。
+- [`validate-configs`](#validate-configs) &mdash; セマンティック モデル構成を検証します。
+- [`health-checks`](#health-checks) &mdash; データ プラットフォームのヘルスチェックを実行します。
+- [`tutorial`](#tutorial) &mdash; MetricFlow を使い始める際に役立つ専用のチュートリアルをご用意しています。
+- [`query`](#query) - コマンドラインインターフェースで表示するメトリクスとディメンションをクエリします。[クエリの例](#query-examples)を参考に、使い始めてください。
   
 </TabItem>
 </Tabs>
 
-## List metrics
-This command lists the metrics with their available dimensions:
+## 指標の一覧表示
+このコマンドは、利用可能なディメンションとともに指標を一覧表示します。
 
 ```bash
 dbt sl list metrics <metric_name> # In dbt Cloud
@@ -132,9 +140,10 @@ Options:
   --help                 Show this message and exit.
 ```
 
-## List dimensions
+## ディメンションの一覧表示
 
-This command lists all unique dimensions for a metric or multiple metrics. It displays only common dimensions when querying multiple metrics:
+このコマンドは、1つまたは複数の指標の固有のディメンションをすべて一覧表示します。
+複数の指標をクエリする場合は、共通のディメンションのみを表示します:
 
 ```bash
 dbt sl list dimensions --metrics <metric_name> # In dbt Cloud
@@ -146,9 +155,9 @@ Options:
   --help              Show this message and exit.
 ```
 
-## List dimension-values
+## ディメンション値の一覧表示
 
-This command lists all dimension values with the corresponding metric:
+このコマンドは、対応する指標を持つすべてのディメンション値を一覧表示します:
 
 ```bash
 dbt sl list dimension-values --metrics <metric_name> --dimension <dimension_name> # In dbt Cloud
@@ -168,9 +177,9 @@ Options:
   --help              Show this message and exit.
 ```
 
-## List entities
+## エンティティの一覧表示
 
-This command lists all unique entities:
+このコマンドは、すべての一意のエンティティを一覧表示します:
 
 ```bash
 dbt sl list entities --metrics <metric_name> # In dbt Cloud 
@@ -182,15 +191,15 @@ Options:
   --help              Show this message and exit.
 ```
 
-## List saved queries
+## 保存済みクエリの一覧表示
 
-This command lists all available saved queries:
+このコマンドは、利用可能なすべての保存済みクエリを一覧表示します:
 
 ```bash
 dbt sl list saved-queries
 ```
 
-You can also add the `--show-exports` flag (or option) to show each export listed under a saved query:
+保存されたクエリの下にリストされている各エクスポートを表示するには、`--show-exports` フラグ (またはオプション) を追加することもできます:
 
 ```bash
 dbt sl list saved-queries --show-exports
@@ -209,9 +218,9 @@ The list of available saved queries:
        - Export(new_customer_orders, alias=orders, schemas=customer_schema, exportAs=TABLE)
 ```
 
-## Validate
+## 検証
 
-The following command performs validations against the defined semantic model configurations.
+次のコマンドは、定義されたセマンティックモデル構成に対して検証を実行します。
 
 ```bash
 dbt sl validate # For dbt Cloud users
@@ -234,28 +243,29 @@ Options:
   --help                          Show this message and exit.
 ```
 
-## Health checks
+## ヘルスチェック
 
-The following command performs a health check against the data platform you provided in the configs. 
+次のコマンドは、構成ファイルで指定したデータプラットフォームに対してヘルスチェックを実行します。
 
-Note, in dbt Cloud the `health-checks` command isn't required since it uses dbt Cloud's credentials to perform the health check.
+dbt Cloud では、ヘルスチェックの実行に dbt Cloud の認証情報を使用するため、`health-checks` コマンドは必要ありません。
 
 ```bash
 mf health-checks # In dbt Core
 ```
 
-## Tutorial
+## チュートリアル
 
-Follow the dedicated MetricFlow tutorial to help you get started:
+MetricFlow を使い始めるには、専用のチュートリアルをご覧ください:
 <!--dbt sl tutorial # In dbt Cloud-->
 
 ```bash
 mf tutorial # In dbt Core
 ```
 
-## Query
+## クエリ
 
-Create a new query with MetricFlow and execute it against your data platform. The query returns the following result:
+MetricFlow で新しいクエリを作成し、データプラットフォームに対して実行します。
+クエリは次の結果を返します:
 
 ```bash
 dbt sl query --metrics <metric_name> --group-by <dimension_name> # In dbt Cloud 
@@ -319,20 +329,21 @@ Options:
   ```
 
 
-## Query examples
+## クエリ例
 
-This section shares various types of query examples that you can use to query metrics and dimensions. The query examples listed are:
+このセクションでは、指標とディメンションのクエリに使用できる様々なタイプのクエリ例を紹介します。
+クエリ例は以下のとおりです。
 
-- [Query metrics](#query-metrics)
-- [Query dimensions](#query-dimensions)
-- [Add `order`/`limit` function](#add-orderlimit)
-- [Add `where` clause](#add-where-clause)
-- [Filter by time](#filter-by-time)
-- [Query saved queries](#query-saved-queries)
+- [指標のクエリ](#query-metrics)
+- [ディメンションのクエリ](#query-dimensions)
+- [`order`/`limit` 関数の追加](#add-orderlimit)
+- [`where` 句の追加](#add-where-clause)
+- [時間によるフィルタリング](#filter-by-time)
+- [保存済みクエリのクエリ](#query-saved-queries)
 
-### Query metrics
+### 指標のクエリ {#query-metrics}
 
-Use the example to query multiple metrics by dimension and return the `order_total` and `users_active` metrics by `metric_time.` 
+この例を使用して、ディメンション別に複数のメトリックをクエリし、`metric_time` 別に `order_total` および `users_active` メトリックを返します。
 
 **Query**
 ```bash
@@ -354,9 +365,12 @@ mf query --metrics order_total,users_active --group-by metric_time # In dbt Core
 | 2017-06-21    |         541.65 |
 ```
 
-### Query dimensions
+### ディメンションのクエリ {#query-dimensions}
 
-You can include multiple dimensions in a query. For example, you can group by the `is_food_order` dimension to confirm if orders were for food or not.  Note that when you query a dimension, you need to specify the primary entity for that dimension. In the following example, the primary entity is `order_id`.
+クエリには複数のディメンションを含めることができます。
+例えば、注文が食品かどうかを確認するために、「is_food_order」ディメンションでグループ化することができます。
+ディメンションをクエリする際は、そのディメンションのプライマリエンティティを指定する必要があります。
+次の例では、プライマリエンティティは「order_id」です。
 
 **Query**
 ```bash
@@ -380,11 +394,15 @@ mf query --metrics order_total --group-by order_id__is_food_order # In dbt Core
 | 2017-06-19    | True            |         448.11 |
 ```
 
-### Add order/limit
+### order/limit の追加 {#add-orderlimit}
 
-You can add order and limit functions to filter and present the data in a readable format. The following query limits the data set to 10 records and orders them by `metric_time`, descending. Note that using the `-` prefix will sort the query in descending order. Without the `-` prefix sorts the query in ascending order.
+order 関数と limit 関数を追加することで、データをフィルタリングし、読みやすい形式で表示できます。
+次のクエリは、データセットを10件のレコードに制限し、`metric_time` の降順で並べ替えます。
+`-` プレフィックスを使用すると、クエリは降順で並べ替えられることに注意してください。
+`-` プレフィックスを使用しないと、クエリは昇順で並べ替えられます。
 
- Note that when you query a dimension, you need to specify the primary entity for that dimension. In the following example, the primary entity is `order_id`.
+ディメンションをクエリする場合は、そのディメンションのプライマリエンティティを指定する必要があります。
+次の例では、プライマリエンティティは `order_id` です。
 
 **Query**
 ```bash
@@ -409,9 +427,10 @@ mf query --metrics order_total --group-by order_id__is_food_order --limit 10 --o
 | 2017-08-28    | False           |         334.73 |
 ```
 
-### Add where clause
+### where 句の追加 {#add-where-clause}
 
-You can further filter the data set by adding a `where` clause to your query. The following example shows you how to query the `order_total` metric, grouped by `is_food_order` with multiple `where` statements (orders that are food orders and orders from the week starting on or after Feb 1st, 2024). 
+クエリに `where` 句を追加することで、データセットをさらにフィルタリングできます。
+次の例は、複数の `where` ステートメントを使用して `is_food_order` でグループ化された `order_total` 指標（食品注文と 2024 年 2 月 1 日以降の週の注文）をクエリする方法を示しています。
 
 **Query**
 ```bash
@@ -422,9 +441,9 @@ dbt sl query --metrics order_total --group-by order_id__is_food_order --where "{
 mf query --metrics order_total --group-by order_id__is_food_order --where "{{ Dimension('order_id__is_food_order') }} = True and TimeDimension('metric_time', 'week') }} >= '2024-02-01'"
 ```
 
-Notes:
-- The type of dimension changes the syntax you use. So if you have a date field, use `TimeDimension` instead of `Dimension`.
-- When you query a dimension, you need to specify the primary entity for that dimension. In the example just shared, the primary entity is `order_id`.
+注:
+- ディメンションの種類によって使用する構文が異なります。日付フィールドがある場合は、`Dimension` ではなく `TimeDimension` を使用してください。
+- ディメンションをクエリする場合は、そのディメンションのプライマリエンティティを指定する必要があります。先ほど共有した例では、プライマリエンティティは `order_id` です。
 
 **Result**
 ```bash
@@ -443,11 +462,13 @@ Notes:
 | 2017-08-22    | True            |         401.91 |
 ```
 
-### Filter by time
+### 時間でフィルタリング {#filter-by-time}
 
-To filter by time, there are dedicated start and end time options. Using these options to filter by time allows MetricFlow to further optimize query performance by pushing down the where filter when appropriate. 
+時間でフィルタリングするには、専用の開始時間と終了時間のオプションがあります。
+これらのオプションを使用して時間でフィルタリングすると、MetricFlowは適切な場合にwhereフィルターを押し下げることで、クエリのパフォーマンスをさらに最適化できます。
 
- Note that when you query a dimension, you need to specify the primary entity for that dimension. In the following example, the primary entity is `order_id`.
+ディメンションをクエリする場合は、そのディメンションのプライマリエンティティを指定する必要があります。
+次の例では、プライマリエンティティは「order_id」です。
 <!--
 bash not support in cloud yet
 # In dbt Cloud
@@ -472,9 +493,10 @@ mf query --metrics order_total --group-by order_id__is_food_order --limit 10 --o
 | 2017-08-22    | True            |         401.91 |
 ```
 
-### Query saved queries
+### 保存済みクエリのクエリ {#query-saved-queries}
 
-You can use this for frequently used queries. Replace `<name>` with the name of your [saved query](/docs/build/saved-queries). 
+頻繁に使用するクエリに使用できます。
+`<name>` を [保存したクエリ](/docs/build/saved-queries) の名前に置き換えてください。
 
 **Query**
 ```bash
@@ -483,21 +505,25 @@ dbt sl query --saved-query <name> # In dbt Cloud
 mf query --saved-query <name> # In dbt Core
 ```
 
-For example, if you use dbt Cloud and have a saved query named `new_customer_orders`, you would run `dbt sl query --saved-query new_customer_orders`.
+たとえば、dbt Cloud を使用していて、`new_customer_orders` という名前の保存済みクエリがある場合は、`dbt sl query --saved-query new_customer_orders` を実行します。
 
-:::info A note on querying saved queries
-When querying [saved queries](/docs/build/saved-queries), you can use parameters such as `where`, `limit`, `order`, `compile`, and so on. However, keep in mind that you can't access `metric` or `group_by` parameters in this context. This is because they are predetermined and fixed parameters for saved queries, and you can't change them at query time. If you would like to query more metrics or dimensions, you can build the query using the standard format.
+:::info 保存済みクエリのクエリに関する注意事項
+[保存済みクエリ](/docs/build/saved-queries) をクエリする際は、`where`、`limit`、`order`、`compile` などのパラメータを使用できます。
+ただし、このコンテキストでは `metric` または `group_by` パラメータにはアクセスできないことに注意してください。
+これは、これらのパラメータが保存済みクエリに対して事前に決定された固定パラメータであり、クエリ実行時に変更できないためです。
+さらに多くの指標やディメンションをクエリする場合は、標準形式を使用してクエリを作成できます。
 :::
 
-## Additional query examples
+## 追加のクエリ例
 
-The following tabs present additional query examples, like exporting to a CSV. Select the tab that best suits your needs:
+以下のタブでは、CSVへのエクスポートなど、追加のクエリ例をご覧いただけます。
+ニーズに最適なタブを選択してください。
 
 <Tabs>
 
 <TabItem value="eg6" label="--compile/--explain flag">
 
-Add `--compile` (or `--explain` for dbt Core users) to your query to view the SQL generated by MetricFlow. 
+MetricFlow によって生成された SQL を表示するには、クエリに `--compile` (または dbt Core ユーザーの場合は `--explain`) を追加します。
 
 **Query**
 
@@ -537,7 +563,8 @@ limit 10
 
 <TabItem value="eg7" label=" Export to CSV">
  
-Add the `--csv file_name.csv` flag to export the results of your query to a csv. The `--csv` flag is available in dbt Core only and not supported in dbt Cloud.
+クエリの結果を csv にエクスポートするには、`--csv file_name.csv` フラグを追加します。
+`--csv` フラグは dbt Core でのみ使用でき、dbt Cloud ではサポートされていません。
 
 **Query**
 
@@ -556,11 +583,12 @@ mf query --metrics order_total --group-by metric_time,is_food_order --limit 10 -
 </TabItem>
 </Tabs>
 
-## Time granularity
+## 時間粒度
 
-Optionally, you can specify the time granularity you want your data to be aggregated at by appending two underscores and the unit of granularity you want to `metric_time`, the global time dimension. You can group the granularity by: `day`, `week`, `month`, `quarter`, and `year`. 
+オプションで、グローバル時間ディメンション「metric_time」に2つのアンダースコアと粒度単位を追加することで、データを集計する時間粒度を指定できます。
+粒度は、「日」、「週」、「月」、「四半期」、「年」でグループ化できます。
 
-Below is an example for querying metric data at a monthly grain:
+以下は、月単位でメトリックデータをクエリする例です。
 
 ```bash
 dbt sl query --metrics revenue --group-by metric_time__month # In dbt Cloud
@@ -568,11 +596,14 @@ dbt sl query --metrics revenue --group-by metric_time__month # In dbt Cloud
 mf query --metrics revenue --group-by metric_time__month # In dbt Core
 ```
 
-## Export
+## エクスポート
 
-Run [exports for a specific saved query](/docs/use-dbt-semantic-layer/exports#exports-for-single-saved-query). Use this command to test and generate exports in your development environment. You can also use the `--select` flag to specify particular exports from a saved query. Refer to [exports in development](/docs/use-dbt-semantic-layer/exports#exports-in-development) for more info. 
+[特定の保存済みクエリのエクスポート](/docs/use-dbt-semantic-layer/exports#exports-for-single-saved-query)を実行します。
+このコマンドを使用して、開発環境でエクスポートをテストおよび生成します。
+また、`--select`フラグを使用して、保存済みクエリから特定のエクスポートを指定することもできます。
+詳細については、[開発中のエクスポート](/docs/use-dbt-semantic-layer/exports#exports-in-development)を参照してください。
 
-Export is available in dbt Cloud.
+エクスポートはdbt Cloudで利用できます。
 
 ```bash
 dbt sl export 
@@ -580,9 +611,11 @@ dbt sl export
 
 ## Export-all
 
-Run [exports for multiple saved queries](/docs/use-dbt-semantic-layer/exports#exports-for-multiple-saved-queries) at once. This command provides a convenient way to manage and execute exports for several queries simultaneously, saving time and effort. Refer to [exports in development](/docs/use-dbt-semantic-layer/exports#exports-in-development) for more info. 
+[複数の保存済みクエリのエクスポート](/docs/use-dbt-semantic-layer/exports#exports-for-multiple-saved-queries)を一度に実行します。
+このコマンドを使用すると、複数のクエリのエクスポートを同時に管理および実行できるため、時間と労力を節約できます。
+詳細については、[開発中のエクスポート](/docs/use-dbt-semantic-layer/exports#exports-in-development)を参照してください。
 
-Export is available in dbt Cloud.
+エクスポートはdbt Cloudで利用できます。
 
 ```bash
 dbt sl export-all 
@@ -591,73 +624,82 @@ dbt sl export-all
 
 ## FAQs
 
-<DetailsToggle alt_header="How can I add a dimension filter to a where filter?">
+<DetailsToggle alt_header="ディメンション フィルターを Where フィルターに追加するにはどうすればよいですか?">
 
-To add a dimension filter to a where filter, you have to indicate that the filter item is part of your model and use a template wrapper: `{{Dimension('primary_entity__dimension_name')}}`.
+where フィルターにディメンションフィルターを追加するには、フィルター項目がモデルの一部であることを示し、テンプレートラッパー（`{{Dimension('primary_entity__dimension_name')}}`）を使用する必要があります。
 
-Here's an example query: `dbt sl query --metrics order_total --group-by metric_time --where "{{Dimension('order_id__is_food_order')}} = True"`.
+クエリの例は次のとおりです。`dbt sl query --metrics order_total --group-by metric_time --where "{{Dimension('order_id__is_food_order')}} = True"`。
 
-Before using the template wrapper, however, set up your terminal to escape curly braces for the filter template to work. 
+ただし、テンプレートラッパーを使用する前に、フィルターテンプレートが機能するように、ターミナルで中括弧をエスケープするように設定してください。
 
 <details> 
-<summary>How to set up your terminal to escape curly braces? </summary>
- To configure your <code>.zshrc</code>profile to escape curly braces, you can use the <code>setopt</code> command to enable the <code>BRACECCL</code> option. This option will cause the shell to treat curly braces as literals and prevent brace expansion. Refer to the following steps to set it up: <br />
+<summary>中括弧をエスケープするためにターミナルを設定するにはどうすればよいでしょうか?</summary>
+<code>.zshrc</code> プロファイルで中括弧をエスケープするように設定するには、<code>setopt</code> コマンドを使用して <code>BRACECCL</code> オプションを有効にします。このオプションを有効にすると、シェルは中括弧をリテラルとして扱い、括弧の展開を防止します。設定手順は以下のとおりです。<br />
 
-1. Open your terminal.
-2. Open your <code>.zshrc</code> file using a text editor like <code>nano</code>, <code>vim</code>, or any other text editor you prefer. You can use the following command to open it with <code>nano</code>:
+1. ターミナルを開きます。
+2. <code>nano</code>、<code>vim</code>、またはその他のお好みのテキストエディタを使用して <code>.zshrc</code> ファイルを開きます。<code>nano</code> で開くには、以下のコマンドを使用します。
 
 ```bash
 nano ~/.zshrc
 ```
-3. Add the following line to the file:
+3. ファイルに次の行を追加します:
 
 ```bash
 setopt BRACECCL
 ```
-4. Save and exit the text editor (in `nano`, press Ctrl + O to save, and Ctrl + X to exit).
+4. テキストエディタを保存して終了します（`nano` では、Ctrl + O で保存し、Ctrl + X で終了します）。
 
-5. Source your <code>.zshrc</code> file to apply the changes:
+5. <code>.zshrc</code> ファイルを source して変更を適用します:
 
 ```bash
 source ~/.zshrc
 ```
 
-6. After making these changes, your Zsh shell will treat curly braces as literal characters and will not perform brace expansion. This means that you can use curly braces without worrying about unintended expansions.
+6. これらの変更を加えると、Zsh シェルは中括弧をリテラル文字として扱い、中括弧の展開を行わなくなります。
+つまり、意図しない展開を心配することなく中括弧を使用できます。
 
-Keep in mind that modifying your shell configuration files can have an impact on how your shell behaves. If you're not familiar with shell configuration, it's a good idea to make a backup of your <code>.zshrc</code> file before making any changes. If you encounter any issues or unexpected behavior, you can revert to the backup.
+シェル設定ファイルを変更すると、シェルの動作に影響が出る可能性があることに注意してください。
+シェル設定に精通していない場合は、変更を加える前に <code>.zshrc</code> ファイルのバックアップを作成することをお勧めします。
+問題や予期しない動作が発生した場合は、バックアップを復元できます。
 
 </details>
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Why is my query limited to 100 rows in the dbt Cloud CLI?">
+<DetailsToggle alt_header="dbt Cloud CLI でクエリが 100 行に制限されているのはなぜですか?">
 
-The default `limit` for query issues from the dbt Cloud CLI is 100 rows. We set this default to prevent returning unnecessarily large data sets as the dbt Cloud CLI is typically used to query the dbt Semantic Layer during the development process, not for production reporting or to access large data sets. For most workflows, you only need to return a subset of the data.
+dbt Cloud CLI からのクエリ発行におけるデフォルトの「limit」は 100 行です。
+dbt Cloud CLI は通常、開発プロセス中に dbt セマンティック レイヤーをクエリするために使用され、本番環境のレポート作成や大規模なデータセットへのアクセスには使用されないため、このデフォルト設定は、不必要に大きなデータセットが返されるのを防ぐためです。
+ほとんどのワークフローでは、データのサブセットのみを返す必要があります。
 
-However, you can change this limit if needed by setting the `--limit` option in your query. For example, to return 1000 rows, you can run `dbt sl list metrics --limit 1000`.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="How can I query multiple metrics, group bys, or where statements?">
-
-To query multiple metrics, group bys, or where statements in your command, follow this guidance:
-
-- To query multiple metrics and group bys, use the `--metrics` or `--group-by` syntax followed by the metric or dimension/entity names, separated by commas without spaces:
-  - Multiple metrics example: `dbt sl query --metrics accounts_active,users_active`
-  - Multiple dimension/entity example: `dbt sl query --metrics accounts_active,users_active --group-by metric_time__week,accounts__plan_tier`
- 
-- To query multiple where statements, use the `--where` syntax and wrap the statement in quotes:
-  - Multiple where statement example: `dbt sl query --metrics accounts_active,users_active --group-by metric_time__week,accounts__plan_tier --where "metric_time__week >= '2024-02-01' and accounts__plan_tier = 'coco'"`
+ただし、必要に応じてクエリで「--limit」オプションを設定することで、この制限を変更できます。
+たとえば、1,000 行を返すには、「dbt sl list metrics --limit 1000」を実行します。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How can I sort my query in ascending or descending order?">
+<DetailsToggle alt_header="複数のメトリック、group by、または where ステートメントをクエリするにはどうすればよいですか?">
 
-When you query metrics, use `--order-by` to specify metrics or groupings to order by. The `order_by` option applies to metrics, dimensions, and group bys. 
+コマンド内で複数の指標、group by、またはwhere文をクエリするには、以下のガイダンスに従ってください。
 
-Add the `-` prefix to sort your query in descending (DESC) order. Leave blank for ascending (ASC) order:
+- 複数の指標とgroup byをクエリするには、`--metrics`または`--group-by`構文に続けて、指標名またはディメンション/エンティティ名をスペースなしでカンマで区切って指定します。
+- 複数の指標の例: `dbt sl query --metrics accounts_active,users_active`
+- 複数のディメンション/エンティティの例: `dbt sl query --metrics accounts_active,users_active --group-by metric_time__week,accounts__plan_tier`
 
-- For example, to query a metric and sort `metric_time` in descending order, run `dbt sl query --metrics order_total --group-by metric_time --order-by -metric_time`. Note that the `-` prefix in `-metric_time` sorts the query in descending order.
-- To query a metric and sort `metric_time` in ascending order and `revenue` in descending order, run `dbt sl query --metrics order_total --order-by metric_time,-revenue`. Note that `metric_time` without a prefix is sorted in ascending order and `-revenue` with a `-` prefix sorts the query in descending order.
+- 複数のwhere文をクエリするには、`--where`構文を使用し、文全体を引用符で囲みます。
+- 複数のwhere文の例: `dbt sl query --metrics accounts_active,users_active --group-by metric_time__week,accounts__plan_tier --where "metric_time__week >= '2024-02-01' and accounts__plan_tier =  'coco'"`
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="クエリを昇順または降順で並べ替えるにはどうすればよいでしょうか?">
+
+指標をクエリする際は、`--order-by` を使用して、並べ替えの基準となる指標またはグループを指定します。
+`order_by` オプションは、指標、ディメンション、および group by に適用されます。
+
+クエリを降順 (DESC) で並べ替えるには、`-` プレフィックスを追加します。昇順 (ASC) の場合は空白のままにします。
+
+- たとえば、指標をクエリし、`metric_time` を降順で並べ替えるには、`dbt sl query --metrics order_total --group-by metric_time --order-by -metric_time` を実行します。
+`-metric_time` の `-` プレフィックスは、クエリを降順で並べ替えることに注意してください。
+- 指標をクエリし、`metric_time` を昇順で、`revenue` を降順で並べ替えるには、`dbt sl query --metrics order_total --order-by metric_time,-revenue` を実行します。
+プレフィックスのない `metric_time` は昇順で並べ替えられ、プレフィックス `-` の付いた `-revenue` はクエリを降順で並べ替えることに注意してください。
 
 </DetailsToggle>

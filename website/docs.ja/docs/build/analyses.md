@@ -1,17 +1,20 @@
 ---
-title: "Analyses"
-description: "Configure SQL files in dbt to create compiled code used for analyses."
+title: "分析"
+description: "分析に使用するコンパイル済みコードを作成するには、dbt で SQL ファイルを構成します。"
 id: "analyses"
 pagination_next: null
 ---
 
-## Overview
+## 概要
 
-dbt's notion of `models` makes it easy for data teams to version control and collaborate on data transformations. Sometimes though, a certain SQL statement doesn't quite fit into the mold of a dbt model. These more "analytical" SQL files can be versioned inside of your dbt project using the `analysis` functionality of dbt.
+dbt の「モデル」という概念により、データチームはデータ変換におけるバージョン管理と共同作業を容易に行うことができます。
+しかしながら、特定の SQL 文が dbt モデルの型に完全には当てはまらない場合があります。
+こうした「分析的な」SQL ファイルは、dbt の「分析」機能を使用して、dbt プロジェクト内でバージョン管理できます。
 
-Any `.sql` files found in the `analyses/` directory of a dbt project will be compiled, but not executed. This means that analysts can use dbt functionality like `{{ ref(...) }}` to select from models in an environment-agnostic way.
+dbt プロジェクトの `analyses/` ディレクトリにある `.sql` ファイルはコンパイルされますが、実行されません。
+つまり、アナリストは `{{ ref(...) }}` などの dbt 機能を使用して、環境に依存しない方法でモデルを選択できます。
 
-In practice, an analysis file might look like this (via the [open source Quickbooks models](https://github.com/dbt-labs/quickbooks)):
+実際には、分析ファイルは次のようになります（[オープンソースの Quickbooks モデル](https://github.com/dbt-labs/quickbooks) を使用）。
 
 <File name='analyses/running_total_by_account.sql'>
 
@@ -43,9 +46,11 @@ order by account_id, id
 
 </File>
 
-To compile this analysis into runnable sql, run:
+この分析を実行可能な SQL にコンパイルするには、次を実行します:
 ```
 dbt compile
 ```
 
-Then, look for the compiled SQL file in `target/compiled/{project name}/analyses/running_total_by_account.sql`. This sql can then be pasted into a data visualization tool, for instance. Note that no `running_total_by_account` relation will be materialized in the database as this is an `analysis`, not a `model`.
+次に、`target/compiled/{プロジェクト名}/analyses/running_total_by_account.sql` でコンパイル済みのSQLファイルを探します。
+このSQLは、例えばデータ視覚化ツールに貼り付けることができます。
+これは `model` ではなく `analysis` であるため、`running_total_by_account` リレーションはデータベースに実体化されないことに注意してください。

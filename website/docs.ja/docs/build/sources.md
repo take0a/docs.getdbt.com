@@ -1,26 +1,27 @@
 ---
-title: "Add sources to your DAG"
+title: "DAGにソースを追加する"
 sidebar_label: "Sources"
-description: "Define data source tables when developing in dbt."
+description: "dbt で開発するときにデータ ソース テーブルを定義します。"
 id: "sources"
 search_weight: "heavy"
 ---
 
-## Related reference docs
-* [Source properties](/reference/source-properties)
-* [Source configurations](/reference/source-configs)
-* [`{{ source() }}` jinja function](/reference/dbt-jinja-functions/source)
-* [`source freshness` command](/reference/commands/source)
+## 関連リファレンスドキュメント
+* [ソースプロパティ](/reference/source-properties)
+* [ソース構成](/reference/source-configs)
+* [`{{ source() }}` Jinja関数](/reference/dbt-jinja-functions/source)
+* [`source freshness` コマンド](/reference/commands/source)
 
-## Using sources
-Sources make it possible to name and describe the data loaded into your warehouse by your Extract and Load tools. By declaring these tables as sources in dbt, you can then
-- select from source tables in your models using the [`{{ source() }}` function,](/reference/dbt-jinja-functions/source) helping define the lineage of your data
-- test your assumptions about your source data
-- calculate the freshness of your source data
+## ソースの使用
+ソースを使用すると、抽出ツールとロードツールによってウェアハウスにロードされたデータに名前を付け、説明を付けることができます。
+dbtでこれらのテーブルをソースとして宣言することで、次のことが可能になります。
+- [`{{ source() }}` 関数](/reference/dbt-jinja-functions/source)を使用して、モデル内のソーステーブルから選択し、データの系統を定義する
+- ソースデータに関する仮定をテストする
+- ソースデータの鮮度を計算する
 
-### Declaring a source
+### ソースの宣言
 
-Sources are defined in `.yml` files nested under a `sources:` key.
+ソースは、`sources:` キーの下にネストされた `.yml` ファイルで定義されます。
 
 <File name='models/<filename>.yml'>
 
@@ -42,13 +43,14 @@ sources:
 
 </File>
 
-*By default, `schema` will be the same as `name`. Add `schema` only if you want to use a source name that differs from the existing schema.
+*デフォルトでは、`schema` は `name` と同じになります。
+既存のスキーマとは異なるソース名を使用する場合にのみ、`schema` を追加してください。
 
-If you're not already familiar with these files, be sure to check out [the documentation on properties.yml files](/reference/configs-and-properties) before proceeding.
+これらのファイルについてまだよく知らない場合は、続行する前に [properties.yml ファイルに関するドキュメント](/reference/configs-and-properties) を確認してください。
 
-### Selecting from a source
+### ソースからの選択
 
-Once a source has been defined, it can be referenced from a model using the [`{{ source()}}` function](/reference/dbt-jinja-functions/source).
+ソースを定義すると、[`{{ source()}}` 関数](/reference/dbt-jinja-functions/source) を使用してモデルから参照できるようになります。
 
 
 <File name='models/orders.sql'>
@@ -82,16 +84,16 @@ left join raw.jaffle_shop.customers using (customer_id)
 
 </File>
 
-Using the `{{ source () }}` function also creates a dependency between the model and the source table.
+`{{ source () }}` 関数を使用すると、モデルとソース テーブルの間に依存関係も作成されます。
 
 <Lightbox src="/img/docs/building-a-dbt-project/sources-dag.png" title="The source function tells dbt a model is dependent on a source "/>
 
-### Testing and documenting sources
-You can also:
-- Add data tests to sources
-- Add descriptions to sources, that get rendered as part of your documentation site
+### ソースのテストとドキュメント作成
+以下の操作も可能です。
+- ソースにデータテストを追加する
+- ソースに説明を追加する（ドキュメントサイトの一部としてレンダリングされる）
 
-These should be familiar concepts if you've already added tests and descriptions to your models (if not check out the guides on [testing](/docs/build/data-tests) and [documentation](/docs/build/documentation)).
+既にモデルにテストと説明を追加している場合は、これらの概念は既にお馴染みのはずです（まだ追加していない場合は、[テスト](/docs/build/data-tests) と [ドキュメント](/docs/build/documentation) のガイドをご覧ください）。
 
 <File name='models/<filename>.yml'>
 
@@ -121,7 +123,7 @@ sources:
 
 </File>
 
-You can find more details on the available properties for sources in the [reference section](/reference/source-properties).
+ソースで使用可能なプロパティの詳細については、[リファレンス セクション](/reference/source-properties) を参照してください。
 
 ### FAQs
 <FAQ path="Project/source-has-bad-name" />
@@ -130,11 +132,12 @@ You can find more details on the available properties for sources in the [refere
 <FAQ path="Tests/testing-sources" />
 <FAQ path="Runs/running-models-downstream-of-source" />
 
-## Source data freshness
-With a couple of extra configs, dbt can optionally capture the "freshness" of the data in your source tables. This is useful for understanding if your data pipelines are in a healthy state, and is a critical component of defining SLAs for your warehouse.
+## ソースデータの鮮度
+dbt は、いくつかの追加設定を行うことで、ソーステーブル内のデータの鮮度をオプションで取得できます。
+これは、データパイプラインが健全な状態にあるかどうかを把握するのに役立ち、ウェアハウスの SLA を定義する上で重要な要素となります。
 
-### Declaring source freshness
-To configure source freshness information, add a `freshness` block to your source and `loaded_at_field` to your table declaration:
+### ソースの鮮度情報の宣言
+ソースの鮮度情報を設定するには、ソースに「freshness」ブロックを追加し、テーブル宣言に「loaded_at_field」を追加します:
 
 <File name='models/<filename>.yml'>
 
@@ -164,20 +167,24 @@ sources:
 
 </File>
 
-In the `freshness` block, one or both of `warn_after` and `error_after` can be provided. If neither is provided, then dbt will not calculate freshness for the tables in this source.
+`freshness` ブロックでは、`warn_after` と `error_after` のいずれか、または両方を指定できます。
+どちらも指定されていない場合、dbt はこのソース内のテーブルの鮮度を計算しません。
 
-Additionally, the `loaded_at_field` is required to calculate freshness for a table. If a `loaded_at_field` is not provided, then dbt will not calculate freshness for the table.
+さらに、テーブルの鮮度を計算するには `loaded_at_field` が必要です。
+`loaded_at_field` が指定されていない場合、dbt はテーブルの鮮度を計算しません。
 
-These configs are applied hierarchically, so `freshness` and `loaded_at_field` values specified for a `source` will flow through to all of the `tables` defined in that source. This is useful when all of the tables in a source have the same `loaded_at_field`, as the config can just be specified once in the top-level source definition.
+これらの設定は階層的に適用されるため、`source` に指定された `freshness` と `loaded_at_field` の値は、そのソースで定義されているすべての `tables` に適用されます。
+これは、ソース内のすべてのテーブルで同じ `loaded_at_field` が使用されている場合に便利です。この設定は、最上位レベルのソース定義で 1 回だけ指定すればよいためです。
 
-### Checking source freshness
-To obtain freshness information for your sources, use the `dbt source freshness` command ([reference docs](/reference/commands/source)):
+### ソースの鮮度を確認する
+ソースの鮮度情報を取得するには、「dbt source freshness」コマンドを使用します（[リファレンスドキュメント](/reference/commands/source)）。
 
 ```
 $ dbt source freshness
 ```
 
-Behind the scenes, dbt uses the freshness properties to construct a `select` query, shown below. You can find this query in the [query logs](/faqs/Runs/checking-logs).
+dbt はバックグラウンドで、freshness プロパティを使用して、以下に示す `select` クエリを構築します。
+このクエリは [クエリ ログ](/faqs/Runs/checking-logs) で確認できます。
 
 ```sql
 select
@@ -187,26 +194,32 @@ from raw.jaffle_shop.orders
 
 ```
 
-The results of this query are used to determine whether the source is fresh or not:
+このクエリの結果は、ソースが新鮮かどうかを判断するために使用されます:
 
 <Lightbox src="/img/docs/building-a-dbt-project/snapshot-freshness.png" title="Uh oh! Not everything is as fresh as we'd like!"/>
 
-### Build models based on source freshness
+### ソースの鮮度に基づいてモデルを構築する
 
-Our best practice recommendation is to use [data source freshness](/docs/build/sources#declaring-source-freshness). This will allow settings to be transfered into a `.yml` file where source freshness is defined on [model level](/reference/resource-properties/freshness).
+ベストプラクティスとして、[データソースの鮮度](/docs/build/sources#declaring-source-freshness)を使用することを推奨します。
+これにより、設定を `.yml` ファイルに転送し、ソースの鮮度を[モデルレベル](/reference/resource-properties/freshness)で定義できるようになります。
 
-To build models based on source freshness in dbt:
+dbt でソースの鮮度に基づいてモデルを構築するには、以下の手順に従います:
 
-1. Run `dbt source freshness` to check the freshness of your sources.
-2. Use the `dbt build --select source_status:fresher+` command to build and test models downstream of fresher sources.
+1. `dbt source freshness` を実行して、ソースの鮮度を確認します。
+2. `dbt build --select source_status:fresher+` コマンドを使用して、より新鮮なソースの下流でモデルを構築およびテストします。
 
-Using these commands in order makes sure models update with the latest data. This eliminates wasted compute cycles on unchanged data and builds models _only_ when necessary. 
+これらのコマンドを順番に使用することで、モデルが最新のデータで更新されることが保証されます。
+これにより、変更されていないデータに対する無駄な計算サイクルが排除され、必要な場合にのみモデルが構築されます。
 
-Set [source freshness snapshots](/docs/deploy/source-freshness#enabling-source-freshness-snapshots) to 30 minutes to check for source freshness, then run a job which rebuilds every hour to rebuild model. This setup retrieves all the models and rebuild them in one attempt if their source freshness has expired. For more information, refer to [Source freshness snapshot frequency](/docs/deploy/source-freshness#source-freshness-snapshot-frequency).
+[ソース鮮度スナップショット](/docs/deploy/source-freshness#enabling-source-freshness-snapshots)を30分に設定してソースの鮮度を確認し、1時間ごとに再構築するジョブを実行してモデルを再構築します。
+この設定により、すべてのモデルが取得され、ソース鮮度が期限切れになった場合に1回の試行で再構築されます。
+詳細については、[ソース鮮度スナップショットの頻度](/docs/deploy/source-freshness#source-freshness-snapshot-frequency)を参照してください。
 
-### Filter
+### フィルター
 
-Some databases can have tables where a filter over certain columns are required, in order prevent a full scan of the table, which could be costly. In order to do a freshness check on such tables a `filter` argument can be added to the configuration, e.g. `filter: _etl_loaded_at >= date_sub(current_date(), interval 1 day)`. For the example above, the resulting query would look like
+一部のデータベースでは、テーブル全体のスキャン（コストのかかる可能性がある）を回避するために、特定の列に対するフィルター処理が必要なテーブルが存在する場合があります。
+このようなテーブルで最新性チェックを行うには、設定に「filter」引数を追加します。例：`filter: _etl_loaded_at >= date_sub(current_date(), interval 1 day)`。
+上記の例では、結果のクエリは次のようになります。
 
 ```sql
 select

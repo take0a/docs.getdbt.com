@@ -1,41 +1,42 @@
 ---
-title: "Jinja and macros"
-description: "Enhance your SQL with Jinja and macros when developing in dbt to create reusable, modular logic."
+title: "Jinjaとマクロ"
+description: "dbt で開発するときに、Jinja とマクロを使用して SQL を強化し、再利用可能なモジュール型ロジックを作成します。"
 id: "jinja-macros"
 ---
 
-## Related reference docs
-* [Jinja Template Designer Documentation](https://jinja.palletsprojects.com/page/templates/) (external link)
-* [dbt Jinja context](/reference/dbt-jinja-functions)
-* [Macro properties](/reference/macro-properties)
+## 関連リファレンスドキュメント
+* [Jinja テンプレートデザイナーのドキュメント](https://jinja.palletsprojects.com/page/templates/) (外部リンク)
+* [dbt Jinja コンテキスト](/reference/dbt-jinja-functions)
+* [マクロプロパティ](/reference/macro-properties)
 
-## Overview
-In dbt, you can combine SQL with [Jinja](https://jinja.palletsprojects.com), a templating language.
+## 概要
+dbt では、SQL とテンプレート言語である [Jinja](https://jinja.palletsprojects.com) を組み合わせることができます。
 
-Using Jinja turns your dbt project into a programming environment for SQL, giving you the ability to do things that aren't normally possible in SQL. It's important to note that Jinja itself isn't a programming language; instead, it acts as a tool to enhance and extend the capabilities of SQL within your dbt projects.
+Jinja を使用すると、dbt プロジェクトが SQL 用のプログラミング環境となり、SQL では通常不可能なことが可能になります。
+Jinja 自体はプログラミング言語ではなく、dbt プロジェクト内で SQL の機能を強化および拡張するためのツールとして機能する点に注意してください。
 
-For example, with Jinja, you can:
-* Use control structures (e.g. `if` statements and `for` loops) in SQL
-* Use [environment variables](/reference/dbt-jinja-functions/env_var) in your dbt project for production deployments
-* Change the way your project builds based on the current target.
-* Operate on the results of one query to generate another query, for example:
-  * Return a list of payment methods, to create a subtotal column per payment method (pivot)
-  * Return a list of columns in two relations, and select them in the same order to make it easier to union them together
-* Abstract snippets of SQL into reusable [**macros**](#macros) — these are analogous to functions in most programming languages.
+例えば、Jinja を使用すると、次のことが可能になります。
+* SQL で制御構造（例: `if` ステートメントや `for` ループ）を使用する
+* 本番環境へのデプロイメントで、dbt プロジェクトで [環境変数](/reference/dbt-jinja-functions/env_var) を使用する
+* 現在のターゲットに基づいてプロジェクトのビルド方法を変更する
+* あるクエリの結果を操作して別のクエリを生成します。例:
+  * 支払い方法のリストを返し、支払い方法ごとに小計列を作成します (ピボット)
+  * 2 つのリレーションの列のリストを返し、同じ順序で選択することで、それらを簡単に結合できるようにします
+* SQL のスニペットを再利用可能な [**マクロ**](#マクロ) に抽象化します。これは、ほとんどのプログラミング言語の関数に似ています。
 
-If you've used the [`{{ ref() }}` function](/reference/dbt-jinja-functions/ref), you're already using Jinja!
+[`{{ ref() }}` 関数](/reference/dbt-jinja-functions/ref) を使用したことがあるなら、すでに Jinja を使っていることになります。
 
-Jinja can be used in any SQL in a dbt project, including [models](/docs/build/sql-models), [analyses](/docs/build/analyses), [tests](/docs/build/data-tests), and even [hooks](/docs/build/hooks-operations).
+Jinja は、dbt プロジェクト内のあらゆる SQL で使用できます。これには、[モデル](/docs/build/sql-models)、[分析](/docs/build/analyses)、[テスト](/docs/build/data-tests)、さらには [フック](/docs/build/hooks-operations) も含まれます。
 
-:::info Ready to get started with Jinja and macros?
+:::info Jinja とマクロを使い始める準備はできましたか?
 
-Check out the [tutorial on using Jinja](/guides/using-jinja) for a step-by-step example of using Jinja in a model, and turning it into a macro!
+モデルで Jinja を使用してマクロに変換する手順の例については、[Jinja の使用に関するチュートリアル](/guides/using-jinja) をご覧ください。
 
 :::
 
-## Getting started
+## はじめる
 ### Jinja
-Here's an example of a dbt model that leverages Jinja:
+以下は Jinja を活用した dbt モデルの例です:
 
 <File name='/models/order_payment_method_amounts.sql'>
 
@@ -54,7 +55,7 @@ group by 1
 
 </File>
 
-This query will get compiled to:
+このクエリは次のようにコンパイルされます:
 
 <File name='/models/order_payment_method_amounts.sql'>
 
@@ -71,19 +72,25 @@ group by 1
 
 </File>
 
-You can recognize Jinja based on the delimiters the language uses, which we refer to as "curlies":
-- **Expressions `{{ ... }}`**: Expressions are used when you want to output a string. You can use expressions to reference [variables](/reference/dbt-jinja-functions/var) and call [macros](/docs/build/jinja-macros#macros).
-- **Statements `{% ... %}`**: Statements don't output a string. They are used for control flow, for example, to set up `for` loops and `if` statements, to [set](https://jinja.palletsprojects.com/en/3.1.x/templates/#assignments) or [modify](https://jinja.palletsprojects.com/en/3.1.x/templates/#expression-statement) variables, or to define macros.
--  **Comments `{# ... #}`**: Jinja comments are used to prevent the text within the comment from executing or outputing a string. Don't use `--` for comment.
+Jinja は、言語で使用される区切り文字（「カーリー」と呼ばれます）に基づいて識別できます:
+- **式 `{{ ... }}`**: 式は、文字列を出力する場合に使用します。
+式を使用して、[変数](/reference/dbt-jinja-functions/var)を参照したり、[マクロ](/docs/build/jinja-macros#macros)を呼び出したりできます。
+- **文 `{% ... %}`**: 文は文字列を出力しません。
+これらは、たとえば `for` ループや `if` 文を設定したり、変数を[設定](https://jinja.palletsprojects.com/en/3.1.x/templates/#assignments)または[変更](https://jinja.palletsprojects.com/en/3.1.x/templates/#expression-statement)したり、マクロを定義したりする制御フローに使用されます。
+- **コメント `{# ... #}`**: Jinjaコメントは、コメント内のテキストの実行や文字列出力を防ぐために使用されます。コメントには `--` を使用しないでください。
 
-When used in a dbt model, your Jinja needs to compile to a valid query. To check what SQL your Jinja compiles to:
-* **Using dbt Cloud:** Click the compile button to see the compiled SQL in the Compiled SQL pane
-* **Using dbt Core:** Run `dbt compile` from the command line. Then open the compiled SQL file in the `target/compiled/{project name}/` directory. Use a split screen in your code editor to keep both files open at once.
+dbt モデルで使用する場合、Jinja は有効なクエリにコンパイルされる必要があります。
+Jinja がコンパイルする SQL を確認するには、次の手順に従ってください:
+* **dbt Cloud を使用する場合:** コンパイルボタンをクリックすると、「コンパイル済み SQL」ペインにコンパイル済みの SQL が表示されます。
+* **dbt Core を使用する場合:** コマンドラインから `dbt compile` を実行します。
+次に、`target/compiled/{プロジェクト名}/` ディレクトリにあるコンパイル済みの SQL ファイルを開きます。
+コードエディタで分割画面を使用して、両方のファイルを同時に開いたままにしてください。
 
-### Macros
-[Macros](/docs/build/jinja-macros) in Jinja are pieces of code that can be reused multiple times – they are analogous to "functions" in other programming languages, and are extremely useful if you find yourself repeating code across multiple models. Macros are defined in `.sql` files, typically in your `macros` directory ([docs](/reference/project-configs/macro-paths)).
+### マクロ
+Jinja の [マクロ](/docs/build/jinja-macros) は、複数回再利用できるコードです。他のプログラミング言語における「関数」に似ており、複数のモデル間でコードを繰り返す必要がある場合に非常に便利です。
+マクロは `.sql` ファイルで定義され、通常は `macros` ディレクトリ ([docs](/reference/project-configs/macro-paths)) にあります。
 
-Macro files can contain one or more macros — here's an example:
+マクロファイルには、1 つ以上のマクロを含めることができます。以下に例を示します。
 
 <File name='macros/cents_to_dollars.sql'>
 
@@ -97,7 +104,7 @@ Macro files can contain one or more macros — here's an example:
 
 </File>
 
-A model which uses this macro might look like:
+このマクロを使用するモデルは次のようになります:
 
 <File name='models/stg_payments.sql'>
 
@@ -112,7 +119,7 @@ from app_data.payments
 
 </File>
 
-This would be _compiled_ to:
+これは次のようにコンパイルされます:
 
 <File name='target/compiled/models/stg_payments.sql'>
 
@@ -130,10 +137,10 @@ import WhitespaceControl from '/snippets/_whitespace-control.md';
 
 <WhitespaceControl/>
 
-### Using a macro from a package
-A number of useful macros have also been grouped together into [packages](/docs/build/packages) — our most popular package is [dbt-utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/).
+### パッケージのマクロの使用
+便利なマクロが [パッケージ](/docs/build/packages) にまとめられています。最も人気のあるパッケージは [dbt-utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) です。
 
-After installing a package into your project, you can use any of the macros in your own project — make sure you qualify the macro by prefixing it with the [package name](/reference/dbt-jinja-functions/project_name):
+パッケージをプロジェクトにインストールすると、そのマクロをプロジェクト内で使用できるようになります。マクロを使用する際は、必ず [パッケージ名](/reference/dbt-jinja-functions/project_name) を先頭に付けてください。
 
 ```sql
 
@@ -149,7 +156,7 @@ from my_table
 
 ```
 
-You can also qualify a macro in your own project by prefixing it with your [package name](/reference/dbt-jinja-functions/project_name) (this is mainly useful for package authors).
+また、独自のプロジェクト内のマクロに [パッケージ名](/reference/dbt-jinja-functions/project_name) をプレフィックスとして付けることによって、そのマクロを修飾することもできます (これは主にパッケージ作成者にとって便利です)。
 
 ## FAQs
 
@@ -163,17 +170,21 @@ You can also qualify a macro in your own project by prefixing it with your [pack
 
 ## dbtonic Jinja
 
-Just like well-written python is pythonic, well-written dbt code is dbtonic.
+よく書かれた Python が pythonic な (Python らしい) のと同じように、よく書かれた dbt コードは dbtonic です。
 
-### Favor readability over <Term id="dry" />-ness {#favor-readability-over-dry-ness}
+### <Term id="dry" /> 性よりも読みやすさを優先しましょう {#favor-readability-over-dry-ness}
 
-Once you learn the power of Jinja, it's common to want to abstract every repeated line into a macro! Remember that using Jinja can make your models harder for other users to interpret — we recommend favoring readability when mixing Jinja with SQL, even if it means repeating some lines of SQL in a few places. If all your models are macros, it might be worth re-assessing.
+Jinja の威力を理解すると、繰り返される行をすべてマクロに抽象化したいと思うようになるでしょう。
+Jinja を使用すると、他のユーザーがモデルを解釈しにくくなる可能性があることに注意してください。Jinja と SQL を混在させる場合は、たとえ SQL の行をいくつかの場所で繰り返して記述する必要があったとしても、読みやすさを優先することをお勧めします。
+すべてのモデルがマクロになっている場合は、再評価する価値があるかもしれません。
 
-### Leverage package macros
-Writing a macro for the first time? Check whether we've open sourced one in [dbt-utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) that you can use, and save yourself some time!
+### パッケージマクロを活用する
+初めてマクロを書く場合は、[dbt-utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) でオープンソースのマクロが公開されているかどうかを確認し、時間を節約しましょう。
 
-### Set variables at the top of a model
-`{% set ... %}` can be used to create a new variable, or update an existing one. We recommend setting variables at the top of a model, rather than hardcoding it inline. This is a practice borrowed from many other coding languages, since it helps with readability, and comes in handy if you need to reference the variable in two places:
+### モデルの先頭で変数を設定する
+`{% set ... %}` は、新しい変数を作成したり、既存の変数を更新したりするために使用できます。
+変数は、インラインでハードコードするのではなく、モデルの先頭で設定することをお勧めします。
+これは、可読性を高めるため、他の多くのコーディング言語から借用した手法であり、変数を2か所で参照する必要がある場合に便利です。
 
 
 ```sql

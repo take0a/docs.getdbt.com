@@ -1,102 +1,110 @@
 ---
-title: "About MetricFlow"
+title: "MetricFlowについて"
 id: about-metricflow
-description: "Learn more about MetricFlow and its key concepts"
+description: "MetricFlowとその主要概念について詳しく学ぶ"
 sidebar_label: About MetricFlow
 tags: [Metrics, Semantic Layer]
 pagination_next: "docs/build/join-logic"
 pagination_prev: null
 ---
 
-This guide introduces MetricFlow's fundamental ideas for people new to this feature. MetricFlow, which powers the dbt Semantic Layer, helps you define and manage the logic for your company's metrics. It's an opinionated set of abstractions and helps data consumers retrieve metric datasets from a data platform quickly and efficiently.
+このガイドでは、MetricFlow を初めて使用する方のために、その基本的な考え方を紹介します。dbt セマンティック レイヤーを支える MetricFlow は、企業のメトリクスのロジックの定義と管理を支援します。
+MetricFlow は独自の抽象化セットであり、データ コンシューマーがデータ プラットフォームからメトリクス データセットを迅速かつ効率的に取得するのに役立ちます。
 
-MetricFlow handles SQL query construction and defines the specification for dbt semantic models and metrics. It allows you to define metrics in your dbt project and query them with [MetricFlow commands](/docs/build/metricflow-commands) whether in dbt Cloud or dbt Core.
+MetricFlow は SQL クエリの構築を処理し、dbt セマンティック モデルとメトリクスの仕様を定義します。
+MetricFlow を使用すると、dbt プロジェクトでメトリクスを定義し、[MetricFlow コマンド](/docs/build/metricflow-commands) を使用して dbt Cloud でも dbt Core でもクエリを実行できます。
 
-Before you start, consider the following guidelines:
+開始する前に、以下のガイドラインをご確認ください。
 
-- Define metrics in YAML and query them using these [new metric specifications](https://github.com/dbt-labs/dbt-core/discussions/7456).
-- You must be on [dbt version](/docs/dbt-versions/upgrade-dbt-version-in-cloud) 1.6 or higher to use MetricFlow. 
-- Use MetricFlow with Snowflake, BigQuery, Databricks, Postgres (dbt Core only), or Redshift. 
-- Discover insights and query your metrics using the [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) and its diverse range of [available integrations](/docs/cloud-integrations/avail-sl-integrations). 
+- YAML でメトリクスを定義し、これらの [新しいメトリクス仕様](https://github.com/dbt-labs/dbt-core/discussions/7456) を使用してクエリを実行します。
+- MetricFlow を使用するには、[dbt バージョン](/docs/dbt-versions/upgrade-dbt-version-in-cloud) 1.6 以上が必要です。
+- MetricFlow は、Snowflake、BigQuery、Databricks、Postgres (dbt Core のみ)、または Redshift で使用できます。
+- [dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) とその多様な [利用可能な統合](/docs/cloud-integrations/avail-sl-integrations) を使用して、インサイトを発見し、メトリクスをクエリします。
 
 ## MetricFlow
 
-MetricFlow is a SQL query generation tool designed to streamline metric creation across different data dimensions for diverse business needs. 
-- It operates through YAML files, where a semantic graph links language to data. This graph comprises [semantic models](/docs/build/semantic-models) (data entry points) and [metrics](/docs/build/metrics-overview) (functions for creating quantitative indicators).
-- MetricFlow is a [BSL package](https://github.com/dbt-labs/metricflow) with code source available, and compatible with dbt version 1.6 and higher. Data practitioners and enthusiasts are highly encouraged to contribute.
-- As a part of the dbt Semantic Layer, MetricFlow empowers organizations to define metrics using YAML abstractions.
-- To query metric dimensions, dimension values, and validate configurations, use [MetricFlow commands](/docs/build/metricflow-commands).
+MetricFlow は、多様なビジネスニーズに対応するために、異なるデータディメンションにわたるメトリクス作成を効率化するように設計された SQL クエリ生成ツールです。
+- YAML ファイルを介して動作し、セマンティックグラフによって言語とデータがリンクされます。このグラフは、[セマンティックモデル](/docs/build/semantic-models) (データエントリポイント) と [メトリクス](/docs/build/metrics-overview) (定量指標を作成するための関数) で構成されます。
+- MetricFlow は [BSL パッケージ](https://github.com/dbt-labs/metricflow) であり、コードソースが利用可能で、dbt バージョン 1.6 以降と互換性があります。データ実践者や熱心な開発者の皆様の貢献を強く推奨します。
+- dbt セマンティックレイヤーの一部である MetricFlow は、YAML 抽象化を使用して組織がメトリクスを定義できるようにします。
+- メトリクスディメンション、ディメンション値のクエリ、および構成の検証を行うには、[MetricFlow コマンド](/docs/build/metricflow-commands) を使用します。
 
 
-**Note** &mdash; MetricFlow doesn't support dbt [builtin functions or packages](/reference/dbt-jinja-functions/builtins) at this time, however, support is planned for the future.
+**注** &mdash; MetricFlow は現在、dbt [組み込み関数またはパッケージ](/reference/dbt-jinja-functions/builtins) をサポートしていませんが、将来的にサポートされる予定です。
 
-MetricFlow abides by these principles:
+MetricFlow は以下の原則に従います。
 
-- **Flexibility with completeness**: Define metric logic using flexible abstractions on any data model.
-- **DRY (Don't Repeat Yourself)**: Minimize redundancy by enabling metric definitions whenever possible.
-- **Simplicity with gradual complexity:** Approach MetricFlow using familiar data modeling concepts.
-- **Performance and efficiency**: Optimize performance while supporting centralized data engineering and distributed logic ownership.
+- **完全性と柔軟性**: あらゆるデータモデルで柔軟な抽象化を使用してメトリックロジックを定義します。
+- **DRY (Don't Repeat Yourself)**: 可能な限りメトリック定義を有効にすることで冗長性を最小限に抑えます。
+- **段階的な複雑さを伴うシンプルさ:** 使い慣れたデータモデリングの概念を使用して MetricFlow にアプローチします。
+- **パフォーマンスと効率性**: 集中型データエンジニアリングと分散型ロジック所有権をサポートしながら、パフォーマンスを最適化します。
 
-### Semantic graph
+### セマンティックグラフ
 
-We're introducing a new concept: a "semantic graph". It's the relationship between semantic models and YAML configurations that creates a data landscape for building metrics. You can think of it like a map, where tables are like locations, and the connections between them (edges) are like roads. Although it's under the hood, the semantic graph is a subset of the <Term id="dag" />, and you can see the semantic models as nodes on the DAG.
+「セマンティックグラフ」という新しい概念を導入します。
+これは、セマンティックモデルとYAML構成の関係性によって、メトリクスを構築するためのデータランドスケープを構築します。
+これは地図のようなもので、テーブルは場所、テーブル間の接続（エッジ）は道路のようなものです。
+セマンティックグラフは内部的には<Term id="dag" />のサブセットであり、セマンティックモデルはDAG上のノードとして表示されます。
 
-The semantic graph helps us decide which information is available to use for consumption and which is not. The connections between tables in the semantic graph are more about relationships between the information. This is different from the DAG, where the connections show dependencies between tasks.
+セマンティックグラフは、どの情報が利用可能で、どの情報が利用不可能かを判断するのに役立ちます。
+セマンティックグラフにおけるテーブル間の接続は、情報間の関係性をより明確に表しています。
+これは、接続がタスク間の依存関係を示すDAGとは異なります。
 
-When MetricFlow generates a metric, it uses its SQL engine to figure out the best path between tables using the framework defined in YAML files for semantic models and metrics. When these models and metrics are correctly defined, they can be used downstream with dbt Semantic Layer's integrations.
+MetricFlowは、メトリクスを生成する際に、SQLエンジンを使用して、セマンティックモデルとメトリクス用のYAMLファイルで定義されたフレームワークに基づき、テーブル間の最適なパスを計算します。
+これらのモデルとメトリックが正しく定義されると、dbt セマンティック レイヤーの統合により下流で使用できるようになります。
 
-### Semantic models 
+### セマンティックモデル
 
-Semantic models are the starting points of data and correspond to models in your dbt project. You can create multiple semantic models from each model. Semantic models have metadata, like a data table, that define important information such as the table name and primary keys for the graph to be navigated correctly.
+セマンティックモデルはデータの出発点であり、dbt プロジェクト内のモデルに対応します。各モデルから複数のセマンティックモデルを作成できます。セマンティックモデルには、データテーブルのようなメタデータがあり、グラフを正しくナビゲートするために必要なテーブル名や主キーなどの重要な情報が定義されています。
 
-For a semantic model, there are three main pieces of metadata:
+セマンティックモデルには、主に 3 つのメタデータがあります。
 
-* [Entities](/docs/build/entities) &mdash; The join keys of your semantic model (think of these as the traversal paths, or edges between semantic models).
-* [Dimensions](/docs/build/dimensions) &mdash; These are the ways you want to group or slice/dice your metrics.
-* [Measures](/docs/build/measures) &mdash; The aggregation functions that give you a numeric result and can be used to create your metrics.
+* [エンティティ](/docs/build/entities) - セマンティックモデルの結合キー（セマンティックモデル間のトラバーサルパス、またはエッジと考えてください）。
+* [ディメンション](/docs/build/dimensions) - メトリクスをグループ化または細分化する方法。
+* [メジャー](/docs/build/measures) - 数値結果を返す集計関数で、メトリクスの作成に使用できます。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/semantic_foundation.jpg" width="70%" title="A semantic model is made up of different components: Entities, Measures, and Dimensions."/>
 
-### Metrics 
+### メトリクス
 
-Metrics, which is a key concept, are functions that combine measures, constraints, or other mathematical functions to define new quantitative indicators. MetricFlow uses measures and various aggregation types, such as average, sum, and count distinct, to create metrics.  Dimensions add context to metrics and without them, a metric is simply a number for all time. You can define metrics in the same YAML files as your semantic models, or create a new file.
+重要な概念であるメトリクスは、メジャー、制約、またはその他の数学関数を組み合わせて新しい定量的指標を定義する関数です。MetricFlow は、メジャーと、平均、合計、個別カウントなどのさまざまな集計タイプを使用してメトリクスを作成します。ディメンションはメトリクスにコンテキストを追加します。ディメンションがなければ、メトリクスは単なる数値になってしまいます。メトリクスは、セマンティックモデルと同じ YAML ファイルで定義することも、新しいファイルを作成することもできます。
 
-MetricFlow supports different metric types:
+MetricFlow は、さまざまなメトリクスタイプをサポートしています。
 
-- [Conversion](/docs/build/conversion) &mdash; Helps you track when a base event and a subsequent conversion event occurs for an entity within a set time period.
-- [Cumulative](/docs/build/cumulative) &mdash;  Aggregates a measure over a given window.
-- [Derived](/docs/build/derived) &mdash; An expression of other metrics, which allows you to do calculations on top of metrics.
-- [Ratio](/docs/build/ratio) &mdash; Create a ratio out of two measures, like revenue per customer.
-- [Simple](/docs/build/simple) &mdash; Metrics that refer directly to one measure. 
+- [コンバージョン](/docs/build/conversion) - 設定された期間内に、エンティティのベースイベントとそれに続くコンバージョンイベントが発生したタイミングを追跡するのに役立ちます。
+- [累積](/docs/build/cumulative) - 指定された期間のメジャーを集計します。
+- [派生](/docs/build/derived) - 他のメトリクスの式で、メトリクスに基づいて計算を行うことができます。
+- [比率](/docs/build/ratio) - 顧客あたりの収益など、2 つの指標から比率を作成します。
+- [シンプル](/docs/build/simple) - 1 つの指標を直接参照する指標。
 
-## Use case
+## ユースケース
 
-In the upcoming sections, we'll show how data practitioners currently calculate metrics and compare it to how MetricFlow makes defining metrics easier and more flexible. 
+次のセクションでは、データ実務者が現在どのようにメトリクスを計算しているかを示し、MetricFlow がどのようにメトリクスの定義を容易かつ柔軟にするかを比較します。
 
-The following example data is based on the Jaffle Shop repo. You can view the complete [dbt project](https://github.com/dbt-labs/jaffle-sl-template). The tables we're using in our example model are:
+以下のサンプルデータは、Jaffle Shop リポジトリに基づいています。[dbt プロジェクト](https://github.com/dbt-labs/jaffle-sl-template) の全文をご覧いただけます。サンプルモデルで使用しているテーブルは次のとおりです。
 
-- `orders` is a production data platform export that has been cleaned up and organized for analytical consumption
-- `customers` is a partially denormalized table in this case with a column derived from the orders table through some upstream process
+- `orders` は、分析用にクリーンアップおよび整理された本番環境データプラットフォームのエクスポートです。
+- `customers` は、この場合は部分的に非正規化されたテーブルで、上流のプロセスを通じて order テーブルから派生した列が含まれています。
 
 <!-- ![MetricFlow-SchemaExample](/img/docs/building-a-dbt-project/MetricFlow-SchemaExample.jpeg) -->
 
-To make this more concrete, consider the metric `order_total`, which is defined using the SQL expression:
+これをより具体的にするために、SQL 式を使用して定義される指標「order_total」を考えてみましょう。
 
-`select sum(order_total) as order_total from orders` 
-This expression calculates the total revenue for all orders by summing the order_total column in the orders table. In a business setting, the metric order_total is often calculated according to different categories, such as"
-- Time, for example `date_trunc(ordered_at, 'day')`
-- Order Type, using `is_food_order` dimension from the `orders` table.
+「select sum(order_total) as order_total from orders」
+この式は、orders テーブルの order_total 列を合計することで、すべての注文の合計収益を計算します。ビジネス環境では、指標「order_total」は、次のようなさまざまなカテゴリに従って計算されることがよくあります。
+- 時間（例：date_trunc(ordered_at, 'day')）
+- 注文タイプ（「orders」テーブルの「is_food_order」ディメンションを使用）
 
-### Calculate metrics
+### メトリクスの計算
 
-Next, we'll compare how data practitioners currently calculate metrics with multiple queries versus how MetricFlow simplifies and streamlines the process.
+次に、データ実務者が現在複数のクエリを使ってメトリクスを計算する方法と、MetricFlow がどのようにプロセスを簡素化・効率化しているかを比較します。
 
 <Tabs>
 <TabItem value="mulqueries" label="Calculate with multiple queries">
 
-The following example displays how data practitioners typically would calculate the `order_total` metric aggregated. It's also likely that analysts are asked for more details on a metric, like how much revenue came from new customers. 
+以下の例は、データ担当者が一般的に「order_total」指標の集計値を計算する方法を示しています。アナリストは、新規顧客からの収益額など、指標に関するより詳細な情報を求められることも少なくありません。
 
-Using the following query creates a situation where multiple analysts working on the same data, each using their own query method &mdash; this can lead to confusion, inconsistencies, and a headache for data management.
+以下のクエリを使用すると、複数のアナリストがそれぞれ独自のクエリ手法を用いて同じデータを処理する状況が発生します。これは混乱や不整合を引き起こし、データ管理の煩雑さにつながる可能性があります。
 
 ```sql
 select
@@ -115,14 +123,14 @@ group by 1, 2
 </TabItem>
 <TabItem value="metricflow" label="Calculate with MetricFlow">
 
-In the following three example tabs, use MetricFlow to define a semantic model that uses order_total as a metric and a sample schema to create consistent and accurate results &mdash; eliminating confusion, code duplication, and streamlining your workflow.
+次の 3 つのサンプル タブでは、MetricFlow を使用して、order_total をメトリックとして使用するセマンティック モデルとサンプル スキーマを定義し、一貫性のある正確な結果を作成します。これにより、混乱やコードの重複がなくなり、ワークフローが合理化されます。
 
 <Tabs>
 <TabItem value="example1" label="Revenue example">
 
-In this example, a measure named `order_total` is defined based on the order_total column in the `orders` table. 
+この例では、「orders」テーブルの「order_total」列に基づいて、「order_total」というメジャーが定義されています。
 
-The time dimension `metric_time` provides daily granularity and can be aggregated into weekly or monthly time periods. Additionally, a categorical dimension called `is_new_customer` is specified in the `customers` semantic model.
+時間ディメンション「metric_time」は日単位の粒度を提供し、週単位または月単位の期間に集計できます。さらに、「customers」セマンティックモデルには、「is_new_customer」というカテゴリディメンションが指定されています。
 
 
 ```yaml
@@ -173,7 +181,7 @@ semantic_models:
 </TabItem>
 <TabItem value="example2" label="More dimensions example">
 
-Similarly, you could then add additional dimensions like `is_food_order` to your semantic models to incorporate even more dimensions to slice and dice your revenue order_total. 
+同様に、セマンティック モデルに `is_food_order` などのディメンションを追加して、さらに多くのディメンションを組み込んで、収益の order_total を細分化することもできます。
 
 ```yaml
 semantic_models:
@@ -204,7 +212,7 @@ semantic_models:
 </TabItem>
 <TabItem value="example3" label="Advanced example">
 
-Imagine an even more complex metric is needed, like the amount of money earned each day from food orders from returning customers. Without MetricFlow the data practitioner's original SQL might look like this:
+リピーターからの毎日の食品注文による収益額など、さらに複雑な指標が必要だと想像してみてください。MetricFlowがなければ、データ担当者が最初に書くSQLは次のようになるでしょう。
 
 ```sql
 select
@@ -223,7 +231,7 @@ where
 group by 1
 ```
 
-MetricFlow simplifies the SQL process via metric YAML configurations as seen below. You can also commit them to your git repository to ensure everyone on the data and business teams can see and approve them as the true and only source of information.
+MetricFlowは、以下に示すように、メトリックYAML設定を介してSQLプロセスを簡素化します。また、これらの設定をGitリポジトリにコミットすることで、データチームとビジネスチームの全員が、真に唯一の情報源として確認・承認できるようになります。
 
 ```yaml
 metrics:
@@ -245,41 +253,41 @@ metrics:
 
 ## FAQs
 
-<DetailsToggle alt_header="Do my datasets need to be normalized?">
+<DetailsToggle alt_header="データセットを正規化する必要がありますか?">
 
-Not at all! While a cleaned and well-modeled data set can be extraordinarily powerful and is the ideal input, you can use any dataset from raw to fully denormalized datasets. 
+いいえ、全く問題ありません！クリーンアップされ、適切にモデル化されたデータセットは非常に強力で理想的な入力データですが、生のデータセットから完全に非正規化されたデータセットまで、あらゆるデータセットを使用できます。
 
-It's recommended that you apply quality data consistency, such as filtering bad data, normalizing common objects, and data modeling of keys and tables, in upstream applications. The Semantic Layer is more efficient at doing data denormalization instead of normalization.
+上流アプリケーションでは、不良データのフィルタリング、共通オブジェクトの正規化、キーとテーブルのデータモデリングなど、高品質なデータ整合性を適用することをお勧めします。セマンティックレイヤーは、正規化ではなく非正規化を行う方が効率的です。
 
-If you have not invested in data consistency, that is okay. The Semantic Layer can take SQL queries or expressions to define consistent datasets.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="Why is normalized data the ideal input?">
-
-MetricFlow is built to do denormalization efficiently. There are better tools to take raw datasets and accomplish the various tasks required to build data consistency and organized data models. On the other end, by putting in denormalized data you are potentially creating redundancy which is technically challenging to manage, and you are reducing the potential granularity that MetricFlow can use to aggregate metrics.
-</DetailsToggle>
-
-<DetailsToggle alt_header="Why not just make metrics the same as measures?">
-One principle of MetricFlow is to reduce the duplication of logic sometimes referred to as Don't Repeat Yourself(DRY).
-
-Many metrics are constructed from reused measures and in some cases constructed from measures from different semantic models. This allows for metrics to be built breadth-first (metrics that can stand alone) instead of depth-first (where you have multiple metrics acting as functions of each other).
-
-Additionally, not all metrics are constructed off of measures. As an example, a conversion metric is likely defined as the presence or absence of an event record after some other event record.
+データ整合性に投資していなくても問題ありません。セマンティックレイヤーは、SQLクエリや式を使用して一貫性のあるデータセットを定義できます。
 
 </DetailsToggle>
-<DetailsToggle alt_header="How does the dbt Semantic Layer handle joins?">
-The dbt Semantic Layer, powered by MetricFlow,  builds joins based on the types of keys and parameters that are passed to entities. To better understand how joins are constructed see our documentation on join types.
 
-Rather than capturing arbitrary join logic, MetricFlow captures the types of each identifier and then helps the user to navigate to appropriate joins. This allows us to avoid the construction of fan out and chasm joins as well as generate legible SQL.
+<DetailsToggle alt_header="正規化されたデータが理想的な入力であるのはなぜですか?">
+
+MetricFlowは、非正規化を効率的に行うために構築されています。生のデータセットを取得し、データの一貫性と整理されたデータモデルの構築に必要な様々なタスクを実行するための、より優れたツールは存在します。一方で、非正規化されたデータを入力すると、技術的に管理が困難な冗長性が生じる可能性があり、MetricFlowがメトリクスを集約するために使用できる粒度が低下する可能性があります。
 </DetailsToggle>
 
-<DetailsToggle alt_header="Are entities and join keys the same thing?">
-If it helps you to think of entities as join keys, that is very reasonable. Entities in MetricFlow have applications beyond joining two tables, such as acting as a dimension.
+<DetailsToggle alt_header="指標を測定基準と同じにするのはなぜですか?">
+MetricFlow の原則の一つは、ロジックの重複を減らすことです。これは Don't Repeat Yourself (DRY) とも呼ばれます。
+
+多くのメトリクスは再利用されたメジャーから構築され、場合によっては異なるセマンティックモデルのメジャーから構築されます。これにより、メトリクスは深さ優先（複数のメトリクスが互いの関数として機能する）ではなく、幅優先（単独で機能するメトリクス）で構築できます。
+
+さらに、すべてのメトリクスがメジャーに基づいて構築されるわけではありません。例えば、コンバージョンメトリクスは、あるイベントレコードの後に​​別のイベントレコードが存在するかどうかとして定義される可能性があります。
+
+</DetailsToggle>
+<DetailsToggle alt_header="dbt セマンティック レイヤーは結合をどのように処理しますか?">
+MetricFlow を搭載した dbt セマンティックレイヤーは、エンティティに渡されるキーとパラメータの型に基づいて結合を構築します。結合の構築方法について詳しくは、結合の種類に関するドキュメントをご覧ください。
+
+MetricFlow は、任意の結合ロジックをキャプチャするのではなく、各識別子の型をキャプチャし、ユーザーが適切な結合を選択できるように支援します。これにより、ファンアウト結合やキャズム結合の構築を回避し、読みやすい SQL を生成できます。
 </DetailsToggle>
 
-<DetailsToggle alt_header="Can a table without a primary or unique entities have dimensions?">
-Yes, but because a dimension is considered an attribute of the primary or unique ent of the table, they are only usable by the metrics that are defined in that table. They cannot be joined to metrics from other tables. This is common in event logs.
+<DetailsToggle alt_header="エンティティと結合キーは同じものですか?">
+エンティティを結合キーとして考えると分かりやすいでしょう。MetricFlow のエンティティは、2 つのテーブルを結合する以外にも、ディメンションとして機能するなど、さまざまな用途に使用できます。
+</DetailsToggle>
+
+<DetailsToggle alt_header="プライマリ エンティティまたは一意のエンティティのないテーブルにディメンションを設定できますか?">
+はい、可能です。ただし、ディメンションはテーブルの主要素または一意の要素の属性とみなされるため、そのテーブルで定義された指標でのみ使用できます。他のテーブルの指標と結合することはできません。これはイベントログでよく見られる現象です。
 </DetailsToggle>
 
 ## Related docs

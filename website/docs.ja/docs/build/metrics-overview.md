@@ -1,17 +1,17 @@
 ---
-title: Creating metrics
+title: メトリックの作成
 id: metrics-overview
-description: "Metrics can be defined in the same or separate YAML files from semantic models within the same dbt project repo."
+description: "メトリックは、同じ dbt プロジェクト リポジトリ内のセマンティック モデルと同じまたは別の YAML ファイルで定義できます。"
 sidebar_label: "Creating metrics"
 tags: [Metrics, Semantic Layer]
 pagination_next: "docs/build/cumulative"
 ---
   
-After building [semantic models](/docs/build/semantic-models), it's time to start adding metrics. This page explains the different supported metric types you can add to your dbt project
+[セマンティックモデル](/docs/build/semantic-models)をビルドしたら、いよいよメトリックの追加作業を開始します。このページでは、dbt プロジェクトに追加できる、サポートされている様々なメトリックの種類について説明します。
 
-Metrics must be defined in a YAML file &mdash; either within the same file as your semantic models or in a separate YAML file in a subdirectory of your dbt project. They shouldn't be defined in a `config` block on a model.
+メトリックは YAML ファイルで定義する必要があります。セマンティックモデルと同じファイル内、または dbt プロジェクトのサブディレクトリにある別の YAML ファイル内に定義してください。モデルの `config` ブロック内で定義することはできません。
 
-The keys for metrics definitions are:
+メトリック定義のキーは次のとおりです:
 
 <!-- for v1.8 and higher -->
 
@@ -19,15 +19,15 @@ The keys for metrics definitions are:
 
 | Parameter | Description | Required | Type |
 | --------- | ----------- | ---- | ---- |
-| `name` | Provide the reference name for the metric. This name must be a unique metric name and can consist of lowercase letters, numbers, and underscores.  | Required | String |
-| `description` | Describe your metric.   | Optional | String |
-| `type` | Define the type of metric, which can be `conversion`, `cumulative`, `derived`, `ratio`, or `simple`. | Required | String |
-| `type_params` | Additional parameters used to configure metrics. `type_params` are different for each metric type. | Required | Dict |
-| `label` | Required string that defines the display value in downstream tools. Accepts plain text, spaces, and quotes (such as `orders_total` or `"orders_total"`).  | Required | String |
-| `config` | Use the [`config`](/reference/resource-properties/config) property to specify configurations for your metric. Supports [`meta`](/reference/resource-configs/meta), [`group`](/reference/resource-configs/group), and [`enabled`](/reference/resource-configs/enabled) configurations.  | Optional | Dict |
-| `filter` | You can optionally add a [filter](#filters) string to any metric type, applying filters to dimensions, entities, time dimensions, or other metrics during metric computation. Consider it as your WHERE clause.   | Optional | String |
+| `name` | メトリックの参照名を入力します。この名前は一意のメトリック名である必要があり、小文字、数字、アンダースコアを使用できます。  | Required | String |
+| `description` | 指標を説明してください。 | Optional | String |
+| `type` | メトリックのタイプを定義します。これは、「変換」、「累積」、「派生」、「比率」、または「単純」のいずれかになります。 | Required | String |
+| `type_params` | メトリックを構成するために使用される追加のパラメータ。`type_params` はメトリック タイプごとに異なります。 | Required | Dict |
+| `label` | 下流ツールでの表示値を定義する必須文字列。プレーンテキスト、スペース、引用符（例：`orders_total`、`"orders_total"`）が使用できます。  | Required | String |
+| `config` | メトリックの設定を指定するには、[`config`](/reference/resource-properties/config) プロパティを使用します。[`meta`](/reference/resource-configs/meta)、[`group`](/reference/resource-configs/group)、[`enabled`](/reference/resource-configs/enabled) 設定がサポートされています。 | Optional | Dict |
+| `filter` | オプションで、任意の指標タイプに[filter](#filters)文字列を追加して、指標計算中にディメンション、エンティティ、時間ディメンション、その他の指標にフィルターを適用できます。WHERE句のように考えてください。 | Optional | String |
 
-Here's a complete example of the metrics spec configuration:
+メトリック仕様の構成の完全な例を次に示します:
 
 <File name="models/metrics/file_name.yml" >
 
@@ -92,7 +92,7 @@ import SLCourses from '/snippets/_sl-course.md';
 
 <SLCourses/>
 
-## Default granularity for metrics
+## 指標のデフォルトの粒度
 
 <VersionBlock lastVersion="1.8">
 Default time granularity for metrics is useful if your time dimension has a very fine grain, like second or hour, but you typically query metrics rolled up at a coarser grain. 
@@ -104,14 +104,15 @@ Default time granularity for metrics is available now in [the "Latest" release t
 
 <VersionBlock firstVersion="1.9">
 
-It's possible to define a default time granularity for metrics if it's different from the granularity of the default aggregation time dimensions (`metric_time`). This is useful if your time dimension has a very fine grain, like second or hour, but you typically query metrics rolled up at a coarser grain. 
+メトリクスのデフォルトの時間粒度を、デフォルトの集計時間ディメンション（`metric_time`）の粒度と異なる粒度で定義できます。これは、時間ディメンションの粒度が秒や時間など非常に細かいものの、通常はより粗い粒度で集計されたメトリクスをクエリする場合に便利です。
 
-The granularity can be set using the `time_granularity` parameter on the metric, and defaults to `day`. If day is not available because the dimension is defined at a coarser granularity, it will default to the defined granularity for the dimension.
+粒度はメトリクスの `time_granularity` パラメータを使用して設定でき、デフォルトは `day` です。ディメンションの粒度が粗いために day が使用できない場合は、ディメンションに定義されている粒度がデフォルトになります。
 
-### Example
-- You have a semantic model called `orders` with a time dimension called `order_time`.
-- You want the `orders` metric to roll up to `monthly` by default; however, you want the option to look at these metrics hourly.
-- You can set the `time_granularity` parameter on the `order_time` dimension to `hour`, and then set the `time_granularity` parameter in the metric to `month`.
+### 例
+
+- 「orders」というセマンティックモデルがあり、「order_time」という時間ディメンションがあるとします。
+- 「orders」指標をデフォルトで「monthly」にロールアップしたいとします。ただし、これらの指標を時間単位で表示するオプションも必要です。
+- 「order_time」ディメンションの「time_granularity」パラメータを「hour」に設定し、指標の「time_granularity」パラメータを「month」に設定します。
 
 ```yaml
 semantic_models:
@@ -136,13 +137,13 @@ metrics:
     time_granularity: month -- Optional, defaults to day
 ```
 
-Remember that metrics can be defined in the same YAML files as your semantic models but must be defined as a separate top-level section and not nested within the `semantic_models` key. Or you can define metrics in their dedicated separate YAML files located in any subdirectories within the same dbt project repository.
+メトリクスはセマンティックモデルと同じYAMLファイルで定義できますが、`semantic_models`キー内にネストせず、独立したトップレベルセクションとして定義する必要があります。または、同じdbtプロジェクトリポジトリ内の任意のサブディレクトリにある専用のYAMLファイルでメトリクスを定義することもできます。
 
 </VersionBlock>
 
-## Conversion metrics
+## コンバージョン指標
 
-[Conversion metrics](/docs/build/conversion) help you track when a base event and a subsequent conversion event occur for an entity within a set time period.
+[コンバージョン指標](/docs/build/conversion) は、設定された期間内にエンティティのベースイベントとそれに続くコンバージョンイベントがいつ発生したかを追跡するのに役立ちます。
 
 <File name="models/metrics/file_name.yml" >
 
@@ -171,9 +172,9 @@ metrics:
 ```
 </File>
 
-## Cumulative metrics
+## 累積メトリクス
 
-[Cumulative metrics](/docs/build/cumulative) aggregate a measure over a given window. If no window is specified, the window will accumulate the measure over all of the recorded time period. Note that you will need to create the [time spine model](/docs/build/metricflow-time-spine) before you add cumulative metrics.
+[累積メトリクス](/docs/build/cumulative)は、指定された期間の測定値を集計します。期間を指定しない場合は、記録された期間全体にわたって測定値が累積されます。累積メトリクスを追加する前に、[タイムスパインモデル](/docs/build/metricflow-time-spine)を作成する必要があることに注意してください。
 
 <File name="models/metrics/file_name.yml" >
 
@@ -193,9 +194,9 @@ metrics:
 ```
 </File>
 
-## Derived metrics
+## 派生メトリクス
 
-[Derived metrics](/docs/build/derived) are defined as an expression of other metrics. Derived metrics allow you to do calculations on top of metrics. 
+[派生メトリクス](/docs/build/derived)は、他のメトリクスの式として定義されます。派生メトリクスを使用すると、メトリクスに基づいて計算を行うことができます。
 
 <File name="models/metrics/file_name.yml" >
 
@@ -233,9 +234,9 @@ metrics:
 ```
 -->
 
-## Ratio metrics 
+## 比率メトリクス
 
-[Ratio metrics](/docs/build/ratio) involve a numerator metric and a denominator metric. A  `filter` string  can be applied to both the numerator and denominator or separately to the numerator or denominator.
+[比率メトリクス](/docs/build/ratio)は、分子メトリクスと分母メトリクスで構成されます。`filter`文字列は、分子と分母の両方に適用することも、分子または分母のいずれかに個別に適用することもできます。
 
 <File name="models/metrics/file_name.yml" >
 
@@ -261,13 +262,13 @@ metrics:
 ```
 </File>
 
-## Simple metrics
+## シンプルメトリクス
 
-[Simple metrics](/docs/build/simple) point directly to a measure. You may think of it as a function that takes only one measure as the input.
+[シンプルメトリクス](/docs/build/simple) は、メジャーを直接参照します。これは、1つのメジャーのみを入力として受け取る関数と考えることができます。
 
-- `name` &mdash; Use this parameter to define the reference name of the metric. The name must be unique amongst metrics and can include lowercase letters, numbers, and underscores. You can use this name to call the metric from the dbt Semantic Layer API.
+- `name` - このパラメータを使用して、メトリクスの参照名を定義します。名前はメトリクス間で一意である必要があり、小文字、数字、アンダースコアを含めることができます。この名前を使用して、dbt セマンティックレイヤー API からメトリクスを呼び出すことができます。
 
-**Note:** If you've already defined the measure using the `create_metric: True` parameter, you don't need to create simple metrics.  However, if you would like to include a constraint on top of the measure, you will need to create a simple type metric.
+**注:** `create_metric: True` パラメータを使用してすでにメトリクスを定義している場合は、シンプルメトリクスを作成する必要はありません。ただし、メトリクスに制約を追加する場合は、シンプルタイプのメトリクスを作成する必要があります。
 
 <File name="models/metrics/file_name.yml" >
 
@@ -287,11 +288,11 @@ metrics:
 ```
 </File>
 
-## Filters
+## フィルター
 
-A filter is configured using Jinja templating. Use the following syntax to reference entities, dimensions, time dimensions, or metrics in filters. 
+フィルターはJinjaテンプレートを使用して設定されます。フィルター内のエンティティ、ディメンション、時間ディメンション、または指標を参照するには、次の構文を使用します。
 
-Refer to [Metrics as dimensions](/docs/build/ref-metrics-in-filters) for details on how to use metrics as dimensions with metric filters:
+指標フィルターで指標をディメンションとして使用する方法の詳細については、[ディメンションとしての指標](/docs/build/ref-metrics-in-filters)を参照してください。
 
 <VersionBlock firstVersion="1.8">
 
@@ -333,7 +334,7 @@ filter: |
 </File>
 </VersionBlock>
 
-For example, if you want to filter for the order date dimension grouped by month, use the following syntax:
+たとえば、月ごとにグループ化された注文日ディメンションをフィルタリングする場合は、次の構文を使用します:
 
 ```yaml
 filter: |  
@@ -341,14 +342,14 @@ filter: |
 
 ```
 
-## Further configuration
+## その他の設定
 
-You can set more metadata for your metrics, which can be used by other tools later on. The way this metadata is used will vary based on the specific integration partner
+メトリクスにメタデータを追加設定できます。これらのメタデータは、後から他のツールで使用できます。メタデータの使用方法は、連携パートナーによって異なります。
 
-- **Description** &mdash;  Write a detailed description of the metric.
+- **説明** - メトリクスの詳細な説明を記入してください。
 
-## Related docs
+## 関連ドキュメント
 
-- [Semantic models](/docs/build/semantic-models)
-- [Fill null values for metrics](/docs/build/fill-nulls-advanced)
-- [Metrics as dimensions with metric filters](/docs/build/ref-metrics-in-filters)
+- [セマンティックモデル](/docs/build/semantic-models)
+- [指標のnull値を埋める](/docs/build/fill-nulls-advanced)
+- [指標フィルターで指標をディメンションとして扱う](/docs/build/ref-metrics-in-filters)

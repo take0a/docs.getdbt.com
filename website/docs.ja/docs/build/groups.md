@@ -1,19 +1,23 @@
 ---
-title: "Add groups to your DAG"
+title: "DAGにグループを追加する"
 sidebar_label: "Groups"
 id: "groups"
-description: "When you define groups in dbt projects, you turn implicit relationships into an explicit grouping."
+description: "dbt プロジェクトでグループを定義すると、暗黙的な関係が明示的なグループ化に変換されます。"
 keywords:
   - groups access mesh
 ---
 
-A group is a collection of nodes within a dbt DAG. Groups are named, and every group has an `owner`. They enable intentional collaboration within and across teams by restricting [access to private](/reference/resource-configs/access) models.
+グループは、dbt DAG 内のノードの集合です。
+グループには名前が付けられ、各グループには「オーナー」が存在します。
+グループは、[プライベート](/reference/resource-configs/access)モデルへのアクセスを制限することで、チーム内およびチーム間での意図的なコラボレーションを可能にします。
 
-Group members may include models, tests, seeds, snapshots, analyses, and metrics. (Not included: sources and exposures.) Each node may belong to only one group.
+グループのメンバーには、モデル、テスト、シード、スナップショット、分析、メトリクスなどが含まれます。
+(ソースとエクスポージャーは含まれません。)
+各ノードは1つのグループにのみ所属できます。
 
-### Declaring a group
+### グループの宣言
 
-Groups are defined in `.yml` files, nested under a `groups:` key.
+グループは `.yml` ファイルで定義され、`groups:` キーの下にネストされます。
 
 <File name='models/marts/finance/finance.yml'>
 
@@ -29,9 +33,9 @@ groups:
 
 </File>
 
-### Adding a model to a group
+### グループへのモデルの追加
 
-Use the `group` configuration to add one or more models to a group.
+`group` 設定を使用して、1 つ以上のモデルをグループに追加します。
 
 <Tabs>
 <TabItem value="project" label="Project-level">
@@ -80,9 +84,11 @@ select ...
 
 </Tabs>
 
-### Referencing a model in a group
+### グループ内のモデルの参照
 
-By default, all models within a group have the `protected` [access modifier](/reference/resource-configs/access). This means they can be referenced by downstream resources in _any_ group in the same project, using the [`ref`](/reference/dbt-jinja-functions/ref) function. If a grouped model's `access` property is set to `private`, only resources within its group can reference it. 
+デフォルトでは、グループ内のすべてのモデルには `protected` [アクセス修飾子](/reference/resource-configs/access) が付与されます。
+つまり、同じプロジェクト内の任意のグループに属する下流リソースから、[`ref`](/reference/dbt-jinja-functions/ref) 関数を使用して参照できます。
+グループ化されたモデルの `access` プロパティが `private` に設定されている場合、そのグループ内のリソースのみがそのモデルを参照できます。
 
 <File name='models/schema.yml'>
 
@@ -115,8 +121,8 @@ dbt.exceptions.DbtReferenceError: Parsing Error
   which is not allowed because the referenced node is private to the finance group.
 ```
 
-## Related docs
+## 関連ドキュメント
 
-* [Model Access](/docs/collaborate/govern/model-access#groups)
-* [Group configuration](/reference/resource-configs/group)
-* [Group selection](/reference/node-selection/methods#group)
+* [モデルアクセス](/docs/collaborate/govern/model-access#groups)
+* [グループ設定](/reference/resource-configs/group)
+* [グループ選択](/reference/node-selection/methods#group)

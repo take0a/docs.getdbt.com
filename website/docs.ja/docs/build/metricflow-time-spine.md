@@ -1,5 +1,5 @@
 ---
-title: MetricFlow time spine
+title: MetricFlow タイムスパイン
 id: metricflow-time-spine
 description: "MetricFlow expects a default time spine table called metricflow_time_spine"
 sidebar_label: "MetricFlow time spine"
@@ -8,62 +8,71 @@ tags: [Metrics, Semantic Layer]
 <VersionBlock firstVersion="1.9">
 
 
-It's common in analytics engineering to have a date dimension or "time spine" table as a base table for different types of time-based joins and aggregations. The structure of this table is typically a base column of daily or hourly dates, with additional columns for other time grains, like fiscal quarters, defined based on the base column. You can join other tables to the time spine on the base column to calculate metrics like revenue at a point in time, or to aggregate to a specific time grain.
+分析エンジニアリングでは、さまざまな種類の時間ベースの結合や集計のベーステーブルとして、日付ディメンションまたは「タイムスパイン」テーブルを使用するのが一般的です。
+このテーブルの構造は通常、日次または時単位の日付をベースとする列で構成され、会計四半期などの他の時間粒度はベース列に基づいて定義されます。
+他のテーブルをベース列のタイムスパインに結合して、ある時点での収益などの指標を計算したり、特定の時間粒度で集計したりできます。
 
-To use MetricFlow with time-based metrics and dimensions, you _must_ provide a time spine. This table serves as the foundation for time-based joins and aggregations. You can either:
+MetricFlow を時間ベースの指標とディメンションで使用するには、タイムスパイン（時間軸）を提供する必要があります。このテーブルは、時間ベースの結合と集計の基盤として機能します。次のいずれかの方法で実行できます:
 
-- Create a time spine from scratch (check out the [example time spine](#example-time-spine-tables) section for examples), or
-- Use an existing table in your project, like a `dim_date` table
+- タイムスパインをゼロから作成する（例については[タイムスパインの例](#example-time-spine-tables)セクションをご覧ください）、または
+- プロジェクト内の既存のテーブル（`dim_date` テーブルなど）を使用する
 
-And once you have a time spine, you need to configure it in YAML to tell MetricFlow how to use it.
+タイム スパインを取得したら、MetricFlow にその使用方法を指示するために、YAML で設定する必要があります。
 
-## Prerequisites
-MetricFlow requires you to define at least one dbt model which provides a time-spine, and then specify (in YAML) the columns to be used for time-based joins. This means you need to:
+## 前提条件
+MetricFlow では、タイムスパインを提供する dbt モデルを少なくとも 1 つ定義し、時間ベースの結合に使用する列を（YAML で）指定する必要があります。
+つまり、以下の作業が必要です。
 
-- Define at least one [time spine](#example-time-spine-tables) at whichever granularity needed for your metrics (like daily or hourly). You can optionally define additional tables for coarser grains (like monthly or yearly).
-- [Configure each time spine in a YAML file](#configuring-time-spine-in-yaml) to define how MetricFlow recognizes and uses its columns.
+- メトリクスに必要な粒度（日次、時間別など）で、少なくとも 1 つの [タイムスパイン](#example-time-spine-tables) を定義します。
+必要に応じて、より粗い粒度（月次、年次など）のテーブルを追加定義することもできます。
+- [YAML ファイルで各タイムスパインを設定](#configuring-time-spine-in-yaml) して、MetricFlow が列をどのように認識して使用するかを定義します。
 
-Note that you can't have overlapping time spines.
+重複するタイムスパインは使用できませんのでご注意ください。
 
-MetricFlow will then join against the time spine model for the following types of metrics and dimensions:
+MetricFlow は、以下の種類のメトリックとディメンションについて、タイムスパインモデルに対して結合を行います。
 
-- [Cumulative metrics](/docs/build/cumulative)
-- [Metric offsets](/docs/build/derived#derived-metric-offset)
-- [Conversion metrics](/docs/build/conversion)
-- [Slowly Changing Dimensions](/docs/build/dimensions#scd-type-ii)
-- [Metrics](/docs/build/metrics-overview) with the `join_to_timespine` configuration set to true
+- [累積メトリック](/docs/build/cumulative)
+- [メトリックオフセット](/docs/build/derived#derived-metric-offset)
+- [コンバージョンメトリック](/docs/build/conversion)
+- [緩やかに変化するディメンション](/docs/build/dimensions#scd-type-ii)
+- [メトリック](/docs/build/metrics-overview) で、`join_to_timespine` 構成が true に設定されている
 
-To see the generated SQL for the metric and dimension types that use time spine joins, refer to the respective documentation or add the `compile=true` flag when querying the Semantic Layer to return the compiled SQL.
+時間スパイン結合を使用するメトリックおよびディメンション タイプに対して生成された SQL を確認するには、それぞれのドキュメントを参照するか、セマンティック レイヤーをクエリするときに `compile=true` フラグを追加して、コンパイルされた SQL を返します。
 
-## Configuring time spine in YAML
+## YAMLでタイムスパインを設定する
 
 :::tip Use our mini guide to create a time spine table
-For a quick start guide on how to create a time spine table, check out our [MetricFlow time spine mini guide](/guides/mf-time-spine)!
+タイム スパイン テーブルを作成する方法に関するクイック スタート ガイドについては、[MetricFlow タイム スパイン ミニ ガイド](/guides/mf-time-spine) をご覧ください。
 :::
 
- Time spine models are normal dbt models with extra configurations that tell dbt and MetricFlow how to use specific columns by defining their properties. Add the [`models` key](/reference/model-properties) for the time spine in your `models/` directory. If your project already includes a calendar table or date dimension, you can configure that table as a time spine. Otherwise, review the [example time-spine tables](#example-time-spine-tables) to create one. If the relevant model file doesn't exist, create it and add the configuration mentioned in the [next section](#creating-a-time-spine-table).
+タイムスパインモデルは、プロパティを定義することで、dbtとMetricFlowに特定の列の使用方法を指示する追加の構成を備えた通常のdbtモデルです。
+`models/`ディレクトリに、タイムスパイン用の[`models`キー](/reference/model-properties)を追加します。
+プロジェクトに既にカレンダーテーブルまたは日付ディメンションが含まれている場合は、そのテーブルをタイムスパインとして設定できます。
+そうでない場合は、[タイムスパインテーブルの例](#example-time-spine-tables)を確認して作成してください。関連するモデルファイルが存在しない場合は作成し、[次のセクション](#creating-a-time-spine-table)で説明されている構成を追加してください。
  
- Some things to note when configuring time spine models:
+タイムスパインモデルを設定する際の注意事項：
 
-- Make sure you already have a time spine SQL table defined in your project.
-- Add the configurations under the `time_spine` key for that [model's properties](/reference/model-properties), just as you would add a description or tests.
-- You only need to configure time-spine models that the Semantic Layer should recognize.
-- At a minimum, define a time-spine table for a daily grain.
-- You can optionally define additional time-spine tables for different granularities, like hourly. Review the [granularity considerations](#granularity-considerations) when deciding which tables to create.
-- If you're looking to specify the grain of a time dimension so that MetricFlow can transform the underlying column to the required granularity, refer to the [Time granularity documentation](/docs/build/dimensions?dimension=time_gran)
+- プロジェクトにタイムスパインSQLテーブルが定義されていることを確認してください。
+- 説明やテストを追加するのと同じように、その[モデルのプロパティ](/reference/model-properties)の`time_spine`キーの下に設定を追加します。
+- セマンティックレイヤーが認識するタイムスパインモデルのみを設定する必要があります。
+- 少なくとも、日単位の粒度のタイムスパインテーブルを定義してください。
+- オプションで、時間単位など、異なる粒度のタイムスパインテーブルを追加定義することもできます。作成するテーブルを決定する際は、[粒度に関する考慮事項](#granularity-considerations)を確認してください。
+- MetricFlowが基になる列を必要な粒度に変換できるように、時間ディメンションの粒度を指定する場合は、[時間粒度に関するドキュメント](/docs/build/dimensions?dimension=time_gran)を参照してください。
 
 :::tip
-- If you previously used a `metricflow_time_spine.sql` model, you can delete it after configuring the `time_spine` property in YAML. The Semantic Layer automatically recognizes the new configuration. No additional `.yml` files are needed. 
-- You can also configure MetricFlow to use any date dimension or time spine table already in your project by updating the `model` setting in the Semantic Layer.
-- If you don’t have a date dimension table, you can still create one by using the code snippet in the [next section](#creating-a-time-spine-table) to build your time spine model.
+- 以前に `metricflow_time_spine.sql` モデルを使用していた場合は、YAML で `time_spine` プロパティを設定した後、このモデルを削除できます。
+セマンティックレイヤーは新しい設定を自動的に認識します。追加の `.yml` ファイルは必要ありません。
+- セマンティックレイヤーの `model` 設定を更新することで、プロジェクトに既に存在する日付ディメンションまたはタイムスパインテーブルを使用するように MetricFlow を構成することもできます。
+- 日付ディメンションテーブルがない場合は、[次のセクション](#creating-a-time-spine-table) のコードスニペットを使用してタイムスパインモデルを構築することで作成できます。
 :::
 
-### Creating a time spine table  
+### タイムスパインテーブルの作成
 
-MetricFlow supports granularities ranging from milliseconds to years. Refer to the [Dimensions page](/docs/build/dimensions?dimension=time_gran#time) (time_granularity tab) to find the full list of supported granularities.
+MetricFlow は、ミリ秒から年単位までの粒度をサポートしています。
+サポートされている粒度の完全なリストについては、[ディメンションページ](/docs/build/dimensions?dimension=time_gran#time) (time_granurity タブ) を参照してください。
 
-To create a time spine table from scratch, you can do so by adding the following code to your dbt project. 
-This example creates a time spine at an hourly grain and a daily grain: `time_spine_hourly` and `time_spine_daily`.
+タイムスパインテーブルを最初から作成するには、次のコードを dbt プロジェクトに追加します。
+この例では、`time_spine_hourly` と `time_spine_daily` という、時間単位と日単位のタイムスパインを作成します。
 
 <VersionBlock firstVersion="1.9">
 <File name="models/_models.yml">
@@ -120,19 +129,19 @@ models:
 </VersionBlock>
 -->
 
-- This example configuration shows a time spine model called  `time_spine_hourly` and `time_spine_daily`. It sets the time spine configurations under the `time_spine` key. 
-- The `standard_granularity_column` is the column that maps to one of our [standard granularities](/docs/build/dimensions?dimension=time_gran). This column must be set under the `columns` key and should have a grain that is finer or equal to any custom granularity columns defined in the same model.
-  - It needs to reference a column defined under the `columns` key, in this case, `date_hour` and `date_day`, respectively.
-  - It sets the granularity at the column-level using the `granularity` key, in this case, `hour` and `day`, respectively. 
-- MetricFlow will use the `standard_granularity_column` as the join key when joining the time spine table to another source table.
-- [The `custom_granularities` field](#custom-calendar), (available in dbt Cloud Latest and dbt Core v1.9 and higher) lets you specify non-standard time periods like `fiscal_year` or `retail_month` that your organization may use.
+- この設定例では、`time_spine_hourly` と `time_spine_daily` というタイムスパインモデルを示しています。`time_spine` キーの下にタイムスパイン設定を設定します。
+- `standard_granurity_column` は、[標準粒度](/docs/build/dimensions?dimension=time_gran) のいずれかにマッピングされる列です。この列は `columns` キーの下に設定し、同じモデルで定義されているカスタム粒度列と同等かそれ以上の粒度にする必要があります。
+- `columns` キーの下に定義された列（この場合はそれぞれ `date_hour` と `date_day`）を参照する必要があります。
+- `granularity` キー（この場合はそれぞれ `hour` と `day`）を使用して、列レベルの粒度を設定します。
+- MetricFlow は、タイムスパインテーブルを別のソーステーブルに結合する際に、`standard_granularity_column` を結合キーとして使用します。
+- [`custom_granularities` フィールド](#custom-calendar) (dbt Cloud 最新版および dbt Core v1.9 以降で利用可能) を使用すると、組織で使用できる `fiscal_year` や `retail_month` などの非標準期間を指定できます。
 
-For an example project, refer to our [Jaffle shop](https://github.com/dbt-labs/jaffle-sl-template/blob/main/models/marts/_models.yml) example.
+サンプルプロジェクトについては、[Jaffle ショップ](https://github.com/dbt-labs/jaffle-sl-template/blob/main/models/marts/_models.yml) の例を参照してください。
 
-### Migrating from SQL to YAML
-If your project already includes a time spine (`metricflow_time_spine.sql`), you can migrate its configuration to YAML to address any deprecation warnings you may get.
+### SQL から YAML への移行
+プロジェクトに既にタイムスパイン (`metricflow_time_spine.sql`) が含まれている場合は、その設定を YAML に移行することで、非推奨の警告に対処できます。
 
-1. Add the following configuration to a new or existing YAML file using the [`models` key](/reference/model-properties) for the time spine in your `models/` directory. Name the YAML file whatever you want (for example, `util/_models.yml`):
+1. `models/` ディレクトリ内のタイムスパインに対して [`models` キー](/reference/model-properties) を使用して、新規または既存の YAML ファイルに以下の設定を追加します。YAML ファイルには任意の名前を付けます (例: `util/_models.yml`)。
 
   <File name="models/_models.yml">
 
@@ -148,24 +157,28 @@ If your project already includes a time spine (`metricflow_time_spine.sql`), you
   ```
   </File>
 
-2. After adding the YAML configuration, delete the existing `metricflow_time_spine.sql` file from your project to avoid any issues.
+2. YAML 設定を追加したら、問題を回避するために、既存の `metricflow_time_spine.sql` ファイルをプロジェクトから削除します。
 
-3. Test the configuration to ensure compatibility with your production jobs.
+3. 設定をテストし、本番環境のジョブとの互換性を確認します。
 
-Note that if you're migrating from a `metricflow_time_spine.sql` file:
+`metricflow_time_spine.sql` ファイルから移行する場合は、次の点に注意してください。
 
-- Replace its functionality by adding the `time_spine` property to YAML as shown in the previous example.
-- Once configured, MetricFlow will recognize the YAML settings, and then the SQL model file can be safely removed.
+- 前の例に示すように、YAML に `time_spine` プロパティを追加して、機能を置き換えます。
+- 設定が完了すると、MetricFlow は YAML 設定を認識するため、SQL モデルファイルを安全に削除できます。
 
-### Considerations when choosing which granularities to create{#granularity-considerations}
+### 作成する粒度を選択する際の考慮事項 {#granularity-considerations}
 
-- MetricFlow will use the time spine with the largest compatible granularity for a given query to ensure the most efficient query possible. For example, if you have a time spine at a monthly grain, and query a dimension at a monthly grain, MetricFlow will use the monthly time spine. If you only have a daily time spine, MetricFlow will use the daily time spine and `date_trunc` to month.
-- You can add a time spine for each granularity you intend to use if query efficiency is more important to you than configuration time, or storage constraints. For most engines, the query performance difference should be minimal and transforming your time spine to a coarser grain at query time shouldn't add significant overhead to your queries.
-- We recommend having a time spine at the finest grain used in any of your dimensions to avoid unexpected errors. For example, if you have dimensions at an hourly grain, you should have a time spine at an hourly grain.
+- MetricFlow は、特定のクエリに対して互換性のある最大の粒度を持つタイムスパインを使用することで、可能な限り効率的なクエリを実現します。
+たとえば、月単位の粒度のタイムスパインがあり、月単位の粒度でディメンションをクエリする場合、MetricFlow は月単位のタイムスパインを使用します。
+日単位のタイムスパインしかない場合、MetricFlow は日単位のタイムスパインを使用し、date_trunc を月に変換します。
+- クエリの効率が設定時間やストレージ制約よりも重要な場合は、使用する粒度ごとにタイムスパインを追加できます。
+ほとんどのエンジンでは、クエリのパフォーマンスの違いは最小限に抑えられるため、クエリ時にタイムスパインをより粗い粒度に変換しても、クエリに大きなオーバーヘッドは発生しません。
+- 予期しないエラーを回避するために、どのディメンションでも最も細かい粒度のタイムスパインを使用することをお勧めします。
+たとえば、時間単位の粒度のディメンションがある場合は、時間単位の粒度でタイムスパインを使用する必要があります。
 
-## Example time spine tables
+## タイムスパインテーブルの例
 
-The following examples show how to create time spine tables at different granularities:
+以下の例は、異なる粒度でタイムスパインテーブルを作成する方法を示しています:
 
 <!-- no toc -->
 - [Seconds](#seconds)
@@ -267,7 +280,7 @@ and date_day < dateadd(day, 30, current_timestamp())
 
 ### Daily (BigQuery)
 
-Use this model if you're using BigQuery. BigQuery supports `DATE()` instead of `TO_DATE()`:
+BigQuery を使用している場合は、このモデルを使用してください。BigQuery は `TO_DATE()` ではなく `DATE()` をサポートしています。
 
 <File name="metricflow_time_spine.sql">
 
@@ -418,10 +431,10 @@ You only need to include the `date_day` column in the table. MetricFlow can hand
 </VersionBlock>
 
 
-## Custom calendar <Lifecycle status="Preview"/>
+## カスタムカレンダー <Lifecycle status="Preview"/>
 
 :::tip
-Check out our mini guide on [how to create a time spine table](/guides/mf-time-spine) to get started!
+まずは、[タイム スパイン テーブルの作成方法](/guides/mf-time-spine)に関するミニ ガイドをご覧ください。
 :::
 
 
@@ -433,31 +446,34 @@ The ability to configure custom calendars, such as a fiscal calendar, is availab
 
 <VersionBlock firstVersion="1.9">
 
-Custom date transformations can be complex, and organizations often have unique needs that can’t be easily generalized. Creating a custom calendar model allows you to define these transformations in SQL, offering more flexibility than native transformations in MetricFlow. This approach lets you map custom columns back to MetricFlow granularities, ensuring consistency while giving you control over the transformations.
+カスタム日付変換は複雑になる場合があり、組織には簡単に一般化できない独自のニーズがあることがよくあります。
+カスタムカレンダーモデルを作成すると、これらの変換をSQLで定義できるため、MetricFlowのネイティブ変換よりも柔軟性が高まります。
+このアプローチにより、カスタム列をMetricFlowの粒度にマッピングし直すことができ、一貫性を保ちながら変換を制御できます。
 
-For example, if you use a custom calendar in your organization, such as a fiscal calendar, you can configure it in MetricFlow using its date and time operations. 
+例えば、組織で会計カレンダーなどのカスタムカレンダーを使用している場合、MetricFlowで日付と時刻の操作を使用してカレンダーを設定できます。
 
-- This is useful for calculating metrics based on a custom calendar, such as fiscal quarters or weeks. 
-- Use the `custom_granularities` key to define a non-standard time period for querying data, such as a `retail_month` or `fiscal_week`, instead of standard options like `day`, `month`, or `year`.
-- This feature provides more control over how time-based metrics are calculated.
+- これは、会計四半期や会計週などのカスタムカレンダーに基づいて指標を計算する場合に便利です。
+- `custom_granurities` キーを使用して、`day`、`month`、`year` などの標準オプションの代わりに、`retail_month` や `fiscal_week` などの非標準の期間を指定してデータをクエリできます。
+- この機能により、時間ベースの指標の計算方法をより細かく制御できます。
 
-<Expandable alt_header="Data types and time zone considerations">
+<Expandable alt_header="データ型とタイムゾーンの考慮事項">
  
-When working with custom calendars in MetricFlow, it's important to ensure:
+MetricFlow でカスタムカレンダーを使用する場合は、以下の点に注意してください:
 
-- Consistent data types &mdash; Both your dimension column and the time spine column should use the same data type to allow accurate comparisons. Functions like `DATE_TRUNC` don't change the data type of the input in some databases (like Snowflake). Using different data types can lead to mismatches and inaccurate results.
+- データ型の一貫性 - 正確な比較を行うには、ディメンション列とタイムスパイン列の両方で同じデータ型を使用する必要があります。「DATE_TRUNC」などの関数は、一部のデータベース（Snowflake など）では入力のデータ型を変更しません。異なるデータ型を使用すると、不一致が発生し、結果が不正確になる可能性があります。
 
-  We recommend using `DATETIME` or `TIMESTAMP` data types for your time dimensions and time spine, as they support all granularities. The `DATE` data type may not support smaller granularities like hours or minutes.
+  時間ディメンションとタイムスパインには、あらゆる粒度をサポートしている「DATETIME」または「TIMESTAMP」データ型を使用することをお勧めします。「DATE」データ型は、時間や分などのより細かい粒度をサポートしていない場合があります。
 
-- Time zones &mdash; MetricFlow currently doesn't perform any timezone manipulation. When working with timezone-aware data, inconsistent time zones may lead to unexpected results during aggregations and comparisons.
+- タイムゾーン - 現在、MetricFlow はタイムゾーンの操作を実行しません。タイムゾーン対応データを扱う場合、タイムゾーンが一致していないと、集計や比較の際に予期しない結果が生じる可能性があります。
 
-For example, if your time spine column is `TIMESTAMP` type and your dimension column is `DATE` type, comparisons between these columns might not work as intended. To fix this, convert your `DATE` column to `TIMESTAMP`, or make sure both columns are the same data type.
+例えば、タイムスパイン列が `TIMESTAMP` 型で、ディメンション列が `DATE` 型の場合、これらの列の比較は意図したとおりに機能しない可能性があります。この問題を解決するには、`DATE` 列を `TIMESTAMP` 型に変換するか、両方の列のデータ型を同じにしてください。
 
 </Expandable>
 
-### Add custom granularities
+### カスタム粒度の追加
 
-To add custom granularities, the Semantic Layer supports custom calendar configurations that allow users to query data using non-standard time periods like `fiscal_year` or `retail_month`. You can define these custom granularities (all lowercased) by modifying your model's YAML configuration like this:
+カスタム粒度を追加するために、セマンティックレイヤーはカスタムカレンダー設定をサポートしています。これにより、ユーザーは　`fiscal_year` や `retail_month` といった標準以外の期間を使用してデータをクエリできます。
+これらのカスタム粒度（すべて小文字）は、モデルのYAML構成を次のように変更することで定義できます。
 
 <File name="models/_models.yml">
 
@@ -473,13 +489,13 @@ models:
 ```
 </File>
 
-#### Coming soon
-Note that features like calculating offsets and period-over-period will be supported soon!
+#### 近日公開予定
+オフセット計算や前期比計算などの機能も近日中にサポートされる予定です。
 
 </VersionBlock>
 
 
-## Related docs
+## 関連ドキュメント
 
-- [MetricFlow time granularity](/docs/build/dimensions?dimension=time_gran#time)
-- [MetricFlow time spine mini guide](/guides/mf-time-spine)
+- [MetricFlow の時間粒度](/docs/build/dimensions?dimension=time_gran#time)
+- [MetricFlow 時間スパイン ミニガイド](/guides/mf-time-spine)
