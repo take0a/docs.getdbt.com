@@ -1,36 +1,36 @@
 ---
-title: "Simple metrics"
+title: "シンプルメトリクス"
 id: simple
-description: "Use simple metrics to directly reference a single measure."
+description: "シンプルメトリクスを使用して、単一の測定値を直接参照します。"
 sidebar_label: Simple
 tags: [Metrics, Semantic Layer]
 pagination_next: null
 ---
 
-Simple metrics are metrics that directly reference a single measure, without any additional measures involved. They are aggregations over a column in your data platform and can be filtered by one or multiple dimensions.
+シンプルメトリクスとは、追加のメジャーを介さずに単一のメジャーを直接参照するメトリクスです。データプラットフォーム内の列の集計であり、1つまたは複数のディメンションでフィルタリングできます。
 
- The parameters, description, and type for simple metrics are:
+シンプルメトリクスのパラメータ、説明、およびタイプは次のとおりです:
 
 :::tip
-Note that we use the double colon (::) to indicate whether a parameter is nested within another parameter. So for example, `query_params::metrics` means the `metrics` parameter is nested under `query_params`.
+パラメータが別のパラメータ内にネストされているかどうかを示すために、二重コロン (::) を使用することに注意してください。たとえば、`query_params::metrics` は、`metrics` パラメータが `query_params` の下にネストされていることを意味します。
 :::
 
 
 | Parameter | Description | Required | Type |
 | --------- | ----------- | ---- | ---- |
-| `name` | The name of the metric. | Required | String |
-| `description` | The description of the metric. | Optional | String |
-| `type` | The type of the metric (cumulative, derived, ratio, or simple). | Required | String |
-| `label` | Defines the display value in downstream tools. Accepts plain text, spaces, and quotes (such as `orders_total` or `"orders_total"`). | Required | String |
-| `type_params` | The type parameters of the metric. | Required | Dict |
-| `measure` | A list of measure inputs. | Required | List |
-| `measure:name` | The measure you're referencing. | Required | String |
-| `measure:alias` | Optional [`alias`](/reference/resource-configs/alias) to rename the measure. | Optional | String |
-| `measure:filter` | Optional `filter` applied to the measure. | Optional | String |
-| `measure:fill_nulls_with` | Set the value in your metric definition instead of null (such as zero). | Optional | String |
-| `measure:join_to_timespine` | Indicates if the aggregated measure should be joined to the time spine table to fill in missing dates. Default `false`. | Optional | Boolean |
+| `name` | メトリックの名前。 | Required | String |
+| `description` | メトリックの説明。 | Optional | String |
+| `type` | メトリックのタイプ (累積、派生、比率、または単純)。 | Required | String |
+| `label` | 下流ツールでの表示値を定義します。プレーンテキスト、スペース、引用符（例：`orders_total` または `"orders_total"`）が使用できます。 | Required | String |
+| `type_params` | メトリックのタイプパラメータ。 | Required | Dict |
+| `measure` | 測定入力のリスト。 | Required | List |
+| `measure:name` | 参照している測定値。 | Required | String |
+| `measure:alias` | メジャーの名前を変更するためのオプションの [`alias`](/reference/resource-configs/alias)。 | Optional | String |
+| `measure:filter` | メジャーに適用されるオプションの「フィルター」。 | Optional | String |
+| `measure:fill_nulls_with` | メトリック定義で null (ゼロなど) ではなく値を設定します。 | Optional | String |
+| `measure:join_to_timespine` | 欠落している日付を埋めるために、集計されたメジャーをタイムスパインテーブルに結合するかどうかを示します。デフォルトは「false」です。 | Optional | Boolean |
 
-The following displays the complete specification for simple metrics, along with an example.
+以下に、単純なメトリックの完全な仕様と例を示します。
 
 ```yaml
 metrics:
@@ -48,7 +48,7 @@ metrics:
 
 ```
 
-For advanced data modeling, you can use `fill_nulls_with` and `join_to_timespine` to [set null metric values to zero](/docs/build/fill-nulls-advanced), ensuring numeric values for every data row.
+高度なデータ モデリングでは、`fill_nulls_with` と `join_to_timespine` を使用して [null メトリック値をゼロに設定](/docs/build/fill-nulls-advanced) し、すべてのデータ行に数値が確保されるようにすることができます。
 
 <!-- create_metric not supported yet
 :::tip
@@ -57,7 +57,7 @@ If you've already defined the measure using the `create_metric: true` parameter,
 :::
 -->
 
-## Simple metrics example
+## シンプルメトリクスの例
 
 ```yaml
   metrics: 
@@ -83,5 +83,5 @@ If you've already defined the measure using the `create_metric: true` parameter,
         {{Dimension('customer__order_total_dim')}} >= 20
 ```
 
-## Related docs
-- [Fill null values for simple, derived, or ratio metrics](/docs/build/fill-nulls-advanced)
+## 関連ドキュメント
+- [シンプルメトリクス、派生メトリクス、または比率メトリクスのnull値を埋める](/docs/build/fill-nulls-advanced)

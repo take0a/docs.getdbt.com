@@ -1,28 +1,30 @@
 ---
 id: ratio
-title: "Ratio metrics"
-description: "Use ratio metrics to create a ratio out of two measures. "
+title: "比率メトリック"
+description: "比率メトリックを使用して、2 つの測定値から比率を作成します。"
 sidebar_label: Ratio
 tags: [Metrics, Semantic Layer]
 ---
 
-Ratio allows you to create a ratio between two metrics. You simply specify a numerator and a denominator metric. Additionally, you can apply a dimensional filter to both the numerator and denominator using a constraint string when computing the metric. 
+比率を使用すると、2つの指標の比率を作成できます。
+分子と分母の指標を指定するだけです。
+さらに、指標を計算する際に制約文字列を使用して、分子と分母の両方にディメンションフィルターを適用することもできます。
 
- The parameters, description, and type for ratio metrics are:
+比率メトリックのパラメータ、説明、およびタイプは次のとおりです。
 
 | Parameter | Description | Required | Type | 
 | --------- | ----------- | ---- | ---- |
-| `name` | The name of the metric. | Required | String |
-| `description` | The description of the metric. | Optional | String |
-| `type` | The type of the metric (cumulative, derived, ratio, or simple). | Required | String |
-| `label` | Defines the display value in downstream tools. Accepts plain text, spaces, and quotes (such as `orders_total` or `"orders_total"`). | Required | String |
-| `type_params` | The type parameters of the metric. | Required | Dict |
-| `numerator` | The name of the metric used for the numerator, or structure of properties. | Required | String or dict |
-| `denominator` |  The name of the metric used for the denominator, or structure of properties. | Required  | String  or dict |
-| `filter` | Optional filter for the numerator or denominator. | Optional | String |
-| `alias` | Optional alias for the numerator or denominator. | Optional | String |
+| `name` | メトリックの名前。 | Required | String |
+| `description` | メトリックの説明。 | Optional | String |
+| `type` | メトリックのタイプ (累積、派生、比率、または単純)。 | Required | String |
+| `label` | 下流ツールでの表示値を定義します。プレーンテキスト、スペース、引用符（例：`orders_total` または `"orders_total"`）が使用できます。 | Required | String |
+| `type_params` | メトリックのタイプパラメータ。 | Required | Dict |
+| `numerator` | 分子またはプロパティの構造に使用されるメトリックの名前。 | Required | String or dict |
+| `denominator` | 分母に使用されるメトリックの名前、またはプロパティの構造。 | Required  | String  or dict |
+| `filter` | 分子または分母のオプション フィルター。 | Optional | String |
+| `alias` | 分子または分母のオプションのエイリアス。 | Optional | String |
 
-The following displays the complete specification for ratio metrics, along with an example.
+以下に、比率メトリックの完全な仕様と例を示します。
 
 <File name="models/metrics/file_name.yml">
  
@@ -44,14 +46,14 @@ metrics:
 ```
 </File>
 
-For advanced data modeling, you can use `fill_nulls_with` and `join_to_timespine` to [set null metric values to zero](/docs/build/fill-nulls-advanced), ensuring numeric values for every data row.
+高度なデータ モデリングでは、`fill_nulls_with` と `join_to_timespine` を使用して [null メトリック値をゼロに設定](/docs/build/fill-nulls-advanced) し、すべてのデータ行に数値が確保されるようにすることができます。
 
-## Ratio metrics example
+## 比率メトリックの例
 
-These examples demonstrate how to create ratio metrics in your model. They cover basic and advanced use cases, including applying filters to the numerator and denominator metrics.
+これらの例は、モデル内で比率メトリックを作成する方法を示しています。分子指標と分母指標へのフィルターの適用など、基本的なユースケースと高度なユースケースを網羅しています。
 
-#### Example 1 
-This example is a basic ratio metric that calculates the ratio of food orders to total orders:
+#### 例1
+この例は、食品の注文数と総注文数の比率を計算する基本的な比率メトリックです。
 
 <File name="models/metrics/file_name.yml">
  
@@ -67,8 +69,8 @@ metrics:
 ```
 </File>
 
-#### Example 2 
-This example is a ratio metric that calculates the ratio of food orders to total orders, with a filter and alias applied to the numerator. Note that in order to add these attributes, you'll need to use an explicit key for the name attribute too.
+#### 例2
+この例は、分子にフィルターとエイリアスを適用し、総注文数に対する料理注文数の比率を計算する比率メトリックです。これらの属性を追加するには、name属性にも明示的なキーを使用する必要があることに注意してください。
 
 <File name="models/metrics/file_name.yml">
  
@@ -90,9 +92,9 @@ metrics:
 ```
 </File>
 
-## Ratio metrics using different semantic models
+## 異なるセマンティックモデルを用いた比率メトリック
 
-The system will simplify and turn the numerator and denominator into a ratio metric from different semantic models by computing their values in sub-queries. It will then join the result set based on common dimensions to calculate the final ratio. Here's an example of the SQL generated for such a ratio metric.
+システムは、サブクエリで分子と分母の値を計算することで、異なるセマンティックモデルから得られた比率メトリックを簡略化し、1つの比率メトリックに変換します。その後、共通のディメンションに基づいて結果セットを結合し、最終的な比率を計算します。このような比率メトリック用に生成されたSQLの例を以下に示します。
 
 
 ```sql
@@ -139,9 +141,9 @@ on
   )
 ```
 
-## Add filter
+## フィルターを追加
 
-Users can define constraints on input metrics for a ratio metric by applying a filter directly to the input metric, like so:
+ユーザーは、入力メトリックに直接フィルターを適用することで、比率メトリックの入力メトリックに制約を定義できます。例:
 
 <File name="models/metrics/file_name.yml">
  
@@ -161,10 +163,10 @@ metrics:
 ```
 </File>
 
-Note the `filter` and `alias` parameters for the metric referenced in the numerator. 
-- Use the `filter` parameter to apply a filter to the metric it's attached to. 
-- The `alias` parameter is used to avoid naming conflicts in the rendered SQL queries when the same metric is used with different filters. 
-- If there are no naming conflicts, the `alias` parameter can be left out.
+分子で参照されているメトリックの「filter」パラメータと「alias」パラメータに注意してください。
+- 「filter」パラメータを使用して、関連付けられているメトリックにフィルターを適用します。
+- 「alias」パラメータは、同じメトリックが異なるフィルターで使用されている場合に、レンダリングされたSQLクエリで名前の競合を回避するために使用されます。
+- 名前の競合がない場合、「alias」パラメータは省略できます。
 
-## Related docs
-- [Fill null values for simple, derived, or ratio metrics](/docs/build/fill-nulls-advanced)
+## 関連ドキュメント
+- [単純メトリック、派生メトリック、または比率メトリックのnull値を埋める](/docs/build/fill-nulls-advanced)

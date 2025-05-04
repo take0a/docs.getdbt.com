@@ -1,17 +1,21 @@
 ---
-title: "Cumulative metrics"
+title: "累積指標"
 id: cumulative
-description: "Use Cumulative metrics to aggregate a measure over a given window."
+description: "累積メトリックを使用して、特定の期間にわたって測定値を集計します。"
 sidebar_label: Cumulative
 tags: [Metrics, Semantic Layer]
 ---
 
-Cumulative metrics aggregate a measure over a given accumulation window. If no window is specified, the window is considered infinite and accumulates values over all time. You will need to create a [time spine model](/docs/build/metricflow-time-spine) before you add cumulative metrics.
+累積指標は、指定された累積期間にわたって測定値を集計します。
+期間が指定されていない場合、その期間は無限とみなされ、全期間にわたって値が累積されます。
+累積指標を追加する前に、[時間スパインモデル](/docs/build/metricflow-time-spine)を作成する必要があります。
 
-Cumulative metrics are useful for calculating things like weekly active users, or month-to-date revenue. The parameters, description, and types for cumulative metrics are: 
+累積指標は、週次アクティブユーザー数や月次累計収益などの計算に役立ちます。
+累積指標のパラメータ、説明、およびタイプは次のとおりです。
 
 :::tip
-Note that we use the double colon (::) to indicate whether a parameter is nested within another parameter. So for example, `measure::name` means the `name` parameter is nested under `measure`.
+パラメータが別のパラメータ内にネストされているかどうかを示すために、二重コロン (::) を使用することに注意してください。
+たとえば、`measure::name` は、`name` パラメータが `measure` の下にネストされていることを意味します。
 :::
 
 ## Parameters
@@ -20,19 +24,19 @@ Note that we use the double colon (::) to indicate whether a parameter is nested
 
 | Parameter   | <div style={{width:'350px'}}>Description</div>   | Required | Type      |
 |-------------|---------------------------------------------------|----------|-----------|
-| `name`  | The name of the metric.       | Required  | String |
-| `description`       | The description of the metric.     | Optional  | String |
-| `type`    | The type of the metric (cumulative, derived, ratio, or simple).       | Required  | String |  
-| `label`     | Required string that defines the display value in downstream tools. Accepts plain text, spaces, and quotes (such as `orders_total` or `"orders_total"`).  | Required  | String |
-| `type_params`    | The type parameters of the metric. Supports nested parameters indicated by the double colon, such as `type_params::measure`.  | Required  | Dict |
-| `type_params::measure`   | The measure associated with the metric. Supports both shorthand (string) and object syntax. The shorthand is used if only the name is needed, while the object syntax allows specifying additional attributes. | Required  | Dict |
-| `measure::name`    | The name of the measure being referenced. Required if using object syntax for `type_params::measure`.  | Optional  | String |
-| `measure::fill_nulls_with`     | Sets a value (for example, 0) to replace nulls in the metric definition.    | Optional  | Integer or string |
-| `measure::join_to_timespine` | Boolean indicating if the aggregated measure should be joined to the time spine table to fill in missing dates. Default is `false`. | Optional  | Boolean |
-| `type_params::cumulative_type_params`     | Configures the attributes like `window`, `period_agg`, and `grain_to_date` for cumulative metrics. | Optional  | Dict |
-| `cumulative_type_params::window`      | Specifies the accumulation window, such as `1 month`, `7 days`, or `1 year`. Cannot be used with `grain_to_date`.   | Optional  | String |
-| `cumulative_type_params::grain_to_date`   | Sets the accumulation grain, such as `month`, restarting accumulation at the beginning of each specified grain period. Cannot be used with `window`. | Optional  | String |
-| `cumulative_type_params::period_agg`  | Defines how to aggregate the cumulative metric when summarizing data to a different granularity: `first`, `last`, or `average`. Defaults to `first` if `window` is not specified. | Optional  | String |
+| `name`  | メトリックの名前。       | Required  | String |
+| `description`       | メトリックの説明。     | Optional  | String |
+| `type`    | メトリックのタイプ (累積、派生、比率、または単純)。 | Required  | String |  
+| `label`     | 下流ツールでの表示値を定義する必須文字列。プレーンテキスト、スペース、引用符（例：`orders_total`、`"orders_total"`）が使用できます。  | Required  | String |
+| `type_params`    | メトリックの型パラメータ。`type_params::measure` のように、二重コロンで示されるネストされたパラメータをサポートします。 | Required  | Dict |
+| `type_params::measure`   | メトリックに関連付けられたメジャー。ショートハンド（文字列）とオブジェクト構文の両方をサポートします。ショートハンドは名前のみが必要な場合に使用され、オブジェクト構文では追加の属性を指定できます。 | Required  | Dict |
+| `measure::name`    | 参照されるメジャーの名前。`type_params::measure` のオブジェクト構文を使用する場合は必須です。 | Optional  | String |
+| `measure::fill_nulls_with`     | メトリック定義内の null を置き換える値 (たとえば、0) を設定します。 | Optional  | Integer or string |
+| `measure::join_to_timespine` | 集計されたメジャーをタイムスパインテーブルに結合して、欠落している日付を埋めるかどうかを示すブール値。デフォルトは「false」です。 | Optional  | Boolean |
+| `type_params::cumulative_type_params`     | 累積メトリックの `window`、`period_agg`、`grain_to_date` などの属性を構成します。 | Optional  | Dict |
+| `cumulative_type_params::window`      | 蓄積期間（「1か月」、「7日間」、「1年」など）を指定します。「grain_to_date」と併用することはできません。| Optional  | String |
+| `cumulative_type_params::grain_to_date`   | `month` などの累積グレインを設定し、指定されたグレイン期間の開始時に累積を再開します。`window` と併用することはできません。 | Optional  | String |
+| `cumulative_type_params::period_agg`  | データを異なる粒度（`first`、`last`、または `average`）で集計する際に、累積メトリックを集計する方法を定義します。`window` が指定されていない場合は、デフォルトで `first` になります。 | Optional  | String |
 
 </VersionBlock>
 
@@ -54,15 +58,17 @@ Note that we use the double colon (::) to indicate whether a parameter is nested
 
 </VersionBlock>
 
-<Expandable alt_header="Explanation of type_params::measure">
+<Expandable alt_header="type_params::measure の説明">
   
-The`type_params::measure` configuration can be written in different ways:
-- Shorthand syntax &mdash;  To only specify the name of the measure, use a simple string value. This is a shorthand approach when no other attributes are required.
+`type_params::measure` 設定は、以下の複数の方法で記述できます:
+- 省略構文 - メジャー名のみを指定するには、単純な文字列値を使用します。
+これは、他の属性が必要ない場合の省略構文です。
   ```yaml
   type_params:
     measure: revenue
   ```
-- Object syntax &mdash; To add more details or attributes to the measure (such as adding a filter, handling `null` values, or specifying whether to join to a time spine), you need to use the object syntax. This allows for additional configuration beyond just the measure's name.
+- オブジェクト構文 - メジャーに詳細や属性（フィルターの追加、null 値の処理、タイムスパインへの結合の指定など）を追加するには、オブジェクト構文を使用する必要があります。
+これにより、メジャー名だけでなく、追加の構成が可能になります。
 
   ```yaml
   type_params:
@@ -73,8 +79,8 @@ The`type_params::measure` configuration can be written in different ways:
   ```
 </Expandable>
 
-### Complete specification
-The following displays the complete specification for cumulative metrics, along with an example:
+### 完全な仕様
+以下に、累積指標の完全な仕様と例を示します。
 
 <File name='models/marts/sem_semantic_model_name.yml'>
 
@@ -119,19 +125,19 @@ metrics:
 
 </File>
 
-## Cumulative metrics example
+## 累積メトリクスの例
 
-Cumulative metrics measure data over a given window and consider the window infinite when no window parameter is passed, accumulating the data over all time.
+累積メトリクスは、指定された期間のデータを測定します。ウィンドウパラメータが渡されない場合は、期間を無限とみなし、全期間にわたってデータを累積します。
 
-The following example shows how to define cumulative metrics in a YAML file:
+次の例は、YAMLファイルで累積メトリクスを定義する方法を示しています。
 
 <VersionBlock firstVersion="1.9">
 
-- `cumulative_order_total`: Calculates the cumulative order total over all time. Uses `type params` to specify the measure `order_total` to be aggregated.
+- `cumulative_order_total`: 全期間の累計注文合計を計算します。`type params` を使用して、集計対象となるメジャー `order_total` を指定します。
 
-- `cumulative_order_total_l1m`: Calculates the trailing 1-month cumulative order total. Uses `cumulative_type_params` to specify a `window` of 1 month.
+- `cumulative_order_total_l1m`: 過去1か月間の累計注文合計を計算します。`cumulative_type_params` を使用して、`window` に1か月を指定します。
 
-- `cumulative_order_total_mtd`: Calculates the month-to-date cumulative order total, respectively. Uses `cumulative_type_params` to specify a `grain_to_date` of `month`.
+- `cumulative_order_total_mtd`: 月初からの累計注文合計を計算します。`cumulative_type_params` を使用して、`grain_to_date` に`month` を指定します。
 
 </VersionBlock>
 
@@ -217,14 +223,14 @@ metrics:
 
 <VersionBlock firstVersion="1.9">
 
-### Granularity options
+### 粒度オプション
 
-Use the `period_agg` parameter with `first()`, `last()`, and `average()` functions to aggregate cumulative metrics over the requested period. This is because granularity options for cumulative metrics are different than the options for other metric types. 
-- For other metrics, we use the `date_trunc` function to implement granularity. 
-- However, cumulative metrics are non-additive (values can't be added up), so we can't use the `date_trunc` function to change their time grain granularity.
-- By default, we take the first value of the period. You can change this by specifying a different function using the `period_agg` parameter.
+`period_agg` パラメータを `first()`、`last()`、`average()` 関数と共に使用することで、指定した期間の累積指標を集計できます。これは、累積指標の粒度オプションが他の指標タイプのオプションと異なるためです。
+- 他の指標については、粒度を実装するために `date_trunc` 関数を使用します。
+- ただし、累積指標は非加算的（値を加算できない）であるため、`date_trunc` 関数を使用して時間粒度の粒度を変更することはできません。
+- デフォルトでは、期間の最初の値が取得されます。`period_agg` パラメータを使用して別の関数を指定することで、これを変更できます。
 
-In the following example, we define a cumulative metric, `cumulative_revenue`, that calculates the cumulative revenue for all orders:
+次の例では、すべての注文の累積収益を計算する累積指標 `cumulative_revenue` を定義します。
 
 <File name='models/marts/sem_semantic_model_name.yml'>
 
@@ -240,12 +246,13 @@ In the following example, we define a cumulative metric, `cumulative_revenue`, t
 ```
 </File>
 
-In this example, `period_agg` is set to `first`, which chooses the first value for the selected granularity window. To query `cumulative_revenue` by week, use the following query syntax: 
+この例では、`period_agg` は `first` に設定されており、選択した粒度ウィンドウの最初の値が選択されます。
+`cumulative_revenue` を週単位でクエリするには、次のクエリ構文を使用します。
 - `dbt sl query --metrics cumulative_revenue --group-by metric_time__week`
 
-<Expandable alt_header="Expand toggle to view how the SQL compiles">
+<Expandable alt_header="トグルを展開してSQLのコンパイル方法を表示します">
 
-Note the use of the `window` function to select the `first` value. For `last` and `average`, we would replace the `first_value()` function in the generated SQL with `last_value()` and `average` respectively.
+`first` 値を選択するために `window` 関数を使用していることに注意してください。`last` と `average` については、生成されたSQL内の `first_value()` 関数をそれぞれ `last_value()` と `average` に置き換えます。
 
 ```sql
 -- re-aggregate metric via the group by
@@ -308,18 +315,18 @@ group by
 
 </VersionBlock>
 
-### Window options
+### ウィンドウオプション
 
-This section details examples of when to specify and not to specify window options.
+このセクションでは、ウィンドウオプションを指定する場合と指定しない場合の例について詳しく説明します。
 
-- When a window is specified, MetricFlow applies a sliding window to the underlying measure, such as tracking weekly active users with a 7-day window.
-- Without specifying a window, cumulative metrics accumulate values over all time, useful for running totals like current revenue and active subscriptions.
+- ウィンドウが指定されている場合、MetricFlow は基になる指標にスライディングウィンドウを適用します。例えば、週単位のアクティブユーザーを 7 日間のウィンドウで追跡します。
+- ウィンドウを指定しない場合、累積指標は全期間にわたって値を累積します。これは、現在の収益やアクティブなサブスクリプションなどの累計を計算するのに役立ちます。
 
-<Expandable alt_header="Example of window specified">
+<Expandable alt_header="ウィンドウが指定された例">
 
-If a window option is specified, MetricFlow applies a sliding window to the underlying measure.
+ウィンドウオプションが指定されている場合、MetricFlow は基になるメジャーにスライディングウィンドウを適用します。
 
-Suppose the underlying measure `customers` is configured to count the unique customers making orders at the Jaffle shop.
+基になるメジャー「customers」が、Jaffle ショップで注文を行う一意の顧客数をカウントするように設定されているとします。
 
 <File name='models/marts/sem_semantic_model_name.yml'>
 
@@ -332,7 +339,7 @@ measures:
 ```
 </File>
 
-We can write a cumulative metric `weekly_customers` as such:
+累積メトリック「weekly_customers」は次のように記述できます:
 
 <VersionBlock firstVersion="1.9">
 
@@ -350,15 +357,15 @@ metrics:
 ```
 </File>
 
-From the sample YAML example, note the following:
+サンプルYAMLの例から、以下の点に注意してください。
 
-* `type`: Specify cumulative to indicate the type of metric. 
-* `type_params`: Configure the cumulative metric by providing a `measure`.
-* `cumulative_type_params`: Optionally add a `window`, `period_agg` and `grain_to_date` configuration.
+* `type`: 指標の種類を示すために、cumulative を指定します。
+* `type_params`: `measure` を指定して累積指標を設定します。
+* `cumulative_type_params`: 必要に応じて、`window`、`period_agg`、`grain_to_date` の設定を追加します。
 
-For example, in the `weekly_customers` cumulative metric, MetricFlow takes a sliding 7-day window of relevant customers and applies a count distinct function.
+例えば、`weekly_customers` 累積指標では、MetricFlow は関連する顧客の7日間のスライディングウィンドウを取得し、count distinctive 関数を適用します。
 
-If you remove `window`, the measure will accumulate over all time.
+`window` を削除すると、指標は全期間にわたって累積されます。
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">
@@ -376,29 +383,30 @@ metrics:
 </File>
 </VersionBlock>
 
-From the sample YAML example, note the following:
+サンプル YAML の例から、以下の点に注意してください。
 
-* `type`: Specify cumulative to indicate the type of metric. 
-* `type_params`: Configure the cumulative metric by providing a `measure` and optionally add a `window` or `grain_to_date` configuration.
+* `type`: 指標の種類を示す累積値を指定します。
+* `type_params`: `measure` を指定して累積指標を設定し、オプションで `window` または `grain_to_date` 構成を追加します。
 
-For example, in the `weekly_customers` cumulative metric, MetricFlow takes a sliding 7-day window of relevant customers and applies a count distinct function.
+例えば、累積指標 `weekly_customers` では、MetricFlow は関連する顧客の 7 日間のスライディングウィンドウを取得し、count distinctive 関数を適用します。
 
-If you remove `window`, the measure will accumulate over all time.
+`window` を削除すると、指標は全期間にわたって累積されます。
 
 </Expandable>
 
-<Expandable alt_header="Example of window not specified">
+<Expandable alt_header="ウィンドウが指定されていない例">
 
-Suppose you (a subscription-based company for the sake of this example) have an event-based log table with the following columns: 
+あなた（この例ではサブスクリプションベースの企業）が、以下の列を持つイベントベースのログテーブルを持っているとします。
 
-* `date`: a date column 
-* `user_id`: (integer) an ID specified for each user that is responsible for the event 
-* `subscription_plan`: (integer) a column that indicates a particular subscription plan associated with the user. 
-* `subscription_revenue`: (integer) a column that indicates the value associated with the subscription plan.  
-* `event_type`: (integer) a column that populates with +1 to indicate an added subscription, or -1 to indicate a deleted subscription. 
-* `revenue`: (integer) a column that multiplies `event_type` and `subscription_revenue` to depict the amount of revenue added or lost for a specific date. 
+* `date`: 日付列
+* `user_id`: (整数) イベントの責任を負う各ユーザーに指定されたID
+* `subscription_plan`: (整数) ユーザーに関連付けられた特定のサブスクリプションプランを示す列
+* `subscription_revenue`: (整数) サブスクリプションプランに関連付けられた値を示す列
+* `event_type`: (整数) 追加されたサブスクリプションを示す +1 または削除されたサブスクリプションを示す -1 が設定される列
+* `revenue`: (整数) `event_type` と `subscription_revenue` を乗算し、特定の日付における収益の増加または減少を表す列。
 
-Using cumulative metrics without specifying a window, you can calculate running totals for metrics like the count of active subscriptions and revenue at any point in time. The following YAML file shows creating a cumulative metrics to obtain current revenue and the total number of active subscriptions as a cumulative sum:
+ウィンドウを指定せずに累積メトリクスを使用すると、アクティブなサブスクリプションの数や収益などのメトリクスの累積合計を任意の時点で計算できます。
+次の YAML ファイルは、現在の収益とアクティブなサブスクリプションの合計数を累積合計として取得するための累積メトリクスの作成方法を示しています:
 
 <File name='models/marts/sem_semantic_model_name.yml'>
 
@@ -431,11 +439,13 @@ metrics:
 </File>
 </Expandable>
 
-### Grain to date
+### 日付までのグレイン
 
-You can choose to specify a grain to date in your cumulative metric configuration to accumulate a metric from the start of a grain (such as week, month, or year). When using a window, such as a month, MetricFlow will go back one full calendar month. However, grain to date will always start accumulating from the beginning of the grain, regardless of the latest date of data.
+累積メトリック設定で日付までのグレインを指定すると、週、月、年などのグレインの開始時点からメトリックを累積できます。
+月などのウィンドウを使用する場合、MetricFlowは1か月分遡ります。
+ただし、日付までのグレインでは、データの最新日付に関係なく、常にグレインの先頭から累積が開始されます。
 
-For example, let's consider an underlying measure of `order_total.`
+例えば、基礎となるメジャーが「order_total」であるとします:
 
 <File name='models/marts/sem_semantic_model_name.yml'>
 
@@ -446,9 +456,9 @@ For example, let's consider an underlying measure of `order_total.`
 ```
 </File>
 
-We can compare the difference between a 1-month window and a monthly grain to date. 
-- The cumulative metric in a window approach applies a sliding window of 1 month
-- The grain to date by month resets at the beginning of each month.
+1か月間のウィンドウと月単位のグレイン（現在までのデータ）の違いを比較できます。
+- ウィンドウアプローチの累積メトリックは、1か月間のスライディングウィンドウを適用します。
+- 月単位のグレイン（現在までのデータ）は、毎月​​初めにリセットされます。
 
 <File name='models/marts/sem_semantic_model_name.yml'>
 
@@ -498,7 +508,7 @@ metrics:
 </VersionBlock>
 </File>
 
-Cumulative metric with grain to date:
+現在までのグレインの累積メトリック:
 
 <VersionBlock firstVersion="1.9">
 <File name='models/marts/sem_semantic_model_name.yml'>
@@ -573,11 +583,13 @@ order by
 </File>
 </VersionBlock>
 
-## SQL implementation example
+## SQL 実装例
 
-To calculate the cumulative value of the metric over a given window we do a time range join to a timespine table using the primary time dimension as the join key. We use the accumulation window in the join to decide whether a record should be included on a particular day. The following SQL code produced from an example cumulative metric is provided for reference:
+特定の期間におけるメトリックの累積値を計算するには、プライマリ時間ディメンションを結合キーとして、タイムスパインテーブルへの時間範囲結合を実行します。
+結合の累積期間を使用して、特定の日にレコードを含めるかどうかを決定します。
+以下の SQL コードは、累積メトリックの例から生成されたものです。参考までに示します。
 
-To implement cumulative metrics, refer to the SQL code example:
+累積メトリックを実装するには、以下の SQL コード例を参照してください。
 
 ``` sql
 select
@@ -626,9 +638,9 @@ limit 100;
 
 ```
 
-## Limitations
+## 制限事項
 
-If you specify a `window` in your cumulative metric definition, you must include `metric_time` as a dimension in the SQL query. This is because the accumulation window is based on metric time. For example,
+累積指標の定義で「ウィンドウ」を指定する場合、SQLクエリのディメンションとして「メトリック時間」を含める必要があります。これは、累積ウィンドウが指標の時間に基づいているためです。例：
 
 ```sql
 select
@@ -642,5 +654,5 @@ group by
   subq_3.metric_time
 ```
 
-## Related docs
-- [Fill null values for simple, derived, or ratio metrics](/docs/build/fill-nulls-advanced)
+## 関連ドキュメント
+- [単純指標、派生指標、または比率指標のnull値を埋める](/docs/build/fill-nulls-advanced)

@@ -1,31 +1,31 @@
 ---
-title: "Fill null values for metrics"
+title: "メトリックにnull値を入力する"
 id: fill-nulls-advanced
-description: "Learn about advanced topics for dbt Semantic Layer and MetricFlow, such as modeling workflows and more."
+description: "ワークフローのモデリングなど、dbt セマンティック レイヤーと MetricFlow の高度なトピックについて学習します。"
 sidebar_label: Fill null values for metrics
 ---
 
-Understanding and implementing strategies to fill null values in metrics is key for accurate analytics. This guide explains `fill_nulls_with` and `join_to_timespine` to ensure data completeness, helping end users make more informed decisions and enhancing your dbt workflows.
+メトリクス内のnull値を埋める戦略を理解し、実装することは、正確な分析を行うための鍵となります。このガイドでは、データの完全性を確保し、エンドユーザーがより情報に基づいた意思決定を行い、dbtワークフローを強化するための「fill_nulls_with」と「join_to_timespine」について説明します。
 
-### About null values
+### null値について
 
-You can use `fill_nulls_with` to replace null values in metrics with a value like zero (or your chosen integer). This ensures every data row shows a numeric value.
+`fill_nulls_with` を使用すると、指標内の null 値を 0 などの値（または任意の整数）に置き換えることができます。これにより、すべてのデータ行に数値が表示されます。
 
-This guide explains how to ensure there are no null values in your metrics:
+このガイドでは、指標に null 値が含まれていないことを確認する方法について説明します。
 
-- Use `fill_nulls_with` for `simple`, `cumulative`, and `conversion` metrics
-- Use `join_to_timespine` and `fill_nulls_with` together for derived and ratio metrics to avoid null values appearing.
+- `simple`、`cumulative`、`conversion` 指標には `fill_nulls_with` を使用します。
+- 派生指標と比率指標には `join_to_timespine` と `fill_nulls_with` を併用し、null 値が表示されないようにします。
 
-### Fill null values for simple metrics
+### シンプルな指標の場合は null 値を埋める
 
-For example, if you'd like to handle days with site visits but no leads, you can use `fill_nulls_with` to set the value for leads to zero on days when there are no conversions.
+例えば、サイト訪問はあったもののリードが発生しなかった日を処理したい場合、`fill_nulls_with` を使用することで、コンバージョンが発生しなかった日のリードの値を 0 に設定できます。
 
-Let's say you have three metrics:
+3 つの指標があるとします。
 
-- `website_visits` and `leads`
-- and a derived metric called `leads_to_website_visit` that calculates the ratio of leads to site visits.
+- `website_visits` と `leads`
+- そして、サイト訪問数に対するリード数の比率を計算する `leads_to_website_visit` という派生指標です。
 
-On the days when there are no conversions, you can set the value for leads to zero by adding the `fill_nulls_with` parameter to the measure input on the leads metric:
+コンバージョンがない日には、リード メトリックのメジャー入力に `fill_nulls_with` パラメータを追加して、リード値をゼロに設定できます:
 
 <File name='models/metrics/website_vists.yml'>
 
@@ -53,7 +53,7 @@ metrics:
 
 </File>
 
-The `website_visits` and `leads` metrics have the following data:
+`website_visits` および `leads` メトリックには次のデータがあります:
 
 | metric_time | website_visits |
 | --- | --- |
@@ -66,9 +66,9 @@ The `website_visits` and `leads` metrics have the following data:
 | --- | --- |
 | 2024-01-01 | 5 |
 | 2024-01-03 | 8 |
-* Note that there is no data for `2024-01-02` in the `leads` metric.
+* `leads` メトリックには `2024-01-02` のデータが存在しないことに注意してください。
 
-Although there are no days without visits, there are days without leads. After applying `fill_nulls_with: 0` to the `leads` metric, querying these metrics together shows zero for leads on days with no conversions:
+訪問がない日はないものの、リードがない日もあります。`leads` 指標に `fill_nulls_with: 0` を適用し、これらの指標をまとめてクエリすると、コンバージョンがない日のリードはゼロと表示されます。
 
 | metric_time | website_visits | leads |
 | --- | --- | --- |
@@ -76,22 +76,22 @@ Although there are no days without visits, there are days without leads. After a
 | 2024-01-02 | 37 | 0 |
 | 2024-01-03 | 79 | 8 |
 
-### Use join_to_timespine for derived and ratio metrics
+### 派生メトリックと比率メトリックには join_to_timespine を使用する
 
-To ensure you have a complete set of data for every and daily coverage for metrics calculated from other metrics, you can use `join_to_timespine` to fill null values for `derived` and `ratio` metrics. These metrics are built from other metrics (other calculations), not direct measures (raw data), requiring MetricFlow to have an extra subquery layer to render the metric. The subquery nesting is as follows:
+他のメトリクスから計算されたメトリクスについて、毎日および日次のカバレッジの完全なデータセットを確保するには、`join_to_timespine` を使用して `derived` メトリクスと `ratio` メトリクスの null 値を埋めることができます。これらのメトリクスは、直接のメジャー（生データ）ではなく、他のメトリクス（他の計算）から構築されるため、MetricFlow ではメトリクスをレンダリングするために追加のサブクエリレイヤーが必要になります。サブクエリのネストは次のとおりです。
 
-- For `derived` and `ratio` metrics, there are three levels of subquery nesting &mdash; derived or ratio metric → input metrics → input measures.
-- For `simple` and `cumulative` metrics, there are only two levels of subquery nesting &mdash; simple or cumulative metric → input measure.
+- `derived` メトリクスと `ratio` メトリクスの場合、サブクエリのネストは 3 段階（派生または比率メトリクス → 入力メトリクス → 入力メジャー）です。
+- `simple` メトリクスと `cumulative` メトリクスの場合、サブクエリのネストは 2 段階（シンプルまたは累積メトリクス → 入力メジャー）のみです。
 
-Because `coalesce` isn't applied to the third, subquery layer for `derived` or `ratio` metrics, this means you could still have nulls in the final result set. 
+`coalesce` は `derived` または `ratio` メトリクスの 3 番目のサブクエリレイヤーには適用されないため、最終的な結果セットに null が含まれる可能性があります。
 
-* Note you can use `join_to_timespine` with metrics that take measure inputs as well if you want to include a row for every date, even if there is no data.
+* データが存在しない場合でも、すべての日付の行を含めたい場合は、メジャー入力を受け取るメトリクスでも `join_to_timespine` を使用できます。
 
-### Fill null values for derived and ratio metrics
+### 派生メトリックと比率メトリックの null 値を埋める
 
-To fill null values for derived and ratio metrics, you can link them with a time spine to ensure daily data coverage. As mentioned in [the previous section](#use-join_to_timespine-for-derived-and-ratio-metrics), this is because `derived` and `ratio` metrics take *metrics* as inputs instead of *measures*.
+派生メトリックと比率メトリックの null 値を埋めるには、タイムスパインを使用してリンクすることで、日次データの範囲を確保できます。[前のセクション](#use-join_to_timespine-for-derived-and-ratio-metrics) で説明したように、これは `derived` 指標と `ratio` 指標が *measures* ではなく *metrics* を入力として取るためです。
 
-For example, the following structure leaves nulls in the final results (`leads_to_website_visit` column) because `COALESCE` isn't applied at the third outer rendering layer for the final metric calculation in `derived` metrics:
+例えば、次の構造では、`derived` 指標の最終指標計算において、外側の 3 番目のレンダリング レイヤーで `COALESCE` が適用されないため、最終結果 (`leads_to_website_visit` 列) に null が残ります。
 
 | metric_time | bookings | leads | leads_to_website_visit |
 | --- | --- | --- | --- |
@@ -99,7 +99,7 @@ For example, the following structure leaves nulls in the final results (`leads_t
 | 2024-01-02 | 37 | 0 | null |
 | 2024-01-03 | 79 | 8 | .1 |
 
-To display a zero value for `leads_to_website_visit` for `2024-01-02`, you would join the `leads` metric to a time spine model to ensure a value for each day. This can be done by adding `join_to_timespine` to the `measure` parameter in the `leads` metric configuration:
+`2024-01-02` の `leads_to_website_visit` にゼロ値を表示するには、`leads` 指標をタイムスパインモデルに結合し、各日の値を確保する必要があります。これは、`leads` 指標設定の `measure` パラメータに `join_to_timespine` を追加することで実現できます:
 
 <File name='models/metrics/leads.yml'>
 
@@ -114,7 +114,7 @@ To display a zero value for `leads_to_website_visit` for `2024-01-02`, you would
 ```
 </File>
 
-Once you do this, if you query the `leads` metric after the timespine join, there will be a record for each day and any null values will get filled with zero.
+これを実行すると、タイムスパイン結合後に `leads` メトリックをクエリすると、各日のレコードが作成され、null 値はすべてゼロで埋められます。
 
 | metric_time |  leads | leads_to_website_visit |
 | --- | --- | --- |
@@ -122,13 +122,13 @@ Once you do this, if you query the `leads` metric after the timespine join, ther
 | 2024-01-02 | 0 | 0 |
 | 2024-01-03 |  8 | .1 |
 
-Now, if you combine the metrics in a `derived` metric, there will be a zero value for `leads_to_website_visit` on `2024-01-02` and the final result set will not have any null values.
+ここで、`derived` メトリックでメトリックを組み合わせると、`2024-01-02` の `leads_to_website_visit` の値はゼロになり、最終的な結果セットには null 値が含まれなくなります。
 
 ## FAQs
 
-<Expandable alt_header="How to handle null values in derived metrics defined on top of multiple tables">
+<Expandable alt_header="複数のテーブルの上に定義された派生メトリックの null 値を処理する方法">
 
-For additional examples and discussion on how to handle null values in derived metrics that use data from multiple tables, check out [MetricFlow issue #1031](https://github.com/dbt-labs/metricflow/issues/1031).
+複数のテーブルのデータを使用する派生メトリックで null 値を処理する方法の追加の例と説明については、[MetricFlow の問題 #1031](https://github.com/dbt-labs/metricflow/issues/1031) を参照してください。
 
 </Expandable>
 

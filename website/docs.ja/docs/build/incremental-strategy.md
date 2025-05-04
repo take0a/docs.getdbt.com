@@ -1,32 +1,32 @@
 ---
-title: "About incremental strategy"
+title: "増分戦略について"
 sidebar_label: "Incremental strategy"
-description: "Incremental strategies for materializations optimize performance by defining how to handle new and changed data."
+description: "マテリアライゼーションの増分戦略は、新しいデータと変更されたデータの処理方法を定義することでパフォーマンスを最適化します。"
 id: "incremental-strategy"
-intro_text: "Incremental strategies for materializations optimize performance by defining how to handle new and changed data."
+intro_text: "マテリアライゼーションの増分戦略は、新しいデータと変更されたデータの処理方法を定義することでパフォーマンスを最適化します。"
 ---
 
-There are various strategies to implement the concept of incremental materializations. The value of each strategy depends on:
+増分マテリアライゼーションの概念を実装するには、様々な戦略があります。それぞれの戦略の価値は、以下の要素に依存します。
 
-* The volume of data.
-* The reliability of your `unique_key`.
-* The support of certain features in your data platform.
+* データ量。
+* `unique_key` の信頼性。
+* データプラットフォームにおける特定の機能のサポート状況。
 
-An optional `incremental_strategy` config is provided in some adapters that controls the code that dbt uses to build incremental models.
+一部のアダプタでは、dbt が増分モデルの構築に使用するコードを制御するためのオプションの `incremental_strategy` 構成が提供されています。
 
-:::info Microbatch
+:::info マイクロバッチ
 
-The [`microbatch` incremental strategy](/docs/build/incremental-microbatch) is intended for large time-series datasets. dbt will process the incremental model in multiple queries (or "batches") based on a configured `event_time` column. Depending on the volume and nature of your data, this can be more efficient and resilient than using a single query for adding new data.
+[`microbatch` 増分戦略](/docs/build/incremental-microbatch) は、大規模な時系列データセットを対象としています。dbt は、設定された `event_time` 列に基づいて、増分モデルを複数のクエリ（または「バッチ」）で処理します。データの量と性質によっては、新しいデータを追加するために単一のクエリを使用するよりも、この方法の方が効率的で回復力に優れている場合があります。
 
 :::
 
-### Supported incremental strategies by adapter
+### アダプタ別にサポートされている増分戦略
 
-This table shows the support of each incremental strategy across adapters available on dbt Cloud's [Latest release track](/docs/dbt-versions/cloud-release-tracks). Some strategies may be unavailable if you're not on "Latest" and the feature hasn't been released to the "Compatible" track.  
+この表は、dbt Cloud の [最新リリーストラック](/docs/dbt-versions/cloud-release-tracks) で利用可能なアダプタにおける各増分戦略のサポート状況を示しています。「最新」ではなく、機能が「互換」トラックにリリースされていない場合、一部の戦略は利用できない場合があります。
 
-If you're interested in an adapter available in dbt Core only, check out the [adapter's individual configuration page](/reference/resource-configs/resource-configs) for more details.
+dbt Core でのみ利用可能なアダプタにご興味がある場合は、[アダプタの個別の構成ページ](/reference/resource-configs/resource-configs) で詳細をご確認ください。
 
-Click the name of the adapter in the following table for more information about supported incremental strategies:
+サポートされている増分戦略の詳細については、次の表でアダプタ名をクリックしてください:
 
 | Data platform adapter | `append` | `merge` | `delete+insert` | `insert_overwrite` | `microbatch`        |
 |-----------------------|:--------:|:-------:|:---------------:|:------------------:|:-------------------:|
@@ -41,10 +41,9 @@ Click the name of the adapter in the following table for more information about 
 | [dbt-athena](/reference/resource-configs/athena-configs#incremental-models)                         |     ✅    |    ✅   |     | ✅ |    |
 | [dbt-teradata](/reference/resource-configs/teradata-configs#valid_history-incremental-materialization-strategy)  | ✅    |  ✅   |   ✅   |    |         ✅    |
 
-### Configuring incremental strategy
+### 増分戦略の設定
 
-The `incremental_strategy` config can either be defined in specific models or
-for all models in your `dbt_project.yml` file:
+`incremental_strategy` 設定は、`dbt_project.yml` ファイル内の特定のモデルまたはすべてのモデルに対して定義できます:
 
 <File name='dbt_project.yml'>
 
@@ -55,7 +54,7 @@ models:
 
 </File>
 
-or:
+または:
 
 <File name='models/my_model.sql'>
 
@@ -74,11 +73,11 @@ select ...
 
 </File>
 
-### Strategy-specific configs
+### 戦略固有の設定
 
-If you use the `merge` strategy and specify a `unique_key`, by default, dbt will entirely overwrite matched rows with new values.
+`merge` 戦略を使用し、`unique_key` を指定した場合、デフォルトでは、dbt は一致した行全体を新しい値で上書きします。
 
-On adapters which support the `merge` strategy (including Snowflake, BigQuery, Apache Spark, and Databricks), you may optionally pass a list of column names to a `merge_update_columns` config. In that case, dbt will update _only_ the columns specified by the config, and keep the previous values of other columns.
+`merge` 戦略をサポートするアダプタ（Snowflake、BigQuery、Apache Spark、Databricks など）では、オプションで列名のリストを `merge_update_columns` 設定に渡すことができます。その場合、dbt は設定で指定された列のみを更新し、他の列は以前の値を保持します。
 
 <File name='models/my_model.sql'>
 
@@ -97,7 +96,7 @@ select ...
 
 </File>
 
-Alternatively, you can specify a list of columns to exclude from being updated by passing a list of column names to a `merge_exclude_columns` config.
+あるいは、列名のリストを `merge_exclude_columns` 設定に渡すことで、更新から除外する列のリストを指定することもできます。
 
 <File name='models/my_model.sql'>
 
@@ -116,11 +115,11 @@ select ...
 
 </File>
 
-### About incremental_predicates
+### incremental_predicates について
 
-`incremental_predicates` is an advanced use of incremental models, where data volume is large enough to justify additional investments in performance. This config accepts a list of any valid SQL expression(s). dbt does not check the syntax of the SQL statements. 
+`incremental_predicates` は、データ量が多くパフォーマンスへの追加投資が正当化されるような増分モデルの高度な使用方法です。この設定は、有効な SQL 式のリストを受け入れます。dbt は SQL 文の構文をチェックしません。
 
-This an example of a model configuration in a `yml` file you might expect to see on Snowflake:
+これは、Snowflake でよく見られる `yml` ファイル内のモデル設定の例です:
 
 ```yml
 
@@ -138,7 +137,7 @@ models:
       # `DBT_INTERNAL_DEST` and `DBT_INTERNAL_SOURCE` are the standard aliases for the target table and temporary table, respectively, during an incremental run using the merge strategy. 
 ```
 
-Alternatively, here are the same configurations configured within a model file:
+あるいは、モデル ファイル内で構成された同じ構成は次のとおりです:
 
 ```sql
 -- in models/my_incremental_model.sql
@@ -159,7 +158,8 @@ Alternatively, here are the same configurations configured within a model file:
 
 ```
 
-This will template (in the `dbt.log` file) a `merge` statement like:
+これにより、次のような `merge` ステートメントが (`dbt.log` ファイル内に) テンプレート化されます:
+
 ```sql
 merge into <existing_table> DBT_INTERNAL_DEST
     from <temp_table_with_new_records> DBT_INTERNAL_SOURCE
@@ -173,7 +173,7 @@ merge into <existing_table> DBT_INTERNAL_DEST
     when not matched then insert ...
 ```
 
-Limit the data scan of _upstream_ tables within the body of their incremental model SQL, which will limit the amount of "new" data processed/transformed.
+増分モデル SQL 本体内の上流テーブルのデータ スキャンを制限します。これにより、処理/変換される「新しい」データの量が制限されます。
 
 ```sql
 with large_source_table as (
@@ -189,14 +189,14 @@ with large_source_table as (
 ```
 
 :::info
-The syntax depends on how you configure your `incremental_strategy`:
-- If using the `merge` strategy, you may need to explicitly alias any columns with either `DBT_INTERNAL_DEST` ("old" data) or `DBT_INTERNAL_SOURCE` ("new" data). 
-- There's a decent amount of conceptual overlap with the `insert_overwrite` incremental strategy.
+構文は、`incremental_strategy` の設定方法によって異なります:
+- `merge` 戦略を使用する場合、列に `DBT_INTERNAL_DEST`（「古い」データ）または `DBT_INTERNAL_SOURCE`（「新しい」データ）のいずれかを明示的に別名設定する必要がある場合があります。
+- `insert_overwrite` 増分戦略と概念的に重複する部分がかなりあります。
 :::
 
-### Built-in strategies
+### 組み込み戦略
 
-Before diving into [custom strategies](#custom-strategies), it's important to understand the built-in incremental strategies in dbt and their corresponding macros:
+[カスタム戦略](#custom-strategies) について詳しく説明する前に、dbt に組み込まれている増分戦略とそれに対応するマクロについて理解しておくことが重要です。
 
 | `incremental_strategy` | Corresponding macro                    |
 |------------------------|----------------------------------------|
@@ -207,7 +207,7 @@ Before diving into [custom strategies](#custom-strategies), it's important to un
 | `microbatch`           | `get_incremental_microbatch_sql`       |
 
 
-For example, a built-in strategy for the `append` can be defined and used with the following files:
+たとえば、`append` の組み込み戦略は、次のファイルで定義して使用できます:
 
 <File name='macros/append.sql'>
 
@@ -233,7 +233,7 @@ For example, a built-in strategy for the `append` can be defined and used with t
 ```
 </File>
 
-Define a model models/my_model.sql:
+モデル models/my_model.sql を定義します:
 
 ```sql
 {{ config(
@@ -244,22 +244,22 @@ Define a model models/my_model.sql:
 select * from {{ ref("some_model") }}
 ```
 
-### Custom strategies
+### カスタム戦略
 
 :::note limited support
 
-Custom strategies are not currently supported on the BigQuery and Spark adapters.
+カスタム戦略は現在、BigQuery および Spark アダプタではサポートされていません。
 
 :::
 
-From dbt v1.2 and onwards, users have an easier alternative to [creating an entirely new materialization](/guides/create-new-materializations). They define and use their own "custom" incremental strategies by:
+dbt v1.2 以降では、[全く新しいマテリアライゼーションを作成する](/guides/create-new-materializations)よりも簡単な方法が利用できます。ユーザーは以下の方法で独自の「カスタム」増分戦略を定義し、使用できます。
 
-1. Defining a macro named `get_incremental_STRATEGY_sql`. Note that `STRATEGY` is a placeholder and you should replace it with the name of your custom incremental strategy.
-2. Configuring `incremental_strategy: STRATEGY` within an incremental model.
+1. `get_incremental_STRATEGY_sql` というマクロを定義します。`STRATEGY` はプレースホルダなので、カスタム増分戦略の名前に置き換えてください。
+2. 増分モデル内で `incremental_strategy: STRATEGY` を設定します。
 
-dbt won't validate user-defined strategies, it will just look for the macro by that name, and raise an error if it can't find one.
+dbt はユーザー定義の戦略を検証せず、その名前のマクロを検索し、見つからない場合はエラーを発生させます。
 
-For example, a user-defined strategy named `insert_only` can be defined and used with the following files:
+例えば、`insert_only` というユーザー定義戦略は、以下のファイルで定義して使用できます。
 
 <File name='macros/my_custom_strategies.sql'>
 
@@ -300,13 +300,13 @@ For example, a user-defined strategy named `insert_only` can be defined and used
 
 </File>
 
-If you use a custom microbatch macro, set a [`require_batched_execution_for_custom_microbatch_strategy` behavior flag](/reference/global-configs/behavior-changes#custom-microbatch-strategy) in your `dbt_project.yml` to enable batched execution of your custom strategy. 
+カスタム マイクロバッチ マクロを使用する場合は、`dbt_project.yml` で [`require_batched_execution_for_custom_microbatch_strategy` 動作フラグ](/reference/global-configs/behavior-changes#custom-microbatch-strategy) を設定して、カスタム戦略のバッチ実行を有効にします。
 
-### Custom strategies from a package
+### パッケージからのカスタム戦略
 
-To use the `merge_null_safe` custom incremental strategy from the `example` package:
-- [Install the package](/docs/build/packages#how-do-i-add-a-package-to-my-project)
-- Add the following macro to your project:
+`example` パッケージの `merge_null_safe` カスタム増分戦略を使用するには、以下の手順に従います。
+- [パッケージをインストール](/docs/build/packages#how-do-i-add-a-package-to-my-project)
+- 次のマクロをプロジェクトに追加します。
 
 <File name='macros/my_custom_strategies.sql'>
 

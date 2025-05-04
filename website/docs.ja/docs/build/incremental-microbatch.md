@@ -1,66 +1,66 @@
 ---
-title: "About microbatch incremental models"
+title: "マイクロバッチ増分モデルについて"
 sidebar_label: "Microbatch incremental models"
 description: "Learn about the 'microbatch' strategy for incremental models."
 id: "incremental-microbatch"
-intro_text: "Use microbatch incremental models to process large time-series datasets efficiently."
+intro_text: "マイクロバッチ増分モデルを使用して、大規模な時系列データセットを効率的に処理します。"
 ---
 
 :::info
 
-Available for [dbt Cloud "Latest"](/docs/dbt-versions/cloud-release-tracks) and dbt Core v1.9 or higher.
+[dbt Cloud "最新"](/docs/dbt-versions/cloud-release-tracks) および dbt Core v1.9 以降でご利用いただけます。
 
-If you use a custom microbatch macro, set a [distinct behavior flag](/reference/global-configs/behavior-changes#custom-microbatch-strategy) in your `dbt_project.yml` to enable batched execution. If you don't have a custom microbatch macro, you don't need to set this flag as dbt will handle microbatching automatically for any model using the [microbatch strategy](#how-microbatch-compares-to-other-incremental-strategies).
+カスタムマイクロバッチマクロを使用する場合は、`dbt_project.yml` で [distinct behavior flag](/reference/global-configs/behavior-changes#custom-microbatch-strategy) を設定してバッチ実行を有効にしてください。カスタムマイクロバッチマクロがない場合は、このフラグを設定する必要はありません。dbt は [microbatch strategy](#how-microbatch-compares-to-other-incremental-strategies) を使用するすべてのモデルに対してマイクロバッチ処理を自動的に処理します。
 
-Read and participate in the discussion: [dbt-core#10672](https://github.com/dbt-labs/dbt-core/discussions/10672). Refer to [Supported incremental strategies by adapter](/docs/build/incremental-strategy#supported-incremental-strategies-by-adapter) for a list of supported adapters. 
+ディスカッションをお読みになり、ご参加ください: [dbt-core#10672](https://github.com/dbt-labs/dbt-core/discussions/10672)サポートされているアダプタのリストについては、[アダプタ別にサポートされている増分戦略](/docs/build/incremental-strategy#supported-incremental-strategies-by-adapter)を参照してください。
 
 :::
 
-## What is "microbatch" in dbt?
+## dbt における「マイクロバッチ」とは何ですか？
 
-Incremental models in dbt are a [materialization](/docs/build/materializations) designed to efficiently update your data warehouse tables by only transforming and loading _new or changed data_ since the last run. Instead of reprocessing an entire dataset every time, incremental models process a smaller number of rows, and then append, update, or replace those rows in the existing table. This can significantly reduce the time and resources required for your data transformations.
+dbt の増分モデルは、前回の実行以降に追加された新しいデータまたは変更されたデータのみを変換してロードすることで、データウェアハウス テーブルを効率的に更新するように設計された [マテリアライゼーション](/docs/build/materializations) です。増分モデルでは、データセット全体を毎回再処理するのではなく、少数の行を処理し、既存のテーブルにそれらの行を追加、更新、または置換します。これにより、データ変換に必要な時間とリソースを大幅に削減できます。
 
-Microbatch is an incremental strategy designed for large time-series datasets:
-- It relies solely on a time column ([`event_time`](/reference/resource-configs/event-time)) to define time-based ranges for filtering. Set the `event_time` column for your microbatch model and its direct parents (upstream models). Note, this is different to `partition_by`, which groups rows into partitions.
-- It complements, rather than replaces, existing incremental strategies by focusing on efficiency and simplicity in batch processing.
-- Unlike traditional incremental strategies, microbatch enables you to [reprocess failed batches](/docs/build/incremental-microbatch#retry), auto-detect [parallel batch execution](/docs/build/parallel-batch-execution), and eliminate the need to implement complex conditional logic for [backfilling](#backfills).
+マイクロバッチは、大規模な時系列データセット向けに設計された増分戦略です。
+- フィルタリングのための時間ベースの範囲を定義するために、時間列（[`event_time`](/reference/resource-configs/event-time)）のみを使用します。マイクロバッチモデルとその直接の親（上流モデル）に `event_time` 列を設定します。これは、行をパーティションにグループ化する `partition_by` とは異なることに注意してください。
+- マイクロバッチは、バッチ処理の効率性とシンプルさに重点を置くことで、既存の増分戦略を置き換えるのではなく、補完します。
+- 従来の増分戦略とは異なり、マイクロバッチでは、[失敗したバッチの再処理](/docs/build/incremental-microbatch#retry)、[並列バッチ実行](/docs/build/parallel-batch-execution)、[バックフィル](#backfills)のための複雑な条件ロジックの実装が不要になります。
 
-- Note, microbatch might not be the best strategy for all use cases. Consider other strategies for use cases such as not having a reliable `event_time` column or if you want more control over the incremental logic. Read more in [How `microbatch` compares to other incremental strategies](#how-microbatch-compares-to-other-incremental-strategies).
+- マイクロバッチは、すべてのユースケースに最適な戦略ではないことに注意してください。信頼性の高い `event_time` 列がない場合や、増分ロジックをより細かく制御する必要がある場合など、ユースケースによっては他の戦略を検討してください。詳しくは、[`microbatch` と他の増分戦略の比較](#how-microbatch-compares-to-other-incremental-strategies)をご覧ください。
 
-## How microbatch works
+## マイクロバッチの仕組み
 
-When dbt runs a microbatch model — whether for the first time, during incremental runs, or in specified backfills — it will split the processing into multiple queries (or "batches"), based on the `event_time` and `batch_size` you configure.
+dbt がマイクロバッチモデルを実行する際（初回実行時、増分実行時、または指定されたバックフィル時）、設定された `event_time` と `batch_size` に基づいて、処理が複数のクエリ（または「バッチ」）に分割されます。
 
-Each "batch" corresponds to a single bounded time period (by default, a single day of data). Where other incremental strategies operate only on "old" and "new" data, microbatch models treat every batch as an atomic unit that can be built or replaced on its own. Each batch is independent and <Term id="idempotent" />. 
+各「バッチ」は、単一の限定された期間（デフォルトでは 1 日分のデータ）に対応します。他の増分戦略が「古い」データと「新しい」データのみを処理するのに対し、マイクロバッチモデルでは、すべてのバッチを個別に構築または置換できるアトミック単位として扱います。各バッチは独立しており、<Term id="idempotent" /> です。
 
-This is a powerful abstraction that makes it possible for dbt to run batches [separately](#backfills), concurrently, and [retry](#retry) them independently.
+これは強力な抽象化であり、dbt がバッチを [個別に](#バックフィル)、並行して実行し、個別に [再試行](#retry) することを可能にします。
 
-### Adapter-specific behavior
+### アダプタ固有の動作
 
-dbt's microbatch strategy uses the most efficient mechanism available for "full batch" replacement on each adapter. This can vary depending on the adapter:
+dbt のマイクロバッチ戦略は、各アダプタで利用可能な最も効率的な「フルバッチ」置換メカニズムを使用します。これはアダプタによって異なります。
 
-- `dbt-postgres`: Uses the `merge` strategy, which performs "update" or "insert" operations.
-- `dbt-redshift`: Uses the `delete+insert` strategy, which "inserts" or "replaces."
-- `dbt-snowflake`: Uses the `delete+insert` strategy, which "inserts" or "replaces."
-- `dbt-bigquery`: Uses the `insert_overwrite` strategy, which "inserts" or "replaces."
-- `dbt-spark`: Uses the `insert_overwrite` strategy, which "inserts" or "replaces."
-- `dbt-databricks`: Uses the `replace_where` strategy, which "inserts" or "replaces." 
+- `dbt-postgres`: `merge` 戦略を使用し、「更新」または「挿入」操作を実行します。
+- `dbt-redshift`: `delete+insert` 戦略を使用し、「挿入」または「置換」を実行します。
+- `dbt-snowflake`: `delete+insert` 戦略を使用し、「挿入」または「置換」を実行します。
+- `dbt-bigquery`: `insert_overwrite` 戦略を使用し、「挿入」または「置換」を実行します。
+- `dbt-spark`: `insert_overwrite` 戦略を使用し、「挿入」または「置換」を実行します。
+- `dbt-databricks`: 「挿入」または「置換」を行う `replace_where` 戦略を使用します。
 
-Check out the [supported incremental strategies by adapter](/docs/build/incremental-strategy#supported-incremental-strategies-by-adapter) for more info.
+詳細については、[アダプタ別にサポートされている増分戦略](/docs/build/incremental-strategy#supported-incremental-strategies-by-adapter) をご覧ください。
 
-## Example
+## 例
 
-A `sessions` model aggregates and enriches data that comes from two other models:
-- `page_views` is a large, time-series table. It contains many rows, new records almost always arrive after existing ones, and existing records rarely update. It uses the `page_view_start` column as its `event_time`.
-- `customers` is a relatively small dimensional table. Customer attributes update often, and not in a time-based manner — that is, older customers are just as likely to change column values as newer customers. The customers model doesn't configure an `event_time` column.
+`sessions` モデルは、他の 2 つのモデルから取得したデータを集約し、拡充します。
+- `page_views` は大規模な時系列テーブルです。多数の行が含まれ、新しいレコードはほとんどの場合既存のレコードよりも後に追加され、既存のレコードはほとんど更新されません。`page_view_start` 列が `event_time` として使用されます。
+- `customers` は比較的小規模なディメンションテーブルです。顧客属性は頻繁に更新されますが、時間ベースではありません。つまり、古い顧客も新しい顧客と同様に列の値を変更する可能性があります。customers モデルでは `event_time` 列は設定されません。
 
-As a result:
+結果：
 
-- Each batch of `sessions` will filter `page_views` to the equivalent time-bounded batch.
-- The `customers` table isn't filtered, resulting in a full scan for every batch. 
+- `sessions` の各バッチは、`page_views` を同等の時間制限付きバッチにフィルタリングします。
+- `customers` テーブルはフィルタリングされないため、すべてのバッチでフルスキャンが実行されます。
 
 :::tip
-In addition to configuring `event_time` for the target table, you should also specify it for any upstream models that you want to filter, even if they have different time columns.
+ターゲット テーブルに `event_time` を構成することに加えて、時間列が異なる場合でも、フィルタリングするアップストリーム モデルに対してこれを指定する必要があります。
 :::
 
 <File name="models/staging/page_views.yml">
@@ -73,13 +73,13 @@ models:
 ```
 </File>
 
-We run the `sessions` model for October 1, 2024, and then again for October 2. It produces the following queries:
+2024 年 10 月 1 日に `sessions` モデルを実行し、その後 10 月 2 日に再度実行します。次のクエリが生成されます。
 
 <Tabs>
 
 <TabItem value="Model definition">
 
-The [`event_time`](/reference/resource-configs/event-time) for the `sessions` model is set to `session_start`, which marks the beginning of a user’s session on the website. This setting allows dbt to combine multiple page views (each tracked by their own `page_view_start` timestamps) into a single session. This way, `session_start` differentiates the timing of individual page views from the broader timeframe of the entire user session.
+`sessions` モデルの [`event_time`](/reference/resource-configs/event-time) は `session_start` に設定されており、これはウェブサイトにおけるユーザーのセッションの開始を示します。この設定により、dbt は複数のページビュー（それぞれが独自の `page_view_start` タイムスタンプで追跡されます）を 1 つのセッションにまとめることができます。これにより、`session_start` は個々のページビューのタイミングを、ユーザーセッション全体のより広範な時間枠から区別します。
   
 <File name="models/sessions.sql">
 
@@ -181,31 +181,31 @@ customers as (
 
 </Tabs>
 
-dbt will instruct the data platform to take the result of each batch query and [insert, update, or replace](#adapter-specific-behavior) the contents of the `analytics.sessions` table for the same day of data. To perform this operation, dbt will use the most efficient atomic mechanism for "full batch" replacement that is available on each data platform. For details, see [How microbatch works](#how-microbatch-works).
+dbt はデータ プラットフォームに対し、各バッチ クエリの結果を取得し、同じ日のデータの `analytics.sessions` テーブルの内容を [挿入、更新、または置換](#adapter-specific-behavior) するよう指示します。この操作を実行するために、dbt は各データ プラットフォームで利用可能な「フルバッチ」置換のための最も効率的なアトミック メカニズムを使用します。詳細については、[マイクロバッチの仕組み](#how-microbatch-works) をご覧ください。
 
-It does not matter whether the table already contains data for that day. Given the same input data, the resulting table is the same no matter how many times a batch is reprocessed.
+テーブルにその日のデータが既に含まれていても問題ありません。同じ入力データであれば、バッチを何度再処理しても、結果のテーブルは同じになります。
 
 <Lightbox src="/img/docs/building-a-dbt-project/microbatch/microbatch_filters.png" title="Each batch of sessions filters page_views to the matching time-bound batch, but doesn't filter sessions, performing a full scan for each batch."/>
 
-## Relevant configs
+## 関連する設定
 
-Several configurations are relevant to microbatch models, and some are required:
+マイクロバッチモデルには関連する設定がいくつかあり、そのうちのいくつかは必須です:
 
 
 | Config   |  Description   | Default | Type | Required  |
 |----------|---------------|---------|------|---------|
-| [`event_time`](/reference/resource-configs/event-time)  | The column indicating "at what time did the row occur." Required for your microbatch model and any direct parents that should be filtered.   | N/A     |  Column  |  Required |
-| [`begin`](/reference/resource-configs/begin)      |  The "beginning of time" for the microbatch model. This is the starting point for any initial or full-refresh builds. For example, a daily-grain microbatch model run on `2024-10-01` with `begin = '2023-10-01` will process 366 batches (it's a leap year!) plus the batch for "today."        | N/A     | Date   | Required |
-| [`batch_size`](/reference/resource-configs/batch-size) |  The granularity of your batches. Supported values are `hour`, `day`, `month`, and `year`    | N/A     | String  | Required |
-| [`lookback`](/reference/resource-configs/lookback)   | Process X batches prior to the latest bookmark to capture late-arriving records.    | `1`     | Integer | Optional |
-| [`concurrent_batches`](/reference/resource-properties/concurrent_batches) | Overrides dbt's auto detect for running batches concurrently (at the same time). Read more about [configuring concurrent batches](/docs/build/incremental-microbatch#configure-concurrent_batches). Setting to <br />* `true` runs batches concurrently (in parallel). <br />* `false` runs batches sequentially (one after the other).  | `None` | Boolean | Optional |
+| [`event_time`](/reference/resource-configs/event-time)  | 「行が発生した時刻」を示す列。マイクロバッチ モデルおよびフィルタリングする必要がある直接の親に必須です。 | N/A     |  Column  |  Required |
+| [`begin`](/reference/resource-configs/begin)      | マイクロバッチモデルの「開始時刻」。これは、初期ビルドまたはフルリフレッシュビルドの開始点となります。例えば、`begin = '2023-10-01` で `2024-10-01` に日単位のマイクロバッチモデルを実行すると、366 バッチ（うるう年です！）に加えて「今日」のバッチが処理されます。 | N/A     | Date   | Required |
+| [`batch_size`](/reference/resource-configs/batch-size) | バッチの粒度。サポートされている値は「時間」、「日」、「月」、「年」です。 | N/A     | String  | Required |
+| [`lookback`](/reference/resource-configs/lookback)   | 遅れて到着したレコードを取得するために、最新のブックマークの前に X バッチを処理します。  | `1`     | Integer | Optional |
+| [`concurrent_batches`](/reference/resource-properties/concurrent_batches) | バッチを同時実行するための dbt の自動検出をオーバーライドします。詳細については、[同時実行バッチの設定](/docs/build/incremental-microbatch#configure-concurrent_batches) を参照してください。<br />* `true` に設定すると、バッチが同時（並列）に実行されます。<br />* `false` に設定すると、バッチが順次（1 つずつ）実行されます。 | `None` | Boolean | Optional |
 
 <Lightbox src="/img/docs/building-a-dbt-project/microbatch/event_time.png" title="The event_time column configures the real-world time of this record"/>
 
-### Required configs for specific adapters
-Some adapters require additional configurations for the microbatch strategy. This is because each adapter implements the microbatch strategy differently.
+### 特定のアダプタに必要な構成
+一部のアダプタでは、マイクロバッチ戦略のために追加の構成が必要です。これは、アダプタごとにマイクロバッチ戦略の実装が異なるためです。
 
-The following table lists the required configurations for the specific adapters, in addition to the standard microbatch configs:
+次の表は、標準のマイクロバッチ構成に加えて、特定のアダプタに必要な構成を示しています。
 
 | Adapter  | `unique_key` config | `partition_by` config |
 |----------|------------------|--------------------|
@@ -213,7 +213,7 @@ The following table lists the required configurations for the specific adapters,
 | [`dbt-spark`](/reference/resource-configs/spark-configs#incremental-models)    | N/A | ✅ Required |
 | [`dbt-bigquery`](/reference/resource-configs/bigquery-configs#merge-behavior-incremental-models) | N/A | ✅ Required |
 
-For example, if you're using `dbt-postgres`, configure `unique_key` as follows:
+たとえば、`dbt-postgres` を使用している場合は、`unique_key` を次のように設定します。
 
 <File name="models/sessions.sql">
 
@@ -237,38 +237,38 @@ from {{ source('sales', 'transactions') }}
 
 ```
 
- In this example, `unique_key` is required because `dbt-postgres` microbatch uses the `merge` strategy, which needs a `unique_key` to identify which rows in the data warehouse need to get merged. Without a `unique_key`, dbt won't be able to match rows between the incoming batch and the existing table.
+この例では、`dbt-postgres` マイクロバッチが `merge` 戦略を使用するため、`unique_key` が必要です。この戦略では、データウェアハウス内のどの行をマージする必要があるかを識別するために `unique_key` が必要です。`unique_key` がないと、dbt は入力バッチと既存のテーブル間で行を一致させることができません。
 
 </File>
 
-### Full refresh
+### フルリフレッシュ
 
-As a best practice, we recommend [configuring `full_refresh: false`](/reference/resource-configs/full_refresh) on microbatch models so that they ignore invocations with the `--full-refresh` flag. If you need to reprocess historical data, do so with a targeted backfill that specifies explicit start and end dates.
+ベストプラクティスとして、マイクロバッチモデルで [`full_refresh: false` を設定](/reference/resource-configs/full_refresh) し、`--full-refresh` フラグを指定した呼び出しを無視することを推奨します。履歴データを再処理する必要がある場合は、開始日と終了日を明示的に指定したターゲットバックフィルを使用してください。
 
-## Usage
+## 使用方法
 
-**You must write your model query to process (read and return) exactly one "batch" of data**. This is a simplifying assumption and a powerful one:
-- You don’t need to think about `is_incremental` filtering
-- You don't need to pick among DML strategies (upserting/merging/replacing)
-- You can preview your model, and see the exact records for a given batch that will appear when that batch is processed and written to the table
+**モデルクエリは、正確に 1 つの「バッチ」のデータだけを処理（読み取りと返却）するように記述する必要があります**。これは、単純化のための前提であり、かつ強力な前提です。
+- `is_incremental` フィルタリングについて考える必要はありません。
+- DML 戦略（upsert/merge/replace）から選択する必要はありません。
+- モデルをプレビューし、特定のバッチが処理されてテーブルに書き込まれたときに表示されるレコードを正確に確認できます。
 
-When you run a microbatch model, dbt will evaluate which batches need to be loaded, break them up into a SQL query per batch, and load each one independently.
+マイクロバッチモデルを実行すると、dbt はロードする必要があるバッチを評価し、バッチごとに SQL クエリに分割して、それぞれを個別にロードします。
 
-dbt will automatically filter upstream inputs (`source` or `ref`) that define `event_time`, based on the `lookback` and `batch_size` configs for this model.
+dbt は、このモデルの `lookback` および `batch_size` 設定に基づいて、`event_time` を定義する上流の入力（`source` または `ref`）を自動的にフィルタリングします。
 
-During standard incremental runs, dbt will process batches according to the current timestamp and the configured `lookback`, with one query per batch.
+標準の増分実行中、dbt は現在のタイムスタンプと構成された `lookback` に従ってバッチを処理し、バッチごとに 1 つのクエリを実行します。
 
 <Lightbox src="/img/docs/building-a-dbt-project/microbatch/microbatch_lookback.png" title="Configure a lookback to reprocess additional batches during standard incremental runs"/>
 
-**Note:** If there’s an upstream model that configures `event_time`, but you *don’t* want the reference to it to be filtered, you can specify `ref('upstream_model').render()` to opt-out of auto-filtering. This isn't generally recommended — most models that configure `event_time` are fairly large, and if the reference is not filtered, each batch will perform a full scan of this input table.
+**注:** 上流モデルで `event_time` を設定しているものの、その参照をフィルタリングしたくない場合は、`ref('upstream_model').render()` を指定して自動フィルタリングを無効にできます。ただし、これは一般的には推奨されません。`event_time` を設定するモデルの多くはかなり大きく、参照がフィルタリングされていない場合、各バッチでこの入力テーブル全体をスキャンしてしまうためです。
 
-## Backfills
+## バックフィル
 
-Whether to fix erroneous source data or retroactively apply a change in business logic, you may need to reprocess a large amount of historical data.
+エラーのあるソースデータを修正する場合でも、ビジネスロジックの変更を遡及的に適用する場合でも、大量の履歴データを再処理する必要がある場合があります。
 
-Backfilling a microbatch model is as simple as selecting it to run or build, and specifying a "start" and "end" for `event_time`. Note that `--event-time-start` and `--event-time-end` are mutually necessary, meaning that if you specify one, you must specify the other. 
+マイクロバッチモデルのバックフィルは、実行またはビルドを選択し、`event_time` に「開始」と「終了」を指定するだけです。`--event-time-start` と `--event-time-end` は相互に必要であり、一方を指定した場合はもう一方も必ず指定する必要があることに注意してください。
 
-As always, dbt will process the batches between the start and end as independent queries.
+dbt は、通常どおり、開始から終了までの間のバッチを独立したクエリとして処理します。
 
 ```bash
 dbt run --event-time-start "2024-09-01" --event-time-end "2024-09-04"
@@ -277,32 +277,32 @@ dbt run --event-time-start "2024-09-01" --event-time-end "2024-09-04"
 
 <Lightbox src="/img/docs/building-a-dbt-project/microbatch/microbatch_backfill.png" title="Configure a lookback to reprocess additional batches during standard incremental runs"/>
 
-## Retry
+## 再試行
 
-If one or more of your batches fail, you can use `dbt retry` to reprocess _only_ the failed batches.
+1 つ以上のバッチが失敗した場合、`dbt retry` を使用して、失敗したバッチのみを再処理できます。
 
 ![Partial retry](https://github.com/user-attachments/assets/f94c4797-dcc7-4875-9623-639f70c97b8f)
 
-## Timezones
+## タイムゾーン
 
-For now, dbt assumes that all values supplied are in UTC:
+現時点では、dbt は指定されたすべての値が UTC であると想定しています。
 
 - `event_time`
 - `begin`
 - `--event-time-start`
 - `--event-time-end`
 
-While we may consider adding support for custom time zones in the future, we also believe that defining these values in UTC makes everyone's lives easier.
+将来的にはカスタムタイムゾーンのサポートを追加することも検討していますが、これらの値を UTC で定義することで、皆様の作業が楽になると考えています。
 
-## How microbatch compares to other incremental strategies
+## マイクロバッチと他の増分戦略の比較
 
-As data warehouses roll out new operations for concurrently replacing/upserting data partitions, we may find that the new operation for the data warehouse is more efficient than what the adapter uses for microbatch. In such instances, we reserve the right the update the default operation for microbatch, so long as it works as intended/documented for models that fit the microbatch paradigm.
+データウェアハウスがデータパーティションの同時置換/更新のための新しい操作を導入するにつれ、データウェアハウスの新しい操作が、アダプタがマイクロバッチで使用する操作よりも効率的であることが判明する場合があります。このような場合、マイクロバッチパラダイムに適合するモデルにおいて意図されたとおりに/ドキュメント化されたとおりに動作する限り、マイクロバッチのデフォルト操作を更新する権利を留保します。
 
-Most incremental models rely on the end user (you) to explicitly tell dbt what "new" means, in the context of each model, by writing a filter in an `{% if is_incremental() %}` conditional block. You are responsible for crafting this SQL in a way that queries [`{{ this }}`](/reference/dbt-jinja-functions/this) to check when the most recent record was last loaded, with an optional look-back window for late-arriving records. 
+ほとんどの増分モデルでは、エンドユーザー（お客様）が `{% if is_incremental() %}` 条件ブロックにフィルターを記述することで、各モデルのコンテキストにおける「新しい」意味を dbt に明示的に伝える必要があります。[`{{ this }}`](/reference/dbt-jinja-functions/this) をクエリして最新のレコードが最後にロードされた日時を確認し、オプションで遅れて到着したレコードのルックバックウィンドウを指定するような SQL を作成するのはお客様の責任です。
 
-Other incremental strategies will control _how_ the data is being added into the table — whether append-only `insert`, `delete` + `insert`, `merge`, `insert overwrite`, etc — but they all have this in common.
+他の増分戦略では、テーブルへのデータの追加方法（追加のみの `insert`、`delete` + `insert`、`merge`、`insert overwrite` など）を制御しますが、これらにはすべて共通点があります。
 
-As an example:
+例:
 
 ```sql
 {{
@@ -323,13 +323,13 @@ select * from {{ ref('stg_events') }}
 
 ```
 
-For this incremental model:
+この増分モデルでは、以下のようになります:
 
-- "New" records are those with a `date_day` greater than the maximum `date_day` that has previously been loaded
-- The lookback window is 3 days
-- When there are new records for a given `date_day`, the existing data for `date_day` is deleted and the new data is inserted
+- 「新しい」レコードとは、`date_day` が、以前に読み込まれた最大の `date_day` よりも大きいレコードです。
+- ルックバックウィンドウは 3 日間です。
+- 特定の `date_day` に新しいレコードがある場合、`date_day` の既存のデータは削除され、新しいデータが挿入されます。
 
-Let’s take our same example from before, and instead use the new `microbatch` incremental strategy:
+先ほどと同じ例で、新しい `microbatch` 増分戦略を使用してみましょう:
 
 <File name="models/staging/stg_events.sql">
 
@@ -351,7 +351,7 @@ select * from {{ ref('stg_events') }} -- this ref will be auto-filtered
 
 </File>
 
-Where you’ve also set an `event_time` for the model’s direct parents - in this case, `stg_events`:
+モデルの直接の親（この場合は `stg_events`）にも `event_time` を設定しています:
 
 <File name="models/staging/stg_events.yml">
 
@@ -364,11 +364,11 @@ models:
 
 </File>
 
-And that’s it!
+これで完了です！
 
-When you run the model, each batch templates a separate query. For example, if you were running the model on October 1, dbt would template separate queries for each day between September 28 and October 1, inclusive — four batches in total.
+モデルを実行すると、各バッチで個別のクエリがテンプレート化されます。例えば、10月1日にモデルを実行した場合、dbtは9月28日から10月1日までの各日について個別のクエリをテンプレート化します（合計4つのバッチ）。
 
-The query for `2024-10-01` would look like:
+`2024-10-01` のクエリは次のようになります:
 
 <File name="target/compiled/staging/stg_events.sql">
 
@@ -382,4 +382,4 @@ select * from (
 
 </File>
 
-Based on your data platform, dbt will choose the most efficient atomic mechanism to insert, update, or replace these four batches (`2024-09-28`, `2024-09-29`, `2024-09-30`, and `2024-10-01`) in the existing table.
+データ プラットフォームに基づいて、dbt は最も効率的なアトミック メカニズムを選択して、既存のテーブルにこれら 4 つのバッチ (`2024-09-28`、`2024-09-29`、`2024-09-30`、および `2024-10-01`) を挿入、更新、または置換します。

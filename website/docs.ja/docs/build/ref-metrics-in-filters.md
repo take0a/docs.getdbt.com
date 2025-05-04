@@ -1,31 +1,31 @@
 ---
-title: "Metrics as dimensions with metric filters"
+title: "メトリックフィルターを使用したディメンションとしてのメトリック"
 id: "ref-metrics-in-filters"
-description: "Add metrics as dimensions to your metric filters to create more complex metrics and gain more insights."
+description: "メトリックをディメンションとしてメトリック フィルターに追加して、より複雑なメトリックを作成し、より多くの分析情報を得ることができます。"
 sidebar_label: "Metrics as dimensions"
 ---
 
-[Metrics](/docs/build/metrics-overview) provide users with valuable insights into their data, like number of active users and overall performance trends to inform business decisions. [Dimensions](/docs/build/dimensions), on the other hand, help categorize data through attributes, like user type or number of orders placed by a customer.
+[メトリクス](/docs/build/metrics-overview)は、アクティブユーザー数や全体的なパフォーマンス傾向など、ビジネス上の意思決定に役立つデータに関する貴重な分析情報をユーザーに提供します。一方、[ディメンション](/docs/build/dimensions)は、ユーザータイプや顧客の注文数などの属性に基づいてデータを分類するのに役立ちます。
 
-To make informed business decisions, some metrics need the value of another metric as part of the metric definition, leading us to "metrics as dimensions".
+情報に基づいたビジネス上の意思決定を行うには、一部の指標では、指標の定義の一部として別の指標の値が必要になります。そこで「ディメンションとしての指標」という考え方が登場します。
 
-This document explains how you can use metrics as dimensions with metric filters, enabling you to create more complex metrics and gain more insights. Available in dbt Cloud for versions 1.8 or higher.
+このドキュメントでは、指標フィルターを用いて指標をディメンションとして使用し、より複雑な指標を作成し、より多くのインサイトを得る方法について説明します。dbt Cloud バージョン 1.8 以降でご利用いただけます。
 
-## Reference a metric in a filter
+## フィルター内でのメトリックの参照
 
-Use the `Metric()` object syntax to reference a metric in the `where` filter for another metric. The function for referencing a metric accepts a metric name and exactly one entity:
+`Metric()` オブジェクト構文を使用して、`where` フィルター内で別のメトリックを参照します。メトリックを参照する関数は、メトリック名とエンティティを1つだけ受け入れます。
 
 ```yaml
 {{ Metric('metric_name', group_by=['entity_name']) }}
 ```
 
-### Usage example
+### 使用例
 
-As an example, a Software as a service (SaaS) company wants to count activated accounts. In this case, the definition of an activated account is an account with more than five data model runs.  
+例えば、SaaS（Software as a Service）企業が、アクティブ化されたアカウントをカウントしたいとします。この場合、アクティブ化されたアカウントとは、データモデルの実行回数が5回を超えるアカウントと定義されます。
 
-To express this metric in SQL, the company will:
-- Write a query to calculate the number of data model runs per account.
-- Then count the number of accounts who have more than five data model runs.
+この指標をSQLで表現するには、次の操作を行います。
+- アカウントごとのデータモデルの実行回数を計算するクエリを作成します。
+- 次に、データモデルの実行回数が5回を超えるアカウントの数をカウントします。
 
 <File name="models/model_name.sql">
 
@@ -60,16 +60,16 @@ from
 ```
 </File>
 
-  This SQL query calculates the number of `activated_accounts` by using the `data_model_runs` metric as a dimension for the user entity. It filters based on the metric value scoped to the account entity. You can express this logic at the query level or in the metric's YAML configuration.
+このSQLクエリは、ユーザーエンティティのディメンションとして「data_model_runs」メトリックを使用し、「activated_accounts」の数を計算します。アカウントエンティティにスコープ設定されたメトリック値に基づいてフィルタリングします。このロジックは、クエリレベルまたはメトリックのYAML設定で記述できます。
 
-#### YAML configuration
+#### YAML 構成
 
-Using the same `activated_accounts` example mentioned in [the usage example](#usage-example), the following YAML example explains how a company can create [semantic models](/docs/build/semantic-models) and [metrics](/docs/build/metrics-overview), and use the `Metric()` object to reference the `data_model_runs` metric in the `activated_accounts` metric filter:
+[使用例](#usage-example) で説明したのと同じ `activated_accounts` の例を使用して、次の YAML 例では、企業が [セマンティックモデル](/docs/build/semantic-models) と [メトリクス](/docs/build/metrics-overview) を作成し、`Metric()` オブジェクトを使用して `activated_accounts` メトリクスフィルターで `data_model_runs` メトリクスを参照する方法を説明します。
 
-- Create two semantic models: `model_runs` and `accounts`.
-- Create a `measure` and `metric` to count data model runs, and another measure to count users.
-- Specify the foreign entity `account` in the `model_runs` semantic model.
-- Then create the `Activated Accounts` metric by filtering accounts that have more than five data model runs.
+- 2 つのセマンティックモデル (`model_runs` と `accounts`) を作成します。
+- データモデルの実行回数をカウントする `measure` と `metric`、およびユーザー数をカウントする別のメジャーを作成します。
+- `model_runs` セマンティックモデルで、外部エンティティ `account` を指定します。
+- 次に、データモデルの実行回数が 5 回を超えるアカウントをフィルタリングして、`Activated Accounts` メトリクスを作成します。
 
   <File name="models/metrics/semantic_model.yml">
 
@@ -109,9 +109,9 @@ Using the same `activated_accounts` example mentioned in [the usage example](#us
   ```
   </File>
 
-  Let’s break down the SQL the system generates based on the metric definition when you run `dbt sl query --metrics activated_accounts` from the command line interface:
+  コマンドライン インターフェースから `dbt sl query --metrics activated_accounts` を実行したときに、システムがメトリック定義に基づいて生成する SQL を詳しく見てみましょう:
 
-- The filter `{{ Metric('data_model_runs', group_by=['account']) }}` generates SQL similar to the `data_models_per_user` sub-query shown earlier:
+- フィルター `{{ Metric('data_model_runs', group_by=['account']) }}` は、前に示した `data_models_per_user` サブクエリに似た SQL を生成します:
 
 	```sql
 	select
@@ -123,7 +123,7 @@ Using the same `activated_accounts` example mentioned in [the usage example](#us
 		account
 	```
 
-- MetricFlow joins this query to the query generated by the `accounts` measure on the group by elements and applies the filter conditions:
+- MetricFlow は、このクエリを、group by 要素の `accounts` メジャーによって生成されたクエリに結合し、フィルター条件を適用します:
 
 	```sql
 	select
@@ -140,7 +140,7 @@ Using the same `activated_accounts` example mentioned in [the usage example](#us
   where data_model_runs > 5
 	```
 
-  The intermediate tables used to create this metric is: Accounts with the `data_model_runs` dimension
+  この指標を作成するために使用される中間テーブルは次のとおりです: `data_model_runs` ディメンションを持つアカウント
 
   | account | data_model runs |
   | --- | --- |
@@ -149,28 +149,28 @@ Using the same `activated_accounts` example mentioned in [the usage example](#us
   | 3 | 9 |
   | 4 | 1 |
 
-  MetricFlow then filters this table to accounts with more than 5 data model runs and counts the number of accounts that meet this criteria:
+  次に、MetricFlow はこのテーブルを、データ モデル実行回数が 5 回を超えるアカウントにフィルターし、次の条件を満たすアカウントの数をカウントします:
 
   | activated_accounts |
   | --- |
   | 2 |
 
-#### Query filter
+#### クエリフィルター
 
-You can also use metrics in filters at the query level. Run this command in the command line interface (CLI) to generate the same SQL query referenced earlier:
+クエリレベルのフィルターでメトリクスを使用することもできます。コマンドラインインターフェース (CLI) で次のコマンドを実行すると、前述のSQLクエリと同じものが生成されます。
 
 ```dbt sl query --metrics accounts --where "{{ Metric('data_model_runs', group_by=['account']) }} > 5"```
 
-The resulting SQL and data will be the same, except with the `accounts` metric name instead of `activated_accounts`.
+結果の SQL とデータは、`activated_accounts` ではなく `accounts` メトリック名を使用することを除いて同じになります。
 
-## Considerations
+## 考慮事項
 
-- When using a metric filter, ensure the sub-query can join to the outer query without fanning out the result (unexpectedly increasing the number of rows).
-  - The example that filters the accounts measure using `{{ Metric('data_model_runs', group_by=['account']) }}` is valid because it aggregates the model runs to the account level.
-  - However, filtering the 'accounts' measure by `{{ Metric('data_model_runs', group_by=['model']) }}` isn't valid due to a one-to-many relationship between accounts and model runs, leading to duplicate data.
-- You can only group a metric by one entity. The ability to support grouping by multiple entities and dimensions is pending.
-- In the future, you can use metrics as dimensions for some of the following example use cases:
-  - User segments: Segment users by using the number of orders placed by a user in the last 7 days as a dimension.
-  - Churn prediction: Use the number of support tickets an account submitted in the first 30 days to predict potential churn.
-  - Activation tracking: Define account or user activation based on the specific actions taken within a certain number of days after signing up.
-  - Support for metric filters requiring multi-hop joins is pending.
+- メトリックフィルターを使用する場合は、サブクエリが外部クエリに結合できることを確認してください。結合の結果がファンアウト（行数が予期せず増加）しないようにする必要があります。
+  - `{{ Metric('data_model_runs', group_by=['account']) }}` を使用してアカウントメジャーをフィルタリングする例は、モデル実行をアカウントレベルで集計するため有効です。
+  - ただし、`{{ Metric('data_model_runs', group_by=['model']) }}` を使用して「アカウント」メジャーをフィルタリングすることは、アカウントとモデル実行の間に1対多の関係があるため有効ではなく、データが重複します。
+- メトリックは1つのエンティティでのみグループ化できます。複数のエンティティとディメンションによるグループ化のサポートは保留中です。
+- 今後、以下のユースケース例の一部において、指標をディメンションとして使用できるようになります。
+  - ユーザーセグメント：過去7日間のユーザーによる注文数をディメンションとして使用して、ユーザーをセグメント化します。
+  - チャーン予測：アカウントが最初の30日間に送信したサポートチケットの数を使用して、潜在的なチャーンを予測します。
+  - アクティベーショントラッキング：サインアップ後、一定日数以内に行われた特定のアクションに基づいて、アカウントまたはユーザーのアクティベーションを定義します。
+  - マルチホップ結合を必要とする指標フィルターのサポートは保留中です。

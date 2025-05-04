@@ -1,57 +1,57 @@
 ---
-title: "Hooks and operations"
-description: "Customize dbt workflows using hooks and operations."
+title: "フックと操作"
+description: "フックと操作を使用して dbt ワークフローをカスタマイズします。"
 id: "hooks-operations"
 ---
 
 import OnRunCommands from '/snippets/_onrunstart-onrunend-commands.md';
 
-## Related documentation
-* [pre-hook & post-hook](/reference/resource-configs/pre-hook-post-hook)
-* [on-run-start & on-run-end](/reference/project-configs/on-run-start-on-run-end)
-* [`run-operation` command](/reference/commands/run-operation)
+## 関連ドキュメント
+* [pre-hook と post-hook](/reference/resource-configs/pre-hook-post-hook)
+* [on-run-start と on-run-end](/reference/project-configs/on-run-start-on-run-end)
+* [`run-operation` コマンド](/reference/commands/run-operation)
 
-### Assumed knowledge
-* [Project configurations](/reference/dbt_project.yml.md)
-* [Model configurations](/reference/model-configs)
-* [Macros](/docs/build/jinja-macros#macros)
+### 前提知識
+* [プロジェクト構成](/reference/dbt_project.yml.md)
+* [モデル構成](/reference/model-configs)
+* [マクロ](/docs/build/jinja-macros#macros)
 
-## Getting started with hooks and operations
+## フックとオペレーションの使い方
 
-Effective database administration sometimes requires additional SQL statements to be run, for example:
-- Creating UDFs
-- Managing row- or column-level permissions
-- Vacuuming tables on Redshift
-- Creating partitions in Redshift Spectrum external tables
-- Resuming/pausing/resizing warehouses in Snowflake
-- Refreshing a pipe in Snowflake
-- Create a share on Snowflake
-- Cloning a database on Snowflake
+効果的なデータベース管理には、追加のSQL文の実行が必要になる場合があります。例えば、次のようなものがあります。
+- UDFの作成
+- 行レベルまたは列レベルの権限の管理
+- Redshift上のテーブルのバキューム処理
+- Redshift Spectrum外部テーブルへのパーティションの作成
+- Snowflake上のウェアハウスの再開/一時停止/サイズ変更
+- Snowflake上のパイプの更新
+- Snowflake上での共有の作成
+- Snowflake上のデータベースのクローン作成
 
-dbt provides hooks and operations so you can version control and execute these statements as part of your dbt project.
+dbtはフックとオペレーションを提供しており、これらのステートメントをdbtプロジェクトの一部としてバージョン管理および実行できます。
 
-## About hooks
+## フックについて
 
-Hooks are snippets of SQL that are executed at different times:
-  * `pre-hook`: executed _before_ a model, seed or snapshot is built.
-  * `post-hook`: executed _after_ a model, seed or snapshot is built.
-  * `on-run-start`: executed at the _start_ of <OnRunCommands/>
-  * `on-run-end`: executed at the _end_ of <OnRunCommands/>
+フックとは、異なるタイミングで実行されるSQL文のスニペットです。
+* `pre-hook`: モデル、シード、またはスナップショットが構築される _前_ に実行されます。
+* `post-hook`: モデル、シード、またはスナップショットが構築される _後_ に実行されます。
+* `on-run-start`: <OnRunCommands/> の _開始_ 時に実行されます。
+* `on-run-end`: <OnRunCommands/> の _終了_ 時に実行されます。
 
-Hooks are a more-advanced capability that enable you to run custom SQL, and leverage database-specific actions, beyond what dbt makes available out-of-the-box with standard materializations and configurations.
+フックは、dbt の標準のマテリアライゼーションと設定ですぐに使用できる機能を超えて、カスタムSQLを実行したり、データベース固有のアクションを活用できるようにする、より高度な機能です。
 
-If (and only if) you can't leverage the [`grants` resource-config](/reference/resource-configs/grants), you can use `post-hook` to perform more advanced workflows:
+[`grants` リソース構成](/reference/resource-configs/grants) を利用できない場合に限り、`post-hook` を使用してより高度なワークフローを実行できます。
 
-* Need to apply `grants` in a more complex way, which the dbt Core `grants` config doesn't (yet) support.
-* Need to perform post-processing that dbt does not support out-of-the-box. For example, `analyze table`, `alter table set property`, `alter table ... add row access policy`, etc.
+* より複雑な方法で `grants` を適用する必要があるが、dbt Core の `grants` 構成では（まだ）サポートされていない。
+* dbt が標準ではサポートしていない後処理を実行する必要がある場合。たとえば、`analyze table`、`alter table set property`、`alter table ... add row access policy` など。
 
-### Examples using hooks
+### フックの使用例
 
-You can use hooks to trigger actions at certain times when running an operation or building a model, seed, or snapshot.
+フックを使用すると、オペレーションの実行中、またはモデル、シード、スナップショットの作成中に、特定のタイミングでアクションをトリガーできます。
 
-For more information about when hooks can be triggered, see reference sections for [`on-run-start` and `on-run-end` hooks](/reference/project-configs/on-run-start-on-run-end) and [`pre-hook`s and `post-hook`s](/reference/resource-configs/pre-hook-post-hook).
+フックをトリガーできるタイミングの詳細については、[`on-run-start` フックと `on-run-end` フック](/reference/project-configs/on-run-start-on-run-end)、および [`pre-hook` フックと `post-hook` フック](/reference/resource-configs/pre-hook-post-hook) のリファレンスセクションを参照してください。
 
-You can use hooks to provide database-specific functionality not available out-of-the-box with dbt. For example, you can use a `config` block to run an `ALTER TABLE` statement right after building an individual model using a `post-hook`:
+フックを使用すると、dbt ではすぐに使用できないデータベース固有の機能を提供できます。たとえば、`config` ブロックを使用して、`post-hook` を使用して個々のモデルを作成した直後に `ALTER TABLE` ステートメントを実行できます:
 
 <File name='models/<model_name>.sql'>
 
@@ -66,9 +66,9 @@ You can use hooks to provide database-specific functionality not available out-o
 </File>
 
 
-### Calling a macro in a hook
+### フック内でのマクロの呼び出し
 
-You can also use a [macro](/docs/build/jinja-macros#macros) to bundle up hook logic. Check out some of the examples in the reference sections for [on-run-start and on-run-end hooks](/reference/project-configs/on-run-start-on-run-end) and [pre- and post-hooks](/reference/resource-configs/pre-hook-post-hook).
+[マクロ](/docs/build/jinja-macros#macros)を使用してフックロジックをまとめることもできます。[on-run-startフックとon-run-endフック](/reference/project-configs/on-run-start-on-run-end)、および[pre-hookとpost-hook](/reference/resource-configs/pre-hook-post-hook)のリファレンスセクションにある例をいくつかご確認ください。
 
 <File name='models/<model_name>.sql'>
 
@@ -105,15 +105,15 @@ models:
 
 </File>
 
-## About operations
+## オペレーションについて
 
-Operations are [macros](/docs/build/jinja-macros#macros) that you can run using the [`run-operation`](/reference/commands/run-operation) command. As such, operations aren't actually a separate resource in your dbt project — they are just a convenient way to invoke a macro without needing to run a model.
+オペレーションとは、[`run-operation`](/reference/commands/run-operation) コマンドを使って実行できる [マクロ](/docs/build/jinja-macros#macros) のことです。オペレーションは実際には dbt プロジェクト内の独立したリソースではなく、モデルを実行せずにマクロを呼び出すための便利な手段です。
 
-:::info Explicitly execute the SQL in an operation
-Unlike hooks, you need to explicitly execute a query within a macro, by using either a [statement block](/reference/dbt-jinja-functions/statement-blocks) or a helper macro like the [run_query](/reference/dbt-jinja-functions/run_query) macro. Otherwise, dbt will return the query as a string without executing it.
+:::info 操作内でSQLを明示的に実行する
+フックとは異なり、マクロ内でクエリを明示的に実行する必要があります。そのためには、[ステートメントブロック](/reference/dbt-jinja-functions/statement-blocks)または[run_query](/reference/dbt-jinja-functions/run_query)マクロなどのヘルパーマクロを使用します。そうでない場合、dbtはクエリを実行せずに文字列として返します。
 :::
 
-This macro performs a similar action as the above hooks:
+このマクロは上記のフックと同様のアクションを実行します:
 
 <File name='macros/grant_select.sql'>
 
@@ -133,7 +133,7 @@ This macro performs a similar action as the above hooks:
 
 </File>
 
-To invoke this macro as an operation, execute `dbt run-operation grant_select --args '{role: reporter}'`.
+このマクロを操作として呼び出すには、`dbt run-operation grant_select --args '{role: reporter}'` を実行します。
 
 ```
 $ dbt run-operation grant_select --args '{role: reporter}'
@@ -142,18 +142,18 @@ Privileges granted
 
 ```
 
-Full usage docs for the `run-operation` command can be found [here](/reference/commands/run-operation).
+`run-operation` コマンドの完全な使用方法については、[こちら](/reference/commands/run-operation) をご覧ください。
 
 
-## Additional examples
+## 追加例
 
-These examples from the community highlight some of the use-cases for hooks and operations!
+コミュニティからのこれらの例は、フックと操作のユースケースの一部を示しています。
 
-* [In-depth discussion of granting privileges using hooks and operations, for dbt Core versions prior to 1.2](https://discourse.getdbt.com/t/the-exact-grant-statements-we-use-in-a-dbt-project/430)
-* [Staging external tables](https://github.com/dbt-labs/dbt-external-tables)
-* [Performing a zero copy clone on Snowflake to reset a dev environment](https://discourse.getdbt.com/t/creating-a-dev-environment-quickly-on-snowflake/1151/2)
-* [Running `vacuum` and `analyze` on a Redshift warehouse](https://github.com/dbt-labs/redshift/tree/0.2.3/#redshift_maintenance_operation-source)
-* [Creating a Snowflake share](https://discourse.getdbt.com/t/how-drizly-is-improving-collaboration-with-external-partners-using-dbt-snowflake-shares/1110)
-* [Unloading files to S3 on Redshift](https://github.com/dbt-labs/redshift/tree/0.2.3/#unload_table-source)
-* [Creating audit events for model timing](https://github.com/dbt-labs/dbt-event-logging)
-* [Creating UDFs](https://discourse.getdbt.com/t/using-dbt-to-manage-user-defined-functions/18)
+* [フックとオペレーションを使用した権限付与の詳細な説明（dbt Core バージョン 1.2 より前）](https://discourse.getdbt.com/t/the-exact-grant-statements-we-use-in-a-dbt-project/430)
+* [外部テーブルのステージング](https://github.com/dbt-labs/dbt-external-tables)
+* [Snowflake でゼロコピークローンを実行して開発環境をリセットする](https://discourse.getdbt.com/t/creating-a-dev-environment-quickly-on-snowflake/1151/2)
+* [Redshift ウェアハウスで `vacuum` と `analyze` を実行する](https://github.com/dbt-labs/redshift/tree/0.2.3/#redshift_maintenance_operation-source)
+* [Snowflake の共有の作成](https://discourse.getdbt.com/t/how-drizly-is-improving-collaboration-with-external-partners-using-dbt-snowflake-shares/1110)
+* [Redshift 上の S3 へのファイルのアンロード](https://github.com/dbt-labs/redshift/tree/0.2.3/#unload_table-source)
+* [モデルタイミングの監査イベントの作成](https://github.com/dbt-labs/dbt-event-logging)
+* [UDF の作成](https://discourse.getdbt.com/t/using-dbt-to-manage-user-defined-functions/18)

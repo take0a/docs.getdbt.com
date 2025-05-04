@@ -1,25 +1,23 @@
 ---
-title: "Materializations"
-description: "Configure materializations in dbt to control how the SQL is run and resulting data is stored."
+title: "マテリアライゼーション"
+description: "dbt でマテリアライゼーションを構成して、SQL の実行方法と結果データの保存方法を制御します。"
 id: "materializations"
 pagination_next: "docs/build/incremental-models"
 ---
 
-## Overview
-<Term id="materialization">Materializations</Term> are strategies for persisting dbt models in a warehouse. There are five types of materializations built into dbt. They are:
+## 概要
+<Term id="materialization">マテリアライゼーション</Term>は、dbt モデルをウェアハウスに永続化するための戦略です。dbt には 5 種類のマテリアライゼーションが組み込まれています。それらは以下のとおりです。
 
 - <Term id="table" />
 - <Term id="view" />
-- incremental
-- ephemeral
-- materialized view
+- 増分
+- 一時
+- マテリアライズド・ビュー
 
-You can also configure [custom materializations](/guides/create-new-materializations?step=1) in dbt. Custom materializations are a powerful way to extend dbt's functionality to meet your specific needs. 
+dbt では、[カスタム マテリアライゼーション](/guides/create-new-materializations?step=1) を構成することもできます。カスタム マテリアライゼーションは、特定のニーズに合わせて dbt の機能を拡張する強力な手段です。
 
-
-## Configuring materializations
-By default, dbt models are materialized as "views". Models can be configured with a different materialization by supplying the [`materialized` configuration](/reference/resource-configs/materialized) parameter as shown in the following tabs.
-
+## マテリアライゼーションの設定
+デフォルトでは、dbt モデルは「ビュー」としてマテリアライズされます。以下のタブに示すように、[`materialized` 設定](/reference/resource-configs/materialized) パラメータを指定することで、モデルを異なるマテリアライゼーションで設定できます。
 <Tabs>
 
 <TabItem value="Project file">
@@ -57,7 +55,7 @@ models:
 
 <TabItem value="Model file">
 
-Alternatively, materializations can be configured directly inside of the model sql files. This can be useful if you are also setting [Performance Optimization] configs for specific models (for example, [Redshift specific configurations](/reference/resource-configs/redshift-configs) or [BigQuery specific configurations](/reference/resource-configs/bigquery-configs)).
+あるいは、マテリアライゼーションはモデルのSQLファイル内で直接設定することもできます。これは、特定のモデル（例えば、[Redshift固有の設定](/reference/resource-configs/redshift-configs)や[BigQuery固有の設定](/reference/resource-configs/bigquery-configs)）に対して[パフォーマンス最適化]設定も設定している場合に便利です。
 
 <File name='models/events/stg_event_log.sql'>
 
@@ -75,7 +73,7 @@ from ...
 
 <TabItem value="Property file">
 
-Materializations can also be configured in the model's `properties.yml` file.  The following example shows the `table` materialization type. For a complete list of materialization types, refer to [materializations](/docs/build/materializations#materializations).
+マテリアライゼーションは、モデルの `properties.yml` ファイルでも設定できます。次の例は、`table` マテリアライゼーションタイプを示しています。マテリアライゼーションタイプの完全なリストについては、[マテリアライゼーション](/docs/build/materializations#materializations) を参照してください。
 
 <File name='models/properties.yml'>
 
@@ -94,106 +92,98 @@ models:
 
 </Tabs>
 
-## Materializations
+## マテリアライゼーション
 
 
 ### View
-When using the `view` materialization, your model is rebuilt as a view on each run, via a `create view as` statement.
-* **Pros:** No additional data is stored, views on top of source data will always have the latest records in them.
-* **Cons:** Views that perform a significant transformation, or are stacked on top of other views, are slow to query.
-* **Advice:**
-    * Generally start with views for your models, and only change to another materialization when you notice performance problems.
-    * Views are best suited for models that do not do significant transformation, e.g. renaming, or recasting columns.
+`view` マテリアライゼーションを使用する場合、モデルは実行ごとに `create view as` ステートメントによってビューとして再構築されます。
+* **利点:** 追加データは保存されず、ソースデータの上に重ねられたビューには常に最新のレコードが含まれます。
+* **欠点:** 大幅な変換を実行するビュー、または他のビューの上に重ねられたビューは、クエリの実行速度が低下します。
+* **アドバイス:**
+  * 通常は、モデルをビューから開始し、パフォーマンスの問題に気付いた場合にのみ、別のマテリアライゼーションに変更してください。
+  * ビューは、列の名前変更や再キャストなどの大幅な変換を行わないモデルに最適です。
 
 ### Table
-When using the `table` materialization, your model is rebuilt as a <Term id="table" /> on each run, via a `create table as` statement.
-* **Pros:** Tables are fast to query
-* **Cons:**
-    * Tables can take a long time to rebuild, especially for complex transformations
-    * New records in underlying source data are not automatically added to the table
-* **Advice:**
-  * Use the table materialization for any models being queried by BI tools, to give your end user a faster experience
-  * Also use the table materialization for any slower transformations that are used by many downstream models
+`table` マテリアライゼーションを使用する場合、モデルは実行ごとに `create table as` ステートメントによって <Term id="table" /> として再構築されます。
+* **利点:** テーブルへのクエリが高速です。
+* **欠点:**
+  * 特に複雑な変換の場合、テーブルの再構築に時間がかかることがあります。
+  * 基になるソースデータの新しいレコードは、テーブルに自動的に追加されません。
+* **アドバイス:**
+  * BI ツールによってクエリされるモデルには、エンドユーザーのエクスペリエンスを高速化するために、テーブル マテリアライゼーションを使用してください。
+  * また、多くの下流モデルで使用される、処理速度の遅い変換にも、テーブル マテリアライゼーションを使用してください。
 
 
 ### Incremental
-`incremental` models allow dbt to insert or update records into a table since the last time that model was run.
-* **Pros:** You can significantly reduce the build time by just transforming new records
-* **Cons:** Incremental models require extra configuration and are an advanced usage of dbt. Read more about using incremental models [here](/docs/build/incremental-models).
-* **Advice:**
-    * Incremental models are best for event-style data
-    * Use incremental models when your `dbt run`s are becoming too slow (i.e. don't start with incremental models)
+`incremental` モデルを使用すると、dbt は前回のモデル実行以降にテーブルにレコードを挿入または更新できます。
+* **利点:** 新しいレコードを変換するだけでビルド時間を大幅に短縮できます。
+* **欠点:** 増分モデルは追加の設定が必要であり、dbt の高度な使用法となります。増分モデルの使用の詳細については、[こちら](/docs/build/incremental-models) をご覧ください。
+* **アドバイス:**
+  * 増分モデルはイベント形式のデータに最適です。
+  * `dbt の実行速度が遅くなりすぎている場合は、増分モデルを使用してください (つまり、増分モデルから始めないでください)。
 
 ### Ephemeral
-`ephemeral` models are not directly built into the database. Instead, dbt will interpolate the code from an ephemeral model into its dependent models using a common table expression (<Term id="cte" />). You can control the identifier for this CTE using a [model alias](/docs/build/custom-aliases), but dbt will always prefix the model identifier with `__dbt__cte__`.
+`ephemeral` モデルはデータベースに直接組み込まれるわけではありません。代わりに、dbt は共通テーブル式 (<Term id="cte" />) を使用して、エフェメラルモデルのコードを依存モデルに補間します。この CTE の識別子は [モデルエイリアス](/docs/build/custom-aliases) を使用して制御できますが、dbt は常にモデル識別子の先頭に `__dbt__cte__` を付加します。
 
-* **Pros:**
-    * You can still write reusable logic
-  - Ephemeral models can help keep your <Term id="data-warehouse" /> clean by reducing clutter (also consider splitting your models across multiple schemas by [using custom schemas](/docs/build/custom-schemas)).
-* **Cons:**
-    * You cannot select directly from this model.
-    * [Operations](/docs/build/hooks-operations#about-operations) (for example, macros called using [`dbt run-operation`](/reference/commands/run-operation) cannot `ref()` ephemeral nodes)
-    * Overuse of ephemeral materialization can also make queries harder to debug.
-    * Ephemeral materialization doesn't support [model contracts](/docs/collaborate/govern/model-contracts#where-are-contracts-supported).
-* **Advice:**  Use the ephemeral materialization for:
-    * very light-weight transformations that are early on in your DAG
-    * are only used in one or two downstream models, and
-    * do not need to be queried directly
+* **利点:**
+  * 再利用可能なロジックを記述できます
+  - エフェメラルモデルを使用すると、煩雑さが軽減され、<Term id="data-warehouse" /> を整理した状態に保つことができます ([カスタムスキーマ](/docs/build/custom-schemas) を使用してモデルを複数のスキーマに分割することも検討してください)。
+* **欠点:**
+  * このモデルから直接選択することはできません。
+  * [オペレーション](/docs/build/hooks-operations#about-operations) (たとえば、[`dbt run-operation`](/reference/commands/run-operation) を使用して呼び出されるマクロは、エフェメラルノードを `ref()` できません)
+  * エフェメラルマテリアライゼーションを過度に使用すると、クエリのデバッグが困難になることもあります。
+  * エフェメラルマテリアライゼーションは、[モデルコントラクト](/docs/collaborate/govern/model-contracts#where-are-contracts-supported) をサポートしていません。
+* **アドバイス:** エフェメラルマテリアライゼーションは次の場合に使用します。
+  * DAG の初期段階にある非常に軽量な変換
+  * 1 つまたは 2 つの下流モデルでのみ使用され、
+  * 直接クエリする必要がない変換
 
 ### Materialized View
 
-The `materialized_view` materialization allows the creation and maintenance of materialized views in the target database.
-Materialized views are a combination of a view and a table, and serve use cases similar to incremental models.
+`materialized_view` マテリアライズドにより、ターゲット データベースにマテリアライズド ビューを作成および管理できます。
+マテリアライズド ビューはビューとテーブルを組み合わせたもので、増分モデルと同様のユースケースで利用できます。
 
-* **Pros:**
-  * Materialized views combine the query performance of a table with the data freshness of a view
-  * Materialized views operate much like incremental materializations, however they are usually
-able to be refreshed without manual interference on a regular cadence (depending on the database), forgoing the regular dbt batch refresh
-required with incremental materializations
-  * `dbt run` on materialized views corresponds to a code deployment, just like views
-* **Cons:**
-  * Due to the fact that materialized views are more complex database objects, database platforms tend to have
-fewer configuration options available; see your database platform's docs for more details
-  * Materialized views may not be supported by every database platform
-* **Advice:**
-  * Consider materialized views for use cases where incremental models are sufficient, but you would like the data platform to manage the incremental logic and refresh.
+* **メリット:**
+  * マテリアライズド ビューは、テーブルのクエリ パフォーマンスとビューのデータの鮮度を組み合わせます。
+  * マテリアライズド ビューは増分マテリアライズドとほぼ同様に動作しますが、通常は手動による介入なしに定期的に更新できます (データベースによって異なります)。そのため、増分マテリアライズドで必要な定期的な dbt バッチ更新は不要です。
+  * マテリアライズド ビューに対する `dbt run` は、ビューと同様にコード デプロイメントに相当します。
+* **デメリット:**
+  * マテリアライズド ビューはより複雑なデータベース オブジェクトであるため、データベース プラットフォームでは利用できる構成オプションが少ない傾向があります。詳細については、データベースプラットフォームのドキュメントをご覧ください。
+  * マテリアライズドビューは、すべてのデータベースプラットフォームでサポートされているとは限りません。
+* **アドバイス:**
+  * 増分モデルで十分であるものの、増分ロジックと更新をデータプラットフォームで管理したいユースケースでは、マテリアライズドビューの使用を検討してください。
 
-#### Configuration Change Monitoring
+#### 構成変更の監視
 
-This materialization makes use of the [`on_configuration_change`](/reference/resource-configs/on_configuration_change)
-config, which aligns with the incremental nature of the namesake database object. This setting tells dbt to attempt to
-make configuration changes directly to the object when possible, as opposed to completely recreating
-the object to implement the updated configuration. Using `dbt-postgres` as an example, indexes can
-be dropped and created on the materialized view without the need to recreate the materialized view itself.
+このマテリアライズは、[`on_configuration_change`](/reference/resource-configs/on_configuration_change) 構成を利用します。これは、同名のデータベースオブジェクトの増分的な性質と一致しています。この設定により、dbt は、更新された構成を実装するためにオブジェクトを完全に再作成するのではなく、可能な場合はオブジェクトに直接構成変更を適用しようとします。`dbt-postgres` を例にすると、マテリアライズドビュー自体を再作成することなく、マテリアライズドビューのインデックスを削除および作成できます。
 
-#### Scheduled Refreshes
+#### スケジュールされた更新
 
-In the context of a `dbt run` command, materialized views should be thought of as similar to views.
-For example, a `dbt run` command is only needed if there is the potential for a change in configuration or sql;
-it's effectively a deploy action.
-By contrast, a `dbt run` command is needed for a table in the same scenarios *AND when the data in the table needs to be updated*.
-This also holds true for incremental and snapshot models, whose underlying relations are tables.
-In the table cases, the scheduling mechanism is either dbt Cloud or your local scheduler;
-there is no built-in functionality to automatically refresh the data behind a table.
-However, most platforms (Postgres excluded) provide functionality to configure automatically refreshing a materialized view.
-Hence, materialized views work similarly to incremental models with the benefit of not needing to run dbt to refresh the data.
-This assumes, of course, that auto refresh is turned on and configured in the model.
+`dbt run` コマンドのコンテキストでは、マテリアライズド・ビューはビューと同様に考えられます。
+たとえば、`dbt run` コマンドは、設定または SQL に変更の可能性がある場合にのみ必要です。これは実質的にはデプロイアクションです。
+一方、`dbt run` コマンドは、同じシナリオでテーブルに対して実行され、かつテーブル内のデータを更新する必要がある場合にも必要です。
+これは、テーブルを基盤とする増分モデルやスナップショットモデルにも当てはまります。
+テーブルの場合、スケジュールメカニズムは dbt Cloud またはローカルスケジューラのいずれかです。
+テーブルの背後にあるデータを自動的に更新する組み込み機能は用意されていません。
+ただし、ほとんどのプラットフォーム（Postgres を除く）では、マテリアライズド・ビューの自動更新を設定する機能が提供されています。
+したがって、マテリアライズド・ビューは増分モデルと同様に動作し、データを更新するために dbt を実行する必要がないという利点があります。
+もちろん、これは、自動更新がオンになっていて、モデル内で構成されていることを前提としています。
 
 :::info
-`dbt-snowflake` _does not_ support materialized views, it uses Dynamic Tables instead. For details, refer to [Snowflake specific configurations](/reference/resource-configs/snowflake-configs#dynamic-tables).
+`dbt-snowflake` はマテリアライズド・ビューをサポートしていません。代わりに動的テーブルを使用します。詳細については、[Snowflake 固有の設定](/reference/resource-configs/snowflake-configs#dynamic-tables) を参照してください。
 :::
 
-## Python materializations
+## Python のマテリアライゼーション
 
-Python models support two materializations:
+Python モデルは、以下の 2 つのマテリアライゼーションをサポートしています。
 - `table`
 - `incremental`
 
-Incremental Python models support all the same [incremental strategies](/docs/build/incremental-strategy) as their SQL counterparts. The specific strategies supported depend on your adapter.
+増分 Python モデルは、SQL モデルと同じ [増分戦略](/docs/build/incremental-strategy) をすべてサポートします。サポートされる具体的な戦略は、アダプタによって異なります。
 
-Python models can't be materialized as `view` or `ephemeral`. Python isn't supported for non-model resource types (like tests and snapshots).
+Python モデルは `view` または `ephemeral` としてマテリアライゼーションすることはできません。Python は、モデル以外のリソースタイプ（テストやスナップショットなど）ではサポートされていません。
 
-For incremental models, like SQL models, you will need to filter incoming tables to only new rows of data:
+SQL モデルなどの増分モデルでは、入力テーブルを新しいデータ行のみにフィルタリングする必要があります。
 
 <WHCode>
 
@@ -257,7 +247,7 @@ def model(dbt, session):
 
 </WHCode>
 
-**Note:** Incremental models are supported on BigQuery/Dataproc for the `merge` incremental strategy. The `insert_overwrite` strategy is not yet supported.
+**注:** BigQuery/Dataproc では、増分モデルは「merge」増分戦略でサポートされています。「insert_overwrite」戦略はまだサポートされていません。
 
 <Snippet path="discourse-help-feed-header" />
 <DiscourseHelpFeed tags="materialization"/>

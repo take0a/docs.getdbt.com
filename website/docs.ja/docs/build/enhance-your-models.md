@@ -1,6 +1,6 @@
 ---
-title: "Enhance your models"
-description: "Learn how you can enhance your models"
+title: "モデルを強化する"
+description: "モデルを強化する方法を学ぶ"
 pagination_next: "docs/build/materializations"
 pagination_prev: null
 ---
@@ -8,14 +8,14 @@ pagination_prev: null
 <div className="grid--2-col">
 
 <Card
-    title="Materializations"
-    body="Learn how to use materializations to make dbt models persist in a data platform."
+    title="マテリアライゼーション"
+    body="マテリアライゼーションを使用して dbt モデルをデータ プラットフォームに永続化する方法を学びます。"
     link="/docs/build/materializations"
     icon="dbt-bit"/>
 
 <Card
-    title="Incremental models"
-    body="Learn how to use incremental models so you can limit the amount of data that needs to be transformed."
+    title="増分モデル"
+    body="変換する必要があるデータの量を制限できるように、増分モデルを使用する方法を学習します。"
     link="/docs/build/incremental-models"
     icon="dbt-bit"/>
 

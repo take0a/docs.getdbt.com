@@ -1,12 +1,12 @@
 ---
-title: "Advanced data modeling"
+title: "高度なデータモデリング"
 description: "Learn about advanced topics for dbt Semantic Layer and MetricFlow, such as modeling workflows and more."
 pagination_prev: null
 ---
 
-The dbt Semantic Layer and MetricFlow are powerful tools that allow you to define metrics and semantic models in your dbt project. 
+dbt セマンティックレイヤーと MetricFlow は、dbt プロジェクトでメトリクスとセマンティックモデルを定義できる強力なツールです。
 
-This section covers advanced topics for the dbt Semantic Layer and MetricFlow, such as data modeling workflows, and more.
+このセクションでは、データモデリングワークフローなど、dbt セマンティックレイヤーと MetricFlow の高度なトピックについて説明します。
 <!--
 - [Fill null values for simple and derived or ratio metrics](/docs/build/fill-nulls-advanced) &mdash; Use `fill_nulls_with` to set null metric values to zero, ensuring numeric values for every data row, even with derived metrics.
 -->
@@ -14,14 +14,14 @@ This section covers advanced topics for the dbt Semantic Layer and MetricFlow, s
 <div className="grid--2-col">
 
 <Card
-    title="Fill null values for metrics"
-    body="Use <code>fill_nulls_with</code> to set null metric values to zero, ensuring numeric values for every data row."
+    title="メトリックのnull値を入力する"
+    body="<code>fill_nulls_with</code> を使用して null メトリック値をゼロに設定し、すべてのデータ行に数値が確保されるようにします。"
     link="/docs/build/fill-nulls-advanced"
     icon="dbt-bit"/>
 
 <Card
-    title="Metrics as dimensions with metric filters"
-    body="Add metrics as dimensions to your metric filters to create more complex metrics and gain more insights."
+    title="メトリックフィルターを使用したディメンションとしてのメトリック"
+    body="メトリックをディメンションとしてメトリック フィルターに追加して、より複雑なメトリックを作成し、より多くの分析情報を得ることができます。"
     link="/docs/build/ref-metrics-in-filters"
     icon="dbt-bit"/>
 

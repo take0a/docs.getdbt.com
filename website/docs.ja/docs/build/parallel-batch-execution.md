@@ -1,45 +1,45 @@
 ---
-title: "Parallel microbatch execution"
+title: 並列マイクロバッチ実行"
 sidebar_label: "Parallel microbatch execution"
 description: "Learn about the 'parallel batch execution' strategy for incremental models."
-intro_text: "Use parallel batch execution to process your microbatch models faster."
+intro_text: "並列バッチ実行を使用して、マイクロバッチ モデルをより高速に処理します。"
 ---
 
-The microbatch strategy offers the benefit of updating a model in smaller, more manageable batches. Depending on your use case, configuring your microbatch models to run in parallel offers faster processing, in comparison to running batches sequentially.
+マイクロバッチ戦略には、モデルをより小さく管理しやすいバッチで更新できるという利点があります。ユースケースによっては、マイクロバッチモデルを並列実行するように構成することで、バッチを順次実行する場合と比較して処理速度が向上します。
 
-Parallel batch execution means that multiple batches are processed at the same time, instead of one after the other (sequentially) for faster processing of your microbatch models.  
+並列バッチ実行とは、複数のバッチを順番に（順次）処理するのではなく、同時に処理することで、マイクロバッチモデルの処理速度を向上させることを意味します。
 
-dbt automatically detects whether a batch can be run in parallel in most cases, which means you don’t need to configure this setting. However, the [`concurrent_batches` config](/reference/resource-properties/concurrent_batches) is available as an override (not a gate), allowing you to specify whether batches should or shouldn’t be run in parallel in specific cases.
+dbt はほとんどの場合、バッチを並列実行できるかどうかを自動的に検出するため、この設定を行う必要はありません。ただし、[`concurrent_batches` 構成](/reference/resource-properties/concurrent_batches) はオーバーライド（ゲートではなく）として使用でき、特定のケースでバッチを並列実行するかどうかを指定できます。
 
-For example, if you have a microbatch model with 12 batches, you can execute those batches to run in parallel. Specifically they'll run in parallel limited by the number of [available threads](/docs/running-a-dbt-project/using-threads).
+たとえば、12 個のバッチを持つマイクロバッチモデルがある場合、それらのバッチを並列実行できます。具体的には、[利用可能なスレッド](/docs/running-a-dbt-project/using-threads)の数によって制限されて並列実行されます。
 
-## Prerequisites
+## 前提条件
 
-To use parallel execution, you must meet the following prerequisites:
+並列実行を使用するには、以下の前提条件を満たす必要があります。
 
-- Use Snowflake as a supported adapter.
-  - More adapters are coming soon!
-  - We'll continue to test and add concurrency support for more adapters in the future.
-- A batch can only be run in parallel if:
-  - The batch is _not_ the first batch.
-  - The batch is _not_ the last batch.
+- サポートされているアダプタとしてSnowflakeを使用してください。
+  - 今後、さらに多くのアダプタがサポートされる予定です。
+  - 今後、さらに多くのアダプタの同時実行サポートをテストし、追加していく予定です。
+- バッチを並列実行できるのは、以下の場合のみです。
+  - バッチが最初のバッチではないこと。
+  - バッチが最後のバッチではないこと。
 
-## How parallel batch execution works
+## 並列バッチ実行の仕組み
 
-After checking for the conditions in the [prerequisites](#prerequisites), and if `concurrent_batches` value isn't set, dbt will intelligently auto-detect if the model invokes the [`{{ this }}`](/reference/dbt-jinja-functions/this) Jinja function. If it references `{{ this }}`, the batches will run sequentially since  `{{ this }}` represents the database of the current model and referencing the same relation causes conflict. 
+[前提条件](#prerequisites) の条件をチェックした後、`concurrent_batches` 値が設定されていない場合、dbt はモデルが [`{{ this }}`](/reference/dbt-jinja-functions/this) Jinja 関数を呼び出すかどうかをインテリジェントに自動検出します。`{{ this }}` を参照している場合、`{{ this }}` は現在のモデルのデータベースを表し、同じリレーションを参照すると競合が発生するため、バッチは順次実行されます。
 
-Otherwise, if `{{ this }}` isn't detected (and other conditions are met), the batches will run in parallel, which can be overriden when you [set a value for `concurrent_batches`](/reference/resource-properties/concurrent_batches).
+それ以外の場合、`{{ this }}` が検出されず（他の条件が満たされている場合）、バッチは並列実行されます。これは、[`concurrent_batches` の値を設定する](/reference/resource-properties/concurrent_batches) ことでオーバーライドできます。
 
-## Parallel or sequential execution
+## 並列実行と順次実行
 
-Choosing between parallel batch execution and sequential processing depends on the specific requirements of your use case. 
+並列バッチ実行と順次処理のどちらを選択するかは、ユースケースの具体的な要件によって異なります。
 
-- Parallel batch execution is faster but requires logic independent of batch execution order. For example, if you're developing a data pipeline for a system that processes user transactions in batches, each batch is executed in parallel for better performance. However, the logic used to process each transaction shouldn't depend on the order of how batches are executed or completed.
-- Sequential processing is slower but essential for calculations like [cumulative metrics](/docs/build/cumulative)  in microbatch models. It processes data in the correct order, allowing each step to build on the previous one.
+- 並列バッチ実行は高速ですが、バッチ実行順序に依存しないロジックが必要です。たとえば、ユーザートランザクションをバッチで処理するシステムのデータパイプラインを開発している場合、パフォーマンスを向上させるために各バッチは並列実行されます。ただし、各トランザクションの処理に使用するロジックは、バッチの実行順序や完了順序に依存してはなりません。
+- 順次処理は低速ですが、マイクロバッチモデルにおける[累積メトリクス](/docs/build/cumulative)などの計算には不可欠です。シーケンシャル処理ではデータが正しい順序で処理されるため、各ステップは前のステップに基づいて構築されます。
 
-## Configure `concurrent_batches` 
+## `concurrent_batches` を設定する
 
-By default, dbt auto-detects whether batches can run in parallel for microbatch models, and this works correctly in most cases. However, you can override dbt's detection by setting the [`concurrent_batches` config](/reference/resource-properties/concurrent_batches) in your `dbt_project.yml` or model `.sql` file to specify parallel or sequential execution, given you meet all the [conditions](#prerequisites):
+デフォルトでは、dbt はマイクロバッチモデルでバッチを並列実行できるかどうかを自動検出し、ほとんどの場合正常に動作します。ただし、すべての [条件](#前提条件) を満たしている場合は、`dbt_project.yml` またはモデルの `.sql` ファイルで [`concurrent_batches` 設定](/reference/resource-properties/concurrent_batches) を設定して並列実行または順次実行を指定することにより、dbt の検出をオーバーライドできます。
 
 <Tabs>
 <TabItem value="yaml" label="dbt_project.yml">

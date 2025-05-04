@@ -1,6 +1,6 @@
 ---
-title: "Enhance your code"
-description: "Learn how you can enhance your code"
+title: "コードを強化する"
+description: "コードを強化する方法を学ぶ"
 pagination_next: "docs/build/project-variables"
 pagination_prev: null
 ---
@@ -8,26 +8,26 @@ pagination_prev: null
 <div className="grid--2-col">
 
 <Card
-    title="Environment variables"
-    body="Learn how you can use environment variables to customize the behavior of a dbt project."
+    title="環境変数"
+    body="環境変数を使用して dbt プロジェクトの動作をカスタマイズする方法を学習します。"
     link="/docs/build/environment-variables"
     icon="dbt-bit"/>
 
 <Card
-    title="Hooks and operations"
-    body="Learn how to use hooks to trigger actions and operations to invoke macros."
+    title="フックと操作"
+    body="フックを使用してアクションと操作をトリガーし、マクロを呼び出す方法を学習します。"
     link="/docs/build/hooks-operations"
     icon="dbt-bit"/>
 
 <Card
-    title="Packages"
-    body="Learn how you can leverage code reuse through packages (libraries)."
+    title="パッケージ"
+    body="パッケージ (ライブラリ) を通じてコードの再利用を活用する方法を学びます。"
     link="/docs/build/packages"
     icon="dbt-bit"/>
 
 <Card
-    title="Project variables"
-    body="Learn how to use project variables to provide data to models for compilation."
+    title="プロジェクト変数"
+    body="プロジェクト変数を使用して、コンパイル用にモデルにデータを提供する方法を学習します。"
     link="/docs/build/project-variables"
     icon="dbt-bit"/>    
 

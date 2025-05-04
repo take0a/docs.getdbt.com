@@ -1,30 +1,30 @@
 ---
-title: "Derived metrics"
+title: "派生メトリック"
 id: derived
-description: "Derived metrics is defined as an expression of other metrics.."
+description: "派生メトリックは、他のメトリックの式として定義されます。"
 sidebar_label: Derived
 tags: [Metrics, Semantic Layer]
 ---
 
-In MetricFlow, derived metrics are metrics created by defining an expression using other metrics. They enable you to perform calculations with existing metrics. This is helpful for combining metrics and doing math functions on aggregated columns, like creating a profit metric. 
+MetricFlow では、派生メトリクスとは、他のメトリクスを用いた式を定義することで作成されるメトリクスです。これにより、既存のメトリクスを使った計算が可能になります。これは、メトリクスを組み合わせたり、集計された列に対して数学関数を実行したりする場合（例えば、利益メトリクスの作成など）に役立ちます。
 
- The parameters, description, and type for derived metrics are: 
+派生メトリクスのパラメータ、説明、およびタイプは次のとおりです:
 
 | Parameter | Description | Required | Type | 
 | --------- | ----------- | ---- | ---- |
-| `name` | The name of the metric. | Required | String |  
-| `description` | The description of the metric. | Optional | String |
-| `type` | The type of the metric (cumulative, derived, ratio, or simple). | Required | String |  
-| `label` | Defines the display value in downstream tools. Accepts plain text, spaces, and quotes (such as `orders_total` or `"orders_total"`). | Required | String |
-| `type_params` | The type parameters of the metric. | Required | Dict |  
-| `expr` | The derived expression. You'll see validation warnings when the derived metric is missing an `expr` or  the `expr` does not use all the input metrics. | Required | String |
-| `metrics` |  The list of metrics used in the derived metrics. Each entry can include optional fields like `alias`, `filter`, or `offset_window`. | Required  | List |  
-| `alias` | Optional alias for the metric that you can use in the `expr`. | Optional | String |
-| `filter` | Optional filter to apply to the metric. | Optional | String |  
-| `offset_window` | Set the period for the offset window, such as 1 month. This will return the value of the metric one month from the metric time.  | Optional | String |
+| `name` | メトリックの名前。 | Required | String |  
+| `description` | メトリックの説明。 | Optional | String |
+| `type` | メトリックのタイプ (累積、派生、比率、または単純)。 | Required | String |  
+| `label` | 下流ツールでの表示値を定義します。プレーンテキスト、スペース、引用符（例：`orders_total` または `"orders_total"`）が使用できます。 | Required | String |
+| `type_params` | メトリックのタイプパラメータ。 | Required | Dict |  
+| `expr` | 派生式。派生メトリックに `expr` がない場合、または `expr` がすべての入力メトリックを使用していない場合、検証警告が表示されます。 | Required | String |
+| `metrics` |  派生メトリックで使用されるメトリックのリスト。各エントリには、`alias`、`filter`、`offset_window` などのオプションフィールドを含めることができます。 | Required  | List |  
+| `alias` | `expr` で使用できるメトリックのオプションのエイリアス。 | Optional | String |
+| `filter` | メトリックに適用するオプションのフィルター。 | Optional | String |  
+| `offset_window` | オフセットウィンドウの期間（例：1か月）を設定します。これにより、メトリックの時刻から1か月後のメトリックの値が返されます。  | Optional | String |
 
 
-The following displays the complete specification for derived metrics, along with an example.
+以下に、派生メトリックの完全な仕様と例を示します。
 
 ```yaml
 metrics:
@@ -41,9 +41,9 @@ metrics:
           offset_window: set the period for the offset window, such as 1 month. This will return the value of the metric one month from the metric time. # Optional
 ```
 
-For advanced data modeling, you can use `fill_nulls_with` and `join_to_timespine` to [set null metric values to zero](/docs/build/fill-nulls-advanced), ensuring numeric values for every data row.
+高度なデータ モデリングでは、`fill_nulls_with` と `join_to_timespine` を使用して [null メトリック値をゼロに設定](/docs/build/fill-nulls-advanced) し、すべてのデータ行に数値が確保されるようにすることができます。
 
-## Derived metrics example
+## 派生メトリックの例
 
 ```yaml
 metrics:
@@ -86,13 +86,13 @@ metrics:
           alias: order_total_prev_month
 ```
 
-## Derived metric offset
+## 派生メトリックのオフセット
 
-To perform calculations using a metric's value from a previous time period, you can add an offset parameter to a derived metric. For example, if you want to calculate period-over-period growth or track user retention, you can use this metric offset.
+過去の期間の指標の値を使用して計算を実行するには、派生メトリックにオフセットパラメータを追加します。たとえば、前期比成長率を計算したり、ユーザー維持率を追跡したりする場合、この指標オフセットを使用できます。
 
-**Note:** You must include the [`metric_time` dimension](/docs/build/dimensions#time) when querying a derived metric with an offset window.
+**注:** オフセットウィンドウを使用して派生メトリックをクエリする場合は、[`metric_time` ディメンション](/docs/build/dimensions#time)を含める必要があります。
 
-The following example displays how you can calculate monthly revenue growth using a 1-month offset window:
+次の例は、1か月のオフセットウィンドウを使用して月間収益成長率を計算する方法を示しています。
 
 ```yaml
 - name: customer_retention
@@ -108,9 +108,9 @@ The following example displays how you can calculate monthly revenue growth usin
         alias: active_customers_prev_month
 ```
 
-### Offset windows and granularity
+### オフセットウィンドウと粒度
 
-You can query any granularity and offset window combination. The following example queries a metric with a 7-day offset and a monthly grain:
+粒度とオフセットウィンドウの組み合わせは任意に指定できます。次の例では、7日間のオフセットと月単位の粒度でメトリックをクエリしています:
 
 ```yaml
 - name: d7_booking_change
@@ -127,13 +127,13 @@ You can query any granularity and offset window combination. The following examp
         alias: bookings_7_days_ago
 ```
 
-When you run the query  `dbt sl query --metrics d7_booking_change --group-by metric_time__month` for the metric, here's how it's calculated. For dbt Core, you can use the `mf query` prefix. 
+クエリ「dbt sl query --metrics d7_booking_change --group-by metric_time__month」を実行してメトリクスを計算すると、以下のように計算されます。dbt Core の場合は、「mf query」プレフィックスを使用できます。
 
-1. Retrieve the raw, unaggregated dataset with the specified measures and dimensions at the smallest level of detail, which is currently 'day'.
-2. Then, perform an offset join on the daily dataset, followed by performing a date trunc and aggregation to the requested granularity.
-   For example, to calculate `d7_booking_change` for July 2017: 
-   - First, sum up all the booking values for each day in July to calculate the bookings metric.
-   - The following table displays the range of days that make up this monthly aggregation.
+1. 指定されたメジャーとディメンションを含む、未集計の生のデータセットを、最小の詳細レベル（現在は「日」）で取得します。
+2. 次に、日次データセットに対してオフセット結合を実行し、日付の切り捨てと、要求された粒度への集計を実行します。
+例えば、2017年7月の「d7_booking_change」を計算するには、以下の手順に従います。
+  - まず、7月の各日の予約額をすべて合計して、予約指標を計算します。
+  - 次の表は、この月次集計を構成する日の範囲を示しています。
 
 |   | Orders | Metric_time |
 | - | ---- | -------- |
@@ -142,7 +142,7 @@ When you run the query  `dbt sl query --metrics d7_booking_change --group-by met
 |   | 78 | 2017-07-01 |
 | Total  | 7438 | 2017-07-01 |
 
-3. Calculate July's bookings with a 7-day offset. The following table displays the range of days that make up this monthly aggregation. Note that the month begins 7 days later (offset by 7 days) on 2017-07-24.
+3. 7日間のオフセットを適用して、7月の予約数を計算します。以下の表は、この月次集計を構成する日数の範囲を示しています。月は7日後の2017年7月24日（7日間のオフセット）から始まることに注意してください。
 
 |   | Orders | Metric_time |
 | - | ---- | -------- |
@@ -151,7 +151,7 @@ When you run the query  `dbt sl query --metrics d7_booking_change --group-by met
 |   | 83 | 2017-06-24 |
 | Total  | 7252 | 2017-07-01 |
 
-4. Lastly, calculate the derived metric and return the final result set:
+4. 最後に、派生メトリックを計算し、最終結果セットを返します:
 
 ```bash
 bookings - bookings_7_days_ago would be compile as 7438 - 7252 = 186. 
@@ -161,6 +161,6 @@ bookings - bookings_7_days_ago would be compile as 7438 - 7252 = 186.
 | ----------------- | ------------------ |
 | 186 | 2017-07-01 |
 
-## Related docs
-- [Fill null values for simple, derived, or ratio metrics](/docs/build/fill-nulls-advanced)
+## 関連ドキュメント
+- [単純メトリック、派生メトリック、または比率メトリックのnull値を埋める](/docs/build/fill-nulls-advanced)
 

@@ -1,40 +1,39 @@
 ---
-title: "Packages"
+title: "パッケージ"
 id: "packages"
-description:  "dbt packages help modularize code and transform data efficiently."
+description:  "dbt パッケージは、コードをモジュール化し、データを効率的に変換するのに役立ちます。"
 keywords: [dbt package, private package, dbt private package, dbt data transformation, dbt clone, add dbt package]
 ---
 
 
-Software engineers frequently modularize code into libraries. These libraries help programmers operate with leverage: they can spend more time focusing on their unique business logic, and less time implementing code that someone else has already spent the time perfecting.
+ソフトウェアエンジニアは、コードをライブラリとしてモジュール化することがよくあります。これらのライブラリは、プログラマーが独自のビジネスロジックに集中する時間を増やし、誰かが既に時間をかけて完成させたコードの実装に費やす時間を減らすのに役立ちます。
 
-In dbt, libraries like these are called _packages_. dbt's packages are so powerful because so many of the analytic problems we encountered are shared across organizations, for example:
-* transforming data from a consistently structured SaaS dataset, for example:
-  * turning [Snowplow](https://hub.getdbt.com/dbt-labs/snowplow/latest/) or [Segment](https://hub.getdbt.com/dbt-labs/segment/latest/) pageviews into sessions
-  * transforming [AdWords](https://hub.getdbt.com/dbt-labs/adwords/latest/) or [Facebook Ads](https://hub.getdbt.com/dbt-labs/facebook_ads/latest/) spend data into a consistent format.
-* writing dbt macros that perform similar functions, for example:
-  * [generating SQL](https://github.com/dbt-labs/dbt-utils#sql-helpers) to union together two relations, pivot columns, or construct a <Term id="surrogate-key" />
-  * creating [custom schema tests](https://github.com/dbt-labs/dbt-utils#schema-tests)
-  * writing [audit queries](https://hub.getdbt.com/dbt-labs/audit_helper/latest/)
-* building models and macros for a particular tool used in your data stack, for example:
-  * Models to understand [Redshift](https://hub.getdbt.com/dbt-labs/redshift/latest/) privileges.
-  * Macros to work with data loaded by [Stitch](https://hub.getdbt.com/dbt-labs/stitch_utils/latest/).
+dbt では、このようなライブラリは「パッケージ」と呼ばれます。dbt のパッケージが非常に強力なのは、私たちが直面した分析上の問題の多くが組織間で共有されているためです。例えば、次のようなことが挙げられます。
+* 一貫性のある構造を持つ SaaS データセットからのデータの変換。例:
+  * [Snowplow](https://hub.getdbt.com/dbt-labs/snowplow/latest/) または [Segment](https://hub.getdbt.com/dbt-labs/segment/latest/) のページビューをセッションに変換する。
+  * [AdWords](https://hub.getdbt.com/dbt-labs/adwords/latest/) または [Facebook Ads](https://hub.getdbt.com/dbt-labs/facebook_ads/latest/) の支出データを一貫した形式に変換する。
+* 同様の機能を実行する dbt マクロの作成。例:
+  * [SQL の生成](https://github.com/dbt-labs/dbt-utils#sql-helpers) による 2 つのリレーションの結合、列のピボット、または <Term id="surrogate-key" /> の構築
+  * [カスタム スキーマ テスト](https://github.com/dbt-labs/dbt-utils#schema-tests) の作成
+  * [監査クエリ](https://hub.getdbt.com/dbt-labs/audit_helper/latest/) の作成
+* データスタックで使用される特定のツール用のモデルとマクロの構築。例:
+  * [Redshift](https://hub.getdbt.com/dbt-labs/redshift/latest/) の権限を理解するためのモデル
+  * [Stitch](https://hub.getdbt.com/dbt-labs/stitch_utils/latest/) によってロードされたデータを操作するマクロ
 
-dbt _packages_ are in fact standalone dbt projects, with models, macros, and other resources that tackle a specific problem area. As a dbt user, by adding a package to your project, all of the package's resources will become part of your own project. This means:
-* Models in the package will be materialized when you `dbt run`.
-* You can use `ref` in your own models to refer to models from the package.
-* You can use `source` to refer to sources in the package.
-* You can use macros in the package in your own project.
-* It's important to note that defining and installing dbt packages is different from [defining and installing Python packages](/docs/build/python-models#using-pypi-packages)
-
+dbt パッケージは、実際にはスタンドアロンの dbt プロジェクトであり、特定の問題領域に対処するモデル、マクロ、その他のリソースが含まれています。dbt ユーザーがプロジェクトにパッケージを追加すると、そのパッケージのすべてのリソースが自分のプロジェクトの一部になります。つまり、次のようになります。
+* パッケージ内のモデルは、`dbt run` を実行すると実体化されます。
+* 自分のモデルで `ref` を使用して、パッケージのモデルを参照できます。
+* `source` を使用して、パッケージ内のソースを参照できます。
+* パッケージ内のマクロを自分のプロジェクトで使用できます。
+* dbt パッケージの定義とインストールは、[Python パッケージの定義とインストール](/docs/build/python-models#using-pypi-packages) とは異なることに注意してください。
 
 import UseCaseInfo from '/snippets/_packages_or_dependencies.md';
 
 <UseCaseInfo/>
 
-## How do I add a package to my project?
-1. Add a file named `dependencies.yml` or `packages.yml` to your dbt project. This should be at the same level as your `dbt_project.yml` file.
-2. Specify the package(s) you wish to add using one of the supported syntaxes, for example:
+## プロジェクトにパッケージを追加するにはどうすればよいですか？
+1. `dependencies.yml` または `packages.yml` という名前のファイルを dbt プロジェクトに追加します。これは `dbt_project.yml` ファイルと同じ階層に配置する必要があります。
+2. サポートされている構文のいずれかを使用して、追加するパッケージを指定します。例:
 
 <File>
 
@@ -51,18 +50,18 @@ packages:
 
 </File>
 
-The default [`packages-install-path`](/reference/project-configs/packages-install-path) is `dbt_packages`.
+デフォルトの [`packages-install-path`](/reference/project-configs/packages-install-path) は `dbt_packages` です。
 
-3. Run `dbt deps` to install the package(s). Packages get installed in the `dbt_packages` directory – by default this directory is ignored by git, to avoid duplicating the source code for the package.
+3. `dbt deps` を実行してパッケージをインストールします。パッケージは `dbt_packages` ディレクトリにインストールされます。デフォルトでは、パッケージのソースコードの重複を避けるため、このディレクトリは Git によって無視されます。
 
-## How do I specify a package?
-You can specify a package using one of the following methods, depending on where your package is stored.
+## パッケージを指定するにはどうすればよいですか？
+パッケージが保存されている場所に応じて、次のいずれかの方法でパッケージを指定できます。
 
-### Hub packages (recommended)
+### ハブパッケージ（推奨）
 
-dbt Labs hosts the [Package hub](https://hub.getdbt.com), registry for dbt packages, as a courtesy to the dbt Community, but does not certify or confirm the integrity, operability, effectiveness, or security of any Packages. Please read the [dbt Labs Package Disclaimer](https://hub.getdbt.com/disclaimer/) before installing Hub packages.
+dbt Labs は、dbt コミュニティへのサービスとして、dbt パッケージのレジストリである [パッケージハブ](https://hub.getdbt.com) をホストしていますが、パッケージの整合性、操作性、有効性、セキュリティについて保証または確認するものではありません。ハブパッケージをインストールする前に、[dbt Labs パッケージ免責事項](https://hub.getdbt.com/disclaimer/) をお読みください。
 
-You can install available hub packages in the following way:
+利用可能なハブパッケージは、以下の方法でインストールできます:
 
 <File name='packages.yml'>
 
@@ -74,7 +73,7 @@ packages:
 
 </File>
 
-Hub packages require a version to be specified – you can find the latest release number on dbt Hub. Since Hub packages use [semantic versioning](https://semver.org/), we recommend pinning your package to the latest patch version from a specific minor release, like so:
+Hubパッケージではバージョンを指定する必要があります。最新のリリース番号はdbt Hubで確認できます。Hubパッケージは[セマンティックバージョニング](https://semver.org/)を使用しているため、パッケージを特定のマイナーリリースの最新パッチバージョンに固定することを推奨します。例：
 
 
 ```yaml
@@ -83,25 +82,25 @@ packages:
     version: [">=0.7.0", "<0.8.0"]
 ```
 
-`dbt deps` "pins" each package by default. See ["Pinning packages"](#pinning-packages) for details.
+`dbt deps` はデフォルトで各パッケージを「ピン留め」します。詳細については、[「パッケージのピン留め」](#pinning-packages) をご覧ください。
 
-Where possible, we recommend installing packages via dbt Hub, since this allows dbt to handle duplicate dependencies. This is helpful in situations such as:
-* Your project uses both the dbt-utils and Snowplow packages, and the Snowplow package _also_ uses the dbt-utils package.
-* Your project uses both the Snowplow and Stripe packages, both of which use the dbt-utils package.
+可能な場合は、dbt Hub 経由でパッケージをインストールすることをお勧めします。これにより、dbt は重複する依存関係を処理できます。これは、次のような状況で役立ちます。
+* プロジェクトで dbt-utils パッケージと Snowplow パッケージの両方を使用しており、Snowplow パッケージも dbt-utils パッケージを使用している場合。
+* プロジェクトで Snowplow パッケージと Stripe パッケージの両方を使用しており、どちらも dbt-utils パッケージを使用している場合。
 
-In comparison, other package installation methods are unable to handle the duplicate dbt-utils package. 
+一方、他のパッケージインストール方法では、重複する dbt-utils パッケージを処理できません。
 
-Advanced users can choose to host an internal version of the package hub based on [this repository](https://github.com/dbt-labs/hub.getdbt.com) and setting the `DBT_PACKAGE_HUB_URL` environment variable.
+上級ユーザーは、[このリポジトリ](https://github.com/dbt-labs/hub.getdbt.com) と `DBT_PACKAGE_HUB_URL` 環境変数の設定に基づいて、パッケージハブの内部バージョンをホストすることもできます。
 
-#### Prerelease versions
+#### プレリリース版
 
-Some package maintainers may wish to push prerelease versions of packages to the dbt Hub, in order to test out new functionality or compatibility with a new version of dbt. A prerelease version is demarcated by a suffix, such as `a1` (first alpha), `b2` (second beta), or `rc3` (third release candidate).
+パッケージメンテナーの中には、新機能や新しいバージョンのdbtとの互換性をテストするために、プレリリース版のパッケージをdbt Hubにプッシュしたいと考える方がいます。プレリリース版は、`a1`（最初のアルファ版）、`b2`（2番目のベータ版）、`rc3`（3番目のリリース候補版）などのサフィックスで区別されます。
 
-By default, `dbt deps` will not include prerelease versions when resolving package dependencies. You can enable the installation of prereleases in one of two ways:
-- Explicitly specifying a prerelease version in your `version` criteria
-- Setting `install_prerelease` to `true`, and providing a compatible version range
+デフォルトでは、`dbt deps`はパッケージの依存関係を解決する際にプレリリース版を含めません。プレリリースのインストールを有効にするには、以下の2つの方法があります。
+- `version` 条件でプレリリースバージョンを明示的に指定する
+- `install_prerelease` を `true` に設定し、互換性のあるバージョン範囲を指定する
 
-For example, both of the following configurations would successfully install `0.4.5-a2` for the [`dbt_artifacts` package](https://hub.getdbt.com/brooklyn-data/dbt_artifacts/latest/):
+例えば、以下のどちらの構成でも、[`dbt_artifacts` パッケージ](https://hub.getdbt.com/brooklyn-data/dbt_artifacts/latest/) の `0.4.5-a2` が正常にインストールされます。
 
 ```yaml
 packages:
@@ -116,8 +115,8 @@ packages:
     install_prerelease: true
 ```
 
-### Git packages
-Packages stored on a Git server can be installed using the `git` syntax, like so:
+### Git パッケージ
+Git サーバーに保存されたパッケージは、次のように `git` 構文を使用してインストールできます:
 
 <File name='packages.yml'>
 
@@ -129,12 +128,12 @@ packages:
 
 </File>
 
-Add the Git URL for the package, and optionally specify a revision. The revision can be:
-- a branch name
-- a tagged release
-- a specific commit (full 40-character hash)
+パッケージの Git URL を追加し、必要に応じてリビジョンを指定します。リビジョンは次のいずれかになります。
+- ブランチ名
+- タグ付きリリース
+- 特定のコミット（40文字のハッシュ全体）
 
-Example of a revision specifying a 40-character hash:
+40文字のハッシュを指定したリビジョンの例：
 
 ```yaml
 packages:
@@ -142,11 +141,11 @@ packages:
     revision: 4e28d6da126e2940d17f697de783a717f2503188
 ```
 
-By default, `dbt deps` "pins" each package. See ["Pinning packages"](#pinning-packages) for details.
+デフォルトでは、`dbt deps` は各パッケージを「ピン留め」します。詳細については、[「パッケージのピン留め」](#pinning-packages) を参照してください。
 
-### Internally hosted tarball URL
+### 内部でホストされている tarball URL
 
-Some organizations have security requirements to pull resources only from internal services. To address the need to install packages from hosted environments such as Artifactory or cloud storage buckets, dbt Core enables you to install packages from internally-hosted tarball URLs. 
+組織によっては、セキュリティ要件によりリソースを内部サービスからのみプルする必要がある場合があります。Artifactory やクラウドストレージバケットなどのホスト環境からパッケージをインストールする必要性に対応するため、dbt Core では内部でホストされている tarball URL からパッケージをインストールできます。 
 
 
 ```yaml
@@ -155,26 +154,26 @@ packages:
     name: 'dbt_utils'
 ```
 
-Where `name: 'dbt_utils'` specifies the subfolder of `dbt_packages` that's created for the package source code to be installed within.
+ここで、`name: 'dbt_utils'` は、パッケージ ソース コードをインストールするために作成された `dbt_packages` のサブフォルダーを指定します。
 
-## Private packages
+## プライベートパッケージ
 
-### Native private packages <Lifecycle status='beta'/> 
+### ネイティブプライベートパッケージ <Lifecycle status='beta'/> 
 
-dbt Cloud supports private packages from [supported](#prerequisites) Git repos leveraging an existing [configuration](/docs/cloud/git/git-configuration-in-dbt-cloud) in your environment. Previously, you had to configure a [token](#git-token-method) to retrieve packages from your private repos.
+dbt Cloud は、環境内の既存の [構成](/docs/cloud/git/git-configuration-in-dbt-cloud) を活用して、[サポート対象](#前提条件) Git リポジトリからのプライベートパッケージをサポートします。以前は、プライベートリポジトリからパッケージを取得するには [トークン](#git-token-method) を設定する必要がありました。
 
-#### Prerequisites
+#### 前提条件
 
-- To use native private packages, you must have one of the following Git providers configured in the **Integrations** section of your **Account settings**:
+- ネイティブのプライベートパッケージを使用するには、**Account settings** の **Integrations** セクションで、以下のいずれかの Git プロバイダーが設定されている必要があります。
   - [GitHub](/docs/cloud/git/connect-github)
   - [Azure DevOps](/docs/cloud/git/connect-azure-devops)
-    - Private packages only work within a single Azure DevOps project. If your repositories are in different projects within the same organization, you can't reference them in the `private` key at this time.
-    - For Azure DevOps, use the `org/repo` path (not the `org_name/project_name/repo_name` path) with the project tier inherited from the integrated source repository.
-  - Support for GitLab is coming soon.
+    - プライベートパッケージは、単一の Azure DevOps プロジェクト内でのみ機能します。リポジトリが同じ組織内の異なるプロジェクトにある場合、現時点では `private` キーでそれらを参照することはできません。
+    - Azure DevOps の場合は、統合ソースリポジトリから継承されたプロジェクト層を使用して、`org/repo` パス（`org_name/project_name/repo_name` パスではありません）を使用してください。
+  - GitLab のサポートは近日中に開始されます。
 
-#### Configuration
+#### 構成
 
-Use the `private` key in your `packages.yml` or `dependencies.yml` to clone package repos using your existing dbt Cloud Git integration without having to provision an access token or create a dbt Cloud environment variable. 
+`packages.yml` または `dependencies.yml` 内の `private` キーを使用すると、アクセストークンをプロビジョニングしたり、dbt Cloud 環境変数を作成したりすることなく、既存の dbt Cloud Git 統合を使用してパッケージリポジトリをクローンできます。
 
 
 <File name="packages.yml">
@@ -187,13 +186,13 @@ packages:
 ```
 </File>
 
-:::tip Azure DevOps considerations
+:::tip Azure DevOps に関する考慮事項
 
-- Private packages currently only work if the package repository is in the same Azure DevOps project as the source repo.
-- Use the `org/repo` path (not the normal ADO `org_name/project_name/repo_name` path) in the `private` key. 
-- Repositories in different Azure DevOps projects is currently not supported until a future update.
+- 現在、プライベートパッケージは、パッケージリポジトリがソースリポジトリと同じ Azure DevOps プロジェクト内にある場合にのみ機能します。
+- `private` キーには、通常の ADO の `org_name/project_name/repo_name` パスではなく、`org/repo` パスを使用してください。
+- 異なる Azure DevOps プロジェクト内のリポジトリは、将来のアップデートまでサポートされません。
 
-You can use private packages by specifying `org/repo` in the `private` key:
+`private` キーに `org/repo` を指定することで、プライベートパッケージを使用できます。
 
 <File name="packages.yml">
 
@@ -204,7 +203,7 @@ packages:
 </File>
 :::
 
-You can pin private packages similar to regular dbt packages:
+通常の dbt パッケージと同様に、プライベート パッケージをピン留めできます:
 
 ```yaml
 packages:
@@ -213,7 +212,7 @@ packages:
   
 ```
 
-If you are using multiple Git integrations, disambiguate by adding the provider key:
+複数の Git 統合を使用している場合は、プロバイダー キーを追加して曖昧さを解消します:
 
 ```yaml
 packages:
@@ -222,12 +221,12 @@ packages:
 
 ```
 
-With this method, you can retrieve private packages from an integrated Git provider without any additional steps to connect. 
+この方法を使用すると、接続するための追加の手順なしで、統合された Git プロバイダーからプライベート パッケージを取得できます。
 
-### SSH key method (command line only)
-If you're using the Command Line, private packages can be cloned via SSH and an SSH key.
+### SSHキー方式（コマンドラインのみ）
+コマンドラインを使用している場合、プライベートパッケージはSSHとSSHキーを介してクローンできます。
 
-When you use SSH keys to authenticate to your git remote server, you don’t need to supply your username and password each time. Read more about SSH keys, how to generate them, and how to add them to your git provider here: [Github](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) and [GitLab](https://docs.gitlab.com/ee/user/ssh.html).
+SSHキーを使用してgitリモートサーバーに認証すると、ユーザー名とパスワードを毎回入力する必要がなくなります。SSHキー、その生成方法、およびgitプロバイダーへの追加方法の詳細については、[Github](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) および [GitLab](https://docs.gitlab.com/ee/user/ssh.html) をご覧ください。
 
 
 <File name='packages.yml'>
@@ -239,22 +238,22 @@ packages:
 
 </File>
 
-If you're using dbt Cloud, the SSH key method will not work, but you can use the [HTTPS Git Token Method](https://docs.getdbt.com/docs/build/packages#git-token-method).
+dbt Cloud を使用している場合、SSH キー メソッドは機能しませんが、[HTTPS Git トークン メソッド](https://docs.getdbt.com/docs/build/packages#git-token-method) を使用できます。
 
 
-### Git token method
+### Gitトークンメソッド
 
 :::note
 
-dbt Cloud has [native support](#native-private-packages) for Git hosted private packages with GitHub and Azure DevOps (GitLab coming soon). If you are using a supported [integrated Git environment](/docs/cloud/git/git-configuration-in-dbt-cloud), you no longer need to configure Git tokens to retrieve private packages. 
+dbt Cloud は、GitHub および Azure DevOps（GitLab は近日提供開始）で Git ホストされたプライベートパッケージを[ネイティブサポート](#native-private-packages)します。サポートされている [統合 Git 環境](/docs/cloud/git/git-configuration-in-dbt-cloud) をご利用の場合は、プライベートパッケージを取得するために Git トークンを設定する必要がなくなりました。
 
 :::
 
-This method allows the user to clone via HTTPS by passing in a git token via an environment variable. Be careful of the expiration date of any token you use, as an expired token could cause a scheduled run to fail. Additionally, user tokens can create a challenge if the user ever loses access to a specific repo.
+この方法では、ユーザーは環境変数を介してgitトークンを渡すことで、HTTPS経由でクローンを実行できます。使用するトークンの有効期限には注意してください。有効期限が切れていると、スケジュールされた実行が失敗する可能性があります。また、ユーザートークンは、ユーザーが特定のリポジトリへのアクセスを失った場合に問題を引き起こす可能性があります。
 
 
-:::info dbt Cloud usage
-If you are using dbt Cloud, you must adhere to the naming conventions for environment variables. Environment variables in dbt Cloud must be prefixed with either `DBT_` or `DBT_ENV_SECRET`. Environment variables keys are uppercased and case sensitive. When referencing `{{env_var('DBT_KEY')}}` in your project's code, the key must match exactly the variable defined in dbt Cloud's UI.
+:::info dbt Cloud の使用
+dbt Cloud を使用する場合は、環境変数の命名規則に従う必要があります。dbt Cloud の環境変数には、`DBT_` または `DBT_ENV_SECRET` のいずれかのプレフィックスを付ける必要があります。環境変数のキーは大文字で、大文字と小文字が区別されます。プロジェクトのコードで `{{env_var('DBT_KEY')}}` を参照する場合、キーは dbt Cloud の UI で定義された変数と完全に一致する必要があります。
 :::
 
 In GitHub:
@@ -275,7 +274,7 @@ packages:
 
 </File>
 
-Read more about creating a GitHub Personal Access token [here](https://docs.github.com/en/enterprise-server@3.1/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token). You can also use a GitHub  App installation [token](https://docs.github.com/en/rest/reference/apps#create-an-installation-access-token-for-an-app).
+GitHub Personal Access Tokenの作成について詳しくは、[こちら](https://docs.github.com/ja/enterprise-server@3.1/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)をご覧ください。GitHub Appインストール[トークン](https://docs.github.com/ja/rest/reference/apps#create-an-installation-access-token-for-an-app)も使用できます。
 
 In GitLab:
 
@@ -288,7 +287,7 @@ packages:
 
 </File>
 
-Read more about creating a GitLab Deploy Token [here](https://docs.gitlab.com/ee/user/project/deploy_tokens/#creating-a-deploy-token) and how to properly construct your HTTPS URL [here](https://docs.gitlab.com/ee/user/project/deploy_tokens/#git-clone-a-repository). Deploy tokens can be managed by Maintainers only.
+GitLab デプロイトークンの作成方法の詳細については[こちら](https://docs.gitlab.com/ee/user/project/deploy_tokens/#creating-a-deploy-token)、HTTPS URLの適切な構築方法については[こちら](https://docs.gitlab.com/ee/user/project/deploy_tokens/#git-clone-a-repository)をご覧ください。デプロイトークンはメンテナーのみが管理できます。
 
 In Azure DevOps:
 
@@ -301,7 +300,7 @@ packages:
 
 </File>
 
-Read more about creating a Personal Access Token [here](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page#create-a-pat).
+個人アクセス トークンの作成の詳細については、[こちら](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page#create-a-pat) を参照してください。
 
 In Bitbucket:
 
@@ -314,13 +313,13 @@ packages:
 
 </File>
 
-Read more about creating a Personal Access Token [here](https://confluence.atlassian.com/bitbucketserver/personal-access-tokens-939515499.html).
+個人アクセス トークンの作成の詳細については、[こちら](https://confluence.atlassian.com/bitbucketserver/personal-access-tokens-939515499.html) を参照してください。
 
 
 
-## Configure subdirectory for packaged projects
+## パッケージ化されたプロジェクトのサブディレクトリの設定
 
-In general, dbt expects `dbt_project.yml` to be located as a top-level file in a package. If the packaged project is instead nested in a subdirectory—perhaps within a much larger mono repo—you can optionally specify the folder path as `subdirectory`. dbt will attempt a [sparse checkout](https://git-scm.com/docs/git-sparse-checkout) of just the files located within that subdirectory. Note that you must be using a recent version of `git` (`>=2.26.0`).
+通常、dbt は `dbt_project.yml` がパッケージの最上位ファイルとして配置されていることを想定しています。パッケージ化されたプロジェクトがサブディレクトリ（たとえば、はるかに大きなモノリポジトリ内）にネストされている場合は、オプションでフォルダパスを `subdirectory` として指定できます。dbt は、そのサブディレクトリ内にあるファイルのみの[スパースチェックアウト](https://git-scm.com/docs/git-sparse-checkout) を試みます。最新バージョンの `git` (`>=2.26.0`) を使用する必要があります。
 
 <File name='packages.yml'>
 
@@ -332,8 +331,8 @@ packages:
 
 </File>
 
-### Local packages
-A "local" package is a dbt project accessible from your local file system. You can install it by specifying the project's path. It works best when you nest the project within a subdirectory relative to your current project's directory.
+### ローカルパッケージ
+「ローカル」パッケージとは、ローカルファイルシステムからアクセス可能な dbt プロジェクトです。プロジェクトのパスを指定してインストールできます。現在のプロジェクトのディレクトリを基準としたサブディレクトリ内にプロジェクトをネストすると、最も効果的に機能します。
 
 <File name='packages.yml'>
 
@@ -344,7 +343,7 @@ packages:
 
 </File>
 
-Other patterns may work in some cases, but not always. For example, if you install this project as a package elsewhere, or try running it on a different system, the relative and absolute paths will yield the same results.
+他のパターンも場合によっては機能しますが、常に機能するとは限りません。例えば、このプロジェクトをパッケージとして別の場所にインストールしたり、別のシステムで実行したりする場合、相対パスと絶対パスは同じ結果になります。
 
 <File name='packages.yml'>
 
@@ -357,37 +356,37 @@ packages:
 
 </File>
 
-There are a few specific use cases where we recommend using a "local" package:
-1. **Monorepo** &mdash; When you have multiple projects, each nested in a subdirectory, within a monorepo. "Local" packages allow you to combine projects for coordinated development and deployment.
-2. **Testing changes** &mdash; To test changes in one project or package within the context of a downstream project or package that uses it. By temporarily switching the installation to a "local" package, you can make changes to the former and immediately test them in the latter for quicker iteration. This is similar to [editable installs](https://pip.pypa.io/en/stable/topics/local-project-installs/) in Python.
-3. **Nested project** &mdash; When you have a nested project that defines fixtures and tests for a project of utility macros, like [the integration tests within the `dbt-utils` package](https://github.com/dbt-labs/dbt-utils/tree/main/integration_tests).
+「ローカル」パッケージの使用を推奨する具体的なユースケースがいくつかあります。
+1. **モノレポ** - モノレポ内のサブディレクトリにそれぞれネストされた複数のプロジェクトがある場合。「ローカル」パッケージを使用すると、プロジェクトを統合して、協調的な開発とデプロイメントを実現できます。
+2. **変更のテスト** - あるプロジェクトまたはパッケージの変更を、それを使用する下流のプロジェクトまたはパッケージのコンテキスト内でテストします。インストールを一時的に「ローカル」パッケージに切り替えることで、前者に変更を加え、後者ですぐにテストして、反復処理を迅速化できます。これは、Python の[編集可能なインストール](https://pip.pypa.io/en/stable/topics/local-project-installs/)に似ています。
+3. **ネストされたプロジェクト** - [`dbt-utils` パッケージ内の統合テスト](https://github.com/dbt-labs/dbt-utils/tree/main/integration_tests)のような、ユーティリティ マクロのプロジェクトのフィクスチャとテストを定義するネストされたプロジェクトがある場合。
 
 
-## What packages are available?
-Check out [dbt Hub](https://hub.getdbt.com) to see the library of published dbt packages!
+## どのようなパッケージが利用可能ですか？
+公開されているdbtパッケージのライブラリを確認するには、[dbt Hub](https://hub.getdbt.com)をご覧ください。
 
-## Advanced package configuration
-### Updating a package
-When you update a version or revision in your `packages.yml` file, it isn't automatically updated in your dbt project. You should run `dbt deps` to update the package. You may also need to run a [full refresh](/reference/commands/run) of the models in this package.
+## 高度なパッケージ構成
+### パッケージの更新
+`packages.yml` ファイルのバージョンまたはリビジョンを更新しても、dbt プロジェクトでは自動的に更新されません。パッケージを更新するには、`dbt deps` を実行する必要があります。また、このパッケージ内のモデルの[完全更新](/reference/commands/run) も実行する必要があるかもしれません。
 
-### Uninstalling a package
-When you remove a package from your `packages.yml` file, it isn't automatically deleted from your dbt project, as it still exists in your `dbt_packages/` directory. If you want to completely uninstall a package, you should either:
-* delete the package directory in `dbt_packages/`;  or
-* run `dbt clean` to delete _all_ packages (and any compiled models), followed by `dbt deps`.
+### パッケージのアンインストール
+`packages.yml` ファイルからパッケージを削除しても、`dbt_packages/` ディレクトリに残っているため、dbt プロジェクトからは自動的に削除されません。パッケージを完全にアンインストールするには、次のいずれかの手順を実行してください。
+* `dbt_packages/` 内のパッケージディレクトリを削除する。または
+* `dbt clean` を実行してすべてのパッケージ（およびコンパイル済みのモデル）を削除し、その後 `dbt deps` を実行する。
 
-### Pinning packages
+### パッケージの固定
 
-Beginning with v1.7, running [`dbt deps`](/reference/commands/deps) "pins" each package by creating or updating the `package-lock.yml` file in the _project_root_ where `packages.yml` is recorded. 
+v1.7 以降では、[`dbt deps`](/reference/commands/deps) を実行すると、`p​​ackages.yml` が記録されている _project_root_ に `package-lock.yml` ファイルを作成または更新することで、各パッケージが「固定」されます。
 
-- The `package-lock.yml` file contains a record of all packages installed.
-- If subsequent `dbt deps` runs contain no changes to `dependencies.yml` or `packages.yml`, dbt-core installs from `package-lock.yml`. 
+- `package-lock.yml` ファイルには、インストールされているすべてのパッケージの記録が含まれます。
+- 後続の `dbt deps` 実行で `dependencies.yml` または `packages.yml` に変更がない場合、dbt-core は `package-lock.yml` からインストールします。
 
-For example, if you use a branch name, the `package-lock.yml` file pins to the head commit. If you use a version range, it pins to the latest release. In either case, subsequent commits or versions will **not** be installed. To get new commits or versions, run `dbt deps --upgrade` or add `package-lock.yml` to your .gitignore file.
+たとえば、ブランチ名を使用した場合、`package-lock.yml` ファイルはヘッドコミットに固定されます。バージョン範囲を使用した場合、最新リリースに固定されます。どちらの場合も、後続のコミットまたはバージョンはインストールされません。新しいコミットまたはバージョンを取得するには、`dbt deps --upgrade` を実行するか、.gitignore ファイルに `package-lock.yml` を追加してください。
 
-dbt will warn you if you install a package using the `git` syntax without specifying a revision (see below).
+リビジョンを指定せずに `git` 構文を使用してパッケージをインストールすると、dbt から警告が表示されます (下記参照)。
 
-### Configuring packages
-You can configure the models and seeds in a package from the `dbt_project.yml` file, like so:
+### パッケージの設定
+`dbt_project.yml` ファイルから、パッケージ内のモデルとシードを次のように設定できます。
 
 <File name='dbt_project.yml'>
 
@@ -414,18 +413,20 @@ seeds:
 
 </File>
 
-For example, when using a dataset specific package, you may need to configure variables for the names of the tables that contain your raw data.
+たとえば、データセット固有のパッケージを使用する場合、生データを含むテーブルの名前の変数を設定する必要がある場合があります。
 
-Configurations made in your `dbt_project.yml` file will override any configurations in a package (either in the `dbt_project.yml` file of the package, or in config blocks).
+`dbt_project.yml` ファイルで行った設定は、パッケージ内の設定（パッケージの `dbt_project.yml` ファイル内、または設定ブロック内）をオーバーライドします。
 
-### Specifying unpinned Git packages
-If your project specifies an "unpinned" Git package, you may see a warning like:
+### ピン留めされていない Git パッケージの指定
+
+プロジェクトで「ピン留めされていない」 Git パッケージを指定した場合、次のような警告が表示されることがあります:
+
 ```
 The git package "https://github.com/dbt-labs/dbt-utils.git" is not pinned.
 This can introduce breaking changes into your project without warning!
 ```
 
-This warning can be silenced by setting `warn-unpinned: false` in the package specification. **Note:** This is not recommended.
+この警告は、パッケージ仕様で `warn-unpinned: false` を設定することで非表示にすることができます。**注:** これは推奨されません。
 
 <File name='packages.yml'>
 
