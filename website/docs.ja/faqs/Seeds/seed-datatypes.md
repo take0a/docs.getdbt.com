@@ -1,13 +1,13 @@
 ---
-title: How do I set a datatype for a column in my seed?
-description: "Use column_types to set a datatype"
-sidebar_label: 'Set a datatype for a column in seed'
+title: シード内の列のデータ型を設定するにはどうすればよいですか?
+description: "column_typesを使用してデータ型を設定する"
+sidebar_label: 'シード内の列のデータ型を設定する'
 id: seed-datatypes
 
 ---
-dbt will infer the datatype for each column based on the data in your CSV.
+dbt は、CSV 内のデータに基づいて各列のデータ型を推測します。
 
-You can also explicitly set a datatype using the `column_types` [configuration](reference/resource-configs/column_types.md) like so:
+`column_types` [設定](reference/resource-configs/column_types.md) を使用して、次のように明示的にデータ型を設定することもできます:
 
 <File name='dbt_project.yml'>
 

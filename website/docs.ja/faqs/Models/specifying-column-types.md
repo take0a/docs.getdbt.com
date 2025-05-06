@@ -1,11 +1,11 @@
 ---
-title: How do I specify column types?
-description: "Specify column types in models"
-sidebar_label: 'Specify column types in models'
+title: 列の種類を指定するにはどうすればよいですか?
+description: "モデル内の列タイプを指定する"
+sidebar_label: 'モデル内の列タイプを指定する'
 id: specifying-column-types
 
 ---
-Simply cast the column to the correct type in your model:
+モデル内の列を正しい型にキャストするだけです:
 
 ```sql
 select
@@ -14,7 +14,7 @@ select
 from some_other_table
 ```
 
-You might have this question if you're used to running statements like this:
+次のようなステートメントを実行することに慣れている場合は、次のような疑問が生じるかもしれません:
 
 ```sql
 create table dbt_alice.my_table
@@ -26,7 +26,7 @@ insert into dbt_alice.my_table (
 )
 ```
 
-In comparison, dbt would build this <Term id="table" /> using a `create table as` statement:
+比較すると、dbt は `create table as` ステートメントを使用してこの <Term id="table" /> を構築します:
 
 ```sql
 create table dbt_alice.my_table as (
@@ -34,10 +34,10 @@ create table dbt_alice.my_table as (
 )
 ```
 
-So long as your model queries return the correct column type, the table you create will also have the correct column type.
+モデルクエリが正しい列タイプを返す限り、作成するテーブルも正しい列タイプになります。
 
-To define additional column options:
+追加の列オプションを定義するには、次の手順に従ってください。
 
-* Rather than enforcing uniqueness and not-null constraints on your column, use dbt's [data testing](/docs/build/data-tests) functionality to check that your assertions about your model hold true.
-* Rather than creating default values for a column, use SQL to express defaults (e.g. `coalesce(updated_at, current_timestamp()) as updated_at`)
-* In edge-cases where you _do_ need to alter a column (e.g. column-level encoding on Redshift), consider implementing this via a [post-hook](/reference/resource-configs/pre-hook-post-hook).
+* 列に一意性と非NULL制約を適用する代わりに、dbt の [データテスト](/docs/build/data-tests) 機能を使用して、モデルに関するアサーションが真であることを確認します。
+* 列のデフォルト値を作成する代わりに、SQL を使用してデフォルト値を指定します (例: `coalesce(updated_at, current_timestamp()) as updated_at`)。
+* 列を変更する必要があるエッジケース (例: Redshift での列レベルのエンコード) では、[post-hook](/reference/resource-configs/pre-hook-post-hook) を使用して実装することを検討してください。

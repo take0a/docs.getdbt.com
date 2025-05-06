@@ -1,13 +1,13 @@
 ---
-title: If I can name these files whatever I'd like, what should I name them?
-description: "Recommendations on how to name your files"
-sidebar_label: 'How to name your files'
+title: これらのファイルに好きな名前を付けられる場合、どのような名前を付ければよいでしょうか?
+description: "ファイル名の付け方に関する推奨事項"
+sidebar_label: 'ファイル名の付け方'
 id: resource-yml-name
 
 ---
-It's up to you! Here's a few options:
-- Default to the existing terminology: `schema.yml` (though this does make it hard to find the right file over time)
-- Use the same name as your directory (assuming you're using sensible names for your directories)
-- If you test and document one model (or seed, snapshot, macro etc.) per file, you can give it the same name as the model (or seed, snapshot, macro etc.)
+あなた次第です！いくつかの選択肢をご紹介します。
+- 既存の用語「schema.yml」をデフォルトにする（ただし、これにより、時間の経過とともに適切なファイルを見つけるのが難しくなります）
+- ディレクトリと同じ名前を使用する（ディレクトリに適切な名前を付けていることを前提としています）
+- ファイルごとに1つのモデル（またはシード、スナップショット、マクロなど）をテストおよびドキュメント化する場合は、モデル（またはシード、スナップショット、マクロなど）と同じ名前を付けることができます。
 
-Choose what works for your team. We have more recommendations in our guide on [structuring dbt projects](/best-practices/how-we-structure/1-guide-overview).
+チームにとって最適な方法を選択してください。[dbt プロジェクトの構造化](/best-practices/how-we-structure/1-guide-overview)に関するガイドに、さらに詳細な推奨事項が記載されています。

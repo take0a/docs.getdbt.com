@@ -1,14 +1,14 @@
 ---
-title: What if my source is in a poorly named schema or table?
-description: "Use schema and identifier properities to define names"
-sidebar_label: 'Source is in a poorly-named scheme or table'
+title: ソースが不適切な名前のスキーマまたはテーブル内にある場合はどうなりますか?
+description: "スキーマと識別子のプロパティを使用して名前を定義する"
+sidebar_label: 'ソースが不適切な名前のスキームまたはテーブル内にある'
 id: source-has-bad-name
 
 ---
 
-By default, dbt will use the `name:` parameters to construct the source reference.
+デフォルトでは、dbt は `name:` パラメータを使用してソース参照を構築します。
 
-If these names are a little less-than-perfect, use the [schema](/reference/resource-properties/schema) and [identifier](/reference/resource-properties/identifier) properties to define the names as per the database, and use your `name:` property for the name that makes sense!
+これらの名前が少し不完全な場合は、[schema](/reference/resource-properties/schema) プロパティと [identifier](/reference/resource-properties/identifier) プロパティを使用してデータベースに従って名前を定義し、`name:` プロパティを使用して適切な名前を指定してください。
 
 <File name='models/<filename>.yml'>
 
@@ -29,12 +29,14 @@ sources:
 </File>
 
 
-In a downstream model:
+ダウンストリームモデルの場合:
+
 ```sql
 select * from {{ source('jaffle_shop', 'orders') }}
 ```
 
-Will get compiled to:
+次のようにコンパイルされます:
+
 ```sql
 select * from raw.postgres_backend_public_schema.api_orders
 ```

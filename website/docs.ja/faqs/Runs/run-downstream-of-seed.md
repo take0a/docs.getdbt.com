@@ -1,14 +1,14 @@
 ---
-title: How do I run models downstream of a seed?
-description: "You run models downstread using model selection syntax"
-sidebar_label: 'Run models downstream of a seed'
+title: シードの下流でモデルを実行するにはどうすればよいですか?
+description: "モデル選択構文を使用してモデルを下流で実行する"
+sidebar_label: 'シードの下流でモデルを実行する'
 id: run-downstream-of-seed
 
 ---
 
-You can run models downstream of a seed using the [model selection syntax](/reference/node-selection/syntax), and treating the seed like a model.
+[モデル選択構文](/reference/node-selection/syntax)を使用して、シードをモデルのように扱い、シードの下流でモデルを実行できます。
 
-For example, the following would run all models downstream of a seed named `country_codes`:
+例えば、以下のコマンドは、`country_codes` という名前のシードの下流ですべてのモデルを実行します。
 
 ```shell
 $ dbt run --select country_codes+

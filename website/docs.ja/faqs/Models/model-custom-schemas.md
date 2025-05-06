@@ -1,12 +1,12 @@
 ---
-title: Can I build my models in a schema other than my target schema or split my models across multiple schemas?
-description: "You can build models outside target schema"
-sidebar_label: 'How to build models in schema(s) outside target schema'
+title: ターゲット スキーマ以外のスキーマでモデルを構築したり、モデルを複数のスキーマに分割したりできますか?
+description: "ターゲットスキーマ外でモデルを構築できる"
+sidebar_label: 'ターゲットスキーマ外のスキーマでモデルを構築する方法'
 id: model-custom-schemas
 
 ---
 
-Yes! Use the [schema](reference/resource-configs/schema.md) configuration in your `dbt_project.yml` file, or using a `config` block:
+はい！`dbt_project.yml` ファイル内の [schema](reference/resource-configs/schema.md) 構成を使用するか、`config` ブロックを使用します:
 
 <File name='dbt_project.yml'>
 

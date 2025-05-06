@@ -1,15 +1,15 @@
 ---
-title: What model configurations exist?
-description: "Learning about model configurations"
-sidebar_label: 'Model configurations'
+title: どのようなモデル構成がありますか?
+description: "モデル構成について学ぶ"
+sidebar_label: 'モデル構成'
 id: available-configurations
 ---
-You can also configure:
+以下の設定も可能です。
 
-* [tags](/reference/resource-configs/tags) to support easy categorization and graph selection
-* [custom schemas](/reference/resource-properties/schema) to split your models across multiple schemas
-* [aliases](/reference/resource-configs/alias) if your <Term id="view" />/<Term id="table" /> name should differ from the filename
-* Snippets of SQL to run at the start or end of a model, known as [hooks](/docs/build/hooks-operations)
-* Warehouse-specific configurations for performance (e.g. `sort` and `dist` keys on Redshift, `partitions` on BigQuery)
+* [タグ](/reference/resource-configs/tags) : 分類とグラフ選択を容易にします。
+* [カスタム スキーマ](/reference/resource-properties/schema) : モデルを複数のスキーマに分割します。
+* [エイリアス](/reference/resource-configs/alias) : <Term id="view" />/<Term id="table" /> の名前をファイル名と異なるものにする場合。
+* [フック](/docs/build/hooks-operations) と呼ばれる、モデルの開始時または終了時に実行する SQL スニペット。
+* パフォーマンス向上のためのウェアハウス固有の設定 (例: Redshift の `sort` キーと `dist` キー、BigQuery の `partitions` キー)
 
-Check out the docs on [model configurations](/reference/model-configs) to learn more.
+詳細については、[モデル設定](/reference/model-configs) のドキュメントをご覧ください。

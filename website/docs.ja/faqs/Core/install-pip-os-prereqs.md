@@ -1,18 +1,18 @@
 ---
-title: "Does my operating system have prerequisites?"
-description: "You can check whether your operating system has prerequisites for installing dbt Core."
-sidebar_label: 'dbt Core system prerequisites'
+title: "オペレーティング システムには前提条件がありますか?"
+description: "dbt Core をインストールするための前提条件がオペレーティング システムにあるかどうかを確認できます。"
+sidebar_label: 'dbt Core システムの前提条件'
 id: install-pip-os-prereqs.md
 
 ---
 
-Your operating system may require pre-installation setup before installing dbt Core with pip. After downloading and installing any dependencies specific to your development environment, you can proceed with the [pip installation of dbt Core](/docs/core/pip-install).
+お使いのオペレーティング システムによっては、pip を使用して dbt Core をインストールする前に事前設定が必要な場合があります。開発環境固有の依存関係をダウンロードしてインストールしたら、[dbt Core の pip インストール](/docs/core/pip-install) に進むことができます。
 
 ### CentOS
 
-CentOS requires Python and some other dependencies to successfully install and run dbt Core.
+CentOS では、dbt Core を正常にインストールして実行するには、Python とその他の依存関係が必要です。
 
-To install Python and other dependencies:
+Python とその他の依存関係をインストールするには、以下の手順に従います:
 
 ```shell
 
@@ -23,9 +23,9 @@ sudo yum install redhat-rpm-config gcc libffi-devel \
 
 ### MacOS
 
-The MacOS requires Python 3.8 or higher to successfully install and run dbt Core.
+MacOS で dbt Core を正常にインストールして実行するには、Python 3.8 以降が必要です。
 
-To check the Python version:
+Python のバージョンを確認するには:
 
 ```shell
 
@@ -33,14 +33,15 @@ python --version
 
 ```
 
-If you need a compatible version, you can download and install [Python version 3.9 or higher for MacOS](https://www.python.org/downloads/macos).
+互換性のあるバージョンが必要な場合は、[MacOS 用 Python バージョン 3.9 以上](https://www.python.org/downloads/macos) をダウンロードしてインストールしてください。
 
-If your machine runs on an Apple M1 architecture, we recommend that you install dbt via [Rosetta](https://support.apple.com/en-us/HT211861). This is necessary for certain dependencies that are only supported on Intel processors.
+お使いのマシンが Apple M1 アーキテクチャで動作している場合は、[Rosetta](https://support.apple.com/en-us/HT211861) 経由で dbt をインストールすることをお勧めします。これは、Intel プロセッサでのみサポートされている特定の依存関係に必要なためです。
+
 ### Ubuntu/Debian
 
-Ubuntu requires Python and other dependencies to successfully install and run dbt Core.
+Ubuntu で dbt Core を正常にインストールして実行するには、Python とその他の依存関係が必要です。
 
-To install Python and other dependencies:
+Python とその他の依存関係をインストールするには、以下の手順に従います:
 
 ```shell
 
@@ -53,8 +54,8 @@ pip install cryptography~=3.4
 
 ### Windows
 
-Windows requires Python and git to successfully install and run dbt Core.
+Windows で dbt Core を正常にインストールして実行するには、Python と Git が必要です。
 
-Install [Git for Windows](https://git-scm.com/downloads) and [Python version 3.9 or higher for Windows](https://www.python.org/downloads/windows/).
+[Git for Windows](https://git-scm.com/downloads) と [Python バージョン 3.9 以上 (Windows 用)](https://www.python.org/downloads/windows/) をインストールしてください。
 
-For further questions, please see the [Python compatibility FAQ](/faqs/Core/install-python-compatibility)
+その他のご質問については、[Python 互換性に関する FAQ](/faqs/Core/install-python-compatibility) をご覧ください。

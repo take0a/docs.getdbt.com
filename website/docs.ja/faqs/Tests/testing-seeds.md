@@ -1,14 +1,14 @@
 ---
-title: How do I test and document seeds?
-description: "Use a schema file to test and document seeds"
-sidebar_label: 'Test and document seeds'
+title: シードをテストして文書化するにはどうすればいいですか?
+description: "スキーマファイルを使用してシードをテストおよび文書化する"
+sidebar_label: 'シードをテストして文書化する'
 id: testing-seeds
 
 ---
 
-To test and document seeds, use a [schema file](/reference/configs-and-properties) and nest the configurations under a `seeds:` key
+シードをテストして文書化するには、[スキーマファイル](/reference/configs-and-properties)を使用し、設定を`seeds:`キーの下にネストします。
 
-## Example
+## 例
 
 <File name='seeds/schema.yml'>
 

@@ -1,16 +1,16 @@
 ---
-title: I need to use quotes to select from my source, what should I do?
-description: "Use quoting property to quote values"
-sidebar_label: 'How to quote values'
+title: ソースから選択するには引用符を使用する必要があります。どうすればよいでしょうか?
+description: "引用符プロパティを使用して値を引用符で囲む"
+sidebar_label: '値をクォートする方法'
 id: source-quotes
 
 ---
 
-This is reasonably common on Snowflake in particular.
+これは特にSnowflakeでよく見られます。
 
-By default, dbt will not quote the database, schema, or identifier for the source tables that you've specified.
+デフォルトでは、dbtは指定したソーステーブルのデータベース、スキーマ、または識別子を引用符で囲みません。
 
-To force dbt to quote one of these values, use the [`quoting` property](/reference/resource-properties/quoting):
+dbtにこれらの値を引用符で囲ませるには、[`quoting` プロパティ](/reference/resource-properties/quoting)を使用します:
 
 <File name='models/<filename>.yml'>
 

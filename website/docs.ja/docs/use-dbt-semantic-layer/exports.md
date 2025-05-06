@@ -1,143 +1,143 @@
 ---
-title: "Write queries with exports"
-description: "Use exports to write tables to the data platform on a schedule."
+title: "エクスポートを使用してクエリを作成する"
+description: "エクスポートを使用して、スケジュールに従ってテーブルをデータ プラットフォームに書き込みます。"
 sidebar_label: "Write queries with exports"
 keywords: [DBT_INCLUDE_SAVED_QUERY, exports, DBT_EXPORTS_SAVED_QUERY, dbt Cloud, Semantic Layer]
 ---
 
-Exports enhance [saved queries](/docs/build/saved-queries) by running your saved queries and writing the output to a table or view within your data platform. Saved queries are a way to save and reuse commonly used queries in MetricFlow, exports take this functionality a step further by:
+エクスポートは、[保存済みクエリ](/docs/build/saved-queries) の機能を強化します。保存済みクエリを実行し、その出力をデータ プラットフォーム内のテーブルまたはビューに書き込むことで、この機能を強化します。保存済みクエリは、MetricFlow でよく使用されるクエリを保存して再利用する方法ですが、エクスポートではこの機能をさらに強化し、次のことが可能になります。
 
-- Enabling you to write these queries within your data platform using the dbt Cloud job scheduler.
-- Proving an integration path for tools that don't natively support the dbt Semantic Layer by exposing tables of metrics and dimensions.
+- dbt Cloud ジョブ スケジューラを使用して、データ プラットフォーム内でこれらのクエリを記述できるようになります。
+- 指標とディメンションのテーブルを公開することで、dbt セマンティック レイヤーをネイティブにサポートしていないツールとの統合パスを提供します。
 
-Essentially, exports are like any other table in your data platform &mdash; they enable you to query metric definitions through any SQL interface or connect to downstream tools without a first-class [Semantic Layer integration](/docs/cloud-integrations/avail-sl-integrations). Running an export counts towards [queried metrics](/docs/cloud/billing#what-counts-as-a-queried-metric) usage. Querying the resulting table or view from the export does not count toward queried metric usage.
+基本的に、エクスポートはデータ プラットフォーム内の他のテーブルと同様です。つまり、エクスポートを使用することで、任意の SQL インターフェースを介して指標定義をクエリしたり、高度な [セマンティック レイヤー統合](/docs/cloud-integrations/avail-sl-integrations) を使用せずに下流のツールに接続したりできます。エクスポートを実行すると、[クエリされた指標](/docs/cloud/billing#what-c​​ounts-as-a-queried-metric) の使用量としてカウントされます。エクスポートからの結果のテーブルまたはビューをクエリしても、クエリされたメトリックの使用にはカウントされません。
 
-## Prerequisites
+## 前提条件
 
-- You have a dbt Cloud account on a [Team or Enterprise](https://www.getdbt.com/pricing/) plan. 
-- You use one of the following data platforms: Snowflake, BigQuery, Databricks, Redshift, or Postgres.
-- You are on [dbt version](/docs/dbt-versions/upgrade-dbt-version-in-cloud) 1.7 or newer.
-- You have the dbt Semantic Layer [configured](/docs/use-dbt-semantic-layer/setup-sl) in your dbt project.
-- You have a dbt Cloud environment with the [job scheduler](/docs/deploy/job-scheduler) enabled.
-- You have a [saved query](/docs/build/saved-queries) and [export configured](/docs/build/saved-queries#configure-exports) in your dbt project. In your configuration, leverage [caching](/docs/use-dbt-semantic-layer/sl-cache) to cache common queries, speed up performance, and reduce compute costs.
-- You have the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) installed. Note, that exports aren't supported in dbt Cloud IDE yet.
+- [Team または Enterprise](https://www.getdbt.com/pricing/) プランの dbt Cloud アカウントをお持ちであること。
+- Snowflake、BigQuery、Databricks、Redshift、Postgres のいずれかのデータプラットフォームを使用していること。
+- [dbt バージョン](/docs/dbt-versions/upgrade-dbt-version-in-cloud) が 1.7 以降であること。
+- dbt プロジェクトで dbt セマンティック レイヤーが [構成済み](/docs/use-dbt-semantic-layer/setup-sl) であること。
+- [ジョブ スケジューラ](/docs/deploy/job-scheduler) が有効になっている dbt Cloud 環境があること。
+- dbt プロジェクトに [保存済みクエリ](/docs/build/saved-queries) と [エクスポート設定済み](/docs/build/saved-queries#configure-exports) があります。設定で [キャッシュ](/docs/use-dbt-semantic-layer/sl-cache) を活用して、よく使用するクエリをキャッシュし、パフォーマンスを向上させ、コンピューティングコストを削減してください。
+- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) がインストールされています。なお、エクスポートは dbt Cloud IDE ではまだサポートされていません。
 
-## Benefits of exports
+## エクスポートのメリット
 
-The following section explains the main benefits of using exports:
+次のセクションでは、エクスポートを使用する主なメリットについて説明します:
 
-<Expandable alt_header="DRY representation">
+<Expandable alt_header="DRY表現">
 
-Currently, creating tables often involves generating tens, hundreds, or even thousands of tables that denormalize data into summary or metric mart tables. The main benefit of exports is creating a "Don't Repeat Yourself (DRY)" representation of the logic to construct each metric, dimension, join, filter, and so on. This allows you to reuse those components for long-term scalability, even if you're replacing manually written SQL models with references to the metrics or dimensions in saved queries.
+現在、テーブルの作成には、数十、数百、あるいは数千ものテーブルを作成し、データをサマリーテーブルやメトリックマートテーブルに非正規化する作業が必要になることがよくあります。エクスポートの主なメリットは、各メトリック、ディメンション、結合、フィルターなどを構築するロジックを「Don't Repeat Yourself（DRY）」形式で表現できることです。これにより、手動で記述したSQLモデルを保存済みクエリ内のメトリックやディメンションへの参照に置き換える場合でも、これらのコンポーネントを再利用して長期的なスケーラビリティを実現できます。
 </Expandable>
 
-<Expandable alt_header="Easier changes">
+<Expandable alt_header="より簡単な変更">
 
-Exports ensure that changes to metrics and dimensions are made in one place and then cascade to those various destinations seamlessly. This prevents the problem of needing to update a metric across every model that references that same concept.
+エクスポートにより、指標とディメンションへの変更は一箇所で行われ、その後、様々な出力先にシームレスに反映されます。これにより、同じ概念を参照するすべてのモデルで指標を更新する必要がなくなります。
 </Expandable>
 
-<Expandable alt_header="Caching"> 
+<Expandable alt_header="キャッシング"> 
 
-Use exports to pre-populate the cache, so that you're pre-computing what you need to serve users through the dynamic Semantic Layer APIs.
+エクスポートを使用してキャッシュを事前に入力し、動的なセマンティック レイヤー API を通じてユーザーに提供するために必要なものを事前に計算できるようにします。
 </Expandable>
 
-#### Considerations
+#### 考慮事項
 
-Exports offer many benefits and it's important to note some use cases that fall outside the advantages:
-- Business users may still struggle to consume from tens, hundreds, or thousands of tables, and choosing the right one can be a challenge.
-- Business users may also make mistakes when aggregating and filtering from the pre-built tables.
+エクスポートには多くのメリットがありますが、メリットに含まれないユースケースについても注意が必要です。
+- ビジネスユーザーは、数十、数百、あるいは数千ものテーブルからデータを取得するのに苦労する可能性があり、適切なテーブルを選択するのが難しい場合があります。
+- ビジネスユーザーは、事前に構築されたテーブルからデータを集計およびフィルタリングする際に、ミスを犯す可能性があります。
 
-For these use cases, use the dynamic [dbt Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview) instead of exports.
+これらのユースケースでは、エクスポートではなく、動的な[dbtセマンティックレイヤーAPI](/docs/dbt-cloud-apis/sl-api-overview)を使用してください。
 
-## Run exports
+## エクスポートを実行する
 
-Before you're able to run exports in development or production, you'll need to make sure you've [configured saved queries and exports](/docs/build/saved-queries) in your dbt project. In your saved query config, you can also leverage [caching](/docs/use-dbt-semantic-layer/sl-cache) with the dbt Cloud job scheduler to cache common queries, speed up performance, and reduce compute costs.
+開発環境または本番環境でエクスポートを実行する前に、dbt プロジェクトで [保存済みクエリとエクスポートを設定](/docs/build/saved-queries) する必要があります。保存済みクエリ設定では、dbt Cloud ジョブスケジューラによる [キャッシュ](/docs/use-dbt-semantic-layer/sl-cache) を活用して、よく使用するクエリをキャッシュし、パフォーマンスを向上させ、コンピューティングコストを削減することもできます。
 
-There are two ways to run an export:
-  
-- [Run exports in development](#exports-in-development) using the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) to test the output before production (You can configure exports in the dbt Cloud IDE, however running them directly in the IDE isn't supported yet). If you're using the dbt Cloud IDE, use `dbt build` to run exports. Make sure you have the [environment variable](#set-environment-variable) enabled. 
-- [Run exports in production](#exports-in-production) using the [dbt Cloud job scheduler](/docs/deploy/job-scheduler) to write these queries within your data platform.
+エクスポートを実行する方法は 2 つあります。
 
-## Exports in development
+- [開発環境でエクスポートを実行](#exports-in-development) [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) を使用して、本番環境へのデプロイ前に出力をテストします (dbt Cloud IDE でエクスポートを設定できますが、IDE で直接実行することはまだサポートされていません)。dbt Cloud IDE を使用している場合は、`dbt build` を使用してエクスポートを実行します。 [環境変数](#set-environment-variable)が有効になっていることを確認してください。
+- [dbt Cloud ジョブ スケジューラ](/docs/deploy/job-scheduler)を使用して[本番環境でエクスポートを実行](#exports-in-production)し、データ プラットフォーム内でこれらのクエリを記述します。
 
-You can run an export in your development environment using your development credentials if you want to test the output of the export before production. 
+## 開発環境でのエクスポート
 
-This section explains the different commands and options available to run exports in development.
+本番環境に移行する前にエクスポートの出力をテストしたい場合は、開発認証情報を使用して開発環境でエクスポートを実行できます。
 
-- Use the [`dbt sl export` command](#exports-for-single-saved-query) to test and generate exports in your development environment for a singular saved query. You can also use the `--select` flag to specify particular exports from a saved query.
+このセクションでは、開発環境でエクスポートを実行するために使用できるさまざまなコマンドとオプションについて説明します。
 
-- Use the [`dbt sl export-all` command](#exports-for-multiple-saved-queries) to run exports for multiple saved queries at once. This command provides a convenient way to manage and execute exports for several queries simultaneously, saving time and effort. 
+- 単一の保存済みクエリに対して開発環境でエクスポートをテストおよび生成するには、[`dbt sl export` コマンド](#exports-for-single-saved-query) を使用します。また、`--select` フラグを使用して、保存済みクエリから特定のエクスポートを指定することもできます。
 
-### Exports for single saved query
+- 複数の保存済みクエリに対してエクスポートを一度に実行するには、[`dbt sl export-all` コマンド](#exports-for-multiple-saved-queries) を使用します。このコマンドを使用すると、複数のクエリのエクスポートを同時に管理および実行できるため、時間と労力を節約できます。
 
-Use the following command to run exports in the dbt Cloud CLI:
+### 保存済みの単一クエリのエクスポート
+
+dbt Cloud CLI でエクスポートを実行するには、次のコマンドを使用します:
 
 ```bash
 dbt sl export
 ```
 
-The following table lists the options for `dbt sl export` command, using the `--` flag prefix to specify the parameters:  
+次の表は、`--` フラグ プレフィックスを使用してパラメータを指定する `dbt sl export` コマンドのオプションを示しています:
 
 | Parameters | Type    | Required | Description    |
 | ------- | --------- | ---------- | ---------------- |
-| `name` | String    | Required     | Name of the `export` object.    |
-| `saved-query` | String    | Required     | Name of a saved query that could be used.    |
-| `select` | List or String   | Optional    | Specify the names of exports to select from the saved query. |
-| `exclude` | String  | Optional    | Specify the names of exports to exclude from the saved query. |
-| `export_as` | String  | Optional    | Type of export to create from the `export_as` types available in the config. Options available are `table` or `view`. |
-| `schema` | String  | Optional    | Schema to use for creating the table or view. |
-| `alias` | String  | Optional    | Table alias to use to write the table or view. |
+| `name` | String    | Required     |`export` オブジェクトの名前。 |
+| `saved-query` | String    | Required     | 使用できる保存済みクエリの名前。 |
+| `select` | List or String   | Optional    | 保存されたクエリから選択するエクスポートの名前を指定します。 |
+| `exclude` | String  | Optional    | 保存されたクエリから除外するエクスポートの名前を指定します。 |
+| `export_as` | String  | Optional    | 設定で使用可能な `export_as` タイプから作成するエクスポートのタイプ。使用可能なオプションは `table` または `view` です。 |
+| `schema` | String  | Optional    | テーブルまたはビューの作成に使用するスキーマ。 |
+| `alias` | String  | Optional    | テーブルまたはビューの書き込みに使用するテーブル別名。 |
 
-You can also run any export defined for the saved query and write the table or view in your development environment. Refer to the following command example and output:
+保存したクエリに定義されているエクスポートを実行し、開発環境でテーブルまたはビューを書き込むこともできます。以下のコマンド例と出力を参照してください:
 
 ```bash
 dbt sl export --saved-query sq_name
 ```
 
-The output would look something like this: 
+出力は次のようになります:
 
 ```bash
 Polling for export status - query_id: 2c1W6M6qGklo1LR4QqzsH7ASGFs..
 Export completed.
 ```
 
-### Use the select flag
+### select フラグを使用する
 
-You can have multiple exports for a saved query and by default, all exports are run for a saved query. You can use the `select` flag in [development](#exports-in-development) to select specific or multiple exports. Note, you can’t sub-select metrics or dimensions from the saved query, it’s just to change the export configuration i.e table format or schema
+保存済みクエリには複数のエクスポートを指定でき、デフォルトではすべてのエクスポートが実行されます。[開発](#exports-in-development) の `select` フラグを使用すると、特定のエクスポートまたは複数のエクスポートを選択できます。保存済みクエリからメトリックやディメンションをサブ選択することはできません。これは、エクスポート設定（テーブル形式やスキーマなど）を変更するためだけに使用できます。
 
-For example, the following command runs `export_1` and `export_2` and doesn't work with the `--alias` or `--export_as` flags:
+例えば、次のコマンドは `export_1` と `export_2` を実行しますが、`--alias` フラグや `--export_as` フラグは指定できません。
 
 ```bash
 dbt sl export --saved-query sq_name --select export_1,export2
 ```
 
 <details>
-<summary>Overriding export configurations</summary>
+<summary>エクスポート設定の上書き</summary>
 
-The `--select` flag is mainly used to include or exclude specific exports. If you need to change these settings, you can use the following flags to override export configurations:
+`--select` フラグは主に、特定のエクスポートを含めるか除外するかを指定します。これらの設定を変更する必要がある場合は、以下のフラグを使用してエクスポート設定をオーバーライドできます。
 
-- `--export-as` &mdash; Defines the materialization type (table or view) for the export. This creates a new export with its own settings and is useful for testing in development.
-- `--schema` &mdash;  Specifies the schema to use for the written table or view.
-- `--alias` &mdash; Assigns a custom alias to the written table or view. This overrides the default export name.
+- `--export-as` - エクスポートのマテリアライズタイプ（テーブルまたはビュー）を定義します。これにより、独自の設定を持つ新しいエクスポートが作成され、開発中のテストに役立ちます。
+- `--schema` - 書き込まれるテーブルまたはビューに使用するスキーマを指定します。
+- `--alias` - 書き込まれるテーブルまたはビューにカスタムエイリアスを割り当てます。これにより、デフォルトのエクスポート名がオーバーライドされます。
 
-Be careful. The `--select` flag _can't_ be used with `alias` or `schema`.
+注意：`--select` フラグは `alias` または `schema` と一緒に使用できません。
 
-For example, you can use the following command to create a new export named `new_export` as a table:
+例えば、次のコマンドを使用して、`new_export` という名前の新しいエクスポートをテーブルとして作成できます。
 
 ```bash
 dbt sl export --saved-query sq_number1 --export-as table --alias new_export
 ```
 </details>
 
-### Exports for multiple saved queries
+### 複数の保存済みクエリのエクスポート
 
-Use the command, `dbt sl export-all`, to run exports for multiple saved queries at once. This is different from the `dbt sl export` command, which only runs exports for a singular saved query.  For example, to run exports for multiple saved queries, you can use:
+`dbt sl export-all` コマンドを使用すると、複数の保存済みクエリのエクスポートを一度に実行できます。これは、単一の保存済みクエリのエクスポートのみを実行する `dbt sl export` コマンドとは異なります。たとえば、複数の保存済みクエリのエクスポートを実行するには、次のようにします:
 
 ```bash
 dbt sl export-all
 ```
 
-The output would look something like this: 
+出力は次のようになります:
 
 ```bash
 Exports completed:
@@ -149,19 +149,18 @@ Exports completed:
 Polling completed
 ```
 
-The command `dbt sl export-all` provides the flexibility to manage multiple exports in a single command.
+コマンド `dbt sl export-all` は、単一のコマンドで複数のエクスポートを管理する柔軟性を提供します。
 
+## 本番環境でのエクスポート
 
-## Exports in production
+dbt Cloud でエクスポートを有効にして実行すると、データワークフローが最適化され、リアルタイムのデータアクセスが確保されます。これにより、効率性とガバナンスが向上し、よりスマートな意思決定が可能になります。
 
-Enabling and executing exports in dbt Cloud optimizes data workflows and ensures real-time data access. It enhances efficiency and governance for smarter decisions.  
+エクスポートでは、本番環境のデフォルトの認証情報が使用されます。エクスポートを有効にして保存済みのクエリを実行し、データプラットフォーム内で書き込むには、次の手順を実行します。
 
-Exports use the default credentials of the production environment. To enable exports to run saved queries and write them within your data platform, perform the following steps:
+1. dbt Cloud で [環境変数を設定](#set-environment-variable)します。
+2. [エクスポートジョブを作成して実行](#create-and-execute-exports)します。
 
-1. [Set an environment variable](#set-environment-variable) in dbt Cloud.
-2. [Create and execute export](#create-and-execute-exports) job run.
-
-### Set environment variable
+### 環境変数を設定する
 <!-- for version 1.7 -->
 <VersionBlock firstVersion lastVersion="1.7">
 
@@ -180,22 +179,22 @@ If exports aren't needed, you can set the value(s) to `FALSE` (`DBT_INCLUDE_SAVE
 <!-- for Release Tracks -->
 <VersionBlock firstVersion="1.8">
 
-1. Click **Deploy** in the top navigation bar and choose **Environments**.
-2. Select **Environment variables**.
-3. [Set the environment variable](/docs/build/environment-variables#setting-and-overriding-environment-variables) key to `DBT_EXPORT_SAVED_QUERIES` and the environment variable's value to `TRUE` (`DBT_EXPORT_SAVED_QUERIES=TRUE`).
-*Note, if you're on dbt v1.7, set the environment variable key to `DBT_INCLUDE_SAVED_QUERY`. Use the documentation toggle to select version "1.7" to view more details.
+1. 上部のナビゲーションバーで  **Deploy** をクリックし、**Environments** を選択します。
+2. **Environment variables** を選択します。
+3. [環境変数](/docs/build/environment-variables#setting-and-overriding-environment-variables) キーを `DBT_EXPORT_SAVED_QUERIES` に設定し、環境変数の値を `TRUE` (`DBT_EXPORT_SAVED_QUERIES=TRUE`) に設定します。
+*注: dbt v1.7 を使用している場合は、環境変数キーを `DBT_INCLUDE_SAVED_QUERY` に設定してください。詳細を表示するには、ドキュメント切り替えを使用してバージョン「1.7」を選択してください。
 
-Doing this ensures saved queries and exports are included in your dbt build job. For example, running `dbt build -s sq_name` runs the equivalent of `dbt sl export --saved-query sq_name` in the dbt Cloud Job scheduler.
+これにより、保存されたクエリとエクスポートが dbt ビルドジョブに含まれるようになります。たとえば、`dbt build -s sq_name` を実行すると、dbt Cloud Job Scheduler で `dbt sl export --saved-query sq_name` と同等の機能が実行されます。
 
-If exports aren't needed, you can set the value(s) to `FALSE` (`DBT_EXPORT_SAVED_QUERIES=FALSE`).
+エクスポートが不要な場合は、値を `FALSE` に設定できます（`DBT_EXPORT_SAVED_QUERIES=FALSE`）。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/env-var-dbt-exports.jpg" width="90%" title="Add an environment variable to run exports in your production run." />
 
 </VersionBlock>
 
-When you run a build job, any saved queries downstream of the dbt models in that job will also run. To make sure your export data is up-to-date, run the export as a downstream step (after the model).
+ビルドジョブを実行すると、そのジョブ内の dbt モデルの下流にある保存済みのクエリも実行されます。エクスポートデータが最新であることを確認するには、下流ステップ（モデルの後に）としてエクスポートを実行してください。
 
-### Create and execute exports
+### エクスポートの作成と実行
 <VersionBlock firstVersion lastVersion="1.7">
 
 1. Create a [deploy job](/docs/deploy/deploy-jobs) and ensure the `DBT_INCLUDE_SAVED_QUERY=TRUE` environment variable is set, as described in [Set environment variable](#set-environment-variable).
@@ -209,60 +208,62 @@ When you run a build job, any saved queries downstream of the dbt models in that
 
 <VersionBlock firstVersion="1.8">
 
-1. Create a [deploy job](/docs/deploy/deploy-jobs) and ensure the `DBT_EXPORT_SAVED_QUERIES=TRUE` environment variable is set, as described in [Set environment variable](#set-environment-variable).
-   - This enables you to run any export that needs to be refreshed after a model is built.
-   - Use the [selector syntax](/reference/node-selection/syntax) `--select` or `-s` option in your build command to specify a particular dbt model or saved query to run. For example, to run all saved queries downstream of the `orders` semantic model, use the following command:
+1. [デプロイジョブ](/docs/deploy/deploy-jobs)を作成し、[環境変数の設定](#set-environment-variable)の説明に従って、`DBT_EXPORT_SAVED_QUERIES=TRUE`環境変数が設定されていることを確認します。
+  - これにより、モデルの構築後に更新が必要なエクスポートを実行できるようになります。
+  - ビルドコマンドで[セレクタ構文](/reference/node-selection/syntax)の`--select`または`-s`オプションを使用して、実行する特定のdbtモデルまたは保存済みクエリを指定します。たとえば、`orders`セマンティックモデルの下流にあるすべての保存済みクエリを実行するには、次のコマンドを使用します:
     ```bash
       dbt build --select orders+
       ```
 
 </VersionBlock>
 
-2. After dbt finishes building the models, the MetricFlow Server processes the exports, compiles the necessary SQL, and executes this SQL against your data platform. It directly executes a "create table" statement so the data stays within your data platform.
-3. Review the exports' execution details in the jobs logs and confirm the export was run successfully. This helps troubleshoot and to ensure accuracy. Since saved queries are integrated into the dbt DAG, all outputs related to exports are available in the job logs.
-4. Your data is now available in the data platform for querying! 🎉
+2. dbt がモデルの構築を完了すると、MetricFlow サーバーはエクスポートを処理し、必要な SQL をコンパイルして、データプラットフォームに対してこの SQL を実行します。データはデータプラットフォーム内に保持されるため、「create table」ステートメントが直接実行されます。
+3. ジョブログでエクスポートの実行詳細を確認し、エクスポートが正常に実行されたことを確認します。これはトラブルシューティングと精度の確保に役立ちます。保存されたクエリは dbt DAG に統合されているため、エクスポートに関連するすべての出力はジョブログで確認できます。
+4. これで、データプラットフォームでクエリを実行できるようになりました。🎉
 
 ## FAQs
 
-<DetailsToggle alt_header="Can I have multiple exports in a single saved query?">
+<DetailsToggle alt_header="1 つの保存されたクエリで複数のエクスポートを実行できますか?">
 
-Yes, this is possible. However, the difference would be the name, schema, and materialization strategy of the export.
-</DetailsToggle>
-
-<DetailsToggle alt_header="How do I run all exports for a saved query?">
-
-- In production runs, you can build the saved query by calling it directly in the build command, or you build a model and any exports downstream of that model.
-- In development, you can run all exports by running `dbt sl export --saved-query sq_name`.
+はい、可能です。ただし、エクスポートの名前、スキーマ、およびマテリアライズ戦略が異なります。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Will I run duplicate exports if multiple models are downstream of my saved query?">
+<DetailsToggle alt_header="保存したクエリのすべてのエクスポートを実行するにはどうすればよいですか?">
 
-dbt will only run each export once even if it builds multiple models that are downstream of the saved query. For example, you could have a saved query called `order_metrics`, which has metrics from both the `orders` and `order_items` semantic models.
-
-You can run a job that includes both models using `dbt build`. This runs both the `orders` and `order_items` models, however, it will only run the `order_metrics` export once.
-</DetailsToggle>
-
-<DetailsToggle alt_header="Can I reference an export as a dbt model using ref()">
-
-No, you won't be able to reference an export using `ref`. Exports are treated as leaf nodes in your DAG. Modifying an export could lead to inconsistencies with the original metrics from the Semantic Layer.
-</DetailsToggle>
-
-<DetailsToggle alt_header="How do exports help me use the dbt Semantic Layer in tools that don't support it, such as PowerBI?">
-
-Exports provide an integration path for tools that don't natively connect with the dbt Semantic Layer by exposing tables of metrics and dimensions in the data platform.
-
-You can use exports to create a custom integration with tools such as PowerBI, and more.
+- 本番環境では、ビルド コマンドで直接呼び出して保存済みクエリをビルドするか、モデルとそのモデルの下流にあるエクスポートをビルドできます。
+- 開発環境では、`dbt sl export --saved-query sq_name` を実行してすべてのエクスポートを実行できます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How can I select saved_queries by their resource type?">
+<DetailsToggle alt_header="保存したクエリの下流に複数のモデルがある場合、重複したエクスポートが実行されますか?">
 
-To include all saved queries in the dbt build run, use the [`--resource-type` flag](/reference/global-configs/resource-type) and run the command `dbt build --resource-type saved_query`.
+dbt は、保存済みクエリの下流に複数のモデルを構築する場合でも、各エクスポートを 1 回だけ実行します。例えば、「order_metrics」という保存済みクエリがあり、このクエリには「orders」と「order_items」セマンティックモデルの両方のメトリクスが含まれているとします。
+
+「dbt build」を使用すれば、両方のモデルを含むジョブを実行できます。この場合、「orders」と「order_items」の両方のモデルが実行されますが、「order_metrics」エクスポートは 1 回だけ実行されます。
+</DetailsToggle>
+
+<DetailsToggle alt_header="ref() を使用してエクスポートを dbt モデルとして参照できますか?">
+
+いいえ、`ref` を使用してエクスポートを参照することはできません。エクスポートは DAG のリーフノードとして扱われます。エクスポートを変更すると、セマンティックレイヤーの元のメトリクスとの不整合が発生する可能性があります。
 
 </DetailsToggle>
 
-## Related docs
-- [Validate semantic nodes in a CI job](/docs/deploy/ci-jobs#semantic-validations-in-ci)
-- Configure [caching](/docs/use-dbt-semantic-layer/sl-cache)
-- [dbt Semantic Layer FAQs](/docs/use-dbt-semantic-layer/sl-faqs)
+<DetailsToggle alt_header="エクスポートは、PowerBI などの dbt セマンティック レイヤーをサポートしていないツールで dbt セマンティック レイヤーを使用するのにどのように役立ちますか?">
+
+エクスポートは、データプラットフォーム内のメトリックとディメンションのテーブルを公開することで、dbt セマンティックレイヤーにネイティブに接続できないツールに統合パスを提供します。
+
+エクスポートを使用することで、PowerBI などのツールとのカスタム統合を作成できます。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="リソースタイプ別に saved_queries を選択するにはどうすればよいですか?">
+
+保存されているすべてのクエリを dbt ビルド実行に含めるには、[`--resource-type` フラグ](/reference/global-configs/resource-type) を使用して、コマンド `dbt build --resource-type saved_query` を実行します。
+
+</DetailsToggle>
+
+## 関連ドキュメント
+- [CI ジョブでセマンティックノードを検証する](/docs/deploy/ci-jobs#semantic-validations-in-ci)
+- [キャッシュ](/docs/use-dbt-semantic-layer/sl-cache)の設定
+- [dbt セマンティックレイヤーに関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)

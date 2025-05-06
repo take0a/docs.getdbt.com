@@ -1,13 +1,13 @@
 ---
-title: Can I use seeds to load raw data?
-description: "Use seeds to load business specific logic"
-sidebar_label: 'Seed data files requirements'
+title: シードを使用して生データを読み込むことはできますか?
+description: "シードを使用してビジネス固有のロジックをロードする"
+sidebar_label: 'シードデータファイルの要件'
 id: load-raw-data-with-seed
 
 ---
 
-Seeds should **not** be used to load raw data (for example, large CSV exports from a production database).
+シードは、生データ（本番データベースからの大容量CSVエクスポートなど）のロードには**使用しないでください**。
 
-Since seeds are version controlled, they are best suited to files that contain business-specific logic, for example a list of country codes or user IDs of employees.
+シードはバージョン管理されているため、国コードのリストや従業員のユーザーIDなど、ビジネス固有のロジックを含むファイルに最適です。
 
-Loading CSVs using dbt's seed functionality is not performant for large files. Consider using a different tool to load these CSVs into your <Term id="data-warehouse" />.
+dbtのシード機能を使用してCSVをロードすると、大容量ファイルの場合、パフォーマンスが低下します。これらのCSVを<Term id="data-warehouse" />にロードするには、別のツールの使用を検討してください。

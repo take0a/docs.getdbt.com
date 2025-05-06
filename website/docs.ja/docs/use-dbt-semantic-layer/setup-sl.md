@@ -1,16 +1,16 @@
 ---
-title: "Set up the dbt Semantic Layer"
+title: "dbtセマンティックレイヤーを設定する"
 id: setup-sl
-description: "Seamlessly set up the dbt Semantic Layer in dbt Cloud using intuitive navigation."
+description: "直感的なナビゲーションを使用して、dbt Cloud で dbt セマンティック レイヤーをシームレスに設定します。"
 sidebar_label: "Set up the Semantic Layer"
 tags: [Semantic Layer]
 pagination_next: "docs/use-dbt-semantic-layer/sl-architecture"
 pagination_prev: "guides/sl-snowflake-qs"
 ---
 
-With the dbt Semantic Layer, you can centrally define business metrics, reduce code duplication and inconsistency, create self-service in downstream tools, and more. 
+dbt セマンティック レイヤーを使用すると、ビジネス メトリックを一元的に定義し、コードの重複と不整合を削減し、下流のツールでセルフサービスを作成するなどが可能になります。
 
-## Prerequisites
+## 前提条件
 
 import SetUp from '/snippets/_v2-sl-prerequisites.md';
 
@@ -20,7 +20,7 @@ import SLCourses from '/snippets/_sl-course.md';
 
 <SLCourses/>
 
-## Set up dbt Semantic Layer
+## dbtセマンティックレイヤーを設定する
 
 import SlSetUp from '/snippets/_new-sl-setup.md';  
 
@@ -37,20 +37,20 @@ import SlSetUp from '/snippets/_new-sl-setup.md';
 8. You’re done 🎉! The semantic layer should is now enabled for your project. 
 -->
 
-## Next steps
+## 次のステップ
 
-- Now that you've set up the dbt Semantic Layer, start querying your metrics with the [available integrations](/docs/cloud-integrations/avail-sl-integrations).
-- [Optimize querying performance](/docs/use-dbt-semantic-layer/sl-cache) using declarative caching.
-- [Validate semantic nodes in CI](/docs/deploy/ci-jobs#semantic-validations-in-ci) to ensure code changes made to dbt models don't break these metrics.
-- If you haven't already, learn how to [build you metrics and semantic models](/docs/build/build-metrics-intro) in your development tool of choice.
-- Learn about commonly asked [dbt Semantic Layer FAQs](/docs/use-dbt-semantic-layer/sl-faqs).
+- dbt セマンティック レイヤーの設定が完了したら、[利用可能な統合](/docs/cloud-integrations/avail-sl-integrations)を使用してメトリクスのクエリを開始します。
+- 宣言型キャッシュを使用して、[クエリのパフォーマンスを最適化](/docs/use-dbt-semantic-layer/sl-cache)します。
+- [CI でセマンティック ノードを検証](/docs/deploy/ci-jobs#semantic-validations-in-ci)し、dbt モデルへのコード変更によってこれらのメトリクスが損なわれないことを確認します。
+- まだお試しでない場合は、お好みの開発ツールで[メトリクスとセマンティック モデルを構築する](/docs/build/build-metrics-intro)方法を学習してください。
+- [dbt セマンティック レイヤーに関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)をご確認ください。
 
 ## FAQs
 
-<DetailsToggle alt_header="How does caching interact with access controls?">
+<DetailsToggle alt_header="キャッシュはアクセス制御とどのように相互作用しますか?">
 
-Cached data is stored separately from the underlying models. If metrics are pulled from the cache, we don’t have the security context applied to those tables at query time.
+キャッシュされたデータは、基盤となるモデルとは別に保存されます。メトリクスがキャッシュから取得された場合、クエリ実行時にそれらのテーブルにセキュリティコンテキストが適用されません。
 
-In the future, we plan to clone credentials, identify the minimum access level needed, and apply those permissions to cached tables.
+今後、認証情報を複製し、必要な最小限のアクセスレベルを特定し、それらの権限をキャッシュされたテーブルに適用する予定です。
 
 </DetailsToggle>

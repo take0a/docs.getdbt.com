@@ -1,12 +1,12 @@
 ---
-title: Do ref-able resource names need to be unique?
-description: "Unique resource names to build dependencies"
-sidebar_label: 'Resource names need to be unique'
+title: 参照可能なリソース名は一意である必要がありますか?
+description: "依存関係を構築するための一意のリソース名"
+sidebar_label: 'リソース名は一意である必要があります'
 id: unique-resource-names
 ---
 
-Within one project: yes! To build dependencies between resources (such as models, seeds, and snapshots), you need to use the `ref` function, and pass in the resource name as an argument. dbt uses that resource name to uniquely resolve the `ref` to a specific resource. As a result, these resource names need to be unique, _even if they are in distinct folders_.
+同一プロジェクト内：はい！リソース（モデル、シード、スナップショットなど）間の依存関係を構築するには、`ref` 関数を使用し、リソース名を引数として渡す必要があります。dbt はこのリソース名を使用して、`ref` を特定のリソースに一意に解決します。そのため、これらのリソース名は、たとえ異なるフォルダ内にある場合でも、一意である必要があります。
 
-A resource in one project can have the same name as a resource in another project (installed as a dependency). dbt uses the project name to uniquely identify each resource. We call this "namespacing." If you `ref` a resource with a duplicated name, it will resolve to the resource within the same namespace (package or project), or raise an error because of an ambiguous reference. Use [two-argument `ref`](/reference/dbt-jinja-functions/ref#ref-project-specific-models) to disambiguate references by specifying the namespace.
+あるプロジェクト内のリソースは、別のプロジェクト（依存関係としてインストールされた）内のリソースと同じ名前を持つことができます。dbt はプロジェクト名を使用して各リソースを一意に識別します。これを「名前空間」と呼びます。重複した名前のリソースを `ref` すると、同じ名前空間（パッケージまたはプロジェクト）内のリソースに解決されるか、参照が曖昧であるためエラーが発生します。名前空間を指定して参照の曖昧さを解消するには、[2 つの引数を持つ `ref`](/reference/dbt-jinja-functions/ref#ref-project-specific-models) を使用してください。
 
-Those resource will still need to land in distinct locations in the data warehouse. Read the docs on [custom aliases](/docs/build/custom-aliases) and [custom schemas](/docs/build/custom-schemas) for details on how to achieve this.
+これらのリソースは、データウェアハウス内の別々の場所に配置する必要があり、その方法の詳細については、[カスタムエイリアス](/docs/build/custom-aliases)と[カスタムスキーマ](/docs/build/custom-schemas)のドキュメントをご覧ください。

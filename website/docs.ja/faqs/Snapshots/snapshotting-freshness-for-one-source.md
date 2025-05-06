@@ -1,13 +1,13 @@
 ---
-title: How do I snapshot freshness for one source only?
-description: "Use select flag to snapshot for specific sources"
-sidebar_label: 'Snapshot freshness for specific sources.'
+title: 1 つのソースのみの最新スナップショットを取得するにはどうすればよいですか?
+description: "特定のソースのスナップショットを作成するには select フラグを使用します"
+sidebar_label: '特定のソースのスナップショットの最新化'
 id: snapshotting-freshness-for-one-source
 
 ---
 
 
-Use the `--select` flag to snapshot freshness for specific sources. Eg:
+特定のソースのスナップショットの最新版を取得するには、`--select` フラグを使用します。例:
 
 ```shell
 # Snapshot freshness for all Jaffle Shop tables:
@@ -20,4 +20,4 @@ $ dbt source freshness --select source:jaffle_shop.orders
 $ dbt source freshness --select source:jaffle_shop.orders source:jaffle_shop.customers
 ```
 
-See the [`source freshness` command reference](/reference/commands/source) for more information.
+詳細については、[`source freshness` コマンド リファレンス](/reference/commands/source)を参照してください。

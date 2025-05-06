@@ -1,13 +1,13 @@
 ---
-title: "Custom target names"
+title: "カスタムターゲット名"
 id: "custom-target-names"
-description: "You can define a custom target name for any dbt Cloud job to correspond to settings in your dbt project."
+description: "dbt プロジェクトの設定に対応するように、任意の dbt Cloud ジョブにカスタム ターゲット名を定義できます。"
 pagination_next: null
 ---
 
 ## dbt Cloud Scheduler
 
-You can define a custom target name for any dbt Cloud job to correspond to settings in your dbt project. This is helpful if you have logic in your dbt project that behaves differently depending on the specified target, for example:
+dbt Cloud ジョブには、dbt プロジェクトの設定に合わせてカスタムターゲット名を定義できます。これは、dbt プロジェクト内に、指定したターゲットに応じて異なる動作をするロジックがある場合に役立ちます。例えば、次のようになります:
 
 ```sql
 select *
@@ -19,11 +19,12 @@ where created_at > date_trunc('month', current_date)
 {% endif %}
 ```
 
-To set a custom target name for a job in dbt Cloud, configure the **Target Name** field for your job in the Job Settings page.
+dbt Cloud でジョブのカスタム ターゲット名を設定するには、Job Settings ページでジョブの **Target Name** フィールドを構成します。
 
 <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/jobs-settings-target-name.png" title="Overriding the target name to 'prod'"/>
 
 ## dbt Cloud IDE
-When developing in dbt Cloud, you can set a custom target name in your development credentials. Click your account name above the profile icon in the left panel, select **Account settings**, then go to **Credentials**. Choose the project to update the target name.
+
+dbt Cloud で開発する場合、開発認証情報にカスタムターゲット名を設定できます。左パネルのプロフィールアイコンの上にあるアカウント名をクリックし、profile icon in the left panel, select **Account settings** を選択してから、**Credentials** に進みます。ターゲット名を更新するプロジェクトを選択してください。
 
 <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/development-credentials.png" title="Overriding the target name to 'dev'"/>

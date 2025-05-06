@@ -1,14 +1,14 @@
 ---
-title: Does my `.yml` file containing tests and descriptions need to be named `schema.yml`?
-description: "Naming your Tests and Descriptions files"
-sidebar_label: 'How to name your tests and descriptions files'
+title: テストと説明を含む `.yml` ファイルの名前は `schema.yml` にする必要がありますか?
+description: "テストと説明ファイルの命名"
+sidebar_label: 'テストと説明ファイルの命名方法'
 id: schema-yml-name
 
 ---
-No! You can name this file whatever you want (including `whatever_you_want.yml`), so long as:
-* The file is in your `models/` directory¹
-* The file has `.yml` extension
+いいえ！このファイルの名前は自由に付けることができます（`whatever_you_want.yml` など）。ただし、以下の条件を満たしている必要があります。
+* ファイルは `models/` ディレクトリ内にあります¹。
+* ファイルの拡張子は `.yml` です。
 
-Check out the [docs](/reference/configs-and-properties) for more information.
+詳しくは [ドキュメント](/reference/configs-and-properties) をご覧ください。
 
-¹If you're declaring properties for seeds, snapshots, or macros, you can also place this file in the related directory — `seeds/`, `snapshots/` and `macros/` respectively.
+¹シード、スナップショット、またはマクロのプロパティを宣言する場合は、このファイルをそれぞれ `seeds/`、`snapshots/`、`macros/` などの関連ディレクトリに配置することもできます。

@@ -1,10 +1,10 @@
 ---
-title: Which materialization should I use for my model?
-description: "Recommendations on materializations to use for models"
-sidebar_label: 'What materializations to use'
+title: モデルにはどのマテリアライゼーションを使用すればよいですか?
+description: "モデルに使用するマテリアライゼーションに関する推奨事項"
+sidebar_label: 'どのようなマテリアライゼーションを使用するか'
 id: which-materialization
 
 ---
-Start out with <Term id="view">views</Term>, and then change models to tables when required for performance reasons (i.e. downstream queries have slowed).
+まずは <Term id="view">ビュー</Term> から始め、パフォーマンス上の理由（下流のクエリの速度低下など）で必要になった場合は、モデルをテーブルに変更してください。
 
-Check out the [docs on materializations](/docs/build/materializations) for advice on when to use each <Term id="materialization" />.
+各 <Term id="materialization" /> をいつ使用するかについては、[マテリアライゼーションに関するドキュメント](/docs/build/materializations) を参照してください。

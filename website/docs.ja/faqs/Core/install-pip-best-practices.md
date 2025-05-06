@@ -1,15 +1,15 @@
 ---
-title: "What are the best practices for installing dbt Core with pip?"
-description: "Instructions on how to install dbt Core with pip"
-sidebar_label: 'Installing dbt Core with pip'
+title: "pip を使用して dbt Core をインストールするためのベストプラクティスは何ですか?"
+description: "pipを使ってdbt Coreをインストールする方法"
+sidebar_label: 'pip で dbt Core をインストールする'
 id: install-pip-best-practices.md
 ---
 
-Managing Python local environments can be challenging! You can use these best practices to improve the dbt Core installation with pip. 
+Python のローカル環境の管理は難しい場合があります。これらのベストプラクティスを活用して、pip を使用した dbt Core のインストールを改善できます。
 
-### Using virtual environments
+### 仮想環境の使用
 
-We recommend using [virtual environments](https://docs.python-guide.org/dev/virtualenvs/) to namespace `pip` modules. Here's an example setup:
+`pip` モジュールの名前空間を設定するには、[仮想環境](https://docs.python-guide.org/dev/virtualenvs/) を使用することをお勧めします。設定例を以下に示します:
 
 ```shell
 
@@ -18,15 +18,15 @@ source dbt-env/bin/activate			# activate the environment for Mac and Linux
 dbt-env\Scripts\activate			# activate the environment for Windows
 ```
 
-If you install `dbt` in a virtual environment, you need to reactivate that same virtual environment each time you create a shell window or session.
+`dbt` を仮想環境にインストールした場合、シェルウィンドウまたはセッションを作成するたびに、同じ仮想環境を再アクティブ化する必要があります。
 
-*Tip:* You can create an alias for the `source` command in your `$HOME/.bashrc`, `$HOME/.zshrc`, or whichever rc file your shell draws from. For example, you can add a command like `alias env_dbt='source <PATH_TO_VIRTUAL_ENV_CONFIG>/bin/activate'`, replacing `<PATH_TO_VIRTUAL_ENV_CONFIG>` with the path to your virtual environment configuration.
+*ヒント:* `$HOME/.bashrc`、`$HOME/.zshrc`、またはシェルが参照する rc ファイル内に `source` コマンドのエイリアスを作成できます。例えば、`alias env_dbt='source <PATH_TO_VIRTUAL_ENV_CONFIG>/bin/activate'` のようなコマンドを追加し、`<PATH_TO_VIRTUAL_ENV_CONFIG>` を仮想環境設定へのパスに置き換えます。
 
-### Using the latest versions
+### 最新バージョンの使用
 
-dbt installations are tested using the latest versions of `pip` and `setuptools`. Newer versions have improved behavior around dependency resolution, as well as much faster install times by using precompiled "wheels" when available for your operating system.
+dbt のインストールは、最新バージョンの `pip` と `setuptools` を使用してテストされています。新しいバージョンでは、依存関係の解決に関する動作が改善されているほか、お使いのオペレーティングシステムで利用可能な場合は、プリコンパイル済みの「wheels」を使用することでインストール時間が大幅に短縮されています。
 
-Before installing dbt, make sure you have the latest versions:
+dbt をインストールする前に、最新バージョンがインストールされていることを確認してください。
 
 ```shell
 

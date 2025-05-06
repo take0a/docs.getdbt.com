@@ -1,8 +1,8 @@
 ---
-title: Do I need to create my target schema before running dbt?
-description: "Target schema is checked or created for you before running dbt"
-sidebar_label: 'Target schema before running dbt'
+title: dbt を実行する前にターゲット スキーマを作成する必要がありますか?
+description: "dbt を実行する前にターゲット スキーマがチェックまたは作成されます"
+sidebar_label: 'dbt を実行する前のターゲット スキーマ'
 id: create-a-schema
 
 ---
-Nope! dbt will check if the schema exists when it runs. If the schema does not exist, dbt will create it for you.
+いいえ！dbt は実行時にスキーマが存在するかどうかを確認します。スキーマが存在しない場合は、dbt が自動的に作成します。

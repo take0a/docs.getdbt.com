@@ -1,9 +1,9 @@
 ---
-title: Do I need to add a YAML entry for column for it to appear in the docs site?
-description: "All columns appear in your docs site"
-sidebar_label: 'Types of columns included in doc site'
+title: ドキュメント サイトに表示するには、列の YAML エントリを追加する必要がありますか?
+description: "すべての列がドキュメントサイトに表示されます"
+sidebar_label: 'ドキュメントサイトに含まれる列の種類'
 id: document-all-columns
 ---
-Fortunately, no!
+幸いなことに、そうではありません！
 
-dbt will introspect your warehouse to generate a list of columns in each relation, and match it with the list of columns in your `.yml` files. As such, any undocumented columns will still appear in your documentation!
+dbt はウェアハウスをイントロスペクトして各リレーションの列リストを生成し、それを `.yml` ファイルの列リストと照合します。そのため、ドキュメント化されていない列もドキュメントには表示されます。

@@ -1,26 +1,25 @@
 ---
-title: "Custom databases"
+title: "カスタムデータベース"
 id: "custom-databases"
 ---
 
 
-:::info A word on naming
+:::info 命名について
 
-Different warehouses have different names for _logical databases_. The information in this document covers "databases" on Snowflake, Redshift, and Postgres; "projects" on BigQuery; and "catalogs" on Databricks Unity Catalog.
+ウェアハウスによって、論理データベースの名称は異なります。このドキュメントでは、Snowflake、Redshift、Postgres では「データベース」、BigQuery では「プロジェクト」、Databricks Unity Catalog では「カタログ」について説明します。
 
-The values `project` and `database` are interchangeable in BigQuery project configurations.
-
+BigQuery プロジェクト構成では、`project` と `database` の値は互換性があります。
 :::
 
-## Configuring custom databases
+## カスタムデータベースの設定
 
-The logical database that dbt models are built into can be configured using the `database` model configuration. If this configuration is not supplied to a model, then dbt will use the database configured in the active target from your `profiles.yml` file. If the `database` configuration *is* supplied for a model, then dbt will build the model into the configured  database.
+dbt モデルが構築される論理データベースは、`database` モデル設定を使用して設定できます。この設定がモデルに指定されていない場合、dbt は `profiles.yml` ファイルのアクティブターゲットに設定されたデータベースを使用します。`database` 設定がモデルに指定されている場合、dbt は設定されたデータベースにモデルを構築します。
 
-The `database` configuration can be supplied for groups of models in the `dbt_project.yml` file, or for individual models in model SQL files.
+`database` 設定は、`dbt_project.yml` ファイル内のモデルグループに対して、またはモデル SQL ファイル内の個々のモデルに対して指定できます。
 
-### Configuring database overrides in `dbt_project.yml`:
+### `dbt_project.yml` でデータベースのオーバーライドを設定する:
 
-This config changes all models in the `jaffle_shop` project to be built into a database called `jaffle_shop`.
+この設定により、`jaffle_shop` プロジェクト内のすべてのモデルが `jaffle_shop` というデータベースにビルドされるように変更されます。
 
 <File name='dbt_project.yml'>
 
@@ -37,9 +36,9 @@ models:
 
 </File>
 
-### Configuring database overrides in a model file
+### モデルファイルでデータベースのオーバーライドを設定する
 
-This config changes a specific model to be built into a database called `jaffle_shop`.
+この設定は、特定のモデルを「jaffle_shop」というデータベースにビルドするように変更します。
 
 <File name='models/my_model.sql'>
 
@@ -54,14 +53,14 @@ select * from ...
 
 ### generate_database_name
 
-The database name generated for a model is controlled by a macro called `generate_database_name`. This macro can be overridden in a dbt project to change how dbt generates model database names. This macro works similarly to the [generate_schema_name](/docs/build/custom-schemas#advanced-custom-schema-configuration) macro.
+モデル用に生成されるデータベース名は、`generate_database_name` というマクロによって制御されます。このマクロを dbt プロジェクト内でオーバーライドすることで、dbt によるモデルデータベース名の生成方法を変更できます。このマクロは、[generate_schema_name](/docs/build/custom-schemas#advanced-custom-schema-configuration) マクロと同様に動作します。
 
-To override dbt's database name generation, create a macro named `generate_database_name` in your own dbt project. The `generate_database_name` macro accepts two arguments:
+dbt によるデータベース名生成をオーバーライドするには、独自の dbt プロジェクト内に `generate_database_name` というマクロを作成します。`generate_database_name` マクロは、以下の 2 つの引数を受け取ります。
 
-1. The custom database supplied in the model config
-2. The node that a custom database is being generated for
+1. モデル構成で指定されたカスタムデータベース
+2. カスタムデータベースが生成されるノード
 
-The default implementation of `generate_database_name` simply uses the supplied `database` config if one is present, otherwise the database configured in the active `target` is used. This implementation looks like this:
+`generate_database_name` のデフォルト実装では、指定された `database` 構成が存在する場合はそれをそのまま使用し、存在しない場合はアクティブな `target` で構成されたデータベースを使用します。この実装は次のようになります。
 
 <File name='get_custom_database.sql'>
 
@@ -89,18 +88,18 @@ import WhitespaceControl from '/snippets/_whitespace-control.md';
 
 <WhitespaceControl/>
 
-### Managing different behaviors across packages
+### パッケージ間で異なる動作を管理する
 
-See docs on macro `dispatch`: ["Managing different global overrides across packages"](/reference/dbt-jinja-functions/dispatch)
+マクロ `dispatch` のドキュメントを参照してください: ["パッケージ間で異なるグローバルオーバーライドを管理する"](/reference/dbt-jinja-functions/dispatch)
 
-## Considerations
+## 考慮事項
 
 ### BigQuery
 
-When dbt opens a BigQuery connection, it will do so using the `project_id` defined in your active `profiles.yml` target. This `project_id` will be billed for the queries that are executed in the dbt run, even if some models are configured to be built in other projects.
+dbt が BigQuery 接続を開く際、アクティブな `profiles.yml` ターゲットで定義された `project_id` が使用されます。一部のモデルが他のプロジェクトでビルドされるように設定されている場合でも、dbt 実行中に実行されるクエリに対しては、この `project_id` に対して課金されます。
 
-## Related docs
+## 関連ドキュメント
 
-- [Customize dbt models database, schema, and alias](/guides/customize-schema-alias?step=1) to learn how to customize dbt models database, schema, and alias
-- [Custom schema](/docs/build/custom-schemas) to learn how to customize dbt model schema
-- [Custom aliases](/docs/build/custom-aliases) to learn how to customize dbt model alias name
+- [dbt モデルのデータベース、スキーマ、エイリアスのカスタマイズ](/guides/customize-schema-alias?step=1) で、dbt モデルのデータベース、スキーマ、エイリアスのカスタマイズ方法をご確認ください。
+- [カスタム スキーマ](/docs/build/custom-schemas) で、dbt モデル スキーマのカスタマイズ方法をご確認ください。
+- [カスタム エイリアス](/docs/build/custom-aliases) で、dbt モデルのエイリアス名のカスタマイズ方法をご確認ください。

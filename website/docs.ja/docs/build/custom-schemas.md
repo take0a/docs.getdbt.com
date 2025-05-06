@@ -1,18 +1,18 @@
 ---
-title: "Custom schemas"
-description: "Configure custom schemas for your dbt model's tables and views in the database."
+title: "カスタムスキーマ"
+description: "データベース内の dbt モデルのテーブルとビューのカスタム スキーマを構成します。"
 id: "custom-schemas"
 pagination_next: "docs/build/custom-databases"
 ---
 
-By default, all dbt models are built in the schema specified in your [environment](/docs/dbt-cloud-environments) (dbt Cloud) or [profile's target](/docs/core/dbt-core-environments) (dbt Core). This default schema is called your _target schema_.
+デフォルトでは、すべての dbt モデルは、[環境](/docs/dbt-cloud-environments) (dbt Cloud) または [プロファイルのターゲット](/docs/core/dbt-core-environments) (dbt Core) で指定されたスキーマで構築されます。このデフォルトのスキーマは、_ターゲット スキーマ_ と呼ばれます。
 
-For dbt projects with lots of models, it's common to build models across multiple schemas and group similar models together. For example, you might want to:
+多数のモデルを含む dbt プロジェクトでは、複数のスキーマにまたがってモデルを構築し、類似のモデルをグループ化するのが一般的です。たとえば、次のようなことが考えられます。
 
-* Group models based on the business unit using the model, creating schemas such as `core`, `marketing`, `finance` and `support`.
-* Hide intermediate models in a `staging` schema, and only present models that should be queried by an end user in an `analytics` schema.
+* モデルを使用する事業部門に基づいてモデルをグループ化し、`core`、`marketing`、`finance`、`support` などのスキーマを作成します。
+* 中間モデルを `staging` スキーマで非表示にし、エンドユーザーがクエリする必要があるモデルのみを `analytics` スキーマで表示します。
 
-To do this, specify a custom schema. dbt generates the schema name for a model by appending the custom schema to the target schema. For example, `<target_schema>_<custom_schema>`.
+これを行うには、カスタム スキーマを指定します。dbt は、カスタム スキーマをターゲット スキーマに追加することで、モデルのスキーマ名を生成します。たとえば、`<target_schema>_<custom_schema>` です。
 
 | Target schema | Custom schema | Resulting schema |
 | ------------- | ------------- | ---------------- |
@@ -23,12 +23,12 @@ To do this, specify a custom schema. dbt generates the schema name for a model b
 | alice_dev | marketing | alice_dev_marketing |
 | dbt_cloud_pr_123_456 | marketing | dbt_cloud_pr_123_456_marketing |
 
-## How do I use custom schemas?
+## カスタムスキーマはどのように使用しますか？
 
-To specify a custom schema for a model, use the `schema` configuration key. As with any configuration, you can do one of the following:
+モデルにカスタムスキーマを指定するには、`schema` 設定キーを使用します。他の設定と同様に、次のいずれかの操作を実行できます。
 
-* apply this configuration to a specific model by using a config block within a model
-* apply it to a subdirectory of models by specifying it in your `dbt_project.yml` file
+* モデル内の設定ブロックを使用して、特定のモデルにこの設定を適用する
+* `dbt_project.yml` ファイルで指定して、モデルのサブディレクトリに適用する
 
 <File name='orders.sql'>
 
@@ -52,21 +52,21 @@ models:
 
 </File>
 
-## Understanding custom schemas
+## カスタムスキーマについて
 
-When first using custom schemas, it's a common misunderstanding to assume that a model _only_ uses the new `schema` configuration; for example, a model that has the configuration `schema: marketing` would be built in the `marketing` schema. However, dbt puts it in a schema like `<target_schema>_marketing`.
+カスタムスキーマを初めて使用する場合、モデルは新しい `schema` 構成のみを使用するという誤解がよくあります。たとえば、`schema: marketing` 構成を持つモデルは `marketing` スキーマ内に構築されます。しかし、dbt はそれを `<target_schema>_marketing` のようなスキーマに配置します。
 
-There's a good reason for this deviation. Each dbt user has their own target schema for development (refer to [Managing Environments](#managing-environments)). If dbt ignored the target schema and only used the model's custom schema, every dbt user would create models in the same schema and would overwrite each other's work.
+この相違には十分な理由があります。各 dbt ユーザーは、開発用に独自のターゲットスキーマを持っています ([環境の管理](#managing-environments) を参照)。dbt がターゲットスキーマを無視してモデルのカスタムスキーマのみを使用すると、すべての dbt ユーザーが同じスキーマ内にモデルを作成し、互いの作業を上書きしてしまいます。
 
-By combining the target schema and the custom schema, dbt ensures that objects it creates in your data warehouse don't collide with one another.
+ターゲットスキーマとカスタムスキーマを組み合わせることで、dbt はデータウェアハウス内に作成するオブジェクトが互いに衝突しないようにします。
 
-If you prefer to use different logic for generating a schema name, you can change the way dbt generates a schema name (see below).
+スキーマ名を生成するために別のロジックを使用する場合は、dbt がスキーマ名を生成する方法を変更できます (以下を参照)。
 
-### How does dbt generate a model's schema name?
+### dbt はモデルのスキーマ名をどのように生成しますか？
 
-dbt uses a default macro called `generate_schema_name` to determine the name of the schema that a model should be built in.
+dbt は、モデルを構築するスキーマ名を決定するために、`generate_schema_name` というデフォルトのマクロを使用します。
 
-The following code represents the default macro's logic:
+次のコードは、このデフォルトマクロのロジックを表しています:
 
 ```sql
 {% macro generate_schema_name(custom_schema_name, node) -%}
@@ -91,21 +91,21 @@ import WhitespaceControl from '/snippets/_whitespace-control.md';
 <WhitespaceControl/>
 
 
-## Changing the way dbt generates a schema name
+## dbt によるスキーマ名生成方法の変更
 
-If your dbt project has a custom macro called `generate_schema_name`, dbt will use it instead of the default macro. This allows you to customize the name generation according to your needs.
+dbt プロジェクトに `generate_schema_name` というカスタムマクロがある場合、dbt はデフォルトのマクロの代わりにこのマクロを使用します。これにより、ニーズに合わせて名前生成をカスタマイズできます。
 
-To customize this macro, copy the example code in the section [How does dbt generate a model's schema name](#how-does-dbt-generate-a-models-schema-name) into a file named `macros/generate_schema_name.sql` and make changes as necessary.
+このマクロをカスタマイズするには、[dbt によるモデルのスキーマ名の生成方法](#how-does-dbt-generate-a-models-schema-name) セクションのサンプルコードを `macros/generate_schema_name.sql` というファイルにコピーし、必要に応じて変更を加えます。
 
-Be careful. dbt will ignore any custom `generate_schema_name` macros included in installed packages.
+注意：dbt は、インストール済みパッケージに含まれるカスタム `generate_schema_name` マクロを無視します。
 
-<Expandable alt_header="Warning: Don't replace `default_schema` in the macro">
+<Expandable alt_header="Warning: マクロ内の `default_schema` を置き換えないでください">
 
-If you're modifying how dbt generates schema names, don't just replace ```{{ default_schema }}_{{ custom_schema_name | trim }}``` with ```{{ custom_schema_name | trim }}``` in the ```generate_schema_name``` macro.
+dbt によるスキーマ名の生成方法を変更する場合、```generate_schema_name``` マクロ内の ```{{ default_schema }}_{{ custom_schema_name | trim }}``` を ```{{ custom_schema_name | trim }}``` に置き換えるだけでは不十分です。
 
-If you remove ```{{ default_schema }}```, it causes developers to override each other's models if they create their own custom schemas. This can also cause issues during development and continuous integration (CI).
+`{{ default_schema }}` を削除すると、開発者が独自のカスタムスキーマを作成する際に、互いのモデルをオーバーライドすることになります。これは、開発および継続的インテグレーション (CI) 中に問題を引き起こす可能性があります。
 
-❌ The following code block is an example of what your code _should not_ look like:
+❌ 次のコード ブロックは、コードが次のようになってはならない例です:
 
 ```sql
 {% macro generate_schema_name(custom_schema_name, node) -%}
@@ -127,18 +127,18 @@ If you remove ```{{ default_schema }}```, it causes developers to override each 
 
 </Expandable>
 
-### generate_schema_name arguments
+### generate_schema_name 引数
 
 | Argument | Description | Example |
 | -------- | ----------- | ------- |
-| custom_schema_name | The configured value of `schema` in the specified node, or `none` if a value is not supplied | `marketing` |
-| node | The `node` that is currently being processed by dbt | `{"name": "my_model", "resource_type": "model",...}` |
+| custom_schema_name | 指定されたノードの `schema` の設定値、または値が指定されていない場合は `none` | `marketing` |
+| node | 現在 dbt によって処理されている `node` | `{"name": "my_model", "resource_type": "model",...}` |
 
-### Jinja context available in generate_schema_name
+### generate_schema_name で利用可能な Jinja コンテキスト
 
-If you choose to write custom logic to generate a schema name, it's worth noting that not all variables and methods are available to you when defining this logic. In other words: the `generate_schema_name` macro is compiled with a limited Jinja context.
+スキーマ名を生成するためのカスタムロジックを記述する場合、そのロジックを定義する際にすべての変数とメソッドが利用できるわけではないことに注意してください。つまり、`generate_schema_name` マクロは、制限された Jinja コンテキストでコンパイルされます。
 
-The following context methods _are_ available in the `generate_schema_name` macro:
+`generate_schema_name` マクロでは、以下のコンテキストメソッドが利用可能です:
 
 | Jinja context | Type | Available |
 | ------------- | ---- | --------- |
@@ -147,21 +147,20 @@ The following context methods _are_ available in the `generate_schema_name` macr
 | [var](/reference/dbt-jinja-functions/var) | Variable | Limited, see below |
 | [exceptions](/reference/dbt-jinja-functions/exceptions) | Macro | ✅ |
 | [log](/reference/dbt-jinja-functions/log) | Macro | ✅ |
-| Other macros in your project | Macro | ✅ |
-| Other macros in your packages | Macro | ✅ |
+| プロジェクト内の他のマクロ | Macro | ✅ |
+| パッケージ内の他のマクロ | Macro | ✅ |
 
-### Which vars are available in generate_schema_name?
+### generate_schema_name で使用できる変数はどれですか？
 
-Globally-scoped variables and variables defined on the command line with
-[--vars](/docs/build/project-variables) are accessible in the `generate_schema_name` context.
+グローバルスコープの変数と、コマンドラインで [--vars](/docs/build/project-variables) を使用して定義された変数は、`generate_schema_name` コンテキストでアクセスできます。
 
-### Managing different behaviors across packages
+### パッケージ間で異なる動作を管理する
 
-See docs on macro `dispatch`: ["Managing different global overrides across packages"](/reference/dbt-jinja-functions/dispatch)
+マクロ `dispatch` のドキュメントを参照してください: ["パッケージ間で異なるグローバルオーバーライドを管理する"](/reference/dbt-jinja-functions/dispatch)
 
-## A built-in alternative pattern for generating schema names
+## スキーマ名を生成するための組み込み代替パターン
 
-A common customization is to use the custom schema in production when provided, with the target schema serving only as a fallback if no custom schema is specified. In other environments, such as development and CI, custom schema configurations are ignored, defaulting to the target schema instead.
+一般的なカスタマイズ方法としては、カスタムスキーマが提供されている場合は本番環境でそれを使用し、カスタムスキーマが指定されていない場合はターゲットスキーマをフォールバックとしてのみ使用するというものがあります。開発環境やCIなどの他の環境では、カスタムスキーマの設定は無視され、代わりにターゲットスキーマがデフォルトとして使用されます。
 
 Production Environment (`target.name == 'prod'`)
 
@@ -179,9 +178,9 @@ Development/CI Environment (`target.name != 'prod'`)
 | dbt_cloud_pr_123_456 | None | dbt_cloud_pr_123_456 |
 | dbt_cloud_pr_123_456 | marketing | dbt_cloud_pr_123_456 |
 
-Similar to the regular macro, this approach guarantees that schemas from different environments will not collide.
+通常のマクロと同様に、このアプローチにより、異なる環境のスキーマが衝突しないことが保証されます。
 
-dbt ships with a macro for this use case &mdash; called `generate_schema_name_for_env` &mdash; which is disabled by default. To enable it, add a custom `generate_schema_name` macro to your project that contains the following code:
+dbt には、このユースケース用のマクロ（「generate_schema_name_for_env」）が付属していますが、デフォルトでは無効になっています。有効にするには、次のコードを含むカスタムの「generate_schema_name」マクロをプロジェクトに追加します。
 
 <File name='macros/get_custom_schema.sql'>
 
@@ -195,22 +194,22 @@ dbt ships with a macro for this use case &mdash; called `generate_schema_name_fo
 
 </File>
 
-When using this macro, you'll need to set the target name in your production job to `prod`.
+このマクロを使用する場合は、本番ジョブのターゲット名を `prod` に設定する必要があります。
 
-## Managing environments
+## 環境の管理
 
-In the `generate_schema_name` macro examples shown in the [built-in alternative pattern](#a-built-in-alternative-pattern-for-generating-schema-names) section, the `target.name` context variable is used to change the schema name that dbt generates for models. If the `generate_schema_name` macro in your project uses the `target.name` context variable, you must ensure that your different dbt environments are configured accordingly. While you can use any naming scheme you'd like, we typically recommend:
+[組み込み代替パターン](#スキーマ名生成のための組み込み代替パターン)セクションに示されている `generate_schema_name` マクロの例では、`target.name` コンテキスト変数を使用して、dbt がモデル用に生成するスキーマ名を変更しています。プロジェクトの `generate_schema_name` マクロで `target.name` コンテキスト変数を使用している場合は、各 dbt 環境が適切に構成されていることを確認する必要があります。任意の命名スキームを使用できますが、通常は次のスキームを推奨します。
 
-* **dev** &mdash; Your local development environment; configured in a `profiles.yml` file on your computer.
-* **ci** &mdash; A [continuous integration](/docs/cloud/git/connect-github) environment running on pull requests in GitHub, GitLab, and so on.
-* **prod** &mdash; The production deployment of your dbt project, like in dbt Cloud, Airflow, or [similar](/docs/deploy/deployments).
+* **dev** - ローカル開発環境。コンピュータ上の `profiles.yml` ファイルで設定されています。
+* **ci** - GitHub、GitLab などのプルリクエストで実行される [継続的インテグレーション](/docs/cloud/git/connect-github) 環境。
+* **prod** - dbt Cloud、Airflow、または[類似](/docs/deploy/deployments)などのdbtプロジェクトの本番環境デプロイメント。
 
-If your schema names are being generated incorrectly, double-check your target name in the relevant environment.
+スキーマ名が正しく生成されていない場合は、該当する環境でターゲット名を再確認してください。
 
-For more information, consult the [managing environments in dbt Core](/docs/core/dbt-core-environments) guide.
+詳細については、[dbt Core での環境管理](/docs/core/dbt-core-environments) ガイドをご覧ください。
 
-## Related docs
+## 関連ドキュメント
 
-- [Customize dbt models database, schema, and alias](/guides/customize-schema-alias?step=1) to learn how to customize dbt models database, schema, and alias
-- [Custom database](/docs/build/custom-databases) to learn how to customize dbt model database
-- [Custom aliases](/docs/build/custom-aliases) to learn how to customize dbt model alias name
+- [dbt モデルのデータベース、スキーマ、エイリアスのカスタマイズ](/guides/customize-schema-alias?step=1) で、dbt モデルのデータベース、スキーマ、エイリアスのカスタマイズ方法をご確認ください。
+- [カスタム データベース](/docs/build/custom-databases) で、dbt モデル データベースのカスタマイズ方法をご確認ください。
+- [カスタム エイリアス](/docs/build/custom-aliases) で、dbt モデルのエイリアス名のカスタマイズ方法をご確認ください。

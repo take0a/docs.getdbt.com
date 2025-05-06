@@ -1,7 +1,7 @@
 ---
-title: "Deploy dbt"
+title: "dbtをデプロイする"
 id: "deployments"
-sidebar: "Use dbt Cloud's capabilities to seamlessly run a dbt job in production."
+sidebar: "dbt Cloud の機能を使用して、本番環境で dbt ジョブをシームレスに実行します。"
 hide_table_of_contents: true
 tags: ["scheduler"]
 pagination_next: "docs/deploy/job-scheduler"
@@ -10,54 +10,55 @@ pagination_prev: null
 
 <IntroText>
 
-Use dbt Cloud's capabilities to seamlessly run a dbt job in production or staging environments. Rather than run dbt commands manually from the command line, you can leverage the [dbt Cloud's in-app scheduling](/docs/deploy/job-scheduler) to automate how and when you execute dbt. 
+dbt Cloud の機能を活用することで、本番環境またはステージング環境で dbt ジョブをシームレスに実行できます。コマンドラインから手動で dbt コマンドを実行する代わりに、[dbt Cloud のアプリ内スケジューリング](/docs/deploy/job-scheduler) を活用して、dbt の実行方法とタイミングを自動化できます。
 
 </IntroText>
 
-dbt Cloud offers the easiest and most reliable way to run your dbt project in production. Effortlessly promote high quality code from development to production and build fresh data assets that your business intelligence tools and end users query to make business decisions. <Term id="deploying">Deploying</Term> with dbt Cloud lets you:
-- Keep production data fresh on a timely basis
-- Ensure CI and production pipelines are efficient 
-- Identify the root cause of failures in deployment environments
-- Maintain high-quality code and data in production
-- Gain visibility into the [health](/docs/collaborate/data-tile) of deployment jobs, models, and tests
-- Uses [exports](/docs/use-dbt-semantic-layer/exports) to write [saved queries](/docs/build/saved-queries) in your data platform for reliable and fast metric reporting
-- [Visualize](/docs/cloud-integrations/downstream-exposures-tableau) and [orchestrate](/docs/cloud-integrations/orchestrate-exposures) downstream exposures to understand how models are used in downstream tools and proactively refresh the underlying data sources during scheduled dbt jobs. <Lifecycle status="enterprise"/>
-- Use [dbt Cloud's Git repository caching](/docs/cloud/account-settings#git-repository-caching) to protect against third-party outages and improve job run reliability. <Lifecycle status="enterprise" />
+dbt Cloudは、dbtプロジェクトを本番環境で実行するための最も簡単かつ信頼性の高い方法を提供します。開発段階から本番環境へと高品質なコードを容易に移行し、ビジネスインテリジェンスツールやエンドユーザーがビジネス上の意思決定に活用できる最新のデータ資産を構築できます。 dbt Cloud を使用した <Term id="deploying">デプロイ</Term> により、次のことが可能になります。
+- 本番環境データをタイムリーに最新の状態に保つ
+- CI および本番環境パイプラインの効率性を確保する
+- デプロイメント環境における障害の根本原因を特定する
+- 本番環境で高品質なコードとデータを維持する
+- デプロイメント ジョブ、モデル、テストの [健全性](/docs/collaborate/data-tile) を可視化する
+- [エクスポート](/docs/use-dbt-semantic-layer/exports) を使用して、データ プラットフォームに [保存済みクエリ](/docs/build/saved-queries) を記述し、信頼性の高い高速なメトリクス レポートを作成する
+- 下流のエクスポージャーを [視覚化](/docs/cloud-integrations/downstream-exposures-tableau) および [オーケストレーション](/docs/cloud-integrations/orchestrate-exposures) することで、下流のツールでモデルがどのように使用されているかを把握し、スケジュールされた dbt ジョブ中に基盤となるデータソースをプロアクティブに更新する。 <Lifecycle status="enterprise"/>
+- [dbt Cloud の Git リポジトリ キャッシュ](/docs/cloud/account-settings#git-repository-caching) を使用して、サードパーティの障害から保護し、ジョブ実行の信頼性を向上させます。<Lifecycle status="enterprise" />
 
-Before continuing, make sure you understand dbt's approach to [deployment environments](/docs/deploy/deploy-environments). 
+続行する前に、dbt の [デプロイメント環境](/docs/deploy/deploy-environments) に対するアプローチを理解していることを確認してください。
 
-Learn how to use dbt Cloud's features to help your team ship timely and quality production data more easily.
+dbt Cloud の機能を活用して、チームがタイムリーかつ高品質な本番環境データをより簡単に提供できるようにする方法を学びましょう。
+
 ## Deploy with dbt
 
 <div className="grid--3-col">
 
 <Card
     title="Job scheduler"
-    body="The job scheduler is the backbone of running jobs in dbt Cloud, bringing power and simplicity to building data pipelines in both continuous integration and production environments."
+    body="ジョブ スケジューラは、dbt Cloud でジョブを実行するためのバックボーンであり、継続的インテグレーション環境と実稼働環境の両方でデータ パイプラインの構築にパワーとシンプルさをもたらします。"
     link="/docs/deploy/job-scheduler"
     icon="dbt-bit"/>
 
 <Card
     title="Deploy jobs"
-    body="Create and schedule jobs for the job scheduler to run. <br /><br />Runs on a schedule, by API, or after another job completes."
+    body="ジョブ スケジューラが実行するジョブを作成し、スケジュールします。<br /><br />スケジュールに従って、API によって、または別のジョブの完了後に実行されます。"
     link="/docs/deploy/deploy-jobs"
     icon="dbt-bit"/>
 
 <Card
     title="Continuous integration"
-    body="Set up CI checks so you can build and test any modified code in a staging environment when you open PRs and push new commits to your dbt repository."
+    body="CI チェックを設定すると、PR を開いて新しいコミットを dbt リポジトリにプッシュするときに、変更されたコードをステージング環境でビルドしてテストできるようになります。"
     link="/docs/deploy/continuous-integration"
     icon="dbt-bit"/>
 
 <Card
     title="Continuous deployment"
-    body="Set up merge jobs to ensure the latest code changes are always in production when pull requests are merged to your Git repository."
+    body="プル リクエストが Git リポジトリにマージされるときに、最新のコード変更が常に本番環境に反映されるように、マージ ジョブを設定します。"
     link="/docs/deploy/continuous-deployment"
     icon="dbt-bit"/>
 
 <Card
     title="Job commands"
-    body="Configure which dbt commands to execute when running a dbt job."
+    body="dbt ジョブを実行するときに実行する dbt コマンドを構成します。"
     link="/docs/deploy/job-commands"
     icon="dbt-bit"/>
 
@@ -69,49 +70,49 @@ Learn how to use dbt Cloud's features to help your team ship timely and quality 
 
 <Card
     title="Visualize and orchestrate exposures"
-    body="Learn how to use dbt Cloud to automatically generate downstream exposures from dashboards and proactively refresh the underlying data sources during scheduled dbt jobs."
+    body="dbt Cloud を使用してダッシュボードからダウンストリーム エクスポージャーを自動的に生成し、スケジュールされた dbt ジョブ中に基礎となるデータ ソースをプロアクティブに更新する方法を学習します。"
     link="/docs/deploy/orchestrate-exposures"
     icon="dbt-bit"/>
 
 <Card
     title="Artifacts"
-    body="dbt Cloud generates and saves artifacts for your project, which it uses to power features like creating docs for your project and reporting the freshness of your sources."
+    body="dbt Cloud を使用してダッシュボードからダウンストリーム エクスポージャーを自動的に生成し、スケジュールされた dbt ジョブ中に基礎となるデータ ソースをプロアクティブに更新する方法を学習します。"
     link="/docs/deploy/artifacts"
     icon="dbt-bit"/>
 
 <Card
     title="Job notifications"
-    body="Receive email or Slack channel notifications when a job run succeeds, fails, or is canceled so you can respond quickly and begin remediation if necessary."
+    body="ジョブの実行が成功、失敗、またはキャンセルされたときにメールまたは Slack チャネルの通知を受信して​​、迅速に対応し、必要に応じて修復を開始できます。"
     link="/docs/deploy/job-notifications"
     icon="dbt-bit"/>
 
 <Card
     title="Model notifications"
-    body="Receive email notifications in real time about issues encountered by your models and tests while a job is running. "
+    body="ジョブの実行中にモデルやテストで発生した問題に関する電子メール通知をリアルタイムで受信します。"
     link="/docs/deploy/model-notifications"
     icon="dbt-bit"/>
 
 <Card
     title="Run visibility"
-    body="View the history of your runs and the model timing dashboard to help identify where improvements can be made to the scheduled jobs."
+    body="実行履歴とモデルタイミングダッシュボードを表示して、スケジュールされたジョブの改善点を特定するのに役立ちます。"
     link="/docs/deploy/run-visibility"
     icon="dbt-bit"/>
 
 <Card
     title="Retry jobs"
-    body="Rerun your errored jobs from start or the failure point."
+    body="エラーの発生したジョブを、開始または障害発生時点から再実行します。"
     link="/docs/deploy/retry-jobs"
     icon="dbt-bit"/>
 
 <Card
     title="Source freshness"
-    body="Enable snapshots to capture the freshness of your data sources and configure how frequent these snapshots should be taken. This can help you determine whether your source data freshness is meeting your SLAs."
+    body="スナップショットを有効にしてデータソースの鮮度をキャプチャし、スナップショットの取得頻度を設定できます。これにより、ソースデータの鮮度がSLAを満たしているかどうかを判断できます。"
     link="/docs/deploy/source-freshness"
     icon="dbt-bit"/>
 
 <Card
     title="Webhooks"
-    body="Create outbound webhooks to send events about your dbt jobs' statuses to other systems in your organization."
+    body="アウトバウンド Webhook を作成して、dbt ジョブのステータスに関するイベントを組織内の他のシステムに送信します。"
     link="/docs/deploy/webhooks"
     icon="dbt-bit"/>
 
@@ -138,7 +139,7 @@ Learn how to use dbt Cloud's features to help your team ship timely and quality 
 
 If you want to run dbt jobs on a schedule, you can use tools such as dbt Cloud, Airflow, Prefect, Dagster, automation server, or Cron.-->
 
-## Related docs
+## 関連ドキュメント
 
-- [Use exports to materialize saved queries](/docs/use-dbt-semantic-layer/exports)
-- [Integrate with other orchestration tools](/docs/deploy/deployment-tools)
+- [エクスポートを使用して保存済みクエリをマテリアライズする](/docs/use-dbt-semantic-layer/exports)
+- [他のオーケストレーションツールと統合する](/docs/deploy/deployment-tools)

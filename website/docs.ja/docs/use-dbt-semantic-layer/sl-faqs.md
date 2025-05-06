@@ -1,290 +1,289 @@
 ---
 title: "dbt Semantic Layer FAQs"
 id: sl-faqs
-description: "Read the FAQs to learn more about the dbt Semantic Layer, how it works, how to build metrics, integrations, and more."
+description: "dbt セマンティック レイヤーの詳細、その仕組み、メトリックの構築方法、統合などについては、FAQ をご覧ください。"
 sidebar_label: "Semantic Layer FAQs"
 tags: [Semantic Layer]
 pagination_next: null
 ---
 
-The [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) is a dbt Cloud offering that allows users to centrally define their metrics within their dbt project using [MetricFlow](/docs/build/about-metricflow).
+[dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) は、dbt Cloud が提供するサービスです。ユーザーは、[MetricFlow](/docs/build/about-metricflow) を使用して、dbt プロジェクト内でメトリクスを一元的に定義できます。
 
-The dbt Semantic Layer offers:
+dbt セマンティック レイヤーは、以下の機能を提供します。
 
-- Dynamic SQL generation to compute metrics
-- APIs to query metrics and dimensions
-- First-class [integrations](/docs/cloud-integrations/avail-sl-integrations) to query those centralized metrics in downstream tools
+- メトリクスを計算するための動的 SQL 生成
+- メトリクスとディメンションをクエリするための API
+- 下流ツールでこれらの一元化されたメトリクスをクエリするためのファーストクラスの [統合](/docs/cloud-integrations/avail-sl-integrations)
 
-The dbt Semantic Layer is powered by MetricFlow, which is a source-available component.
+dbt セマンティック レイヤーは、ソースコードが利用可能なコンポーネントである MetricFlow を基盤としています。
 
-## Overview of the dbt Semantic Layer
+## dbtセマンティックレイヤーの概要
 
-<Expandable alt_header="What are the main benefits of using the dbt Semantic Layer?">
+<Expandable alt_header="dbt セマンティック レイヤーを使用する主な利点は何ですか?">
 
-The primary value of the dbt Semantic Layer is to centralize and bring consistency to your metrics across your organization. Additionally, it allows you to:
+dbtセマンティックレイヤーの主な価値は、組織全体でメトリクスを一元管理し、一貫性を保つことです。さらに、以下のメリットも得られます。
 
-- **Meet your users where they are** by being agnostic to where your end users consume data through the supporting of different APIs for integrations.
-- **Optimize costs** by spending less time preparing data for consumption.
-- **Simplify your code** by not duplicating metric logic and allowing MetricFlow to perform complex calculations for you.
-- **Empower stakeholders** with rich context and flexible, yet governed experiences.
+- エンドユーザーがどこでデータを利用するかに関わらず、**ユーザーのいる場所で対応**できます。統合のための多様なAPIをサポートすることで、エンドユーザーがどこでデータを利用するかに関わらず対応できます。
+- **コストを最適化**できます。データ利用準備にかかる時間を短縮できます。
+- **コードを簡素化**できます。メトリクスロジックの重複を排除し、MetricFlowに複雑な計算を任せることで、**コードを簡素化**できます。
+- **関係者に、豊富なコンテキストと柔軟かつガバナンスのとれたエクスペリエンスを提供**できます。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-concept.png" width="90%" title="This diagram shows how the dbt Semantic Layer works with your data stack." />
 
 </Expandable>
 
-<Expandable alt_header="What's the main difference between the dbt Semantic Layer and dbt Metrics?">
+<Expandable alt_header="dbt セマンティック レイヤーと dbt メトリックの主な違いは何ですか?">
 
-dbt Metrics is the now-deprecated dbt package that was used to define metrics within dbt. dbt Metrics has been replaced with [MetricFlow](/docs/build/about-metricflow), a more flexible and powerful engine, which powers the foundation of the dbt Semantic Layer today.
+dbt Metrics は、dbt 内でメトリクスを定義するために使用されていた、現在は非推奨の dbt パッケージです。dbt Metrics は、より柔軟で強力なエンジンである [MetricFlow](/docs/build/about-metricflow) に置き換えられ、現在の dbt セマンティック レイヤーの基盤を支えています。
 
-MetricFlow introduces SQL generation to the dbt Semantic Layer and offers more advanced capabilities than dbt Metrics, for example:
+MetricFlow は、dbt セマンティック レイヤーに SQL 生成を導入し、dbt Metrics よりも高度な機能を提供します。例えば、次のような機能です。
 
-- **Query construction** &mdash; MetricFlow iteratively constructs queries using a dataflow plan, our internal DAG for generating SQL. By comparison, dbt Metrics relied on templated Jinja to construct SQL.
-- **Joins** &mdash; MetricFlow also has a sophisticated way of handling joins, which dbt Metrics did not support. With MetricFlow you can effortlessly access all valid dimensions for your metrics on the fly, even when they are defined in different semantic models.
-
-</Expandable>
-
-<Expandable alt_header="Is there a dbt Semantic Layer discussion hub?">
-
-Yes, absolutely! Join the [dbt Slack community](https://app.slack.com/client/T0VLPD22H) and [#dbt-cloud-semantic-layer](https://getdbt.slack.com/archives/C046L0VTVR6) slack channel for all things related to the dbt Semantic Layer.
+- **クエリ構築** &mdash; MetricFlow は、SQL 生成用の内部 DAG であるデータフロー プランを使用して、クエリを反復的に構築します。これに対し、dbt Metrics はテンプレート化された Jinja を使用して SQL を構築していました。
+- **結合** &mdash; MetricFlow には、dbt Metrics ではサポートされていなかった、結合を処理する高度な方法もあります。MetricFlow を使用すると、異なるセマンティック モデルで定義されている場合でも、メトリクスのすべての有効なディメンションに簡単にアクセスできます。
 
 </Expandable>
 
-<Expandable alt_header="How does the dbt Semantic Layer fit with different modeling approaches (Medallion, Data Vault, Dimensional modeling)?">
+<Expandable alt_header="dbt セマンティック レイヤーのディスカッション ハブはありますか?">
 
-The dbt Semantic Layer is flexible enough to work with many common modeling approaches. It references dbt models, which means how you configure your Semantic Layer will mirror the modeling approach you've taken with the underlying data.
+はい、もちろんです！dbt セマンティック レイヤーに関するあらゆる情報については、[dbt Slack コミュニティ](https://app.slack.com/client/T0VLPD22H) と [#dbt-cloud-semantic-layer](https://getdbt.slack.com/archives/C046L0VTVR6) Slack チャンネルにご参加ください。
 
-The primary consideration is the flexibility and performance of the underlying queries. For example:
-
-- A star schema data model offers more flexibility for dimensions that are available for a given metric, but will require more joins.
-- A fully denormalized data model is simpler, will be materialized to a specific grain, but won’t be able to join to other tables.
-
-While the dbt Semantic Layer will work for both cases, it's best to allow MetricFlow do handle some level of denormalization for you in order to provide more flexibility to metric consumers.
 </Expandable>
 
-<Expandable alt_header="How is the dbt Semantic Layer priced?">
+<Expandable alt_header="dbt セマンティック レイヤーは、さまざまなモデリング アプローチ (メダリオン、データ ボールト、ディメンション モデリング) とどのように適合しますか?">
 
-The dbt Semantic Layer measures usage in distinct 'Queried Metrics'. Refer to the [Billing](/docs/cloud/billing#what-counts-as-a-queried-metric) to learn more about pricing.
+dbt セマンティック レイヤーは、多くの一般的なモデリング手法に対応できる柔軟性を備えています。dbt モデルを参照するため、セマンティック レイヤーの構成は、基盤となるデータで採用したモデリング手法を反映したものになります。
+
+主な考慮事項は、基盤となるクエリの柔軟性とパフォーマンスです。例えば、次のようなケースです。
+
+- スター スキーマ データ モデルは、特定のメトリックで利用可能なディメンションに対して柔軟性を提供しますが、結合回数が多くなります。
+- 完全に非正規化されたデータ モデルはよりシンプルで、特定の粒度にマテリアライズされますが、他のテーブルとの結合はできません。
+
+dbt セマンティック レイヤーはどちらのケースでも機能しますが、メトリック コンシューマーに柔軟性を提供するために、MetricFlow である程度非正規化を処理できるようにすることをお勧めします。
+</Expandable>
+
+<Expandable alt_header="dbt セマンティック レイヤーの価格設定はどうですか?">
+
+dbtセマンティックレイヤーは、個別の「クエリされたメトリック」で使用状況を測定します。料金の詳細については、[課金](/docs/cloud/billing#what-c​​ounts-as-a-queried-metric)をご覧ください。
 </Expandable>
 
 ## Availability
 
-<Expandable alt_header="What data platforms are supported by the dbt Semantic Layer?">
+<Expandable alt_header="dbt セマンティック レイヤーではどのようなデータ プラットフォームがサポートされていますか?">
 
-The dbt Semantic Layer supports the following data platforms:
+dbt セマンティックレイヤーは、以下のデータプラットフォームをサポートしています:
 
 - Snowflake
 - BigQuery
 - Databricks
 - Redshift
 
-Support for other data platforms, such as Fabric and Trino, isn't available at this time. If you're interested in using the dbt Semantic Layer with a data platform not on the list, please [contact us](https://www.getdbt.com/get-started).
+Fabric や Trino などの他のデータプラットフォームは、現時点ではサポートされていません。リストにないデータプラットフォームで dbt セマンティックレイヤーをご利用になりたい場合は、[お問い合わせ](https://www.getdbt.com/get-started)ください。
 </Expandable>
 
-<Expandable alt_header="Do I need to be on a specific version of dbt to use dbt Semantic Layer?">
+<Expandable alt_header="dbt セマンティック レイヤーを使用するには、特定のバージョンの dbt を使用する必要がありますか?">
 
-Yes, the dbt Semantic Layer is compatible with [dbt v1.6 or higher](/docs/dbt-versions/upgrade-dbt-version-in-cloud).
+はい、dbt セマンティック レイヤーは [dbt v1.6 以上](/docs/dbt-versions/upgrade-dbt-version-in-cloud) と互換性があります。
 </Expandable>
 
-<Expandable alt_header="Does dbt Semantic Layer require a specific dbt Cloud plan?">
+<Expandable alt_header="dbt セマンティック レイヤーには特定の dbt クラウド プランが必要ですか?">
 
-Yes, dbt Cloud [Enterprise or Team](https://www.getdbt.com/pricing) plan customers can access the dbt Semantic Layer.
+はい、dbt Cloud [Enterprise または Team](https://www.getdbt.com/pricing) プランのお客様は dbt セマンティック レイヤーにアクセスできます。
 </Expandable>
 
-<Expandable alt_header="Is there a way to leverage dbt Semantic Layer capabilities in dbt Core?">
+<Expandable alt_header="dbt Core で dbt セマンティック レイヤー機能を活用する方法はありますか?">
 
-The dbt Semantic Layer is proprietary to dbt Cloud, however some components of it are open-source. dbt Core users can use MetricFlow features, like defining metrics in their projects, without a dbt Cloud plan.
+dbt セマンティック レイヤーは dbt Cloud 独自のものですが、一部のコンポーネントはオープンソースです。dbt Core ユーザーは、dbt Cloud プランに加入していなくても、プロジェクト内でのメトリクスの定義など、MetricFlow の機能を使用できます。
 
-dbt Core users can also query their semantic layer locally using the command line. However, they won't be able to use the [APIs](/docs/dbt-cloud-apis/sl-api-overview) or [available integrations](/docs/cloud-integrations/avail-sl-integrations) to access metrics dynamically.
+dbt Core ユーザーは、コマンドラインを使用してセマンティック レイヤーをローカルでクエリすることもできます。ただし、[API](/docs/dbt-cloud-apis/sl-api-overview) や [利用可能な統合](/docs/cloud-integrations/avail-sl-integrations) を使用してメトリクスに動的にアクセスすることはできません。
 
 </Expandable>
 
-<Expandable alt_header="Is there a solution or licensing path for an organization that doesn't use dbt for pipelining, but might like to implement the dbt Semantic Layer?">
+<Expandable alt_header="パイプラインに dbt を使用しないが、dbt セマンティック レイヤーを実装したい組織向けのソリューションまたはライセンス パスはありますか?">
 
-If you're interested in the this type of implementation, please reach out to us [here](https://www.getdbt.com/get-started).
+このタイプの実装に興味がある場合は、[こちら](https://www.getdbt.com/get-started) からお問い合わせください。
 </Expandable>
 
-## How does the dbt Semantic Layer work?
+## dbt セマンティック レイヤーはどのように機能しますか?
 
-<Expandable alt_header="Why is the dbt Semantic Layer better than using tables or dbt models to calculate  metrics?">
+<Expandable alt_header="メトリックを計算するためにテーブルや dbt モデルを使用するよりも dbt セマンティック レイヤーの方が優れているのはなぜですか?">
 
-You can use tables and dbt models to calculate metrics as an option, but it's a static approach that is rigid and cumbersome to maintain. That’s because metrics are seldom useful on their own: they usually need dimensions, grains, and attributes for business users to analyze (or slice and dice) data effectively.
+テーブルと dbt モデルを使用してメトリクスを計算するという選択肢もありますが、これは静的なアプローチであり、柔軟性に欠け、メンテナンスが煩雑です。これは、メトリクスが単独で役立つことはほとんどないためです。通常、ビジネスユーザーがデータを効果的に分析（または細分化）するには、ディメンション、粒度、属性が必要です。
 
-If you create a table with a metric, you’ll need to create numerous other tables derived from that table to show the desired metric cut by the desired dimension or time grain. Mature data models have thousands of dimensions, so you can see how this will quickly result in unnecessary duplication, maintenance, and costs. It's also incredibly hard to predict all the slices of data that a user is going to need ahead of time.
+メトリクスを含むテーブルを作成すると、そのテーブルから派生した多数のテーブルを作成し、必要なディメンションまたは時間粒度で切り取ったメトリクスを表示する必要があります。成熟したデータモデルには数千ものディメンションがあるため、これはすぐに不要な重複、メンテナンス、コストの増加につながることは明らかです。また、ユーザーが必要とするすべてのデータスライスを事前に予測することは非常に困難です。
 
-With the dbt Semantic Layer, you don’t need to pre-join or build any tables; rather, you can simply add a few lines of code to your semantic model, and that data will only be computed upon request.
+dbt セマンティックレイヤーを使用すると、事前にテーブルを結合したり構築したりする必要はありません。セマンティックモデルに数行のコードを追加するだけで、データはリクエスト時にのみ計算されます。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-concept.png" width="90%" title="This diagram shows how the dbt Semantic Layer works with your data stack." />
 
 </Expandable>
 
-<Expandable alt_header="Do I materialize anything when I define a semantic model?">
+<Expandable alt_header="セマンティック モデルを定義すると何かがマテリアライズされますか?">
 
-No, you don't. When querying the dbt Semantic Layer through the [Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview), you're not materializing any data by default.
+いいえ、必要ありません。[セマンティック レイヤー API](/docs/dbt-cloud-apis/sl-api-overview) を介して dbt セマンティック レイヤーにクエリを実行する場合、デフォルトではデータはマテリアライズされません。
 
-The dbt Semantic Layer dynamically computes the metric using the underlying data tables. Then it returns the output to the end user.
+dbt セマンティック レイヤーは、基盤となるデータテーブルを使用してメトリックを動的に計算します。そして、その出力をエンドユーザーに返します。
 </Expandable>
 
-<Expandable alt_header="Is the dbt Semantic Layer a physical copy of your data stored on your data warehouse?">
+<Expandable alt_header="dbt セマンティック レイヤーは、データ ウェアハウスに保存されているデータの物理コピーですか?">
 
-The dbt Semantic Layer does not store a physical copy of your data. It uses underlying tables to construct or compute the requested output.
+dbtセマンティックレイヤーはデータの物理的なコピーを保存しません。要求された出力を構築または計算するために、基盤となるテーブルを使用します。
 </Expandable>
 
-<Expandable alt_header="How does the Semantic Layer handle data?">
+<Expandable alt_header="セマンティック レイヤーはデータをどのように処理しますか?">
 
-The dbt Semantic Layer is part of dbt Cloud. It allows data teams to define metrics once, centrally, and access them from any integrated analytics tool, ensuring consistent answers across diverse datasets. In providing this service, dbt Labs permits clients to access Semantic Layer metrics. Client data passes through the Semantic Layer on the way back from the data warehouse.
+dbtセマンティックレイヤーはdbt Cloudの一部です。データチームはメトリクスを一度一元的に定義し、あらゆる統合分析ツールからアクセスすることで、多様なデータセットにわたって一貫した結果を得ることができます。このサービスを提供するにあたり、dbt Labsはクライアントがセマンティックレイヤーのメトリクスにアクセスできるようにしています。クライアントのデータは、データウェアハウスから戻る際にセマンティックレイヤーを通過します。
 
-dbt Labs handles this in a secure way using encryption and authentication from the client’s data warehouse. In certain cases, such data may be cached on dbt Labs system ephemerally (data is not persistently stored).
+dbt Labsは、クライアントのデータウェアハウスからの暗号化と認証を用いて、これを安全に処理します。場合によっては、これらのデータはdbt Labsシステムに一時的にキャッシュされることがあります（データは永続的に保存されません）。
 
-dbt Labs employees cannot access cached data during normal business operations and must have a business need and/or direct manager approval for access to the underlying infrastructure. Access would only be when necessary for providing a client services and never with the purpose of enriching dbt Labs.
+dbt Labsの従業員は、通常の業務中はキャッシュされたデータにアクセスできません。基盤となるインフラストラクチャにアクセスするには、業務上の必要性や上司の直接の承認が必要です。アクセスは、クライアントへのサービス提供に必要な場合のみ行われ、dbt Labsの強化を目的としたアクセスは許可されません。
 
-No client warehouse data is retained on dbt Labs's systems. We offer a caching solution to optimize query performance. The caching feature uses client data warehouse storage rather than being stored on dbt Labs’s systems. In addition, this feature is activated only through a client opt-in. Therefore, caching is always in client hands and at client discretion
-
-</Expandable>
-
-<Expandable alt_header="Does our agreement, the Terms of Service (ToS) for dbt Cloud, apply to the Semantic Layer?">
-
-Yes it does.
+クライアントのウェアハウスデータはdbt Labsのシステムには保存されません。クエリパフォーマンスを最適化するためのキャッシュソリューションを提供しています。キャッシュ機能は、dbt Labsのシステムではなく、クライアントのデータウェアハウスストレージを使用します。また、この機能はクライアントのオプトインによってのみ有効化されます。したがって、キャッシュ機能は常にクライアントの責任となり、クライアントの裁量に委ねられます。
 
 </Expandable>
 
-<Expandable alt_header="Where is MetricFlow hosted? How do queries pass through MetricFlow and dbt Cloud and back to the end user?">
+<Expandable alt_header="当社の契約である dbt Cloud の利用規約 (ToS) はセマンティック レイヤーに適用されますか?">
 
-MetricFlow is hosted in dbt Cloud. Requests from the [Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview) are routed from our API gateway to MetricFlow, which generates the SQL to compute what's requested by the user. MetricFlow hands the SQL back to our gateway, which then executes it against the data platform.
-</Expandable>
-
-<Expandable alt_header="How do I configure the dbt Semantic Layer?">
-
-1. You define [semantic models](/docs/build/semantic-models) in YAML files that describe your data, including entities (for joins), measures (with aggregation types as a building block to your metrics), and dimensions (to slice and dice your metrics).
-
-2. Then you build your metrics on top of these semantic models. This is all done in `.yml` configurations alongside your dbt models in your projects.
-3. Once you've defined your metrics and semantic models, you can [configure the dbt Semantic Layer](/docs/use-dbt-semantic-layer/setup-sl) in dbt Cloud.
-
-Read our [dbt Semantic Layer quickstart](/guides/sl-snowflake-qs) guide for more information.
+はい、適用されます。
 
 </Expandable>
 
-<Expandable alt_header="How does caching work in the dbt Semantic Layer?">
+<Expandable alt_header="MetricFlow はどこでホストされていますか? クエリはどのようにして MetricFlow と dbt Cloud を通過し、エンドユーザーに戻りますか?">
 
-Beginning in March 2024, the dbt Semantic Layer will offer two layers of caching:
+MetricFlowはdbt Cloudでホストされています。[セマンティックレイヤーAPI](/docs/dbt-cloud-apis/sl-api-overview)からのリクエストは、APIゲートウェイからMetricFlowにルーティングされ、そこでユーザーのリクエストに応じた計算を行うSQLが生成されます。MetricFlowはこのSQLをゲートウェイに返し、ゲートウェイはデータプラットフォームに対してSQLを実行します。
+</Expandable>
 
-- The result cache, which caches query results in the data platform so that subsequent runs of the same query are faster.
-- A declarative cache which also lives in your data platform.
+<Expandable alt_header="dbt セマンティック レイヤーを構成するにはどうすればよいですか?">
+
+1. YAML ファイルで [セマンティックモデル](/docs/build/semantic-models) を定義します。このモデルは、エンティティ（結合用）、メジャー（集計タイプを含む指標の構成要素）、ディメンション（指標を細分化するためのもの）など、データを記述します。
+2. 次に、これらのセマンティックモデルに基づいて指標を構築します。これはすべて、プロジェクト内の dbt モデルと並行して、`.yml` 構成で行います。
+3. 指標とセマンティックモデルを定義したら、dbt Cloud で [dbt セマンティックレイヤーを構成](/docs/use-dbt-semantic-layer/setup-sl) できます。
+
+詳細については、[dbt セマンティックレイヤー クイックスタート](/guides/sl-snowflake-qs) ガイドをご覧ください。
 
 </Expandable>
 
-<Expandable alt_header="Does the dbt Semantic Layer expect all models to be in normalized format?">
+<Expandable alt_header="dbt セマンティック レイヤーではキャッシュはどのように機能しますか?">
 
-No, the dbt Semantic Layer is flexible enough to work with many data modeling approaches including Snowflake, Star schemas, Data vaults, or other normalized tables.
-</Expandable>
+2024年3月以降、dbtセマンティックレイヤーは2層のキャッシュを提供します。
 
-<Expandable alt_header="How are queries optimized to not scan more data than they should?">
-
-MetricFlow always tries to generate SQL in the most performant way, while ensuring the metric value is correct. It generates SQL in a way that allows us to add optimizations, like predicate pushdown, to ensure we don’t perform full table scans.
+- 結果キャッシュ：クエリ結果をデータプラットフォームにキャッシュすることで、同じクエリの次回実行を高速化します。
+- 宣言型キャッシュ：これもデータプラットフォーム内に格納されます。
 
 </Expandable>
 
-<Expandable alt_header="What are the latency considerations of using the dbt Semantic Layer?">
+<Expandable alt_header="dbt セマンティック レイヤーでは、すべてのモデルが正規化された形式であることが想定されていますか?">
 
-The latency of query runtimes is low, in the order of milliseconds.
+いいえ、dbt セマンティック レイヤーは、スノーフレーク、スター スキーマ、データ ボールト、その他の正規化されたテーブルなど、多くのデータ モデリング アプローチで使用できるほど柔軟です。
+</Expandable>
+
+<Expandable alt_header="必要以上のデータをスキャンしないようにクエリをどのように最適化しますか?">
+
+MetricFlowは、メトリック値の正確性を確保しながら、常に最もパフォーマンスの高い方法でSQLを生成しようとします。述語プッシュダウンなどの最適化を追加できるようにSQLを生成することで、テーブル全体のスキャンを実行しないようにします。
 
 </Expandable>
 
-<Expandable alt_header="What if different teams have different definitions?">
+<Expandable alt_header="dbt セマンティック レイヤーを使用する場合のレイテンシーに関する考慮事項は何ですか?">
 
-If the underlying metric aggregation is different, then these would be different metrics. However, if teams have different definitions because they're using specific filters or dimensions, it's still the same metric. They're just using it in different ways.
-
-This can be managed by adjusting how the metric is viewed in downstream tools or setting up [saved queries](/docs/build/saved-queries) to handle the various permutations of it.
+クエリ実行時間のレイテンシはミリ秒単位と低くなります。
 
 </Expandable>
 
-## Build metrics and semantic models
+<Expandable alt_header="チームによって定義が異なる場合はどうなるでしょうか?">
 
-<Expandable alt_header="Can I define my own aggregations?">
+基盤となる指標の集計方法が異なる場合、これらは異なる指標となります。ただし、特定のフィルターやディメンションを使用しているためにチームごとに定義が異なる場合でも、指標は同じです。単に使用方法が異なるだけです。
 
-MetricFlow does not currently support custom aggregations on measures. You can find supported aggregation types [here](/docs/build/measures#aggregation).
+これは、下流ツールでの指標の表示方法を調整するか、[保存済みクエリ](/docs/build/saved-queries)を設定して、指標のさまざまな組み合わせに対応することで管理できます。
 
 </Expandable>
 
-<Expandable alt_header="How are joins identified in the semantic model? ">
+## メトリクスとセマンティックモデルを構築する
 
-[Joins](/docs/build/join-logic) are identified through [entities](/docs/build/entities) defined in a [semantic model](/docs/build/semantic-models). These are the keys in your dataset. You can specify `foreign`, `unique`, `primary`, or `natural` joins.
+<Expandable alt_header="独自の集計を定義できますか?">
 
-With multiple semantic models and the entities within them, MetricFlow creates a graph using the semantic models as nodes and the join paths as edges to perform joins automatically. MetricFlow chooses the appropriate join type and avoids fan-out or chasm joins with other tables based on the entity types. You can find supported join types [here](/docs/build/join-logic#types-of-joins).
+MetricFlowは現在、メジャーのカスタム集計をサポートしていません。サポートされている集計タイプについては、[こちら](/docs/build/measures#aggregation)をご覧ください。
+
 </Expandable>
 
-<Expandable alt_header="What is the benefit of “expr” used in semantic models and metric configurations?">
+<Expandable alt_header="セマンティック モデルでは結合はどのように識別されますか?">
 
-Expr (short for “expression”) allows you to put any arbitrary SQL supported by your data platform in any definition of a measure, entity, or dimension.
+[結合](/docs/build/join-logic)は、[セマンティックモデル](/docs/build/semantic-models)で定義された[エンティティ](/docs/build/entities)によって識別されます。これらはデータセット内のキーです。`foreign`、`unique`、`primary`、または`natural`結合を指定できます。
 
-This is useful if you want the object name in the semantic model to be different than what it’s called in the database. Or if you want to include logic in the definition of the component you're creating.
-
-The MetricFlow spec is deliberately opinionated, and we offer “expr” as an escape hatch to allow developers to be more expressive.
+MetricFlowは、複数のセマンティックモデルとその中のエンティティを使用して、セマンティックモデルをノード、結合パスをエッジとして使用してグラフを作成し、自動的に結合を実行します。MetricFlowは、エンティティタイプに基づいて適切な結合タイプを選択し、他のテーブルとのファンアウト結合やキャズム結合を回避します。サポートされている結合タイプについては、[こちら](/docs/build/join-logic#types-of-joins)をご覧ください。
 </Expandable>
 
-<Expandable alt_header="Do you support semi-additive metrics?">
+<Expandable alt_header="セマンティック モデルやメトリック構成で使用される「expr」の利点は何ですか?">
 
-Yes, we approach this by specifying a [dimension](/docs/build/dimensions) that a metric cannot be aggregated across (such as `time`). You can learn how to configure semi-additive dimensions [here](/docs/build/measures#non-additive-dimensions).
+Expr（「expression」の略）を使用すると、データプラットフォームでサポートされている任意のSQLを、メジャー、エンティティ、またはディメンションの定義に記述できます。
+
+これは、セマンティックモデル内のオブジェクト名をデータベース内でのオブジェクト名と異なるものにしたい場合や、作成するコンポーネントの定義にロジックを含めたい場合に便利です。
+
+MetricFlowの仕様は意図的に独自の解釈が求められており、開発者がより表現力豊かに記述できるように、Exprをその抜け道として提供しています。
 </Expandable>
 
-<Expandable alt_header="Can I use an entity as a dimension?">
+<Expandable alt_header="半加法メトリックをサポートしていますか?">
 
-Yes, while [entities](/docs/build/entities) must be defined under “entities,” they can be queried like dimensions in downstream tools. Additionally, if the entity isn't used to perform joins across your semantic models, you may optionally define it as a dimension.
+はい、メトリックを集計できない[ディメンション](/docs/build/dimensions)（例：`time`）を指定することで、この問題を解決します。準加法ディメンションの設定方法については、[こちら](/docs/build/measures#non-additive-dimensions)をご覧ください。
 </Expandable>
 
-<Expandable alt_header="Can I test my semantic models and metrics?">
+<Expandable alt_header="エンティティをディメンションとして使用できますか?">
 
-Yes! You can validate your semantic nodes (semantic models, metrics, saved queries) in a few ways:
+はい。[エンティティ](/docs/build/entities)は「entities」配下で定義する必要がありますが、下流ツールではディメンションのようにクエリを実行できます。また、エンティティがセマンティックモデル間の結合に使用されない場合は、必要に応じてディメンションとして定義できます。
+</Expandable>
 
-- [Query and validate you metrics](/docs/build/metricflow-commands) in your development tool before submitting your code changes.
-- [Validate semantic nodes in CI](/docs/deploy/ci-jobs#semantic-validations-in-ci) to ensure code changes made to dbt models don't break these metrics.
+<Expandable alt_header="セマンティック モデルとメトリックをテストできますか?">
+
+はい！セマンティックノード（セマンティックモデル、メトリクス、保存済みクエリ）は、いくつかの方法で検証できます。
+
+- コード変更を送信する前に、開発ツールで[メトリクスのクエリと検証](/docs/build/metricflow-commands)を実行します。
+- [CIでセマンティックノードを検証](/docs/deploy/ci-jobs#semantic-validations-in-ci) して、dbtモデルへのコード変更によってこれらのメトリクスが損なわれないことを確認します。
 
 </Expandable>
 
 ## Available integrations
 
-<Expandable alt_header="What integrations are supported today?">
+<Expandable alt_header="現在どのような統合がサポートされていますか?">
 
-There are a number of data applications that have integrations with the dbt Semantic Layer, including Tableau, Google Sheets, Hex, and Mode, among others.
+Tableau、Google Sheets、Hex、Mode など、dbt セマンティックレイヤーと統合できるデータアプリケーションは数多くあります。
 
-Refer to [Available integrations](/docs/cloud-integrations/avail-sl-integrations) for more information.
-
-</Expandable>
-
-<Expandable alt_header="How can I benefit from using the dbt Semantic Layer if my visualization tool is not currently supported?">
-
-You can use [exports](/docs/use-dbt-semantic-layer/exports) to materialize your metrics into a table or view in your data platform. From there, you can connect your visualization tool to your data platform.
-
-Although this approach doesn't provide the dynamic benefits of the dbt Semantic Layer, you still benefit from centralized metrics and from using MetricFlow configurations to define, generate, and compute SQL for your metrics.
+詳細については、[利用可能な統合](/docs/cloud-integrations/avail-sl-integrations) を参照してください。
 
 </Expandable>
 
-<Expandable alt_header="Why should I use exports as opposed to defining a view within my data platform?">
+<Expandable alt_header="視覚化ツールが現在サポートされていない場合、dbt セマンティック レイヤーを使用するとどのようなメリットがありますか?">
 
-Creating an [export](/docs/use-dbt-semantic-layer/exports) allows you to bring your governed metric definitions into your data platform as a table or view. This means your metric logic is managed centrally in dbt, instead of as a view in your data platform and ensures that metric values remain consistent across all interfaces.
+[エクスポート](/docs/use-dbt-semantic-layer/exports) を使用すると、メトリクスをデータプラットフォーム内のテーブルまたはビューにマテリアライズできます。そこから、可視化ツールをデータプラットフォームに接続できます。
 
-</Expandable>
-
-<Expandable alt_header="Can metric descriptions be viewed from third-party tools?">
-
-Yes, all of our interfaces or APIs expose metric descriptions, which you can surface in downstream tools.
+このアプローチでは、dbt セマンティックレイヤーの動的なメリットは得られませんが、一元化されたメトリクスと、MetricFlow 構成を使用してメトリクス用の SQL を定義、生成、計算できるというメリットは得られます。
 
 </Expandable>
 
-## Permissions and access
+<Expandable alt_header="データ プラットフォーム内でビューを定義するのではなく、エクスポートを使用する必要があるのはなぜですか?">
 
-<Expandable alt_header="How do fine-grained access controls work with the dbt Semantic Layer?">
-
-The dbt Semantic Layer uses service tokens for authentication, mapped to underlying data platform credentials. These credentials control physical access to the raw data. The credential configuration allows admins to create a credential and map it to service tokens, which can then be shared to relevant teams for BI connection setup. You can configure credentials and service tokens to reflect your teams and their roles. 
-
-Currently, the credentials you configure when setting up the dbt Semantic Layer are used for every request. Any physical access policies you have tied to your credentials will be respected.
-
-We are currently working on introducing more fine-grained access controls, including user-level access and group credentials, that enable flexible granular permissions.
+[エクスポート](/docs/use-dbt-semantic-layer/exports)を作成すると、管理対象の指標定義をテーブルまたはビューとしてデータプラットフォームに取り込むことができます。これにより、指標ロジックはデータプラットフォーム内のビューではなく、dbt内で一元管理され、すべてのインターフェース間で指標値の一貫性が確保されます。
 
 </Expandable>
 
-## Implementation
+<Expandable alt_header="メトリックの説明はサードパーティのツールから表示できますか?">
 
-<Expandable alt_header="How can I implement dbt Mesh with the dbt Semantic Layer">
+はい、すべてのインターフェースまたは API はメトリックの説明を公開しており、下流のツールで表示できます。
+
+</Expandable>
+
+## 権限とアクセス
+
+<Expandable alt_header="きめ細かなアクセス制御は dbt セマンティック レイヤーでどのように機能しますか?">
+
+dbt セマンティック レイヤーは、基盤となるデータ プラットフォームの認証情報にマッピングされたサービス トークンを認証に使用します。これらの認証情報は、生データへの物理アクセスを制御します。認証情報の設定により、管理者は認証情報を作成し、それをサービス トークンにマッピングできます。マッピングされた認証情報は、BI 接続の設定時に関係するチームと共有できます。認証情報とサービス トークンは、チームとその役割に応じて設定できます。
+
+現在、dbt セマンティック レイヤーの設定時に設定した認証情報は、すべてのリクエストに使用されます。認証情報に関連付けた物理アクセス ポリシーはすべて尊重されます。
+
+現在、ユーザーレベルのアクセスやグループ認証情報など、よりきめ細かなアクセス制御の導入に取り組んでおり、柔軟できめ細かな権限設定が可能になります。
+
+</Expandable>
+
+## 実装
+
+<Expandable alt_header="dbtセマンティックレイヤーでdbtメッシュを実装するにはどうすればいいですか？">
 
 import SLMeshFAQs from '/snippets/_sl-dbt-mesh-faq.md';
 
@@ -292,22 +291,22 @@ import SLMeshFAQs from '/snippets/_sl-dbt-mesh-faq.md';
 
 </Expandable>
 
-<Expandable alt_header="Which ‘staging layer’ should the dbt Semantic Layer talk to? Raw, staging, or marts?">
+<Expandable alt_header="dbt セマンティック レイヤーはどの「ステージング レイヤー」と通信する必要がありますか? Raw、ステージング、それとも marts でしょうか?">
 
-We recommend to build your semantic layer on top of the [marts layer](/best-practices/how-we-structure/4-marts), which represents the clean and transformed data from your dbt models.
+dbt モデルからのクリーンで変換されたデータを表す [marts レイヤー](/best-practices/how-we-structure/4-marts) の上にセマンティック レイヤーを構築することをお勧めします。
 </Expandable>
 
-<Expandable alt_header="Should semantic layer credentials mirror those for production environments? Or should they be different?">
+<Expandable alt_header="セマンティック レイヤーの認証情報は、実稼働環境の認証情報を反映する必要がありますか? それとも異なる必要がありますか?">
 
-Semantic layer credentials are different than the credentials you use to run dbt models. Specifically, we recommend a less privileged set of credentials since consumers are only reading data.
+セマンティックレイヤーの認証情報は、dbtモデルの実行に使用する認証情報とは異なります。具体的には、コンシューマーはデータの読み取りのみを行うため、権限の低い認証情報セットを推奨します。
 </Expandable>
 
-<Expandable alt_header="How does the dbt Semantic Layer support a dbt Mesh architecture design?">
+<Expandable alt_header="dbt セマンティック レイヤーは、dbt メッシュ アーキテクチャ設計をどのようにサポートしますか?">
 
-Currently, semantic models can be created from dbt models that live across projects ([dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro)). In the future, users will also be able to use mesh concepts on semantic objects and define metrics across dbt projects.
+現在、セマンティックモデルは、複数のプロジェクトにまたがるdbtモデルから作成できます（[dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro)）。将来的には、セマンティックオブジェクトにメッシュの概念を適用し、複数のdbtプロジェクトにまたがるメトリクスを定義できるようになる予定です。
 </Expandable>
 
-<Expandable alt_header="How do I migrate from the legacy Semantic Layer?">
+<Expandable alt_header="従来のセマンティック レイヤーから移行するにはどうすればよいですか?">
 
-If you're using the legacy Semantic Layer, we highly recommend you [upgrade your dbt version](/docs/dbt-versions/upgrade-dbt-version-in-cloud) to dbt v1.6 or higher to use the latest dbt Semantic Layer. Refer to the dedicated [migration guide](/guides/sl-migration) for more info.
+従来のセマンティック レイヤを使用している場合は、最新の dbt セマンティック レイヤを使用するために、[dbt バージョンを dbt v1.6 以上にアップグレード](/docs/dbt-versions/upgrade-dbt-version-in-cloud)することを強くお勧めします。詳しくは、専用の[移行ガイド](/guides/sl-migration)をご覧ください。
 </Expandable>

@@ -1,12 +1,12 @@
 ---
-title: How do I define a column type?
-description: "Using cast function to define a column type"
-sidebar_label: 'How to define a column type'
+title: 列タイプを定義するにはどうすればよいですか?
+description: "キャスト関数を使用して列の型を定義する"
+sidebar_label: '列タイプを定義する方法'
 id: define-a-column-type
 
 ---
 
-Your warehouse's SQL engine automatically assigns a [datatype](https://www.w3schools.com/sql/sql_datatypes.asp) to every column, whether it's found in a source or model. To force SQL to treat a columns a certain datatype, use `cast` functions:
+ウェアハウスのSQLエンジンは、ソースまたはモデル内の列に関わらず、すべての列に[データ型](https://www.w3schools.com/sql/sql_datatypes.asp)を自動的に割り当てます。SQLで列を特定のデータ型で処理するように強制するには、`cast`関数を使用します:
 
 <File name='models/order_prices.sql'>
 
@@ -20,7 +20,7 @@ from {{ ref('stg_orders') }}
 
 </File>
 
-Many modern <Term id="data-warehouse" />s now support `::` syntax as a shorthand for `cast( as )`.
+多くの最新の <Term id="data-warehouse" /> では、`cast( as )` の省略形として `::` 構文がサポートされるようになりました。
 
 <File name='models/orders_prices_colon_syntax.sql'>
 
@@ -34,6 +34,6 @@ from {{ ref('stg_orders') }}
 
 </File>
 
-Be warned, reading in data and casting that data may not always yield expected results, and every warehouse has its own subtleties. Certain casts may not be allowed (e.g. on Bigquery, you can't cast a `boolean`-type value to a `float64`). Casts that involve a loss in precision loss (e.g. `float` to `integer`) rely on your SQL engine to make a best guess or follow a specific schema not used by competing services. When performing casts, it's imperative that you are familiar with your warehouse's casting rules to best label fields in your sources and models.
+データの読み込みとキャストは必ずしも期待通りの結果をもたらすとは限らず、ウェアハウスごとに微妙な違いがあります。特定のキャストは許可されない場合があります（例：BigQueryでは、`boolean`型の値を`float64`にキャストすることはできません）。精度の低下を伴うキャスト（例：`float`から`integer`）は、SQLエンジンによる推測や、競合サービスでは使用されていない特定のスキーマへの準拠に依存します。キャストを実行する際は、ウェアハウスのキャストルールを理解し、ソースとモデルのフィールドに最適なラベルを付けることが不可欠です。
 
-Thankfully, popular database services tend to have type docs--[Redshift](https://docs.amazonaws.cn/en_us/redshift/latest/dg/r_CAST_function.html) and [Bigquery](https://cloud.google.com/bigquery/docs/reference/standard-sql/conversion_rules).
+ありがたいことに、人気のデータベース サービスには、[Redshift](https://docs.amazonaws.cn/en_us/redshift/latest/dg/r_CAST_function.html) や [Bigquery](https://cloud.google.com/bigquery/docs/reference/standard-sql/conversion_rules) などのタイプのドキュメントが用意されている傾向があります。

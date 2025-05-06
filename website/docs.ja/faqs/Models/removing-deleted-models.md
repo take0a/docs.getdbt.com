@@ -1,13 +1,13 @@
 ---
-title: How do I remove deleted models from my data warehouse?
-description: "Remove deleted models directly in your data warehouse"
-sidebar_label: 'Removing deleted models from your warehouse'
+title: 削除されたモデルをデータ ウェアハウスから削除するにはどうすればよいですか?
+description: "削除されたモデルをデータ ウェアハウスから直接削除する"
+sidebar_label: '削除したモデルをウェアハウスから削除する'
 id: removing-deleted-models
 
 ---
 
-If you delete a model from your dbt project, dbt does not automatically drop the relation from your schema. This means that you can end up with extra objects in schemas that dbt creates, which can be confusing to other users.
+dbt プロジェクトからモデルを削除しても、dbt はスキーマからリレーションを自動的に削除しません。そのため、dbt が作成するスキーマに余分なオブジェクトが残り、他のユーザーの混乱を招く可能性があります。
 
-(This can also happen when you switch a model from being a <Term id="view" /> or <Term id="table" />, to ephemeral)
+(モデルを <Term id="view" /> または <Term id="table" /> から一時的なモデルに切り替えた場合にも、同様の問題が発生する可能性があります。)
 
-When you remove models from your dbt project, you should manually drop the related relations from your schema.
+dbt プロジェクトからモデルを削除する場合は、関連するリレーションをスキーマから手動で削除する必要があります。

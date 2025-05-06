@@ -1,34 +1,34 @@
 ---
-title: "About the empty flag"
-description: "Use the empty flag to test your code and build your tables without populating data."
+title: empty フラグについて"
+description: "empty フラグを使用してコードをテストし、データを入力せずにテーブルを構築します。"
 sidebar_label: "The empty flag"
 pagination_next: "docs/build/sample-flag"
 pagination_prev: null
 ---
 
-# About the `--empty` flag
+# `--empty`フラグについて
 
 :::note
 
-The `--empty` flag is not currently available for Python models. If the flag is used with a Python model, it will be ignored.
+`--empty` フラグは現在 Python モデルでは使用できません。このフラグを Python モデルで使用した場合、無視されます。
 
 :::
 
-During dbt development, you might want to validate that your models are semantically correct without the time-consuming cost of building the entire model in the data warehouse. The [`run`](/reference/commands/run) and [`build`](/reference/commands/build) commands support the `--empty` flag for building schema-only dry runs. The `--empty` flag limits the refs and sources to zero rows. dbt will still execute the model SQL against the target data warehouse but will avoid expensive reads of input data. This validates dependencies and ensures your models will build properly.
+dbt 開発中に、データウェアハウスでモデル全体を構築するという時間のかかるコストをかけずに、モデルがセマンティックに正しいことを検証したい場合があります。[`run`](/reference/commands/run) コマンドと [`build`](/reference/commands/build) コマンドは、スキーマのみのドライランを構築するための `--empty` フラグをサポートしています。`--empty` フラグは、参照とソースを 0 行に制限します。dbt はターゲット データウェアハウスに対してモデル SQL を実行しますが、入力データの読み取りにかかるコストを回避します。これにより、依存関係が検証され、モデルが適切に構築されることが保証されます。
 
-### Examples
+### 例
 
-Run all models in a project while building only the schemas in your development environment:
+開発環境でスキーマのみを構築しながら、プロジェクト内のすべてのモデルを実行します:
 
 ```
 dbt run --empty
 ```
 
-Run a specific model:
+特定のモデルを実行します:
 
 ```
 dbt run --select path/to/your_model --empty
 ```
 
-dbt will build and execute the SQL, resulting in an empty schema in the data warehouse.
+dbt は SQL を構築して実行し、データ ウェアハウスに空のスキーマを作成します。
 

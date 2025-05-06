@@ -1,11 +1,11 @@
 ---
-title: How do I build one seed at a time?
-description: "Use select flag to build one seed at a time"
-sidebar_label: "Build one seed at a time"
+title: 一度に 1 つのシードを構築するにはどうすればよいでしょうか?
+description: "select フラグを使用して、一度に 1 つのシードを構築します。"
+sidebar_label: "一度に1つのシードを構築する"
 id: build-one-seed
 ---
 
-You can use a `--select` option with the `dbt seed` command, like so:
+次のように、`dbt seed` コマンドで `--select` オプションを使用できます。
 
 ```shell
 
@@ -13,7 +13,7 @@ $ dbt seed --select country_codes
 
 ```
 
-There is also an `--exclude` option.
+`--exclude` オプションもあります。
 
-Check out more in the [model selection syntax](/reference/node-selection/syntax) documentation.
+[モデル選択構文](/reference/node-selection/syntax) のドキュメントで詳細をご確認ください。
 

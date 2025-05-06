@@ -1,14 +1,14 @@
 ---
-title: Can I set test failure thresholds?
-description: "Use configs to set custom failure thresholds in tests"
-sidebar_label: 'How to set failure thresholds in test'
+title: テスト失敗のしきい値を設定できますか?
+description: "構成を使用してテストのカスタム失敗しきい値を設定する"
+sidebar_label: 'テストで失敗しきい値を設定する方法'
 id: custom-test-thresholds
 
 ---
 
-You can use the `error_if` and `warn_if` configs to set custom failure thresholds in your tests. For more details, see [reference](/reference/resource-configs/severity) for more information.
+`error_if` および `warn_if` 構成を使用して、テストでカスタムの失敗しきい値を設定できます。詳細については、[リファレンス](/reference/resource-configs/severity) を参照してください。
 
-You can also try the following solutions:
+以下の解決策もお試しください。
 
-* Setting the [severity](/reference/resource-properties/data-tests#severity) to `warn`, or:
-* Writing a [custom generic test](/best-practices/writing-custom-generic-tests) that accepts a threshold argument ([example](https://discourse.getdbt.com/t/creating-an-error-threshold-for-schema-tests/966))
+* [severity](/reference/resource-properties/data-tests#severity) を `warn` に設定する。または、以下の手順を実行してください。
+* しきい値引数を受け入れる [カスタム汎用テスト](/best-practices/writing-custom-generic-tests) を作成する ([例](https://discourse.getdbt.com/t/creating-an-error-threshold-for-schema-tests/966))

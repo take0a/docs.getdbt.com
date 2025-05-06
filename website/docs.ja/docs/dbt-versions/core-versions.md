@@ -1,111 +1,111 @@
 ---
-title: "About dbt Core versions"
+title: "dbt Coreのバージョンについて"
 id: "core"
-description: "Learn about semantic versioning for dbt Core, and how long those versions are supported."
+description: "dbt Core のセマンティック バージョニングと、それらのバージョンがサポートされる期間について説明します。"
 pagination_next: "docs/dbt-versions/upgrade-dbt-version-in-cloud"
 pagination_prev: null
 ---
 
-dbt Core releases follow [semantic versioning](https://semver.org/) guidelines. For more on how we use semantic versions, see [How dbt Core uses semantic versioning](#how-dbt-core-uses-semantic-versioning). 
+dbt Core のリリースは [セマンティック バージョニング](https://semver.org/) ガイドラインに準拠しています。セマンティック バージョンの使用方法の詳細については、[dbt Core におけるセマンティック バージョニングの活用方法](#how-dbt-core-uses-semantic-versioning) をご覧ください。
 
-:::tip Release Tracks keep you up to date, always
+:::tip リリーストラックで常に最新の状態を維持
 
-_Did you know that you can always be working with the latest features and functionality?_ 
+_常に最新の機能と操作性をご利用いただけます。_
 
-With dbt Cloud, you can get early access to new functionality before it becomes available in dbt Core and without the need of managing your own version upgrades. Refer to the ["Latest" Release Track](/docs/dbt-versions/cloud-release-tracks) setting for details.
+dbt Cloud を使用すると、dbt Core で利用可能になる前に新機能に早期アクセスでき、バージョンアップグレードを独自に管理する必要がありません。詳細については、["最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks) の設定をご覧ください。
 
 :::
 
-dbt Labs provides different support levels for different versions, which may include new features, bug fixes, or security patches:
+dbt Labs は、バージョンごとに異なるサポート レベルを提供しており、これには新機能、バグ修正、セキュリティ パッチなどが含まれる場合があります:
 
 <Snippet path="core-version-support" />
 
 
 <Snippet path="core-versions-table" />
 
-### Further reading
+### 参考資料
 
-- To learn how you can use dbt Core versions in dbt Cloud, see [Choosing a dbt Core version](/docs/dbt-versions/upgrade-dbt-version-in-cloud).
-- To learn about installing dbt Core, see "[How to install dbt Core](/docs/core/installation-overview)."
-- To restrict your project to only work with a range of dbt Core versions, or use the currently running dbt Core version, see [`require-dbt-version`](/reference/project-configs/require-dbt-version) and [`dbt_version`](/reference/dbt-jinja-functions/dbt_version).
+- dbt Cloud で dbt Core バージョンを使用する方法については、[dbt Core バージョンの選択](/docs/dbt-versions/upgrade-dbt-version-in-cloud) をご覧ください。
+- dbt Core のインストール方法については、[dbt Core のインストール方法](/docs/core/installation-overview) をご覧ください。
+- プロジェクトを特定の範囲の dbt Core バージョンのみで動作するように制限したり、現在実行中の dbt Core バージョンを使用したりするには、[`require-dbt-version`](/reference/project-configs/require-dbt-version) および [`dbt_version`](/reference/dbt-jinja-functions/dbt_version) をご覧ください。
 
-## Version support prior to v1.0
+## v1.0 より前のバージョンのサポート
 
-All dbt Core versions released prior to 1.0 and their version-specific documentation have been deprecated. If upgrading to a currently supported version, reference our [best practices for upgrading](#best-practices-for-upgrading)
+1.0 より前にリリースされたすべての dbt Core バージョンと、そのバージョン固有のドキュメントは廃止されました。現在サポートされているバージョンにアップグレードする場合は、[アップグレードのベストプラクティス](#best-practices-for-upgrading) を参照してください。
 
-## EOL version support 
+## EOLバージョンのサポート
 
-All dbt Core minor versions that have reached end-of-life (EOL) will have no new patch releases. This means they will no longer receive any fixes, including for known bugs that have been identified. Fixes for those bugs will instead be made in newer minor versions that are still under active support.
+サポート終了（EOL）となったすべてのdbt Coreマイナーバージョンには、新しいパッチリリースが提供されません。つまり、特定された既知のバグを含む、修正プログラムは一切提供されなくなります。これらのバグに対する修正は、引き続きサポートが有効な新しいマイナーバージョンで提供されます。
 
-We recommend upgrading to a newer version in [dbt Cloud](/docs/dbt-versions/upgrade-dbt-version-in-cloud) or [dbt Core](/docs/core/installation-overview#upgrading-dbt-core) to continue receiving support. 
+引き続きサポートを受けるには、[dbt Cloud](/docs/dbt-versions/upgrade-dbt-version-in-cloud)または[dbt Core](/docs/core/installation-overview#upgrading-dbt-core)で新しいバージョンにアップグレードすることをお勧めします。
 
-All dbt Core v1.0 and later are available in dbt Cloud until further notice. In the future, we intend to align dbt Cloud availability with dbt Core ongoing support. You will receive plenty of advance notice before any changes take place.
+dbt Core v1.0以降はすべて、追って通知があるまでdbt Cloudでご利用いただけます。今後、dbt Cloudの提供期間とdbt Coreのサポート期間を一致させる予定です。変更が行われる前に、十分な事前通知をお送りします。
 
 
-## Current version support
+## 現在のバージョンのサポート
 
-### Minor versions
+### マイナーバージョン
 
-Minor versions include new features and capabilities. They will be supported for one year from their initial release date. _dbt Labs is committed to this 12-month support timeframe._ Our mechanism for continuing to support a minor version is by releasing new patches: small, targeted bug fixes. Whenever we refer to a minor version, such as v1.0, we always mean its latest available patch release (v1.0.x).
+マイナーバージョンには新機能が含まれます。最初のリリース日から1年間サポートされます。_dbt Labs は、この12ヶ月間のサポート期間を厳守いたします。_ マイナーバージョンのサポートを継続するために、新しいパッチ（小規模で的を絞ったバグ修正）をリリースしています。v1.0 などのマイナーバージョンは、常に最新のパッチリリース（v1.0.x）を指します。
 
-While a minor version is officially supported:
-- You can use it in dbt Cloud. For more on dbt Cloud versioning, see [Choosing a dbt version](/docs/dbt-versions/upgrade-dbt-version-in-cloud).
-- You can select it from the version dropdown on this website, to see documentation that is accurate for use with that minor version.
+マイナーバージョンが公式にサポートされている間、以下のことが可能です。
+- dbt Cloud で使用できます。dbt Cloud のバージョン管理の詳細については、[dbt バージョンの選択](/docs/dbt-versions/upgrade-dbt-version-in-cloud) をご覧ください。
+- このウェブサイトのバージョンドロップダウンから選択すると、そのマイナーバージョンでの使用に関する正確なドキュメントを参照できます。
 
-### Ongoing patches
+### 継続的なパッチ
 
-During the 12-month support window, we will continue to release new patch versions that include fixes.
+12ヶ月間のサポート期間中は、修正を含む新しいパッチバージョンを継続的にリリースします。
 
-**Active Support:** In the first few months after a minor version's initial release, we will patch it with "bugfix" releases. These will include fixes for regressions and net-new bugs that were present in the minor version's original release.
+**アクティブサポート:** マイナーバージョンの最初のリリース後、最初の数か月間は「バグ修正」リリースでパッチをリリースします。これには、マイナーバージョンの元のリリースで発生していたリグレッションや新規バグの修正が含まれます。
 
-**Critical Support:** When a newer minor version is available, we will transition the previous minor version into "Critical Support." Subsequent patches to that older minor version will be "security" releases only, limited to critical fixes related to security and installation.
+**クリティカルサポート:** 新しいマイナーバージョンが利用可能になると、以前のマイナーバージョンは「クリティカルサポート」に移行します。以前のマイナーバージョンへの以降のパッチは「セキュリティ」リリースのみとなり、セキュリティとインストールに関連する重要な修正に限定されます。
 
-After a minor version reaches the end of its critical support period, one year after its initial release, no new patches will be released.
+マイナーバージョンのクリティカルサポート期間（最初のリリースから1年後）が終了すると、新しいパッチはリリースされなくなります。
 
-### Future versions
+### 将来のバージョン
 
-For the latest information about upcoming releases, including planned release dates and which features and fixes might be included, consult the [`dbt-core` repository milestones](https://github.com/dbt-labs/dbt-core/milestones) and [product roadmaps](https://github.com/dbt-labs/dbt-core/tree/main/docs/roadmap).
+今後のリリースに関する最新情報（リリース予定日、含まれる可能性のある機能や修正など）については、[`dbt-core` リポジトリのマイルストーン](https://github.com/dbt-labs/dbt-core/milestones) および [製品ロードマップ](https://github.com/dbt-labs/dbt-core/tree/main/docs/roadmap) をご覧ください。
 
-## Best practices for upgrading
+## アップグレードのベストプラクティス
 
-Because of our new version practice, we've outlined best practices and expectations for dbt users to upgrade as we continue to release new versions of dbt Core.
+新しいバージョンのリリースに伴い、dbt Core の新バージョンを継続的にリリースしていく中で、dbt ユーザーの皆様がアップグレードを行うためのベストプラクティスと期待される事項をまとめました。
 
-### Upgrading to new patch versions
+### 新しいパッチバージョンへのアップグレード
 
-We expect users to upgrade to patches as soon as they're available. When we refer to a "minor version" of dbt Core, such as v1.0, we are always referring to the latest available patch release for that minor version. We encourage you to structure your development and production environments so that you can always install the latest patches of `dbt-core` and any adapter plugins. (Note that patch numbers may be different between dbt-core and plugins. [See below](#how-we-version-adapter-plugins) for an explanation.)
+パッチが利用可能になり次第、速やかにアップグレードしていただくようお願いいたします。dbt Core の「マイナーバージョン」（v1.0 など）は、常にそのマイナーバージョンで利用可能な最新のパッチリリースを指します。開発環境と本番環境を構築し、`dbt-core` とアダプタプラグインの最新パッチを常にインストールできるようにすることをお勧めします。（dbt-core とプラグインのパッチ番号は異なる場合がありますのでご注意ください。[下記](#how-we-version-adapter-plugins) で説明をご覧ください。）
 
-### Upgrading to new minor versions
+### 新しいマイナーバージョンへのアップグレード
 
-During the official support period, minor versions will remain available in dbt Cloud and the version dropdown on the docs site. While we do not expect users to immediately upgrade to newer minor versions as soon as they're available, there will always be some features and fixes only available for users of the latest minor version.
+公式サポート期間中、マイナーバージョンはdbt Cloudおよびドキュメントサイトのバージョンドロップダウンで引き続きご利用いただけます。新しいマイナーバージョンが利用可能になった時点で、ユーザーがすぐにアップグレードする必要はありませんが、最新のマイナーバージョンのユーザーのみに提供される機能や修正が常に存在します。
 
-### Trying prereleases
+### プレリリース版の試用
 
-All dbt Core versions are available as _prereleases_ before the final release. "Release candidates" are available for testing, in production-like environments, two weeks before the final release. For minor versions, we also aim to release one or more "betas," which include new features and invite community feedback, 4+ weeks before the final release. It is in your interest to help us test prereleases—we need your help!
+dbt Core のすべてのバージョンは、最終リリース前に_プレリリース_としてご利用いただけます。「リリース候補版」は、最終リリースの2週間前から本番環境に近い環境でテストできます。マイナーバージョンについては、新機能を追加し、コミュニティからのフィードバックを募る「ベータ版」を1つ以上、最終リリースの4週間以上前にリリースする予定です。プレリリース版のテストにご協力いただけると幸いです。皆様のご協力が必要です！
 
-## How dbt Core uses semantic versioning
+## dbt Core におけるセマンティック バージョニングの適用方法
 
-Like many software projects, dbt Core releases follow [semantic versioning](https://semver.org/), which defines three types of version releases.
+多くのソフトウェア プロジェクトと同様に、dbt Core のリリースは [セマンティック バージョニング](https://semver.org/) に準拠しており、3 種類のバージョン リリースが定義されています。
 
-- **Major versions:** To date, dbt Core has had one major version release: v1.0.0. When v2.0.0 is released, it will introduce new features, and functionality that has been announced for deprecation will stop working.
-- **Minor versions**, also called "feature" releases, include a mix of new features, behind-the-scenes improvements, and changes to existing capabilities that are **backwards compatible** with previous minor versions. They will not break code in your project that relies on documented functionality.
-- **Patch versions**, also called "bugfix" or "security" releases, include **fixes _only_**. These fixes could be needed to restore previous (documented) behavior, fix obvious shortcomings of new features, or offer critical fixes for security or installation issues. We are judicious about which fixes are included in patch releases, to minimize the surface area of changes.
+- **メジャー バージョン:** 現在までに、dbt Core には v1.0.0 という 1 つのメジャー バージョン リリースがリリースされています。v2.0.0 がリリースされると、新機能が導入され、廃止予定と発表されていた機能は動作しなくなります。
+- **マイナー バージョン** (「機能」リリースとも呼ばれます) には、新機能、舞台裏での改善、および以前のマイナー バージョンとの **後方互換性** のある既存機能の変更が含まれます。ドキュメント化された機能に依存するプロジェクト内のコードに影響はありません。
+- **パッチ バージョン** (「バグ修正」リリースとも呼ばれます) には、**修正のみ_** が含まれます。これらの修正は、以前の（ドキュメント化された）動作の復元、新機能の明らかな欠陥の修正、あるいはセキュリティやインストールに関する問題に対する重要な修正のために必要となる場合があります。変更の影響範囲を最小限に抑えるため、パッチリリースにどの修正を含めるかについては慎重に検討しています。
 
-We are committed to avoiding breaking changes in minor versions for end users of dbt. There are two types of breaking changes that may be included in minor versions:
+dbt のエンドユーザーにとって、マイナーバージョンで互換性を損なう変更を行わないよう努めています。マイナーバージョンに含まれる可能性のある互換性を損なう変更には、以下の 2 種類があります。
 
-- Changes to the Python interface for adapter plugins. These changes are relevant _only_ to adapter maintainers, and they will be clearly communicated in documentation and release notes. For more information, refer to [Build, test, document, and promote adapters](/guides/adapter-creation) guide.
-- Changes to metadata interfaces, including [artifacts](/docs/deploy/artifacts) and [logging](/reference/events-logging), signalled by a version bump. Those version upgrades may require you to update external code that depends on these interfaces, or to coordinate upgrades between dbt orchestrations that share metadata, such as [state-powered selection](/reference/node-selection/syntax#about-node-selection).
+- アダプタプラグインの Python インターフェースの変更。これらの変更はアダプタのメンテナーにのみ関係し、ドキュメントとリリースノートで明確に通知されます。詳細については、[アダプタのビルド、テスト、ドキュメント化、およびプロモート](/guides/adapter-creation) ガイドを参照してください。
+- メタデータインターフェース（[アーティファクト](/docs/deploy/artifacts) や [ロギング](/reference/events-logging) など）の変更は、バージョンアップによって通知されます。これらのバージョンアップグレードでは、これらのインターフェースに依存する外部コードの更新や、[状態駆動型選択](/reference/node-selection/syntax#about-node-selection) などのメタデータを共有する dbt オーケストレーション間のアップグレードの調整が必要になる場合があります。
 
-### How we version adapter plugins
+### アダプタプラグインのバージョン管理方法
 
-When you use dbt, you use a combination of `dbt-core` and an adapter plugin specific to your database. You can see the current list in [Supported Data Platforms](/docs/supported-data-platforms). Both `dbt-core` and dbt adapter plugins follow semantic versioning.
+dbt を使用する場合、`dbt-core` とデータベース固有のアダプタプラグインを組み合わせて使用​​します。最新のリストは [サポート対象データプラットフォーム](/docs/supported-data-platforms) で確認できます。`dbt-core` と dbt アダプタプラグインはどちらもセマンティックバージョニングに準拠しています。
 
-`dbt-core` and adapter plugins use the `dbt-adapters` interface to coordinate new features and behind-the-scenes changes. New adapter features are defined in `dbt-adapters` (which `dbt-core` will use). These features are opt-in, meaning they only impact adapters that explicitly implement them. This allows us to independently release adapters, `dbt-adapters`, and `dbt-core` without creating a broken experience for users.
+`dbt-core` とアダプタプラグインは、`dbt-adapters` インターフェースを使用して、新機能とバックグラウンドで行われる変更を調整します。新しいアダプタ機能は `dbt-adapters` で定義され、`dbt-core` が使用します。これらの機能はオプトインであり、明示的に実装されているアダプタにのみ影響します。これにより、ユーザーエクスペリエンスを損なうことなく、アダプタ、`dbt-adapters`、`dbt-core` を個別にリリースできます。
 
-Unlike `dbt-core` versions before 1.8, the minor and patch version numbers might not match between `dbt-core` and the adapter plugin(s) you've installed. 
+1.8 より前のバージョンの `dbt-core` とは異なり、`dbt-core` とインストールしたアダプタプラグインのマイナーバージョン番号とパッチバージョン番号が一致しない場合があります。
 
-For example, you might find you're using `dbt-core==1.8.0` with `dbt-snowflake==1.9.0`. Even though these don't have the same minor version, they can still work together as they both work with `dbt-adapters==1.8.0`. Patch releases can contain important bug or security fixes so it’s critical to stay up to date. 
+たとえば、`dbt-core==1.8.0` と `dbt-snowflake==1.9.0` を併用しているとします。これらはマイナーバージョンが同じではありませんが、どちらも `dbt-adapters==1.8.0` で動作するため、連携して動作できます。パッチリリースには重要なバグやセキュリティ修正が含まれている可能性があるため、常に最新の状態に保つことが重要です。
 
-You can use the `dbt --version` command to see which versions you have installed:
+`dbt --version` コマンドを使用して、インストールされているバージョンを確認できます:
 
 ```
 $ dbt --version
@@ -117,9 +117,10 @@ Plugins:
   - snowflake: 1.9.0 - Up to date!
 ```
 
-You can see which version of the registered adapter that's being invoked in the [logs](/reference/global-configs/logs). Below is an example of the message in the `logs/dbt.log` file: 
+登録済みアダプタのどのバージョンが呼び出されているかは、[ログ](/reference/global-configs/logs)で確認できます。以下は`logs/dbt.log`ファイル内のメッセージの例です:
+
 ```
 [0m13:13:48.572182 [info ] [MainThread]: Registered adapter: snowflake=1.9.0
 ```
 
-It's likely that newer patches have become available since then, so it's always important to check and make sure you're up to date!
+それ以降、新しいパッチが利用可能になっている可能性が高いため、常にチェックして最新の状態であることを確認することが重要です。

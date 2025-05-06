@@ -1,13 +1,13 @@
 ---
-title: How do I document macros?
-description: "You can use a schema file to document macros"
-sidebar_label: 'Document macros'
+title: マクロを文書化するにはどうすればいいですか?
+description: "マクロを文書化するためにスキーマファイルを使用できます"
+sidebar_label: 'マクロを文書化する'
 id: documenting-macros
 ---
 
 import MacroArgsNote from '/snippets/_validate-macro-args.md';
 
-To document macros, use a [schema file](/reference/macro-properties) and nest the configurations under a `macros:` key
+マクロを文書化するには、[スキーマファイル](/reference/macro-properties)を使用し、`macros:`キーの下に構成をネストします。
 
 ## Example
 
@@ -32,15 +32,15 @@ macros:
 
 <MacroArgsNote />
 
-## Document a custom materialization
+## カスタムマテリアライゼーションをドキュメント化する
 
-When you create a [custom materialization](/guides/create-new-materializations), dbt creates an associated macro with the following format:
+[カスタムマテリアライゼーション](/guides/create-new-materializations)を作成すると、dbt は次の形式の関連マクロを作成します:
 
 ```
 materialization_{materialization_name}_{adapter}
 ```
 
-To document a custom materialization, use the previously mentioned format to determine the associated macro name(s) to document.
+カスタム マテリアライゼーションを文書化するには、前述の形式を使用して、文書化する関連マクロ名を決定します。
 
 <File name='macros/properties.yml'>
 

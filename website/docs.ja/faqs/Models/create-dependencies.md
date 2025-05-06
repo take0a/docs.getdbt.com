@@ -1,14 +1,14 @@
 ---
-title: How do I create dependencies between models?
-description: "Using ref function to create dependencies"
-sidebar_label: 'Creating dependencies between models'
+title: モデル間の依存関係を作成するにはどうすればよいですか?
+description: "ref関数を使用して依存関係を作成する"
+sidebar_label: 'モデル間の依存関係の作成'
 id: create-dependencies
 
 ---
 
-When you use the `ref` [function](/reference/dbt-jinja-functions/ref), dbt automatically infers the dependencies between models.
+`ref` [関数](/reference/dbt-jinja-functions/ref) を使用すると、dbt はモデル間の依存関係を自動的に推測します。
 
-For example, consider a model, `customer_orders`, like so:
+例えば、次のような `customer_orders` モデルを考えてみましょう:
 
 <File name='models/customer_orders.sql'>
 
@@ -25,7 +25,7 @@ group by 1
 
 </File>
 
-**There's no need to explicitly define these dependencies.** dbt will understand that the `stg_orders` model needs to be built before the above model (`customer_orders`). When you execute `dbt run`, you will see these being built in order:
+**これらの依存関係を明示的に定義する必要はありません。** dbt は、`stg_orders` モデルを上記のモデル (`customer_orders`) の前にビルドする必要があることを理解します。`dbt run` を実行すると、これらのモデルが順番にビルドされているのが確認できます:
 
 ```txt
 $ dbt run
@@ -44,4 +44,4 @@ Found 2 models, 28 tests, 0 snapshots, 0 analyses, 130 macros, 0 operations, 0 s
 Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
 ```
 
-To learn more about building a dbt project, we recommend you complete the [quickstart guide](/guides).
+dbt プロジェクトの構築について詳しくは、[クイックスタート ガイド](/guides) を完了することをお勧めします。

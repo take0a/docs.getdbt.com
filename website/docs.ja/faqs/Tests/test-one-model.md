@@ -1,15 +1,15 @@
 ---
-title: How do I test one model at a time?
-description: "Use select flag to test one model at a time"
-sidebar_label: 'Testing one model at a time'
+title: 一度に 1 つのモデルをテストするにはどうすればよいですか?
+description: "select フラグを使用して、一度に 1 つのモデルをテストします。"
+sidebar_label: '一度に1つのモデルをテストする'
 id: test-one-model
 
 ---
 
-Running tests on one model looks very similar to running a model: use the `--select` flag (or `-s` flag), followed by the name of the model:
+1 つのモデルでテストを実行するのは、モデルを実行するのと非常に似ています。`--select` フラグ (または `-s` フラグ) を使用し、その後にモデルの名前を指定します:
 
 ```shell
 dbt test --select customers
 ```
 
-Check out the [model selection syntax documentation](/reference/node-selection/syntax) for full syntax, and [test selection examples](/reference/node-selection/test-selection-examples) in particular.
+完全な構文については[モデル選択構文のドキュメント](/reference/node-selection/syntax)を、特に[テスト選択の例](/reference/node-selection/test-selection-examples)を確認してください。

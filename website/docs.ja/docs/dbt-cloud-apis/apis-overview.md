@@ -1,23 +1,23 @@
 ---
-title: "APIs Overview"
-description: "Learn how dbt accounts on the Team and Enterprise plans can query the dbt Cloud APIs."
+title: "APIの概要"
+description: "チーム プランとエンタープライズ プランの dbt アカウントで dbt Cloud API をクエリする方法について説明します。"
 id: "overview"
 pagination_next: "docs/dbt-cloud-apis/user-tokens"
 pagination_prev: null
 ---
 
-# APIs overview <Lifecycle status="team,enterprise"/>
+# APIの概要 <Lifecycle status="team,enterprise"/>
 
-Accounts on the _Team_ and _Enterprise_ plans can query the dbt Cloud APIs.
+_Team_ プランと _Enterprise_ プランのアカウントは、dbt Cloud API にクエリを実行できます。
 
-dbt Cloud provides the following APIs:
+dbt Cloud は以下の API を提供します。
 
-- The [dbt Cloud Administrative API](/docs/dbt-cloud-apis/admin-cloud-api) can be used to administrate a dbt Cloud account. It can be called manually or with [the dbt Cloud Terraform provider](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest).
-- The [dbt Cloud Discovery API](/docs/dbt-cloud-apis/discovery-api) can be used to fetch metadata related to the state and health of your dbt project.
-- The [dbt Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview) provides multiple API options which allow you to query your metrics defined in the dbt Semantic Layer.
+- [dbt Cloud Administrative API](/docs/dbt-cloud-apis/admin-cloud-api) は、dbt Cloud アカウントの管理に使用できます。この API は手動で呼び出すことも、[dbt Cloud Terraform プロバイダ](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest) を使用して呼び出すこともできます。
+- [dbt Cloud Discovery API](/docs/dbt-cloud-apis/discovery-api) は、dbt プロジェクトの状態と健全性に関するメタデータを取得するために使用できます。
+- [dbt Semantic Layer API](/docs/dbt-cloud-apis/sl-api-overview) は、dbt Semantic Layer で定義されたメトリックをクエリするための複数の API オプションを提供します。
 
-If you want to learn more about webhooks, refer to [Webhooks for your jobs](/docs/deploy/webhooks).
+Webhook の詳細については、[ジョブ用の Webhook](/docs/deploy/webhooks) を参照してください。
 
-## How to Access the APIs
+## API へのアクセス方法
 
-dbt Cloud supports two types of API Tokens: [personal access tokens](/docs/dbt-cloud-apis/user-tokens) and [service account tokens](/docs/dbt-cloud-apis/service-tokens). Requests to the dbt Cloud APIs can be authorized using these tokens.
+dbt Cloud は、[個人アクセストークン](/docs/dbt-cloud-apis/user-tokens) と [サービスアカウントトークン](/docs/dbt-cloud-apis/service-tokens) の 2 種類の API トークンをサポートしています。これらのトークンを使用して、dbt Cloud API へのリクエストを承認できます。

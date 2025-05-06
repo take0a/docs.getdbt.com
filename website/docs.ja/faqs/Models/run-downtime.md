@@ -1,10 +1,10 @@
 ---
-title: If I rerun dbt, will there be any downtime as models are rebuilt?
-description: "No downtime when re-building models in dbt "
-sidebar_label: 'Re-building models in dbt atomically'
+title: dbt を再実行すると、モデルが再構築されるためダウンタイムが発生しますか?
+description: "dbt でモデルを再構築する際のダウンタイムなし"
+sidebar_label: 'dbt でモデルをアトミックに再構築する'
 id: run-downtime
 
 ---
-Nope! The SQL that dbt generates behind the scenes ensures that any relations are replaced atomically (i.e. your business users won't experience any downtime).
+いいえ！dbt がバックグラウンドで生成する SQL により、リレーションはアトミックに置き換えられます（つまり、ビジネスユーザーにダウンタイムは発生しません）。
 
-The implementation of this varies on each warehouse, check out the [logs](/faqs/Runs/checking-logs) to see the SQL dbt is executing.
+実装はウェアハウスごとに異なります。dbt が実行している SQL を確認するには、[ログ](/faqs/Runs/checking-logs) を確認してください。

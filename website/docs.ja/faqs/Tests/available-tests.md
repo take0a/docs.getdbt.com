@@ -1,19 +1,19 @@
 ---
-title: What tests are available for me to use in dbt?
-description: "Types of tests to use in dbt"
-sidebar_label: 'Available test to use in dbt'
+title: dbt で使用できるテストは何ですか?    
+description: "dbtで使用するテストの種類"
+sidebar_label: 'dbtで使用できるテスト'
 id: available-tests
 
 ---
-Out of the box, dbt ships with the following tests:
+dbt には、以下のテストが標準で付属しています。
 
 * `unique`
 * `not_null`
 * `accepted_values`
-* `relationships` (i.e. referential integrity)
+* `relationships` (参照整合性など)
 
-You can also write your own [custom schema data tests](/docs/build/data-tests).
+独自の [カスタムスキーマデータテスト](/docs/build/data-tests) を作成することもできます。
 
-Some additional custom schema tests have been open-sourced in the [dbt-utils package](https://github.com/dbt-labs/dbt-utils?#generic-tests), check out the docs on [packages](/docs/build/packages) to learn how to make these tests available in your project.
+[dbt-utils パッケージ](https://github.com/dbt-labs/dbt-utils?#generic-tests) には、追加のカスタムスキーマテストがオープンソース化されています。これらのテストをプロジェクトで利用できるようにする方法については、[パッケージ](/docs/build/packages) のドキュメントをご覧ください。
 
-Note that although you can't document data tests as of yet, we recommend checking out [this dbt Core discussion](https://github.com/dbt-labs/dbt-core/issues/2578) where the dbt community shares ideas.
+現時点ではデータテストをドキュメント化することはできませんが、dbt コミュニティがアイデアを共有している [dbt Core のディスカッション](https://github.com/dbt-labs/dbt-core/issues/2578) を確認することをお勧めします。

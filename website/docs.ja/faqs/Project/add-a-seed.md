@@ -1,10 +1,10 @@
 ---
-title: Add a seed file
+title: シードファイルを追加する
 id: add-a-seed
-description: Learn how to add a seed file to your project
+description: プロジェクトにシードファイルを追加する方法を学ぶ
 ---
 
-1. Add a seed file:
+1. シードファイルを追加します:
 
 <File name='seeds/country_codes.csv'>
 
@@ -18,8 +18,8 @@ GB,United Kingdom
 
 </File>
 
-2. Run `dbt seed`
-3. Ref the model in a downstream model
+2. `dbt seed` を実行する
+3. 下流モデルでモデルを参照する
 
 <File name='models/something.sql'>
 

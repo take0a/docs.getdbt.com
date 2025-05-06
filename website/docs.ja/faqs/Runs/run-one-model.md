@@ -1,15 +1,15 @@
 ---
-title: How do I run one model at a time?
-description: "Use select flags to run one model at a time"
-sidebar_label: 'Run one model at a time'
+title: 一度に 1 つのモデルを実行するにはどうすればよいですか?
+description: "select フラグを使用して、一度に 1 つのモデルを実行します。"
+sidebar_label: '一度に1つのモデルを実行する'
 id: run-one-model
 
 ---
 
-To run one model, use the `--select` flag (or `-s` flag), followed by the name of the model:
+1 つのモデルを実行するには、`--select` フラグ (または `-s` フラグ) の後にモデルの名前を指定します:
 
 ```shell
 $ dbt run --select customers
 ```
 
-Check out the [model selection syntax documentation](/reference/node-selection/syntax) for more operators and examples.
+その他の演算子と例については、[モデル選択構文のドキュメント](/reference/node-selection/syntax)を参照してください:

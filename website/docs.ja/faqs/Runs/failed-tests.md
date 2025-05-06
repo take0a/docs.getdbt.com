@@ -1,18 +1,18 @@
 ---
-title: One of my tests failed, how can I debug it?
-description: "You can debug failed tests by finding the SQL"
-sidebar_label: 'Debug failed tests'
+title: テストの 1 つが失敗しました。どうすればデバッグできますか?
+description: "失敗したテストをデバッグするには、SQL文を見つけます。"
+sidebar_label: '失敗したテストをデバッグする'
 id: failed-tests
 
 ---
-To debug a failing test, find the SQL that dbt ran by:
+失敗したテストをデバッグするには、dbt が実行した SQL を次のように見つけます:
 
 * dbt Cloud:
-  * Within the test output, click on the failed test, and then select "Details"
+  * テスト出力内で、失敗したテストをクリックし、「詳細」を選択します。
 
 * dbt Core:
-  * Open the file path returned as part of the error message.
-  * Navigate to the `target/compiled/schema_tests` directory for all compiled test queries
+  * エラーメッセージの一部として返されたファイルパスを開きます。
+  * コンパイル済みのすべてのテストクエリが格納されている `target/compiled/schema_tests` ディレクトリに移動します。
 
-Copy the SQL into a query editor (in dbt Cloud, you can paste it into a new `Statement`), and run the query to find the records that failed.
+SQL をクエリエディタにコピーし（dbt Cloud では、新しい `Statement` に貼り付けることができます）、クエリを実行して失敗したレコードを見つけます。
 

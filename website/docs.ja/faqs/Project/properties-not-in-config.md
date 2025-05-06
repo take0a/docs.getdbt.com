@@ -1,25 +1,25 @@
 ---
-title: Can I add tests and descriptions in a config block?
-description: "Types of properties defined in config blocks"
-sidebar_label: 'Types of properties defined in config blocks'
+title: 構成ブロックにテストと説明を追加できますか?
+description: "構成ブロックで定義されるプロパティの種類"
+sidebar_label: '構成ブロックで定義されるプロパティの種類'
 id: properties-not-in-config
 
 ---
 
-dbt has the ability to define node configs in `.yml` files, in addition to `config()` blocks and `dbt_project.yml`. But the reverse isn't always true: there are some things in `.yml` files that can _only_ be defined there.
+dbt は、`config()` ブロックと `dbt_project.yml` に加えて、`.yml` ファイルでもノード設定を定義できます。しかし、その逆は必ずしも真ではありません。`.yml` ファイルには、そのファイルでしか定義できない項目もあります。
 
-Certain properties are special, because:
-- They have a unique Jinja rendering context
-- They create new project resources
-- They don't make sense as hierarchical configuration
-- They're older properties that haven't yet been redefined as configs
+一部のプロパティは特別なものです。理由は以下のとおりです。
+- 固有の Jinja レンダリング コンテキストを持つ
+- 新しいプロジェクト リソースを作成する
+- 階層的な構成としては意味をなさない
+- まだ構成として再定義されていない古いプロパティである
 
-These properties are:
+これらのプロパティは次のとおりです。
 - [`description`](/reference/resource-properties/description)
 - [`tests`](/reference/resource-properties/data-tests)
 - [`docs`](/reference/resource-configs/docs)
 - `columns`
 - [`quote`](/reference/resource-properties/columns#quote)
-- [`source` properties](/reference/source-properties) (e.g. `loaded_at_field`, `freshness`)
-- [`exposure` properties](/reference/exposure-properties) (e.g. `type`, `maturity`)
-- [`macro` properties](/reference/macro-properties) (e.g. `arguments`)
+- [`source` プロパティ](/reference/source-properties) (例: `loaded_at_field`、`freshness`)
+- [`exposure` プロパティ](/reference/exposure-properties) (例: `type`、 `maturity`)
+- [`macro` プロパティ](/reference/macro-properties) (例: `arguments`)

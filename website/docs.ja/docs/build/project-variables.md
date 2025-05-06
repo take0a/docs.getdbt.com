@@ -1,35 +1,32 @@
 ---
-title: "Project variables"
+title: "プロジェクト変数"
 description: "Use dbt project variables to configure conditional or reusable logic across models and other resources." 
 id: "project-variables"
 pagination_next: "docs/build/environment-variables"
 ---
 
-dbt provides a mechanism, [variables](/reference/dbt-jinja-functions/var), to provide data to models for
-compilation. Variables can be used to [configure timezones](https://github.com/dbt-labs/snowplow/blob/0.3.9/dbt_project.yml#L22),
-[avoid hardcoding table names](https://github.com/dbt-labs/quickbooks/blob/v0.1.0/dbt_project.yml#L23)
-or otherwise provide data to models to configure how they are compiled.
+dbt は、モデルにコンパイル用のデータを提供するための [変数](/reference/dbt-jinja-functions/var) というメカニズムを提供しています。
+変数は、[タイムゾーンを設定](https://github.com/dbt-labs/snowplow/blob/0.3.9/dbt_project.yml#L22)、[テーブル名のハードコーディングを回避](https://github.com/dbt-labs/quickbooks/blob/v0.1.0/dbt_project.yml#L23)、あるいはモデルにデータを提供してコンパイル方法を設定するために使用できます。
 
-To use a variable in a model, hook, or macro, use the `{{ var('...') }}` function. More information on the `var` function can be found [here](/reference/dbt-jinja-functions/var).
+モデル、フック、またはマクロで変数を使用するには、`{{ var('...') }}` 関数を使用します。`var` 関数の詳細については、[こちら](/reference/dbt-jinja-functions/var) を参照してください。
 
-Variables can be defined in two ways:
+変数は2つの方法で定義できます。
 
-1. In the `dbt_project.yml` file
-2. On the command line
+1. `dbt_project.yml` ファイル内
+2. コマンドライン
 
-### Defining variables in `dbt_project.yml`
+### `dbt_project.yml` で変数を定義する
 
 
 :::info
 
-Jinja is not supported within the `vars` config, and all values will be interpreted literally.
+Jinja は `vars` 構成内ではサポートされていないため、すべての値は文字通り解釈されます。
 
 :::
 
 
-To define variables in a dbt project, add a `vars` config to your `dbt_project.yml` file.
-These `vars` can be scoped globally, or to a specific package imported in your
-project.
+dbt プロジェクトで変数を定義するには、`dbt_project.yml` ファイルに `vars` 設定を追加します。
+これらの `vars` は、グローバルにスコープすることも、プロジェクトにインポートされた特定のパッケージに限定することもできます。
 
 <File name='dbt_project.yml'>
 
@@ -57,50 +54,50 @@ models:
 
 </File>
 
-### Defining variables on the command line
+### コマンドラインでの変数の定義
 
-The `dbt_project.yml` file is a great place to define variables that rarely
-change. Other types of variables, like date ranges, will change frequently. To
-define (or override) variables for a run of dbt, use the `--vars` command line
-option. In practice, this looks like:
+`dbt_project.yml` ファイルは、ほとんど変更されない変数を定義するのに最適です。
+日付範囲など、頻繁に変更される変数もあります。
+dbt の実行時に変数を定義（または上書き）するには、`--vars` コマンドラインオプションを使用します。
+実際には、次のようになります。
 
 ```
 $ dbt run --vars '{"key": "value"}'
 ```
 
-The `--vars` argument accepts a YAML dictionary as a string on the command line.
-YAML is convenient because it does not require strict quoting as with <Term id="json" />.
+`--vars` 引数は、コマンドラインで YAML 辞書を文字列として受け入れます。
+YAML は、<Term id="json" /> のように厳密な引用符で囲む必要がないため便利です。
 
-Both of the following are valid and equivalent:
+以下の 2 つの例はどちらも有効であり、同等です。
 
 ```
 $ dbt run --vars '{"key": "value", "date": 20180101}'
 $ dbt run --vars '{key: value, date: 20180101}'
 ```
 
-If only one variable is being set, the brackets are optional, eg:
+設定する変数が 1 つだけの場合、括弧はオプションです。例:
 
 ```
 $ dbt run --vars 'key: value'
 ```
 
-You can find more information on defining dictionaries with YAML [here](https://github.com/Animosity/CraftIRC/wiki/Complete-idiot%27s-introduction-to-yaml).
+YAML で辞書を定義する方法の詳細については、[こちら](https://github.com/Animosity/CraftIRC/wiki/Complete-idiot%27s-introduction-to-yaml) を参照してください。
 
-### Variable precedence
+### 変数の優先順位
 
-Variables defined with the `--vars` command line argument override variables defined in the `dbt_project.yml` file. They are globally scoped and accessible to the root project and all installed packages.
+`--vars` コマンドライン引数で定義された変数は、`dbt_project.yml` ファイルで定義された変数をオーバーライドします。これらの変数はグローバルスコープを持ち、ルートプロジェクトとインストールされたすべてのパッケージからアクセスできます。
 
-The order of precedence for variable declaration is as follows (highest priority first):
+変数宣言の優先順位は以下のとおりです（優先度の高いものから順に）。
 
-1. The variables defined on the command line with `--vars`.
-2. The package-scoped variable declaration in the root `dbt_project.yml` file
-3. The global variable declaration in the root `dbt_project.yml` file
-4. If this node is defined in a package: variable declarations in that package's `dbt_project.yml` file
-5. The variable's default argument (if one is provided)
+1. コマンドラインで `--vars` を使用して定義された変数。
+2. ルート `dbt_project.yml` ファイル内のパッケージスコープの変数宣言。
+3. ルート `dbt_project.yml` ファイル内のグローバル変数宣言。
+4. このノードがパッケージ内で定義されている場合：そのパッケージの `dbt_project.yml` ファイル内の変数宣言。
+5. 変数のデフォルト引数（指定されている場合）
 
-If dbt is unable to find a definition for a variable after checking all possible variable declaration places, then a compilation error will be raised.
+dbt が変数宣言の可能性のある場所をすべてチェックした後でも変数の定義を見つけられない場合、コンパイルエラーが発生します。
 
-**Note:** Variable scope is based on the node ultimately using that variable. Imagine the case where a model defined in the root project is calling a macro defined in an installed package. That macro, in turn, uses the value of a variable. The variable will be resolved based on the _root project's_ scope, rather than the package's scope.
+**注:** 変数のスコープは、その変数を最終的に使用するノードに基づきます。ルートプロジェクトで定義されたモデルが、インストール済みパッケージで定義されたマクロを呼び出す場合を想像してみてください。そのマクロは、変数の値を使用します。変数は、パッケージのスコープではなく、ルートプロジェクトのスコープに基づいて解決されます。
 
 <Snippet path="discourse-help-feed-header" />
 <DiscourseHelpFeed tags="variables"/>

@@ -1,111 +1,112 @@
 ---
-title: "Job scheduler"
+title: "ジョブスケジューラ"
 id: "job-scheduler"
 sidebar_label: "Job scheduler"
-description: "The dbt Cloud job scheduler queues scheduled or API-triggered runs, before preparing the job to enter cloud data platform. Build observability into transformation workflows with the in-app scheduling, logging, and alerting." 
+description: "dbt Cloudジョブスケジューラは、ジョブをクラウドデータプラットフォームに入力する準備を行う前に、スケジュールされた実行またはAPIトリガー実行をキューに登録します。アプリ内スケジューリング、ロギング、アラート機能により、変換ワークフローに可観測性を組み込みます。" 
 tags: [scheduler]
 ---
 
-The job scheduler is the backbone of running jobs in dbt Cloud, bringing power and simplicity to building data pipelines in both continuous integration and production contexts. The scheduler frees teams from having to build and maintain their own infrastructure, and ensures the timeliness and reliability of data transformations.
+ジョブスケジューラは、dbt Cloud におけるジョブ実行の基盤であり、継続的インテグレーションと本番環境の両方でデータパイプラインの構築を強力かつシンプルにします。スケジューラにより、チームは独自のインフラストラクチャを構築・維持する必要がなくなり、データ変換のタイムリーさと信頼性を確保できます。
 
-The scheduler enables both cron-based and event-driven execution of dbt commands in the user’s data platform. Specifically, it handles:
+スケジューラは、ユーザーのデータプラットフォームにおいて、cron ベースとイベントドリブンの両方で dbt コマンドを実行できるようにします。具体的には、以下の処理を行います。
 
-- Cron-based execution of dbt Cloud jobs that run on a predetermined cadence
-- Event-driven execution of dbt Cloud jobs that run based on the completion of another job ([trigger on job completion](/docs/deploy/deploy-jobs#trigger-on-job-completion))
-- Event-driven execution of dbt Cloud CI jobs triggered when a pull request is merged to the branch ([merge jobs](/docs/deploy/merge-jobs))
-- Event-driven execution of dbt Cloud jobs triggered by API
-- Event-driven execution of dbt Cloud jobs manually triggered by a user to **Run now**
+- 事前に定義された周期で実行される dbt Cloud ジョブの cron ベースの実行
+- 別のジョブの完了に基づいて実行される dbt Cloud ジョブのイベントドリブン実行 ([ジョブ完了時のトリガー](/docs/deploy/deploy-jobs#trigger-on-job-completion))
+- プルリクエストがブランチにマージされたときにトリガーされる dbt Cloud CI ジョブのイベントドリブン実行 ([マージジョブ](/docs/deploy/merge-jobs))
+- API によってトリガーされる dbt Cloud ジョブのイベントドリブン実行
+- ユーザーが手動でトリガーし、**Run now** する dbt Cloud ジョブのイベントドリブン実行
 
-The scheduler handles various tasks including:
-- Queuing jobs
-- Creating temporary environments to run the dbt commands required for those jobs
-- Providing logs for debugging and remediation
-- Storing dbt artifacts for direct consumption/ingestion by the Discovery API
+スケジューラは、以下のタスクなど、さまざまなタスクを処理します。
+- ジョブのキューイング
+- ジョブに必要な dbt コマンドを実行するための一時環境の作成
+- デバッグと修復のためのログの提供
+- Discovery API による直接使用/取り込みのための dbt アーティファクトの保存
 
-The scheduler also:
-- Uses [dbt Cloud's Git repository caching](/docs/cloud/account-settings#git-repository-caching) to protect against third-party outages and improve job run reliability. <Lifecycle status="enterprise" />
-- Powers running dbt in staging and production environments, bringing ease and confidence to CI/CD workflows and enabling observability and governance in deploying dbt at scale. 
+スケジューラは以下の機能も提供します。
+- [dbt Cloud の Git リポジトリ キャッシュ](/docs/cloud/account-settings#git-repository-caching) を使用して、サードパーティによる障害から保護し、ジョブ実行の信頼性を向上させます。<Lifecycle status="enterprise" />
+- ステージング環境と本番環境での dbt の実行を強化し、CI/CD ワークフローの容易さと信頼性を高め、大規模な dbt の導入におけるオブザーバビリティとガバナンスを実現します。
 
-## Scheduler terms
+## スケジューラ用語
 
-Familiarize yourself with these useful terms to help you understand how the job scheduler works.
+ジョブスケジューラの仕組みを理解するために、これらの便利な用語を理解しておきましょう。
 
 | Term | Definition |
 | --- | --- |
-| Scheduler | The dbt Cloud engine that powers job execution. The scheduler queues scheduled or API-triggered job runs, prepares an environment to execute job commands in your cloud data platform, and stores and serves logs and artifacts that are byproducts of run execution. |
-| Job | A collection of run steps, settings, and a trigger to invoke dbt commands against a project in the user's cloud data platform. |
-| Job queue | The job queue acts as a waiting area for job runs when they are scheduled or triggered to run; runs remain in queue until execution begins. More specifically, the Scheduler checks the queue for runs that are due to execute, ensures the run is eligible to start, and then prepares an environment with appropriate settings, credentials, and commands to begin execution. Once execution begins, the run leaves the queue. |
-| Over-scheduled job | A situation when a cron-scheduled job's run duration becomes longer than the frequency of the job’s schedule, resulting in a job queue that will grow faster than the scheduler can process the job’s runs. |
-| Deactivated job | A situation where a job has reached 100 consecutive failing runs. |
-| Prep time | The time dbt Cloud takes to create a short-lived environment to execute the job commands in the user's cloud data platform. Prep time varies most significantly at the top of the hour when the dbt Cloud Scheduler experiences a lot of run traffic. |
-| Run | A single, unique execution of a dbt job. |
-| Run slot | Run slots control the number of jobs that can run concurrently. Developer plans have a fixed number of run slots, while Enterprise and Team plans have unlimited run slots. Each running job occupies a run slot for the duration of the run. <br /><br />Team and Developer plans are limited to one project each. For additional projects, consider upgrading to the [Enterprise plan](https://www.getdbt.com/pricing/).| 
-| Threads | When dbt builds a project's DAG, it tries to parallelize the execution by using threads. The [thread](/docs/running-a-dbt-project/using-threads) count is the maximum number of paths through the DAG that dbt can work on simultaneously. The default thread count in a job is 4. |
-| Wait time | Amount of time that dbt Cloud waits before running a job, either because there are no available slots or because a previous run of the same job is still in progress. |
+| Scheduler | ジョブ実行を強化するdbt Cloudエンジン。スケジューラは、スケジュールされたジョブ実行またはAPIトリガーによるジョブ実行をキューに登録し、クラウドデータプラットフォームでジョブコマンドを実行する環境を準備し、実行結果のログとアーティファクトを保存して提供します。 |
+| Job | ユーザーのクラウド データ プラットフォーム内のプロジェクトに対して dbt コマンドを呼び出すための実行ステップ、設定、トリガーのコレクション。 |
+| Job queue | ジョブキューは、ジョブ実行がスケジュールまたはトリガーされた際に、待機エリアとして機能します。実行は、実行が開始されるまでキュー内に保持されます。具体的には、スケジューラはキュー内で実行予定の実行を確認し、実行が開始可能であることを確認した上で、適切な設定、資格情報、および実行開始コマンドを含む環境を準備します。実行が開始されると、実行はキューから出ます。 |
+| Over-scheduled job | cron でスケジュールされたジョブの実行期間がジョブのスケジュールの頻度よりも長くなり、ジョブ キューがスケジューラによるジョブの実行処理能力よりも速く増大する状況。 |
+| Deactivated job | ジョブの実行が 100 回連続して失敗した状況。 |
+| Prep time | dbt Cloud がユーザーのクラウド データ プラットフォームでジョブコマンドを実行するための短命環境を作成するのにかかる時間です。準備時間は、dbt Cloud Scheduler の実行トラフィックが集中する毎時00分に最も大きく変動します。 |
+| Run | dbt ジョブの単一の一意の実行。 |
+| Run slot | 実行スロットは、同時に実行できるジョブの数を制御します。開発者プランでは実行スロットの数が固定ですが、エンタープライズプランとチームプランでは実行スロットの数が無制限です。実行中のジョブは、実行期間中、1つの実行スロットを占有します。<br /><br />チームプランと開発者プランでは、それぞれ1つのプロジェクトに制限されています。プロジェクト数を増やすには、[エンタープライズプラン](https://www.getdbt.com/pricing/)へのアップグレードをご検討ください。| 
+| Threads | dbt はプロジェクトの DAG をビルドする際に、スレッドを使用して実行を並列化しようとします。[スレッド](/docs/running-a-dbt-project/using-threads) 数は、dbt が同時に処理できる DAG 内のパスの最大数です。ジョブ内のデフォルトのスレッド数は 4 です。 |
+| Wait time | 利用可能なスロットがないか、同じジョブの前回の実行がまだ進行中であるため、dbt Cloud がジョブを実行する前に待機する時間。 |
 
 
-## Scheduler queue
+## スケジューラキュー
 
-The scheduler queues a deployment job to be processed when it's triggered to run by a [set schedule](/docs/deploy/deploy-jobs#schedule-days), [a job completed](/docs/deploy/deploy-jobs#trigger-on-job-completion), an API call, or manual action. 
+スケジューラは、[スケジュール設定](/docs/deploy/deploy-jobs#schedule-days)、[ジョブの完了](/docs/deploy/deploy-jobs#trigger-on-job-completion)、API 呼び出し、または手動アクションによって実行がトリガーされると、デプロイジョブを処理対象としてキューに登録します。
 
-Before the job starts executing, the scheduler checks these conditions to determine if the run can start executing:
+ジョブの実行を開始する前に、スケジューラは以下の条件をチェックして、実行を開始できるかどうかを判断します:
 
-- **Is there a run slot that's available on the account for use?** &mdash; If all run slots are occupied, the queued run will wait. The wait time is displayed in dbt Cloud. If there are long wait times, [upgrading to Enterprise](https://www.getdbt.com/contact/) can provide more run slots and allow for higher job concurrency.
+- **アカウントで使用可能な実行スロットはありますか？** &mdash; すべての実行スロットが使用されている場合、キュー内の実行は待機状態になります。待機時間はdbt Cloudに表示されます。待機時間が長い場合は、[Enterprise にアップグレード](https://www.getdbt.com/contact/)することで、より多くの実行スロットが提供され、ジョブの同時実行性を高めることができます。
 
-- **Does this same job have a run already in progress?** &mdash; The scheduler executes distinct runs of the same dbt Cloud job serially to avoid model build collisions. If there's a job already running, the queued job will wait, and the wait time will be displayed in dbt Cloud.
+- **同じジョブで既に実行中の実行がありますか？** &mdash; スケジューラは、モデル構築の衝突を回避するため、同じ dbt Cloud ジョブの個別の実行を順番に実行します。既に実行中のジョブがある場合、キュー内のジョブは待機状態になり、待機時間はdbt Cloudに表示されます。
 
-If there is an available run slot and there isn't an actively running instance of the job, the scheduler will prepare the job to run in your cloud data platform. This prep involves readying a Kubernetes pod with the right version of dbt installed, setting environment variables, loading data platform credentials, and Git provider authorization, amongst other environment-setting tasks. The time it takes to prepare the job is displayed as **Prep time** in the UI.
+利用可能な実行スロットがあり、ジョブのアクティブに実行中のインスタンスがない場合、スケジューラはクラウド データ プラットフォームでジョブを実行する準備をします。この準備には、適切なバージョンの dbt がインストールされた Kubernetes ポッドの準備、環境変数の設定、データ プラットフォームの認証情報の読み込み、Git プロバイダーの承認など、環境設定タスクが含まれます。ジョブの準備にかかる時間は、UI に **Prep time** として表示されます。
 
 <Lightbox src="/img/docs/dbt-cloud/deployment/deploy-scheduler.jpg" width="85%" title="An overview of a dbt Cloud job run"/>
 
-### Treatment of CI jobs
-When compared to deployment jobs, the scheduler behaves differently when handling [continuous integration (CI) jobs](/docs/deploy/continuous-integration). It queues a CI job to be processed when it's triggered to run by a Git pull request, and the conditions the scheduler checks to determine if the run can start executing are also different: 
+### CI ジョブの扱い
 
-- **Will the CI run consume a run slot?** &mdash; CI runs don't consume run slots and will never block production runs.
-- **Does this same job have a run already in progress?** &mdash; CI runs can execute concurrently (in parallel). CI runs build into unique temporary schemas, and CI checks execute in parallel to help increase team productivity. Teammates never have to wait to get a CI check review.
+デプロイメントジョブと比較すると、スケジューラは [継続的インテグレーション (CI) ジョブ](/docs/deploy/continuous-integration) を処理する際に異なる動作をします。Git プルリクエストによって CI ジョブの実行がトリガーされると、そのジョブは処理対象としてキューに登録されます。また、実行開始の可否を判断するためにスケジューラがチェックする条件も異なります。
 
-### Treatment of merge jobs
-When triggered by a _merged_ Git pull request, the scheduler queues a [merge job](/docs/deploy/merge-jobs) to be processed.
+- **CI 実行は実行スロットを消費しますか？** - CI 実行は実行スロットを消費せず、本番環境での実行をブロックすることはありません。
+- **同じジョブで既に実行中のジョブがありますか？** - CI 実行は同時実行（並列実行）できます。CI 実行は固有の一時スキーマにビルドされ、CI チェックは並列実行されるため、チームの生産性が向上します。チームメンバーは CI チェックのレビューを待つ必要はありません。
 
-- **Will the merge job run consume a run slot?** &mdash; Yes, merge jobs do consume run slots.
-- **Does this same job have a run already in progress?** &mdash; A merge job can only have one run in progress at a time. If there are multiple runs queued up, the scheduler will enqueue the most recent run and cancel all the other runs. If there is a run in progress, it will wait until the run completes before queuing the next run.
+### マージジョブの処理
 
-## Job memory
+_マージされた_ Git プルリクエストによってトリガーされると、スケジューラは [マージジョブ](/docs/deploy/merge-jobs) を処理対象としてキューに登録します。
 
-In dbt Cloud, the setting to provision memory available to a job is defined at the account-level and applies to each job running in the account; the memory limit cannot be customized per job. If a running job reaches its memory limit, the run is terminated with a "memory limit error" message.
+- **マージジョブの実行は実行スロットを消費しますか？** &mdash; はい、マージジョブは実行スロットを消費します。
+- **同じジョブの実行が既に進行中ですか？** &mdash; マージジョブは一度に 1 つの実行のみを処理できます。複数の実行がキューに登録されている場合、スケジューラは最新の実行をキューに登録し、他のすべての実行をキャンセルします。進行中の実行がある場合は、その実行が完了するまで待機してから、次の実行をキューに登録します。
 
-Jobs consume a lot of memory in the following situations:
-- A high thread count was specified
-- Custom dbt macros attempt to load data into memory instead of pushing compute down to the cloud data platform
-- Having a job that generates dbt project documentation for a large and complex dbt project. 
-  * To prevent problems with the job running out of memory, we recommend generating documentation in a separate job that is set aside for that task and removing `dbt docs generate` from all other jobs. This is especially important for large and complex projects.
+## ジョブメモリ
 
-Refer to [dbt Cloud architecture](/docs/cloud/about-cloud/architecture) for an architecture diagram and to learn how the data flows.
+dbt Cloud では、ジョブで利用可能なメモリのプロビジョニング設定はアカウントレベルで定義され、アカウントで実行されている各ジョブに適用されます。メモリ制限はジョブごとにカスタマイズできません。実行中のジョブがメモリ制限に達すると、「メモリ制限エラー」メッセージが表示され、実行が終了します。
 
-## Run cancellation for over-scheduled jobs
+ジョブが大量のメモリを消費するのは、以下の状況です。
+- スレッド数が多い場合
+- カスタム dbt マクロが、クラウドデータプラットフォームにコンピューティングをプッシュダウンするのではなく、メモリにデータをロードしようとする場合
+- 大規模で複雑な dbt プロジェクトに対して、dbt プロジェクトドキュメントを生成するジョブがある場合
+* ジョブのメモリ不足による問題を回避するため、ドキュメント生成は、そのタスク専用の別のジョブで実行し、他のすべてのジョブから `dbt docs generate` を削除することをお勧めします。これは、大規模で複雑なプロジェクトでは特に重要です。
 
-:::info Scheduler won't cancel API-triggered jobs 
-The scheduler will not cancel over-scheduled jobs triggered by the [API](/docs/dbt-cloud-apis/overview).
+アーキテクチャ図とデータフローについては、[dbt Cloud アーキテクチャ](/docs/cloud/about-cloud/architecture) を参照してください。
+
+## スケジュール超過ジョブのキャンセルを実行する
+
+:::info スケジューラは API によってトリガーされたジョブをキャンセルしません
+スケジューラは、[API](/docs/dbt-cloud-apis/overview) によってトリガーされたスケジュール超過のジョブをキャンセルしません。
 :::
 
-The dbt Cloud scheduler prevents too many job runs from clogging the queue by canceling unnecessary ones. If a job takes longer to run than its scheduled frequency, the queue will grow faster than the scheduler can process the runs, leading to an ever-expanding queue with runs that don’t need to be processed (called _over-scheduled jobs_). 
+dbt Cloud スケジューラは、不要なジョブ実行をキャンセルすることで、過剰なジョブ実行によるキューの詰まりを防ぎます。ジョブの実行にスケジュールされた頻度よりも時間がかかる場合、キューのサイズはスケジューラが処理できる速度を超え、処理する必要のない実行（いわゆる「スケジュール超過ジョブ」）がキューに蓄積され続けることになります。
 
-The scheduler prevents queue clog by canceling runs that aren't needed, ensuring there is only one run of the job in the queue at any given time. If a newer run is queued, the scheduler cancels any previously queued run for that job and displays an error message.
+スケジューラは、不要な実行をキャンセルすることでキューの詰まりを防ぎ、キューには常に同じジョブの実行が 1 つだけ存在するようにします。新しい実行がキューに追加されると、スケジューラはそのジョブの以前の実行をキャンセルし、エラーメッセージを表示します。
 
 <Lightbox src="/img/docs/dbt-cloud/deployment/run-error-message.jpg" width="85%" title="The cancelled runs display an error message explaining why the run was cancelled and recommendations"/>
 
-To prevent over-scheduling, users will need to take action by either refactoring the job so it runs faster or modifying its [schedule](/docs/deploy/deploy-jobs#schedule-days).
+過剰なスケジュールを防ぐために、ユーザーはジョブをリファクタリングして実行速度を上げるか、[スケジュール](/docs/deploy/deploy-jobs#schedule-days)を変更するなどの措置を講じる必要があります。
 
-## Deactivation of jobs <Lifecycle status='beta' />
+## ジョブの無効化 <Lifecycle status='beta' />
 
-To reduce unnecessary resource consumption and reduce contention for run slots in your account, dbt Cloud will deactivate a [deploy job](/docs/deploy/deploy-jobs) or a [CI job](/docs/deploy/ci-jobs) if it reaches 100 consecutive failing runs and indicate this through the use of banners. When this happens, scheduled and triggered-to-run jobs will no longer be enqueued. 
+不要なリソース消費を削減し、アカウント内の実行スロットの競合を軽減するため、dbt Cloud は [デプロイジョブ](/docs/deploy/deploy-jobs) または [CI ジョブ](/docs/deploy/ci-jobs) の実行が連続して 100 回失敗すると、そのジョブを無効化し、バナーでその旨を通知します。無効化されると、スケジュール設定されたジョブとトリガー実行ジョブはキューに登録されなくなります。
 
-To reactivate a deactivated job, you can either:
-- Update the job's settings to fix the issue and save the job (recommended)
-- Perform a manual run by clicking **Run now** on the job's page
+無効化されたジョブを再度有効化するには、次のいずれかの方法があります。
+- ジョブの設定を更新して問題を修正し、ジョブを保存する（推奨）
+- ジョブのページで **Run now** をクリックして手動で実行する
 
-
-Example of deactivation banner on job's page: 
+ジョブのページで無効化バナーが表示される例：
 
 <Lightbox src="/img/docs/dbt-cloud/deployment/example-deactivated-deploy-job.png" title="Example of deactivation banner on job's page"/>
 
@@ -113,9 +114,9 @@ Example of deactivation banner on job's page:
 
 <FAQ path="Troubleshooting/job-memory-limits" />
 
-## Related docs
-- [dbt Cloud architecture](/docs/cloud/about-cloud/architecture#dbt-cloud-features-architecture)
-- [Job commands](/docs/deploy/job-commands)
-- [Job notifications](/docs/deploy/job-notifications)
-- [Webhooks](/docs/deploy/webhooks)
-- [dbt Cloud continuous integration](/docs/deploy/continuous-integration)
+## 関連ドキュメント
+- [dbt Cloud アーキテクチャ](/docs/cloud/about-cloud/architecture#dbt-cloud-features-architecture)
+- [ジョブコマンド](/docs/deploy/job-commands)
+- [ジョブ通知](/docs/deploy/job-notifications)
+- [Webhook](/docs/deploy/webhooks)
+- [dbt Cloud 継続的インテグレーション](/docs/deploy/continuous-integration)

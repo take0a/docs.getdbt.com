@@ -1,12 +1,12 @@
 ---
-title: Should I use separate files to declare resource properties, or one large file?
-description: "Structuring your files and project"
-sidebar_label: 'Ways to structure your project/files'
+title: リソース プロパティを宣言するには、個別のファイルを使用する必要があるでしょうか、それとも 1 つの大きなファイルを使用する必要があるでしょうか?
+description: "ファイルとプロジェクトの構造化"
+sidebar_label: 'プロジェクト/ファイルの構成方法'
 id: multiple-resource-yml-files
 
 ---
-It's up to you:
-- Some folks find it useful to have one file per model (or source / snapshot / seed etc)
-- Some find it useful to have one per directory, documenting and testing multiple models in one file
+あなた次第です。
+- モデル（またはソース/スナップショット/シードなど）ごとに1つのファイルを用意するのが便利だと感じる人もいます。
+- ディレクトリごとに1つのファイルを用意し、複数のモデルを1つのファイルでドキュメント化およびテストするのが便利だと感じる人もいます。
 
-Choose what works for your team. We have more recommendations in our guide on [structuring dbt projects](/best-practices/how-we-structure/1-guide-overview).
+チームにとって最適な方法を選択してください。[dbt プロジェクトの構造化](/best-practices/how-we-structure/1-guide-overview) に関するガイドに、さらに詳しい推奨事項が記載されています。

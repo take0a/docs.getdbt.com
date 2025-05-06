@@ -1,17 +1,17 @@
 ---
-title: Which SQL dialect should I write my models in? Or which SQL dialect does dbt use?
-description: "Use SQL dialect of your own database"
-sidebar_label: 'Which SQL dialect to use?'
+title: どの SQL 方言でモデルを記述すればよいですか? または、dbt はどの SQL 方言を使用していますか?
+description: "データベースに独自のSQL方言を使用する"
+sidebar_label: 'どの SQL 方言を使用すればよいですか?'
 id: sql-dialect
 ---
 
-dbt can feel like magic, but it isn't actually magic. Under the hood, it's running SQL in your own warehouse — your data is not processed outside of your warehouse.
+dbt は魔法のように思えるかもしれませんが、実際には魔法ではありません。内部的には、独自のウェアハウス内で SQL を実行しているため、データがウェアハウスの外部で処理されることはありません。
 
-As such, your models should just use the **SQL dialect of your own database**. Then, when dbt wraps your `select` statements in the appropriate <Term id="ddl" /> or <Term id="dml" />, it will use the correct DML for your warehouse — all of this logic is written in to dbt.
+そのため、モデルでは **独自のデータベースの SQL 方言** を使用する必要があります。その後、dbt が `select` ステートメントを適切な <Term id="ddl" /> または <Term id="dml" /> でラップすると、ウェアハウスに適した DML が使用されます。このロジックはすべて dbt に記述されています。
 
-You can find more information about the databases, platforms, and query engines that dbt supports in the [Supported Data Platforms](/docs/supported-data-platforms) docs.
+dbt がサポートするデータベース、プラットフォーム、クエリエンジンの詳細については、[サポートされるデータプラットフォーム](/docs/supported-data-platforms) ドキュメントをご覧ください。
 
-Want to go a little deeper on how this works? Consider a snippet of SQL that works on each warehouse:
+この仕組みについてもう少し詳しく知りたいですか？各ウェアハウスで動作する SQL スニペットを検討してください:
 
 <File name='models/test_model.sql'>
 
@@ -22,7 +22,7 @@ select 1 as my_column
 
 </File>
 
-To replace an existing <Term id="table" />, here's an _illustrative_ example of the SQL dbt will run on different warehouses (the actual SQL can get much more complicated than this!)
+既存の <Term id="table" /> を置き換えるには、異なるウェアハウスで実行される SQL dbt の _説明的な_ 例を次に示します (実際の SQL はこれよりもはるかに複雑になる可能性があります)。
 
 <Tabs
   defaultValue="redshift"

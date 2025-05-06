@@ -1,12 +1,12 @@
 ---
-title: What tests should I add to my project?
-description: "Recommended tests for project"
-sidebar_label: 'Recommended tests for project'
+title: プロジェクトにどのようなテストを追加すればよいですか?
+description: "プロジェクトに推奨されるテスト"
+sidebar_label: 'プロジェクトに推奨されるテスト'
 id: recommended-tests
 
 ---
-We recommend that every model has a test on a <Term id="primary-key" />, that is, a column that is `unique` and `not_null`.
+すべてのモデルに、<Term id="primary-key" />（つまり、`unique` かつ `not_null` である列）のテストを含めることをお勧めします。
 
-We also recommend that you test any assumptions on your source data. For example, if you believe that your payments can only be one of three payment methods, you should test that assumption regularly — a new payment method may introduce logic errors in your SQL.
+また、ソースデータに対する仮定をテストすることもお勧めします。例えば、支払い方法が3つの方法のうちの1つだけであると考えている場合は、その仮定を定期的にテストする必要があります。新しい支払い方法が導入されると、SQLに論理エラーが発生する可能性があります。
 
-In advanced dbt projects, we recommend using [sources](/docs/build/sources) and running these source data-integrity tests against the sources rather than models.
+高度なdbtプロジェクトでは、[sources](/docs/build/sources)を使用し、モデルではなくソースに対してこれらのソースデータ整合性テストを実行することをお勧めします。

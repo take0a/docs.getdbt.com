@@ -1,55 +1,55 @@
 ---
-title: "About the sample flag"
-description: "Use the sample flag to lower development time and reduce warehouse spend."
+title: "sample フラグについて"
+description: "sample フラグを使用すると、開発時間を短縮し、データウェアハウスの支出を削減できます。"
 sidebar_label: "The sample flag"
 pagination_next: null
 pagination_prev: "docs/build/empty-flag"
 ---
 
-# About the `--sample` flag
+# `--sample`フラグについて
 
 :::note
 
-The `--sample` flag is not currently available for Python models. If the flag is used with a Python model, it will be ignored.
+`--sample` フラグは現在 Python モデルでは使用できません。このフラグを Python モデルで使用した場合、無視されます。
 
-Seeds will be created normally, but are sampled when referenced by downstream nodes. 
+シードは通常どおり作成されますが、下流ノードによって参照される際にサンプリングされます。
 
 :::
 
-Large data sets can drastically increase build times and reduce how quickly dbt developers can build and test new code. The dbt `--sample` flag can help to reduce build times and warehouse spend by running dbt in sample mode. Sample mode enables you to address cases where you don't need to build the entire model during the development or CI cycle but include enough data to validate the outputs. 
+大規模なデータセットはビルド時間を大幅に増加させ、dbt 開発者が新しいコードを構築およびテストする速度を低下させる可能性があります。dbt の `--sample` フラグを使用すると、dbt をサンプルモードで実行することで、ビルド時間とウェアハウスの使用量を削減できます。サンプルモードを使用すると、開発サイクルまたは CI サイクル中にモデル全体をビルドする必要はないものの、出力を検証するのに十分なデータを含めることができるケースに対応できます。
 
-Sample mode takes the [`--empty` flag's](/docs/build/empty-flag) validation of semantic results a step further by including a sampling of data from the model(s) in your development schema. It won't solve every scenario; for example, there are cases where not all joins will be populated. However, it presents a viable solution for faster building, testing, and validating many strategies. 
+サンプルモードは、[`--empty` フラグ](/docs/build/empty-flag) によるセマンティック結果の検証をさらに一歩進め、開発スキーマ内のモデルからデータのサンプリングを含めます。これはすべてのシナリオに対応できるわけではありません。たとえば、すべての結合がデータ入力されない場合もあります。しかし、多くの戦略の構築、テスト、検証を高速化するための有効なソリューションとなります。
 
-The `--sample` flag will become more robust over time, but it only supports time-based sampling for now.
+`--sample` フラグは今後さらに堅牢になりますが、現時点では時間ベースのサンプリングのみをサポートしています。
 
-## Using the `--sample` flag
+## `--sample` フラグの使用
 
-The `--sample` flag is available for the [`run`](/reference/commands/run) and [`build`](/reference/commands/build) commands. When used, sample mode generates filtered refs and sources. Since it's using time-based sampling, if you have refs like `{{ ref('some_model') }}` being sampled, you need to set [`event_time`](/reference/resource-configs/event-time) for `some_model` to the field that will be used as the timestamp. 
+`--sample` フラグは、[`run`](/reference/commands/run) コマンドと [`build`](/reference/commands/build) コマンドで使用できます。サンプルモードを使用すると、フィルタリングされた参照とソースが生成されます。時間ベースのサンプリングを使用しているため、`{{ ref('some_model') }}` のような参照をサンプリングする場合は、`some_model` の [`event_time`](/reference/resource-configs/event-time) をタイムスタンプとして使用するフィールドに設定する必要があります。
 
-There are two time-based sample specifications supported for sample mode:
-- **Relative time specs:** Filters sampled data from the time the command is run back to a specified integer and granularity. Supported granularities are:
-    - Hours
-    - Days
-    - Months
-    - Years
-- **Static time specs:** Filters your data between a defined start and end period using date and/or timestamp.
+サンプルモードでは、時間ベースのサンプル仕様が2つサポートされています。
+- **相対時間仕様:** コマンド実行時から指定した整数と粒度まで遡って、サンプリングされたデータをフィルタリングします。サポートされている粒度は次のとおりです。
+    - 時間
+    - 日
+    - 月
+    - 年
+- **静的時間仕様:** 日付またはタイムスタンプを使用して、定義された開始期間と終了期間の間のデータをフィルタリングします。
 
 
-### Examples
+### 例
 
-Let's say you want to run your `stg_customers` model and build the table in your development schema with a relative time spec sample size of three days. Your command in the IDE would look something like this:
+`stg_customers` モデルを実行し、開発スキーマに相対時間指定のサンプルサイズを 3 日間としてテーブルを構築するとします。IDE でのコマンドは次のようになります:
 
 ```
 dbt run --select path/to/stg_customers --sample="3 days"
 ```
 
-If you have an even larger model, for example, `stg_orders` you can set sample mode to hours:
+さらに大きなモデル (たとえば `stg_orders`) がある場合は、サンプル モードを時間に設定できます:
 
 ```
 dbt run --select path/to/stg_customers --sample="6 hours"
 ```
 
-Next, let's say you want to validate data for your entire business from a sample size further in the past - your busiest week in July, from the first until closing time on the eighth. You can run the following: 
+次に、さらに過去のサンプルサイズ、つまり7月1日から8日の閉店時間までの最も忙しい週のデータを使って、事業全体のデータを検証したいとします。以下のコマンドを実行できます:
 
 ```
 dbt run --sample="{'start': '2024-07-01', 'end': '2024-07-08 18:00:00'}"
@@ -71,5 +71,5 @@ source as (
 
 ```
 
-dbt will then execute the model SQL against the target data warehouse and build the tables with data from the sample sizes.
+次に、dbt はターゲット データ ウェアハウスに対してモデル SQL を実行し、サンプル サイズのデータ​​を使用してテーブルを構築します。
  

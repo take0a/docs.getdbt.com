@@ -1,41 +1,41 @@
 ---
-title: "dbt Semantic Layer architecture"
+title: "dbt Semantic Layer アーキテクチャ"
 id: sl-architecture
-description: "dbt Semantic Layer product architecture and related questions."
+description: "dbt セマンティック レイヤー製品のアーキテクチャと関連する質問。"
 sidebar_label: "Semantic Layer architecture"
 tags: [Semantic Layer]
 ---
 
-The dbt Semantic Layer allows you to define metrics and use various interfaces to query them. The Semantic Layer does the heavy lifting to find where the queried data exists in your data platform and generates the SQL to make the request (including performing joins). 
+dbtセマンティックレイヤーを使用すると、メトリクスを定義し、様々なインターフェースを使用してクエリを実行できます。セマンティックレイヤーは、クエリ対象のデータがデータプラットフォーム内のどこに存在するかを特定するという重労働を担い、リクエストを実行するためのSQL（結合の実行を含む）を生成します。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-architecture.jpg" width="85%" title="The diagram displays how your data flows using the dbt Semantic Layer and the variety of integration tools it supports."/>
 
-## Components
+## コンポーネント
 
-The dbt Semantic Layer includes the following components:
+dbt セマンティックレイヤーには、以下のコンポーネントが含まれます:
 
 
 | Components | Information | dbt Core users | Developer plans |  Team plans | Enterprise plans | License |
 | --- | --- | :---: | :---: | :---: | :---: | :---: |
-| **[MetricFlow](/docs/build/about-metricflow)** | MetricFlow in dbt allows users to centrally define their semantic models and metrics with YAML specifications. | ✅ | ✅ | ✅ |  ✅  | BSL package (code is source available) |
-| **dbt Semantic interfaces**| A configuration spec for defining metrics, dimensions, how they link to each other, and how to query them. The [dbt-semantic-interfaces](https://github.com/dbt-labs/dbt-semantic-interfaces) is available under Apache 2.0. | ❌ | ❌ | ✅ | ✅ | Proprietary, Cloud (Team & Enterprise)|
-| **Service layer** | Coordinates query requests and dispatching the relevant metric query to the target query engine. This is provided through dbt Cloud and is available to all users on dbt version 1.6 or later. The service layer includes a Gateway service for executing SQL against the data platform. | ❌ | ❌ | ✅ | ✅ | Proprietary, Cloud (Team & Enterprise) |
-| **[Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview)** | The interfaces allow users to submit metric queries using GraphQL and JDBC APIs. They also serve as the foundation for building first-class integrations with various tools. | ❌ | ❌ | ✅ | ✅ | Proprietary, Cloud (Team & Enterprise)|
+| **[MetricFlow](/docs/build/about-metricflow)** | dbt の MetricFlow を使用すると、ユーザーは YAML 仕様を使用してセマンティック モデルとメトリックを一元的に定義できます。 | ✅ | ✅ | ✅ |  ✅  | BSL package (code is source available) |
+| **dbt Semantic interfaces**| 指標、ディメンション、それらの相互リンク、そしてクエリの実行方法を定義するための設定仕様。[dbt-semantic-interfaces](https://github.com/dbt-labs/dbt-semantic-interfaces) はApache 2.0で利用可能です。 | ❌ | ❌ | ✅ | ✅ | Proprietary, Cloud (Team & Enterprise)|
+| **Service layer** | クエリリクエストを調整し、関連するメトリッククエリをターゲットクエリエンジンにディスパッチします。これはdbt Cloudを通じて提供され、dbtバージョン1.6以降のすべてのユーザーが利用できます。サービスレイヤーには、データプラットフォームに対してSQLを実行するためのゲートウェイサービスが含まれています。 | ❌ | ❌ | ✅ | ✅ | Proprietary, Cloud (Team & Enterprise) |
+| **[Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview)** | これらのインターフェースにより、ユーザーはGraphQLおよびJDBC APIを使用してメトリッククエリを送信できます。また、様々なツールとの高度な統合を構築するための基盤としても機能します。 | ❌ | ❌ | ✅ | ✅ | Proprietary, Cloud (Team & Enterprise)|
 
 
-## Feature comparison
+## 機能比較
 
-The following table compares the features available in dbt Cloud and source available in dbt Core:
+以下の表は、dbt Cloud で利用可能な機能と dbt Core で利用可能な機能を比較したものです:
 
 | Feature | MetricFlow Source available | dbt Semantic Layer with dbt Cloud |
 | ----- | :------: | :------: |
-| Define metrics and semantic models in dbt using the MetricFlow spec | ✅ | ✅ |
-| Generate SQL from a set of config files | ✅ | ✅ |
-| Query metrics and dimensions through the command line interface (CLI) | ✅ | ✅ |
-| Query dimension, entity, and metric metadata  through the CLI | ✅ | ✅ |
-| Query metrics and dimensions through semantic APIs (ADBC, GQL)  | ❌ | ✅ |
-| Connect to downstream integrations (Tableau, Hex, Mode, Google Sheets, and so on.) | ❌ | ✅ |
-| Create and run Exports to save metrics queries as tables in your data platform. | ❌ | ✅ |
+| MetricFlow 仕様を使用して dbt でメトリックとセマンティック モデルを定義する | ✅ | ✅ |
+| 設定ファイルのセットからSQLを生成する | ✅ | ✅ |
+| コマンドラインインターフェース (CLI) を介してメトリックとディメンションをクエリする | ✅ | ✅ |
+| CLI を介してディメンション、エンティティ、メトリックのメタデータをクエリする | ✅ | ✅ |
+| セマンティック API (ADBC、GQL) を通じてメトリックとディメンションをクエリする  | ❌ | ✅ |
+| ダウンストリーム統合 (Tableau、Hex、Mode、Google Sheets など) に接続します。 | ❌ | ✅ |
+| エクスポートを作成して実行し、メトリック クエリをデータ プラットフォーム内のテーブルとして保存します。 | ❌ | ✅ |
 
-## Related docs
-- [dbt Semantic Layer FAQs](/docs/use-dbt-semantic-layer/sl-faqs)
+## 関連ドキュメント
+- [dbt セマンティックレイヤーに関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)

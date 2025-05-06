@@ -1,22 +1,22 @@
 ---
-title: Why do I need to quote column names in Jinja?
-description: "Use quotes to pass string"
-sidebar_label: 'Why quote column names in Jinja'
+title: Jinja で列名を引用符で囲む必要があるのはなぜですか?
+description: "文字列を渡すには引用符を使用してください"
+sidebar_label: 'Jinjaで列名を引用符で囲む理由'
 id: quoting-column-names
 ---
 
-In the [macro example](/docs/build/jinja-macros#macros) we passed the column name `amount` quotes:
+[マクロの例](/docs/build/jinja-macros#macros)では、列名 `amount` を引用符で囲んで渡しました。
 
 ```sql
 {{ cents_to_dollars('amount') }} as amount_usd
 ```
 
-We have to use quotes to pass the _string_ `'amount'` to the macro.
+_文字列_ `'amount'` をマクロに渡すには引用符を使用する必要があります。
 
-Without the quotes, the Jinja parser will look for a variable named `amount`. Since this doesn't exist, it will compile to nothing.
+引用符がない場合、Jinjaパーサーは `amount` という変数を探します。しかし、この変数は存在しないため、コンパイル時に何も返されません。
 
-Quoting in Jinja can take a while to get used to! The rule is that you're within a Jinja expression or statement (i.e. within `{% ... %}` or `{{ ... }}`), you'll need to use quotes for any arguments that are strings.
+Jinjaでの引用符の使い方には、慣れるまで少し時間がかかるかもしれません。ルールとして、Jinjaの式または文（つまり `{% ... %}` または `{{ ... }}` 内）では、文字列の引数には引用符を使用する必要があります。
 
-Single and double quotes are equivalent in Jinja – just make sure you match them appropriately.
+Jinjaでは、シングルクォーテーションとダブルクォーテーションは同じ意味です。適切に対応させてください。
 
-And if you do need to pass a variable as an argument, make sure you [don't nest your curlies](/best-practices/dont-nest-your-curlies).
+また、変数を引数として渡す必要がある場合は、[中括弧をネストしないでください](/best-practices/dont-nest-your-curlies)。

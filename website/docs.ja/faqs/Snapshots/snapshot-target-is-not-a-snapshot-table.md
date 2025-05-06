@@ -1,15 +1,15 @@
 ---
-title: "Debug Snapshot target is not a snapshot table errors"
-description: "Debugging Snapshot target is not a snapshot table"
-sidebar_label: "Snapshot target is not a snapshot table"
+title: "スナップショットターゲットがスナップショットテーブルではないエラーをデバッグする"
+description: "スナップショットターゲットがスナップショットテーブルではない場合のデバッグ"
+sidebar_label: "スナップショットターゲットがスナップショットテーブルではない"
 id: snapshot-target-is-not-a-snapshot-table
 ---
 
-If you see the following error when you try executing the snapshot command:
+スナップショットコマンドを実行しようとした際に、以下のエラーが表示される場合：
 
 > Snapshot target is not a snapshot table (missing `dbt_scd_id`, `dbt_valid_from`, `dbt_valid_to`)
 
-Double check that you haven't inadvertently caused your snapshot to behave like table materializations by setting its `materialized` config to be `table`. Prior to dbt version 1.4, it was possible to have a snapshot like this:
+スナップショットの `materialized` 設定を `table` に設定することで、スナップショットが誤ってテーブルマテリアライゼーションのように動作していないか、再度ご確認ください。dbt バージョン 1.4 より前では、次のようなスナップショットを作成できました:
 
 ```sql
 {% snapshot snappy %}
@@ -18,13 +18,13 @@ Double check that you haven't inadvertently caused your snapshot to behave like 
 {% endsnapshot %}
 ```
 
-dbt is treating snapshots like tables (issuing `create or replace table ...` statements) **silently** instead of actually snapshotting data (SCD2 via `insert` / `merge` statements). When upgrading to dbt versions 1.4 and higher, dbt now raises a Parsing Error (instead of silently treating snapshots like tables) that reads:
+dbt は、実際にデータのスナップショットを作成する（`insert` / `merge` ステートメントを介した SCD2）のではなく、スナップショットをテーブルのように扱い（`create or replace table ...` ステートメントを発行）、**サイレント** に処理します。dbt バージョン 1.4 以降にアップグレードすると、dbt は（スナップショットをテーブルのようにサイレントに処理するのではなく）次のような解析エラーを発生させます。
 
 ```
 A snapshot must have a materialized value of 'snapshot'
 ```
 
-This tells you to change your `materialized` config to `snapshot`. But when you make that change, you might encounter an error message saying that certain fields like `dbt_scd_id` are missing. This error happens because, previously, when dbt treated snapshots as tables, it didn't include the necessary [snapshot meta-fields](/docs/build/snapshots#snapshot-meta-fields) in your target table. Since those meta-fields don't exist, dbt correctly identifies that you're trying to create a snapshot in a table that isn't actually a snapshot.
+これは、`materialized` 構成を `snapshot` に変更するように指示しています。ただし、この変更を行うと、`dbt_scd_id` などの特定のフィールドが見つからないというエラーメッセージが表示される場合があります。このエラーは、以前 dbt がスナップショットをテーブルとして扱っていた際に、必要な [スナップショット メタフィールド](/docs/build/snapshots#snapshot-meta-fields) がターゲットテーブルに含まれていなかったために発生します。これらのメタフィールドが存在しないため、dbt は実際にはスナップショットではないテーブルにスナップショットを作成しようとしていることを正しく認識します。
 
-When this happens, you have to start from scratch &mdash; re-snapshotting your source data as if it was the first time by dropping your "snapshot" which isn't a real snapshot table. Then dbt snapshot will create a new snapshot and insert the snapshot meta-fields as expected.
+このエラーが発生した場合、最初からやり直す必要があります。つまり、実際のスナップショットテーブルではない「スナップショット」を削除し、初めてスナップショットを作成する場合と同様に、ソースデータを再スナップショットする必要があります。その後、dbt snapshot は新しいスナップショットを作成し、期待どおりにスナップショット メタフィールドを挿入します。
 

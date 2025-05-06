@@ -1,11 +1,11 @@
 ---
-title: The columns of my seed changed, and now I get an error when running the `seed` command, what should I do?
-description: "Rerun the command with a `--full-refresh` flag"
-sidebar_label: 'debug error when columns of seed changes'
+title: シードの列が変更されたため、`seed` コマンドを実行するとエラーが発生します。どうすればよいでしょうか?
+description: "`--full-refresh`フラグを付けてコマンドを再実行します"
+sidebar_label: 'シードの列が変更されたときのエラーをデバッグする'
 id: full-refresh-seed
 
 ---
-If you changed the columns of your seed, you may get a `Database Error`:
+シードの列を変更した場合、`Database Error` が発生する可能性があります:
 
 <Tabs
   defaultValue="snowflake"
@@ -65,16 +65,16 @@ Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 
 </Tabs>
 
-In this case, you should rerun the command with a `--full-refresh` flag, like so:
+この場合は、次のように `--full-refresh` フラグを付けてコマンドを再実行する必要があります:
 
 ```shell
 dbt seed --full-refresh
 ```
 
-**Why is this the case?**
+**なぜそうなるのでしょうか？**
 
-When you typically run dbt seed, dbt truncates the existing <Term id="table" /> and reinserts the data. This pattern avoids a `drop cascade` command, which may cause downstream objects (that your BI users might be querying!) to get dropped.
+通常、dbt seed を実行すると、dbt は既存の <Term id="table" /> を切り捨て、データを再挿入します。このパターンにより、下流のオブジェクト（BI ユーザーがクエリを実行している可能性のあるオブジェクト）が削除される可能性のある `drop cascade` コマンドを回避できます。
 
-However, when column names are changed, or new columns are added, these statements will fail as the table structure has changed.
+ただし、列名が変更されたり、新しい列が追加されたりすると、テーブル構造が変更されるため、これらのステートメントは失敗します。
 
-The `--full-refresh` flag will force dbt to `drop cascade` the existing table before rebuilding it.
+`--full-refresh` フラグを指定すると、dbt は既存のテーブルを再構築する前に `drop cascade` を強制的に実行します。

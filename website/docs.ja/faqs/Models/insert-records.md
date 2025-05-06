@@ -1,12 +1,12 @@
 ---
-title: If models can only be `select` statements, how do I insert records?
-description: "Incremental models to insert records"
-sidebar_label: 'How to insert records'
+title: モデルが `select` ステートメントのみである場合、レコードを挿入するにはどうすればよいでしょうか?
+description: "レコードを挿入するための増分モデル"
+sidebar_label: 'レコードを挿入する方法'
 id: insert-records
 
 ---
 
-For those coming from an <Term id="etl" /> (Extract Transform Load) paradigm, there's often a desire to write transformations as `insert` and `update` statements. In comparison, dbt will wrap your `select` query in a `create table as` statement, which can feel counter-productive.
+<Term id="etl" /> (抽出、変換、ロード) パラダイムから移行してきた場合、変換を `insert` および `update` ステートメントとして記述したいという要望がよくあります。これに対し、dbt では `select` クエリが `create table as` ステートメントでラップされるため、逆効果に感じる場合があります。
 
-* If you wish to use `insert` statements for performance reasons (i.e. to reduce data that is processed), consider [incremental models](/docs/build/incremental-models)
-* If you wish to use `insert` statements since your source data is constantly changing (e.g. to create "Type 2 Slowly Changing Dimensions"), consider [snapshotting your source data](/docs/build/sources#source-data-freshness), and building models on top of your snaphots.
+* パフォーマンス上の理由 (処理するデータ量を削減するなど) で `insert` ステートメントを使用する場合は、[増分モデル](/docs/build/incremental-models) を検討してください。
+* ソースデータが常に変化するため `insert` ステートメントを使用する場合 (例: 「タイプ 2 緩やかに変化するディメンション」を作成する) は、[ソースデータのスナップショット](/docs/build/sources#source-data-freshness) を検討し、そのスナップショットに基づいてモデルを構築することを検討してください。

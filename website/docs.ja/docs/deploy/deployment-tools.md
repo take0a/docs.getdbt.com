@@ -1,23 +1,23 @@
 ---
-title: "Integrate with other orchestration tools"
+title: "他のオーケストレーションツールとの統合"
 id: "deployment-tools"
 sidebar_label: "Integrate with other tools"
 pagination_next: null
 ---
 
-Alongside [dbt Cloud](/docs/deploy/jobs), discover other ways to schedule and run your dbt jobs with the help of tools such as the ones described on this page.
+[dbt Cloud](/docs/deploy/jobs)に加えて、このページで説明されているようなツールを活用して、dbtジョブをスケジュールして実行する他の方法もご確認ください。
 
-Build and install these tools to automate your data workflows, trigger dbt jobs (including those hosted on dbt Cloud), and enjoy a hassle-free experience, saving time and increasing efficiency.
+これらのツールをビルドしてインストールすることで、データワークフローを自動化し、dbtジョブ（dbt Cloudでホストされているジョブを含む）をトリガーし、手間のかからない操作性を実現し、時間を節約し、効率性を向上させることができます。
 
 ## Airflow
 
-If your organization uses [Airflow](https://airflow.apache.org/), there are a number of ways you can run your dbt jobs, including:
+組織で [Airflow](https://airflow.apache.org/) を使用している場合、次のようなさまざまな方法で dbt ジョブを実行できます:
 
 <Tabs>
 
 <TabItem value="airflowcloud" label="dbt Cloud">
 
-Installing the [dbt Cloud Provider](https://airflow.apache.org/docs/apache-airflow-providers-dbt-cloud/stable/index.html) to orchestrate dbt Cloud jobs. This package contains multiple Hooks, Operators, and Sensors to complete various actions within dbt Cloud.
+dbt Cloud ジョブをオーケストレーションするために、[dbt Cloud Provider](https://airflow.apache.org/docs/apache-airflow-providers-dbt-cloud/stable/index.html) をインストールします。このパッケージには、dbt Cloud 内でさまざまなアクションを実行するための複数のフック、オペレーター、センサーが含まれています。
 
 <Lightbox src="/img/docs/running-a-dbt-project/airflow_dbt_connector.png" title="Airflow DAG using DbtCloudRunJobOperator"/>
 <Lightbox src="/img/docs/running-a-dbt-project/dbt_cloud_airflow_trigger.png" title="dbt Cloud job triggered by Airflow"/>
@@ -26,73 +26,72 @@ Installing the [dbt Cloud Provider](https://airflow.apache.org/docs/apache-airfl
 
 <TabItem value="airflowcore" label="dbt Core">
 
-Invoking dbt Core jobs through the [BashOperator](https://registry.astronomer.io/providers/apache-airflow/modules/bashoperator). In this case, be sure to install dbt into a virtual environment to avoid issues with conflicting dependencies between Airflow and dbt.
+[BashOperator](https://registry.astronomer.io/providers/apache-airflow/modules/bashoperator) を介して dbt Core ジョブを呼び出す。この場合、Airflow と dbt 間の依存関係の競合による問題を回避するため、dbt を仮想環境にインストールしてください。
 
 </TabItem>
 </Tabs>
 
-For more details on both of these methods, including example implementations, check out [this guide](https://docs.astronomer.io/learn/airflow-dbt-cloud).
+これら 2 つの方法の詳細 (実装例を含む) については、[このガイド](https://docs.astronomer.io/learn/airflow-dbt-cloud) を参照してください。
 
-## Automation servers
+## 自動化サーバー
 
-Automation servers (such as CodeDeploy, GitLab CI/CD ([video](https://youtu.be/-XBIIY2pFpc?t=1301)), Bamboo and Jenkins) can be used to schedule bash commands for dbt. They also provide a UI to view logging to the command line, and integrate with your git repository.
+自動化サーバー（CodeDeploy、GitLab CI/CD（[動画](https://youtu.be/-XBIIY2pFpc?t=1301)）、Bamboo、Jenkins など）を使用して、dbt の bash コマンドをスケジュールできます。また、コマンドラインへのログ出力を表示したり、Git リポジトリと統合したりするための UI も提供しています。
 
 ## Azure Data Factory
 
-Integrate dbt Cloud and [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/) (ADF) for a smooth data process from data ingestion to data transformation. You can seamlessly trigger dbt Cloud jobs upon completion of ingestion jobs by using the [dbt API](/docs/dbt-cloud-apis/overview) in ADF.
+dbt Cloud と [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/) (ADF) を統合することで、データの取り込みから変換まで、スムーズなデータ処理が可能になります。ADF の [dbt API](/docs/dbt-cloud-apis/overview) を使用することで、取り込みジョブの完了時に dbt Cloud ジョブをシームレスにトリガーできます。
 
-
-The following video provides you with a detailed overview of how to trigger a dbt Cloud job via the API in Azure Data Factory.
+次のビデオでは、Azure Data Factory の API を介して dbt Cloud ジョブをトリガーする方法の詳細な概要を説明しています。
 
 <LoomVideo id="8dcc1d22a0bf43a1b89ecc6f6b6d0b18" /> 
 
 
-To use the dbt API to trigger a job in dbt Cloud through ADF:
+dbt API を使用して ADF 経由で dbt Cloud のジョブをトリガーするには、次の手順を実行します。
 
-1. In dbt Cloud, go to the job settings of the daily production job and turn off the scheduled run in the **Trigger** section.
-2. You'll want to create a pipeline in ADF to trigger a dbt Cloud job.
-3. Securely fetch the dbt Cloud service token from a key vault in ADF, using a web call as the first step in the pipeline.
-4. Set the parameters in the pipeline, including the dbt Cloud account ID and  job ID, as well as the name of the key vault and secret that contains the service token. 
-    * You can find the dbt Cloud job and account id in the URL, for example, if your URL is `https://YOUR_ACCESS_URL/deploy/88888/projects/678910/jobs/123456`, the account ID is 88888 and the job ID is 123456
-5. Trigger the pipeline in ADF to start the dbt Cloud job and monitor the status of the dbt Cloud job in ADF.
-6. In dbt Cloud, you can check the status of the job and how it was triggered in dbt Cloud.
+1. dbt Cloud で、日次本番ジョブのジョブ設定に移動し、[**トリガー**] セクションでスケジュールされた実行をオフにします。
+2. ADF で dbt Cloud ジョブをトリガーするためのパイプラインを作成します。
+3. パイプラインの最初のステップとして Web 呼び出しを使用して、ADF のキー コンテナーから dbt Cloud サービス トークンを安全に取得します。
+4. パイプラインで、dbt Cloud アカウント ID、ジョブ ID、キー コンテナーの名前、サービス トークンを含むシークレットなどのパラメータを設定します。
+* dbt Cloud ジョブとアカウント ID は URL に記載されています。たとえば、URL が `https://YOUR_ACCESS_URL/deploy/88888/projects/678910/jobs/123456` の場合、アカウント ID は 88888、ジョブ ID は 123456 です。
+5. ADF でパイプラインをトリガーして dbt Cloud ジョブを開始し、ADF で dbt Cloud ジョブのステータスを監視します。
+6. dbt Cloud で、ジョブのステータスと、dbt Cloud でジョブがどのようにトリガーされたかを確認できます。
 
 ## Cron
 
-Cron is a decent way to schedule bash commands. However, while it may seem like an easy route to schedule a job, writing code to take care of all of the additional features associated with a production deployment often makes this route more complex compared to other options listed here.
+cronはbashコマンドをスケジュールするのに有効な手段です。しかし、ジョブをスケジュールする簡単な方法のように見えるかもしれませんが、本番環境へのデプロイに関連する追加機能をすべて処理するコードを書く必要があるため、ここで挙げた他の方法と比べて、この方法はより複雑になることが多いです。
 
 ## Dagster
 
-If your organization uses [Dagster](https://dagster.io/), you can use the [dagster_dbt](https://docs.dagster.io/_apidocs/libraries/dagster-dbt) library to integrate dbt commands into your pipelines. This library supports the execution of dbt through dbt Cloud or dbt Core. Running dbt from Dagster automatically aggregates metadata about your dbt runs. Refer to the [example pipeline](https://dagster.io/blog/dagster-dbt) for details.
+組織で [Dagster](https://dagster.io/) をご利用の場合は、[dagster_dbt](https://docs.dagster.io/_apidocs/libraries/dagster-dbt) ライブラリを使用して、dbt コマンドをパイプラインに統合できます。このライブラリは、dbt Cloud または dbt Core を介した dbt の実行をサポートしています。Dagster から dbt を実行すると、dbt 実行に関するメタデータが自動的に集約されます。詳細については、[サンプルパイプライン](https://dagster.io/blog/dagster-dbt) を参照してください。
 
-## Databricks workflows 
+## Databricks ワークフロー
 
-Use Databricks workflows to call the dbt Cloud job API, which has several benefits such as integration with other ETL processes, utilizing dbt Cloud job features, separation of concerns, and custom job triggering based on custom conditions or logic. These advantages lead to more modularity, efficient debugging, and flexibility in scheduling dbt Cloud jobs.
+Databricks ワークフローを使用して dbt Cloud ジョブ API を呼び出すと、他の ETL プロセスとの統合、dbt Cloud ジョブ機能の活用、関心の分離、カスタム条件またはロジックに基づくカスタムジョブのトリガーなど、さまざまなメリットが得られます。これらのメリットにより、モジュール性の向上、デバッグの効率化、dbt Cloud ジョブのスケジュール設定の柔軟性が向上します。
 
-For more info, refer to the guide on [Databricks workflows and dbt Cloud jobs](/guides/how-to-use-databricks-workflows-to-run-dbt-cloud-jobs).
+詳細については、[Databricks ワークフローと dbt Cloud ジョブ](/guides/how-to-use-databricks-workflows-to-run-dbt-cloud-jobs) に関するガイドを参照してください。
 
 ## Kestra
 
-If your organization uses [Kestra](http://kestra.io/), you can leverage the [dbt plugin](https://kestra.io/plugins/plugin-dbt) to orchestrate dbt Cloud and dbt Core jobs. Kestra's user interface (UI) has built-in [Blueprints](https://kestra.io/docs/user-interface-guide/blueprints), providing ready-to-use workflows. Navigate to the Blueprints page in the left navigation menu and [select the dbt tag](https://demo.kestra.io/ui/blueprints/community?selectedTag=36) to find several examples of scheduling dbt Core commands and dbt Cloud jobs as part of your data pipelines. After each scheduled or ad-hoc workflow execution, the Outputs tab in the Kestra UI allows you to download and preview all dbt build artifacts. The Gantt and Topology view additionally render the metadata to visualize dependencies and runtimes of your dbt models and tests. The dbt Cloud task provides convenient links to easily navigate between Kestra and dbt Cloud UI.
+組織で [Kestra](http://kestra.io/) を使用している場合は、[dbt プラグイン](https://kestra.io/plugins/plugin-dbt) を利用して dbt Cloud ジョブと dbt Core ジョブをオーケストレーションできます。Kestra のユーザー インターフェース (UI) には [ブループリント](https://kestra.io/docs/user-interface-guide/blueprints) が組み込まれており、すぐに使用できるワークフローが提供されています。左側のナビゲーション メニューの [ブループリント](https://kestra.io/docs/user-interface-guide/blueprints) ページで [dbt タグを選択](https://demo.kestra.io/ui/blueprints/community?selectedTag=36) すると、データ パイプラインの一部として dbt Core コマンドと dbt Cloud ジョブをスケジュールするいくつかの例が表示されます。スケジュールされたワークフローまたはアドホック ワークフローの実行ごとに、Kestra UI の [出力] タブで、すべての dbt ビルド成果物をダウンロードしてプレビューできます。ガントチャートとトポロジビューでは、メタデータも表示され、dbtモデルとテストの依存関係と実行時間を視覚化できます。dbt Cloudタスクには、Kestraとdbt Cloud UI間を簡単に移動するための便利なリンクが用意されています。
 
 ## Orchestra
 
-If your organization uses [Orchestra](https://getorchestra.io), you can trigger dbt jobs using the dbt Cloud API. Create an API token from your dbt Cloud account and use this to authenticate Orchestra in the [Orchestra Portal](https://app.getorchestra.io). For details, refer to the [Orchestra docs on dbt Cloud](https://orchestra-1.gitbook.io/orchestra-portal/integrations/transformation/dbt-cloud).
+組織で [Orchestra](https://getorchestra.io) を使用している場合は、dbt Cloud API を使用して dbt ジョブをトリガーできます。dbt Cloud アカウントから API トークンを作成し、これを使用して [Orchestra ポータル](https://app.getorchestra.io) で Orchestra を認証します。詳細については、[dbt Cloud の Orchestra ドキュメント](https://orchestra-1.gitbook.io/orchestra-portal/integrations/transformation/dbt-cloud) を参照してください。
 
-Orchestra automatically collects metadata from your runs so you can view your dbt jobs in the context of the rest of your data stack.
+Orchestra は実行からメタデータを自動的に収集するため、dbt ジョブを他のデータスタックのコンテキストで表示できます。
 
-The following is an example of the run details in dbt Cloud for a job triggered by Orchestra:
+以下は、Orchestra によってトリガーされたジョブの dbt Cloud での実行詳細の例です。
 
 <Lightbox src="/img/docs/running-a-dbt-project/dbt_cloud_orchestra_trigger.png" title="Example of Orchestra triggering a dbt job"/>
 
-The following is an example of viewing lineage in Orchestra for dbt jobs:
+以下は、Orchestra で dbt ジョブの系統を表示する例です:
 
 <Lightbox src="/img/docs/running-a-dbt-project/orchestra_lineage_dbt_cloud.png" title="Example of a lineage view for dbt jobs in Orchestra"/>
 
 
 ## Prefect
 
-If your organization uses [Prefect](https://www.prefect.io/), the way you will run your jobs depends on the dbt version you're on, and whether you're orchestrating dbt Cloud or dbt Core jobs. Refer to the following variety of options:
+組織で[Prefect](https://www.prefect.io/)をご利用の場合、ジョブの実行方法は、dbtのバージョンと、dbt Cloudジョブとdbt Coreジョブのどちらをオーケストレーションするかによって異なります。以下のオプションをご参照ください:
 
 <Lightbox src="/img/docs/running-a-dbt-project/prefect_dag_dbt_cloud.jpg" width="75%" title="Prefect DAG using a dbt Cloud job run flow"/> 
 
@@ -103,9 +102,8 @@ If your organization uses [Prefect](https://www.prefect.io/), the way you will r
 
 <TabItem value="prefect2cloud" label="dbt Cloud">
 
-- Use the [trigger_dbt_cloud_job_run_and_wait_for_completion](https://prefecthq.github.io/prefect-dbt/cloud/jobs/#prefect_dbt.cloud.jobs.trigger_dbt_cloud_job_run_and_wait_for_completion) flow. 
-- As jobs are executing, you can poll dbt to see whether or not the job completes without failures, through the [Prefect user interface (UI)](https://docs.prefect.io/ui/overview/).
-
+- [trigger_dbt_cloud_job_run_and_wait_for_completion](https://prefecthq.github.io/prefect-dbt/cloud/jobs/#prefect_dbt.cloud.jobs.trigger_dbt_cloud_job_run_and_wait_for_completion) フローを使用します。
+- ジョブの実行中に、[Prefect ユーザーインターフェース (UI)](https://docs.prefect.io/ui/overview/) を介して dbt をポーリングし、ジョブが失敗なく完了したかどうかを確認できます。
 
 <Lightbox src="/img/docs/running-a-dbt-project/dbt_cloud_job_prefect.jpg" title="dbt Cloud job triggered by Prefect"/> 
 
@@ -113,8 +111,8 @@ If your organization uses [Prefect](https://www.prefect.io/), the way you will r
 
 <TabItem value="prefect2core" label="dbt Core">
 
-- Use the [trigger_dbt_cli_command](https://prefecthq.github.io/prefect-dbt/cli/commands/#prefect_dbt.cli.commands.trigger_dbt_cli_command) task. 
-- For details on both of these methods, see [prefect-dbt docs](https://prefecthq.github.io/prefect-dbt/).
+- [trigger_dbt_cli_command](https://prefecthq.github.io/prefect-dbt/cli/commands/#prefect_dbt.cli.commands.trigger_dbt_cli_command) タスクを使用します。
+- これらの方法の詳細については、[prefect-dbt ドキュメント](https://prefecthq.github.io/prefect-dbt/) を参照してください。
 
 </TabItem>
 </Tabs>
@@ -126,26 +124,26 @@ If your organization uses [Prefect](https://www.prefect.io/), the way you will r
 
 <TabItem value="prefect1cloud" label="dbt Cloud">
 
-- Trigger dbt Cloud jobs with the [DbtCloudRunJob](https://docs.prefect.io/api/latest/tasks/dbt.html#dbtcloudrunjob) task. 
-- Running this task will generate a markdown artifact viewable in the Prefect UI. 
-- The artifact will contain links to the dbt artifacts generated as a result of the job run.
+- [DbtCloudRunJob](https://docs.prefect.io/api/latest/tasks/dbt.html#dbtcloudrunjob) タスクを使用して、dbt Cloud ジョブをトリガーします。
+- このタスクを実行すると、Prefect UI で表示可能なマークダウン アーティファクトが生成されます。
+- このアーティファクトには、ジョブ実行の結果として生成された dbt アーティファクトへのリンクが含まれます。
 
 </TabItem>
 
 <TabItem value="prefect1core" label="dbt Core">
 
-- Use the [DbtShellTask](https://docs.prefect.io/api/latest/tasks/dbt.html#dbtshelltask) to schedule, execute, and monitor your dbt runs. 
-- Use the supported [ShellTask](https://docs.prefect.io/api/latest/tasks/shell.html#shelltask) to execute dbt commands through the shell.
+- [DbtShellTask​​](https://docs.prefect.io/api/latest/tasks/dbt.html#dbtshelltask) を使用して、dbt 実行のスケジュール設定、実行、監視を行います。
+- サポートされている [ShellTask​​](https://docs.prefect.io/api/latest/tasks/shell.html#shelltask) を使用して、シェル経由で dbt コマンドを実行します。
 
 
 </TabItem>
 </Tabs>
 
 
-## Related docs
+## 関連ドキュメント
 
-- [dbt Cloud plans and pricing](https://www.getdbt.com/pricing/)
-- [Quickstart guides](/guides)
-- [Webhooks for your jobs](/docs/deploy/webhooks)
-- [Orchestration guides](https://docs.getdbt.com/guides/orchestration)
-- [Commands for your production deployment](https://discourse.getdbt.com/t/what-are-the-dbt-commands-you-run-in-your-production-deployment-of-dbt/366)
+- [dbt Cloud のプランと料金](https://www.getdbt.com/pricing/)
+- [クイックスタートガイド](/guides)
+- [ジョブ用 Webhook](/docs/deploy/webhooks)
+- [オーケストレーションガイド](https://docs.getdbt.com/guides/orchestration)
+- [本番環境デプロイメント用のコマンド](https://discourse.getdbt.com/t/what-are-the-dbt-commands-you-run-in-your-production-deployment-of-dbt/366)

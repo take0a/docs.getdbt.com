@@ -5,28 +5,28 @@ sidebar_label: "Model access"
 description: "Define model access with group capabilities"
 ---
 
-:::info "Model access" is not "User access"
+:::info 「モデルアクセス」は「ユーザーアクセス」とは異なります。
 
-**Model groups and access** and **user groups and access** mean two different things. "User groups and access" is a specific term used in dbt Cloud to manage permissions. Refer to [User access](/docs/cloud/manage-access/about-user-access) for more info.
+**モデルグループとアクセス** と **ユーザーグループとアクセス** はそれぞれ異なる意味を持ちます。「ユーザーグループとアクセス」は、dbt Cloud で権限を管理するために使用される特定の用語です。詳細については、[ユーザーアクセス](/docs/cloud/manage-access/about-user-access) を参照してください。
 
-The two concepts will be closely related, as we develop multi-project collaboration workflows this year:
-- Users with access to develop in a dbt project can view and modify **all** models in that project, including private models.
-- Users in the same dbt Cloud account _without_ access to develop in a project cannot view that project's private models, and they can take a dependency on its public models only.
+今年、マルチプロジェクトのコラボレーションワークフローを開発するにあたり、これら 2 つの概念は密接に関連しています。
+- dbt プロジェクトで開発権限を持つユーザーは、そのプロジェクト内の**すべての**モデル（プライベートモデルを含む）を表示および変更できます。
+- 同じ dbt Cloud アカウント内で、プロジェクトで開発権限を持たないユーザーは、そのプロジェクトのプライベートモデルを表示できず、パブリックモデルにのみ依存関係を作成できます。
 :::
 
-## Related documentation
+## 関連ドキュメント
 * [`groups`](/docs/build/groups)
 * [`access`](/reference/resource-configs/access)
 
-## Groups
+## グループ
 
-Models can be grouped under a common designation with a shared owner. For example, you could group together all models owned by a particular team, or related to modeling a specific data source (`github`).
+モデルは、共通の所有者を持つ共通の名称でグループ化できます。例えば、特定のチームが所有するすべてのモデル、または特定のデータソース (`github`) のモデリングに関連するすべてのモデルをグループ化できます。
 
-Why define model `groups`? There are two reasons:
-- It turns implicit relationships into an explicit grouping, with a defined owner. By thinking about the interface boundaries _between_ groups, you can have a cleaner (less entangled) DAG. In the future, those interface boundaries could be appropriate as the interfaces between separate projects.
-- It enables you to designate certain models as having "private" access—for use exclusively within that group. Other models will be restricted from referencing (taking a dependency on) those models. In the future, they won't be visible to other teams taking a dependency on your project—only "public" models will be.
+モデルをグループとして定義する理由は2つあります。
+- 暗黙的な関係を、明確な所有者を持つ明示的なグループ化に変換します。グループ間のインターフェース境界を考慮することで、よりクリーンな (より絡み合いの少ない) DAG を構築できます。将来的には、これらのインターフェース境界は、個別のプロジェクト間のインターフェースとして適切になる可能性があります。
+- 特定のモデルを「プライベート」アクセスとして指定し、そのグループ内でのみ使用できるようにします。他のモデルは、これらのモデルを参照 (依存関係を取得) できなくなります。将来的には、これらのモデルはプロジェクトに依存する他のチームには表示されなくなり、「パブリック」モデルのみが表示されます。
 
-If you follow our [best practices for structuring a dbt project](/best-practices/how-we-structure/1-guide-overview), you're probably already using subdirectories to organize your dbt project. It's easy to apply a `group` label to an entire subdirectory at once:
+[dbt プロジェクトの構造化に関するベストプラクティス](/best-practices/how-we-structure/1-guide-overview)に従っている場合は、おそらく既にサブディレクトリを使用して dbt プロジェクトを整理しているでしょう。`group` ラベルをサブディレクトリ全体に一括で適用するのは簡単です:
 
 <File name="dbt_project.yml">
 
@@ -42,24 +42,24 @@ models:
 
 </File>
 
-Each model can only belong to one `group`, and groups cannot be nested. If you set a different `group` in that model's YAML or in-file config, it will override the `group` applied at the project level.
+各モデルは1つの `group` にのみ所属でき、グループはネストできません。モデルのYAMLまたはファイル内設定で異なる `group` を設定した場合、プロジェクトレベルで適用された `group` が上書きされます。
 
 
 import ModelGovernanceRollback from '/snippets/_model-governance-rollback.md';
 
 <ModelGovernanceRollback />
 
-## Access modifiers
+## アクセス修飾子
 
-Some models are implementation details, meant for reference only within their group of related models. Other models should be accessible through the [ref](/reference/dbt-jinja-functions/ref) function across groups and projects. Models can set an [access modifier](https://en.wikipedia.org/wiki/Access_modifiers) to indicate their intended level of accessibility.
+一部のモデルは実装の詳細であり、関連するモデルのグループ内でのみ参照されることを目的としています。その他のモデルは、[ref](/reference/dbt-jinja-functions/ref) 関数を通じてグループやプロジェクト間でアクセスできるようにする必要があります。モデルには、[アクセス修飾子](https://en.wikipedia.org/wiki/Access_modifiers) を設定することで、意図するアクセスレベルを示すことができます。
 
 | Access    | Referenceable by                       |
 |-----------|----------------------------------------|
-| private   | Same group                             |
-| protected | Same project (or installed as a package) |
-| public    | Any group, package, or project. When defined, rerun a production job to apply the change |
+| private   | 同じグループ                             |
+| protected | 同じプロジェクト（またはパッケージとしてインストール） |
+| public    | 任意のグループ、パッケージ、またはプロジェクト。定義したら、変更を適用するために本番ジョブを再実行します。 |
 
-If you try to reference a model outside of its supported access, you will see an error:
+サポートされているアクセス範囲外でモデルを参照しようとすると、エラーが表示されます:
 
 ```shell
 dbt run -s marketing_model
@@ -69,9 +69,9 @@ dbt.exceptions.DbtReferenceError: Parsing Error
   which is not allowed because the referenced node is private to the finance group.
 ```
 
-By default, all models are `protected`. This means that other models in the same project can reference them, regardless of their group. This is largely for backward compatibility when assigning groups to an existing set of models, as there may already be existing references across group assignments.
+デフォルトでは、すべてのモデルは `protected` されています。つまり、同じプロジェクト内の他のモデルは、グループに関係なく、それらのモデルを参照できます。これは主に、既存のモデルセットにグループを割り当てる際の下位互換性を確保するためです。グループ割り当て間で既に参照が存在する可能性があるためです。
 
-However, it is recommended to set the access modifier of a new model to `private` to prevent other project resources from taking dependencies on models not intentionally designed for sharing across groups.
+ただし、グループ間での共有を意図して設計されていないモデルに、他のプロジェクトリソースが依存するのを防ぐため、新しいモデルのアクセス修飾子を `private` に設定することをお勧めします。
 
 <File name="models/marts/customers.yml">
 
@@ -104,9 +104,9 @@ models:
 
 </File>
 
-Models with `materialized` set to `ephemeral` cannot have the access property set to public.
+`materialized` が `ephemeral` に設定されているモデルでは、アクセスプロパティを public に設定できません。
 
-For example, if you have a model config set as:
+例えば、モデル設定が次のように設定されているとします:
 
 <File name="models/my_model.sql">
 
@@ -118,7 +118,7 @@ For example, if you have a model config set as:
 
 </File>
 
-And the model access is defined:
+そして、モデル アクセスが定義されます:
 
 <File name="models/my_project.yml">
 
@@ -132,7 +132,7 @@ models:
 
 </File>
 
-It will lead to the following error:
+次のエラーが発生します:
 
 ```
 ❯ dbt parse
@@ -143,39 +143,39 @@ Parsing Error
 
 ## FAQs
 
-### How does model access relate to database permissions?
+### モデルアクセスとデータベース権限の関係は？
 
-These are different!
+これらは異なります！
 
-Specifying `access: public` on a model does not trigger dbt to automagically grant `select` on that model to every user or role in your data platform when you materialize it. You have complete control over managing database permissions on every model/schema, as makes sense to you & your organization.
+モデルに `access: public` を指定しても、dbt がモデルをマテリアライズする際に、データプラットフォーム内のすべてのユーザーまたはロールにそのモデルの `select` 権限を自動的に付与するわけではありません。すべてのモデル/スキーマに対するデータベース権限の管理は、お客様と組織の状況に応じて完全に制御できます。
 
-Of course, dbt can facilitate this by means of [the `grants` config](/reference/resource-configs/grants), and other flexible mechanisms. For example:
-- Grant access to downstream queriers on public models
-- Restrict access to private models, by revoking default/future grants, or by landing them in a different schema
+もちろん、dbt は [`grants` 設定](/reference/resource-configs/grants) やその他の柔軟なメカニズムを用いて、これを容易に実現できます。例えば、以下のようになります。
+- パブリックモデルへの下流クエリ実行者へのアクセスを許可する
+- プライベートモデルへのアクセスを制限する（デフォルト/将来のアクセス権限を取り消す、または別のスキーマに配置する）
 
-As we continue to develop multi-project collaboration, `access: public` will mean that other teams are allowed to start taking a dependency on that model. This assumes that they've requested, and you've granted them access, to select from the underlying dataset.
+マルチプロジェクトコラボレーションの開発を進めていく中で、`access: public` は他のチームがそのモデルへの依存関係を取得できるようになることを意味します。これは、他のチームが基盤となるデータセットからの選択アクセスをリクエストし、お客様がそのアクセスを許可していることを前提としています。
 
-### How do I ref a model from another project?
+### 別のプロジェクトからモデルを参照するにはどうすればよいですか？
 
-You can `ref` a model from another project in two ways:
-1. [Project dependency](/docs/collaborate/govern/project-dependencies): In dbt Cloud Enterprise, you can use project dependencies to `ref`  a model. dbt Cloud uses a behind-the-scenes metadata service to resolve the reference, enabling efficient collaboration across teams and at scale.
-2. ["Package" dependency](/docs/build/packages): Another way to `ref` a model from another project is to treat the other project as a package dependency. This requires installing the other project as a package, including its full source code, as well as its upstream dependencies.
+別のプロジェクトからモデルを参照するには、次の 2 つの方法があります。
+1. [プロジェクト依存関係](/docs/collaborate/govern/project-dependencies): dbt Cloud Enterprise では、プロジェクト依存関係を使用してモデルを参照できます。dbt Cloud は、バックグラウンドでメタデータ サービスを使用して参照を解決するため、チーム間や大規模なコラボレーションを効率的に実現できます。
+2. ["パッケージ" 依存関係](/docs/build/packages): 別のプロジェクトからモデルを参照するもう 1 つの方法は、別のプロジェクトをパッケージ依存関係として扱うことです。この場合、別のプロジェクトをパッケージとしてインストールする必要があります。これには、そのプロジェクトの完全なソースコードと上流の依存関係も含まれます。
 
-### How do I restrict access to models defined in a package?
+### パッケージで定義されたモデルへのアクセスを制限するにはどうすればよいですか？
 
-Source code installed from a package becomes part of your runtime environment. You can call macros and run models as if they were macros and models that you had defined in your own project.
+パッケージからインストールされたソースコードは、ランタイム環境の一部となります。マクロを呼び出したり、モデルを実行したりすることは、自分のプロジェクトで定義したマクロやモデルであるかのように行うことができます。
 
-For this reason, model access restrictions are "off" by default for models defined in packages. You can reference models from that package regardless of their `access` modifier.
+そのため、パッケージで定義されたモデルに対するモデルアクセス制限は、デフォルトで「オフ」になっています。そのパッケージのモデルは、`access` 修飾子に関わらず参照できます。
 
-The project is installed as a package can optionally restrict external `ref` access to just its public models. The package maintainer does this by setting a `restrict-access` config to `True` in `dbt_project.yml`.
+パッケージとしてインストールされたプロジェクトでは、外部からの `ref` アクセスを、そのパッケージに含まれる公開モデルのみに制限することもできます。パッケージのメンテナーは、`dbt_project.yml` で `restrict-access` 設定を `True` に設定することでこれを実現します。
 
-By default, the value of this config is `False`. This means that:
-- Models in the package with `access: protected` may be referenced by models in the root project, as if they were defined in the same project
-- Models in the package with `access: private` may be referenced by models in the root project, so long as they also have the same `group` config
+デフォルトでは、この設定の値は `False` です。これは以下のことを意味します。
+- パッケージ内の `access: protected` が指定されたモデルは、ルートプロジェクト内のモデルから、同じプロジェクトで定義されているかのように参照できます。
+- パッケージ内の `access: private` が指定されたモデルは、ルートプロジェクト内のモデルから参照できます。ただし、それらのモデルが同じ `group` 設定を持っている必要があります。
 
-When `restrict-access: True`:
-- Any `ref` from outside the package to a protected or private model in that package will fail.
-- Only models with `access: public` can be referenced outside the package.
+`restrict-access: True` の場合：
+- パッケージ外からそのパッケージ内の protected または private なモデルへの `ref` は失敗します。
+- パッケージ外から参照できるのは、 `access: public` が指定されたモデルのみです。
 
 <File name="dbt_project.yml">
 

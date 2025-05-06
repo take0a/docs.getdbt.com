@@ -1,12 +1,12 @@
 ---
-title: My compiled SQL has a lot of spaces and new lines, how can I get rid of it?
-description: "Managing whitespace control"
-sidebar_label: 'Compiled sql has a lot of white space'
+title: コンパイルされた SQL には多くのスペースと改行が含まれていますが、どうすれば削除できますか?
+description: "空白スペースの制御"
+sidebar_label: 'コンパイルされたSQLには多くの空白があります'
 id: jinja-whitespace
 ---
 
-This is known as "whitespace control".
+これは「空白制御」と呼ばれます。
 
-Use a minus sign (`-`, e.g. `{{- ... -}}`, `{%- ... %}`, `{#- ... -#}`) at the start or end of a block to strip whitespace before or after the block (more docs [here](https://jinja.palletsprojects.com/page/templates/#whitespace-control)). Check out the [tutorial on using Jinja](/guides/using-jinja#use-whitespace-control-to-tidy-up-compiled-code) for an example.
+ブロックの先頭または末尾にマイナス記号 (`-`、例: `{{- ... -}}`、`{%- ... %}`、`{#- ... -#}`) を使用すると、ブロックの前後の空白が削除されます (詳細なドキュメントは [こちら](https://jinja.palletsprojects.com/page/templates/#whitespace-control) をご覧ください)。例については、[Jinja の使用に関するチュートリアル](/guides/using-jinja#use-whitespace-control-to-tidy-up-compiled-code) をご覧ください。
 
-Take caution: it's easy to fall down a rabbit hole when it comes to whitespace control!
+ご注意ください: 空白制御に関しては、よく考えも及ばないところがあります。

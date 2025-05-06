@@ -1,16 +1,16 @@
 ---
-title: What version of Python can I use?
-description: "Python versions supported with dbt Core"
+title: どのバージョンの Python を使用できますか?
+description: "dbt Core でサポートされている Python バージョン"
 sidebar_label: 'Python version'
 id: install-python-compatibility
 ---
 
 import Pythonmatrix from '/snippets/_python-compatibility-matrix.md';
 
-Use this table to match dbt-core versions with their compatible Python versions. New [dbt minor versions](/docs/dbt-versions/core#minor-versions) will add support for new Python3 minor versions when all dependencies can support it. In addition, dbt minor versions will withdraw support for old Python3 minor versions before their [end of life](https://endoflife.date/python).
+この表を使用して、dbt-core のバージョンと互換性のある Python のバージョンを照合してください。新しい [dbt マイナーバージョン](/docs/dbt-versions/core#minor-versions) では、すべての依存関係がサポートできる場合、新しい Python3 マイナーバージョンのサポートが追加されます。また、dbt マイナーバージョンでは、古い Python3 マイナーバージョンのサポートが [サポート終了](https://endoflife.date/python) 前に終了します。
 
 <Pythonmatrix/>
 
-Adapter plugins and their dependencies are not always compatible with the latest version of Python.
+アダプタプラグインとその依存関係は、必ずしも最新バージョンのPythonと互換性があるとは限りません。
 
-Note that this shouldn't be confused with [dbt Python models](/docs/build/python-models#specific-data-platforms). If you're using a data platform that supports Snowpark, use the `python_version` config to run a Snowpark model with [Python versions](https://docs.snowflake.com/en/developer-guide/snowpark/python/setup) 3.9, 3.10, or 3.11.
+[dbt Pythonモデル](/docs/build/python-models#specific-data-platforms)と混同しないでください。Snowparkをサポートするデータプラットフォームを使用している場合は、`python_version`設定を使用して、[Pythonバージョン](https://docs.snowflake.com/en/developer-guide/snowpark/python/setup) 3.9、3.10、または3.11でSnowparkモデルを実行してください。

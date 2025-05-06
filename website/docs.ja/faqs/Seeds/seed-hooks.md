@@ -1,14 +1,14 @@
 ---
-title: Do hooks run with seeds?
-description: "Run hooks with seeds and configure them in project.yml file"
-sidebar_label: "Use hooks to run with seeds"
+title: フックでシードを実行できますか？
+description: "フックでシードを実行して、project.yml ファイルで設定します。"
+sidebar_label: "シードの実行にフックを使う"
 id: seed-hooks
 
 ---
 
-Yes! The following hooks are available:
+はい！以下のフックが利用可能です。
 
-- [pre-hooks & post-hooks](reference/resource-configs/pre-hook-post-hook.md)
-- [on-run-start & on-run-end hooks](reference/project-configs/on-run-start-on-run-end.md)
+- [pre-hooks と post-hooks](reference/resource-configs/pre-hook-post-hook.md)
+- [on-run-start と on-run-end フック](reference/project-configs/on-run-start-on-run-end.md)
 
-Configure these in your `dbt_project.yml` file.
+`dbt_project.yml` ファイルでこれらを設定してください。

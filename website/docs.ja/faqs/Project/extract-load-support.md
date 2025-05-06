@@ -1,7 +1,7 @@
 ---
-title: Does dbt offer extract and load functionality?
-description: "dbt is a transformation tool"
-sidebar_label: 'Does dbt offer extract and load functionality?'
+title: dbt は抽出およびロード機能を提供しますか?
+description: "dbtは変換ツールです"
+sidebar_label: 'dbt は抽出およびロード機能を提供しますか?'
 id: transformation-tool
 ---
-dbt is a transformation tool. It is _not_ designed for extract or load functionality, and dbt Labs strongly recommends against using dbt in this way. Support is not provided for extract or load functionality.
+dbtは変換ツールです。抽出やロード機能用に設計されていません。dbt Labsは、dbtをそのような用途で使用しないことを強く推奨します。抽出やロード機能のサポートは提供されていません。

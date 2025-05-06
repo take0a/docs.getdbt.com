@@ -1,14 +1,14 @@
 ---
-title: How did dbt choose which schema to build my models in?
-description: "You can change your target schema in your Environment Settings."
-sidebar_label: 'dbt builds models in your target schema'
+title: dbt はモデルを構築するスキーマをどのように選択したのでしょうか?
+description: "環境設定でターゲット スキーマを変更できます。"
+sidebar_label: 'dbtはターゲットスキーマにモデルを構築します'
 id: which-schema
 
 ---
-By default, dbt builds models in your target schema. To change your target schema:
-* If you're developing in **dbt Cloud**, these are set for each user when you first use a development environment.
-* If you're developing with **dbt Core**, this is the `schema:` parameter in your `profiles.yml` file.
+デフォルトでは、dbt はターゲット スキーマでモデルを構築します。ターゲット スキーマを変更するには、次の手順に従ってください。
+* **dbt Cloud** で開発している場合、開発環境を初めて使用するときに、各ユーザーに対してこれらのスキーマが設定されます。
+* **dbt Core** で開発している場合、これは `profiles.yml` ファイルの `schema:` パラメータです。
 
-If you wish to split your models across multiple schemas, check out the docs on [using custom schemas](/docs/build/custom-schemas).
+モデルを複数のスキーマに分割する場合は、[カスタム スキーマの使用](/docs/build/custom-schemas) に関するドキュメントをご覧ください。
 
-Note: on BigQuery, `dataset` is used interchangeably with `schema`.
+注: BigQuery では、`dataset` は `schema` と同じ意味で使用されます。

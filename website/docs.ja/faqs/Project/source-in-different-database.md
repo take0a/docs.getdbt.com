@@ -1,12 +1,12 @@
 ---
-title: What if my source is in a different database to my target database?
-description: "Use database property to define source in a diff database"
-sidebar_label: 'Source is in a different database to target database'
+title: ソースがターゲット データベースとは異なるデータベースにある場合はどうなりますか?
+description: "データベースプロパティを使用して、異なるデータベースのソースを定義します。"
+sidebar_label: 'ソースはターゲット データベースとは異なるデータベースにあります'
 id: source-in-different-database
 
 ---
 
-Use the [`database` property](/reference/resource-properties/database) to define the database that the source is in.
+[`database` プロパティ](/reference/resource-properties/database) を使用して、ソースが存在するデータベースを定義します。
 
 <File name='models/<filename>.yml'>
 

@@ -1,32 +1,33 @@
 ---
-title: How can I consolidate projects in dbt Cloud?
-description: "Consolidating projects in dbt Cloud"
-sidebar_label: 'How to consolidate projects'
+title: dbt Cloud でプロジェクトを統合するにはどうすればよいですか?
+description: "dbt Cloudでプロジェクトを統合する"
+sidebar_label: 'プロジェクトを統合する方法'
 id: consolidate-projects
 
 ---
 
-Consolidating your dbt projects can be an enormous task, and there is no universal solution. But, there are some common approaches to project consolidation in dbt Cloud that you can follow, depending on the scope of the work that needs to be done.
+dbt プロジェクトの統合は膨大な作業になる可能性があり、万能な解決策はありません。しかし、dbt Cloud には、必要な作業の範囲に応じて、プロジェクト統合のための一般的なアプローチがいくつかあります。
 
-If you have multiple projects that contain production-worthy code, there are rarely straightforward solutions to merging them. Let's suppose you have `Main Project` and `Smaller Subset Project`.
+本番環境で使用可能なコードを含む複数のプロジェクトがある場合、それらを統合するための簡単な方法はほとんどありません。例えば、「メインプロジェクト」と「小規模なサブセットプロジェクト」があるとします。
 
-## Files and Folders
+## ファイルとフォルダ
 
-### Git and the local directory
+### Gitとローカルディレクトリ
 
-Reference the [merge git commands](https://gist.github.com/msrose/2feacb303035d11d2d05) to help complete the migration plan. Using the commands will help retain git commit history, but you might result in duplicate folders called `models`, `tests`, etc. You will most likely still have to move files around manually.
+移行計画の完成には、[git マージコマンド](https://gist.github.com/msrose/2feacb303035d11d2d05) を参照してください。これらのコマンドを使用すると Git コミット履歴を保持できますが、「models」、「tests」などのフォルダが重複する可能性があります。そのため、ファイルを手動で移動する必要がある可能性が高くなります。
 
-Another option would be to use an external code editor (for example, VS Code) to move files from the `Smaller Subset Project` to the `Main Project`. This is what internal dbt Labs experts recommend to stay informed about what comes over to the main project and also allows you to be more aware of the incoming files, with the ability to make any minor tweaks to folder hierarchy that you might want to do at the same time.
+もう 1 つの方法は、外部コードエディタ（VS Code など）を使用して、「Smaller Subset Project」から「Main Project」にファイルを移動することです。これは、dbt Labs 社内の専門家が推奨する方法です。メインプロジェクトに移行する内容を把握し、移行されるファイルをより正確に把握できるだけでなく、フォルダ階層の微調整も同時に行うことができます。
 
-### Manual migration with multiple browser tabs
+### 複数のブラウザタブを使用した手動移行
 
-If you only have a couple of models or macros that you want to consolidate, copy the raw file contents from your git provider in `Smaller Subset Project`. Then, in the dbt Cloud IDE, paste the contents into a new file in your `Main Project`.
+統合するモデルやマクロが数個しかない場合は、git プロバイダーから「Smaller Subset Project」にファイルの内容をコピーします。次に、dbt Cloud IDE で、その内容を「Main Project」の新しいファイルに貼り付けます。
 
-Alternatively, you can download those files from your git provider (`Smaller Subset Project` repo) and upload them back to your other repository (`Main Project` repo). This doesn’t scale well and could bypass change controls, so it might only be a viable solution for organizations with only a few files.
+あるいは、git プロバイダー（「Smaller Subset Project」リポジトリ）からファイルをダウンロードし、別のリポジトリ（「Main Project」リポジトリ）にアップロードすることもできます。この方法はスケーラビリティが低く、変更管理を回避できる可能性があるため、ファイル数が少ない組織でのみ有効なソリューションとなる可能性があります。
 
-## Production jobs
-If you have multiple projects with deployment environments deploying jobs, this poses another challenge. Assuming all the models from `Smaller Subset Project` can be consolidated into `Main Project`, your commands within your jobs will take on a new meaning. In lieu of refactoring your global job strategy at the same time, you can add tags to the incoming project models and utilize that in your job command syntax, with the help of node selection syntax.
+## 本番環境ジョブ
 
-Main Project job command example: `dbt build --exclude tag:smaller_subset_project`
+ジョブをデプロイするデプロイメント環境を持つ複数のプロジェクトがある場合、新たな課題が生じます。「Smaller Subset Project」のすべてのモデルを「Main Project」に統合できると仮定すると、ジョブ内のコマンドは新しい意味を持つことになります。グローバルジョブ戦略を同時にリファクタリングする代わりに、入力プロジェクトモデルにタグを追加し、ノード選択構文を使用してジョブコマンド構文でそのタグを利用することができます。
 
-Smaller Subset Project commands: `dbt build --select tag:smaller_subset_project`
+Main Project ジョブコマンドの例: `dbt build --exclude tag:smaller_subset_project`
+
+Smaller Subset Project コマンド: `dbt build --select tag:smaller_subset_project`

@@ -1,15 +1,15 @@
 ---
-title: How do I run one snapshot at a time?
-description: "Use select flags to run one snapshot at a time"
-sidebar_label: 'Run one snapshot at a time'
+title: 一度に 1 つのスナップショットを実行するにはどうすればよいですか?
+description: "select フラグを使用して、一度に 1 つのスナップショットを実行します。"
+sidebar_label: '一度に1つのスナップショットを実行する'
 id: run-one-snapshot
 
 ---
 
-To run one snapshot, use the `--select` flag, followed by the name of the snapshot:
+1 つのスナップショットを実行するには、`--select` フラグの後にスナップショットの名前を指定します:
 
 ```shell
 $ dbt snapshot --select order_snapshot
 ```
 
-Check out the [model selection syntax documentation](/reference/node-selection/syntax) for more operators and examples.
+その他の演算子と例については、[モデル選択構文のドキュメント](/reference/node-selection/syntax)を参照してください。

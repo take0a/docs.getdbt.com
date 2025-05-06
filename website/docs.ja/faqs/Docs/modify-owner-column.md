@@ -1,15 +1,15 @@
 ---
-title: How do I populate the owner column in the generated docs?
-description: "Modify owner column"
-sidebar_label: 'Can I populate owner column in docs?'
+title: 生成されたドキュメントに所有者列を入力するにはどうすればよいですか?
+description: "所有者列の変更"
+sidebar_label: 'ドキュメントに所有者列を入力できますか?'
 id: modify-owner-column
 ---
 
 
-Due to the nature of the field, you won't be able to change the owner column in your generated documentation. 
- 
-The _owner_ field in `dbt-docs` is pulled from database metadata (`catalog.json`), meaning the owner of that table in the database. With the exception of exposures, it's not pulled from an `owner` field set within dbt.
- 
-Generally, dbt's database user owns the tables created in the database. Source tables are usually owned by the service responsible for ingesting/loading them. 
- 
-If you set `meta.owner`, you should now be seeing that field appear under **meta** (pulled from dbt), but still not under the top-level **owner** field.
+フィールドの性質上、生成されたドキュメントの owner 列を変更することはできません。
+
+`dbt-docs` の _owner_ フィールドはデータベースメタデータ (`catalog.json`) から取得され、データベース内のそのテーブルの所有者を表します。exposures を除き、dbt 内で設定された `owner` フィールドからは取得されません。
+
+通常、dbt のデータベースユーザーがデータベース内に作成されたテーブルの所有者となります。ソーステーブルは通常、それらの取り込み/読み込みを担当するサービスが所有します。
+
+`meta.owner` を設定すると、そのフィールドは **meta** (dbt から取得) の下に表示されますが、最上位の **owner** フィールドの下には表示されません。

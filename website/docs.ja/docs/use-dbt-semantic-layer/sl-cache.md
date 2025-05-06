@@ -1,41 +1,41 @@
 ---
-title: "Cache common queries"
+title: "一般的なクエリをキャッシュする"
 id: "sl-cache"
-description: "Cache common queries to speed up performance and reduce query computation."
+description: "一般的なクエリをキャッシュしてパフォーマンスを高速化し、クエリの計算を削減します。"
 tags: [Semantic Layer]
 sidebar_label: "Cache common queries"
 ---
 
 
-The dbt Semantic Layer allows you to cache common queries in order to speed up performance and reduce compute on expensive queries.
+dbt セマンティックレイヤーを使用すると、よく使用するクエリをキャッシュしてパフォーマンスを向上させ、高負荷なクエリの計算負荷を軽減できます。
 
-There are two different types of caching:
+キャッシュには2つの種類があります。
 
-- [Result caching](#result-caching) leverages your data platform's built-in caching layer.
-- [Declarative caching](#declarative-caching) allows you to pre-warm the cache using saved queries configuration.
+- [結果キャッシュ](#result-caching) は、データプラットフォームに組み込まれているキャッシュレイヤーを活用します。
+- [宣言型キャッシュ](#declarative-caching) は、保存されたクエリ設定を使用してキャッシュを事前にウォームアップできます。
 
-While you can use caching to speed up your queries and reduce compute time, knowing the difference between the two depends on your use case: 
+キャッシュを使用するとクエリを高速化し、計算時間を短縮できますが、この2つの違いはユースケースによって異なります。
 
-- Result caching happens automatically by leveraging your data platform's cache.
-- Declarative caching allows you to 'declare' the queries you specifically want to cache. With declarative caching, you need to anticipate which queries you want to cache.
-- Declarative caching also allows you to dynamically filter your dashboards without losing the performance benefits of caching. This works because filters on dimensions (that are already in a saved query config) will use the cache.
+- 結果のキャッシュは、データプラットフォームのキャッシュを活用して自動的に行われます。
+- 宣言型キャッシュでは、キャッシュするクエリを具体的に「宣言」できます。宣言型キャッシュを使用する場合は、どのクエリをキャッシュするかを事前に予測する必要があります。
+- 宣言型キャッシュでは、キャッシュによるパフォーマンス上のメリットを損なうことなく、ダッシュボードを動的にフィルタリングすることもできます。これは、ディメンションのフィルタ（保存済みクエリ設定に既に存在するもの）がキャッシュを使用するためです。
 
-## Prerequisites
-- dbt Cloud [Team or Enterprise](https://www.getdbt.com/) plan.
-- dbt Cloud environments must be on [release tracks](/docs/dbt-versions/cloud-release-tracks) and not legacy dbt Core versions.
-- A successful job run and [production environment](/docs/deploy/deploy-environments#set-as-production-environment).
-- For declarative caching, you need to have [exports](/docs/use-dbt-semantic-layer/exports) defined in your [saved queries](/docs/build/saved-queries) YAML configuration file.
+## 前提条件
+- dbt Cloud [Team または Enterprise](https://www.getdbt.com/) プラン。
+- dbt Cloud 環境は、従来の dbt Core バージョンではなく、[リリーストラック](/docs/dbt-versions/cloud-release-tracks) である必要があります。
+- ジョブが正常に実行され、[本番環境](/docs/deploy/deploy-environments#set-as-production-environment) が設定されている必要があります。
+- 宣言型キャッシュを使用するには、[保存済みクエリ](/docs/build/saved-queries) YAML 構成ファイルに [エクスポート](/docs/use-dbt-semantic-layer/exports) が定義されている必要があります。
 
-## Result caching
+## 結果のキャッシュ
 
-Result caching leverages your data platform’s built-in caching layer and features. [MetricFlow](/docs/build/about-metricflow) generates the same SQL for multiple query requests, this means it can take advantage of your data platform’s cache. Double-check your data platform's specifications.
+結果のキャッシュは、データプラットフォームに組み込まれているキャッシュレイヤーと機能を活用します。[MetricFlow](/docs/build/about-metricflow) は複数のクエリリクエストに対して同じ SQL を生成するため、データプラットフォームのキャッシュを活用できます。データプラットフォームの仕様をよくご確認ください。
 
-Here's how caching works, using Snowflake as an example, and should be similar across other data platforms:
+Snowflake を例に、キャッシュの仕組みを説明します。他のデータプラットフォームでも同様の仕組みです。
 
-1. **Run from cold cache** &mdash; When you run a semantic layer query from your BI tool that hasn't been executed in the past 24 hours, the query scans the entire dataset and doesn't use the cache.
-2. **Run from warm cache** &mdash; If you rerun the same query after 1 hour, the SQL generated and executed on Snowflake remains the same. On Snowflake, the result cache is set per user for 24 hours, which allows the repeated query to use the cache and return results faster.
+1. **コールドキャッシュから実行** - BI ツールから、過去 24 時間以内に実行されていないセマンティックレイヤークエリを実行すると、クエリはデータセット全体をスキャンし、キャッシュは使用しません。
+2. **ウォームキャッシュから実行** - 1 時間後に同じクエリを再実行した場合、Snowflake で生成および実行された SQL は同じままです。Snowflake では、結果キャッシュはユーザーごとに 24 時間設定されるため、繰り返し実行されるクエリでキャッシュが使用され、結果がより速く返されます。
 
-Different data platforms might have different caching layers and cache invalidation rules. Here's a list of resources on how caching works on some common data platforms:
+データプラットフォームによって、キャッシュレイヤーやキャッシュ無効化ルールが異なる場合があります。一般的なデータプラットフォームにおけるキャッシュの仕組みに関する参考資料を以下に示します:
 
 - [BigQuery](https://cloud.google.com/bigquery/docs/cached-results)
 - [DataBricks](https://docs.databricks.com/en/optimizations/disk-cache.html)
@@ -44,43 +44,43 @@ Different data platforms might have different caching layers and cache invalidat
 - [Snowflake](https://community.snowflake.com/s/article/Caching-in-the-Snowflake-Cloud-Data-Platform)
 - [Starburst Galaxy](https://docs.starburst.io/starburst-galaxy/data-engineering/optimization-performance-and-quality/workload-optimization/warp-speed-enabled.html)
 
-## Declarative caching
+## 宣言型キャッシュ
 
-Declarative caching enables you to pre-warm the cache using [saved queries](/docs/build/saved-queries) by setting the cache config to `true` in your `saved_queries` settings. This is useful for optimizing performance for key dashboards or common ad-hoc query requests. 
+宣言型キャッシュを使用すると、[保存済みクエリ](/docs/build/saved-queries)を使用してキャッシュを事前ウォームアップできます。そのためには、`saved_queries` 設定でキャッシュ構成を `true` に設定します。これは、主要なダッシュボードや一般的なアドホッククエリリクエストのパフォーマンスを最適化するのに役立ちます。
 
 :::tip
-Declarative caching also allows you to dynamically filter your dashboards without losing the performance benefits of caching. This works because filters on dimensions (that are already in a saved query config) will use the cache.
+宣言型キャッシュを使用すると、キャッシュによるパフォーマンス上のメリットを損なうことなく、ダッシュボードを動的にフィルタリングできます。これは、ディメンションのフィルタ（保存済みクエリ設定に既に存在するもの）がキャッシュを使用するためです。
 
-For example, if you filter a metric by geographical region on a dashboard, the query will hit the cache, ensuring faster results. This also removes the need to create separate saved queries with static filters.
+例えば、ダッシュボードで地理的な地域でメトリックをフィルタリングする場合、クエリはキャッシュにアクセスし、より高速な結果を得ることができます。また、静的フィルタを使用した保存済みクエリを別途作成する必要もありません。
 :::
 
-For configuration details, refer to [Declarative caching setup](#declarative-caching-setup).
+設定の詳細については、[宣言型キャッシュの設定](#declarative-caching-setup)を参照してください。
 
-How declarative caching works:
-- Make sure your saved queries YAML configuration file has [exports](/docs/use-dbt-semantic-layer/exports) defined.
-- Running a saved query triggers the dbt Semantic Layer to:
-  - Build a cached table from a saved query, with exports defined, into your data platform.
-  - Make sure any query requests that match the saved query's inputs use the cache, returning data more quickly.
-  - Automatically invalidates the cache when it detects new and fresh data in any upstream models related to the metrics in your cached table.
-  - Refreshes (or rebuilds) the cache the next time you run the saved query.
+宣言型キャッシュの仕組み:
+- 保存済みクエリのYAML設定ファイルに[エクスポート](/docs/use-dbt-semantic-layer/exports)が定義されていることを確認してください。
+- 保存済みクエリを実行すると、dbtセマンティックレイヤーがトリガーされ、次の処理が実行されます。
+  - エクスポートが定義された保存済みクエリから、データプラットフォームにキャッシュされたテーブルを構築します。
+  - 保存済みクエリの入力に一致するクエリリクエストでキャッシュが使用されるようにし、より迅速にデータを返します。
+  - キャッシュされたテーブル内の指標に関連する上流モデルで新しい最新データが検出されると、キャッシュが自動的に無効化されます。
+  - 保存済みクエリを次回実行するときに、キャッシュが更新（または再構築）されます。
  
 <details>
 
-<summary> 📹 Check out this video demo to see how declarative caching works!</summary>
+<summary> 📹 宣言型キャッシュがどのように機能するかを確認するには、このビデオ デモをご覧ください。</summary>
 
-This video demonstrates the concept of declarative caching, how to run it using the dbt Cloud scheduler, and how fast your dashboards load as a result.
+このビデオでは、宣言型キャッシュの概念、dbt Cloud スケジューラを使用してそれを実行する方法、そしてその結果としてダッシュボードがどれだけ速く読み込まれるかについて説明します。
 
 <LoomVideo id='aea82a4dee364dfdb536e7b8068684e7' />
 
 </details>
 
-Refer to the following diagram, which illustrates what happens when the dbt Semantic Layer receives a query request:
+dbt セマンティック レイヤーがクエリ要求を受信したときに何が起こるかを示す次の図を参照してください:
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/declarative-cache-query-flow.jpg" width="70%" title="Overview of the declarative cache query flow" />
 
-### Declarative caching setup
+### 宣言型キャッシュの設定
 
-To populate the cache, you need to configure an export in your saved query YAML file configuration _and_ set the `cache config` to `true`. You can't cache a saved query without an export defined.
+キャッシュにデータを取り込むには、保存済みクエリのYAMLファイル設定でエクスポートを設定し、`cache config` を `true` に設定する必要があります。エクスポートが定義されていない保存済みクエリをキャッシュすることはできません。
 
 <File name='semantic_model.yml'>
 
@@ -98,7 +98,7 @@ saved_queries:
 ```
 </File>
 
-To enable saved queries at the project level, you can set the `saved-queries` configuration in the [`dbt_project.yml` file](/reference/dbt_project.yml). This saves you time in configuring saved queries in each file:
+プロジェクトレベルで保存クエリを有効にするには、[`dbt_project.yml` ファイル](/reference/dbt_project.yml) で `saved-queries` 設定を設定します。これにより、各ファイルで保存クエリを設定する手間が省けます:
 
 <File name='dbt_project.yml'>
 
@@ -111,39 +111,39 @@ saved-queries:
 ```
 </File>
 
-### Run your declarative cache
+### 宣言型キャッシュを実行する
 
-After setting up declarative caching in your YAML configuration, you can now run [exports](/docs/use-dbt-semantic-layer/exports) with the dbt Cloud job scheduler to build a cached table from a saved query into your data platform.
+YAML 構成で宣言型キャッシュを設定したら、dbt Cloud ジョブスケジューラで [exports](/docs/use-dbt-semantic-layer/exports) を実行し、保存済みクエリからデータプラットフォームにキャッシュされたテーブルを構築できます。
 
-- Use [exports to set up a job](/docs/use-dbt-semantic-layer/exports) to run a saved query dbt Cloud.
-- The dbt Semantic Layer builds a cache table in your data platform in a dedicated `dbt_sl_cache` schema. 
-- The cache schema and tables are created using your deployment credentials. You need to grant read access to this schema for your Semantic Layer user.
-- The cache refreshes (or rebuilds) on the same schedule as the saved query job.
+- [exports を使用してジョブを設定する](/docs/use-dbt-semantic-layer/exports) を使用して、保存済みクエリを dbt Cloud で実行します。
+- dbt Semantic Layer は、専用の `dbt_sl_cache` スキーマを使用して、データプラットフォームにキャッシュテーブルを構築します。
+- キャッシュスキーマとテーブルは、デプロイメント認証情報を使用して作成されます。Semantic Layer ユーザーにこのスキーマへの読み取りアクセス権を付与する必要があります。
+- キャッシュは、保存済みクエリジョブと同じスケジュールで更新（または再構築）されます。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/cache-creation-flow.jpg" width="70%" title="Overview of the cache creation flow." />
 
-After a successful job run, you can go back to your dashboard to experience the speed and benefits of declarative caching.
+ジョブの実行が成功したら、ダッシュボードに戻って宣言型キャッシュの速度と利点を体験できます。
 
-## Cache management
+## キャッシュ管理
 
-dbt Cloud uses the metadata from your dbt model runs to intelligently manage cache invalidation. When you start a dbt job, it keeps track of the last model runtime and checks the freshness of the metrics upstream of your cache.
+dbt Cloud は、dbt モデル実行から得られたメタデータを使用して、キャッシュの無効化をインテリジェントに管理します。dbt ジョブを開始すると、前回のモデル実行時間が記録され、キャッシュの上流にあるメトリクスの最新状態がチェックされます。
 
-If an upstream model has data in it that was created after the cache was created, dbt Cloud invalidates the cache. This means queries won't use outdated cases and will instead query directly from the source data. Stale, outdated cache tables are periodically dropped and dbt Cloud will write a new cache the next time your saved query runs.
+上流モデルに、キャッシュ作成後に作成されたデータが含まれている場合、dbt Cloud はキャッシュを無効化します。つまり、クエリは古いケースを使用せず、ソースデータから直接クエリを実行します。古くなったキャッシュテーブルは定期的に削除され、保存されたクエリが次に実行されるときに、dbt Cloud は新しいキャッシュを書き込みます。
 
-You can manually invalidate the cache through the [dbt Semantic Layer APIs](/docs/dbt-cloud-apis/sl-api-overview) using the `InvalidateCacheResult` field.
+[dbt セマンティック レイヤー API](/docs/dbt-cloud-apis/sl-api-overview) の `InvalidateCacheResult` フィールドを使用して、キャッシュを手動で無効化できます。
 
 ## FAQs
 
-<DetailsToggle alt_header="How does caching interact with access controls?">
+<DetailsToggle alt_header="キャッシュはアクセス制御とどのように相互作用しますか?">
 
-Cached data is stored separately from the underlying models. If metrics are pulled from the cache, we don’t have the security context applied to those tables at query time.
+キャッシュされたデータは、基盤となるモデルとは別に保存されます。メトリクスがキャッシュから取得された場合、クエリ実行時にそれらのテーブルにセキュリティコンテキストが適用されません。
 
-In the future, we plan to clone credentials, identify the minimum access level needed, and apply those permissions to cached tables.
+今後、認証情報を複製し、必要な最小限のアクセスレベルを特定し、それらの権限をキャッシュされたテーブルに適用する予定です。
 
 </DetailsToggle>
 
 
-## Related docs
-- [Validate semantic nodes in CI](/docs/deploy/ci-jobs#semantic-validations-in-ci)
-- [Saved queries](/docs/build/saved-queries)
-- [dbt Semantic Layer FAQs](/docs/use-dbt-semantic-layer/sl-faqs)
+## 関連ドキュメント
+- [CI でセマンティックノードを検証する](/docs/deploy/ci-jobs#semantic-validations-in-ci)
+- [保存されたクエリ](/docs/build/saved-queries)
+- [dbt セマンティックレイヤーに関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)

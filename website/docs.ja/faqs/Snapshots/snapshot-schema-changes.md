@@ -1,13 +1,13 @@
 ---
-title: What happens if I add new columns to my snapshot query?
-description: "Reconcile changes when adding new columns in snapshot query"
-sidebar_label: 'Snapshot column changes'
+title: スナップショット クエリに新しい列を追加するとどうなりますか?
+description: "スナップショットクエリに新しい列を追加するときに変更を調整する"
+sidebar_label: 'スナップショット列の変更'
 id: snapshot-schema-changes
 
 ---
-When the columns of your source query changes, dbt will attempt to reconcile this change in the destination snapshot <Term id="table" />. dbt does this by:
+ソースクエリの列が変更されると、dbt は宛先スナップショット <Term id="table" /> でこの変更を調整しようとします。dbt は以下の方法でこれを行います。
 
-1. Creating new columns from the source query in the destination table
-2. Expanding the size of string types where necessary (eg. `varchar`s on Redshift)
+1. ソースクエリから宛先テーブルに新しい列を作成します。
+2. 必要に応じて文字列型のサイズを拡張します (例: Redshift の `varchar` 列)。
 
-dbt _will not_ delete columns in the destination snapshot table if they are removed from the source query. It will also not change the type of a column beyond expanding the size of varchar columns. That is, if a `string` column is changed to a `date` column in the snapshot source query, dbt will not attempt to change the type of the column in the destination table.
+dbt は、ソースクエリから列が削除されても、宛先スナップショットテーブルの列を削除しません。また、varchar 列のサイズを拡張する以外に、列の型を変更することもありません。つまり、スナップショットソースクエリで `string` 列が `date` 列に変更された場合、dbt は宛先テーブルの列の型を変更しません。

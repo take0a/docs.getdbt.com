@@ -1,10 +1,9 @@
 ---
-title: Why are profiles stored outside of my project?
-description: "Profiles stored outside version control"
-sidebar_label: 'Profiles stored outside project'
+title: プロファイルがプロジェクト外部に保存されるのはなぜですか?
+description: "バージョン管理外に保存されたプロファイル"
+sidebar_label: 'プロジェクト外に保存されたプロファイル'
 id: separate-profile
 
 ---
 
-Profiles are stored separately to dbt projects to avoid checking credentials into version control. Database credentials are extremely sensitive information and should **never be checked into version control**.
-
+プロファイルは、バージョン管理への認証情報のチェックインを回避するため、dbtプロジェクトとは別に保存されます。データベースの認証情報は非常に機密性の高い情報であるため、**バージョン管理にチェックインしないでください**。

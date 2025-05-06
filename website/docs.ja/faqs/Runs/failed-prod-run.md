@@ -1,9 +1,9 @@
 ---
-title: What happens if one of my runs fails?
-description: "Set up notifications to debug failed runs"
-sidebar_label: 'Notifications to debug failed runs'
+title: 実行の 1 つが失敗した場合はどうなりますか?
+description: "失敗した実行をデバッグするための通知を設定する"
+sidebar_label: '失敗した実行をデバッグするための通知'
 id: failed-prod-run
 
 ---
 
-If you're using dbt Cloud, we recommend setting up email and Slack notifications (`Account Settings > Notifications`) for any failed runs. Then, debug these runs the same way you would debug any runs in development.
+dbt Cloud をご利用の場合は、失敗した実行についてメールと Slack の通知を設定することをお勧めします（「アカウント設定」>「通知」）。その後、開発中の実行と同じようにデバッグしてください。

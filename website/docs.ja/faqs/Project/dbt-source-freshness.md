@@ -5,10 +5,10 @@ sidebar_label: 'Accessing Source Freshness results'
 id: dbt-source-freshness
 
 ---
-Yes!
+はい！
 
-The `dbt source freshness` command will output a pass/warning/error status for each <Term id="table" /> selected in the freshness snapshot.
+`dbt source freshness` コマンドは、フレッシュネススナップショットで選択された各 <Term id="table" /> について、pass/warning/error ステータスを出力します。
 
-Additionally, dbt will write the freshness results to a file in the `target/` directory called `sources.json` by default. You can also override this destination, use the `-o` flag to the `dbt source freshness` command.
+さらに、dbt はフレッシュネスの結果を、デフォルトで `target/` ディレクトリ内の `sources.json` というファイルに書き込みます。`dbt source freshness` コマンドに `-o` フラグを使用することで、この出力先をオーバーライドすることもできます。
 
-After enabling source freshness within a job, configure [Artifacts](/docs/deploy/artifacts) in your **Project Details** page, which you can find by selecting your account name on the left side menu in dbt Cloud and clicking **Account settings**. You can see the current status for source freshness by clicking **View Sources** in the job page.
+ジョブ内でソースフレッシュネスを有効にした後、**Project Details** ページで [アーティファクト](/docs/deploy/artifacts) を構成します。このページは、dbt Cloud の左側のメニューでアカウント名を選択し、**Account settings** をクリックすると表示されます。ジョブページで **View Sources** をクリックすると、ソースフレッシュネスの現在のステータスを確認できます。

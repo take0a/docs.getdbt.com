@@ -1,12 +1,12 @@
 ---
-title: Can I build my seeds in a schema other than my target schema or can I split my seeds across multiple schemas?
-description: "Use schema config in your dbt_project.yml file"
-sidebar_label: 'Build seeds in a schema outside target schema'
+title: ターゲット スキーマ以外のスキーマでシードを構築したり、シードを複数のスキーマに分割したりできますか?
+description: "dbt_project.yml ファイルでスキーマ設定を使用する"
+sidebar_label: 'ターゲット スキーマ外のスキーマでシードを構築する'
 id: seed-custom-schemas
 
 ---
 
-Yes! Use the [schema](reference/resource-configs/schema.md) configuration in your `dbt_project.yml` file.
+はい！`dbt_project.yml` ファイルで [schema](reference/resource-configs/schema.md) 構成を使用してください。
 
 <File name='dbt_project.yml'>
 

@@ -1,7 +1,7 @@
 ---
-title: "Deployment environments"
+title: "デプロイメント環境"
 id: "deploy-environments"
-description: "Learn about dbt Cloud's deployment environment to seamlessly schedule jobs or enable CI."
+description: "ジョブをシームレスにスケジュールしたり、CI を有効にしたりするための dbt Cloud のデプロイメント環境について学習します。"
 ---
 
 Deployment environments in dbt Cloud are crucial for deploying dbt jobs in production and using features or integrations that depend on dbt metadata or results. To execute dbt, environments determine the settings used during job runs, including:

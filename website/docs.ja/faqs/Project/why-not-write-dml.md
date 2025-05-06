@@ -1,33 +1,33 @@
 ---
-title: "Why can't I just write DML in my transformations?"
-description: "Using SQL in your transformations instead of DML."
-sidebar_label: 'Why not write in DML'
+title: "変換で DML を記述できないのはなぜですか?"
+description: "変換では DML ではなく SQL を使用します。"
+sidebar_label: 'DMLで書いてみませんか？'
 id: why-not-write-dml
 
 ---
 
-#### `select` statements make transformations accessible
+#### `select` 文により変換がアクセス可能になります
 
-More people know how to write `select` statements, than <Term id="dml" />, making the transformation layer accessible to more people!
+<Term id="dml" /> よりも `select` 文の書き方を知っている人が多いため、変換レイヤーをより多くの人が利用できるようになります。
 
-#### Writing good DML is hard
+#### 適切な DML を書くのは難しい
 
-If you write the <Term id="ddl" /> / DML yourself you can end up getting yourself tangled in problems like:
+<Term id="ddl" /> / DML を自分で書くと、次のような問題に悩まされる可能性があります。
 
-* What happens if the <Term id="table" /> already exists? Or this table already exists as a <Term id="view" />, but now I want it to be a table?
-* What if the schema already exists? Or, should I check if the schema already exists?
-* How do I replace a model atomically (such that there's no down-time for someone querying the table)
-* What if I want to parameterize my schema so I can run these transformations in a development environment?
-* What order do I need to run these statements in? If I run a `cascade` does it break other things?
+* <Term id="table" /> が既に存在する場合はどうなるでしょうか？ あるいは、このテーブルは既に <Term id="view" /> として存在しているのですが、テーブルとして使いたい場合、どうなるでしょうか？
+* スキーマが既に存在する場合はどうなるでしょうか？ あるいは、スキーマが既に存在するかどうかを確認する必要があるでしょうか？
+* モデルをアトミックに置き換えるにはどうすればよいでしょうか（テーブルをクエリするユーザーにダウンタイムが発生しないようにするため）。
+* 開発環境でこれらの変換を実行できるように、スキーマをパラメータ化したい場合はどうすればよいでしょうか？
+* これらのステートメントはどのような順序で実行する必要がありますか？ `cascade` を実行すると、他の機能が動作しなくなりますか？
 
-Each of these problems _can_ be solved, but they are unlikely to be the best use of your time.
+これらの問題はどれも解決可能ですが、時間の無駄遣いにはなりにくいでしょう。
 
-#### dbt does more than generate SQL
+#### dbt は SQL を生成するだけではありません。
 
-You can test your models, generate documentation, create snapshots, and more!
+モデルのテスト、ドキュメントの生成、スナップショットの作成など、さまざまな機能を備えています。
 
-#### You reduce your vendor lock in
+#### ベンダーロックインの軽減
 
-SQL dialects tend to diverge the most in DML and DDL (rather than in `select` statements) — check out the example [here](/faqs/Models/sql-dialect). By writing less SQL, it can make a migration to a new database technology easier.
+SQL方言は、`select`文よりもDMLとDDLで大きく異なる傾向があります。[こちら](/faqs/Models/sql-dialect)の例をご覧ください。SQLの記述量を減らすことで、新しいデータベーステクノロジーへの移行が容易になります。
 
-If you do need to write custom DML, there are ways to do this in dbt using [custom materializations](/guides/create-new-materializations).
+カスタムDMLを記述する必要がある場合は、dbtで[カスタムマテリアライゼーション](/guides/create-new-materializations)を使用して記述する方法があります。

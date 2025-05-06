@@ -1,11 +1,14 @@
 ---
-title: How do I write long-form explanations in my descriptions?
-description: "Write long descriptions in your documentation"
-sidebar_label: 'Write long descriptions'
+title: 説明文に長い説明を書くにはどうすればいいですか?
+description: "ドキュメントに長い説明を書く"
+sidebar_label: '長い説明を書く'
 id: long-descriptions
 ---
-If you need more than a sentence to explain a model, you can:
-1. Split your description over multiple lines using `>`. Interior line breaks are removed and Markdown can be used. This method is recommended for simple, single-paragraph descriptions:
+
+モデルの説明に1文では足りない場合は、以下の方法があります。
+
+1. `>` を使って説明を複数行に分割します。行間の改行は削除され、Markdown が使用可能になります。この方法は、1段落だけのシンプルな説明に推奨されます。
+
 ```yml
   version: 2
 
@@ -18,7 +21,8 @@ If you need more than a sentence to explain a model, you can:
       consequat.
 ```
 
-2. Split your description over multiple lines using `|`. Interior line breaks are maintained and Markdown can be used. This method is recommended for more complex descriptions:
+2. `|` を使って説明を複数行に分割します。行内の改行は維持され、Markdown も使用できます。この方法は、より複雑な説明に推奨されます。
+
 ```yml
   version: 2
 
@@ -31,4 +35,4 @@ If you need more than a sentence to explain a model, you can:
       * tempor incididunt ut labore et dolore magna aliqua.
 ```
 
-3. Use a [docs block](/docs/build/documentation#using-docs-blocks) to write the description in a separate Markdown file.
+3. [docs ブロック](/docs/build/documentation#using-docs-blocks)を使用して、説明を別の Markdown ファイルに記述します。

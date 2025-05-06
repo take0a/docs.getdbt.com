@@ -1,7 +1,7 @@
 ---
-title: "Deploy your metrics"
+title: "メトリクスを展開する"
 id: deploy-sl
-description: "Deploy the dbt Semantic Layer in dbt Cloud by running a job to materialize your metrics."
+description: "メトリクスを具体化するジョブを実行して、dbt Cloud に dbt セマンティック レイヤーをデプロイします。"
 sidebar_label: "Deploy your metrics"
 tags: [Semantic Layer]
 pagination_next: "docs/use-dbt-semantic-layer/exports"
@@ -16,14 +16,16 @@ import RunProdJob from '/snippets/_sl-run-prod-job.md';
 
 <RunProdJob/>
 
-## Next steps
-After you've executed a job and deployed your Semantic Layer:
-- [Set up your Semantic Layer](/docs/use-dbt-semantic-layer/setup-sl) in dbt Cloud.
-- Discover the [available integrations](/docs/cloud-integrations/avail-sl-integrations), such as Tableau, Google Sheets, Microsoft Excel, and more.
-- Start querying your metrics with the [API query syntax](/docs/dbt-cloud-apis/sl-jdbc#querying-the-api-for-metric-metadata).
+## 次のステップ
+
+ジョブを実行してセマンティックレイヤーをデプロイしたら、次の手順に従ってください。
+- dbt Cloud で [セマンティックレイヤーをセットアップ](/docs/use-dbt-semantic-layer/setup-sl)します。
+- Tableau、Google Sheets、Microsoft Excel など、[利用可能な統合](/docs/cloud-integrations/avail-sl-integrations)を確認します。
+- [API クエリ構文](/docs/dbt-cloud-apis/sl-jdbc#querying-the-api-for-metric-metadata)を使用して、メトリクスのクエリを開始します。
 
 
-## Related docs
-- [Optimize querying performance](/docs/use-dbt-semantic-layer/sl-cache) using declarative caching.
-- [Validate semantic nodes in CI](/docs/deploy/ci-jobs#semantic-validations-in-ci) to ensure code changes made to dbt models don't break these metrics.
-- If you haven't already, learn how to [build your metrics and semantic models](/docs/build/build-metrics-intro) in your development tool of choice.
+## 関連ドキュメント
+
+- 宣言型キャッシュを使用して、[クエリパフォーマンスを最適化](/docs/use-dbt-semantic-layer/sl-cache)します。
+- [CI でセマンティックノードを検証](/docs/deploy/ci-jobs#semantic-validations-in-ci)して、dbt モデルへのコード変更によってこれらのメトリクスが損なわれないようにします。
+- まだお試しでない場合は、お好みの開発ツールで[メトリクスとセマンティックモデルを構築する](/docs/build/build-metrics-intro)方法を学習してください。

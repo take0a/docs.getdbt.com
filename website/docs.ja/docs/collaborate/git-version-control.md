@@ -7,21 +7,21 @@ pagination_next: "docs/collaborate/git/version-control-basics"
 pagination_prev: null
 ---
 
-A [version control](https://en.wikipedia.org/wiki/Version_control) system allows you and your teammates to work collaboratively, safely, and simultaneously on a single project. Version control helps you track all the code changes made in your dbt project.
+[バージョン管理](https://en.wikipedia.org/wiki/Version_control)システムを使用すると、チームメンバーが単一のプロジェクトで共同作業を行い、安全に、同時に作業を進めることができます。バージョン管理は、dbtプロジェクトで行われたすべてのコード変更を追跡するのに役立ちます。
 
-In a distributed version control system, every developer has a full copy of the project and project history. Git is one of the most popular distributed version control systems and is commonly used for both open source and commercial software development, with great benefits for individuals, teams and businesses.
+分散型バージョン管理システムでは、すべての開発者がプロ​​ジェクトとプロジェクト履歴の完全なコピーを保持します。Gitは最も人気のある分散型バージョン管理システムの1つであり、オープンソースソフトウェア開発と商用ソフトウェア開発の両方で広く使用されており、個人、チーム、そして企業に大きなメリットをもたらします。
 
 ![Git overview](https://docs.getdbt.com/img/docs/dbt-cloud/cloud-ide/git-overview.png)
 
 
-Git allows developers see the entire timeline of their changes, decisions, and progression of any project in one place. From the moment they access the history of a project, the developer has all the context they need to understand it and start contributing.
+Git を使用すると、開発者はプロジェクトの変更、決定、進捗のタイムライン全体を 1 か所で確認できます。プロジェクトの履歴にアクセスした瞬間から、開発者はプロジェクトを理解し、貢献するために必要なすべてのコンテキストを入手できます。
 
-When you develop in the command line interface (CLI) or Cloud  integrated development environment (IDE), you can leverage Git directly to version control your code. To use version control, make sure you are connected to a Git repository in the CLI or Cloud IDE. 
+コマンドラインインターフェース (CLI) またはクラウド統合開発環境 (IDE) で開発する場合、Git を直接利用してコードのバージョン管理を行うことができます。バージョン管理を使用するには、CLI またはクラウド IDE で Git リポジトリに接続していることを確認してください。 
 
 
-## Related docs
-- [Version control basics](/docs/collaborate/git/version-control-basics)
-- [Merge conflicts](/docs/collaborate/git/merge-conflicts) 
-- [Connect to GitHub](/docs/cloud/git/connect-github)
-- [Connect to GitLab](/docs/cloud/git/connect-gitlab)
-- [Connect to Azure DevOps](/docs/cloud/git/connect-azure-devops)
+## 関連ドキュメント
+- [バージョン管理の基本](/docs/collaborate/git/version-control-basics)
+- [マージの競合](/docs/collaborate/git/merge-conflicts)
+- [GitHub への接続](/docs/cloud/git/connect-github)
+- [GitLab への接続](/docs/cloud/git/connect-gitlab)
+- [Azure DevOps への接続](/docs/cloud/git/connect-azure-devops)

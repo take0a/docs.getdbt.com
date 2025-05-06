@@ -1,16 +1,14 @@
 ---
-title: Can I store my seeds in a directory other than the `seeds` directory in my project?
-description: "Where to store seeds in a directory"
-sidebar_label: 'How to name seeds directory'
+title: プロジェクトの `seeds` ディレクトリ以外のディレクトリにシードを保存できますか?
+description: "シードを保存するディレクトリの場所"
+sidebar_label: 'シードディレクトリの命名方法'
 id: configurable-data-path
 
 ---
 
-By default, dbt expects your seed files to be located in the `seeds` subdirectory
-of your project.
+デフォルトでは、dbt はシードファイルがプロジェクトの `seeds` サブディレクトリにあることを想定しています。
 
-To change this, update the [seed-paths](reference/project-configs/seed-paths.md) configuration in your `dbt_project.yml`
-file, like so:
+これを変更するには、`dbt_project.yml` ファイルの [seed-paths](reference/project-configs/seed-paths.md) 設定を次のように更新します。
 
 <File name='dbt_project.yml'>
 

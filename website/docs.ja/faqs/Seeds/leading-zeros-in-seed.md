@@ -1,9 +1,9 @@
 ---
-title: How do I preserve leading zeros in a seed?
-description: "Use column types to include leading zeros in seed"
+title: シードの先頭のゼロを保持するにはどうすればよいですか?
+description: "列タイプを使用してシードの先頭にゼロを含める"
 sidebar_label: 'Include leading zeroes in your seed file'
 id: leading-zeros-in-seed
 
 ---
 
-If you need to preserve leading zeros (for example in a zipcode or mobile number), include leading zeros in your seed file, and use the `column_types` [configuration](reference/resource-configs/column_types.md) with a varchar datatype of the correct length.
+先頭のゼロを保持する必要がある場合 (たとえば、郵便番号や携帯電話番号)、シード ファイルに先頭のゼロを含め、正しい長さの varchar データ型で `column_types` [構成](reference/resource-configs/column_types.md) を使用します。

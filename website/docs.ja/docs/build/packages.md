@@ -241,7 +241,7 @@ packages:
 dbt Cloud を使用している場合、SSH キー メソッドは機能しませんが、[HTTPS Git トークン メソッド](https://docs.getdbt.com/docs/build/packages#git-token-method) を使用できます。
 
 
-### Gitトークンメソッド
+### Gitトークンメソッド {#git-token-method}
 
 :::note
 

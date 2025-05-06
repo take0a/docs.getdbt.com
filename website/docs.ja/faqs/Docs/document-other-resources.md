@@ -1,8 +1,8 @@
 ---
-title: Can I document things other than models, like sources, seeds, and snapshots?
-description: "Using the description key to document resources"
-sidebar_label: 'Document other resources'
+title: ソース、シード、スナップショットなど、モデル以外のものを文書化できますか?
+description: "説明キーを使用してリソースを文書化する"
+sidebar_label: 'その他のリソースを文書化する'
 id: document-other-resources
 ---
 
-Yes! You can document almost everything in your project using the `description:` key. Check out the reference docs on [descriptions](/reference/resource-properties/description) for more info!
+はい！`description:`キーを使えば、プロジェクト内のほぼすべての情報をドキュメント化できます。詳しくは[descriptions](/reference/resource-properties/description)のリファレンスドキュメントをご覧ください。

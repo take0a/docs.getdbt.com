@@ -1,11 +1,11 @@
 ---
-title: How should I structure my project?
-description: "Recommendations on how to structure project"
-sidebar_label: 'How to structure project'
+title: プロジェクトをどのように構成すればよいでしょうか?
+description: "プロジェクトの構成方法に関する推奨事項"
+sidebar_label: 'プロジェクトの構成方法'
 id: structure-a-project
 
 ---
 
-There's no one best way to structure a project! Every organization is unique.
+プロジェクト構築に最適な方法は一つではありません！組織はそれぞれ異なります。
 
-If you're just getting started, check out how we (dbt Labs) [structure our dbt projects](/best-practices/how-we-structure/1-guide-overview).
+これからプロジェクトを始める方は、私たち（dbt Labs）がどのように[dbtプロジェクトを構築しているか](/best-practices/how-we-structure/1-guide-overview) をご覧ください。

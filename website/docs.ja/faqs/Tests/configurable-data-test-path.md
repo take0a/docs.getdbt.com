@@ -1,14 +1,13 @@
 ---
-title: Can I store my tests in a directory other than the `tests` directory in my project?
-description: "Where to store tests in a directory"
-sidebar_label: 'How to name tests directory'
+title: プロジェクトの `tests` ディレクトリ以外のディレクトリにテストを保存できますか?
+description: "テストを保存するディレクトリの場所"
+sidebar_label: 'テストディレクトリの命名方法'
 id: configurable-data-test-path
 
 ---
-By default, dbt expects your singular test files to be located in the `tests` subdirectory of your project, and generic test definitions to be located in `tests/generic` or `macros`.
+デフォルトでは、dbt は個別のテストファイルをプロジェクトの `tests` サブディレクトリに配置し、汎用テスト定義を `tests/generic` または `macros` に配置することを想定しています。
 
-To change this, update the [test-paths](reference/project-configs/test-paths.md) configuration in your `dbt_project.yml`
-file, like so:
+これを変更するには、`dbt_project.yml` ファイルの [test-paths](reference/project-configs/test-paths.md) 設定を次のように更新します。
 
 <File name='dbt_project.yml'>
 
@@ -18,4 +17,4 @@ test-paths: ["my_cool_tests"]
 
 </File>
 
-Then, you can define generic tests in `my_cool_tests/generic/`, and singular tests everywhere else in `my_cool_tests/`.
+それから、`my_cool_tests/generic/` に汎用テストを定義し、`my_cool_tests/` 内の他のすべての場所に特異テストを定義します。

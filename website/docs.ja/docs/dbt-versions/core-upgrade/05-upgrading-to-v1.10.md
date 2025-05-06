@@ -1,47 +1,47 @@
 ---
-title: "Upgrading to v1.10"
+title: "v1.10へのアップグレード"
 id: upgrading-to-v1.10
-description: New features and changes in dbt Core v1.10
+description: dbt Core v1.10 の新機能と変更点
 displayed_sidebar: "docs"
 ---
  
-## Resources 
+## リソース
 
-- dbt Core v1.10 changelog (coming soon)
-- [dbt Core CLI Installation guide](/docs/core/installation-overview)
-- [Cloud upgrade guide](/docs/dbt-versions/upgrade-dbt-version-in-cloud#release-tracks)
+- dbt Core v1.10 の変更履歴（近日公開予定）
+- [dbt Core CLI インストールガイド](/docs/core/installation-overview)
+- [クラウドアップグレードガイド](/docs/dbt-versions/upgrade-dbt-version-in-cloud#release-tracks)
 
-## What to know before upgrading
+## アップグレード前に知っておくべきこと
 
-dbt Labs is committed to providing backward compatibility for all versions 1.x. Any behavior changes will be accompanied by a [behavior change flag](/reference/global-configs/behavior-changes#behavior-change-flags) to provide a migration window for existing projects. If you encounter an error upon upgrading, please let us know by [opening an issue](https://github.com/dbt-labs/dbt-core/issues/new).
+dbt Labs は、すべてのバージョン 1.x に対して下位互換性を提供することに尽力しています。動作変更には、[動作変更フラグ](/reference/global-configs/behavior-changes#behavior-change-flags) が付与され、既存のプロジェクトへの移行期間が提供されます。アップグレード時にエラーが発生した場合は、[問題を報告](https://github.com/dbt-labs/dbt-core/issues/new) してお知らせください。
 
-Starting in 2024, dbt Cloud provides the functionality from new versions of dbt Core via [release tracks](/docs/dbt-versions/cloud-release-tracks) with automatic upgrades. If you have selected the "Latest" release track in dbt Cloud, you already have access to all the features, fixes, and other functionality that is included in dbt Core v1.10! If you have selected the "Compatible" release track, you will have access in the next monthly "Compatible" release after the dbt Core v1.10 final release.
+2024 年以降、dbt Cloud は、dbt Core の新しいバージョンの機能を [リリーストラック](/docs/dbt-versions/cloud-release-tracks) を通じて提供し、自動アップグレードを実施します。dbt Cloud で「最新」リリーストラックを選択した場合は、dbt Core v1.10 に含まれるすべての機能、修正、その他の機能を既にご利用いただけます。 「互換」リリーストラックを選択した場合、dbt Core v1.10 最終リリースの翌月次「互換」リリースからアクセスできるようになります。
 
-For users of dbt Core, since v1.8, we recommend explicitly installing both `dbt-core` and `dbt-<youradapter>`. This may become required for a future version of dbt. For example:
+dbt Core v1.8 以降をご利用の場合は、`dbt-core` と `dbt-<youradapter>` の両方を明示的にインストールすることをお勧めします。これは、dbt の将来のバージョンで必要になる可能性があります。例:
 
 ```sql
 python3 -m pip install dbt-core dbt-snowflake
 ```
 
-## New and changed features and functionality
+## 新機能と変更点
 
-New features and functionality available in dbt Core v1.10
+dbt Core v1.10 で利用可能な新機能
 
-### The `--sample` flag
+### `--sample` フラグ
 
-Large data sets can slow down dbt build times, making it harder for developers to test new code efficiently. The [`--sample` flag](/docs/build/sample-flag), available for the `run` and `build` commands, helps reduce build times and warehouse costs by running dbt in sample mode. It generates filtered refs and sources using time-based sampling, allowing developers to validate outputs without building entire models.
+大規模なデータセットは dbt のビルド時間を遅くし、開発者が新しいコードを効率的にテストすることを困難にする可能性があります。`run` コマンドと `build` コマンドで使用可能な [`--sample` フラグ](/docs/build/sample-flag) は、dbt をサンプルモードで実行することで、ビルド時間とウェアハウスコストを削減するのに役立ちます。このフラグは、時間ベースのサンプリングを使用してフィルタリングされた参照とソースを生成するため、開発者はモデル全体を構築することなく出力を検証できます。
 
-### Managing changes to legacy behaviors
+### 従来の動作への変更の管理
 
-dbt Core v1.10 introduces new flags for [managing changes to legacy behaviors](/reference/global-configs/behavior-changes). You may opt into recently introduced changes (disabled by default), or opt out of mature changes (enabled by default), by setting `True` / `False` values, respectively, for `flags` in `dbt_project.yml`.
+dbt Core v1.10 では、[従来の動作への変更の管理](/reference/global-configs/behavior-changes) 用の新しいフラグが導入されました。`dbt_project.yml` の `flags` にそれぞれ `True` / `False` の値を設定することで、最近導入された変更を有効にするか（デフォルトでは無効）、成熟した変更を無効にするか（デフォルトでは有効）を選択できます。
 
-You can read more about each of these behavior changes in the following links:
+これらの動作変更の詳細については、以下のリンクをご覧ください。
 
-- (Introduced, disabled by default) [`validate_macro_args`](/reference/global-configs/behavior-changes#macro-argument-validation). If the flag is set to `True`, dbt will raise a warning if the argument `type` names you've added in your macro YAMLs don't match the argument names in your macro or if the argument types aren't valid according to the [supported types](/reference/global-configs/behavior-changes#supported-types).
+- (導入済み、デフォルトでは無効) [`validate_macro_args`](/reference/global-configs/behavior-changes#macro-argument-validation)フラグが `True` に設定されている場合、マクロ YAML に追加した引数 `type` 名がマクロ内の引数名と一致しない場合、または引数の型が [サポートされている型](/reference/global-configs/behavior-changes#supported-types) に従って有効でない場合、dbt は警告を発します。
 
-## Quick hits
+## クイックヒット
 
-- Provide the [`loaded_at_query`](/reference/resource-properties/freshness#loaded_at_query) property for source freshness to specify custom SQL to generate the `maxLoadedAt` time stamp on the source (versus the [built-in query](https://github.com/dbt-labs/dbt-adapters/blob/6c41bedf27063eda64375845db6ce5f7535ef6aa/dbt/include/global_project/macros/adapters/freshness.sql#L4-L16), which uses the `loaded_at_field`). You cannot define `loaded_at_query` if the `loaded_at_field` config is also provided.
+- ソースの鮮度を表す [`loaded_at_query`](/reference/resource-properties/freshness#loaded_at_query) プロパティを指定して、ソースの `maxLoadedAt` タイムスタンプを生成するカスタム SQL を指定します（[組み込みクエリ](https://github.com/dbt-labs/dbt-adapters/blob/6c41bedf27063eda64375845db6ce5f7535ef6aa/dbt/include/global_project/macros/adapters/freshness.sql#L4-L16) では `loaded_at_field` が使用されます）。`loaded_at_field` 設定も指定されている場合は、`loaded_at_query` を定義することはできません。
 
-- Provide validation for macro arguments using the [`validate_macro_args`](/reference/global-configs/behavior-changes#macro-argument-validation) flag, which is disabled by default. When enabled, this flag checks that documented macro argument names match those in the macro definition and validates their types against a supported format. Previously, dbt did not enforce standard argument types, treating the type field as documentation-only. If no arguments are documented, dbt infers them from the macro and includes them in the manifest.json file. Learn more about [supported types](/reference/global-configs/behavior-changes#supported-types).
+- [`validate_macro_args`](/reference/global-configs/behavior-changes#macro-argument-validation) フラグを使用して、マクロ引数の検証を提供します。このフラグはデフォルトでは無効になっています。有効にすると、このフラグは、ドキュメント化されたマクロ引数名がマクロ定義内の引数名と一致するかどうかを確認し、サポートされている形式に照らして型を検証します。以前は、dbt は標準の引数型を強制せず、型フィールドをドキュメント専用として扱っていました。引数がドキュメント化されていない場合、dbt はマクロから引数を推測し、manifest.json ファイルに含めます。[サポートされている型](/reference/global-configs/behavior-changes#supported-types) の詳細については、こちらをご覧ください。
  
