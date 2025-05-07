@@ -1,19 +1,19 @@
 ---
 resource_types: [models, seeds, snapshots, tests]
-description: "Aliasing a resource lets you give it a custom name in the database instead of using the filename."
+description: "リソースにエイリアスを設定すると、ファイル名を使用する代わりに、データベース内でカスタム名を付けることができます。"
 datatype: string
-intro_text: Specify a custom alias for a model, data test, snapshot, or seed and give it a more user-friendly name in the database.
+intro_text: モデル、データ テスト、スナップショット、またはシードにカスタム エイリアスを指定し、データベース内でよりユーザーフレンドリな名前を付けます。
 ---
 
 
 <Tabs>
 <TabItem value="model" label="Models">
 
-Specify a custom alias for a model in your `dbt_project.yml` file, `models/properties.yml` file, or config block in a SQL file. 
+`dbt_project.yml` ファイル、`models/properties.yml` ファイル、または SQL ファイルの設定ブロックで、モデルのカスタムエイリアスを指定します。
 
-For example, if you have a model that calculates `sales_total` and want to give it a more user-friendly alias, you can alias it as shown in the following examples.
+例えば、`sales_total` を計算するモデルがあり、よりユーザーフレンドリーなエイリアスを設定したい場合は、次の例のようにエイリアスを設定できます。
 
-In the `dbt_project.yml` file, the following example sets a default `alias` for the `sales_total` model at the project level:
+`dbt_project.yml` ファイルでは、次の例のように、プロジェクトレベルで `sales_total` モデルのデフォルトのエイリアスを設定します。
 
 <File name='dbt_project.yml'>
 
@@ -25,7 +25,7 @@ models:
 ```
 </File>
 
-The following specifies an `alias` as part of the `models/properties.yml` file metadata, useful for centralized configuration:
+以下は、集中管理された構成に役立つ `models/properties.yml` ファイルのメタデータの一部として `alias` を指定します:
 
 <File name='models/properties.yml'>
 
@@ -39,7 +39,7 @@ models:
 ```
 </File>
 
-The following assigns the `alias` directly in the In `models/sales_total.sql` file:
+以下は、`models/sales_total.sql` ファイル内で `alias` を直接割り当てます:
 
 <File name='models/sales_total.sql'>
 
@@ -50,15 +50,15 @@ The following assigns the `alias` directly in the In `models/sales_total.sql` fi
 ```
 </File>
 
-This would return `analytics.finance.sales_dashboard` in the database, instead of the default `analytics.finance.sales_total`.
+これにより、データベースにはデフォルトの `analytics.finance.sales_total` ではなく `analytics.finance.sales_dashboard` が返されます。
 
 </TabItem>
 
 <TabItem value="seeds" label="Seeds">
 
-Configure a seed's alias in your `dbt_project.yml` file or a `properties.yml` file. The following examples demonstrate how to `alias` a seed named `product_categories` to `categories_data`.
+`dbt_project.yml` ファイルまたは `properties.yml` ファイルでシードのエイリアスを設定します。以下の例は、`product_categories` という名前のシードに `categories_data` というエイリアスを設定する方法を示しています。
 
-In the `dbt_project.yml` file at the project level:
+プロジェクトレベルの `dbt_project.yml` ファイルでの設定：
 
 <File name='dbt_project.yml'>
 
@@ -70,7 +70,7 @@ seeds:
 ```
 </File>
 
-In the `seeds/properties.yml` file:
+`seeds/properties.yml` ファイル内:
 
 <File name='seeds/properties.yml'>
 
@@ -84,9 +84,9 @@ seeds:
 ```
 </File>
 
-This would return the name `analytics.finance.categories_data` in the database.
+これにより、データベース内の `analytics.finance.categories_data` という名前が返されます。
 
-In the following second example, the seed at `seeds/country_codes.csv` will be built as a <Term id="table" /> named `country_mappings`.
+次の2番目の例では、`seeds/country_codes.csv` にあるシードが `country_mappings` という名前の <Term id="table" /> として構築されます。
 
 <File name='dbt_project.yml'>
 
@@ -102,11 +102,11 @@ seeds:
 
 <TabItem value="snapshot" label="Snapshots">
 
-Configure a snapshots's alias in your `dbt_project.yml` file, `snapshots/snapshot_name.yml` file, or config block. 
+`dbt_project.yml` ファイル、`snapshots/snapshot_name.yml` ファイル、または設定ブロックでスナップショットのエイリアスを設定します。
 
-The following examples demonstrate how to `alias` a snapshot named `your_snapshot` to `the_best_snapshot`.
+次の例は、`your_snapshot` という名前のスナップショットに `the_best_snapshot` というエイリアスを設定する方法を示しています。
 
-In the `dbt_project.yml` file at the project level:
+プロジェクトレベルの `dbt_project.yml` ファイルでの設定：
 
 <File name='dbt_project.yml'>
 
@@ -118,7 +118,7 @@ snapshots:
 ```
 </File>
 
-In the `snapshots/snapshot_name.yml` file:
+`snapshots/snapshot_name.yml` ファイル内:
 
 <File name='snapshots/snapshot_name.yml'>
 
@@ -142,17 +142,17 @@ In `snapshots/your_snapshot.sql` file:
 ```
 </File>
 
-This would build your snapshot to `analytics.finance.the_best_snapshot` in the database.
+これにより、データベース内の `analytics.finance.the_best_snapshot` へのスナップショットが構築されます。
 
 </TabItem>
 
 <TabItem value="test" label="Tests">
 
-Configure a data test's alias in your `dbt_project.yml` file, `properties.yml` file, or config block in the model file. 
+データテストのエイリアスは、`dbt_project.yml` ファイル、`properties.yml` ファイル、またはモデルファイル内の設定ブロックで設定します。
 
-The following examples demonstrate how to `alias` a unique data test named `order_id` to `unique_order_id_test` to identify a specific data test.
+次の例は、`order_id` という名前の一意のデータテストに `unique_order_id_test` というエイリアスを設定して、特定のデータテストを識別する方法を示しています。
 
-In the `dbt_project.yml` file at the project level:
+プロジェクトレベルの `dbt_project.yml` ファイルでの設定：
 
 <File name='dbt_project.yml'>
 
@@ -190,23 +190,23 @@ In `tests/unique_order_id_test.sql` file:
 ```
 </File>
 
-When using [`store_failures_as`](/reference/resource-configs/store_failures_as), this would return the name `analytics.dbt_test__audit.orders_order_id_unique_order_id_test` in the database.
+[`store_failures_as`](/reference/resource-configs/store_failures_as) を使用すると、データベースに `analytics.dbt_test__audit.orders_order_id_unique_order_id_test` という名前が返されます。
 
 
 </TabItem>
 </Tabs>
 
-## Definition
+## 定義
 
-Optionally specify a custom alias for a [model](/docs/build/models), [data test](/docs/build/data-tests), [snapshot](/docs/build/snapshots), or [seed](/docs/build/seeds).
+オプションで、[モデル](/docs/build/models)、[データテスト](/docs/build/data-tests)、[スナップショット](/docs/build/snapshots)、または[シード](/docs/build/seeds)のカスタムエイリアスを指定します。
 
-When dbt creates a relation (<Term id="table" />/<Term id="view" />) in a database, it creates it as: `{{ database }}.{{ schema }}.{{ identifier }}`, e.g. `analytics.finance.payments`
+dbt がデータベースにリレーション (<Term id="table" />/<Term id="view" />) を作成する場合、`{{ database }}.{{ schema }}.{{ identifier }}` という形式で作成します (例: `analytics.finance.payments`)。
 
-The standard behavior of dbt is:
-* If a custom alias is _not_ specified, the identifier of the relation is the resource name (i.e. the filename).
-* If a custom alias is specified, the identifier of the relation is the `{{ alias }}` value.
+dbt の標準的な動作は次のとおりです。
+* カスタムエイリアスが指定されていない場合、リレーションの識別子はリソース名 (つまりファイル名) になります。
+* カスタムエイリアスが指定されている場合、リレーションの識別子は `{{ alias }}` の値になります。
 
-**Note** With an [ephemeral model](/docs/build/materializations), dbt will always apply the prefix `__dbt__cte__` to the <Term id="cte" /> identifier. This means that if an alias is set on an ephemeral model, then its CTE identifier will be `__dbt__cte__{{ alias }}`, but if no alias is set then its identifier will be `__dbt__cte__{{ filename }}`.
+**注** [エフェメラルモデル](/docs/build/materializations)では、dbt は常に <Term id="cte" /> 識別子にプレフィックス `__dbt__cte__` を適用します。つまり、エフェメラルモデルにエイリアスが設定されている場合、その CTE 識別子は `__dbt__cte__{{ alias }}` になりますが、エイリアスが設定されていない場合は `__dbt__cte__{{ filename }}` になります。
 
-To learn more about changing the way that dbt generates a relation's `identifier`, read [Using Aliases](/docs/build/custom-aliases).
+dbt がリレーションの `identifier` を生成する方法を変更する方法の詳細については、[エイリアスの使用](/docs/build/custom-aliases) を参照してください。
 

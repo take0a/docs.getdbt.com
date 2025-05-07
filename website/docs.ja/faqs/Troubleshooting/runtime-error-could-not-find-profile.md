@@ -1,12 +1,12 @@
 ---
-title: I'm receiving a Runtime Error Could not find profile named 'user' error?
-description: "Re-authorize your credentials on Profile Settings"
-sidebar_label: 'Could not find profile named user"error in the IDE'
+title: ランタイム エラー「Could not find profile named 'user'」というエラーが発生します。
+description: "プロフィール設定で資格情報を再認証する"
+sidebar_label: 'IDEで「Could not find profile named user"error」'
 id: runtime-error-could-not-find-profile
 
 ---
 
-If you're unable to access the IDE due to the below error message, we'll do our best to get you unstuck with the below steps! 
+以下のエラー メッセージが表示されて IDE にアクセスできない場合は、以下の手順に従って問題を解決できるよう最善を尽くします。
 
 ```shell
 Running with dbt=1.9.0
@@ -17,12 +17,12 @@ Runtime Error
   Could not run dbt'
 ```
 
-Usually this errors indicates that there is an issue with missing/stale credentials/authentication. No worries, we have a few workarounds for you to try:
+通常、このエラーは、資格情報または認証情報が不足しているか古くなっていることが原因で発生します。ご安心ください。いくつかの回避策をお試しください。
 
-**In the IDE:**
-If this is happening in the IDE, you'll want to navigate to the Profile settings where your development credentials are configured. Once you're there, you'll need to either re-enter or re-authorize your credentials in order to get around this error message.
+**IDE の場合:**
+IDE でこのエラーが発生する場合は、開発用の資格情報が設定されているプロファイル設定に移動してください。設定画面が表示されたら、資格情報を再入力するか、再認証することで、このエラーメッセージを回避することができます。
 
-**In a job:**
-If this is happening in a job, it might be that you made some sort of change to the deployment environment in which the job is configured and did not re-enter your deployment credentials upon saving those changes. To fix this, you'll need to go back into the deployment environment settings, re-enter your credentials (either the private key/private key passphrase or the username and password), and kick off a new job run.
+**ジョブの場合:**
+ジョブでこのエラーが発生する場合は、ジョブが設定されているデプロイメント環境に何らかの変更を加えたものの、変更を保存する際にデプロイメント用の資格情報を再入力しなかった可能性があります。この問題を解決するには、デプロイメント環境設定に戻り、資格情報（秘密鍵/秘密鍵のパスフレーズ、またはユーザー名とパスワード）を再入力して、新しいジョブ実行を開始する必要があります。
 
-If you've tried the step above and are still experiencing this behavior - reach out to the Support team at support@getdbt.com and we'll be happy to help!
+上記の手順を試してもこの現象が継続する場合は、support@getdbt.com のサポート チームまでご連絡ください。喜んでお手伝いいたします。

@@ -1,12 +1,12 @@
 ---
-title: Why am I receiving a Runtime Error in my packages?
-description: "Update dbt_utils package in packages.yml file"
-sidebar_label: 'Runtime error in packages.yml file'
+title: パッケージでランタイム エラーが発生するのはなぜですか?
+description: "packages.yml ファイル内の dbt_utils パッケージを更新します。"
+sidebar_label: 'packages.yml ファイルの実行時エラー'
 id: runtime-packages.yml
 
 ---
 
-If you're receiving the runtime error below in your packages.yml folder, it may be due to an old version of your dbt_utils package that isn't compatible with your current dbt Cloud version.
+packages.yml フォルダーで以下のランタイム エラーが表示される場合は、現在の dbt Cloud バージョンと互換性のない古いバージョンの dbt_utils パッケージが原因である可能性があります。
 
 ```shell
 Running with dbt=xxx
@@ -16,7 +16,7 @@ Runtime Error
   Error encountered in dbt_utils/dbt_project.yml
   ```
 
-Try updating the old version of the dbt_utils package in your packages.yml to the latest version found in the [dbt hub](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/):
+packages.yml 内の dbt_utils パッケージの古いバージョンを [dbt hub](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) にある最新バージョンに更新してみてください。
 
 ```shell
 packages:
@@ -25,4 +25,4 @@ packages:
 version: xxx
 ```
 
-If you've tried the workaround above and are still experiencing this behavior - reach out to the Support team at support@getdbt.com and we'll be happy to help!
+上記の回避策を試してもこの現象が引き続き発生する場合は、support@getdbt.com のサポート チームまでご連絡ください。喜んでお手伝いいたします。

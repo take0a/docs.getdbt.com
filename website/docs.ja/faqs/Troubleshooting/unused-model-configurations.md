@@ -1,10 +1,10 @@
 ---
-title: I got an "unused model configurations" error message, what does this mean?
-description: "Model configurations error message"
-sidebar_label: 'Receiving an unused model configurations error'
+title: 「unused model configurations」というエラー メッセージが表示されましたが、これはどういう意味ですか?
+description: "モデル構成エラーメッセージ"
+sidebar_label: '未使用のモデル構成エラーを受信する'
 id: unused-model-configurations
 
 ---
-You might have forgotten to nest your configurations under your project name, or you might be trying to apply configurations to a directory that doesn't exist.
+プロジェクト名の下に設定をネストし忘れたか、存在しないディレクトリに設定を適用しようとしている可能性があります。
 
-Check out this [article](https://discourse.getdbt.com/t/faq-i-got-an-unused-model-configurations-error-message-what-does-this-mean/112) to understand more.
+詳しくは、こちらの[記事](https://discourse.getdbt.com/t/faq-i-got-an-unused-model-configurations-error-message-what-does-this-mean/112)をご覧ください。

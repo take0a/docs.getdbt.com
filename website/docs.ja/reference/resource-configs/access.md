@@ -15,11 +15,11 @@ models:
 
 </File>
 
-You can apply access modifiers in config files, including the `dbt_project.yml`, or to models one-by-one in `properties.yml`. Applying access configs to a subfolder modifies the default for all models in that subfolder, so make sure you intend for this behavior. When setting individual model access, a group or subfolder might contain a variety of access levels, so when you designate a model with `access: public` make sure you intend for this behavior.
+アクセス修飾子は、`dbt_project.yml` などの設定ファイル、または `properties.yml` でモデルごとに個別に適用できます。サブフォルダにアクセス設定を適用すると、そのサブフォルダ内のすべてのモデルのデフォルトが変更されるため、この動作を意図していることを確認してください。個々のモデルへのアクセスを設定する場合、グループまたはサブフォルダにはさまざまなアクセスレベルが含まれる可能性があるため、モデルに `access: public` を指定する場合は、この動作を意図していることを確認してください。
 
-There are multiple approaches to configuring access:
+アクセスを設定するには、複数の方法があります。
 
-- In `properties.yml` using the older method: 
+- `properties.yml` で、従来の方法を使用する場合：
 
   <File name='models/properties_my_public_model.yml'>
   
@@ -33,7 +33,7 @@ There are multiple approaches to configuring access:
   ```
   </File>
   
-- In `properties.yml` using the new method (for v1.7 or higher). Use either the older method or the new method, but not both for the same model:
+- `properties.yml` で新しいメソッドを使用します（バージョン 1.7 以降）。同じモデルに対して、古いメソッドと新しいメソッドのどちらか一方のみを使用してください。
 
   <File name='models/properties_my_public_model.yml'>
   
@@ -49,7 +49,7 @@ There are multiple approaches to configuring access:
   </File>
 
 
-- In `dbt_project.yml`:
+- `dbt_project.yml` 内:
 
   <File name='dbt_project.yml'>
   
@@ -62,7 +62,7 @@ There are multiple approaches to configuring access:
   ```
   </File>
 
-- In the `my_public_model.sql` file:
+- `my_public_model.sql` ファイル内:
 
   <File name='models/my_public_model.sql'>
   
@@ -75,20 +75,21 @@ There are multiple approaches to configuring access:
   ```
   </File>
 
-After you define `access`, rerun a production job to apply the change. 
+`access` を定義した後、本番ジョブを再実行して変更を適用します。
 
-## Definition
-The access level of the model you are declaring properties for.
+## 定義
 
-Some models (not all) are designed to be referenced through the [ref](/reference/dbt-jinja-functions/ref) function across [groups](/docs/build/groups).
+プロパティを宣言するモデルのアクセスレベル。
+
+一部のモデル（すべてではありません）は、[ref](/reference/dbt-jinja-functions/ref) 関数を介して [groups](/docs/build/groups) に参照されるように設計されています。
 
 | Access    | Referenceable by              |
 |-----------|-------------------------------|
-| private   | Same group                    |
-| protected | Same project/package          |
-| public    | Any group, package, or project. When defined, rerun a production job to apply the change. |
+| private   | 同じグループ                    |
+| protected | 同じプロジェクト/パッケージ         |
+| public    | 任意のグループ、パッケージ、またはプロジェクト。定義したら、本番ジョブを再実行して変更を適用します。 |
 
-If you try to reference a model outside of its supported access, you will see an error:
+サポートされているアクセス範囲外でモデルを参照しようとすると、エラーが表示されます:
 
 ```shell
 dbt run -s marketing_model
@@ -98,11 +99,11 @@ dbt.exceptions.DbtReferenceError: Parsing Error
   which is not allowed because the referenced node is private to the finance group.
 ```
 
-## Default
+## デフォルト
 
-By default, all models are "protected." This means that other models in the same project can reference them.
+デフォルトでは、すべてのモデルは「protected」です。つまり、同じプロジェクト内の他のモデルから参照できます。
 
-## Related docs
+## 関連ドキュメント
 
-* [Model Access](/docs/collaborate/govern/model-access#groups)
-* [Group configuration](/reference/resource-configs/group)
+* [モデルアクセス](/docs/collaborate/govern/model-access#groups)
+* [グループ設定](/reference/resource-configs/group)

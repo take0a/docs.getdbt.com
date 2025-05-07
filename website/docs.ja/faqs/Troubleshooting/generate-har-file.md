@@ -1,6 +1,6 @@
 ---
-title: "How to generate HAR files"
-description: "How to generate HAR files for debugging"
+title: "HARファイルの生成方法"
+description: "デバッグ用のHARファイルを生成する方法"
 sidebar_label: 'Generate HAR files'
 sidebar_position: 1
 keywords:
@@ -10,62 +10,62 @@ keywords:
   - Debugging
 ---
 
-HTTP Archive (HAR) files are used to gather data from users’ browser, which dbt Support uses to troubleshoot network or resource issues. This information includes detailed timing information about the requests made between the browser and the server. 
+HTTP アーカイブ (HAR) ファイルは、ユーザーのブラウザからデータを収集するために使用されます。dbt サポートは、このデータを使用してネットワークやリソースの問題をトラブルシューティングします。この情報には、ブラウザとサーバー間で行われたリクエストの詳細なタイミング情報が含まれます。
 
-The following sections describe how to generate HAR files using common browsers such as [Google Chrome](#google-chrome), [Mozilla Firefox](#mozilla-firefox), [Apple Safari](#apple-safari), and [Microsoft Edge](#microsoft-edge).
+以下のセクションでは、[Google Chrome](#google-chrome)、[Mozilla Firefox](#mozilla-firefox)、[Apple Safari](#apple-safari)、[Microsoft Edge](#microsoft-edge) などの一般的なブラウザを使用して HAR ファイルを生成する方法について説明します。
 
 :::info
-Remove or hide any confidential or personally identifying information before you send the HAR file to dbt Labs. You can edit the file using a text editor. 
+HARファイルをdbt Labsに送信する前に、機密情報や個人を特定できる情報を削除または非表示にしてください。ファイルはテキストエディタで編集できます。
 :::
 
 ### Google Chrome
 
-1. Open Google Chrome.
-2. Click on **View** --> **Developer Tools**.
-3. Select the **Network** tab.
-4. Ensure that Google Chrome is recording. A red button (🔴) indicates that a recording is already in progress. Otherwise, click **Record network log**.
-5. Select **Preserve Log**.
-6. Clear any existing logs by clicking **Clear network log** (🚫).
-7. Go to the page where the issue occurred and reproduce the issue.
-8. Click **Export HAR** (the down arrow icon) to export the file as HAR. The icon is located on the same row as the **Clear network log** button.
-9. Save the HAR file.
-10. Upload the HAR file to the dbt Support ticket thread.
+1. Google Chrome を開きます。
+2. **View** --> **Developer Tools** をクリックします。
+3. **Network** タブを選択します。
+4. Google Chrome が記録中であることを確認します。赤いボタン (🔴) は、すでに記録が進行中であることを示します。そうでない場合は、**Record network log** をクリックします。
+5. **Preserve Log** を選択します。
+6. **Clear network log** (🚫) をクリックして、既存のログを消去します。
+7. 問題が発生したページに移動し、問題を再現します。
+8. **Export HAR** (下矢印アイコン) をクリックして、ファイルを HAR としてエクスポートします。このアイコンは、**Clear network log** ボタンと同じ行にあります。
+9. HAR ファイルを保存します。
+10. HAR ファイルを dbt サポート チケット スレッドにアップロードします。
 
 ### Mozilla Firefox
 
-1. Open Firefox.
-2. Click the application menu and then **More tools** --> **Web Developer Tools**.
-3. In the developer tools docked tab, select **Network**.
-4. Go to the page where the issue occurred and reproduce the issue. The page automatically starts recording as you navigate.
-5. When you're finished, click **Pause/Resume recording network log**.
-6. Right-click anywhere in the **File** column and select **Save All as HAR**.
-7. Save the HAR file.
-8. Upload the HAR file to the dbt Support ticket thread.
+1. Firefox を開きます。
+2. アプリケーションメニューをクリックし、**More tools** --> **Web Developer Tools** を選択します。
+3. 開発者ツールのドッキングタブで、**Network** を選択します。
+4. 問題が発生したページに移動し、問題を再現します。ページを移動すると、自動的に記録が開始されます。
+5. 完了したら、**Pause/Resume recording network log** をクリックします。
+6. **File** 列の任意の場所を右クリックし、**Save All as HAR** を選択します。
+7. HAR ファイルを保存します。
+8. HAR ファイルを dbt サポートチケットスレッドにアップロードします。
 
 ### Apple Safari
 
-1. Open Safari.
-2. In case the **Develop** menu doesn't appear in the menu bar, go to **Safari** and then **Settings**.
-3. Click **Advanced**.
-4. Select the **Show features for web developers** checkbox.
-5. From the **Develop** menu, select **Show Web Inspector**.
-6. Click the **Network tab**.
-7. Go to the page where the issue occurred and reproduce the issue.
-8. When you're finished, click **Export**.
-9. Save the file.
-10. Upload the HAR file to the dbt Support ticket thread.
+1. Safari を開きます。
+2. メニューバーに **Develop** メニューが表示されない場合は、**Safari** に移動して **Settings** を選択します。
+3. **Advanced** をクリックします。
+4. **Show features for web developers** チェックボックスをオンにします。
+5. **Develop** メニューから **Show Web Inspector** を選択します。
+6. **Network tab** をクリックします。
+7. 問題が発生したページに移動し、問題を再現します。
+8. 完了したら、**Export** をクリックします。
+9. ファイルを保存します。
+10. HAR ファイルを dbt サポートチケットスレッドにアップロードします。
 
 ### Microsoft Edge
 
-1. Open Microsoft Edge.
-2. Click the **Settings and more** menu (...) to the right of the toolbar and then select **More tools** --> **Developer tools**.
-3. Click **Network**.
-4. Ensure that Microsoft Edge is recording. A red button (🔴) indicates that a recording is already in progress. Otherwise, click **Record network log**.
-5. Go to the page where the issue occurred and reproduce the issue.
-6. When you're finished, click **Stop recording network log**.
-7. Click **Export HAR** (the down arrow icon) or press **Ctrl + S** to export the file as HAR.
-8. Save the HAR file.
-9. Upload the HAR file to the dbt Support ticket thread.
+1. Microsoft Edge を開きます。
+2. ツールバーの右側にある **Settings and more** メニュー (...) をクリックし、**More tools** --> **Developer tools** を選択します。
+3. **Network** をクリックします。
+4. Microsoft Edge が記録中であることを確認します。赤いボタン (🔴) は、すでに記録が進行中であることを示します。そうでない場合は、**Record network log** をクリックします。
+5. 問題が発生したページに移動し、問題を再現します。
+6. 完了したら、**Stop recording network log** をクリックします。
+7. **Export HAR** (下矢印アイコン) をクリックするか、**Ctrl + S** を押してファイルを HAR としてエクスポートします。
+8. HAR ファイルを保存します。
+9. HAR ファイルを dbt サポート チケット スレッドにアップロードします。
 
-### Additional resources
-Check out the [How to generate a HAR file in Chrome](https://www.loom.com/share/cabdb7be338243f188eb619b4d1d79ca) video for a visual guide on how to generate HAR files in Chrome.
+### 追加リソース
+ChromeでHARファイルを生成する方法を視覚的に説明した[ChromeでHARファイルを生成する方法](https://www.loom.com/share/cabdb7be338243f188eb619b4d1d79ca)動画をご覧ください。

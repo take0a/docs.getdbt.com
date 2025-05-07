@@ -1,18 +1,17 @@
 ---
-title: Using the + prefix
-description: "The + prefix helps disambiguate between resource paths and configs in dbt_project.yml files."
-intro_text: "Use the + prefix to help clarify the difference between resource paths and configs in dbt_project.yml files."
+title: + プレフィックスの使用
+description: "+ プレフィックスは、dbt_project.yml ファイル内のリソース パスと構成の区別に役立ちます。"
+intro_text: "dbt_project.yml ファイル内のリソース パスと構成の違いを明確にするには、+ プレフィックスを使用します。"
 ---
 
-The `+` prefix is a dbt syntax feature which helps disambiguate between [resource paths](/reference/resource-configs/resource-path) and configs in [`dbt_project.yml` files](/reference/dbt_project.yml).
+`+` プレフィックスは、dbt 構文の機能であり、[リソースパス](/reference/resource-configs/resource-path) と [`dbt_project.yml` ファイル](/reference/dbt_project.yml) 内の設定を区別するのに役立ちます。
 
-- It is not compatible with `dbt_project.yml` files that use [`config-version`](/reference/project-configs/config-version) 1. 
-- It doesn't apply to:
-  - `config()` Jinja macro within a resource file
-  - config property in a `.yml` file.
+- これは、[`config-version`](/reference/project-configs/config-version) 1 を使用する `dbt_project.yml` ファイルとは互換性がありません。
+- 以下のファイルには適用されません。
+- リソースファイル内の `config()` Jinja マクロ
+- `.yml` ファイル内の設定プロパティ
 
-
-For example:
+例:
 
 <File name='dbt_project.yml'>
 
@@ -31,11 +30,11 @@ models:
 
 </File>
 
-Throughout this documentation, we've tried to be consistent in using the `+` prefix in `dbt_project.yml` files.
+このドキュメント全体を通して、`dbt_project.yml` ファイルでは `+` プレフィックスの使用に一貫性を持たせるように努めてきました。
 
-However, the leading `+` is in fact _only required_ when you need to disambiguate between resource paths and configs. For example when:
-- A config accepts a dictionary as its inputs. As an example, the [`persist_docs` config](/reference/resource-configs/persist_docs).
-- Or, a config shares a key with part of a resource path. For example, if you had a directory of models named `tags`.
+ただし、先頭の `+` は、リソースパスと設定を区別する必要がある場合にのみ必要です。例えば、以下の場合です。
+- 設定が入力として辞書を受け入れる場合。例として、[`persist_docs` 設定](/reference/resource-configs/persist_docs) が挙げられます。
+- または、設定がリソースパスの一部とキーを共有している場合。例えば、`tags` という名前のモデルのディレクトリがある場合などです。
 
 <File name='dbt_project.yml'>
 
@@ -66,7 +65,7 @@ models:
 
 </File>
 
-When adding configs in `dbt_project.yml`, it doesn't hurt to use the `+` prefix, so we recommend you use it always.
+`dbt_project.yml` に構成を追加する際は、`+` プレフィックスを使用しても問題はありませんので、常に使用することをお勧めします。
 
-**Note:** This use of the `+` prefix, in `dbt_project.yml`, is distinct from the use of `+` to control config merge behavior (clobber vs. add) in other config settings (specific resource `.yml` and `.sql` files). Currently, the only config which supports `+` for controlling config merge behavior is [`grants`](/reference/resource-configs/grants#grant-config-inheritance).
+**注:** `dbt_project.yml` におけるこの `+` プレフィックスの使用は、他の構成設定（特定のリソース `.yml` および `.sql` ファイル）における構成のマージ動作（上書きまたは追加）を制御するための `+` の使用とは異なります。現在、構成のマージ動作を制御するために `+` をサポートしている構成は [`grants`](/reference/resource-configs/grants#grant-config-inheritance) のみです。
 

@@ -1,18 +1,18 @@
 ---
-title: Can I connect my dbt project to two databases?
-description: "Prepare your warehouse for dbt transformations"
-sidebar_label: 'Can you connect dbt project to two databases?'
+title: dbt プロジェクトを 2 つのデータベースに接続できますか?
+description: "データウェアハウスを dbt での変換用に準備する"
+sidebar_label: 'dbt プロジェクトを 2 つのデータベースに接続できますか?'
 id: connecting-to-two-dbs-not-allowed
 
 ---
 
-The meaning of the term 'database' varies with each major warehouse manager. Hence, the answer to "can a dbt project connect to more than one database?" depends on the warehouse used in your tech stack.
+「データベース」という用語の意味は、主要なウェアハウスマネージャーによって異なります。したがって、「dbt プロジェクトは複数のデータベースに接続できますか？」という質問への答えは、テクノロジースタックで使用されているウェアハウスによって異なります。
 
-* dbt projects connecting to warehouses like Snowflake or Bigquery&mdash;these empower one set of credentials to draw from all datasets or 'projects' available to an account&mdash;are _sometimes_ said to connect to more than one database.
-* dbt projects connecting to warehouses like Redshift and Postgres&mdash;these tie one set of credentials to one database&mdash;are said to connect to one database only.
+* Snowflake や BigQuery などのウェアハウスに接続する dbt プロジェクトは、1 セットの認証情報でアカウントで利用可能なすべてのデータセットまたは「プロジェクト」からデータを取得できるため、複数のデータベースに接続すると言われることがあります。
+* Redshift や Postgres などのウェアハウスに接続する dbt プロジェクトは、1 セットの認証情報を 1 つのデータベースに結び付けるため、1 つのデータベースのみに接続すると言われることがあります。
 
-Sidestep the 'one database problem' by relying on <Term id="elt" /> thinking (i.e. extract -> load -> transform). Remember, dbt is not a loader--with few exceptions, it doesn't move data from sources to a warehouse. dbt is a transformer. It enters the picture after extractors and loaders have funneled sources into a warehouse. It moves and combines data inside the warehouse itself.
+「1 つのデータベースの問題」を回避するには、<Term id="elt" /> の考え方（つまり、抽出 -> ロード -> 変換）を活用します。dbt はローダーではないことに注意してください。いくつかの例外を除き、ソースからウェアハウスにデータを移動することはありません。dbt は変換ツールです。これは、抽出機能とローダーがソースをウェアハウスに取り込んだ後に登場します。ウェアハウス内でデータの移動と結合を行います。
 
-Hence, instead of thinking "how do I connect my dbt project to two databases", ask "what loader services will best prepare our warehouse for dbt transformations."
+したがって、「dbtプロジェクトを2つのデータベースに接続するにはどうすればいいか」を考えるのではなく、「どのローダーサービスがウェアハウスをdbt変換に最適な状態に準備できるか」を考えましょう。
 
-For more on the modern 'ELT-powered' data stack, see the "dbt and the modern BI stack" section of this [dbt blog post](https://blog.getdbt.com/what-exactly-is-dbt).
+最新の「ELTを活用した」データスタックの詳細については、こちらの[dbtブログ記事](https://blog.getdbt.com/what-exactly-is-dbt)の「dbtと最新のBIスタック」セクションをご覧ください。

@@ -1,6 +1,6 @@
 ---
 title: dispatch (config)
-description: "Read this guide to understand the dispatch configuration in dbt."
+description: "dbt のディスパッチ構成を理解するには、このガイドをお読みください。"
 datatype: list
 required: False
 ---
@@ -17,14 +17,13 @@ dispatch:
 
 </File>
 
-## Definition
+## 定義
 
-Optionally override the [dispatch](/reference/dbt-jinja-functions/dispatch) search locations for macros in certain namespaces. If not specified, `dispatch` will look in your root project _first_, by default, and then look for implementations in the package named by `macro_namespace`.
+必要に応じて、[dispatch](/reference/dbt-jinja-functions/dispatch) による特定の名前空間内のマクロの検索場所をオーバーライドします。指定されていない場合、`dispatch` はデフォルトでまずルートプロジェクトを検索し、次に `macro_namespace` で指定されたパッケージ内の実装を検索します。
 
-## Examples
+## 例
 
-
-I want to "shim" the `dbt_utils` package with the `spark_utils` compatibility package.
+`dbt_utils` パッケージを `spark_utils` 互換パッケージで「shim」したいとします。
 
 <File name='dbt_project.yml'>
 
@@ -36,9 +35,9 @@ dispatch:
 
 </File>
 
-I've reimplemented certain macros from the `dbt_utils` package in my root project (`'my_root_project'`), and I want my versions to take precedence. Otherwise, fall back to the versions in `dbt_utils`.
+ルートプロジェクト（`'my_root_project'`）で `dbt_utils` パッケージの特定のマクロを再実装しましたが、自分のバージョンを優先させたいと考えています。そうでない場合は、`dbt_utils` のバージョンにフォールバックします。
 
-_Note: This is the default behavior. You may optionally choose to express that search order explicitly as:_
+_注: これはデフォルトの動作です。必要に応じて、検索順序を次のように明示的に指定することもできます。_
 
 <File name='dbt_project.yml'>
 

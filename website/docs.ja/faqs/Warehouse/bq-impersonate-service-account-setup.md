@@ -1,23 +1,13 @@
 ---
-title: How can I set up the right permissions in BigQuery?
-description: "Use service account to set up permissions in BigQuery"
-sidebar_label: 'Setting up permissions in BigQuery"'
+title: BigQuery で適切な権限を設定するにはどうすればよいですか?
+description: "サービス アカウントを使用して BigQuery の権限を設定する"
+sidebar_label: 'BigQuery での権限の設定'
 id: bq-impersonate-service-account-setup
 
 ---
 
-To use this functionality, first create the service account you want to
-impersonate. Then grant users that you want to be able to impersonate
-this service account the `roles/iam.serviceAccountTokenCreator` role on
-the service account resource. Then, you also need to grant the service
-account the same role on itself. This allows it to create short-lived
-tokens identifying itself, and allows your human users (or other service
-accounts) to do the same. More information on this scenario is available
-[here](https://cloud.google.com/iam/docs/understanding-service-accounts#directly_impersonating_a_service_account).
+この機能を使用するには、まず、権限を借用するサービス アカウントを作成します。次に、このサービス アカウントを権限借用できるようにするユーザーに、サービス アカウント リソースに対する `roles/iam.serviceAccountTokenCreator` ロールを付与します。さらに、サービス アカウント自体にも同じロールを付与する必要があります。これにより、サービス アカウントは自身を識別するための短命トークンを作成できるようになり、人間のユーザー（または他のサービス アカウント）も同様のトークンを作成できるようになります。このシナリオの詳細については、
+[こちら](https://cloud.google.com/iam/docs/understanding-service-accounts#directly_impersonating_a_service_account) をご覧ください。
 
-Once you've granted the appropriate permissions, you'll need to enable
-the [IAM Service Account Credentials API](https://console.cloud.google.com/apis/library/iamcredentials.googleapis.com).
-Enabling the API and granting the role are eventually consistent operations,
-taking up to 7 minutes to fully complete, but usually fully propagating within 60
-seconds. Give it a few minutes, then add the `impersonate_service_account`
-option to your BigQuery profile configuration.
+適切な権限を付与したら、[IAM Service Account Credentials API](https://console.cloud.google.com/apis/library/iamcredentials.googleapis.com) を有効にする必要があります。
+API の有効化とロールの付与は結果整合性のある操作であり、完了までに最大 7 分かかりますが、通常は 60 秒以内に完全に反映されます。数分待ってから、BigQuery プロファイル設定に `impersonate_service_account` オプションを追加してください。

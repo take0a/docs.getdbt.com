@@ -151,7 +151,7 @@ macros:
 
 <VersionBlock firstVersion="1.9">
 
-You can add a description to a [singular data test](/docs/build/data-tests#singular-data-tests) or a [generic data test](/docs/build/data-tests#generic-data-tests).
+[特異データ テスト](/docs/build/data-tests#singular-data-tests) または [汎用データ テスト](/docs/build/data-tests#generic-data-tests) に説明を追加できます。
 
 <File name='tests/schema.yml'>
 
@@ -233,9 +233,9 @@ The `description` property is available for [unit tests](/docs/build/unit-tests)
 
 </Tabs>
 
-## Definition
+## 定義
 
-A user-defined description used to document:
+以下の内容を文書化するために使用するユーザー定義の説明:
 
 - a model, and model columns
 - sources, source tables, and source columns
@@ -246,31 +246,31 @@ A user-defined description used to document:
 - data tests, and data test columns
 - unit tests for models
 
-These descriptions are used in the documentation website rendered by dbt (refer to [the documentation guide](/docs/build/documentation) or [dbt Explorer](/docs/collaborate/explore-projects)). 
+これらの説明は、dbt によって表示されるドキュメントウェブサイトで使用されます（[ドキュメントガイド](/docs/build/documentation) または [dbt Explorer](/docs/collaborate/explore-projects) を参照してください）。
 
-Descriptions can include markdown, as well as the [`doc` jinja function](/reference/dbt-jinja-functions/doc).
+説明には、マークダウンと [`doc` jinja 関数](/reference/dbt-jinja-functions/doc) を使用できます。
 
-:::caution You may need to quote your YAML
+:::caution YAMLを引用符で囲む必要がある場合があります
 
-Be mindful of YAML semantics when providing a description. If your description contains special YAML characters like curly brackets, colons, or square brackets, you may need to quote your description. An example of a quoted description is shown [below](#use-some-markdown-in-a-description).
+説明を記述する際は、YAMLのセマンティクスに注意してください。説明に中括弧、コロン、角括弧などの特殊なYAML文字が含まれている場合は、説明を引用符で囲む必要がある場合があります。引用符で囲んだ説明の例を[下記](#use-some-markdown-in-a-description)に示します。
 
 :::
 
-## Examples
+## 例
 
-This section contains examples of how to add descriptions to various resources:
+このセクションでは、さまざまなリソースに説明を追加する方法の例を示します。
 
-- [Add a simple description to a model and column](#add-a-simple-description-to-a-model-and-column) <br />
-- [Add a multiline description to a model](#add-a-multiline-description-to-a-model) <br />
-- [Use some markdown in a description](#use-some-markdown-in-a-description) <br />
-- [Use a docs block in a description](#use-a-docs-block-in-a-description) <br />
-- [Link to another model in a description](#link-to-another-model-in-a-description)
-- [Include an image from your repo in your descriptions](#include-an-image-from-your-repo-in-your-descriptions) <br />
-- [Include an image from the web in your descriptions](#include-an-image-from-the-web-in-your-descriptions) <br />
-- [Add a description to a data test](#add-a-description-to-a-data-test) <br />
-- [Add a description to a unit test](#add-a-description-to-a-unit-test) <br />
+- [モデルと列に簡単な説明を追加する](#add-a-simple-description-to-a-model-and-column) <br />
+- [モデルに複数行の説明を追加する](#add-a-multiline-description-to-a-model) <br />
+- [説明にマークダウンを使用する](#use-some-markdown-in-a-description) <br />
+- [説明にドキュメントブロックを使用する](#use-a-docs-block-in-a-description) <br />
+- [説明に別のモデルへのリンクを追加する](#link-to-another-model-in-a-description)
+- [説明にリポジトリから画像を含める](#include-an-image-from-your-repo-in-your-descriptions) <br />
+- [説明にウェブ上の画像を含める](#include-an-image-from-the-web-in-your-descriptions) <br />
+- [データテストに説明を追加する](#add-a-description-to-a-data-tes) <br />
+- [ユニットテストに説明を追加する](#add-a-description-to-a-unit-test) <br />
 
-### Add a simple description to a model and column
+### Add a simple description to a model and column {#add-a-simple-description-to-a-model-and-column}
 
 <File name='models/schema.yml'>
 
@@ -289,9 +289,9 @@ models:
 
 </File>
 
-### Add a multiline description to a model
+### Add a multiline description to a model {#add-a-multiline-description-to-a-model}
 
-You can use YAML [block notation](https://yaml-multiline.info/) to split a longer description over multiple lines:
+YAML [ブロック表記](https://yaml-multiline.info/)を使用すると、長い説明を複数行に分割できます:
 
 <File name='models/schema.yml'>
 
@@ -313,9 +313,9 @@ models:
 
 </File>
 
-### Use some markdown in a description
+### Use some markdown in a description {#use-some-markdown-in-a-description}
 
-You can use markdown in your descriptions, but you may need to quote your description to ensure the YAML parser doesn't get confused by special characters!
+説明にはマークダウンを使用できますが、YAML パーサーが特殊文字によって混乱しないように、説明を引用符で囲む必要がある場合があります。
 
 <File name='models/schema.yml'>
 
@@ -334,9 +334,9 @@ models:
 
 </File>
 
-### Use a docs block in a description
+### Use a docs block in a description {#use-a-docs-block-in-a-description}
 
-If you have a long description, especially if it contains markdown, it may make more sense to leverage a [`docs` block](/reference/dbt-jinja-functions/doc). A benefit of this approach is that code editors will correctly highlight markdown, making it easier to debug as you write.
+説明が長い場合、特にマークダウンが含まれている場合は、[`docs` ブロック](/reference/dbt-jinja-functions/doc)を活用すると効果的です。このアプローチの利点は、コードエディタがマークダウンを正しくハイライト表示するため、記述中のデバッグが容易になることです。
 
 <File name='models/schema.yml'>
 
@@ -378,14 +378,14 @@ Orders can be one of the following statuses:
 </File>
 
 
-### Link to another model in a description
+### 説明内で別のモデルへのリンク {#link-to-another-model-in-a-description}
 
-You can use relative links to link to another model. It's a little hacky — but to do this:
+相対リンクを使って別のモデルにリンクできます。少し面倒ですが、以下の手順で行います。
 
-1. Serve your docs site.
-2. Navigate to the model you want to link to, e.g. `http://127.0.0.1:8080/#!/model/model.jaffle_shop.stg_stripe__payments`
-3. Copy the url_path, i.e. everything after `http://127.0.0.1:8080/`, so in this case `#!/model/model.jaffle_shop.stg_stripe__payments`
-4. Paste it as the link
+1. ドキュメントサイトを開きます。
+2. リンク先のモデルに移動します。例: `http://127.0.0.1:8080/#!/model/model.jaffle_shop.stg_stripe__payments`
+3. url_path（`http://127.0.0.1:8080/` の後のすべて、つまりこの場合は `#!/model/model.jaffle_shop.stg_stripe__payments`）をコピーします。
+4. それをリンクとして貼り付けます。
 
 <File name='models/schema.yml'>
 
@@ -405,16 +405,16 @@ models:
 </File>
 
 
-### Include an image from your repo in your descriptions
+### 説明にリポジトリの画像を含める {#include-an-image-from-your-repo-in-your-description}
 
-This section applies to dbt Core users only. Including an image from your repository ensures your images are version-controlled. 
+このセクションは dbt Core ユーザーのみに適用されます。リポジトリの画像を含めることで、画像のバージョン管理が確実に行われます。
 
-Both dbt Cloud and dbt Core users can [include an image from the web](#include-an-image-from-the-web-in-your-descriptions), which offers dynamic content, reduced repository size, accessibility, and ease of collaboration.
+dbt Cloud ユーザーと dbt Core ユーザーの両方が [Web からの画像を含める](#説明に Web からの画像を含める) ことができます。これにより、動的なコンテンツ、リポジトリサイズの削減、アクセシビリティ、そして共同作業の容易さが実現します。
 
-To include an image in your model's `description` field:
+モデルの `description` フィールドに画像を含めるには:
 
-1. Add the file in a subdirectory, e.g. `assets/dbt-logo.svg`
-2. Set the [`asset-paths` config](/reference/project-configs/asset-paths) in your `dbt_project.yml` file so that this directory gets copied to the `target/` directory as part of `dbt docs generate`
+1. サブディレクトリにファイルを追加します (例: `assets/dbt-logo.svg`)。
+2. `dbt_project.yml` ファイルの [`asset-paths` 設定](/reference/project-configs/asset-paths) を設定し、`dbt docs generate` の実行時にこのディレクトリが `target/` ディレクトリにコピーされるようにします。
 
 <File name='dbt_project.yml'>
 
@@ -443,17 +443,17 @@ models:
 
 </File>
 
-3. Run `dbt docs generate` — the `assets` directory will be copied to the `target` directory
+3. `dbt docs generate` を実行します。`assets` ディレクトリが `target` ディレクトリにコピーされます。
 
-4. Run `dbt docs serve` — the image will be rendered as part of your project documentation:
+4. `dbt docs serve` を実行します。画像がプロジェクトドキュメントの一部としてレンダリングされます。
 
-If mixing images and text, also consider using a docs block.
+画像とテキストを混在させる場合は、docs ブロックの使用も検討してください。
 
-### Include an image from the web in your descriptions
+### 説明にウェブ上の画像を含める {#include-an-image-from-the-web-in-your-descriptions}
 
-This section applies to dbt Cloud and dbt Core users. Including an image from the web offers dynamic content, reduced repository size, accessibility, and ease of collaboration.
+このセクションは、dbt Cloud および dbt Core ユーザーに適用されます。ウェブ上の画像を含めることで、動的なコンテンツ、リポジトリサイズの削減、アクセシビリティの向上、そして共同作業の容易化といったメリットが得られます。
 
-To include images from the web, specify the image URL in your model's `description` field:
+ウェブ上の画像を含めるには、モデルの「description」フィールドに画像の URL を指定します:
 
 <File name='models/schema.yml'>
 
@@ -472,9 +472,9 @@ models:
 
 </File>
 
-If mixing images and text, also consider using a docs block.
+画像とテキストを混在させる場合は、ドキュメント ブロックの使用も検討してください。
 
-### Add a description to a data test
+### データテストに説明を追加する {#add-a-description-to-a-data-test}
 
 <VersionBlock lastVersion="1.8">
 
@@ -482,11 +482,11 @@ If mixing images and text, also consider using a docs block.
 
 </VersionBlock>
 
-You can add a `description` property to a generic or singular data test.
+汎用データ テストまたは特異データ テストに `description` プロパティを追加できます。
 
-#### Generic data test
+#### 汎用データテスト
 
-This example shows a generic data test that checks for unique values in a column for the `orders` model.
+この例は、`orders` モデルの列内の一意の値をチェックする汎用データテストを示しています。
 
 <File name='models/<filename>.yml'>
 
@@ -503,11 +503,11 @@ models:
 ```
 </File>
 
-You can also add descriptions to the Jinja macro that provides the core logic of a generic data test. Refer to the [Add description to generic data test logic](/best-practices/writing-custom-generic-tests#add-description-to-generic-data-test-logic) for more information.
+汎用データテストのコアロジックを提供するJinjaマクロに説明を追加することもできます。詳細については、[汎用データテストのロジックに説明を追加する](/best-practices/writing-custom-generic-tests#add-description-to-generic-data-test-logic)を参照してください。
 
-#### Singular data test
+#### 特異データテスト
 
-This example shows a singular data test that checks to ensure all values in the `payments` model are not negative (≥ 0).
+この例は、`payments` モデル内のすべての値が負でない (≥ 0) ことを確認する特異データテストを示しています。
 
 <File name='tests/<filename>.yml'>
 
@@ -522,9 +522,9 @@ data_tests:
 ```
 </File>
 
-Note that in order for the test to run, the `tests/assert_total_payment_amount_is_positive.sql` SQL file has to exist in the `tests` directory.
+テストを実行するには、`tests` ディレクトリに `tests/assert_total_payment_amount_is_positive.sql` SQL ファイルが存在している必要があることに注意してください。
 
-### Add a description to a unit test
+### ユニットテストに説明を追加する {#add-a-description-to-a-unit-test}
 
 <VersionBlock lastVersion="1.7">
 
@@ -532,7 +532,7 @@ Note that in order for the test to run, the `tests/assert_total_payment_amount_i
 
 </VersionBlock>
 
-This example shows a unit test that checks to ensure the `opened_at` timestamp is properly truncated to a date for the `stg_locations` model.
+この例では、`opened_at` タイムスタンプが `stg_locations` モデルの日付に適切に切り捨てられていることを確認する単体テストを示します。
 
 <File name='models/<filename>.yml'>
 

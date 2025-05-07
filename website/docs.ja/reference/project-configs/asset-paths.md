@@ -1,6 +1,6 @@
 ---
 datatype: [directorypath]
-description: "Read this guide to understand the asset-paths configuration in dbt."
+description: "dbt の asset-paths 構成を理解するには、このガイドをお読みください。"
 default_value: []
 ---
 
@@ -12,15 +12,15 @@ asset-paths: [directorypath]
 
 </File>
 
-## Definition
-Optionally specify a custom list of directories to copy to the `target` directory as part of the `docs generate` command. This is useful for rendering images in your repository in your project documentation.
+## 定義
+`docs generate` コマンドの一部として、`target` ディレクトリにコピーするディレクトリのカスタムリストをオプションで指定します。これは、リポジトリ内の画像をプロジェクトドキュメントにレンダリングする場合に便利です。
 
 
-## Default
+## デフォルト
 
-By default, dbt will not copy any additional files as part of docs generate. For example, `asset-paths: []`.
+デフォルトでは、dbt はドキュメント生成時に追加のファイルをコピーしません。例えば、`asset-paths: []` などです。
 
-import RelativePath from '/snippets/_relative-path.md';
+import RelativePath from '/snippets.ja/_relative-path.md';
 
 <RelativePath 
 path="asset-paths"
@@ -28,19 +28,19 @@ absolute="/Users/username/project/assets"
 />
 
 - ✅ **Do**
-  - Use relative path:
+  - 相対パスを使用:
     ```yml
     asset-paths: ["assets"]
     ```
 
 - ❌ **Don't**
-  - Avoid absolute paths:
+  - 絶対パスは避けてください:
     ```yml
     asset-paths: ["/Users/username/project/assets"]
     ```
 
-## Examples
-### Compile files in the `assets` subdirectory as part of `docs generate`
+## 例
+### `docs generate` の一部として `assets` サブディレクトリ内のファイルをコンパイルします。
 
 <File name='dbt_project.yml'>
 
@@ -50,6 +50,6 @@ asset-paths: ["assets"]
 
 </File>
 
-Any files included in this directory will be copied to the `target/` directory as part of `dbt docs generate`, making them accessible as images in your project documentation.
+このディレクトリに含まれるファイルはすべて、`dbt docs generate` によって `target/` ディレクトリにコピーされ、プロジェクトドキュメント内で画像としてアクセスできるようになります。
 
-Check out the full writeup on including images in your descriptions [here](/reference/resource-properties/description/#include-an-image-from-your-repo-in-your-descriptions).
+説明に画像を含める方法の詳細については、[こちら](/reference/resource-properties/description/#include-an-image-from-your-repo-in-your-descriptions) をご覧ください。

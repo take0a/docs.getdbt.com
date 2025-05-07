@@ -12,7 +12,7 @@ query-comment: string
 
 </File>
 
-The `query-comment` configuration also accepts a dictionary input, like so:
+`query-comment` 構成では、次のように辞書入力も受け入れます:
 
 <File name='dbt_project.yml'>
 
@@ -29,13 +29,13 @@ query-comment:
 
 </File>
 
-## Definition
-A string to inject as a comment in each query that dbt runs against your database. This comment can attribute SQL statements to specific dbt resources like models and tests.
+## 定義
+dbt がデータベースに対して実行する各クエリにコメントとして挿入する文字列。このコメントにより、SQL 文をモデルやテストなどの特定の dbt リソースに関連付けることができます。
 
-The `query-comment` configuration can also call a macro that returns a string.
+`query-comment` 設定では、文字列を返すマクロを呼び出すこともできます。
 
-## Default
-By default, dbt will insert a <Term id="json" /> comment at the top of your query containing the information including the dbt version, profile and target names, and node ids for the resources it runs. For example:
+## デフォルト
+デフォルトでは、dbt はクエリの先頭に <Term id="json" /> コメントを挿入します。このコメントには、dbt のバージョン、プロファイル名とターゲット名、実行するリソースのノード ID などの情報が含まれます。例:
 
 ```sql
 /* {"app": "dbt", "dbt_version": "1.5.0rc2", "profile_name": "debug",
@@ -49,17 +49,17 @@ create view analytics.analytics.orders as (
 
 
 
-## Using the dictionary syntax
-The dictionary syntax includes two keys:
-  * `comment` (optional, for more information, refer to the [default](#default) section): The string to be injected into a query as a comment.
-  * `append` (optional, default=`false`): Whether a comment should be appended (added to the bottom of a query) or not (i.e. added to the top of a query). By default, comments are added to the top of queries (i.e. `append: false`).
+## 辞書構文の使用
+辞書構文には2つのキーが含まれます。
+* `comment` (オプション、詳細については[default](#default)セクションを参照してください): クエリにコメントとして挿入する文字列。
+* `append` (オプション、デフォルト=`false`): コメントを追加するか(クエリの末尾に追加するか)、追加しないか(クエリの先頭に追加するか)を指定します。デフォルトでは、コメントはクエリの先頭に追加されます(`append: false`)。
 
-This syntax is useful on databases like Snowflake which [remove leading SQL comments](https://docs.snowflake.com/en/release-notes/2017-04.html#queries-leading-comments-removed-during-execution).
+この構文は、Snowflakeなどの[先頭のSQLコメントを削除する](https://docs.snowflake.com/en/release-notes/2017-04.html#queries-leading-comments-removed-during-execution)データベースで役立ちます。
 
-## Examples
+## 例
 
-### Prepend a static comment
-The following example injects a comment that reads `/* executed by dbt */` into the header of the SQL queries that dbt runs.
+### 静的コメントを先頭に追加する
+次の例では、dbt が実行する SQL クエリのヘッダーに `/* executed by dbt */` というコメントを挿入します。
 
 <File name='dbt_project.yml'>
 
@@ -70,7 +70,7 @@ query-comment: "executed by dbt"
 
 </File>
 
-**Example output:**
+**出力例:**
 
 ```sql
 /* executed by dbt */
@@ -78,7 +78,7 @@ query-comment: "executed by dbt"
 select ...
 ```
 
-### Disable query comments
+### クエリコメントを無効にする
 
 <File name='dbt_project.yml'>
 
@@ -89,7 +89,7 @@ query-comment:
 
 </File>
 
-Or:
+または：
 
 <File name='dbt_project.yml'>
 
@@ -100,9 +100,8 @@ query-comment: null
 
 </File>
 
-### Prepend a dynamic comment
-The following example injects a comment that varies based on the configured `user` specified in the active dbt target.
-
+### 動的なコメントを先頭に追加する
+次の例では、アクティブな dbt ターゲットで指定された構成済みの「user」に基づいて変化するコメントを挿入します。
 <File name='dbt_project.yml'>
 
 ```yml
@@ -112,7 +111,7 @@ query-comment: "run by {{ target.user }} in dbt"
 
 </File>
 
-**Example output:**
+**出力例:**
 
 ```sql
 /* run by drew in dbt */
@@ -120,10 +119,10 @@ query-comment: "run by {{ target.user }} in dbt"
 select ...
 ```
 
-### Append the default comment
-The following example uses the dictionary syntax to append (rather than prepend) the default comment.
+### デフォルトコメントを追加する
+次の例では、辞書構文を使用して、デフォルトコメントを（先頭ではなく）末尾に追加します。
 
-Note that the `comment:` field is omitted to allow the default to be appended.
+デフォルトコメントを追加できるようにするために、`comment:` フィールドが省略されていることに注意してください。
 
 <File name='dbt_project.yml'>
 
@@ -135,7 +134,7 @@ query-comment:
 
 </File>
 
-**Example output:**
+**出力例:**
 
 ```sql
 select ...
@@ -143,9 +142,9 @@ select ...
 ;
 ```
 
-### BigQuery: include query comment items as job labels
+### BigQuery: クエリコメント項目をジョブラベルとして含める
 
-If `query-comment.job-label` is set to true, dbt will include the query comment items, if a dictionary, or the comment string, as job labels on the query it executes. These will be included in addition to labels specified in the [BigQuery-specific config](/reference/project-configs/query-comment#bigquery-include-query-comment-items-as-job-labels).
+`query-comment.job-label` が true に設定されている場合、dbt はクエリコメント項目（辞書形式の場合）またはコメント文字列を、実行するクエリのジョブラベルとして含めます。これらのラベルは、[BigQuery 固有の設定](/reference/project-configs/query-comment#bigquery-include-query-comment-items-as-job-labels) で指定されたラベルに加えて含められます。
 
 <File name='dbt_project.yml'>
 
@@ -157,8 +156,8 @@ query-comment:
 
 </File>
 
-### Append a custom comment
-The following example uses the dictionary syntax to append (rather than prepend) a comment that varies based on the configured `user` specified in the active dbt target.
+### カスタムコメントを追加する
+次の例では、辞書構文を使用して、アクティブな dbt ターゲットで指定された構成済みの「ユーザー」に基づいて変化するコメントを（先頭ではなく）末尾に追加します。
 
 <File name='dbt_project.yml'>
 
@@ -171,7 +170,7 @@ query-comment:
 
 </File>
 
-**Example output:**
+**出力例:**
 
 ```sql
 select ...
@@ -181,9 +180,9 @@ select ...
 
 
 
-### Intermediate: Use a macro to generate a comment
+### 中級：マクロを使ってコメントを生成する
 
-The `query-comment` config can reference macros in your dbt project. Simply create a macro with any name (`query_comment` is a good start!) in your `macros` directory, like so:
+`query-comment` 設定は、dbt プロジェクト内のマクロを参照できます。`macros` ディレクトリに任意の名前（`query_comment` などが良いでしょう）のマクロを以下のように作成するだけです。
 
 <File name='macros/query_comment.sql'>
 
@@ -198,7 +197,7 @@ The `query-comment` config can reference macros in your dbt project. Simply crea
 
 </File>
 
-Then call the macro in your `dbt_project.yml` file. Make sure you quote the macro to avoid the YAML parser from trying to interpret the `{` as the start of a dictionary.
+次に、`dbt_project.yml` ファイルでマクロを呼び出します。YAML パーサーが `{` を辞書の開始として解釈しないように、マクロを引用符で囲んでください。
 
 <File name='dbt_project.yml'>
 
@@ -209,9 +208,9 @@ query-comment: "{{ query_comment() }}"
 
 </File>
 
-### Advanced: Use a macro to generate a comment
+### 上級：マクロを使用してコメントを生成する
 
-The following example shows a JSON query comment which can be parsed to understand the performance characteristics of your dbt project.
+次の例は、解析することで dbt プロジェクトのパフォーマンス特性を把握できる JSON クエリコメントを示しています。
 
 <File name='macros/query_comment.sql'>
 
@@ -246,7 +245,7 @@ The following example shows a JSON query comment which can be parsed to understa
 
 </File>
 
-As above, call this macro as follows:
+上記のマクロを以下のように呼び出します。
 
 
 <File name='dbt_project.yml'>
@@ -258,23 +257,23 @@ query-comment: "{{ query_comment(node) }}"
 
 </File>
 
-## Compilation context
+## コンパイルコンテキスト
 
-The following context variables are available when generating a query comment:
+クエリコメントを生成する際に、以下のコンテキスト変数が利用できます。
 
 | Context Variable | Description |
 | ---------------- | ----------- |
-| dbt_version      | The version of dbt being used. For details about release versioning, refer to [Versioning](/reference/commands/version#versioning). |
+| dbt_version      | 使用されているdbtのバージョン。リリースバージョン管理の詳細については、[バージョン管理](/reference/commands/version#versioning)を参照してください。 |
 | env_var          | See [env_var](/reference/dbt-jinja-functions/env_var) |
 | modules          | See [modules](/reference/dbt-jinja-functions/modules) |
-| run_started_at   | When the dbt invocation began |
-| invocation_id    | A unique ID for the dbt invocation |
+| run_started_at   | dbt呼び出しが開始されたとき |
+| invocation_id    | dbt呼び出しの一意のID |
 | fromjson         | See [fromjson](/reference/dbt-jinja-functions/fromjson) |
 | tojson           | See [tojson](/reference/dbt-jinja-functions/tojson) |
 | log              | See [log](/reference/dbt-jinja-functions/log) |
 | var              | See [var](/reference/dbt-jinja-functions/var) |
 | target           | See [target](/reference/dbt-jinja-functions/target) |
-| connection_name  | A string representing the internal name for the connection. This string is generated by dbt. |
-| node             | A dictionary representation of the parsed node object. Use `node.unique_id`, `node.database`, `node.schema`, and so on. |
+| connection_name  | 接続の内部名を表す文字列。この文字列はdbtによって生成されます。 |
+| node             | 解析されたノードオブジェクトの辞書表現。`node.unique_id`、`node.database`、`node.schema` などを使用します。 |
 
-Note: The `var()` function in `query-comment` macros only access variables passed through the `--vars` argument in the CLI. Variables defined in the vars block of your `dbt_project.yml` are not accessible when generating query comments. 
+注: `query-comment` マクロの `var()` 関数は、CLI の `--vars` 引数で渡された変数にのみアクセスします。`dbt_project.yml` の vars ブロックで定義された変数は、クエリコメントの生成時にはアクセスできません。

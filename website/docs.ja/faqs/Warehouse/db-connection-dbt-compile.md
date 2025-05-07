@@ -1,33 +1,33 @@
 ---
-title: Why dbt compile needs a data platform connection
-description: "`dbt compile` needs a data platform connection because the work it does depends on the current state of your warehouse"
-sidebar_label: "Why dbt compile needs a data platform connection"
+title: dbt compile にデータ プラットフォーム接続が必要な理由
+description: "`dbt compile` は、ウェアハウスの現在の状態に応じて作業を行うため、データ プラットフォーム接続が必要です。"
+sidebar_label: "dbt compile にデータ プラットフォーム接続が必要な理由"
 id: db-connection-dbt-compile
 ---
 
-`dbt compile` needs a data platform connection in order to gather the info it needs (including from introspective queries) to prepare the SQL for every model in your project.
+`dbt compile` では、プロジェクト内のすべてのモデルの SQL を準備するために必要な情報 (イントロスペクト クエリからの情報を含む) を収集するために、データ プラットフォーム接続が必要です。
 
 ### dbt compile
 
-The [`dbt compile` command](/reference/commands/compile) generates executable SQL from `source`, `model`, `test`, and `analysis` files. `dbt compile` is similar to `dbt run` except that it doesn't materialize the model's compiled SQL into an existing table. So, up until the point of materialization, `dbt compile` and `dbt run` are similar because they both require a data platform connection, run queries, and have an [`execute` variable](/reference/dbt-jinja-functions/execute) set to `True`. 
+[`dbt compile` コマンド](/reference/commands/compile) は、`source`、`model`、`test`、`analysis` ファイルから実行可能な SQL を生成します。`dbt compile` は、モデルのコンパイル済み SQL を既存のテーブルにマテリアライズしない点を除けば、`dbt run` と似ています。マテリアライズの時点までは、`dbt compile` と `dbt run` はどちらもデータプラットフォーム接続を必要とし、クエリを実行し、[`execute` 変数](/reference/dbt-jinja-functions/execute) が `True` に設定されている点で似ています。
 
-However, here are some things to consider:
+ただし、考慮すべき点がいくつかあります。
 
-- You don't need to execute `dbt compile` before `dbt run`
-- In dbt, `compile` doesn't mean `parse`. This is because `parse` validates your written `YAML`, configured tags, and so on.
+- `dbt run` の前に `dbt compile` を実行する必要はありません。
+- dbt では、`compile` は `parse` を意味しません。これは、`parse` が記述した `YAML` や設定されたタグなどを検証するためです。
 
-### Introspective queries
+### イントロスペクティブクエリ
 
-To generate the compiled SQL for many models, dbt needs to run introspective queries, (which is when dbt needs to run SQL in order to pull data back and do something with it) against the data platform.
+多くのモデルに対してコンパイル済み SQL を生成するために、dbt はデータプラットフォームに対してイントロスペクティブクエリ（データを取得して処理するために SQL を実行する必要があるクエリ）を実行する必要があります。
 
-These introspective queries include:
+これらのイントロスペクティブクエリには、次のものが含まれます。
 
-- Populating the relation cache. For more information, refer to the [Create new materializations](/guides/create-new-materializations) guide. Caching speeds up the metadata checks, including whether an [incremental model](/docs/build/incremental-models) already exists in the data platform. 
-- Resolving [macros](/docs/build/jinja-macros#macros), such as `run_query` or `dbt_utils.get_column_values` that you're using to template out your SQL. This is because dbt needs to run those queries during model SQL compilation. 
+- リレーションキャッシュへのデータ入力。詳細については、[新しいマテリアライゼーションの作成](/guides/create-new-materializations)ガイドを参照してください。キャッシュにより、メタデータチェック（[増分モデル](/docs/build/incremental-models)がデータプラットフォームに既に存在するかどうかの確認など）が高速化されます。
+- SQL のテンプレート化に使用している `run_query` や `dbt_utils.get_column_values` などの[マクロ](/docs/build/jinja-macros#macros) の解決。これは、dbt がモデル SQL のコンパイル中にこれらのクエリを実行する必要があるためです。
 
-Without a data platform connection, dbt can't perform these introspective queries and won't be able to generate the compiled SQL needed for the next steps in the dbt workflow. You can [`parse`](/reference/commands/parse) a project and use the [`list`](/reference/commands/list) resources in the project, without an internet or data platform connection. Parsing a project is enough to produce a [manifest](/reference/artifacts/manifest-json), however, keep in mind that the written-out manifest won't include compiled SQL.
+データ プラットフォーム接続がないと、dbt はこれらのイントロスペクティブ クエリを実行できず、dbt ワークフローの次のステップに必要なコンパイル済み SQL を生成できません。インターネット接続やデータ プラットフォーム接続がなくても、プロジェクトを [`parse`](/reference/commands/parse) し、プロジェクト内の [`list`](/reference/commands/list) リソースを使用できます。プロジェクトを解析するだけで [マニフェスト](/reference/artifacts/manifest-json) を作成できますが、書き出されたマニフェストにはコンパイル済み SQL が含まれないことに注意してください。
 
-To configure a project, you do need a [connection profile](/docs/core/connect-data-platform/connection-profiles) (`profiles.yml` if using the CLI). You need this file because the project's configuration depends on its contents. For example, you may need to use [`{{target}}`](/reference/dbt-jinja-functions/target) for conditional configs or know what platform you're running against so that you can choose the right flavor of SQL. 
+プロジェクトを構成するには、[接続プロファイル](/docs/core/connect-data-platform/connection-profiles) (CLI を使用する場合は `profiles.yml`) が必要です。プロジェクトの構成はこのファイルの内容に依存するため、このファイルが必要になります。たとえば、条件付き構成に [`{{target}}`](/reference/dbt-jinja-functions/target) を使用したり、実行しているプラ​​ットフォームを把握して適切な SQL フレーバーを選択したりする必要がある場合があります。
 
 
 

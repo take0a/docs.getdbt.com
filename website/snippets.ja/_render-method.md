@@ -1,8 +1,8 @@
-#### The render method
+#### render メソッド
 
-The `.render()` method is generally used to resolve or evaluate Jinja expressions (such as `{{ source(...) }}`) during runtime. 
+`.render()` メソッドは通常、実行時に Jinja 式（`{{ source(...) }}` など）を解決または評価するために使用されます。
 
-When using the `--empty flag`, dbt may skip processing `ref()` or `source()` for optimization. To avoid compilation errors and to explicitly tell dbt to process a specific relation (`ref()` or `source()`), use the `.render()` method in your model file. For example:
+`--empty フラグ` を使用すると、dbt は最適化のために `ref()` または `source()` の処理を​​スキップすることがあります。コンパイルエラーを回避し、特定のリレーション（`ref()` または `source()`）を処理するように dbt に明示的に指示するには、モデルファイルで `.render()` メソッドを使用します。例:
 
 
 <File name='models.sql'>

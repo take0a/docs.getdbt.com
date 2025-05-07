@@ -1,29 +1,29 @@
 ---
 resource_types: [models]
-description: "When the contract configuration is enforced, dbt will ensure that your model's returned dataset exactly matches the attributes you have defined in yaml, such as name and data_type, as well as any additional constraints supported by the data platform."
+description: "契約構成が強制されると、dbt は、モデルによって返されるデータセットが、name や data_type などの yaml で定義した属性や、データ プラットフォームでサポートされている追加の制約と完全に一致することを確認します。"
 datatype: "{<dictionary>}"
 default_value: {enforced: false}
 id: "contract"
 ---
 
-When the `contract` configuration is enforced, dbt will ensure that your model's returned dataset exactly matches the attributes you have defined in yaml:
-- `name` and `data_type` for every column
-- Additional [`constraints`](/reference/resource-properties/constraints), as supported for this materialization and data platform
+`contract` 構成が適用されると、dbt はモデルが返すデータセットが、yaml で定義した属性と完全に一致するようにします。
+- すべての列の `name` と `data_type`
+- このマテリアライゼーションとデータプラットフォームでサポートされている追加の [`constraints`](/reference/resource-properties/constraints)
 
-This is to ensure that the people querying your model downstream—both inside and outside dbt—have a predictable and consistent set of columns to use in their analyses. Even a subtle change in data type, such as from `boolean` (`true`/`false`) to `integer` (`0`/`1`), could cause queries to fail in surprising ways.
+これは、dbt の内外を問わず、下流のモデルに対してクエリを実行するユーザーが、分析に使用する列セットを予測可能かつ一貫性のあるものにするためです。`boolean` (`true`/`false`) から `integer` (`0`/`1`) へのデータ型のわずかな変更でさえ、予期せぬ形でクエリが失敗する可能性があります。
 
-## Support
+## サポート
 
-At present, model contracts are supported for:
-- SQL models (not yet Python)
-- Models materialized as `table`, `view`, and `incremental` (with `on_schema_change: append_new_columns` or `on_schema_change: fail`)
-- The most popular data platforms — though support and enforcement of different [constraint types](/reference/resource-properties/constraints) vary by platform
+現在、モデルコントラクトは以下のモデルでサポートされています。
+- SQL モデル（Python はまだサポートされていません）
+- `table`、`view`、`incremental` としてマテリアライズされたモデル（`on_schema_change: append_new_columns` または `on_schema_change: fail` を使用）
+- 最も一般的なデータプラットフォーム（ただし、さまざまな [制約タイプ](/reference/resource-properties/constraints) のサポートと適用はプラットフォームによって異なります）
 
-## Data type aliasing
+## データ型エイリアス
 
-dbt uses built-in type aliasing for the `data_type` defined in your YAML. For example, you can specify `string` in your contract, and on Postgres/Redshift, dbt will convert it to `text`. If dbt doesn't recognize the `data_type` name among its known aliases, it will pass it through as-is. This is enabled by default, but you can opt-out by setting `alias_types` to `false`.
+dbt は、YAML で定義された `data_type` に対して組み込みの型エイリアスを使用します。例えば、コントラクトで `string` を指定すると、Postgres/Redshift では dbt によって `text` に変換されます。`data_type` 名が既知のエイリアスに含まれていない場合、dbt はそれをそのまま渡します。これはデフォルトで有効になっていますが、`alias_types` を `false` に設定することで無効にできます。
 
-Example for disabling: 
+無効化の例:
 
 <File name='FOLDER_NAME/FILE_NAME.yml'>
 
@@ -40,13 +40,13 @@ models:
 
 </File>
 
-## Size, precision, and scale
+## サイズ、精度、スケール
 
-When dbt compares data types, it will not compare granular details such as size, precision, or scale. We don't think you should sweat the difference between `varchar(256)` and `varchar(257)`, because it doesn't really affect the experience of downstream queriers. You can accomplish a more-precise assertion by [writing or using a custom test](/best-practices/writing-custom-generic-tests).
+dbt はデータ型を比較す​​る際に、サイズ、精度、スケールといった詳細な比較は行いません。`varchar(256)` と `varchar(257)` の違いは、下流のクエリ実行者のエクスペリエンスにほとんど影響を与えないため、あまり気にする必要はないと考えています。[カスタムテストを作成または使用](/best-practices/writing-custom-generic-tests) することで、より正確なアサーションを実現できます。
 
-Note that you need to specify a varchar size or numeric scale, otherwise dbt relies on default values. For example, if a `numeric` type defaults to a precision of 38 and a scale of 0, then the numeric column stores 0 digits to the right of the decimal (it only stores whole numbers), which might cause it to fail contract enforcement. To avoid this implicit coercion, specify your `data_type` with a nonzero scale, like `numeric(38, 6)`. dbt Core 1.7 and higher provides a warning if you don't specify precision and scale when providing a numeric data type.
+varchar のサイズまたは数値スケールを指定する必要があります。指定しない場合、dbt はデフォルト値を使用します。たとえば、`numeric` 型のデフォルト値が精度 38、スケール 0 の場合、数値列には小数点以下の桁数が 0 となり（整数のみが格納されます）、コントラクトの適用に失敗する可能性があります。この暗黙的な強制を回避するには、`numeric(38, 6)` のように、`data_type` をゼロ以外のスケールで指定します。dbt Core 1.7 以降では、数値データ型を指定するときに精度とスケールを指定しないと警告が表示されます。
 
-### Example
+### 例
 
 <File name='models/dim_customers.yml'>
 
@@ -70,7 +70,7 @@ models:
 
 </File>
 
-Let's say your model is defined as:
+モデルが次のように定義されているとします:
 
 <File name='models/dim_customers.sql'>
 
@@ -82,7 +82,8 @@ select
 
 </File>
 
-When you `dbt run` your model, _before_ dbt has materialized it as a table in the database, you will see this error:
+モデルを `dbt run` すると、dbt がそれをデータベース内のテーブルとして実現する前に、次のエラーが表示されます:
+
 ```txt
 20:53:45  Compilation Error in model dim_customers (models/dim_customers.sql)
 20:53:45    This model has an enforced contract that failed.
@@ -97,19 +98,19 @@ When you `dbt run` your model, _before_ dbt has materialized it as a table in th
 ```
 
 
-### Incremental models and `on_schema_change`
+### 増分モデルと `on_schema_change`
 
-Why require that incremental models also set [`on_schema_change`](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change), and why to `append_new_columns` or `fail`?
+増分モデルでも [`on_schema_change`](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change) の設定が必要なのはなぜですか？また、`append_new_columns` または `fail` が必要なのはなぜですか？
 
-Imagine:
-- You add a new column to both the SQL and the YAML spec
-- You don't set `on_schema_change`, or you set `on_schema_change: 'ignore'`
-- dbt doesn't actually add that new column to the existing table — and the upsert/merge still succeeds, because it does that upsert/merge on the basis of the already-existing "destination" columns only (this is long-established behavior)
-- The result is a delta between the yaml-defined contract, and the actual table in the database - which means the contract is now incorrect!
+想像してみてください。
+- SQL と YAML の両方の仕様に新しい列を追加します。
+- `on_schema_change` を設定しないか、`on_schema_change: 'ignore'` を設定します。
+- dbt は実際には新しい列を既存のテーブルに追加しません。それでも upsert/merge は成功します。これは、既存の「宛先」列のみに基づいて upsert/merge を実行するためです（これは長年確立された動作です）。
+- 結果として、yaml で定義されたコントラクトとデータベース内の実際のテーブルとの間に差分が生じます。つまり、コントラクトが正しくないということです！
 
-Why `append_new_columns` (or `fail`) rather than `sync_all_columns`? Because removing existing columns is a breaking change for contracted models! `sync_all_columns` works like `append_new_columns` but also removes deleted columns, which you're not suppose to do with contracted models unless you upgrade the version.
+なぜ `sync_all_columns` ではなく `append_new_columns` (または `fail`) を使用するのでしょうか？既存の列を削除すると、コントラクトモデルにとって互換性のない変更となるためです。 `sync_all_columns` は `append_new_columns` と同様に機能しますが、削除された列も削除します。これは、バージョンをアップグレードしない限り、縮小モデルでは実行されないはずです。
 
-## Related documentation
-- [What is a model contract?](/docs/collaborate/govern/model-contracts)
-- [Defining `columns`](/reference/resource-properties/columns)
-- [Defining `constraints`](/reference/resource-properties/constraints)
+## 関連ドキュメント
+- [モデル契約とは](/docs/collaborate/govern/model-contracts)
+- [`columns` の定義](/reference/resource-properties/columns)
+- [`constraints` の定義](/reference/resource-properties/constraints)

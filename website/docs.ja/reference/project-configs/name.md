@@ -1,6 +1,6 @@
 ---
 datatype: string
-description: "Read this guide to understand the name configuration in dbt."
+description: "dbt での name の構成を理解するには、このガイドをお読みください。"
 required: True
 ---
 
@@ -12,20 +12,20 @@ name: string
 
 </File>
 
-## Definition
-**Required configuration**
+## 定義
+**必須設定**
 
-The name of a dbt project. Must be letters, digits and underscores only, and cannot start with a digit.
+dbt プロジェクトの名前。文字、数字、アンダースコアのみで構成でき、数字で始まる名前は指定できません。
 
-## Recommendation
-Often an organization has one dbt project, so it is sensible to name a project with your organization's name, in `snake_case`. For example:
+## 推奨事項
+多くの場合、組織には dbt プロジェクトが 1 つだけ存在します。そのため、プロジェクト名は組織名を `snake_case` で表記するのが賢明です。例:
 * `name: acme`
 * `name: jaffle_shop`
 * `name: evilcorp`
 
 
-## Troubleshooting
-### Invalid project name
+## トラブルシューティング
+### 無効なプロジェクト名
 
 ```
 Encountered an error while reading the project:
@@ -35,7 +35,7 @@ Runtime Error
   Could not run dbt
 ```
 
-This project has:
+このプロジェクトには次のものが含まれます:
 
 <File name='dbt_project.yml'>
 
@@ -45,7 +45,7 @@ name: jaffle-shop
 
 </File>
 
-In this case, change your project name to be `snake_case` instead:
+この場合は、プロジェクト名を `snake_case` に変更します。
 
 <File name='dbt_project.yml'>
 

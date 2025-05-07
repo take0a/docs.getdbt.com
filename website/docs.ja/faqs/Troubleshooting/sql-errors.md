@@ -1,13 +1,13 @@
 ---
-title: What happens if the SQL in my query is bad or I get a database error?
-description: "Use error message and logs to debug"
-sidebar_label: 'How to debug SQL or database error'
+title: クエリ内の SQL が不正であったり、データベース エラーが発生した場合はどうなりますか?
+description: "エラーメッセージとログを使用してデバッグする"
+sidebar_label: 'SQLまたはデータベースエラーをデバッグする方法'
 id: sql-errors
 
 ---
 
 
-If there's a mistake in your SQL, dbt will return the error that your database returns.
+SQL に間違いがある場合、dbt はデータベースが返すエラーを返します。
 
 ```shell
 $ dbt run --select customers
@@ -30,4 +30,4 @@ Database Error in model customers (models/customers.sql)
 Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 ```
 
-Any models downstream of this model will also be skipped. Use the error message and the [compiled SQL](/faqs/Runs/checking-logs) to debug any errors.
+このモデルの下流にあるモデルもすべてスキップされます。エラーメッセージと[コンパイル済みSQL](/faqs/Runs/checking-logs)を使用して、エラーをデバッグしてください。

@@ -11,14 +11,14 @@ packages-install-path: directorypath
 
 </File>
 
-## Definition
-Optionally specify a custom directory where [packages](/docs/build/packages) are installed when you run the `dbt deps` [command](/reference/commands/deps). Note that this directory is usually git-ignored.
+## 定義
+オプションで、`dbt deps` [コマンド](/reference/commands/deps) を実行する際に [パッケージ](/docs/build/packages) がインストールされるカスタムディレクトリを指定します。このディレクトリは通常、git によって無視されることに注意してください。
 
-## Default
-By default, dbt will install packages in the `dbt_packages` directory, i.e. `packages-install-path: dbt_packages`
+## デフォルト
+デフォルトでは、dbt はパッケージを `dbt_packages` ディレクトリにインストールします。つまり、`packages-install-path: dbt_packages` です。
 
-## Examples
-### Install packages in a subdirectory named `packages` instead of `dbt_packages`
+## 例
+### `dbt_packages` ではなく `packages` という名前のサブディレクトリにパッケージをインストールします
 
 <File name='dbt_project.yml'>
 

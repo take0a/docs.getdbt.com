@@ -1,10 +1,10 @@
 ---
 resource_types: [models, seeds]
-description: "Set the full_refresh config for models and other resources in dbt."
+description: "dbt 内のモデルやその他のリソースの full_refresh 構成を設定します。"
 datatype: boolean
 ---
 
-The `full_refresh` config allows you to control whether a resource will always or never perform a full-refresh. This config overrides the `--full-refresh` command-line flag.
+`full_refresh` 設定を使用すると、リソースが常にフルリフレッシュを実行するか、あるいは実行しないかを制御できます。この設定は `--full-refresh` コマンドラインフラグをオーバーライドします。
 
 <Tabs
   defaultValue="models"
@@ -58,35 +58,35 @@ seeds:
 
 </Tabs>
 
-## Description
+## 説明
 
-The `full_refresh` config allows you to optionally configure whether a resource will always or never perform a full-refresh. This config is an override for the `--full-refresh` command line flag used when running dbt commands. 
+`full_refresh` 設定を使用すると、リソースが常にフルリフレッシュを実行するか、あるいは実行しないかをオプションで設定できます。この設定は、dbt コマンド実行時に使用される `--full-refresh` コマンドラインフラグをオーバーライドします。
 
-You can set the `full_refresh` config in the `dbt_project.yml` file or in a resource config. 
+`full_refresh` 設定は、`dbt_project.yml` ファイルまたはリソース設定で設定できます。
 
 | `full_refresh` value | Behavior |
 | ---------------------------- | -------- |
-| If set to `true` | The resource _always_ performs a full refresh, regardless of whether you pass the `--full-refresh` flag in the dbt command. |
-| If set to `false` | The resource _never_ performs a full refresh, regardless of whether you pass the `--full-refresh` flag in the dbt command. |
-| If set to `none` or omitted | The resource follows the behavior of the `--full-refresh` flag. If the flag is used, the resource will perform a full refresh; otherwise, it will not. |
+| If set to `true` | dbt コマンドで `--full-refresh` フラグを渡すかどうかに関係なく、リソースは常に完全更新を実行します。 |
+| If set to `false` | dbt コマンドで `--full-refresh` フラグを渡すかどうかに関係なく、リソースは完全な更新を決して実行しません。 |
+| If set to `none` or omitted | リソースは `--full-refresh` フラグの動作に従います。このフラグが使用されている場合、リソースは完全リフレッシュを実行します。そうでない場合は、リフレッシュは実行されません。 |
 
-#### Note
-- The `--full-refresh` flag also supports a short name, `-f`.
-- The [`should_full_refresh()`](https://github.com/dbt-labs/dbt-adapters/blob/60005a0a2bd33b61cb65a591bc1604b1b3fd25d5/dbt/include/global_project/macros/materializations/configs.sql) macro has logic encoded.
+#### 注
+- `--full-refresh` フラグは、短縮名 `-f` もサポートしています。
+- [`should_full_refresh()`](https://github.com/dbt-labs/dbt-adapters/blob/60005a0a2bd33b61cb65a591bc1604b1b3fd25d5/dbt/include/global_project/macros/materializations/configs.sql) マクロにはロジックがエンコードされています。
 
-## Usage
+## 使用法
 
-### Incremental models
+### 増分モデル
 
-* [How do I rebuild an incremental model?](/docs/build/incremental-models#how-do-i-rebuild-an-incremental-model)
-* [What if the columns of my incremental model change?](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change)
+* [増分モデルを再構築するにはどうすればよいですか？](/docs/build/incremental-models#how-do-i-rebuild-an-incremental-model)
+* [増分モデルの列が変更された場合はどうなりますか？](/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change)
 
 ### Seeds
 
 <FAQ path="Seeds/full-refresh-seed" />
 
-## Recommendation
-Set `full_refresh: false` for models of especially large datasets, which you would _never_ want dbt to fully drop and recreate.
+## 推奨事項
+特に大規模なデータセットのモデルでは、dbt で完全に削除して再作成する必要がないため、`full_refresh: false` を設定してください。
 
-## Reference docs
+## リファレンスドキュメント
 * [on_configuration_change](/reference/resource-configs/on_configuration_change)

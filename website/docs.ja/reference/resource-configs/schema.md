@@ -1,16 +1,16 @@
 ---
 sidebar_label: "schema"
 resource_types: [models, seeds, tests]
-description: "Override the default schema when dbt creates resources in your data platform."
+description: "dbt がデータ プラットフォームにリソースを作成するときに、デフォルトのスキーマをオーバーライドします。"
 datatype: string
 ---
 
 <Tabs>
 <TabItem value="model" label="Model">
 
-Specify a [custom schema](/docs/build/custom-schemas#understanding-custom-schemas) for a group of models in your `dbt_project.yml` file or a [config block](/reference/resource-configs/schema#models). 
- 
-For example, if you have a group of marketing-related models and want to place them in a separate schema called `marketing`, you can configure it like this:
+`dbt_project.yml` ファイルまたは [config ブロック](/reference/resource-configs/schema#models) で、モデルグループに [カスタムスキーマ](/docs/build/custom-schemas#understanding-custom-schemas) を指定します。
+
+例えば、マーケティング関連のモデルグループがあり、それらを `marketing` という別のスキーマに配置する場合は、次のように設定します。
 
 <File name='dbt_project.yml'>
 
@@ -23,15 +23,15 @@ models:
 </File>
 
 
-This would result in the generated relations for these models being located in the  `marketing` schema, so the full relation names would be `analytics.target_schema_marketing.model_name`. This is because the schema of the relation is `{{ target.schema }}_{{ schema }}`. The [definition](#definition) section explains this in more detail.
+これにより、これらのモデルに対して生成されたリレーションは `marketing` スキーマに配置され、完全なリレーション名は `analytics.target_schema_marketing.model_name` となります。これは、リレーションのスキーマが `{{ target.schema }}_{{ schema }}` であるためです。[定義](#definition) セクションで、この点について詳しく説明されています。
 
 </TabItem>
 
 <TabItem value="seeds" label="Seeds">
 
-Configure a [custom schema](/docs/build/custom-schemas#understanding-custom-schemas) in your `dbt_project.yml` file. 
+`dbt_project.yml` ファイルで [カスタムスキーマ](/docs/build/custom-schemas#understanding-custom-schemas) を設定します。
 
-For example, if you have a seed that should be placed in a separate schema called `mappings`, you can configure it like this:
+例えば、`mappings` という別のスキーマに配置するシードがある場合は、次のように設定できます。
 
 <File name='dbt_project.yml'>
 
@@ -42,7 +42,7 @@ seeds:
       +schema: mappings
 ```
 
-This would result in the generated relation being located in the `mappings` schema, so the full relation name would be `analytics.mappings.seed_name`. 
+これにより、生成されたリレーションは `mappings` スキーマに配置されるため、完全なリレーション名は `analytics.mappings.seed_name` になります。
 
 </File>
 </TabItem>
@@ -57,11 +57,11 @@ Available in dbt Core v1.9 and higher. Select v1.9 or newer from the version dro
 
 <VersionBlock firstVersion="1.9">
 
-Specify a [custom schema](/docs/build/custom-schemas#understanding-custom-schemas) for a snapshot in your `dbt_project.yml` or YAML file.
+`dbt_project.yml` ファイルまたは YAML ファイルで、スナップショットの [カスタム スキーマ](/docs/build/custom-schemas#understanding-custom-schemas) を指定します。
 
-For example, if you have a snapshot that you want to load into a schema other than the target schema, you can configure it like this:
+たとえば、ターゲット スキーマ以外のスキーマに読み込むスナップショットがある場合は、次のように設定します。
 
-In a `dbt_project.yml` file:
+`dbt_project.yml` ファイルで、次の設定を行います:
 
 <File name='dbt_project.yml'>
 
@@ -73,7 +73,7 @@ snapshots:
 ```
 </File>
 
-In a `snapshots/snapshot_name.yml` file:
+`snapshots/snapshot_name.yml` ファイル内:
 
 <File name='snapshots/snapshot_name.yml'>
 
@@ -88,7 +88,7 @@ snapshots:
 
 </File>
 
-This results in the generated relation being located in the `snapshots` schema so the full relation name would be `analytics.snapshots.your_snapshot` instead of the default target schema.
+この結果、生成されたリレーションは `snapshots` スキーマに配置されるため、完全なリレーション名はデフォルトのターゲット スキーマではなく `analytics.snapshots.your_snapshot` になります。
 
 </VersionBlock>
 
@@ -96,7 +96,7 @@ This results in the generated relation being located in the `snapshots` schema s
 
 <TabItem value="saved-queries" label="Saved queries">
 
-Specify a [custom schema](/docs/build/custom-schemas#understanding-custom-schemas) for a [saved query](/docs/build/saved-queries#parameters) in your `dbt_project.yml` or YAML file.
+`dbt_project.yml` または YAML ファイルで、[保存されたクエリ](/docs/build/custom-schemas#understanding-custom-schemas) の [カスタム スキーマ](/docs/build/custom-schemas#understanding-custom-schemas) を指定します。
 
 <File name='dbt_project.yml'>
 ```yml
@@ -105,15 +105,15 @@ saved-queries:
 ```
 </File>
 
-This would result in the saved query being stored in the `metrics` schema.
+これにより、保存されたクエリが `metrics` スキーマに保存されることになります。
 
 </TabItem>
 
 <TabItem value="tests" label="Test">
 
-Customize a [custom schema](/docs/build/custom-schemas#understanding-custom-schemas) for storing test results in your `dbt_project.yml` file. 
+`dbt_project.yml` ファイルでテスト結果を保存するための [カスタムスキーマ](/docs/build/custom-schemas#understanding-custom-schemas) をカスタマイズします。
 
-For example, to save test results in a specific schema, you can configure it like this:
+たとえば、テスト結果を特定のスキーマに保存するには、次のように設定します:
 
 <File name='dbt_project.yml'>
 
@@ -123,31 +123,32 @@ tests:
   +schema: test_results
 ```
 
-This would result in the test results being stored in the `test_results` schema.
+これにより、テスト結果は `test_results` スキーマに保存されます。
 </File>
 </TabItem>
 </Tabs>
 
-Refer to [Usage](#usage) for more examples.
+詳細な例については、[使用方法](#usage) を参照してください。
 
-## Definition
-Optionally specify a custom schema for a [model](/docs/build/sql-models), [seed](/docs/build/seeds), [snapshot](/docs/build/snapshots), [saved query](/docs/build/saved-queries), or [test](/docs/build/data-tests). 
+## 定義
 
-For users on dbt Cloud v1.8 or earlier, use the [`target_schema` config](/reference/resource-configs/target_schema) to specify a custom schema for a snapshot.
+オプションで、[モデル](/docs/build/sql-models)、[シード](/docs/build/seeds)、[スナップショット](/docs/build/snapshots)、[保存済みクエリ](/docs/build/saved-queries)、または[テスト](/docs/build/data-tests)のカスタムスキーマを指定します。
 
-When dbt creates a relation (<Term id="table" />/<Term id="view" />) in a database, it creates it as: `{{ database }}.{{ schema }}.{{ identifier }}`, e.g. `analytics.finance.payments`
+dbt Cloud v1.8 以前のバージョンをご利用の場合は、[`target_schema` 設定](/reference/resource-configs/target_schema) を使用してスナップショットのカスタムスキーマを指定します。
 
-The standard behavior of dbt is:
-* If a custom schema is _not_ specified, the schema of the relation is the target schema (`{{ target.schema }}`).
-* If a custom schema is specified, by default, the schema of the relation is `{{ target.schema }}_{{ schema }}`.
+dbt がデータベースにリレーション (<Term id="table" />/<Term id="view" />) を作成する場合、`{{ database }}.{{ schema }}.{{ identifier }}` という形式で作成されます。例: `analytics.finance.payments`
 
-To learn more about changing the way that dbt generates a relation's `schema`, read [Using Custom Schemas](/docs/build/custom-schemas)
+dbt の標準的な動作は次のとおりです。
+* カスタムスキーマが指定されていない場合、リレーションのスキーマはターゲットスキーマ (`{{ target.schema }}`) になります。
+* カスタムスキーマが指定されている場合、デフォルトでは、リレーションのスキーマは `{{ target.schema }}_{{ schema }}` になります。
+
+dbt がリレーションの `schema` を生成する方法を変更する方法の詳細については、[カスタムスキーマの使用](/docs/build/custom-schemas) を参照してください。
 
 ## Usage
 
 ### Models
 
-Configure groups of models from the `dbt_project.yml` file.
+`dbt_project.yml` ファイルからモデルのグループを構成します。
 
 <File name='dbt_project.yml'>
 
@@ -160,7 +161,7 @@ models:
 
 </File>
 
-Configure individual models using a config block:
+構成ブロックを使用して個々のモデルを構成します:
 
 <File name='models/my_model.sql'>
 
@@ -182,11 +183,11 @@ seeds:
 
 </File>
 
-### Tests
+### テスト
 
-Customize the name of the schema in which tests [configured to store failures](/reference/resource-configs/store_failures) will save their results.
-The resulting schema is `{{ profile.schema }}_{{ tests.schema }}`, with a default suffix of `dbt_test__audit`.
-To use the same profile schema, set `+schema: null`.
+[失敗を保存するように構成された](/reference/resource-configs/store_failures)テストの結果を保存するスキーマの名前をカスタマイズします。
+生成されるスキーマは ```{{ profile.schema }}_{{ tests.schema }}``` で、デフォルトのサフィックスは「dbt_test__audit」です。
+同じプロファイルスキーマを使用するには、「+schema: null」を設定します。
 
 <File name='dbt_project.yml'>
 
@@ -198,14 +199,15 @@ tests:
 
 </File>
 
-Ensure you have the authorization to create or access schemas for your work. To ensure that the required schemas have the correct permissions, run a sql statement in your respective data platform environment. For example, run the following command if using Redshift (exact authorization query may differ from one data platform to another):
+作業に必要なスキーマを作成またはアクセスする権限があることを確認してください。必要なスキーマに適切な権限が付与されていることを確認するには、それぞれのデータプラットフォーム環境でSQL文を実行してください。例えば、Redshiftを使用している場合は、以下のコマンドを実行します（正確な権限クエリはデータプラットフォームによって異なる場合があります）。
 
 ```sql
 create schema if not exists dev_username_dbt_test__audit authorization username;
 ```
-_Replace `dev_username` with your specific development schema name and `username` with the appropriate user who should have the permissions._
 
-This command grants the appropriate permissions to create and access the `dbt_test__audit` schema, which is often used with the `store_failures` configuration.
+_`dev_username` を実際の開発スキーマ名に、`username` を権限を付与する適切なユーザーに置き換えてください。_
 
-## Warehouse specific information
-* BigQuery: `dataset` and `schema` are interchangeable
+このコマンドは、`store_failures` 構成でよく使用される `dbt_test__audit` スキーマの作成とアクセスに必要な権限を付与します。
+
+## ウェアハウス固有の情報
+* BigQuery: `dataset` と `schema` は互換性があります

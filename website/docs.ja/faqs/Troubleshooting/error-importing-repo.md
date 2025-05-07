@@ -1,14 +1,14 @@
 ---
-title: Errors importing a repository on dbt Cloud project set up
-description: "Errors importing a repository on dbt Cloud project set up"
-sidebar_label: 'Errors importing a repository on dbt Cloud project set up'
+title: dbt Cloud プロジェクトセットアップでリポジトリをインポートする際にエラーが発生しました
+description: "dbt Cloud プロジェクトセットアップでリポジトリをインポートする際にエラーが発生しました"
+sidebar_label: 'dbt Cloud プロジェクトセットアップでリポジトリをインポートする際にエラーが発生しました'
 id: error-importing-repo
 ---
 
-If you don't see your repository listed, double-check that:
-- Your repository is in a Gitlab group you have access to. dbt Cloud will not read repos associated with a user.
+リポジトリが表示されない場合は、以下の点を確認してください。
+- リポジトリが、アクセス権を持つ GitLab グループに属している。dbt Cloud は、ユーザーに関連付けられたリポジトリを読み取りません。
 
-If you do see your repository listed, but are unable to import the repository successfully, double-check that:
-- You are a maintainer of that repository. Only users with maintainer permissions can set up repository connections.
+リポジトリが表示されているにもかかわらず、リポジトリを正常にインポートできない場合は、以下の点を確認してください。
+- 自分がそのリポジトリのメンテナーである。メンテナー権限を持つユーザーのみがリポジトリ接続を設定できます。
 
-If you imported a repository using the dbt Cloud native integration with GitLab, you should be able to see if the clone strategy is using a `deploy_token`. If it's relying on an SSH key, this means the repository was not set up using the native GitLab integration, but rather using the generic git clone option. The repository must be reconnected in order to get the benefits described above.
+dbt Cloud と GitLab のネイティブ統合を使用してリポジトリをインポートした場合、クローン戦略で `deploy_token` が使用されているかどうかを確認できます。SSH キーを使用している場合は、リポジトリがネイティブの GitLab 統合ではなく、汎用の git clone オプションを使用して設定されていることを意味します。上記のメリットを得るには、リポジトリを再接続する必要があります。

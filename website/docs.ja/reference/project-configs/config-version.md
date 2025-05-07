@@ -1,9 +1,9 @@
 ---
 datatype: integer
-description: "Read this guide to understand the config-version configuration in dbt."
+description: "dbt の config-version 構成を理解するには、このガイドをお読みください。"
 ---
 
-The `config-version:` tag is optional.
+`config-version:` タグはオプションです。
 
 <File name='dbt_project.yml'>
 
@@ -13,10 +13,10 @@ config-version: 2
 
 </File>
 
-## Definition
+## 定義
 
-Specify your `dbt_project.yml` as using the v2 structure.
+`dbt_project.yml` を v2 構造を使用して指定します。
 
-## Default
+## デフォルト
 
-Without this configuration, dbt will assume your `dbt_project.yml` uses the version 2 syntax. Version 1 has been deprecated.
+この設定がない場合、dbt は `dbt_project.yml` がバージョン 2 の構文を使用していると想定します。バージョン 1 は非推奨です。

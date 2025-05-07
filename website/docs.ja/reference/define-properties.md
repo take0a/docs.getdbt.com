@@ -1,37 +1,36 @@
 ---
-title: Define properties
-sidebar_label: Define properties
-intro_text: "Learn how to define properties for your resources in a properties.yml file"
-description: "Learn how to define properties for your resources in a properties.yml file"
+title: プロパティを定義する
+sidebar_label: プロパティを定義する
+intro_text: "properties.yml ファイルでリソースのプロパティを定義する方法を学びます"
+description: "properties.yml ファイルでリソースのプロパティを定義する方法を学びます"
 pagination_previous: "reference/define-configs"
 ---
 
-In dbt, you can use `properties.yml` files to define properties for resources. You can declare properties in `.yml` files, in the same directory as your resources. You can name these files `whatever_you_want.yml` and nest them arbitrarily in sub-folders within each directory. 
+dbt では、`properties.yml` ファイルを使用してリソースのプロパティを定義できます。プロパティは、リソースと同じディレクトリにある `.yml` ファイルで宣言できます。これらのファイルには `whatever_you_want.yml` という名前を付け、各ディレクトリ内のサブフォルダに任意にネストできます。
 
-We highly recommend that you define properties in dedicated paths alongside the resources they're describing.
+プロパティは、記述するリソースと同じパスに定義することを強くお勧めします。
 
 :::info
 
-#### schema.yml files
+#### schema.yml ファイル
 
-Previous versions of the docs referred to these as `schema.yml` files — we've moved away from that terminology since the word `schema` is used to mean other things when talking about databases, and people often thought that you _had_ to name these files `schema.yml`.
+以前のバージョンのドキュメントでは、これらのファイルは「schema.yml」ファイルと呼ばれていましたが、「schema」という言葉はデータベースに関する用語として他の意味にも使用され、これらのファイルは「schema.yml」という名前にしなければならないと思われていたため、この用語は廃止されました。
 
-Instead, we now refer to these files as `properties.yml` files. (Of course, you're still free to name your files `schema.yml`)
-git pull
+代わりに、これらのファイルは「properties.yml」ファイルと呼ばれるようになりました。（もちろん、ファイル名を「schema.yml」のままにしておくこともできます。）
 :::
 
-### Which properties are _not_ also configs?
+### 構成ではないプロパティはどれですか？
 
-In dbt, you can define node configs in `properties.yml` files, in addition to `config()` blocks and `dbt_project.yml`. However, some special properties can only be defined in the `.yml` file and you cannot configure them using `config()` blocks or the `dbt_project.yml` file:
+dbt では、`config()` ブロックと `dbt_project.yml` に加えて、`properties.yml` ファイルでもノード構成を定義できます。ただし、一部の特殊なプロパティは `.yml` ファイルでのみ定義でき、`config()` ブロックや `dbt_project.yml` ファイルでは設定できません。
 
-Certain properties are special, because:
+以下の理由で特別なプロパティがあります。
 
-- They have a unique Jinja rendering context
-- They create new project resources
-- They don't make sense as hierarchical configuration
-- They're older properties that haven't yet been redefined as configs
+- 固有の Jinja レンダリングコンテキストを持つ。
+- 新しいプロジェクトリソースを作成する。
+- 階層的な構成としては意味をなさない。
+- まだ構成として再定義されていない古いプロパティである。
 
-These properties are:
+これらのプロパティは次のとおりです:
 
 - [`columns`](/reference/resource-properties/columns)
 - [`deprecation_date`](/reference/resource-properties/deprecation_date)
@@ -39,11 +38,11 @@ These properties are:
 - [`quote`](/reference/resource-properties/columns#quote)
 - [`source` properties](/reference/source-properties) (for example, `loaded_at_field`, `freshness`)
 - [`exposure` properties](/reference/exposure-properties) (for example, `type`, `maturity`)
-  - Note that while most exposure properties must be configured directly in `properties.yml` files, you can set the [`enabled`](/reference/resource-configs/enabled) config at the [project level](/reference/exposure-properties#project-level-configs) in the`dbt_project.yml` file.
+  - ほとんどの公開プロパティは `properties.yml` ファイルで直接設定する必要がありますが、[`enabled`](/reference/resource-configs/enabled) 設定は `dbt_project.yml` ファイルの [プロジェクト レベル](/reference/exposure-properties#project-level-configs) で設定できることに注意してください。
 - [`macro` properties](/reference/macro-properties) (for example, `arguments`)
 - [`tests`](/reference/resource-properties/data-tests)
 - [`versions`](/reference/resource-properties/versions)
 
-import Example from '/snippets/_configs-properties.md'  ;
+import Example from '/snippets.ja/_configs-properties.md'  ;
 
 <Example />

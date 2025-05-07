@@ -1,8 +1,8 @@
 
-:::info Model versions, dbt_project.yml versions, and .yml versions
+:::info モデルバージョン、dbt_project.yml バージョン、および .yml バージョン
 
-Take note that [model versions](/docs/collaborate/govern/model-versions) are different from [dbt_project.yml versions](/reference/project-configs/version#dbt_projectyml-versions) and [.yml property file versions](/reference/project-configs/version#yml-property-file-versions).
+[モデルバージョン](/docs/collaborate/govern/model-versions) は、[dbt_project.yml バージョン](/reference/project-configs/version#dbt_projectyml-versions) や [.yml プロパティファイルバージョン](/reference/project-configs/version#yml-property-file-versions) とは異なることに注意してください。
 
-Model versions is a _feature_ that enables better governance and data model management by allowing you to track changes and updates to models over time. dbt_project.yml versions refer to the compatibility of the dbt project with a specific version of dbt. Version numbers within .yml property files inform how dbt parses those YAML files. The latter two are completely optional starting from dbt v1.5.
+モデルバージョンは、モデルの変更や更新を経時的に追跡できるようにすることで、ガバナンスとデータモデル管理を向上させる _機能_ です。dbt_project.yml バージョンは、dbt プロジェクトと特定のバージョンの dbt との互換性を示します。.yml プロパティファイル内のバージョン番号は、dbt がそれらの YAML ファイルをどのように解析するかを示します。後者 2 つは、dbt v1.5 以降では完全にオプションです。
 
 :::

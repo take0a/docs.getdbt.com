@@ -5,37 +5,37 @@ default_value: {}
 id: "grants"
 ---
 
-You can manage access to the datasets you're producing with dbt by using grants. To implement these permissions, define grants as resource configs on each model, seed, or snapshot. Define the default grants that apply to the entire project in your `dbt_project.yml`, and define model-specific grants within each model's SQL or YAML file.
+dbt で生成するデータセットへのアクセスは、権限を使用することで管理できます。これらの権限を実装するには、各モデル、シード、またはスナップショットのリソース構成として権限を定義します。`dbt_project.yml` でプロジェクト全体に適用されるデフォルトの権限を定義し、各モデルの SQL ファイルまたは YAML ファイルでモデル固有の権限を定義します。
 
-The grant resource configs enable you to apply permissions at build time to a specific set of recipients and model, seed, or snapshot. When your model, seed, or snapshot finishes building, dbt ensures that the grants on its view or table match exactly the grants you have configured.
+権限リソース構成を使用すると、ビルド時に特定の受信者セットとモデル、シード、またはスナップショットに権限を適用できます。モデル、シード、またはスナップショットのビルドが完了すると、dbt はビューまたはテーブルの権限が、構成済みの権限と完全に一致することを確認します。
 
-dbt aims to use the most efficient approach when updating grants, which varies based on the adapter you're using, and whether dbt is replacing or updating an object that already exists. You can always check the debug logs for the full set of grant and revoke statements that dbt runs.
+dbt は、権限の更新時に最も効率的なアプローチを使用することを目指しています。これは、使用しているアダプタや、dbt が既存のオブジェクトを置き換えるか更新するかによって異なります。dbt が実行する grant ステートメントと revoke ステートメントの完全なセットは、いつでもデバッグログで確認できます。
 
-You should define grants as resource configs whenever possible, but you might occasionally need to write grants statements manually and run them using [hooks](/docs/build/hooks-operations). For example, hooks may be appropriate if you want to:
+可能な限り、権限付与はリソース構成として定義する必要がありますが、場合によっては手動で権限付与ステートメントを記述し、[フック](/docs/build/hooks-operations)を使用して実行する必要があるかもしれません。たとえば、次のような場合、フックが適している可能性があります。
 
-* Apply grants on other database objects besides views and tables.
-* Create more granular row- and column-level access, use masking policies, or apply future grants.
-* Take advantage of more advanced permission capabilities offered by your data platform, for which dbt does not offer out-of-the-box support using resource configuration.
-* Apply grants in a more complex or custom manner, beyond what the built-in grants capability can provide.
+* ビューやテーブル以外のデータベースオブジェクトに権限付与を適用する。
+* よりきめ細かい行レベルおよび列レベルのアクセス権限を作成したり、マスキングポリシーを使用したり、将来の権限付与を適用したりする。
+* dbt ではリソース構成を使用した標準サポートが提供されていない、データプラットフォームが提供するより高度な権限付与機能を活用する。
+* 組み込みの権限付与機能では提供できない、より複雑な方法やカスタムの方法で権限付与を適用する。
 
-For more information on hooks, see [Hooks & operations](/docs/build/hooks-operations).
+フックの詳細については、[フックとオペレーション](/docs/build/hooks-operations) を参照してください。
 
-## Definition
+## 定義
 
-You can use the `grants` field to set permissions or grants for a resource. When you `run` a model, `seed` data, or `snapshot` a dataset, dbt will run `grant` and/or `revoke` statements to ensure that the permissions on the database object match the `grants` you have configured on the resource.
+`grants` フィールドを使用して、リソースの権限または付与を設定できます。モデルを `run`、データを `seed`、またはデータセットを `snapshot` すると、dbt は `grant` ステートメントまたは `revoke` ステートメントを実行し、データベース オブジェクトに対する権限がリソースに構成した `grants` と一致することを確認します。
 
-Like all configurations, `grants` will be included in dbt project metadata, including [the manifest artifact](/reference/artifacts/manifest-json).
+すべての構成と同様に、`grants` は [マニフェスト アーティファクト](/reference/artifacts/manifest-json) を含む dbt プロジェクト メタデータに含まれます。
 
-### Common syntax
+### 一般的な構文
 
-Grants have two key components:
+権限付与には、2 つの主要な構成要素があります。
 
-* **Privilege:** A right to perform a specific action or set of actions on an object in the database, such as selecting data from a table.
-* **Grantees:** One or more recipients of granted privileges. Some platforms also call these "principals." For example, a grantee could be a user, a group of users, a role held by one or more users (Snowflake), or a service account (BigQuery/GCP).
+* **権限:** データベース内のオブジェクトに対して特定のアクションまたは一連のアクション（テーブルからのデータの選択など）を実行する権限。
+* **権限付与対象者:** 付与された権限の 1 人以上の受信者。プラットフォームによっては、これらを「プリンシパル」と呼ぶこともあります。たとえば、権限付与対象者は、ユーザー、ユーザーグループ、1 人以上のユーザーが保持するロール（Snowflake）、サービスアカウント（BigQuery/GCP）などです。
 
-## Configuring grants
+## 権限の設定
 
-You can configure `grants` in `dbt_project.yml` to apply grants to many resources at once—all models in your project, a package, or a subfolder—and you can also configure `grants` one-by-one for specific resources, in YAML `config:` blocks or right within their `.sql` files.
+`dbt_project.yml` で `grants` を設定することで、プロジェクト内のすべてのモデル、パッケージ、またはサブフォルダなど、複数のリソースに権限を一度に適用できます。また、YAML の `config:` ブロック内、または `.sql` ファイル内で、特定のリソースに対して `grants` を個別に設定することもできます。
 
 <Tabs
   defaultValue="models"
@@ -60,12 +60,12 @@ models:
 
 </File>
 
-The `grants` config can also be defined:
+`grants` 設定は、以下の方法でも定義できます:
 
-- under the `models` config block in `dbt_project.yml`
-- in a `config()` Jinja macro within a model's SQL file
+- `dbt_project.yml` の `models` 設定ブロック内
+- モデルの SQL ファイル内の `config()` Jinja マクロ内
 
-See [configs and properties](/reference/configs-and-properties) for details.
+詳細については、[設定とプロパティ](/reference/configs-and-properties) を参照してください。
 
 </TabItem>
 
@@ -83,7 +83,7 @@ seeds:
 
 </File>
 
-The `grants` config can also be defined under the `seeds` config block in `dbt_project.yml`. See [configs and properties](/reference/configs-and-properties) for details.
+`grants` 設定は、`dbt_project.yml` の `seeds` 設定ブロック内でも定義できます。詳細は [設定とプロパティ](/reference/configs-and-properties) をご覧ください。
 
 </TabItem>
 
@@ -101,21 +101,21 @@ snapshots:
 
 </File>
 
-The `grants` config can also be defined:
+`grants` 設定は、以下の場所でも定義できます:
 
-- under the `snapshots` config block in `dbt_project.yml`
-- in a `config()` Jinja macro within a snapshot's SQL block
+- `dbt_project.yml` の `snapshots` 設定ブロック内
+- スナップショットの SQL ブロック内の `config()` Jinja マクロ内
 
-See [configs and properties](/reference/configs-and-properties) for details.
+詳細については、[設定とプロパティ](/reference/configs-and-properties) を参照してください。
 
 </TabItem>
 </Tabs>
 
-### Grant config inheritance
+### 権限設定の継承
 
-When you set `grants` for the same model in multiple places, such as in `dbt_project.yml` and in a more-specific `.sql` or `.yml` file, dbt's default behavior replaces the less-specific set of grantees with the more-specific set of grantees.  This "merge and clobber" behavior updates each privilege when dbt parses your project.
+同じモデルに対して、`grants` を複数の場所（`dbt_project.yml` と、より具体的な `.sql` または `.yml` ファイルなど）で設定した場合、dbt のデフォルトの動作により、具体的でない権限付与対象者のセットが、より具体的な権限付与対象者のセットに置き換えられます。この「マージして上書きする」動作により、dbt がプロジェクトを解析する際に各権限が更新されます。
 
-For example:
+例:
 
 <File name='dbt_project.yml'>
 
@@ -135,9 +135,9 @@ models:
 
 </File>
 
-As a result of this configuration, `specific_model` will be configured to grant the `select` privilege to `user_c` _only_. After you run `specific_model`, that is the only granted privilege you would see in the database, and the only `grant` statement you would find in dbt's logs.
+この設定の結果、`specific_model` は `select` 権限を `user_c` のみに付与するように設定されます。`specific_model` を実行すると、データベースに表示される付与された権限はこれが唯一となり、dbt のログにもこの `grant` 文が記録されます。
 
-Let's say we wanted to _add_ `user_c` to the existing list of grantees receiving the `select` privilege on `specific_model`, rather than _replacing_ that list entirely. To accomplish that, we can use the `+` ("addition") symbol, prefixing the name of the privilege:
+`specific_model` の `select` 権限を付与されている既存の権限付与対象者リストを `user_c` に `add` したい場合を考えてみましょう。リスト全体を `置き換える_ のではなく。これを行うには、権限名の前に `+`（「追加」）記号を付けます。
 
 <File name='models/specific_model.sql'>
 
@@ -147,16 +147,16 @@ Let's say we wanted to _add_ `user_c` to the existing list of grantees receiving
 
 </File>
 
-Now, the model will grant select to `user_a`, `user_b`, AND `user_c`!
+これで、モデルは `user_a`、`user_b`、そして `user_c` に select 権限を付与するようになります。
 
-**Notes:**
-- This will only take effect for privileges which include the `+` prefix. Each privilege controls that behavior separately. If we were granting other privileges, in addition to `select`, and those privilege names lacked the `+` prefix, they would continue to "clobber" rather than "add" new grantees.
-- This use of `+`, controlling clobber vs. add merge behavior, is distinct from the use of `+` in `dbt_project.yml` (shown in the example above) for defining configs with dictionary values. For more information, see [the plus prefix](https://docs.getdbt.com/reference/resource-configs/plus-prefix).
-- `grants` is the first config to support a `+` prefix for controlling config merge behavior. Currently, it's the only one. If it proves useful, we may extend this capability to new and existing configs in the future.
+**注:**
+- これは、`+` プレフィックスを含む権限に対してのみ有効です。各権限は個別に動作を制御します。`select` に加えて他の権限を付与する場合、それらの権限名に `+` プレフィックスが付いていないと、新しい権限付与対象者を「追加」するのではなく「上書き」する動作が継続されます。
+- この `+` の使用法は、上書きと追加のマージ動作を制御するものであり、辞書値を持つ構成を定義するための `dbt_project.yml` 内の `+` の使用法（上記の例を参照）とは異なります。詳細については、[plus プレフィックス](https://docs.getdbt.com/reference/resource-configs/plus-prefix) を参照してください。
+- `grants` は、構成のマージ動作を制御するための `+` プレフィックスをサポートする最初の構成です。現時点ではこれが唯一の機能です。もし有用性が証明されれば、将来的には新規および既存の設定にこの機能を拡張する可能性があります。
 
-### Conditional grants
+### 条件付き権限付与
 
-Like any other config, you can use Jinja to vary the grants in different contexts. For example, you might grant different permissions in prod than dev:
+他の設定と同様に、Jinja を使用することで、状況に応じて権限付与を変更することができます。例えば、prod と dev で異なる権限を付与できます。
 
 <File name='dbt_project.yml'>
 
@@ -168,9 +168,9 @@ models:
 
 </File>
 
-## Revoking grants
+## 権限の取り消し
 
-dbt only modifies grants on a node (including revocation) when a `grants` configuration is attached to that node. For example, imagine you had originally specified the following grants in `dbt_project.yml`:
+dbt は、ノードに `grants` 設定がアタッチされている場合にのみ、そのノードの権限を変更します（取り消しも含みます）。例えば、`dbt_project.yml` で最初に以下の権限を指定していたとします。
 
 <File name='dbt_project.yml'>
 
@@ -182,7 +182,7 @@ models:
 
 </File>
 
-If you delete the entire `+grants` section, dbt assumes you no longer want it to manage grants and doesn't change anything. To have dbt revoke all existing grants from a node, provide an empty list of grantees.
+`+grants` セクション全体を削除すると、dbt は権限管理が不要になったと認識し、何も変更しません。ノードから既存の権限をすべて取り消すには、権限付与対象者のリストを空にしてください。
 
     <Tabs
     defaultValue="revoke-one"
@@ -231,9 +231,9 @@ If you delete the entire `+grants` section, dbt assumes you no longer want it to
 
     </Tabs>
 
-## General examples
+## 一般的な例
 
-You can grant each permission to a single grantee, or a set of multiple grantees. In this example, we're granting `select` on this model to just `bi_user`, so that it can be queried in our Business Intelligence (BI) tool.
+各権限は、単一の権限付与対象者、または複数の権限付与対象者グループに付与できます。この例では、このモデルに対する `select` 権限を `bi_user` にのみ付与し、ビジネスインテリジェンス (BI) ツールでクエリを実行できるようにしています。
 
 <File name='models/table_model.sql'>
 
@@ -245,12 +245,13 @@ You can grant each permission to a single grantee, or a set of multiple grantees
 
 </File>
 
-When dbt runs this model for the first time, it will create the table, and then run code like:
+dbt がこのモデルを初めて実行すると、テーブルが作成され、次のようなコードが実行されます:
+
 ```sql
 grant select on schema_name.table_model to bi_user;
 ```
 
-In this case, we're creating an incremental model, and granting the `select` privilege to two recipients: `bi_user` and `reporter`.
+この場合、増分モデルを作成し、2 人の受信者 (`bi_user` と `reporter`) に `select` 権限を付与します。
 
 <File name='models/incremental_model.sql'>
 
@@ -262,43 +263,44 @@ In this case, we're creating an incremental model, and granting the `select` pri
 
 </File>
 
-When dbt runs this model for the first time, it will create the table, and then run code like:
+dbt がこのモデルを初めて実行すると、テーブルが作成され、次のようなコードが実行されます:
+
 ```sql
 grant select on schema_name.incremental_model to bi_user, reporter;
 ```
 
-In subsequent runs, dbt will use database-specific SQL to show the grants already on `incremental_model`, and then determine if any `revoke` or `grant` statements are needed.
+以降の実行では、dbt はデータベース固有の SQL を使用して、`incremental_model` にすでに付与されている権限を表示し、`revoke` または `grant` ステートメントが必要かどうかを判断します。
 
 
-## Database-specific requirements and notes
+## データベース固有の要件と注意事項
 
-While we try to standardize the terms we use to describe different features, you will always find nuances in different databases. This section outlines some of those database-specific requirements and notes.
+様々な機能を説明する際に使用する用語は標準化に努めていますが、データベースごとに微妙な違いが見られる場合があります。このセクションでは、データベース固有の要件と注意事項の一部について説明します。
 
-In our examples above and below, you will find us referring to a privilege named `select`, and a grantee named `another_user`. Many databases use these or similar terms. Be aware that your database may require different syntax for privileges and grantees; you must configure `grants` in dbt with the appropriate names for both.
+上記および下記の例では、「select」という権限と「another_user」という被付与者について言及しています。多くのデータベースでは、これらまたは類似の用語が使用されています。データベースによっては、権限と被付与者の構文が異なる場合がありますので、dbt で「grants」を適切な名前で設定する必要があります。
 
 <WHCode>
 
 <div warehouse="BigQuery">
 
-On BigQuery, "privileges" are called "roles," and they take the form `roles/service.roleName`. For instance, instead of granting `select` on a model, you would grant `roles/bigquery.dataViewer`.
+BigQuery では、「権限」は「ロール」と呼ばれ、`roles/service.roleName` という形式になります。たとえば、モデルに対して `select` 権限を付与する代わりに、`roles/bigquery.dataViewer` 権限を付与します。
 
-Grantees can be users, groups, service accounts, domains—and each needs to be clearly demarcated as such with a prefix. For instance, to grant access on a model to `someone@yourcompany.com`, you need to specify them as `user:someone@yourcompany.com`.
+権限付与対象は、ユーザー、グループ、サービスアカウント、ドメインなどです。それぞれを接頭辞で明確に区別する必要があります。たとえば、モデルへのアクセス権限を `someone@yourcompany.com` に付与するには、`user:someone@yourcompany.com` と指定する必要があります。
 
-We encourage you to read Google's documentation for more context:
-- [Understanding GCP roles](https://cloud.google.com/iam/docs/understanding-roles)
-- [How to format grantees](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language#user_list)
+詳細については、Google のドキュメントをご覧ください。
+- [GCP ロールについて](https://cloud.google.com/iam/docs/understanding-roles)
+- [権限付与対象のフォーマット方法](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language#user_list)
 
 <Snippet path="grants-vs-access-to" />
 
-### BigQuery examples
+### BigQuery の例
 
-Granting permission using SQL and BigQuery:
+SQL と BigQuery を使用した権限付与:
 
 ```sql
 {{ config(grants = {'roles/bigquery.dataViewer': ['user:someone@yourcompany.com']}) }}
 ```
 
-Granting permission in a model schema using BigQuery:
+BigQuery を使用してモデル スキーマに権限を付与する:
 
 <File name='models/schema.yml'>
 
@@ -316,24 +318,24 @@ models:
 
 <div warehouse="Databricks">
 
-- OSS Apache Spark / Delta Lake do not support `grants`.
-- Databricks automatically enables `grants` on SQL endpoints. For interactive clusters, admins should enable grant functionality using these two setup steps in the Databricks documentation:
-  - [Enable table access control for your workspace](https://docs.databricks.com/administration-guide/access-control/table-acl.html)
-  - [Enable table access control for a cluster](https://docs.databricks.com/security/access-control/table-acls/table-acl.html)
-- In order to grant `READ_METADATA` or `USAGE`, use [post-hooks](https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook)
+- OSS Apache Spark / Delta Lake は `grants` をサポートしていません。
+- Databricks は SQL エンドポイントで `grants` を自動的に有効化します。インタラクティブ クラスターの場合、管理者は Databricks ドキュメントに記載されている以下の 2 つの設定手順を使用して、付与機能を有効にする必要があります。
+- [ワークスペースのテーブルアクセス制御を有効にする](https://docs.databricks.com/administration-guide/access-control/table-acl.html)
+- [クラスターのテーブルアクセス制御を有効にする](https://docs.databricks.com/security/access-control/table-acls/table-acl.html)
+- `READ_METADATA` または `USAGE` を付与するには、[post-hooks](https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook) を使用します。
 
 </div>
 
 <div warehouse="Redshift">
 
-* Granting to / revoking from is only fully supported for Redshift users (not [groups](https://docs.aws.amazon.com/redshift/latest/dg/r_Groups.html) or [roles](https://docs.aws.amazon.com/redshift/latest/dg/r_roles-managing.html)). See [dbt-redshift#415](https://github.com/dbt-labs/dbt-redshift/issues/415) for the corresponding issue.
+* 権限の付与/取り消しは、Redshift ユーザーに対してのみ完全にサポートされています（[グループ](https://docs.aws.amazon.com/redshift/latest/dg/r_Groups.html)または[ロール](https://docs.aws.amazon.com/redshift/latest/dg/r_roles-managing.html)はサポートされていません）。関連する問題については、[dbt-redshift#415](https://github.com/dbt-labs/dbt-redshift/issues/415) を参照してください。
 
 </div>
 
 <div warehouse="Snowflake">
 
-* dbt accounts for the [`copy_grants` configuration](/reference/resource-configs/snowflake-configs#copying-grants) when calculating which grants need to be added or removed.
-* Granting to / revoking from is only fully supported for Snowflake roles (not [database roles](https://docs.snowflake.com/user-guide/security-access-control-overview#types-of-roles)).
+* dbt は、追加または削除する必要がある権限を計算する際に、[`copy_grants` 構成](/reference/resource-configs/snowflake-configs#copying-grants) を考慮します。
+* 権限の付与と取り消しは、Snowflake ロールに対してのみ完全にサポートされています（[データベース ロール](https://docs.snowflake.com/user-guide/security-access-control-overview#types-of-roles) はサポートされていません）。
 
 </div>
 

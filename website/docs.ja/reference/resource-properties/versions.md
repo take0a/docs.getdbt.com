@@ -5,7 +5,7 @@ required: no
 keyword: governance, model version, model versioning, dbt model versioning
 ---
 
-import VersionsCallout from '/snippets/_model-version-callout.md';
+import VersionsCallout from '/snippets.ja/_model-version-callout.md';
 
 <VersionsCallout />
 
@@ -33,50 +33,50 @@ models:
 
 </File>
 
-The standard convention for naming model versions is `<model_name>_v<v>`. This holds for the file where dbt expects to find the model's definition (SQL or Python), and the alias it will use by default when materializing the model in the database.
+モデルバージョンの命名規則は `<model_name>_v<v>` です。これは、dbt がモデルの定義（SQL または Python）を記述するファイルと、データベースにモデルをマテリアライズする際にデフォルトで使用されるエイリアスに適用されます。
 
 ### `v`
 
-The version identifier for a version of a model. This value can be numeric (integer or float), or any string.
+モデルのバージョンを表すバージョン識別子。この値は、数値（整数または浮動小数点数）または任意の文字列です。
 
-The value of the version identifier is used to order versions of a model relative to one another. If a versioned model does _not_ explicitly configure a [`latest_version`](/reference/resource-properties/latest_version), the highest version number is used as the latest version to resolve `ref` calls to the model without a `version` argument.
+バージョン識別子の値は、モデルのバージョンを相対的に順序付けるために使用されます。バージョン管理されたモデルで [`latest_version`](/reference/resource-properties/latest_version) が明示的に設定されていない場合、`version` 引数を指定せずにモデルへの `ref` 呼び出しを解決する際に、最も高いバージョン番号が最新バージョンとして使用されます。
 
-In general, we recommend that you use a simple "major versioning" scheme for your models: `1`, `2`, `3`, and so on, where each version reflects a breaking change from previous versions. You are able to use other versioning schemes. dbt will sort your version identifiers alphabetically if the values are not all numeric. You should **not** include the letter `v` in the version identifier, as dbt will do that for you.
+一般的に、モデルにはシンプルな「メジャー バージョン管理」スキーム（`1`、`2`、`3` など）を使用することをお勧めします。各バージョンは、以前のバージョンからの互換性を破る変更を反映します。他のバージョン管理スキームも使用できます。dbt は、値がすべて数値でない場合、バージョン識別子をアルファベット順に並べ替えます。バージョン識別子に文字 `v` を含めないでください。dbt が自動的に行います。
 
-To run a model with multiple versions, you can use the [`--select` flag](/reference/node-selection/syntax). Refer to [Model versions](/docs/collaborate/govern/model-versions#run-a-model-with-multiple-versions) for more information and syntax.
+複数のバージョンを持つモデルを実行するには、[`--select` フラグ](/reference/node-selection/syntax) を使用します。詳細と構文については、[モデルのバージョン](/docs/collaborate/govern/model-versions#run-a-model-with-multiple-versions) を参照してください。
 
 
 ### `defined_in`
 
-The name of the model file (excluding the file extension, e.g. `.sql` or `.py`) where the model version is defined.
+モデルバージョンが定義されているモデルファイルの名前（ファイル拡張子（例：`.sql` または `.py`）を除く）。
 
-If `defined_in` is not specified, dbt searches for the definition of a versioned model in a model file named `<model_name>_v<v>`. The **latest** version of a model may also be defined in a file named `<model_name>`, without the version suffix. Model file names must be globally unique, even when defining versioned implementations of a model with a different name.
+`defined_in` が指定されていない場合、dbt はバージョン管理されたモデルの定義を `<model_name>_v<v>` という名前のモデルファイルで検索します。モデルの**最新**バージョンは、バージョンサフィックスのない `<model_name>` という名前のファイルで定義することもできます。モデルファイル名は、異なる名前でモデルのバージョン管理された実装を定義する場合でも、グローバルに一意である必要があります。
 
 ### `alias`
 
-The default resolved `alias` for a versioned model is `<model_name>_v<v>`. The logic for this is encoded in the `generate_alias_name` macro.
+バージョン管理されたモデルのデフォルトの解決済み `alias` は `<model_name>_v<v>` です。このロジックは `generate_alias_name` マクロにエンコードされています。
 
-This default can be overwritten in two ways:
-- Configuring a custom `alias` within the version yaml, or the versioned model's definition
-- Overwriting dbt's `generate_alias_name` macro, to use different behavior based on `node.version`
+このデフォルトは、次の 2 つの方法で上書きできます。
+- バージョン管理されたモデルの定義またはバージョン管理された YAML 内でカスタム `alias` を設定する
+- dbt の `generate_alias_name` マクロを上書きし、`node.version` に基づいて異なる動作を使用する
 
-See ["Custom aliases"](https://docs.getdbt.com/docs/build/custom-aliases) for more details.
+詳細については、[「カスタム エイリアス」](https://docs.getdbt.com/docs/build/custom-aliases) を参照してください。
 
-Note that the value of `defined_in` and the `alias` configuration of a model are not coordinated, except by convention. The two are declared and determined independently.
+モデルの `defined_in` の値と `alias` 設定は、慣例による場合を除き、連携しないことに注意してください。この 2 つは独立して宣言および決定されます。
 
 ### `include`
 
-The specification of which columns are defined in a model's top-level `columns` property to include or exclude in a versioned implementation of that model.
+モデルの最上位レベルの `columns` プロパティで定義されている列のうち、バージョン管理されたモデル実装に含めるか除外するかを指定します。
 
-`include` is either:
-- a list of specific column names to include
-- `'*'` or `'all'`, indicating that **all** columns from the top-level `columns` property should be included in the versioned model
+`include` は次のいずれかです。
+- 含める列名のリスト
+- `'*'` または `'all'`。これは、最上位レベルの `columns` プロパティの **すべての** 列をバージョン管理されたモデルに含めることを示します。
 
-`exclude` is a list of column names to exclude. It can only be declared if `include` is set to one of `'*'` or `'all'`. 
+`exclude` は除外する列名のリストです。`include` が `'*'` または `'all'` のいずれかに設定されている場合にのみ宣言できます。
 
-The `columns` list of a versioned model can have _at most one_ `include/exclude` element.
+バージョン管理されたモデルの `columns` リストには、最大で 1 つの `include/exclude` 要素を含めることができます。
 
-You may declare additional columns within the version's `columns` list. If a version-specific column's `name` matches a column included from the top level, the version-specific entry will override that column for that version.
+バージョンの `columns` リスト内に追加の列を宣言できます。バージョン固有の列の `name` が最上位レベルから含められる列と一致する場合、そのバージョンではバージョン固有のエントリがその列をオーバーライドします。
 
 <File name='models/<schema>.yml'>
 
@@ -107,9 +107,9 @@ models:
 
 </File>
 
-By default, `include` is "all", and `exclude` is the empty list. This has the effect of including all columns from the base model in the versioned model.
+デフォルトでは、`include` は "all"、`exclude` は空のリストです。これにより、ベースモデルのすべての列がバージョン管理モデルに含められます。
 
-#### Example
+#### 例
 
 <File name='models/customers.yml'>
 
@@ -155,22 +155,22 @@ models:
 
 </File>
 
-Because `v4` has not specified any `columns`, it will include all of the top-level `columns`.
+`v4` は `columns` を指定していないため、トップレベルの `columns` をすべて含めます。
 
-Each other version has declared a modification from the top-level property:
-- `v3` will include all columns, but it reimplements the `customer_country` column with a different `description`.
-- `v2` will include all columns *except* `customer_country`.
-- `v1` doesn't include *any* of the top-level `columns`. Instead, it declares only a single integer column named `id`.
+その他のバージョンでは、トップレベルのプロパティから変更が宣言されています。
+- `v3` はすべての列を含めますが、`customer_country` 列を異なる `description` で再実装します。
+- `v2` は `customer_country` を除くすべての列を含めます。
+- `v1` はトップレベルの `columns` を *一切* 含めません。代わりに、`id` という名前の単一の整数列のみを宣言します。
 
 
-### Our recommendations
-- Follow a consistent naming convention for model versions and aliases.
-- Use `defined_in` and `alias` only if you have good reason.
-- Create a view that always points to the latest version of your model. You can automate this for all versioned models in your project with an `on-run-end` hook. For more details, read the full docs on ["Model versions"](/docs/collaborate/govern/model-versions#configuring-database-location-with-alias)
+### 推奨事項
+- モデルのバージョンとエイリアスには、一貫した命名規則に従ってください。
+- `defined_in` と `alias` は、正当な理由がある場合のみ使用してください。
+- 常にモデルの最新バージョンを指すビューを作成してください。`on-run-end` フックを使用することで、プロジェクト内のすべてのバージョン管理モデルに対してこれを自動化できます。詳細については、["モデルのバージョン"](/docs/collaborate/govern/model-versions#configuring-database-location-with-alias) の完全なドキュメントをご覧ください。
 
-### Detecting breaking changes
+### 破壊的変更の検出
 
-When you use the `state:modified` selection method in Slim CI, dbt will detect changes to versioned model contracts, and raise an error if any of those changes could be breaking for downstream consumers.
+Slim CI で `state:modified` 選択メソッドを使用すると、dbt はバージョン管理されたモデルコントラクトへの変更を検出し、下流のコンシューマーにとって破壊的となる可能性のある変更があった場合はエラーを発生します。
 
 import BreakingChanges from '/snippets/_versions-contracts.md';
 
@@ -181,7 +181,7 @@ value2="dbt also warns if a model has or had a contract but isn't versioned."
 
 <Tabs>
 
-<TabItem value="unversioned" label="Example message for unversioned models">
+<TabItem value="unversioned" label="バージョン管理されていないモデルのメッセージの例">
 
 ```
   Breaking Change to Unversioned Contract for contracted_model (models/contracted_models/contracted_model.sql)
@@ -200,7 +200,7 @@ value2="dbt also warns if a model has or had a contract but isn't versioned."
 ```
 </TabItem>
 
-<TabItem value="versioned" label="Example message for versioned models">
+<TabItem value="versioned" label="バージョン管理されたモデルのメッセージの例">
 
 ```
 Breaking Change to Contract Error in model sometable (models/sometable.sql)
@@ -223,6 +223,6 @@ Breaking Change to Contract Error in model sometable (models/sometable.sql)
 
 </Tabs>
 
-Additive changes are **not** considered breaking:
-- Adding a new column to a contracted model
-- Adding new `constraints` to an existing column in a contracted model
+追加的な変更は、**破壊的変更とはみなされません**。
+- 縮小モデルに新しい列を追加する
+- 縮小モデル内の既存の列に新しい「制約」を追加する

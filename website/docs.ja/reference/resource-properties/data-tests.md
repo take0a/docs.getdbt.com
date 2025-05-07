@@ -1,6 +1,6 @@
 ---
-title: "About data tests property"
-description: "Reference guide for the resource properties available for data tests in dbt."
+title: "data tests プロパティについて"
+description: "dbt のデータ テストに使用できるリソース プロパティのリファレンス ガイド。"
 sidebar_label: "Data tests"
 resource_types: all
 datatype: data-test
@@ -145,29 +145,29 @@ snapshots:
 
 <TabItem value="analyses">
 
-This feature is not implemented for analyses.
+この機能は analyses には実装されていません。
 
 </TabItem>
 
 </Tabs>
 
-## Related documentation
+## 関連ドキュメント
 
-* [Data testing guide](/docs/build/data-tests)
+* [データテストガイド](/docs/build/data-tests)
 
-## Description
+## 説明
 
-The data `tests` property defines assertions about a column, <Term id="table" />, or <Term id="view" />. The property contains a list of [generic tests](/docs/build/data-tests#generic-data-tests), referenced by name, which can include the four built-in generic tests available in dbt. For example, you can add tests that ensure a column contains no duplicates and zero null values. Any arguments or [configurations](/reference/data-test-configs) passed to those tests should be nested below the test name.
+データ `tests` プロパティは、列、<Term id="table" />、または <Term id="view" /> に関するアサーションを定義します。このプロパティには、名前で参照される [汎用テスト](/docs/build/data-tests#generic-data-tests) のリストが含まれます。これには、dbt で利用可能な 4 つの組み込み汎用テストを含めることができます。たとえば、列に重複がなく、null 値がゼロであることを確認するテストを追加できます。これらのテストに渡す引数または [構成](/reference/data-test-configs) は、テスト名の下にネストする必要があります。
 
-Once these tests are defined, you can validate their correctness by running `dbt test`.
+これらのテストを定義したら、`dbt test` を実行してその正確性を検証できます。
 
-## Out-of-the-box data tests
+## すぐに使えるデータテスト
 
-There are four generic data tests that are available out of the box, for everyone using dbt.
+dbt をご利用のすべてのユーザーがすぐに使用できる、4 つの汎用データテストが用意されています。
 
 ### `not_null`
 
-This test validates that there are no `null` values present in a column.
+このテストは、列に `null` 値が存在しないことを検証します。
 
 <File name='models/<filename>.yml'>
 
@@ -186,9 +186,9 @@ models:
 
 ### `unique`
 
-This test validates that there are no duplicate values present in a field.
-                
-The config and where clause are optional.
+このテストは、フィールドに重複した値がないことを検証します。
+
+config と where 句はオプションです。
 
 <File name='models/<filename>.yml'>
 
@@ -209,9 +209,9 @@ models:
 
 ### `accepted_values`
 
-This test validates that all of the non-`null` values in a column are present in a supplied list of `values`. If any values other than those provided in the list are present, then the test will fail.
+このテストは、列内の「null」以外のすべての値が、指定された「values」リストに存在するかどうかを検証します。リストに指定されていない値が存在する場合、テストは失敗します。
 
-The `accepted_values` test supports an optional `quote` parameter which, by default, will single-quote the list of accepted values in the test query. To test non-strings (like integers or boolean values) explicitly set the `quote` config to `false`.
+「accepted_values」テストはオプションの「quote」パラメータをサポートしており、デフォルトでは、テストクエリで受け入れられる値のリストをシングルクォーテーションで囲みます。文字列以外の値（整数やブール値など）をテストするには、「quote」設定を明示的に「false」に設定してください。
 
 <File name='schema.yml'>
 
@@ -237,9 +237,9 @@ models:
 
 ### `relationships`
 
-This test validates that all of the records in a child <Term id="table" /> have a corresponding record in a parent table. This property is referred to as "referential integrity".
+このテストは、子テーブル <Term id="table" /> 内のすべてのレコードが、親テーブル内に対応するレコードを持つかどうかを検証します。この特性は「参照整合性」と呼ばれます。
 
-The following example tests that every order's `customer_id` maps back to a valid `customer`.
+次の例では、すべての注文の `customer_id` が有効な `customer` にマッピングされているかどうかをテストします。
 
 <File name='schema.yml'>
 
@@ -258,12 +258,13 @@ models:
 
 </File>
 
-The `to` argument accepts a [Relation](/reference/dbt-classes#relation) – this means you can pass it a `ref` to a model (e.g. `ref('customers')`), or a `source` (e.g. `source('jaffle_shop', 'customers')`).
+`to` 引数は [Relation](/reference/dbt-classes#relation) を受け入れます。つまり、モデルへの `ref` (例: `ref('customers')`)、または `source` (例: `source('jaffle_shop', 'customers')`) を渡すことができます。
 
-## Additional examples
+## 追加の例
 
-### Test an expression
-Some data tests require multiple columns, so it doesn't make sense to nest them under the `columns:` key. In this case, you can apply the data test to the model (or source, seed, or snapshot) instead:
+### 式をテストする
+
+一部のデータテストでは複数の列が必要となるため、`columns:` キーの下に列をネストするのは意味がありません。このような場合は、代わりにモデル（またはソース、シード、スナップショット）にデータテストを適用できます:
 
 <File name='models/orders.yml'>
 
@@ -282,11 +283,11 @@ models:
 ```
 </File>
 
-This example focuses on testing expressions to ensure that `order_items_subtotal` equals `subtotal` and `order_total` correctly sums `subtotal` and `tax_paid`.
+この例では、`order_items_subtotal` が `subtotal` と等しく、`order_total` が `subtotal` と `tax_paid` を正しく合計することを確認するための式のテストに重点を置いています。
 
-### Use custom generic test
+### カスタム汎用テストを使用する
 
-If you've defined your own custom generic test, you can use that as the `test_name`:
+独自のカスタム汎用テストを定義している場合は、それを `test_name` として使用できます:
 
 <File name='models/<filename>.yml'>
 
@@ -304,21 +305,21 @@ models:
 
 </File>
 
-Check out the guide on writing a [custom generic test](/best-practices/writing-custom-generic-tests) for more information.
+詳細については、[カスタム汎用テスト](/best-practices/writing-custom-generic-tests)の作成に関するガイドをご覧ください。
 
-### Custom data test name
+### カスタムデータテスト名
 
-By default, dbt will synthesize a name for your generic test by concatenating:
-- test name (`not_null`, `unique`, etc)
-- model name (or source/seed/snapshot)
-- column name (if relevant)
-- arguments (if relevant, e.g. `values` for `accepted_values`)
+デフォルトでは、dbt は以下の要素を連結して汎用テストの名前を生成します。
+- テスト名 (`not_null`、`unique` など)
+- モデル名 (またはソース/シード/スナップショット)
+- 列名 (該当する場合)
+- 引数 (該当する場合、例: `accepted_values` の場合は `values`)
 
-It does not include any configurations for the test. If the concatenated name is too long, dbt will use a truncated and hashed version instead. The goal is to preserve unique identifiers for all resources in your project, including tests.
+テストの設定は含まれません。連結された名前が長すぎる場合、dbt は代わりに短縮されハッシュ化された名前を使用します。これは、テストを含むプロジェクト内のすべてのリソースの一意の識別子を維持することを目的としています。
 
-You may also define your own name for a specific test, via the `name` property.
+`name` プロパティを使用して、特定のテストに独自の名前を定義することもできます。
 
-**When might you want this?** dbt's default approach can result in some wonky (and ugly) test names. By defining a custom name, you get full control over how the test will appear in log messages and metadata artifacts. You'll also be able to select the test by that name.
+**どのような場合にこれが必要なのでしょうか？** dbt のデフォルトのアプローチでは、奇妙で見苦しいテスト名が生成されることがあります。カスタム名を定義することで、ログメッセージやメタデータアーティファクトにおけるテストの表示方法を完全に制御できます。その名前でテストを選択することもできます。
 
 <File name='models/<filename>.yml'>
 
@@ -356,9 +357,9 @@ $ dbt test --select unexpected_order_status_today
 12:43:41  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
 ```
 
-A test's name must be unique for all tests defined on a given model-column combination. If you give the same name to tests defined on several different columns, or across several different models, then `dbt test --select <repeated_custom_name>` will select them all. 
+テスト名は、特定のモデルと列の組み合わせで定義されたすべてのテストで一意である必要があります。複数の異なる列、または複数の異なるモデルで定義されたテストに同じ名前を付けた場合、`dbt test --select <repeated_custom_name>` はそれらすべてを選択します。
 
-**When might you need this?** In cases where you have defined the same test twice, with only a difference in configuration, dbt will consider these tests to be duplicates:
+**この機能が必要になるのはどのような場合ですか？** 設定のみが異なる同じテストを2回定義した場合、dbt はこれらのテストを重複テストと見なします:
 
 <File name='models/<filename>.yml'>
 
@@ -395,7 +396,7 @@ Compilation Error
   - test.testy.accepted_values_orders_status__placed__shipped__completed__returned.69dce9e5d5 (models/one_file.yml)
 ```
 
-By providing a custom name, you help dbt differentiate tests:
+カスタム名を指定すると、dbt がテストを区別しやすくなります:
 
 <File name='models/<filename>.yml'>
 
@@ -440,13 +441,13 @@ $ dbt test
 12:48:04  Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
 ```
 
-**If using [`store_failures`](/reference/resource-configs/store_failures):** dbt uses each data test's name as the name of the table in which to store any failing records. If you have defined a custom name for one test, that custom name will also be used for its table of failures. You may optionally configure an [`alias`](/reference/resource-configs/alias) for the test, to separately control both the name of the test (for metadata) and the name of its database table (for storing failures).
+**[`store_failures`](/reference/resource-configs/store_failures) を使用する場合:** dbt は、各データテストの名前を、失敗したレコードを保存するテーブルの名前として使用します。あるテストにカスタム名を定義している場合は、そのカスタム名がその失敗テーブルにも使用されます。オプションで、テストの [`alias`](/reference/resource-configs/alias) を設定して、テスト名（メタデータ用）とデータベーステーブル名（失敗の保存用）の両方を個別に制御することもできます。
 
-### Alternative format for defining tests
+### テスト定義の代替形式
 
-When defining a generic data test with several arguments and configurations, the YAML can look and feel unwieldy. If you find it easier, you can define the same test properties as top-level keys of a single dictionary, by providing the test name as `test_name` instead. It's totally up to you.
+複数の引数と設定を含む汎用データテストを定義する場合、YAML は見た目も操作性も複雑になることがあります。より簡潔にしたい場合は、テスト名を `test_name` として指定することで、同じテストプロパティを単一の辞書の最上位キーとして定義できます。これは完全にあなた次第です。
 
-This example is identical to the one above:
+この例は上記の例と同じです:
 
 <File name='models/<filename>.yml'>
 

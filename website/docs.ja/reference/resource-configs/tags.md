@@ -67,7 +67,8 @@ datatype: string | [string]
 
 <VersionBlock firstVersion="1.9">
 
-The following examples show how to add tags to dbt resources in YAML files. Replace `resource_type` with `exposures`, `models`, `snapshots`, `seeds`, or `saved_queries` as appropriate.
+以下の例は、YAML ファイルで dbt リソースにタグを追加する方法を示しています。`resource_type` を、必要に応じて `exposures`、`models`、`snapshots`、`seeds`、または `saved_queries` に置き換えてください。
+
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">
@@ -95,7 +96,7 @@ resource_type:
 
 </File>
 
-To apply tags to a model in your `models/` directory, add the `config` property similar to the following example:
+`models/` ディレクトリ内のモデルにタグを適用するには、次の例のように `config` プロパティを追加します:
 
 <File name='models/model.yml'>
 
@@ -125,41 +126,43 @@ models:
 
 </Tabs>
 
-## Definition
-Apply a tag (or list of tags) to a resource.
+## 定義
 
-These tags can be used as part of the [resource selection syntax](/reference/node-selection/syntax), when running the following commands:
-- `dbt run --select tag:my_tag` &mdash; Run all models tagged with a specific tag.
-- `dbt build --select tag:my_tag` &mdash; Build all resources tagged with a specific tag.
-- `dbt seed --select tag:my_tag` &mdash; Seed all resources tagged with a specific tag.
-- `dbt snapshot --select tag:my_tag` &mdash; Snapshot all resources tagged with a specific tag.
-- `dbt test --select tag:my_tag` &mdash; Indirectly runs all tests associated with the models that are tagged.
+リソースにタグ（またはタグのリスト）を適用します。
 
-#### Using tags with the `+` operator
-You can use the [`+` operator](/reference/node-selection/graph-operators#the-plus-operator) to include upstream or downstream dependencies in your `tag` selection:
-- `dbt run --select tag:my_tag+` &mdash; Run models tagged with `my_tag` and all their downstream dependencies.
-- `dbt run --select +tag:my_tag` &mdash; Run models tagged with `my_tag` and all their upstream dependencies.
-- `dbt run --select +model_name+` &mdash; Run a model, its upstream dependencies, and its downstream dependencies.
-- `dbt run --select tag:my_tag+ --exclude tag:exclude_tag` &mdash; Run model tagged with `my_tag` and their downstream dependencies, and exclude models tagged with `exclude_tag`, regardless of their dependencies.
+これらのタグは、以下のコマンドを実行する際に、[リソース選択構文](/reference/node-selection/syntax)の一部として使用できます。
+- `dbt run --select tag:my_tag` &mdash; 特定のタグが付けられたすべてのモデルを実行します。
+- `dbt build --select tag:my_tag` &mdash; 特定のタグが付けられたすべてのリソースをビルドします。
+- `dbt seed --select tag:my_tag` &mdash; 特定のタグが付けられたすべてのリソースをシードします。
+- `dbt snapshot --select tag:my_tag` &mdash; 特定のタグが付けられたすべてのリソースのスナップショットを作成します。
+- `dbt test --select tag:my_tag` &mdash; タグ付けされたモデルに関連付けられたすべてのテストを間接的に実行します。
+
+#### `+` 演算子を使用したタグの使用
+
+[`+` 演算子](/reference/node-selection/graph-operators#the-plus-operator) を使用すると、`tag` 選択に上流または下流の依存関係を含めることができます。
+- `dbt run --select tag:my_tag+` &mdash; `my_tag` タグが付いたモデルとそのすべての下流の依存関係を実行します。
+- `dbt run --select +tag:my_tag` &mdash; `my_tag` タグが付いたモデルとそのすべての上流の依存関係を実行します。
+- `dbt run --select +model_name+` &mdash; モデルとその上流の依存関係、および下流の依存関係を実行します。
+- `dbt run --select tag:my_tag+ --exclude tag:exclude_tag` &mdash; `my_tag` タグが付いたモデルとその下流の依存関係を実行し、依存関係に関係なく `exclude_tag` タグが付いたモデルを除外します。
 
 
-:::tip Usage notes about tags
+:::tip タグに関する使用上の注意
 
-When using tags, consider the following: 
+タグを使用する際は、以下の点にご注意ください。
 
-- Tags are additive across project hierarchy.
-- Some resource types (like sources, exposures) require tags at the top level.
+- タグはプロジェクト階層全体にわたって追加されます。
+- 一部のリソースタイプ（ソース、エクスポージャーなど）では、最上位レベルでタグを設定する必要があります。
 
-Refer to [usage notes](#usage-notes) for more information.
+詳しくは、[使用上の注意](#usage-notes) をご覧ください。
 :::
 
-## Examples
+## 例
 
-The following examples show how to apply tags to resources in your project. You can configure tags in the `dbt_project.yml`, `schema.yml`, or SQL files.
+以下の例は、プロジェクト内のリソースにタグを適用する方法を示しています。タグは `dbt_project.yml`、`schema.yml`、または SQL ファイルで設定できます。
 
-### Use tags to run parts of your project
+### タグを使用してプロジェクトの一部を実行します
 
-Apply tags in your `dbt_project.yml` as a single value or a string. In the following example, one of the models, the `jaffle_shop` model, is tagged with `contains_pii`. 
+`dbt_project.yml` で、単一の値または文字列としてタグを適用します。次の例では、モデルの1つである `jaffle_shop` モデルに `contains_pii` タグが付けられています。
 
 <File name='dbt_project.yml'>
 
@@ -186,11 +189,11 @@ models:
 </File>
 
 
-### Apply tags to models
+### モデルへのタグの適用
 
-This section demonstrates applying tags to models in the `dbt_project.yml`, `schema.yml`, and SQL files. 
+このセクションでは、`dbt_project.yml`、`schema.yml`、およびSQLファイル内のモデルにタグを適用する方法を説明します。
 
-To apply tags to a model in your `dbt_project.yml` file, you would add the following:
+`dbt_project.yml`ファイル内のモデルにタグを適用するには、以下のコードを追加します:
 
 <File name='dbt_project.yml'>
 
@@ -202,7 +205,7 @@ models:
 
 </File>
 
-To apply tags to a model in your `models/` directory YAML file, you would add the following using the `config` property:
+`models/` ディレクトリの YAML ファイル内のモデルにタグを適用するには、`config` プロパティを使用して以下を追加します:
 
 <File name='models/stg_customers.yml'>
 
@@ -222,7 +225,7 @@ models:
 
 </File>
 
-To apply tags to a model in your SQL file, you would add the following:
+SQL ファイル内のモデルにタグを適用するには、次のコードを追加します:
 
 <File name='models/staging/stg_payments.sql'>
 
@@ -237,7 +240,7 @@ select ...
 
 </File>
 
-Run resources with specific tags (or exclude resources with specific tags) using the following commands:
+次のコマンドを使用して、特定のタグが付いたリソースを実行します (または特定のタグが付いたリソースを除外します):
 
 ```shell
 # Run all models tagged "daily"
@@ -273,7 +276,7 @@ seeds:
 
 </File>
 
-### Apply tags to saved queries
+### 保存したクエリにタグを適用する
 
 <VersionBlock lastVersion="1.8">
 
@@ -282,7 +285,7 @@ seeds:
 </VersionBlock>
 
 
-This following example shows how to apply a tag to a saved query in the `dbt_project.yml` file. The saved query is then tagged with `order_metrics`.
+次の例は、`dbt_project.yml` ファイルに保存されたクエリにタグを適用する方法を示しています。保存されたクエリには `order_metrics` タグが付けられます:
 
 <File name='dbt_project.yml'>
 
@@ -295,14 +298,14 @@ This following example shows how to apply a tag to a saved query in the `dbt_pro
 
 </File>
 
-Then run resources with a specific tag using the following commands:
+次に、次のコマンドを使用して、特定のタグを持つリソースを実行します:
 
 ```shell
 # Run all resources tagged "order_metrics"
   dbt run --select tag:order_metrics
 ```
 
-The second example shows how to apply multiple tags to a saved query in the `semantic_model.yml` file. The saved query is then tagged with `order_metrics` and `hourly`.
+2番目の例は、`semantic_model.yml`ファイルに保存されたクエリに複数のタグを適用する方法を示しています。保存されたクエリには、`order_metrics`と`hourly`のタグが付けられます。
 
 <File name='semantic_model.yml'>
 
@@ -319,17 +322,18 @@ saved_queries:
 </File>
 
 
-Run resources with multiple tags using the following commands:
+次のコマンドを使用して、複数のタグを持つリソースを実行します:
 
 ```shell
 # Run all resources tagged "order_metrics" and "hourly"
   dbt build --select tag:order_metrics tag:hourly
 ```
 
-## Usage notes
+## 使用上の注意
 
-### Tags are additive
-Tags accumulate hierarchically. The [earlier example](/reference/resource-configs/tags#use-tags-to-run-parts-of-your-project) would result in:
+### タグは追加可能です
+
+タグは階層的に蓄積されます。[前の例](/reference/resource-configs/tags#タグを使用してプロジェクトの各部分を実行する)では、次のようになります。
 
 | Model                            | Tags                                  |
 | -------------------------------- | ------------------------------------- |
@@ -338,11 +342,10 @@ Tags accumulate hierarchically. The [earlier example](/reference/resource-config
 | models/marts/dim_customers.sql   | `contains_pii`, `hourly`, `published` |
 | models/metrics/daily_metrics.sql | `contains_pii`, `daily`, `published`  |
 
-### Other resource types
+### その他のリソースタイプ
 
-Tags can also be applied to [sources](/docs/build/sources), [exposures](/docs/build/exposures), and even _specific columns_ in a resource.
-These resources do not yet support the `config` property, so you'll need to specify
-the tags as a top-level key instead.
+タグは、[ソース](/docs/build/sources)、[エクスポージャー](/docs/build/exposures)、さらにはリソース内の_特定の列_にも適用できます。
+これらのリソースはまだ `config` プロパティをサポートしていないため、代わりに最上位キーとしてタグを指定する必要があります。
 
 <File name='models/schema.yml'>
 
@@ -373,7 +376,8 @@ sources:
 </File>
 
 
-In the example above, the `unique` test would be selected by any of these four tags:
+上記の例では、`unique` テストは次の 4 つのタグのいずれかによって選択されます:
+
 ```bash
 dbt test --select tag:top_level
 dbt test --select tag:table_level

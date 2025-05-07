@@ -26,38 +26,39 @@ models:
 
 </File>
 
-## Definition
+## 定義
 
-The deprecation date of the model is formatted as a date, optionally with a timezone offset. Supported RFC 3339 formats include:
+モデルの廃止日は日付形式で表され、オプションでタイムゾーンオフセットも指定できます。サポートされているRFC 3339形式は次のとおりです:
 - `YYYY-MM-DD hh:mm:ss.sss±hh:mm`
 - `YYYY-MM-DD hh:mm:ss.sss`
 - `YYYY-MM-DD`
 
-When `deprecation_date` does not include an offset from UTC, then it is interpreted as being in the system time zone of the dbt execution environment.
+`deprecation_date` に UTC からのオフセットが含まれていない場合、dbt 実行環境のシステム タイム ゾーンにあると解釈されます。
 
-## Explanation
+## 説明
 
-### Purpose
+### 目的
 
-Declaring a `deprecation_date` for a dbt model provides a mechanism to communicate plans and timelines for long-term support and maintenance and to facilitate change management.
+dbt モデルに `deprecation_date` を宣言することで、長期的なサポートとメンテナンスの計画とタイムラインを伝え、変更管理を容易にするメカニズムが提供されます。
 
-Setting a `deprecation_date` works well in conjunction with other [model governance](/docs/collaborate/govern/about-model-governance) features like [model versions](/docs/collaborate/govern/model-versions), but can also be used independently from them.
+`deprecation_date` の設定は、[モデルバージョン](/docs/collaborate/govern/model-versions) などの他の [モデルガバナンス](/docs/collaborate/govern/about-model-governance) 機能と連携して機能しますが、それらとは独立して使用することもできます。
 
-### Warning messages
+### 警告メッセージ
 
-When a project references a model that's slated for deprecation or the deprecation date has passed, a warning is generated. If it's a versioned model, with a newer version available, then the warning says so. This added bit of cross-team communication, from producers to consumers, is an advantage of using dbt's built-in functionality around model versions to facilitate migrations.
+プロジェクトが廃止予定のモデル、または廃止予定日を過ぎたモデルを参照している場合、警告が生成されます。バージョン管理されたモデルで、新しいバージョンが利用可能な場合は、警告にその旨が表示されます。プロデューサーからコンシューマーまで、チーム間のコミュニケーションが促進されるこの仕組みは、モデルバージョンに関する dbt の組み込み機能を使用して移行を円滑に進めるメリットです。
 
-Additionally, [`WARN_ERROR_OPTIONS`](/reference/global-configs/warnings) gives a mechanism whereby users can promote these warnings to actual runtime errors:
+さらに、[`WARN_ERROR_OPTIONS`](/reference/global-configs/warnings) を使用すると、ユーザーはこれらの警告を実際のランタイムエラーに昇格させることができます。
 
 | Warning                        | Scenario                                           | Affected projects      |
 |--------------------------------|----------------------------------------------------|------------------------|
-|        `DeprecatedModel`       | Parsing a project that defines a deprecated model  | Producer               |
-| `DeprecatedReference`          | Referencing a model with a past deprecation date   | Producer and consumers |
-| `UpcomingReferenceDeprecation` | Referencing a model with a future deprecation date | Producer and consumers |
+|        `DeprecatedModel`       | 非推奨のモデルを定義するプロジェクトの解析  | Producer               |
+| `DeprecatedReference`          | 廃止日が過ぎたモデルを参照する   | Producer and consumers |
+| `UpcomingReferenceDeprecation` | 将来の廃止予定日を持つモデルを参照する | Producer and consumers |
 
-**Example**
+**例**
 
-Example output for an `UpcomingReferenceDeprecation` warning:
+`UpcomingReferenceDeprecation` 警告の出力例:
+
 ```
 $ dbt parse
 15:48:14  Running with dbt=1.6.0
@@ -65,22 +66,22 @@ $ dbt parse
 15:48:14  [WARNING]: While compiling 'my_model_ref': Found a reference to my_model, which is slated for deprecation on '2038-01-19T03:14:07-00:00'.
 ```
 
-### Selection syntax
+### 選択構文
 
-There is not specific [node selection syntax](/reference/node-selection/syntax) for `deprecation_date`. [Programmatic invocations](/reference/programmatic-invocations) is one way to identify deprecated models (potentially in conjunction with [dbt list](/reference/commands/list)). e.g., `dbt -q ls  --output json --output-keys database schema alias deprecation_date`.
+`deprecation_date` には特定の [ノード選択構文](/reference/node-selection/syntax) はありません。[プログラムによる呼び出し](/reference/programmatic-invocations) は、非推奨モデルを識別する方法の 1 つです（[dbt リスト](/reference/commands/list) と併用することもできます）。例: `dbt -q ls --output json --output-keys database schema alias deprecation_date`。
 
-### Deprecation process
+### 非推奨プロセス
 
-Additional steps are necessary to save on build-related compute and storage costs for a deprecated model.
+非推奨モデルのビルド関連のコンピューティングおよびストレージコストを削減するには、追加の手順が必要です。
 
-Deprecated models can continue to be built by producers and be selected by consumers until they are [disabled](/reference/resource-configs/enabled) or removed.
+非推奨モデルは、[無効化](/reference/resource-configs/enabled)または削除されるまで、プロデューサーによって引き続きビルドされ、コンシューマーによって選択されます。
 
-Just like it does not automatically [drop relations when models are deleted](/faqs/Models/removing-deleted-models), dbt does not drop relations for deprecated models.
+モデルが削除されてもリレーションが自動的に削除されないのと同様に、dbt は非推奨モデルのリレーションを削除しません。
 
-Strategies similar to [here](https://discourse.getdbt.com/t/faq-cleaning-up-removed-models-from-your-production-schema/113) or [here](https://discourse.getdbt.com/t/clean-your-warehouse-of-old-and-deprecated-models/1547) can be used to drop relations that have been deprecated and are no longer in use.
+[こちら](https://discourse.getdbt.com/t/faq-cleaning-up-removed-models-from-your-production-schema/113) や [こちら](https://discourse.getdbt.com/t/clean-your-warehouse-of-old-and-deprecated-models/1547) と同様の戦略を使用して、非推奨となり使用されなくなったリレーションを削除できます。
 
-### Table expiration on BigQuery
+### BigQuery のテーブルの有効期限
 
-dbt-bigquery can set an [`hours_to_expiration`](/reference/resource-configs/bigquery-configs#controlling-table-expiration) that translates to `expiration_timestamp` within BigQuery.
+dbt-bigquery は、[`hours_to_expiration`](/reference/resource-configs/bigquery-configs#controlling-table-expiration) を設定できます。これは BigQuery 内で `expiration_timestamp` に変換されます。
 
-dbt does not automatically synchronize `deprecation_date` and `hours_to_expiration`, but users may want to coordinate them in some fashion (such as setting a model to expire 48 hours after its `deprecation_date`). Expired tables in BigQuery will be deleted and their storage reclaimed.
+dbt は `deprecation_date` と `hours_to_expiration` を自動的に同期しませんが、ユーザーは何らかの方法でこれらを調整することができます（例えば、モデルの有効期限を `deprecation_date` の 48 時間後に設定するなど）。BigQuery 内の有効期限切れのテーブルは削除され、ストレージが再利用されます。

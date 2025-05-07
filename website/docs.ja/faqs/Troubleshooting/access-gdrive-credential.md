@@ -1,32 +1,33 @@
 ---
-title: I'm receiving a "Permission denied while getting Drive credential" error when trying to query from Google Drive?
-description: "Grant BigQuery service account access"
-sidebar_label: 'Error when trying to query from Google Drive'
+title: Google ドライブからクエリを実行しようとすると、「ドライブの認証情報の取得中にアクセスが拒否されました」というエラーが表示されます。
+description: "BigQuery サービス アカウントへのアクセスを許可する"
+sidebar_label: 'Google ドライブからクエリを実行しようとしたときにエラーが発生しました'
 id: access-gdrive-credential
 
 ---
 
-If you're seeing the below error when you try to query a dataset from a Google Drive document in the IDE,  the IDE due to the below error message, we'll do our best to get you unstuck with the below steps! 
+IDE で Google Drive ドキュメントからデータセットをクエリしようとしたときに以下のエラーが表示される場合、IDE で以下のエラー メッセージが表示されるため、以下の手順で問題を解決できるよう最善を尽くします。
 
 ```
 Access denied: BigQuery BigQuery: Permission denied while getting Drive credentials
 ```
 
-Usually, this error indicates that you haven't granted the BigQuery service account access to the specific Google Drive document. If you're seeing this error, try giving the service account (Client email field seen [here](/docs/cloud/connect-data-platform/connect-bigquery)) you are using for your BigQuery connection in dbt Cloud, permission to your Google Drive or Google Sheet. You'll want to do this directly in your Google Document, click the **Share** button, and enter the client email. 
+通常、このエラーは、BigQuery サービス アカウントに特定の Google ドライブ ドキュメントへのアクセスを許可していないことを示します。このエラーが表示される場合は、dbt Cloud で BigQuery 接続に使用しているサービス アカウント（[こちら](/docs/cloud/connect-data-platform/connect-bigquery) に記載されているクライアントのメール アドレス）に、Google ドライブまたは Google スプレッドシートへのアクセス権限を付与してみてください。この操作は、Google ドキュメント内で直接実行し、**Share** ボタンをクリックしてクライアントのメール アドレスを入力してください。
 
-If you are experiencing this error when using OAuth, and you have verified your access to the Google Sheet, you may need to grant permissions for gcloud to access Google Drive:
+OAuth の使用時にこのエラーが発生し、Google スプレッドシートへのアクセスを検証済みの場合は、gcloud に Google ドライブへのアクセス権限を付与する必要がある可能性があります。
 
 ```
 gcloud auth application-default login --disable-quota-project
 ```
-For more info see the [gcloud auth application-default documentation](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login)
 
-If you've tried the earlier steps and are still experiencing this behavior, try using the following command to log into Google Cloud and enable access to Google Drive. It also updates the Application Default Credentials (ADC) file, which many Google Cloud libraries use to authenticate API calls.
+詳細については、[gcloud auth application-default のドキュメント](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) をご覧ください。
+
+上記の手順を試してもこの動作が続く場合は、以下のコマンドを使用して Google Cloud にログインし、Google ドライブへのアクセスを有効にしてください。このコマンドは、多くの Google Cloud ライブラリが API 呼び出しの認証に使用するアプリケーション デフォルト認証情報 (ADC) ファイルも更新します。
 
 ```
 gcloud auth login --enable-gdrive-access --update-adc
 ```
 
-For more info, refer to [gcloud auth login documentation](https://cloud.google.com/sdk/gcloud/reference/auth/login#--enable-gdrive-access).
+詳細については、[gcloud auth login ドキュメント](https://cloud.google.com/sdk/gcloud/reference/auth/login#--enable-gdrive-access) をご覧ください。
 
-If you've tried the steps above and are still experiencing this behavior - reach out to the Support team at support@getdbt.com and we'll be happy to help!
+上記の手順を試しても問題が解決しない場合は、サポートチーム（support@getdbt.com）までお問い合わせください。喜んでお手伝いいたします。

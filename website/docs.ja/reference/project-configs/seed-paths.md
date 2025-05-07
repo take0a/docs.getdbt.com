@@ -11,14 +11,14 @@ seed-paths: [directorypath]
 
 </File>
 
-## Definition
-Optionally specify a custom list of directories where [seed](/docs/build/seeds) files are located.
+## 定義
+オプションで、[seed](/docs/build/seeds)ファイルが配置されているディレクトリのカスタムリストを指定します。
 
-## Default
+## デフォルト
 
-By default, dbt expects seeds to be located in the `seeds` directory. For example, `seed-paths: ["seeds"]`. 
+デフォルトでは、dbt はシードが `seeds` ディレクトリにあるものと想定します。例: `seed-paths: ["seeds"]`。
 
-import RelativePath from '/snippets/_relative-path.md';
+import RelativePath from '/snippets.ja/_relative-path.md';
 
 <RelativePath 
 path="seed-paths"
@@ -26,19 +26,19 @@ absolute="/Users/username/project/seed"
 />
 
 - ✅ **Do**
-  - Use relative path:
+  - 相対パスを使用:
     ```yml
     seed-paths: ["seed"]
     ```
 
 - ❌ **Don't:**
-  - Avoid absolute paths:
+  - 絶対パスは避けてください:
     ```yml
     seed-paths: ["/Users/username/project/seed"]
     ```
 
-## Examples
-### Use a directory named `custom_seeds` instead of `seeds`
+## 例
+### `seeds` の代わりに `custom_seeds` という名前のディレクトリを使用します
 
 <File name='dbt_project.yml'>
 
@@ -48,8 +48,8 @@ seed-paths: ["custom_seeds"]
 
 </File>
 
-### Co-locate your models and seeds in the `models` directory
-Note: this works because dbt is looking for different file types for seeds (`.csv` files) and models (`.sql` files).
+### モデルとシードを `models` ディレクトリに同じ場所に配置します。
+注: dbt はシード（`.csv` ファイル）とモデル（`.sql` ファイル）に対して異なるファイルタイプを検索するため、この方法が機能します。
 
 <File name='dbt_project.yml'>
 
@@ -60,8 +60,8 @@ model-paths: ["models"]
 
 </File>
 
-### Split your seeds across two directories
-Note: We recommend that you instead use two subdirectories within the `seeds/` directory to achieve a similar effect.
+### シードを2つのディレクトリに分割します
+注: 同様の効果を得るには、代わりに `seeds/` ディレクトリ内に2つのサブディレクトリを使用することをお勧めします。
 
 <File name='dbt_project.yml'>
 

@@ -1,1 +1,1 @@
-<span>Paths specified in <code>{props.path}</code> must be relative to the location of your `dbt_project.yml` file. Avoid using absolute paths like <code>{props.absolute}</code>, as it will lead to unexpected behavior and outcomes.</span>
+<span><code>{props.path} </code>で指定するパスは、`dbt_project.yml` ファイルの場所からの相対パスでなければなりません。<code>{props.absolute} </code>のような絶対パスは使用しないでください。予期しない動作や結果につながる可能性があります。</span>

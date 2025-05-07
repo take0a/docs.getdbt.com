@@ -1,22 +1,21 @@
 ---
-description: "Reference guide for configuring the dbt_project.yml file."
-intro_text: "The dbt_project.yml file is a required file for all dbt projects. It contains important information that tells dbt how to operate your project."
+description: "dbt_project.yml ファイルを構成するためのリファレンス ガイド。"
+intro_text: "dbt_project.yml ファイルは、すべての dbt プロジェクトに必須のファイルです。このファイルには、dbt にプロジェクトの操作方法を指示する重要な情報が含まれています。"
 ---
 
-Every [dbt project](/docs/build/projects) needs a `dbt_project.yml` file — this is how dbt knows a directory is a dbt project. It also contains important information that tells dbt how to operate your project. It works as follows:
+すべての [dbt プロジェクト](/docs/build/projects) には `dbt_project.yml` ファイルが必要です。これは、dbt がディレクトリが dbt プロジェクトであることを認識するためのものです。また、このファイルには、dbt にプロジェクトの操作方法を指示する重要な情報も含まれています。動作は以下のとおりです。
 
-- dbt uses [YAML](https://yaml.org/) in a few different places. If you're new to YAML, it would be worth learning how arrays, dictionaries, and strings are represented.
+- dbt はいくつかの場所で [YAML](https://yaml.org/) を使用します。YAML を初めて使用する場合は、配列、辞書、文字列の表現方法を学ぶことをお勧めします。
 
-- By default, dbt looks for the `dbt_project.yml` in your current working directory and its parents, but you can set a different directory using the `--project-dir` flag or the `DBT_PROJECT_DIR` environment variable.
+- デフォルトでは、dbt は現在の作業ディレクトリとその親ディレクトリで `dbt_project.yml` を検索しますが、`--project-dir` フラグまたは `DBT_PROJECT_DIR` 環境変数を使用して別のディレクトリを指定することもできます。
 
-- Specify your dbt Cloud project ID in the `dbt_project.yml` file using `project-id` under the `dbt-cloud` config. Find your project ID in your dbt Cloud project URL: For example, in `https://YOUR_ACCESS_URL/11/projects/123456`, the project ID is `123456`.
+- `dbt_project.yml` ファイルで、`dbt-cloud` 構成ファイルの `project-id` を使用して、dbt Cloud プロジェクト ID を指定します。 dbt Cloud プロジェクト URL でプロジェクト ID を見つけます。たとえば、`https://YOUR_ACCESS_URL/11/projects/123456` の場合、プロジェクト ID は `123456` です。
 
+- `dbt_project.yml` ファイルでは、設定ファイル（[マクロ](/reference/macro-properties) など）以外の「プロパティ」を設定することはできません。これはすべての種類のリソースに適用されます。詳細については、[設定ファイルとプロパティ](/reference/configs-and-properties) を参照してください。
 
-- Note, you can't set up a "property" in the `dbt_project.yml` file if it's not a config (an example is [macros](/reference/macro-properties)). This applies to all types of resources. Refer to [Configs and properties](/reference/configs-and-properties) for more detail.
+## 例
 
-## Example
-
-The following example is a list of all available configurations in the `dbt_project.yml` file:
+次の例は、`dbt_project.yml` ファイルで利用可能なすべての設定のリストです:
 
 <File name='dbt_project.yml'>
 
@@ -100,17 +99,17 @@ vars:
 
 </File>
 
-## The `+` prefix
+## `+` プレフィックス
 
-import PlusPrefix from '/snippets/_plus-prefix.md';
+import PlusPrefix from '/snippets.ja/_plus-prefix.md';
 
 <PlusPrefix />
 
-## Naming convention
+## 命名規則
 
-It's important to follow the correct YAML naming conventions for the configs in your `dbt_project.yml` file to ensure dbt can process them properly. This is especially true for resource types with more than one word.
+dbt が適切に処理できるように、`dbt_project.yml` ファイル内の設定項目は正しい YAML 命名規則に従うことが重要です。これは、複数の単語を含むリソースタイプの場合に特に重要です。
 
-- Use dashes (`-`) when configuring resource types with multiple words in your `dbt_project.yml` file. Here's an example for [saved queries](/docs/build/saved-queries#configure-saved-query):
+- `dbt_project.yml` ファイルで複数の単語を含むリソースタイプを設定する場合は、ダッシュ (`-`) を使用します。[保存済みクエリ](/docs/build/saved-queries#configure-saved-query) の例を以下に示します。
 
     <File name="dbt_project.yml">
 
@@ -122,7 +121,7 @@ It's important to follow the correct YAML naming conventions for the configs in 
     ```
     </File>
 
-- Use underscore (`_`) when configuring resource types with multiple words for YAML files other than the `dbt_project.yml` file. For example, here's the same saved queries resource in the `semantic_models.yml` file:
+- `dbt_project.yml` ファイル以外の YAML ファイルで、複数の単語を含むリソースタイプを設定する場合は、アンダースコア (`_`) を使用します。例えば、`semantic_models.yml` ファイルに保存されている同じクエリリソースは次のようになります:
 
     <File name="models/semantic_models.yml">
 

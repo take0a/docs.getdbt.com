@@ -3,7 +3,7 @@ title: "event_time"
 id: "event-time"
 sidebar_label: "event_time"
 resource_types: [models, seeds, source]
-description: "dbt uses event_time to understand when an event occurred. When defined, event_time enables microbatch incremental models, the sample flag, and more refined comparison of datasets during Advanced CI."
+description: "dbtはevent_timeを使用してイベントの発生時刻を把握します。event_timeを定義すると、マイクロバッチ増分モデル、サンプルフラグ、そして高度なCIにおけるデータセットのより精密な比較が可能になります。"
 datatype: string
 ---
 
@@ -103,7 +103,7 @@ snapshots:
 </File>
 
 
-import SnapshotYaml from '/snippets/_snapshot-yaml-spec.md';
+import SnapshotYaml from '/snippets.ja/_snapshot-yaml-spec.md';
 
 <SnapshotYaml/>
 </VersionBlock>
@@ -136,40 +136,40 @@ sources:
 </TabItem>
 </Tabs>
 
-## Definition
+## 定義
 
-dbt uses `event_time` to understand when an event occurred. Configure it in your `dbt_project.yml` file, property YAML file, or config block for [models](/docs/build/models), [seeds](/docs/build/seeds), or [sources](/docs/build/sources).
+dbt は、イベントが発生したタイミングを把握するために `event_time` を使用します。`dbt_project.yml` ファイル、プロパティ YAML ファイル、または [models](/docs/build/models)、[seeds](/docs/build/seeds)、[sources](/docs/build/sources) の設定ブロックで設定してください。
 
-### Usage
+### 使用方法
 
-`event_time` is required for the [incremental microbatch](/docs/build/incremental-microbatch) strategy<VersionBlock firstVersion="1.10">, the [`--sample` flag](/docs/build/sample-flag),</VersionBlock> and highly recommended for [Advanced CI's compare changes](/docs/deploy/advanced-ci#optimizing-comparisons) in CI/CD workflows, where it ensures the same time-slice of data is correctly compared between your CI and production environments.
+`event_time` は、[増分マイクロバッチ](/docs/build/incremental-microbatch) 戦略 <VersionBlock firstVersion="1.10">、[`--sample` フラグ](/docs/build/sample-flag)、</VersionBlock> に必須です。また、CI/CD ワークフローにおける [高度な CI の変更比較](/docs/deploy/advanced-ci#optimizing-comparisons) にも強く推奨されます。これにより、CI 環境と本番環境間で同じタイムスライスのデータが正しく比較されます。
 
-### Best practices
+### ベストプラクティス
 
-Set the `event_time` to the name of the field that represents the actual timestamp of the event (like `account_created_at`). The timestamp of the event should represent "at what time did the row occur" rather than an event ingestion date. Marking a column as the `event_time` when it isn't, diverges from the semantic meaning of the column which may result in user confusion when other tools make use of the metadata.
+`event_time` を、イベントの実際のタイムスタンプを表すフィールド名（`account_created_at` など）に設定してください。イベントのタイムスタンプは、イベントの取り込み日ではなく、「行が発生した時刻」を表す必要があります。`event_time` ではない列を `event_time` としてマークすると、列の意味から逸脱し、他のツールでメタデータを使用する際にユーザーの混乱を招く可能性があります。
 
-However, if an ingestion date (like `loaded_at`, `ingested_at`, or `last_updated_at`) are the only timestamps you use, you can set `event_time` to these fields. Here are some considerations to keep in mind if you do this:
+ただし、取り込み日（`loaded_at`、`ingested_at`、`last_updated_at` など）のみを使用するタイムスタンプの場合は、これらのフィールドに `event_time` を設定できます。この場合、以下の点に注意してください。
 
-- Using `last_updated_at` or `loaded_at` &mdash; May result in duplicate entries in the resulting table in the data warehouse over multiple runs. Setting an appropriate [lookback](/reference/resource-configs/lookback) value can reduce duplicates but it can't fully eliminate them since some updates outside the lookback window won't be processed.
-- Using `ingested_at` &mdash; Since this column is created by your ingestion/EL tool instead of coming from the original source, it will change if/when you need to resync your connector for some reason. This means that data will be reprocessed and loaded into your warehouse for a second time against a second date. As long as this never happens (or you run a full refresh when it does), microbatches will be processed correctly when using `ingested_at`. 
+- `last_updated_at` または `loaded_at` を使用すると、複数回実行したデータウェアハウスの結果テーブルにエントリが重複する可能性があります。適切な [lookback](/reference/resource-configs/lookback) 値を設定すると重複を減らすことができますが、ルックバック期間外の更新の一部は処理されないため、重複を完全に排除することはできません。
+- `ingested_at` の使用 - この列は元のソースから取得されるのではなく、取り込み/EL ツールによって作成されるため、何らかの理由でコネクタを再同期する必要がある場合は、この列の値が変更されます。つまり、データは再処理され、別の日付でウェアハウスに再度ロードされます。このような状況が発生しない限り（または発生した場合は完全更新を実行する限り）、`ingested_at` を使用するとマイクロバッチは正しく処理されます。
 
-Here are some examples of recommended and not recommended `event_time` columns:
+推奨される `event_time` 列と推奨されない `event_time` 列の例をいくつか示します:
 
 
 | <div style={{width:'200px'}}>Status</div>      | Column name     | Description    |
 |--------------------|---------------------|----------------------|
-| ✅ Recommended | `account_created_at` | Represents the specific time when an account was created, making it a fixed event in time.                       |
-| ✅ Recommended | `session_began_at`    | Captures the exact timestamp when a user session started, which won’t change and directly ties to the event.     |
-| ❌ Not recommended | `_fivetran_synced`    | This represents the time the event was ingested, not when it happened.                                           |
-| ❌ Not recommended | `last_updated_at`    | Changes over time and isn't tied to the event itself. If used, note the considerations mentioned earlier in [best practices](#best-practices).    |
+| ✅ Recommended | `account_created_at` | アカウントが作成された特定の時刻を表し、時間的に固定されたイベントになります。 |
+| ✅ Recommended | `session_began_at`    | ユーザー セッションが開始されたときの正確なタイムスタンプをキャプチャします。このタイムスタンプは変更されず、イベントに直接結び付けられます。 |
+| ❌ Not recommended | `_fivetran_synced`    | これは、イベントが発生した時刻ではなく、イベントが取り込まれた時刻を表します。  |
+| ❌ Not recommended | `last_updated_at`    | 時間の経過とともに変化し、イベント自体とは結びつきません。使用する場合は、[ベストプラクティス](#best-practices)で前述した考慮事項に注意してください。    |
 
-## Examples
+## 例
 
 <Tabs> 
 
 <TabItem value="model" label="Models">
 
-Here's an example in the `dbt_project.yml` file:
+以下は `dbt_project.yml` ファイルの例です:
 
 <File name='dbt_project.yml'>
 
@@ -181,7 +181,7 @@ models:
 ```
 </File>
 
-Example in a properties YAML file:
+プロパティ YAML ファイルの例:
 
 <File name='models/properties.yml'>
 
@@ -194,7 +194,7 @@ models:
 
 </File>
 
-Example in sql model config block:
+SQL モデル構成ブロックの例:
 
 <File name="models/user_sessions.sql">
 
@@ -206,12 +206,13 @@ Example in sql model config block:
 
 </File> 
 
-This setup sets `session_start_time` as the `event_time` for the `user_sessions` model.
+この設定では、`user_sessions` モデルの `event_time` として `session_start_time` が設定されます。
+
 </TabItem> 
 
 <TabItem value="seeds" label="Seeds">
 
-Here's an example in the `dbt_project.yml` file:
+以下は `dbt_project.yml` ファイルの例です:
 
 <File name='dbt_project.yml'>
 
@@ -224,7 +225,7 @@ seeds:
 
 </File>
 
-Example in a seed properties YAML:
+seed プロパティ YAML の例:
 
 <File name='seeds/properties.yml'>
 
@@ -236,13 +237,13 @@ seeds:
 ```
 </File>
 
-This setup sets `record_timestamp` as the `event_time` for `my_seed`. 
+この設定では、`record_timestamp` が `my_seed` の `event_time` として設定されます。
 
 </TabItem> 
 
 <TabItem value="snapshot" label="Snapshots">
 
-Here's an example in the `dbt_project.yml` file:
+以下は `dbt_project.yml` ファイルの例です:
 
 <File name='dbt_project.yml'>
 
@@ -255,7 +256,7 @@ snapshots:
 
 </File>
 
-Example in a snapshot properties YAML:
+スナップショットプロパティ YAML の例:
 
 <File name='my_project/properties.yml'>
 
@@ -267,13 +268,13 @@ snapshots:
 ```
 </File>
 
-This setup sets `record_timestamp` as the `event_time` for `my_snapshot`. 
+この設定では、`record_timestamp` が `my_snapshot` の `event_time` として設定されます。
 
 </TabItem> 
 
 <TabItem value="sources" label="Sources">
 
-Here's an example of source properties YAML file:
+ソース プロパティ YAML ファイルの例を次に示します:
 
 <File name='models/properties.yml'>
 
@@ -287,7 +288,7 @@ sources:
 ```
 </File>
 
-This setup sets `event_timestamp` as the `event_time` for the specified source table.
+この設定では、指定されたソース テーブルの `event_time` として `event_timestamp` を設定します。
 
 </TabItem> 
 </Tabs>

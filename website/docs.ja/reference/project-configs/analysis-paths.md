@@ -1,6 +1,6 @@
 ---
 datatype: [directorypath]
-description: "Read this guide to understand the analysis-paths configuration in dbt."
+description: "dbt の analysis-paths 構成を理解するには、このガイドをお読みください。"
 default_value: []
 ---
 
@@ -12,15 +12,15 @@ analysis-paths: [directorypath]
 
 </File>
 
-## Definition
-Specify a custom list of directories where [analyses](/docs/build/analyses) are located. 
+## 定義
+[analyses](/docs/build/analyses) が配置されているディレクトリのカスタムリストを指定します。
 
-## Default
-Without specifying this config, dbt will not compile any `.sql` files as analyses.
+## デフォルト
+この設定を指定しないと、dbt は `.sql` ファイルを analyses としてコンパイルしません。
 
-However, the [`dbt init` command](/reference/commands/init) populates this value as `analyses` ([source](https://github.com/dbt-labs/dbt-starter-project/blob/HEAD/dbt_project.yml#L15)).
+ただし、[`dbt init` コマンド](/reference/commands/init) は、この値を `analyses` として入力します ([ソース](https://github.com/dbt-labs/dbt-starter-project/blob/HEAD/dbt_project.yml#L15))。
 
-import RelativePath from '/snippets/_relative-path.md';
+import RelativePath from '/snippets.ja/_relative-path.md';
 
 <RelativePath 
 path="analysis-paths"
@@ -28,20 +28,20 @@ absolute="/Users/username/project/analyses"
 />
 
 - ✅ **Do** 
-  - Use relative path:
+  - 相対パスを使用:
     ```yml
     analysis-paths: ["analyses"]
     ```
 
 - ❌ **Don't** 
-  - Avoid absolute paths:
+  - 絶対パスは避けてください:
     ```yml
     analysis-paths: ["/Users/username/project/analyses"]
     ```
 
-## Examples
-### Use a subdirectory named `analyses`
-This is the value populated by the [`dbt init` command](/reference/commands/init).
+## 例
+### `analyses`という名前のサブディレクトリを使用する
+これは、[`dbt init` コマンド](/reference/commands/init) によって設定される値です。
 
 <File name='dbt_project.yml'>
 
@@ -51,7 +51,7 @@ analysis-paths: ["analyses"]
 
 </File>
 
-### Use a subdirectory named `custom_analyses`
+### `custom_analyses`という名前のサブディレクトリを使用します
 
 <File name='dbt_project.yml'>
 

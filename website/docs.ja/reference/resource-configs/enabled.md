@@ -1,6 +1,6 @@
 ---
 resource_types: all
-description: "Enabled - Read this in-depth guide to learn about configurations in dbt."
+description: "Enabled - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: boolean
 default_value: true
 ---
@@ -298,23 +298,25 @@ saved_queries:
 
 </Tabs>
 
-## Definition
+## 定義
 
-An optional configuration for enabling or disabling a resource.
+リソースを有効化または無効化するためのオプション設定。
 
-* Default: true
+* デフォルト: true
 
-When a resource is disabled, dbt will not consider it as part of your project. Note that this can cause compilation errors.
+リソースが無効化されると、dbt はそれをプロジェクトの一部として扱いません。ただし、コンパイルエラーが発生する可能性があることに注意してください。
 
-If you instead want to exclude a model from a particular run, consider using the `--exclude` parameter as part of the [model selection syntax](/reference/node-selection/syntax)
+特定の実行からモデルを除外したい場合は、[モデル選択構文](/reference/node-selection/syntax) の一部として `--exclude` パラメータを使用することを検討してください。
 
-If you are disabling models because they are no longer being used, but you want to version control their SQL, consider making them an [analysis](/docs/build/analyses) instead.
+モデルが使用されなくなったために無効化するが、その SQL をバージョン管理したい場合は、[分析](/docs/build/analyses) にすることを検討してください。
 
-## Examples
-### Disable a model in a package in order to use your own version of the model.
-This could be useful if you want to change the logic of a model in a package. For example, if you need to change the logic in the `segment_web_page_views` from the `segment` package ([original model](https://github.com/dbt-labs/segment/blob/a8ff2f892b009a69ec36c3061a87e437f0b0ea93/models/base/segment_web_page_views.sql)):
-1. Add a model named `segment_web_page_views` (the same name) to your own project.
-2. To avoid a compilation error due to duplicate models, disable the segment package's version of the model like so:
+## 例
+
+### パッケージ内のモデルを無効化して、独自のモデルバージョンを使用します。
+
+これは、パッケージ内のモデルのロジックを変更する場合に便利です。たとえば、`segment` パッケージ ([オリジナルモデル](https://github.com/dbt-labs/segment/blob/a8ff2f892b009a69ec36c3061a87e437f0b0ea93/models/base/segment_web_page_views.sql)) の `segment_web_page_views` のロジックを変更する必要がある場合は、次のようにします。
+1. `segment_web_page_views` (同じ名前) というモデルを独自のプロジェクトに追加します。
+2. モデルの重複によるコンパイルエラーを回避するには、次のようにして、セグメントパッケージのバージョンのモデルを無効化します。
 
 <File name='dbt_project.yml'>
 

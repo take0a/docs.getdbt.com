@@ -1,19 +1,19 @@
 ---
-title: Unable to trigger a CI job with GitLab
-description: "Unable to trigger a CI job"
-sidebar_label: 'Unable to trigger a CI job'
+title: GitLabでCIジョブをトリガーできない
+description: "CIジョブをトリガーできません"
+sidebar_label: 'CIジョブをトリガーできません'
 id: gitlab-webhook
 ---
 
-When you connect dbt Cloud to a GitLab repository, GitLab automatically registers a webhook in the background, viewable under the repository settings. This webhook is also used to trigger [CI jobs](/docs/deploy/ci-jobs) when you push to the repository.
+dbt Cloud を GitLab リポジトリに接続すると、GitLab はバックグラウンドで自動的に Webhook を登録します。登録された Webhook はリポジトリ設定で確認できます。この Webhook は、リポジトリへのプッシュ時に [CI ジョブ](/docs/deploy/ci-jobs) をトリガーするためにも使用されます。
 
-If you're unable to trigger a CI job, this usually indicates that the webhook registration is missing or incorrect.
+CI ジョブをトリガーできない場合は、通常、Webhook の登録が欠落しているか、正しくないことを示しています。
 
-To resolve this issue, navigate to the repository settings in GitLab and view the webhook registrations by navigating to GitLab --> **Settings** --> **Webhooks**.
+この問題を解決するには、GitLab のリポジトリ設定に移動し、GitLab --> **Settings** --> **Webhooks** に移動して Webhook の登録を確認します。
 
-Some things to check:
+確認事項：
 
-- The webhook registration is enabled in GitLab. 
-- The webhook registration is configured with the correct URL and secret.
+- GitLab で Webhook の登録が有効になっていること。
+- Webhook の登録に正しい URL とシークレットが設定されていること。
 
-If you're still experiencing this issue, reach out to the Support team at support@getdbt.com and we'll be happy to help!
+問題が解決しない場合は、サポートチーム（support@getdbt.com）までお問い合わせください。喜んでお手伝いいたします。

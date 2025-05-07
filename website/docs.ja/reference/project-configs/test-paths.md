@@ -11,17 +11,17 @@ test-paths: [directorypath]
 
 </File>
 
-## Definition
+## 定義
 
-Optionally specify a custom list of directories where [singular tests](/docs/build/data-tests#singular-data-tests) and [custom generic tests](/docs/build/data-tests#generic-data-tests) are located.
+オプションで、[特異テスト](/docs/build/data-tests#singular-data-tests)と[カスタム汎用テスト](/docs/build/data-tests#generic-data-tests)が配置されているディレクトリのカスタムリストを指定します。
 
 
-## Default
-Without specifying this config, dbt will search for tests in the `tests` directory, i.e. `test-paths: ["tests"]`. Specifically, it will look for `.sql` files containing:
-- Generic test definitions in the `tests/generic` subdirectory
-- Singular tests (all other files)
+## デフォルト
+この設定を指定しない場合、dbt は `tests` ディレクトリ（つまり `test-paths: ["tests"]`）内のテストを検索します。具体的には、以下の内容を含む `.sql` ファイルを検索します。
+- `tests/generic` サブディレクトリ内の汎用テスト定義
+- 個別テスト（その他のファイル）
 
-import RelativePath from '/snippets/_relative-path.md';
+import RelativePath from '/snippets.ja/_relative-path.md';
 
 <RelativePath 
 path="test-paths"
@@ -29,19 +29,19 @@ absolute="/Users/username/project/test"
 />
 
 - ✅ **Do**
-  - Use relative path:
+  - 相対パスを使用:
     ```yml
     test-paths: ["test"]
     ```
 
 - ❌ **Don't:**
-  - Avoid absolute paths:
+  - 絶対パスは避けてください:
     ```yml
     test-paths: ["/Users/username/project/test"]
     ```
 
-## Examples
-### Use a subdirectory named `custom_tests` instead of `tests` for data tests
+## 例
+### データテストには `tests` ではなく `custom_tests` というサブディレクトリを使用します
 
 <File name='dbt_project.yml'>
 

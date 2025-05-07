@@ -1,6 +1,6 @@
 ---
 datatype: version-range | [version-range]
-description: "Read this guide to understand the require-dbt-version configuration in dbt."
+description: "dbt の require-dbt-version 構成を理解するには、このガイドをお読みください。"
 default_value: None
 ---
 
@@ -14,13 +14,13 @@ require-dbt-version: version-range | [version-range]
 
 </File>
 
-## Definition
+## 定義
 
-You can use `require-dbt-version` to restrict your project to only work with a range of dbt versions. 
+`require-dbt-version` を使用すると、プロジェクトが特定のバージョンの dbt でのみ動作するように制限できます。
 
-When you set this configuration, dbt sends a helpful error message for any user who attempts to run the project with an unsupported version of dbt. This can be useful for package maintainers (such as [dbt-utils](https://github.com/dbt-labs/dbt-utils)) to ensure that users' dbt version is compatible with the package. Setting this configuration might also help your whole team remain synchronized on the same version of dbt for local development, to avoid compatibility issues from changed behaviour.
+この設定を行うと、サポートされていないバージョンの dbt を使用してプロジェクトを実行しようとしたユーザーに、dbt は役立つエラーメッセージを送信します。これは、パッケージメンテナー（[dbt-utils](https://github.com/dbt-labs/dbt-utils) など）が、ユーザーの dbt バージョンがパッケージと互換性があることを確認するのに役立ちます。また、この設定を行うことで、ローカル開発においてチーム全体が同じバージョンの dbt で同期を保つことができ、動作の変更による互換性の問題を回避できます。
 
-If this configuration is not specified, no version check will occur.
+この設定が指定されていない場合、バージョンチェックは行われません。
 
 :::info dbt Cloud release tracks 
 
@@ -28,9 +28,10 @@ If this configuration is not specified, no version check will occur.
 
 :::
 
-### YAML quoting
+### YAML の引用符で囲む
 
-This configuration needs to be interpolated by the YAML parser as a string. As such, you should quote the value of the configuration, taking care to avoid whitespace. For example:
+この設定は、YAML パーサーによって文字列として展開される必要があります。そのため、設定の値は引用符で囲み、空白文字を避けるように注意してください。例:
+
 ```yml
 # ✅ These will work
 require-dbt-version: ">=1.0.0" # Double quotes are OK
@@ -42,10 +43,10 @@ require-dbt-version: ">= 1.0.0" # Don't put whitespace after the equality signs
 ```
 
 
-## Examples
+## 例
 
-### Specify a minimum dbt version
-Use a `>=` operator for a minimum boundary. In the following example, this project will run with any version of dbt greater than or equal to 1.0.0.
+### 最小の dbt バージョンを指定します
+最小境界には `>=` 演算子を使用します。次の例では、このプロジェクトは dbt のバージョン 1.0.0 以上で実行されます。
 
 
 <File name='dbt_project.yml'>
@@ -57,8 +58,8 @@ require-dbt-version: ">=1.0.0"
 </File>
 
 
-### Pin to a range
-Use a comma separated list for an upper and lower bound. In the following example, this project will run with dbt 1.x.x.
+### 範囲に固定する
+上限と下限をカンマ区切りのリストで指定します。以下の例では、このプロジェクトは dbt 1.x.x で実行されます。
 
 <File name='dbt_project.yml'>
 
@@ -68,7 +69,7 @@ require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 </File>
 
-OR
+または
 
 <File name='dbt_project.yml'>
 
@@ -79,16 +80,15 @@ require-dbt-version: ">=1.0.0,<2.0.0"
 </File>
 
   
-### Require a specific dbt version
+### 特定のdbtバージョンを要求する
 
-:::info Not recommended
-Pinning to a specific dbt version is discouraged because it limits project flexibility and can cause compatibility issues, especially with dbt packages. It's recommended to [pin to a major release](#pin-to-a-range), using a version range (for example, `">=1.0.0", "<2.0.0"`) for broader compatibility and to benefit from updates.
+:::info 非推奨
+特定の dbt バージョンへの固定は、プロジェクトの柔軟性が制限され、特に dbt パッケージで互換性の問題が発生する可能性があるため、推奨されません。互換性を高め、アップデートのメリットを享受するには、バージョン範囲（例：`">=1.0.0"、"<2.0.0"`）を使用して[メジャーリリースに固定](#範囲で固定)することをお勧めします。
 
-While you can restrict your project to run only with an exact version of dbt Core, we do not recommend this for dbt Core v1.0.0 and higher. 
-
+プロジェクトを特定のバージョンの dbt Core でのみ実行するように制限することは可能ですが、dbt Core v1.0.0 以降では推奨されません。
 :::
 
-In the following example, the project will only run with dbt v1.5: 
+次の例では、プロジェクトは dbt v1.5 でのみ実行されます:
 
 <File name='dbt_project.yml'>
 
@@ -98,9 +98,10 @@ require-dbt-version: "1.5.0"
 
 </File>
 
-## Invalid dbt versions
+## 無効な dbt バージョン
 
-If the version of dbt used to invoke a project disagrees with the specified `require-dbt-version` in the project or _any_ of the included packages, then dbt will fail immediately with the following error:
+プロジェクトの起動に使用された dbt のバージョンが、プロジェクトまたは含まれるパッケージのいずれかで指定された `require-dbt-version` と一致しない場合、dbt は次のエラーで直ちに失敗します:
+
 ```
 $ dbt compile
 Running with dbt=1.5.0
@@ -112,17 +113,18 @@ Runtime Error
   Check the requirements for the 'my_project' package, or run dbt again with --no-version-check
 ```
 
-## Disabling version checks
+## バージョンチェックの無効化
 
-To suppress failures to to incompatible dbt versions, supply the `--no-version-check` flag to `dbt run`.
+互換性のない dbt バージョンによるエラーを抑制するには、`dbt run` に `--no-version-check` フラグを指定します。
+
 ```
 $ dbt run --no-version-check
 Running with dbt=1.5.0
 Found 13 models, 2 tests, 1 archives, 0 analyses, 204 macros, 2 operations....
 ```
 
-See [global configs](/reference/global-configs/version-compatibility) for usage details.
+使用方法の詳細については、[グローバル設定](/reference/global-configs/version-compatibility)を参照してください。
 
-## Recommendation
-* This is a recommended configuration
-* Before v1, you should pin your required dbt version to a minor release. After v1, you should pin to a major release (see above [example](#pin-to-a-range))
+## 推奨事項
+* これは推奨設定です
+* v1 より前は、必要な dbt バージョンをマイナーリリースに固定する必要があります。v1 より後は、メジャーリリースに固定する必要があります (上記の [例](#pin-to-a-range) を参照)

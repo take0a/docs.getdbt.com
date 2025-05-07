@@ -1,8 +1,8 @@
 ---
 resource_types: [snapshots, models]
-description: "Learn more about unique_key configurations in dbt."
+description: "dbt の unique_key 構成について詳しく学びます。"
 datatype: column_name_or_expression
-intro_text: "unique_key identifies records for incremental models or snapshots, ensuring changes are captured or updated correctly."
+intro_text: "unique_key は増分モデルまたはスナップショットのレコードを識別し、変更が正しくキャプチャまたは更新されることを保証します。"
 ---
 
 
@@ -10,7 +10,7 @@ intro_text: "unique_key identifies records for incremental models or snapshots, 
 
 <TabItem value="models" label="Models">
 
-Configure the `unique_key` in the `config` block of your [incremental model's](/docs/build/incremental-models) SQL file, in your `models/properties.yml` file, or in your `dbt_project.yml` file.
+[増分モデルの](/docs/build/incremental-models) SQL ファイルの `config` ブロック、`models/properties.yml` ファイル、または `dbt_project.yml` ファイルで `unique_key` を構成します。
 
 <File name='models/my_incremental_model.sql'>
 
@@ -59,7 +59,7 @@ models:
 
 <VersionBlock firstVersion="1.9">
 
-For [snapshots](/docs/build/snapshots), configure the `unique_key` in the your `snapshot/filename.yml` file or in your `dbt_project.yml` file.
+[スナップショット](/docs/build/snapshots)の場合は、`snapshot/filename.yml` ファイルまたは `dbt_project.yml` ファイルで `unique_key` を設定します。
 
 <File name='snapshots/<filename>.yml'>
 
@@ -108,31 +108,32 @@ snapshots:
 </TabItem>
 </Tabs>
 
-## Description
-A column name or expression that uniquely identifies each record in the inputs of a snapshot or incremental model. dbt uses this key to match incoming records to existing records in the target table (either a snapshot or an incremental model) so that changes can be captured or updated correctly:
-* In an incremental model, dbt replaces the old row (like a merge key or upsert).
-* In a snapshot, dbt keeps history, storing multiple rows for that same `unique_key` as it evolves over time.
+## 説明
 
-In dbt Cloud "Latest" release track and from dbt v1.9, [snapshots](/docs/build/snapshots) are defined and configured in YAML files within your `snapshots/` directory. You can specify one or multiple `unique_key` values within your snapshot YAML file's `config` key.
+スナップショットまたは増分モデルの入力に含まれる各レコードを一意に識別する列名または式。dbt はこのキーを使用して、入力レコードをターゲットテーブル（スナップショットまたは増分モデル）内の既存のレコードと照合し、変更を正しくキャプチャまたは更新します。
+* 増分モデルの場合、dbt は古い行を置き換えます（マージキーや upsert のように）。
+* スナップショットの場合、dbt は履歴を保持し、時間の経過とともに変化する同じ `unique_key` の複数の行を保存します。
+
+dbt Cloud の「最新」リリーストラックおよび dbt v1.9 以降では、[スナップショット](/docs/build/snapshots) は `snapshots/` ディレクトリ内の YAML ファイルで定義および構成されます。スナップショット YAML ファイルの `config` キー内で、1 つまたは複数の `unique_key` 値を指定できます。
 
 :::caution 
 
-Providing a non-unique key will result in unexpected snapshot results. dbt **will not** test the uniqueness of this key, consider [testing](/blog/primary-key-testing#how-to-test-primary-keys-with-dbt) the source data to ensure that this key is indeed unique.
-
+一意でないキーを指定すると、予期しないスナップショット結果になります。dbt は**このキーの一意性をテストしません**。このキーが実際に一意であることを確認するために、ソース データの[テスト](/blog/primary-key-testing#how-to-test-primary-keys-with-dbt)を検討してください。
 :::
 
-## Default
-This is a **required parameter**. No default is provided.
+## デフォルト
+
+これは**必須パラメータ**です。デフォルトは指定されていません。
 
 
-## Examples
-### Use an `id` column as a unique key
+## 例
+### `id` 列を一意のキーとして使用する
 
 <Tabs>
 
 <TabItem value="models" label="Models">
 
-In this example, the `id` column is the unique key for an incremental model.
+この例では、`id` 列は増分モデルの一意のキーです。
 
 <File name='models/my_incremental_model.sql'>
 
@@ -152,7 +153,7 @@ select * from ..
 
 <TabItem value="snapshots" label="Snapshots">
 
-In this example, the `id` column is used as a unique key for a snapshot.
+この例では、`id` 列がスナップショットの一意のキーとして使用されます。
 
 <VersionBlock firstVersion="1.9">
 
@@ -186,10 +187,11 @@ snapshots:
 
 </File>
 
-You can also write this in yaml. This might be a good idea if multiple snapshots share the same `unique_key` (though we prefer to apply this configuration in a config block, as above).
+これをYAMLで記述することもできます。複数のスナップショットが同じ `unique_key` を共有する場合は、これが良いかもしれません（ただし、上記のように、この設定は設定ブロックで適用することをお勧めします）。
 </VersionBlock>
 
 You can also specify configurations in your `dbt_project.yml` file if multiple snapshots share the same `unique_key`:
+
 <File name='dbt_project.yml'>
 
 ```yml
@@ -206,14 +208,14 @@ snapshots:
 
 <VersionBlock firstVersion="1.9">
 
-### Use multiple unique keys
+### 複数の一意のキーを使用する
 
 <Tabs>
 <TabItem value="models" label="Models">
 
-Configure multiple unique keys for an incremental model as a string representing a single column or a list of single-quoted column names that can be used together, for example, `['col1', 'col2', …]`. 
+増分モデルに複数の一意のキーを設定する場合は、単一の列を表す文字列、または組み合わせて使用​​できる一重引用符で囲まれた列名のリスト（例：['col1', 'col2', …]）を指定します。
 
-Columns must not contain null values, otherwise the incremental model will fail to match rows and generate duplicate rows. Refer to [Defining a unique key](/docs/build/incremental-models#defining-a-unique-key-optional) for more information.
+列にnull値を含めることはできません。null値を含めると、増分モデルは行のマッチングに失敗し、重複行を生成します。詳細については、[一意のキーの定義](/docs/build/incremental-models#defining-a-unique-key-optional)を参照してください。
 
 <File name='models/my_incremental_model.sql'>
 
@@ -233,7 +235,7 @@ with...
 
 <TabItem value="snapshots" label="Snapshots">
 
-You can configure snapshots to use multiple unique keys for `primary_key` columns.
+`primary_key` 列に複数の一意のキーを使用するようにスナップショットを設定できます。
 
 <File name='snapshots/transaction_items_snapshot.yml'>
 

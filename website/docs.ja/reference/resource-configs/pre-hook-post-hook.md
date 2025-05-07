@@ -1,6 +1,6 @@
 ---
-title: pre-hook & post-hook
-description: "Configure hooks to execute SQL before (pre) and after (post) a model is run in dbt."
+title: pre-hook と post-hook
+description: "dbt でモデルが実行される前 (pre) と後 (post) に SQL を実行するためのフックを構成します。"
 resource_types: [models, seeds, snapshots]
 datatype: sql-statement | [sql-statement]
 ---
@@ -145,16 +145,17 @@ snapshots:
 
 </Tabs>
 
-## Definition
-A SQL statement (or list of SQL statements) to be run before or after a model, seed, or snapshot is built.
+## 定義
 
-Pre- and post-hooks can also call macros that return SQL statements. If your macro depends on values available only at execution time, such as using model configurations or `ref()` calls to other resources as inputs, you will need to [wrap your macro call in an extra set of curly braces](/best-practices/dont-nest-your-curlies#an-exception).
+モデル、シード、またはスナップショットの構築前または構築後に実行されるSQL文（またはSQL文のリスト）。
 
-### Why would I use hooks?
+事前フックと事後フックは、SQL文を返すマクロを呼び出すこともできます。マクロが実行時にのみ利用可能な値（モデル設定や他のリソースへの `ref()` 呼び出しを入力として使用するなど）に依存する場合は、[マクロ呼び出しを中括弧で囲む](/ベストプラクティス/中括弧をネストしない#例外) 必要があります。
 
-dbt aims to provide all the boilerplate SQL you need (DDL, DML, and DCL) via out-of-the-box functionality, which you can configure quickly and concisely. In some cases, there may be SQL that you want or need to run, specific to functionality in your data platform, which dbt does not (yet) offer as a built-in feature. In those cases, you can write the exact SQL you need, using dbt's compilation context, and pass it into a `pre-` or `post-` hook to run before or after your model, seed, or snapshot.
+### フックを使用する理由
 
-import SQLCompilationError from '/snippets/_render-method.md';
+dbt は、必要なすべての定型 SQL（DDL、DML、DCL）を、すぐに使用できる機能を通じて提供することを目指しています。これらの機能は、迅速かつ簡潔に構成できます。場合によっては、データプラットフォームの機能に固有の SQL を実行したい、または実行する必要があるものの、dbt が（まだ）組み込み機能として提供していないことがあります。そのような場合、dbt のコンパイルコンテキストを使用して必要な SQL を正確に記述し、それをモデル、シード、またはスナップショットの前後に実行する `pre-` フックまたは `post-` フックに渡すことができます。
+
+import SQLCompilationError from '/snippets.ja/_render-method.md';
 
 <SQLCompilationError />
 
@@ -174,7 +175,7 @@ select ...
 
 </File>
 
-See: [Redshift docs on `UNLOAD`](https://docs.aws.amazon.com/redshift/latest/dg/r_UNLOAD.html)
+参照: [Redshift の `UNLOAD` に関するドキュメント](https://docs.aws.amazon.com/redshift/latest/dg/r_UNLOAD.html)
 
 ### [Apache Spark] Analyze tables after creation
 
@@ -193,38 +194,43 @@ models:
           - "{{ analyze_table() }}"
 ```
 
-See: [Apache Spark docs on `ANALYZE TABLE`](https://spark.apache.org/docs/latest/sql-ref-syntax-aux-analyze-table.html)
+参照: [Apache Spark の `ANALYZE TABLE` に関するドキュメント](https://spark.apache.org/docs/latest/sql-ref-syntax-aux-analyze-table.html)
 
 </File>
 
-### Additional examples
-We've compiled some more in-depth examples [here](/docs/build/hooks-operations#additional-examples).
+### 追加の例
 
-## Usage notes
-### Hooks are cumulative
-If you define hooks in both your `dbt_project.yml` and in the `config` block of a model, both sets of hooks will be applied to your model.
+より詳細な例を[こちら](/docs/build/hooks-operations#additional-examples)にまとめました。
 
-### Execution ordering
-If multiple instances of any hooks are defined, dbt will run each hook using the following ordering:
-1. Hooks from dependent packages will be run before hooks in the active package.
-2. Hooks defined within the model itself will be run after hooks defined in `dbt_project.yml`.
-3. Hooks within a given context will be run in the order in which they are defined.
+## 使用上の注意
+
+### フックは累積的に適用されます
+
+`dbt_project.yml` とモデルの `config` ブロックの両方でフックを定義した場合、両方のフックセットがモデルに適用されます。
+
+### 実行順序
+
+フックのインスタンスが複数定義されている場合、dbt は以下の順序で各フックを実行します。
+1. 依存パッケージのフックは、アクティブパッケージのフックよりも先に実行されます。
+2. モデル自体で定義されたフックは、`dbt_project.yml` で定義されたフックよりも後に実行されます。
+3. 特定のコンテキスト内のフックは、定義された順序で実行されます。
 
 
-### Transaction behavior
-If you're using an adapter that uses transactions (namely Postgres or Redshift), it's worth noting that by default hooks are executed inside of the same transaction as your model being created.
+### トランザクションの動作
 
-There may be occasions where you need to run these hooks _outside_ of a transaction, for example:
-* You want to run a `VACUUM` in a `post-hook`, however, this cannot be executed within a transaction ([Redshift docs](https://docs.aws.amazon.com/redshift/latest/dg/r_VACUUM_command.html#r_VACUUM_usage_notes))
-* You want to insert a record into an audit <Term id="table" /> at the start of a run and do not want that statement rolled back if the model creation fails.
+トランザクションを使用するアダプタ（Postgres または Redshift）を使用している場合、デフォルトではフックはモデルの作成と同じトランザクション内で実行されることに注意してください。
 
-To achieve this behavior, you can use one of the following syntaxes:
-  - Important note: Do not use this syntax if you are using a database where dbt does not support transactions. This includes databases like Snowflake, BigQuery, and Spark or Databricks.
+これらのフックをトランザクションの _外部_ で実行する必要がある場合があります。たとえば、次のようになります。
+* `post-hook` で `VACUUM` を実行したいが、トランザクション内では実行できない ([Redshift ドキュメント](https://docs.aws.amazon.com/redshift/latest/dg/r_VACUUM_command.html#r_VACUUM_usage_notes))
+* 実行開始時に監査 <Term id="table" /> にレコードを挿入し、モデルの作成に失敗してもそのステートメントをロールバックしたくない場合。
+
+この動作を実現するには、次のいずれかの構文を使用できます。
+- 重要な注意: dbt がトランザクションをサポートしていないデータベースを使用している場合は、この構文を使用しないでください。これには、Snowflake、BigQuery、Spark、Databricks などのデータベースが含まれます。
 
 <Tabs>
 <TabItem value="beforebegin" label="Use before_begin and after_commit">
 
-#### Config block: use the `before_begin` and `after_commit` helper macros
+#### 設定ブロック: `before_begin` および `after_commit` ヘルパーマクロを使用する
 
 <File name='models/<modelname>.sql'>
 
@@ -245,7 +251,8 @@ select ...
 
 <TabItem value="dictionary" label="Use a dictionary">
 
-#### Config block: use a dictionary
+#### 設定ブロック: 辞書​​を使用する
+
 <File name='models/<modelname>.sql'>
 
 ```sql
@@ -272,7 +279,7 @@ select ...
 
 <TabItem value="dbt_project.yml" label="Use dbt_project.yml">
 
-#### `dbt_project.yml`: Use a dictionary
+#### `dbt_project.yml`: 辞書を使用する
 
 <File name='dbt_project.yml'>
 

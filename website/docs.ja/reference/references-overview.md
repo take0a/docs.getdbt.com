@@ -1,76 +1,76 @@
 ---
-title: "About References"
+title: "リファレンスについて"
 id: "references-overview"
-sidebar_label: "About References"
-description: "Connect dbt to any data platform in dbt Cloud or dbt Core, using a dedicated adapter plugin"
+sidebar_label: "リファレンスについて"
+description: "専用のアダプタプラグインを使用して、dbt Cloud または dbt Core の任意のデータプラットフォームに dbt を接続します。"
 hide_table_of_contents: true
 pagination_next: null
 pagination_prev: null
 ---
 
-The References section contains reference materials for developing with dbt, which includes dbt Cloud and dbt Core.
+リファレンスセクションには、dbt Cloud や dbt Core など、dbt を使った開発に関する参考資料が掲載されています。
 
-Learn how to add more configurations to your dbt project or adapter, use properties for extra ability, refer to dbt commands, use powerful Jinja functions to streamline your dbt project, and understand how to use dbt artifacts.  <br />
+dbt プロジェクトまたはアダプタに構成を追加する方法、プロパティを使用して機能を追加する方法、dbt コマンドを参照する方法、強力な Jinja 関数を使用して dbt プロジェクトを効率化する方法、dbt アーティファクトの使用方法について学習します。  <br />
 
 <div className="grid--3-col">
 
 <Card
-    title="Project configurations"
-    body="Customize and configure your dbt project to optimize performance."
+    title="プロジェクト構成"
+    body="パフォーマンスを最適化するために、dbt プロジェクトをカスタマイズおよび構成します。"
     link="/reference/dbt_project.yml"
     icon="computer"/>
 
 <Card
-    title="Platform-specific configurations"
-    body="Learn how to optimize performance with data platform-specific configurations in dbt Cloud and dbt Core."
+    title="プラットフォーム固有の構成"
+    body="dbt Cloud および dbt Core のデータ プラットフォーム固有の構成を使用してパフォーマンスを最適化する方法を学習します。"
     link="/reference/resource-configs/postgres-configs"
     icon="computer"/>
 
 <Card
-    title="Resource configurations and properties"
-    body="Properties and configurations that provide extra abilities to your projects resources."
+    title="リソースの構成とプロパティ"
+    body="プロジェクト リソースに追加の機能を提供するプロパティと構成。"
     link="/reference/configs-and-properties"
     icon="computer"/>
 
 <Card
-    title="dbt Commands"
-    body="Outlines the commands supported by dbt and their relevant flags."
+    title="dbt コマンド"
+    body="dbt でサポートされているコマンドと関連するフラグの概要を説明します。"
     link="/reference/dbt-commands"
     icon="computer"/>
 
 <Card
-    title="dbt Jinja functions"
-    body="Additional functions and variables to the Jinja context that are useful when working with a dbt project."
+    title="dbt Jinja 関数"
+    body="dbt プロジェクトで作業するときに役立つ、Jinja コンテキストへの追加の関数と変数。"
     link="/reference/dbt-jinja-functions"
     icon="computer"/>
 
 <Card
-    title="dbt Artifacts"
-    body="Information on dbt-generated Artifacts and how you can use them."
+    title="dbt アーティファクト"
+    body="dbt によって生成されたアーティファクトとその使用方法に関する情報。"
     link="/reference/artifacts/dbt-artifacts"
     icon="computer"/>
 
 <Card
-    title="Snowflake permissions artifacts"
-    body="Provides an example Snowflake database role permissions."
+    title="Snowflake 権限アーティファクト"
+    body="Snowflake データベース ロールの権限の例を示します。"
     link="/reference/database-permissions/snowflake-permissions"
     icon="computer"/>
 
 <Card
-    title="Databricks permissions artifacts"
-    body="Provides an example Databricks database role permissions."
+    title="Databricks 権限アーティファクト"
+    body="Databricks データベース ロールの権限の例を示します。"
     link="/reference/database-permissions/databricks-permissions"
     icon="computer"/>
 
 <Card
-    title="Redshift permissions artifacts"
-    body="Provides an example Redshift database role permissions."
+    title="Redshift 権限アーティファクト"
+    body="Redshift データベース ロールの権限の例を示します。"
     link="/reference/database-permissions/redshift-permissions"
     icon="computer"/>
 
 <Card
-    title="Postgres permissions artifacts"
-    body="Provides an example Postgres database role permissions."
+    title="Postgres 権限アーティファクト"
+    body="Postgres データベース ロールの権限の例を示します。"
     link="/reference/database-permissions/postgres-permissions"
     icon="computer"/>
 

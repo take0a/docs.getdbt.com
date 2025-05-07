@@ -1,13 +1,13 @@
 ---
 title: Resource path
-description: "Learn how to use resource paths to configure resource types in dbt."
+description: "リソース パスを使用して dbt でリソース タイプを構成する方法を学習します。"
 id: resource-path
 sidebar_label: "About resource paths"
 ---
 
-The `<resource-path>` nomenclature is used in this documentation when documenting how to configure resource types like models, seeds, snapshots, tests, sources, and others, from your `dbt_project.yml` file. 
+このドキュメントでは、`<resource-path>` という命名法を使用して、`dbt_project.yml` ファイルからモデル、シード、スナップショット、テスト、ソースなどのリソースタイプを設定する方法を説明します。
 
-It represents the nested dictionary keys that provide the path to a directory of that resource type, or a single instance of that resource type by name.
+これは、そのリソースタイプのディレクトリへのパス、または名前でそのリソースタイプの単一インスタンスを提供する、ネストされた辞書キーを表します。
 
 ```yml
 resource_type:
@@ -18,13 +18,13 @@ resource_type:
           ...
 ```
 
-## Example
+## 例
 
-The following examples are mostly for models and a source, but the same concepts apply for seeds, snapshots, tests, sources, and other resource types.
+以下の例は主にモデルとソースを対象としていますが、シード、スナップショット、テスト、ソース、その他のリソースタイプにも同じ概念が適用されます。
 
-### Apply config to all models
+### すべてのモデルに設定を適用する
 
-To apply a configuration to all models, do not use a `<resource-path>`:
+すべてのモデルに設定を適用するには、`<resource-path>` を使用しないでください。
 
 <File name='dbt_project.yml'>
 
@@ -35,9 +35,9 @@ models:
 
 </File>
 
-### Apply config to all models in your project
+### プロジェクト内のすべてのモデルに設定を適用する
 
-To apply a configuration to all models in _your_ project only, use your [project name](/reference/project-configs/name) as the `<resource-path>`:
+プロジェクト内のすべてのモデルに設定を適用するには、[プロジェクト名](/reference/project-configs/name) を `<resource-path>` として使用します。
 
 <File name='dbt_project.yml'>
 
@@ -51,9 +51,9 @@ models:
 
 </File>
 
-### Apply config to all models in a subdirectory
+### サブディレクトリ内のすべてのモデルに設定を適用する
 
-To apply a configuration to all models in a subdirectory of your project, e.g. `staging`, nest the directory under the project name:
+プロジェクトのサブディレクトリ（例：`staging`）内のすべてのモデルに設定を適用するには、プロジェクト名の下にディレクトリをネストします:
 
 <File name='dbt_project.yml'>
 
@@ -68,7 +68,8 @@ models:
 
 </File>
 
-In the following project, this would apply to models in the `staging/` directory, but not the `marts/` directory:
+次のプロジェクトでは、これは `staging/` ディレクトリ内のモデルに適用されますが、`marts/` ディレクトリには適用されません:
+
 ```
 .
 ├── dbt_project.yml
@@ -78,9 +79,9 @@ In the following project, this would apply to models in the `staging/` directory
 
 ```
 
-### Apply config to a specific model
+### 特定のモデルに設定を適用する
 
-To apply a configuration to a specific model, nest the full path under the project name. For a model at `/staging/stripe/payments.sql`, this would look like:
+特定のモデルに設定を適用するには、プロジェクト名の下にフルパスをネストします。`/staging/stripe/payments.sql` にあるモデルの場合、以下のようになります。
 
 <File name='dbt_project.yml'>
 
@@ -97,7 +98,7 @@ models:
 
 </File>
 
-In the following project, this would only apply to the `payments` model:
+次のプロジェクトでは、これは `payments` モデルにのみ適用されます:
 
 ```
 .
@@ -115,10 +116,10 @@ In the following project, this would only apply to the `payments` model:
             └── payments.sql
 
 ```
-### Apply config to a source nested in a subfolder 
+### サブフォルダにネストされたソースに構成を適用する
 
-To disable a source table nested in a YAML file in a subfolder, you will need to supply the subfolder(s) within the path to that YAML file, as well as the source name and the table name in the `dbt_project.yml` file.<br /><br /> 
-  The following example shows how to disable a source table nested in a YAML file in a subfolder: 
+サブフォルダ内の YAML ファイルにネストされたソーステーブルを無効にするには、その YAML ファイルへのパスにサブフォルダを指定し、`dbt_project.yml` ファイルにソース名とテーブル名を指定する必要があります。<br /><br />
+次の例は、サブフォルダ内の YAML ファイルにネストされたソーステーブルを無効にする方法を示しています。 
 
   <File name='dbt_project.yml'>
 

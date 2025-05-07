@@ -2,15 +2,15 @@
 sidebar_label: "database"
 resource_types: [models, seeds, tests]
 datatype: string
-description: "Override the default database when dbt creates resources in your data platform."
+description: "dbt がデータ プラットフォームにリソースを作成するときに、デフォルトのデータベースをオーバーライドします。"
 ---
 
 <Tabs>
 <TabItem value="model" label="Model">
 
-Specify a custom database for a model in your `dbt_project.yml` file. 
+`dbt_project.yml` ファイルで、モデルのカスタムデータベースを指定します。
 
-For example, if you have a model that you want to load into a database other than the target database, you can configure it like this:
+例えば、ターゲットデータベース以外のデータベースにロードしたいモデルがある場合は、次のように設定します:
 
 <File name='dbt_project.yml'>
 
@@ -23,14 +23,15 @@ models:
 </File>
 
 
-This would result in the generated relation being located in the `reporting` database, so the full relation name would be `reporting.finance.sales_metrics` instead of the default target database.
+これにより、生成されたリレーションは `reporting` データベースに配置されるため、完全なリレーション名はデフォルトのターゲット データベースではなく `reporting.finance.sales_metrics` になります。
+
 </TabItem>
 
 <TabItem value="seeds" label="Seeds">
 
-Configure a database in your `dbt_project.yml` file. 
+`dbt_project.yml` ファイルでデータベースを設定します。
 
-For example, to load a seed into a database called `staging` instead of the target database, you can configure it like this:
+例えば、シードをターゲットデータベースではなく `staging` というデータベースにロードするには、次のように設定します。
 
 <File name='dbt_project.yml'>
 
@@ -41,7 +42,7 @@ seeds:
       +database: staging
 ```
 
-This would result in the generated relation being located in the `staging` database, so the full relation name would be `staging.finance.product_categories`.
+これにより、生成されたリレーションは `staging` データベースに配置されるため、完全なリレーション名は `staging.finance.product_categories` になります。
 
 </File>
 </TabItem>
@@ -56,9 +57,9 @@ Available for dbt Cloud release tracks or dbt Core v1.9+. Select v1.9 or newer f
 
 <VersionBlock firstVersion="1.9">
 
-Specify a custom database for a snapshot in your `dbt_project.yml`, snapshot.yml file, or config file. 
+`dbt_project.yml`、snapshot.yml ファイル、または設定ファイルで、スナップショットの保存先となるカスタムデータベースを指定します。
 
-For example, if you have a snapshot that you want to load into a database other than the target database, you can configure it like this:
+例えば、ターゲットデータベース以外のデータベースにスナップショットをロードしたい場合は、次のように設定します。
 
 <File name='dbt_project.yml'>
 
@@ -70,7 +71,7 @@ snapshots:
 ```
 </File>
 
-Or in a `snapshot_name.yml` file:
+または `snapshot_name.yml` ファイルで:
 
 <File name='snapshots/snapshot_name.yml'>
 
@@ -84,7 +85,7 @@ snapshots:
 ```
 </File>
 
-This results in the generated relation being located in the `snapshots` database so the full relation name would be `snapshots.finance.your_snapshot` instead of the default target database.
+この結果、生成されたリレーションは `snapshots` データベースに配置されるため、完全なリレーション名はデフォルトのターゲット データベースではなく `snapshots.finance.your_snapshot` になります。
 
 </VersionBlock>
 
@@ -94,9 +95,9 @@ This results in the generated relation being located in the `snapshots` database
 
 <TabItem value="test" label="Tests">
 
-Customize the database for storing test results in your `dbt_project.yml` file.
+`dbt_project.yml` ファイルで、テスト結果を保存するデータベースをカスタマイズします。
 
-For example, to save test results in a specific database, you can configure it like this:
+例えば、テスト結果を特定のデータベースに保存するには、次のように設定します:
 
 <File name='dbt_project.yml'>
 
@@ -106,26 +107,25 @@ tests:
   +database: test_results
 ```
 
-This would result in the test results being stored in the `test_results` database.
+これにより、テスト結果が `test_results` データベースに保存されます。
+
 </File>
 </TabItem>
 </Tabs>
 
 
-## Definition
+## 定義
 
-Optionally specify a custom database for a [model](/docs/build/sql-models), [seed](/docs/build/seeds), [snapshot](/docs/build/snapshots), or [data test](/docs/build/data-tests).
+オプションで、[モデル](/docs/build/sql-models)、[シード](/docs/build/seeds)、[スナップショット](/docs/build/snapshots)、または[データテスト](/docs/build/data-tests)のカスタムデータベースを指定します。
 
-When dbt creates a relation (<Term id="table" />/<Term id="view" />) in a database, it creates it as: `{{ database }}.{{ schema }}.{{ identifier }}`, e.g. `analytics.finance.payments`
+dbt がデータベースにリレーション (<Term id="table" />/<Term id="view" />) を作成する場合、`{{ database }}.{{ schema }}.{{ identifier }}` という形式で作成します (例: `analytics.finance.payments`)。
 
-The standard behavior of dbt is:
-* If a custom database is _not_ specified, the database of the relation is the target database (`{{ target.database }}`).
-* If a custom database is specified, the database of the relation is the `{{ database }}` value.
+dbt の標準的な動作は次のとおりです。
+* カスタムデータベースが指定されていない場合、リレーションのデータベースはターゲットデータベース (`{{ target.database }}`) になります。
+* カスタムデータベースが指定されている場合、リレーションのデータベースは `{{ database }}` の値になります。
 
-To learn more about changing the way that dbt generates a relation's `database`, read [Using Custom Databases](/docs/build/custom-databases)
+dbt がリレーションの `database` を生成する方法を変更する方法の詳細については、[カスタム データベースの使用](/docs/build/custom-databases) を参照してください。
 
-
-
-## Warehouse specific information
-* BigQuery: `project` and `database` are interchangeable
+## ウェアハウス固有の情報
+* BigQuery: 「プロジェクト」と「データベース」は互換性があります
 

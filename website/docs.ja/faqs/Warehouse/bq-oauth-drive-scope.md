@@ -1,8 +1,8 @@
 ---
-title: Why does the BigQuery OAuth application require scopes to Google Drive?
-description: "Learn more about Google Drive scopes in the BigQuery OAuth application"
-sidebar_label: "BigQuery OAuth Drive Scopes"
+title: BigQuery OAuth アプリケーションに Google ドライブへのスコープが必要なのはなぜですか?
+description: "BigQuery OAuth アプリケーションにおける Google ドライブのスコープの詳細"
+sidebar_label: "BigQuery OAuth での Google ドライブのスコープ"
 id: bq-oauth-drive-scope
 ---
 
-BigQuery supports external tables over both personal Google Drive files and shared files. For more information, refer to [Create Google Drive external tables](https://cloud.google.com/bigquery/docs/external-data-drive).
+BigQuery は、個人の Google ドライブ ファイルと共有ファイルの両方に対する外部テーブルをサポートしています。詳細については、[Google ドライブの外部テーブルを作成する](https://cloud.google.com/bigquery/docs/external-data-drive) をご覧ください。

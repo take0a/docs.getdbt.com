@@ -1,5 +1,5 @@
 ---
-title: "About config property"
+title: "config プロパティについて"
 sidebar_label: "config"
 resource_types: [models, seeds, snapshots, tests, sources, metrics, exposures]
 datatype: "{dictionary}"
@@ -212,5 +212,5 @@ saved-queries:
 
 </Tabs>
 
-## Definition
-The `config` property allows you to configure resources at the same time you're defining properties in YAML files.
+## 定義
+`config` プロパティを使用すると、YAML ファイルでプロパティを定義すると同時にリソースを設定できます。

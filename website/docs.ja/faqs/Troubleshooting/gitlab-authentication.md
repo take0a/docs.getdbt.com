@@ -1,29 +1,29 @@
 ---
-title: I'm seeing a Gitlab authentication out of date error loop
-description: "GitLab and dbt Cloud deploy key mismatch "
-sidebar_label: 'GitLab authentication out of date'
+title: Gitlab認証の期限切れエラーループが発生しています
+description: "GitLabとdbt Cloudのデプロイキーが一致しません"
+sidebar_label: 'GitLabの認証が古い'
 id: gitlab-authentication
 ---
 
-If you're seeing a 'GitLab Authentication is out of date' 500 server error page - this usually occurs when the deploy key in the repository settings in both dbt Cloud and GitLab do not match. 
+「GitLab 認証が古いです」という 500 サーバーエラーページが表示される場合、これは通常、dbt Cloud と GitLab の両方のリポジトリ設定のデプロイキーが一致していない場合に発生します。
 
-No worries - this is a current issue the dbt Labs team is working on and we have a few workarounds for you to try:
+ご安心ください。これは現在 dbt Labs チームが対応中の問題であり、いくつかの回避策をご用意しています。
 
-### 1st Workaround
+### 回避策 1
 
-1. Disconnect repo from project in dbt Cloud.
-2. Go to Gitlab and click on Settings > Repository.
-3. Under Repository Settings, remove/revoke active dbt Cloud deploy tokens and deploy keys.
-4. Attempt to reconnect your repository via dbt Cloud.
-5. You would then need to check Gitlab to make sure that the new deploy key is added.
-6. Once confirmed that it's added, refresh dbt Cloud and try developing once again.
+1. dbt Cloud でリポジトリをプロジェクトから切断します。
+2. Gitlab にアクセスし、[設定] > [リポジトリ] をクリックします。
+3. [リポジトリ設定] で、アクティブな dbt Cloud デプロイトークンとデプロイキーを削除/取り消します。
+4. dbt Cloud 経由でリポジトリへの再接続を試みます。
+5. Gitlab で新しいデプロイキーが追加されていることを確認します。
+6. 追加されたことを確認したら、dbt Cloud を更新し、再度開発を試みます。
 
-### 2nd Workaround
+### 回避策 2
 
-1. Keep repo in project as is -- don't disconnect.
-2. Copy the deploy key generated in dbt Cloud.
-3. Go to Gitlab and click on Settings > Repository.
-4. Under Repository Settings, manually add to your Gitlab project deploy key repo (with `Grant write permissions` box checked).
-5. Go back to dbt Cloud, refresh your page and try developing again.
+1. プロジェクトのリポジトリをそのまま保持します。切断しないでください。
+2. dbt Cloud で生成されたデプロイキーをコピーします。
+3. Gitlab に移動し、「設定」>「リポジトリ」をクリックします。
+4. 「リポジトリ設定」で、Gitlab プロジェクトのデプロイキーリポジトリを手動で追加します（「書き込み権限を付与する」チェックボックスをオンにします）。
+5. dbt Cloud に戻り、ページを更新して再度開発を試みます。
 
-If you've tried the workarounds above and are still experiencing this behavior - reach out to the Support team at support@getdbt.com and we'll be happy to help!
+上記の回避策を試してもこの動作が続く場合は、サポートチーム（support@getdbt.com）までご連絡ください。喜んでお手伝いいたします。

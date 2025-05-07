@@ -1,26 +1,26 @@
 ---
-title: How do I run tests on just my sources?
-description: "Use the select source command to test sources"
-sidebar_label: 'Run tests on all sources'
+title: ソースのみでテストを実行するにはどうすればよいですか?
+description: "ソースをテストするには、select source コマンドを使用します。"
+sidebar_label: 'すべてのソースでテストを実行する'
 id: testing-sources
 
 ---
 
-To run tests on all sources, use the following command:
+すべてのソースに対してテストを実行するには、次のコマンドを使用します:
 
 ```shell
   dbt test --select "source:*"
 ```
 
-(You can also use the `-s` shorthand here instead of `--select`)
+(`--select` の代わりに `-s` ショートカットを使用することもできます)
 
-To run tests on one source (and all of its tables):
+1 つのソース (およびそのすべてのテーブル) に対してテストを実行するには:
 
 ```shell
 $ dbt test --select source:jaffle_shop
 ```
 
-And, to run tests on one source <Term id="table" /> only:
+また、1 つのソース <Term id="table" /> のみでテストを実行するには、次のようにします:
 
 ```shell
 $ dbt test --select source:jaffle_shop.orders

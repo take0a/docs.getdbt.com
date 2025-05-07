@@ -1,10 +1,10 @@
 ---
-title: Advanced configuration usage
+title: 高度な構成の使用
 sidebar_label: Advanced usage
 ---
-## Alternative config block syntax
+## 代替の設定ブロック構文
 
-Some configurations may contain characters (e.g. dashes) that cannot be parsed as a jinja argument. For example, the following would return an error:
+一部の設定には、Jinja の引数として解析できない文字（例：ダッシュ）が含まれている場合があります。例えば、次の設定はエラーを返します。
 
 ```sql
 {{ config(
@@ -15,9 +15,9 @@ Some configurations may contain characters (e.g. dashes) that cannot be parsed a
 select ...
 ```
 
-While dbt provides an alias for any core configurations (e.g. you should use `pre_hook` instead of `pre-hook` in a config block), your dbt project may contain custom configurations without aliases.
+dbt はコア設定にエイリアスを提供します（例：設定ブロックでは `pre-hook` ではなく `pre_hook` を使用する必要があります）。ただし、dbt プロジェクトにはエイリアスのないカスタム設定が含まれている場合があります。
 
-If you want to specify these configurations inside of a model, use the alternative config block syntax:
+モデル内でこれらの設定を指定する場合は、代替の設定ブロック構文を使用します。
 
 
 <File name='models/events/base/base_events.sql'>

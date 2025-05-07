@@ -2,7 +2,7 @@
 title: .dbtignore
 ---
 
-You can create a `.dbtignore` file in the root of your [dbt project](/docs/build/projects) to specify files that should be **entirely** ignored by dbt. The file behaves like a [`.gitignore` file, using the same syntax](https://git-scm.com/docs/gitignore). Files and subdirectories matching the pattern will not be read, parsed, or otherwise detected by dbt—as if they didn't exist.
+[dbt プロジェクト](/docs/build/projects) のルートに `.dbtignore` ファイルを作成すると、dbt によって **完全に** 無視されるファイルを指定できます。このファイルは [`.gitignore` ファイルと同様に動作し、同じ構文を使用します](https://git-scm.com/docs/gitignore)。このパターンに一致するファイルとサブディレクトリは、存在しないかのように、dbt によって読み込まれたり、解析されたり、その他の方法で検出されたりすることはありません。
 
 **Examples**
 

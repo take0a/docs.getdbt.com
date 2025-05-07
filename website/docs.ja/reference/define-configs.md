@@ -1,18 +1,19 @@
 ---
-title: Define configs
-sidebar_label: Define configs
-intro_text: "Learn how to define configurations for your resources in a dbt project"
-description: "Learn how to define configurations for your resources in a dbt project"
+title: 構成を定義する
+sidebar_label: 構成を定義する
+intro_text: "dbt プロジェクトでリソースの構成を定義する方法を学びます"
+description: "dbt プロジェクトでリソースの構成を定義する方法を学びます"
 pagination_previous: "reference/configs-and-properties"
 pagination_next: "reference/define-properties"
 ---
 
-Depending on the resource type, you can define configurations in a dbt project and also in an installed package by:
+リソース タイプに応じて、次の方法で dbt プロジェクトおよびインストールされたパッケージで構成を定義できます:
 
 <VersionBlock firstVersion="1.9">
 
-1. Using a [`config` property](/reference/resource-properties/config) in a `.yml` file for supported resource directories like `models/`, `snapshots/`, `seeds/`, `analyses`, `tests/`, and more.
-2. From the [`dbt_project.yml` file](dbt_project.yml), under the corresponding resource key (`models:`, `snapshots:`, `tests:`, and so on)
+1. `models/`、`snapshots/`、`seeds/`、`analyses`、`tests/` などのサポートされているリソースディレクトリの `.yml` ファイルで [`config` プロパティ](/reference/resource-properties/config) を使用する。
+2. [`dbt_project.yml` ファイル](dbt_project.yml) の対応するリソースキー (`models:`、`snapshots:`、`tests:` など) から
+
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">
@@ -22,30 +23,30 @@ Depending on the resource type, you can define configurations in a dbt project a
 3. From the [`dbt_project.yml` file](dbt_project.yml), under the corresponding resource key (`models:`, `snapshots:`, `tests:`, and so on)
 </VersionBlock>
 
-## Config inheritance
+## 設定の継承
 
-The most specific config always takes precedence. This generally follows the order above: an in-file `config()` block --> properties defined in a `.yml` file --> config defined in the project file. 
+最も具体的な設定が常に優先されます。これは通常、上記の順序に従います。ファイル内の `config()` ブロック --> `.yml` ファイルで定義されたプロパティ --> プロジェクトファイルで定義された設定。
 
-Note - Generic data tests work a little differently when it comes to specificity. See [test configs](/reference/data-test-configs).
+注: 汎用データテストは、詳細度に関して動作が少し異なります。[テスト設定](/reference/data-test-configs) を参照してください。
 
-Within the project file, configurations are also applied hierarchically. The most specific config always takes precedence. In the project file, for example, configurations applied to a `marketing` subdirectory will take precedence over configurations applied to the entire `jaffle_shop` project. To apply a configuration to a model or directory of models, define the [resource path](/reference/resource-configs/resource-path) as nested dictionary keys.
+プロジェクトファイル内でも、設定は階層的に適用されます。最も具体的な設定が常に優先されます。例えば、プロジェクトファイル内では、`marketing` サブディレクトリに適用された設定は、`jaffle_shop` プロジェクト全体に適用された設定よりも優先されます。モデルまたはモデルディレクトリに設定を適用するには、[リソースパス](/reference/resource-configs/resource-path) をネストされた辞書キーとして定義します。
 
-Configurations in your root dbt project have _higher_ precedence than configurations in installed packages. This enables you to override the configurations of installed packages, providing more control over your dbt runs. 
+ルート dbt プロジェクト内の設定は、インストール済みパッケージ内の設定よりも優先順位が高くなります。これにより、インストールされたパッケージの構成を上書きして、dbt の実行をより細かく制御できるようになります。
 
-## Combining configs
+## 構成の結合
 
-Most configurations are "clobbered" when applied hierarchically. Whenever a more specific value is available, it will completely replace the less specific value. Note that a few configs have different merge behavior:
-- [`tags`](/tags) are additive. If a model has some tags configured in `dbt_project.yml`, and more tags applied in its `.sql` file, the final set of tags will include all of them.
-- [`meta`](/reference/resource-configs/meta) dictionaries are merged (a more specific key-value pair replaces a less specific value with the same key)
-- [`pre-hook` and `post-hook`](/reference/resource-configs/pre-hook-post-hook) are also additive.
+ほとんどの構成は、階層的に適用すると「上書き」されます。より具体的な値が利用可能な場合は、より具体的でない値が完全に置き換えられます。ただし、いくつかの構成ではマージ動作が異なります。
+- [`tags`](/tags) は加算されます。モデルの `dbt_project.yml` でいくつかのタグが設定され、さらに `.sql` ファイルで複数のタグが適用されている場合、最終的なタグセットにはそれらすべてが含まれます。
+- [`meta`](/reference/resource-configs/meta) 辞書はマージされます（より具体的なキーと値のペアは、同じキーを持つより具体的でない値を置き換えます）。
+- [`pre-hook` と `post-hook`](/reference/resource-configs/pre-hook-post-hook) も加算されます。
 
 ## The `+` prefix
 
-import PlusPrefix from '/snippets/_plus-prefix.md';
+import PlusPrefix from '/snippets.ja/_plus-prefix.md';
 
 <PlusPrefix />
 
 
-import Example from '/snippets/_configs-properties.md'  ;
+import Example from '/snippets.ja/_configs-properties.md'  ;
 
 <Example />

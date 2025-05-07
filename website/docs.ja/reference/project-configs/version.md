@@ -4,20 +4,20 @@ required: True
 keyword: project version, project versioning, dbt project versioning
 ---
 
-import VersionsCallout from '/snippets/_model-version-callout.md';
+import VersionsCallout from '/snippets.ja/_model-version-callout.md';
 
 <VersionsCallout />
 
 
-dbt projects have two distinct types of `version` tags. This field has a different meaning depending on its location.
+dbt プロジェクトには 2 つの異なるタイプの `version` タグがあります。このフィールドは、その場所によって意味が異なります。
 
-## `dbt_project.yml` versions
+## `dbt_project.yml` のバージョン
 
-The version tag in a `dbt_project` file represents the version of your dbt project. 
+`dbt_project` ファイル内のバージョンタグは、dbt プロジェクトのバージョンを表します。
 
-Starting in dbt version 1.5, `version` in the `dbt_project.yml` is an *optional parameter*. If used, the version must be in a [semantic version](https://semver.org/) format, such as `1.0.0`. The default value is `None` if not specified. For users on dbt version 1.4 or lower, this tag is required, though it isn't currently used meaningfully by dbt.
+dbt バージョン 1.5 以降、`dbt_project.yml` 内の `version` は *オプションパラメータ* です。バージョンを指定する場合は、`1.0.0` などの [セマンティックバージョン](https://semver.org/) 形式にする必要があります。指定されていない場合のデフォルト値は `None` です。dbt バージョン 1.4 以前のバージョンをご利用の場合、このタグは必須ですが、現時点では dbt では意味のある意味で使用されていません。
 
-For more on Core versions, see [About dbt Core versions](/docs/dbt-versions/core).
+Core バージョンの詳細については、[dbt Core バージョンについて](/docs/dbt-versions/core) を参照してください。
 
 <File name='dbt_project.yml'>
 
@@ -27,13 +27,13 @@ version: version
 
 </File>
 
-## `.yml` property file versions
+## `.yml` プロパティファイルのバージョン
 
-A version tag in a `.yml` property file provides the control tag, which informs how dbt processes property files. 
+`.yml` プロパティファイル内のバージョンタグは、dbt がプロパティファイルを処理する方法を指示する制御タグを提供します。
 
-Starting from version 1.5, dbt will no longer require this configuration in your resource `.yml` files.  If you want to know more about why this tag was previously required, you can refer to the [FAQs](#faqs). For users on dbt version 1.4 or lower, this tag is required,
+バージョン 1.5 以降、dbt はリソース `.yml` ファイルでこの設定を必要としなくなります。このタグが以前必須だった理由について詳しくは、[FAQ](#faqs) を参照してください。dbt バージョン 1.4 以前のユーザーの場合、このタグは必須です。
 
-For more on property files, see their general [documentation](/reference/define-properties) on the same page.
+プロパティファイルの詳細については、同じページにある一般的な [ドキュメント](/reference/define-properties) を参照してください。
 
 <Tabs
   groupId="resource-version-configs"

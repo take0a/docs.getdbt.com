@@ -1,6 +1,6 @@
 ---
-title: on-run-start & on-run-end
-description: "Read this guide to understand the on-run-start and on-run-end configurations in dbt."
+title: on-run-start と on-run-end
+description: "このガイドを読んで、dbt の on-run-start および on-run-end 構成を理解してください。"
 datatype: sql-statement | [sql-statement]
 ---
 
@@ -16,19 +16,19 @@ on-run-end: sql-statement | [sql-statement]
 </File>
 
 
-## Definition
+## 定義
 
-A SQL statement (or list of SQL statements) to be run at the start or end of the following commands: <OnRunCommands />
+以下のコマンドの開始時または終了時に実行されるSQL文（またはSQL文のリスト）: <OnRunCommands />
 
-`on-run-start` and `on-run-end` hooks can also [call macros](#call-a-macro-to-grant-privileges) that return SQL statements.
+`on-run-start`フックと`on-run-end`フックは、SQL文を返す[マクロを呼び出す](#権限付与のためのマクロ呼び出し)こともできます。
 
-## Usage notes
-* The `on-run-end` hook has additional jinja variables available in the context — check out the [docs](/reference/dbt-jinja-functions/on-run-end-context).
+## 使用上の注意
+* `on-run-end` フックには、コンテキストで使用できる追加の Jinja 変数があります。[ドキュメント](/reference/dbt-jinja-functions/on-run-end-context) をご覧ください。
 
-## Examples
+## 例
 
-### Grant privileges on all schemas that dbt uses at the end of a run
-This leverages the [schemas](/reference/dbt-jinja-functions/schemas) variable that is only available in an `on-run-end` hook.
+### 実行終了時に dbt が使用するすべてのスキーマに対する権限を付与します。
+これは、`on-run-end` フックでのみ使用可能な [schemas](/reference/dbt-jinja-functions/schemas) 変数を活用します。
 
 <File name='dbt_project.yml'>
 
@@ -40,7 +40,7 @@ on-run-end:
 
 </File>
 
-### Call a macro to grant privileges
+### 権限を付与するためのマクロを呼び出す
 
 <File name='dbt_project.yml'>
 
@@ -51,5 +51,5 @@ on-run-end: "{{ grant_select(schemas) }}"
 
 </File>
 
-### Additional examples
-We've compiled some more in-depth examples [here](/docs/build/hooks-operations#additional-examples).
+### 追加の例
+より詳細な例を[こちら](/docs/build/hooks-operations#additional-examples)にまとめました。

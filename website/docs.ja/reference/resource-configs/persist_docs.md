@@ -1,6 +1,6 @@
 ---
 id: "persist_docs"
-description: "Persist_docs - Read this in-depth guide to learn about configurations in dbt."
+description: "Persist_docs - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: Dict[Str, Bool]
 ---
 
@@ -48,7 +48,7 @@ select ...
 
 <TabItem value="sources">
 
-This config is not implemented for sources.
+この設定は sources には実装されていません。
 
 </TabItem>
 
@@ -122,39 +122,35 @@ select ...
 
 </Tabs>
 
-## Definition
+## 定義
 
-Optionally persist [resource descriptions](/reference/resource-properties/description) as
-column and relation comments in the database. By default, documentation
-persistence is disabled, but it can be enabled for specific resources or groups of
-resources as needed.
+オプションで、[リソースの説明](/reference/resource-properties/description)を列およびリレーションコメントとしてデータベースに保存します。デフォルトではドキュメントの保存は無効になっていますが、必要に応じて特定のリソースまたはリソースグループに対して有効にすることができます。
 
-## Support
+## サポート
 
-The `persist_docs` config is supported on the most widely used dbt adapters:
+`persist_docs` 構成は、最も広く使用されている dbt アダプタでサポートされています。
 - Postgres
 - Redshift
 - Snowflake
 - BigQuery
-- Databricks 
+- Databricks
 - Apache Spark
 
-However, some databases limit where and how descriptions can be added to database objects. Those database adapters might not support `persist_docs`, or might offer only partial support.
+ただし、一部のデータベースでは、データベースオブジェクトに説明を追加できる場所と方法が制限されています。これらのデータベースアダプタは、`persist_docs` をサポートしていないか、部分的にしかサポートしていない可能性があります。
 
-Some known issues and limitations:
+既知の問題と制限事項：
 
 <WHCode>
 
 <div warehouse="Databricks">
 
-- Column-level comments require `file_format: delta` (or another "v2 file format")
-
+- 列レベルのコメントには `file_format: delta` (または別の「v2 ファイル形式」) が必要です
 
 </div>
 
 <div warehouse="Snowflake">
 
-- No known issues
+- 既知の問題はありません
 
 </div>
 
@@ -162,9 +158,9 @@ Some known issues and limitations:
 
 ## Usage
 
-### Documenting columns and relations
+### 列とリレーションのドキュメント化
 
-Supply a [description](/reference/resource-properties/description) for a model:
+モデルの[説明](/reference/resource-properties/description)を指定します:
 
 <File name='models/schema.yml'>
 
@@ -182,7 +178,7 @@ models:
 
 </File>
 
-Enable `persist_docs` for columns and relations in your project:
+プロジェクト内の列とリレーションに対して `persist_docs` を有効にします:
 
 <File name='dbt_project.yml'>
 
@@ -195,8 +191,7 @@ models:
 
 </File>
 
-Run dbt and observe that the created relation and columns are annotated with
-your descriptions:
+dbt を実行し、作成されたリレーションと列に説明が注釈付けされていることを確認します:
 
 <Lightbox src="/img/reference/persist_docs_relation.png"
           title="Relation descriptions in BigQuery"/>

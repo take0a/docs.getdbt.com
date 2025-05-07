@@ -1,9 +1,9 @@
 ---
-title: When should I run my tests?
-description: "Run tests in production or when writing new code"
-sidebar_label: 'When to run tests'
+title: テストはいつ実行すればよいですか?
+description: "本番環境または新しいコードを書くときにテストを実行する"
+sidebar_label: 'テストを実行するタイミング'
 id: when-to-test
 
 ---
 
-You should run your tests whenever you are writing new code (to ensure you haven't broken any existing models by changing SQL), and whenever you run your transformations in production (to ensure that your assumptions about your source data are still valid).
+新しいコードを作成するときは必ずテストを実行する必要があります (SQL を変更することで既存のモデルが壊れていないことを確認するため)。また、本番環境で変換を実行するときは必ずテストを実行する必要があります (ソース データに関する想定が依然として有効であることを確認するため)。

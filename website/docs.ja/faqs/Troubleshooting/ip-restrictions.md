@@ -1,15 +1,15 @@
 ---
-title: "I'm receiving a 403 error 'Forbidden: Access denied' when using service tokens"
-description: "All service token traffic is now subject to IP restrictions. To resolve 403 errors, add your third-party integration CIDRs (network addresses) to the allowlist."
+title: "サービストークンの使用時に403エラー 'Forbidden: Access denied' が表示されます"
+description: "すべてのサービストークントラフィックはIP制限の対象となります。403エラーを解決するには、サードパーティ統合のCIDR（ネットワークアドレス）を許可リストに追加してください。"
 sidebar_label: 'Service token 403 error: Forbidden: Access denied'
 ---
 
 
-All [service token](/docs/dbt-cloud-apis/service-tokens) traffic is subject to IP restrictions.
+すべての [サービストークン](/docs/dbt-cloud-apis/service-tokens) トラフィックは IP 制限の対象となります。
 
-When using a service token, the following 403 response error indicates the IP is not on the allowlist. To resolve this, you should add your third-party integration CIDRs (network addresses) to your allowlist.
+サービストークンの使用時に、次の 403 レスポンスエラーが表示される場合は、IP が許可リストに登録されていないことを示します。この問題を解決するには、サードパーティ統合の CIDR（ネットワークアドレス）を許可リストに追加する必要があります。
 
-The following is an example of the 403 response error:
+以下は 403 レスポンスエラーの例です:
 
 ```json
         {

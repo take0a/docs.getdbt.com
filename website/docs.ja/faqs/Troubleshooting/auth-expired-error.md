@@ -1,19 +1,19 @@
 ---
-title: Receiving an `authentication has expired` error when trying to run queries in the IDE.
-description: "Reauthenticate warehouse when seeing `authentication has expired` error"
-sidebar_label: 'Receiving `authentication has expired` error in the IDE'
+title: IDE でクエリを実行しようとすると、「authentication has expired」というエラーが発生します。
+description: "`authentication has expired` というエラーが表示されたら、ウェアハウスを再認証します"
+sidebar_label: 'IDEで `authentication has expired` というエラーが表示される'
 ---
 
-If you see a `authentication has expired` error when you try to run queries in the dbt Cloud IDE, this means your [OAuth](/docs/cloud/manage-access/set-up-snowflake-oauth) connection between Snowflake and dbt Cloud has expired.
+dbt Cloud IDE でクエリを実行しようとしたときに `authentication has expired` というエラーが表示される場合は、Snowflake と dbt Cloud 間の [OAuth](/docs/cloud/manage-access/set-up-snowflake-oauth) 接続の有効期限が切れていることを意味します。
 
-To fix this, you must reconnect the two tools.
+この問題を解決するには、2 つのツールを再接続する必要があります。
 
-Your Snowflake administrator can [configure](/docs/cloud/manage-access/set-up-snowflake-oauth#create-a-security-integration) the refresh tokens' validity, which has a maximum 90-day validity period.
+Snowflake 管理者は、リフレッシュ トークンの有効期間を [構成](/docs/cloud/manage-access/set-up-snowflake-oauth#create-a-security-integration) できます。リフレッシュ トークンの有効期間は最大 90 日間です。
 
-To resolve the issue, complete the following steps:
+この問題を解決するには、次の手順を実行してください:
 
-1. Go to your **Profile settings** page, accessible from the navigation menu.
-2. Navigate to **Credentials** and click on the project you're experiencing the issue with.
-3. Under **Development credentials**, click the **Reconnect Snowflake Account** (green) button. This steps you through reauthentication using the SSO workflow. 
+1. ナビゲーション メニューから **Profile settings** ページに移動します。
+2. **Credentials** に移動し、問題が発生しているプロジェクトをクリックします。
+3. **Development credentials** の下にある **Reconnect Snowflake Account**（緑色）ボタンをクリックします。SSOワークフローを使用した再認証の手順が表示されます。
 
-If you've tried these step and are still getting this error, please contact the Support team at support@getdbt.com for further assistance.
+これらの手順を試してもエラーが解消されない場合は、サポートチーム（support@getdbt.com）までお問い合わせください。

@@ -141,21 +141,21 @@ analyses:
 
 </Tabs>
 
-Columns are not resources in and of themselves. Instead, they are child properties of another resource type. They can define sub-properties that are similar to properties defined at the resource level:
+列自体はリソースではありません。別のリソースタイプの子プロパティです。列には、リソースレベルで定義されたプロパティに類似したサブプロパティを定義できます:
 - `tags`
 - `meta`
 - `tests`
 - `description`
 
-Because columns are not resources, their `tags` and `meta` properties are not true configurations. They do not inherit the `tags` or `meta` values of their parent resources. However, you can select a generic test, defined on a column, using tags applied to its column or top-level resource; see [test selection examples](/reference/node-selection/test-selection-examples#run-tests-on-tagged-columns).
+列はリソースではないため、`tags` プロパティと `meta` プロパティは真の設定ではありません。親リソースの `tags` 値や `meta` 値は継承されません。ただし、列または最上位リソースに適用されたタグを使用して、列に定義された汎用テストを選択することは可能です。[テスト選択の例](/reference/node-selection/test-selection-examples#run-tests-on-tagged-columns) を参照してください。
 
-Columns may optionally define a `data_type`, which is necessary for:
-- Enforcing a model [contract](/reference/resource-configs/contract)
-- Use in other packages or plugins, such as the [`external`](/reference/resource-properties/external) property of sources and [`dbt-external-tables`](https://hub.getdbt.com/dbt-labs/dbt_external_tables/latest/)
+列ではオプションで `data_type` を定義できます。これは以下の目的で必要です。
+- モデル [contract](/reference/resource-configs/contract) の適用
+- ソースの [`external`](/reference/resource-properties/external) プロパティや [`dbt-external-tables`](https://hub.getdbt.com/dbt-labs/dbt_external_tables/latest/) など、他のパッケージやプラグインでの使用
 
 ### `quote`
 
-The `quote` field can be used to enable or disable quoting for column names.
+`quote` フィールドを使用すると、列名の引用を有効または無効にすることができます。
 
 <Tabs
   defaultValue="models"
@@ -266,27 +266,32 @@ analyses:
 
 </Tabs>
 
-### Default
-The default quoting value is `false`
+### デフォルト
 
-### Explanation
-This is particularly relevant to those using Snowflake, where quoting can be particularly fickle.
+デフォルトの引用符の値は「false」です
 
-This property is useful when:
-- A source <Term id="table" /> has a column that needs to be quoted to be selected, for example, to preserve column casing
-- A seed was created with `quote_columns: true` ([docs](/reference/resource-configs/quote_columns)) on Snowflake
-- A model uses quotes in the SQL, potentially to work around the use of reserved words
+### 説明
+
+これは、引用符の扱いが特に不安定なSnowflakeを使用している場合に特に重要です。
+
+このプロパティは、次の場合に役立ちます。
+- ソース <Term id="table" /> に、選択時に引用符で囲む必要がある列がある場合（例：列の大文字と小文字の区別を維持する場合）
+- Snowflakeでシードが `quote_columns: true` ([docs](/reference/resource-configs/quote_columns)) で作成された場合
+- モデルがSQLで引用符を使用している場合（予約語の使用を回避するためなど）
+
 ```sql
 select user_group as "group"
 ```
 
-Without setting `quote: true`:
-- [Data tests](/docs/build/data-tests) applied to this column may fail due to invalid SQL
-- Documentation may not render correctly, e.g. `group` and `"group"` may not be matched as the same column name.
+`quote: true` を設定しない場合：
+- この列に適用された [データテスト](/docs/build/data-tests) は、無効な SQL が原因で失敗する可能性があります。
+- ドキュメントが正しく表示されない可能性があります。例: `group` と `"group"` が同じ列名として一致しない可能性があります。
 
-### Example
-#### Add tests to a quoted column in a source table
-This is especially relevant if using Snowflake:
+### 例
+
+#### ソーステーブル内の引用符で囲まれた列にテストを追加する
+
+これは特にSnowflakeを使用する場合に重要です:
 
 ```yml
 version: 2
@@ -303,7 +308,7 @@ sources:
 
 ```
 
-Without `quote: true`, the following error will occur:
+`quote: true` がない場合、次のエラーが発生します:
 
 ```
 $ dbt test -s source:stripe.*
@@ -325,7 +330,8 @@ Database Error in test source_not_null_stripe_payment_order_id (models/staging/s
   compiled SQL at target/compiled/jaffle_shop/schema_test/source_not_null_stripe_payment_orderID.sql
 ```
 
-This is because dbt is trying to run:
+これは、dbt が実行しようとしているためです:
+
 ```sql
 select count(*)
 from raw.stripe.payment
@@ -333,7 +339,8 @@ where orderID is null
 
 ```
 
-Instead of:
+の代わりに：
+
 ```sql
 select count(*)
 from raw.stripe.payment

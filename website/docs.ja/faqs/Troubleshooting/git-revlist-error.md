@@ -1,11 +1,11 @@
 ---
-title: I'm receiving a git rev-list master error in the IDE?
-description: "Primary branch not recognized"
-sidebar_label: 'Receiving git rev-list master error in the IDE'
+title: IDE で git rev-list master エラーが表示されますか?
+description: "プライマリブランチが認識されません"
+sidebar_label: 'IDEでgit rev-list masterエラーが発生する'
 id: git-revlist-error
 ---
 
-If you're unable to access the IDE due to the below error message, we'll do our best to get you unstuck with the below steps!
+以下のエラー メッセージが表示されて IDE にアクセスできない場合は、以下の手順に従って問題を解決できるよう最善を尽くします。
 
 ```shell
 git rev-list master..origin/main --count
@@ -14,18 +14,18 @@ Use '--' to separate paths from revisions, like this:
 'git <command> [<revision>...] -- [<file>...]'
 ```
 
-Usually this error indicates that the "main" branch name has changed or it is possible that dbt Cloud was unable to determine what your primary branch was. No worries, we have a few workarounds for you to try:
+通常、このエラーは「メイン」ブランチ名が変更されたか、dbt Cloud がプライマリブランチを特定できなかったことを示しています。ご安心ください。いくつかの回避策をお試しください。
 
-**Workaround 1**
-Take a look at your Environment Settings - If you **do not** have a custom branch filled in your Environment Settings:
+**回避策 1**
+環境設定を確認してください。環境設定にカスタムブランチが**入力されていない**場合：
 
-1. Disconnect and reconnect your repository [connection](https://docs.getdbt.com/docs/dbt-cloud/cloud-configuring-dbt-cloud/cloud-import-a-project-by-git-url) on your Project Settings page. This should then allow dbt Cloud to pick up that the "main" branch is now called `main`
-2. In the Environment Settings, set the custom branch to 'master' and refresh the IDE 
+1. プロジェクト設定ページでリポジトリの [接続](https://docs.getdbt.com/docs/dbt-cloud/cloud-configuring-dbt-cloud/cloud-import-a-project-by-git-url) を切断し、再接続してください。これにより、dbt Cloud は「メイン」ブランチの名前が「main」になったことを認識できるようになります。
+2. 環境設定で、カスタムブランチを「master」に設定し、IDE を更新します。
 
-**Workaround 2**
-Take a look at your Environment Settings - If you **do** have a custom branch filled in your Environment Settings:
+**回避策 2**
+環境設定を確認します。環境設定にカスタムブランチが設定されている場合は、以下の手順を実行してください。
 
-1. Disconnecting and reconnecting your repository [connection](https://docs.getdbt.com/docs/dbt-cloud/cloud-configuring-dbt-cloud/cloud-import-a-project-by-git-url) on your Project Settings page. This should then allow dbt Cloud to pick up that the "main" branch is now called `main`
-2. In the Environment Settings, remove the custom branch and refresh the IDE
+1. プロジェクト設定ページでリポジトリの [接続](https://docs.getdbt.com/docs/dbt-cloud/cloud-configuring-dbt-cloud/cloud-import-a-project-by-git-url) を切断し、再接続します。これにより、dbt Cloud は「メイン」ブランチの名前が「main」になったことを認識できるようになります。
+2. 環境設定で、カスタムブランチを削除し、IDE を更新します。
 
-If you've tried the workarounds above and are still experiencing this behavior - reach out to the Support team at support@getdbt.com and we'll be happy to help!
+上記の回避策を試しても問題が解決しない場合は、サポートチーム（support@getdbt.com）までご連絡ください。喜んでお手伝いいたします。

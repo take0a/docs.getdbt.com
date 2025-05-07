@@ -1,17 +1,17 @@
 ---
-title: Receiving a 'Could not parse dbt_project.yml' error in dbt Cloud job
-description: "Receiving a 'Could not parse dbt_project.yml' error in dbt Cloud? This error is typically caused by a tab indentation in your dbt_project.yml file."
-sidebar_label: 'Could not parse dbt_project.yml error in dbt Cloud'
+title: dbt Cloud ジョブで 'Could not parse dbt_project.yml' というエラーが発生する
+description: "dbt Cloud で 'Could not parse dbt_project.yml' というエラーが表示されましたか? このエラーは通常、dbt_project.yml ファイルのタブ インデントによって発生します。"
+sidebar_label: 'dbt Cloud で dbt_project.yml を解析できませんでした'
 ---
 
-The error message `Could not parse dbt_project.yml: while scanning for...` in your dbt Cloud job run or development usually occurs for several reasons:
+dbt Cloud ジョブの実行中または開発中に `Could not parse dbt_project.yml: while scanning for...` というエラーメッセージが表示される場合、通常はいくつかの原因が考えられます。
 
-- There's a parsing failure in a YAML file (such as a tab indentation or Unicode characters).
-- Your `dbt_project.yml` file has missing fields or incorrect formatting.
-- Your `dbt_project.yml` file doesn't exist in your dbt project repository.
+- YAML ファイルの解析エラー（タブインデントや Unicode 文字など）
+- `dbt_project.yml` ファイルにフィールドが欠落しているか、フォーマットが正しくありません。
+- `dbt_project.yml` ファイルが dbt プロジェクト リポジトリに存在しません。
 
-To resolve this issue, consider the following:
-- Use an online YAML parser or validator to check for any parsing errors in your YAML file. Some known parsing errors include missing fields, incorrect formatting, or tab indentation.
-- Or ensure your `dbt_project.yml` file exists.
+この問題を解決するには、次の点を検討してください。
+- オンライン YAML パーサーまたはバリデータを使用して、YAML ファイルに解析エラーがないか確認します。既知の解析エラーには、フィールドの欠落、フォーマットが正しくない、タブインデントなどがあります。
+- または、`dbt_project.yml` ファイルが存在することを確認してください。
 
-Once you've identified the issue, you can fix the error and rerun your dbt Cloud job.
+問題を特定したら、エラーを修正して dbt Cloud ジョブを再実行できます。

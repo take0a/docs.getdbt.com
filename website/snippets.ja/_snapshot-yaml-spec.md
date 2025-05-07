@@ -1,4 +1,4 @@
-:::info Use the latest snapshot syntax
+:::info最新のスナップショット構文を使用する
 
-In [dbt Cloud "Latest""](/docs/dbt-versions/cloud-release-tracks) or [dbt Core v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9), you can configure snapshots in YAML files using the updated syntax within your `snapshots/` directory (as defined by the [`snapshot-paths` config](/reference/project-configs/snapshot-paths)).  This syntax allows for faster, more efficient snapshot management.
+[dbt Cloud "最新"](/docs/dbt-versions/cloud-release-tracks) または [dbt Core v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9) では、`snapshots/` ディレクトリ（[`snapshot-paths` config](/reference/project-configs/snapshot-paths) で定義）内で、更新された構文を使用して YAML ファイルでスナップショットを設定できます。この構文により、スナップショット管理がより高速かつ効率的になります。
 :::

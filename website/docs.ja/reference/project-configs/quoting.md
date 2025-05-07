@@ -1,8 +1,8 @@
 ---
-title: "Configuring quoting in projects"
+title: "プロジェクトのクォートの設定"
 sidebar_label: "quoting"
 datatype: boolean # -ish, it's actually a dictionary of bools
-description: "Read this guide to understand the quoting configuration in dbt."
+description: "dbt でのクォート設定を理解するには、このガイドをお読みください。"
 default: true
 ---
 <File name='dbt_project.yml'>
@@ -17,20 +17,20 @@ quoting:
 
 </File>
 
-## Definition
-Optionally configure whether dbt should quote databases, schemas, and identifiers when:
-* creating relations (tables/views)
-* resolving a `ref` function to a direct relation reference
+## 定義
+以下の場合に、dbt がデータベース、スキーマ、および識別子を引用符で囲むかどうかをオプションで設定します。
+* リレーション（テーブル/ビュー）の作成
+* `ref` 関数を直接リレーション参照に解決する
 
-:::info BigQuery Terminology
+:::info BigQuery 用語
 
-Note that for BigQuery quoting configuration, `database` and `schema` should be used here, though these configs will apply to `project` and `dataset` names respectively
-
+BigQuery の引用符設定では、`database` と `schema` を使用する必要がありますが、これらの設定はそれぞれ `project` と `dataset` の名前に適用されます。
 :::
 
-## Default
+## デフォルト
 
-The default values vary by database.
+デフォルト値はデータベースによって異なります。
+
 <Tabs
   defaultValue="default"
   values={[
@@ -40,9 +40,9 @@ The default values vary by database.
 }>
 <TabItem value="default">
 
-For most adapters, quoting is set to `true` by default.
+ほとんどのアダプタでは、引用符はデフォルトで `true` に設定されています。
 
-Why? It's equally easy to select from relations with quoted or unquoted identifiers. Quoting allows you to use reserved words and special characters in those identifiers, though we recommend avoiding this whenever possible.
+なぜでしょうか？ 引用符で囲まれた識別子でも、囲まれていない識別子でも、リレーションからの選択は同じように簡単です。引用符で囲むことで、識別子内で予約語や特殊文字を使用できますが、可能な限り引用符の使用は避けることをお勧めします。
 
   <File name='dbt_project.yml'>
 
@@ -58,9 +58,9 @@ quoting:
 </TabItem>
 <TabItem value="snowflake">
 
-On Snowflake, quoting is set to `false` by default.
+Snowflakeでは、引用符はデフォルトで `false` に設定されています。
 
-Creating relations with quoted identifiers also makes those identifiers case sensitive. It's much more difficult to select from them. You can re-enable quoting for relations identifiers that are case sensitive, reserved words, or contain special characters, but we recommend you avoid this as much as possible.
+引用符で囲まれた識別子を使用してリレーションを作成すると、それらの識別子の大文字と小文字が区別されます。そのため、それらの識別子からの選択は非常に困難になります。大文字と小文字が区別される、予約語を含む、または特殊文字を含むリレーション識別子に対して引用符を再度有効にすることは可能ですが、可能な限り避けることをお勧めします。
 
 <File name='dbt_project.yml'>
 
@@ -79,8 +79,9 @@ quoting:
 
 </Tabs>
 
-## Examples
-Set quoting to `false` for a project:
+## 例
+プロジェクトの引用符を `false` に設定する:
+
 <File name='dbt_project.yml'>
 
 ```yml
@@ -91,7 +92,7 @@ quoting:
 
 ```
 
-dbt will then create relations without quotes:
+dbt は引用符なしのリレーションを作成します:
 
 ```sql
 create table analytics.dbt_alice.dim_customers
@@ -100,18 +101,19 @@ create table analytics.dbt_alice.dim_customers
 </File>
 
 
-## Recommendation
+## おすすめ
 
 ### Snowflake
-Set all quoting configs to `False`. This means that you cannot use reserved words as identifiers, however it's usually a good idea to avoid these reserved words anyway.
 
-If a Snowflake source table uses a quoted database, schema, or table identifier, you can configure it in the source.yml file. [Refer to configuring quoting for more info](/reference/resource-properties/quoting).
+すべての引用符設定を `False` に設定してください。これは、予約語を識別子として使用できないことを意味します。ただし、通常はこれらの予約語の使用を避けることをお勧めします。
+
+Snowflake のソーステーブルで引用符で囲まれたデータベース、スキーマ、またはテーブル識別子を使用している場合は、source.yml ファイルで設定できます。[詳細については、引用符の設定を参照してください](/reference/resource-properties/quoting)。
 
 
 
-#### Explanation:
+#### 説明:
 
-Whereas most databases will _lowercase_ unquoted identifiers, Snowflake will _uppercase_ unquoted identifiers. If a model name is lowercased _and quoted_, then it cannot be referred to without quotes! Check out the example below for more information.
+ほとんどのデータベースでは引用符で囲まれていない識別子は小文字で変換されますが、Snowflakeでは引用符で囲まれていない識別子は大文字で変換されます。モデル名が小文字で引用符で囲まれている場合は、引用符なしで参照することはできません。詳細については、以下の例をご覧ください。
 
 <File name='snowflake_casing.sql'>
 
@@ -162,5 +164,5 @@ select * from analytics.orders;
 
 
 
-### Other warehouses
-Leave the default values for your warehouse.
+### その他のデータウェアハウス
+データウェアハウスのデフォルト値はそのままにしておきます。

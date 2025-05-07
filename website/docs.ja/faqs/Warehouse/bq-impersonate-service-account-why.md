@@ -1,22 +1,12 @@
 ---
-title: Why would I want to impersonate a service account?
-description: "Build models using dedicated service account"
-sidebar_label: 'Why impersonate a service account'
+title: なぜサービス アカウントになりすます必要があるのでしょうか?
+description: "専用サービス アカウントを使用してモデルを構築する"
+sidebar_label: 'サービスアカウントになりすます理由'
 id: bq-impersonate-service-account-why
 
 ---
 
-You may want your models to be built using a dedicated service account that has
-elevated access to read or write data to the specified project or dataset.
-Typically, this requires you to create a service account key for running under
-development or on your CI server. By specifing the email address of the service
-account you want to build models as, you can use [Application Default Credentials](https://cloud.google.com/sdk/gcloud/reference/auth/application-default) or the
-service's configured service account (when running in GCP) to assume the identity
-of the service account with elevated permissions.
+指定されたプロジェクトまたはデータセットへのデータの読み取りまたは書き込み権限が昇格された専用のサービスアカウントを使用してモデルを構築したい場合があります。
+通常、これには開発中またはCIサーバー上で実行するためのサービスアカウントキーを作成する必要があります。モデルの構築に使用するサービスアカウントのメールアドレスを指定することで、[アプリケーションのデフォルト認証情報](https://cloud.google.com/sdk/gcloud/reference/auth/application-default)、またはサービスで構成されたサービスアカウント（GCPで実行している場合）を使用して、昇格された権限を持つサービスアカウントのIDを取得できます。
 
-This allows you to reap the advantages of using federated identity for developers
-(via ADC) without needing to grant individual access to read and write data
-directly, and without needing to create separate service account and keys for
-each user. It also allows you to completely eliminate the need for service
-account keys in CI as long as your CI is running on GCP (Cloud Build, Jenkins,
-GitLab/Github Runners, etc).
+これにより、開発者向けフェデレーションID（ADC経由）を使用するメリットを享受でき、データの読み取りと書き込みのアクセス権を個別に付与したり、ユーザーごとに個別のサービスアカウントとキーを作成したりする必要がありません。また、CI が GCP（Cloud Build、Jenkins、GitLab/Github Runners など）上で実行されている限り、CI でサービス アカウント キーを使用する必要が完全になくなります。

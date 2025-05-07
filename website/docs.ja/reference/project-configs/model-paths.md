@@ -11,13 +11,13 @@ model-paths: [directorypath]
 
 </File>
 
-## Definition
-Optionally specify a custom list of directories where [models](/docs/build/models), [sources](/docs/build/sources), and [unit tests](/docs/build/unit-tests) are located.
+## 定義
+オプションで、[モデル](/docs/build/models)、[ソース](/docs/build/sources)、[ユニットテスト](/docs/build/unit-tests)が配置されているディレクトリのカスタムリストを指定します。
 
-## Default
-By default, dbt will search for models and sources in the `models` directory. For example, `model-paths: ["models"]`. 
+## デフォルト
+デフォルトでは、dbt はモデルとソースを `models` ディレクトリ内で検索します。たとえば、`model-paths: ["models"]` のようになります。
 
-import RelativePath from '/snippets/_relative-path.md';
+import RelativePath from '/snippets.ja/_relative-path.md';
 
 <RelativePath 
 path="model-paths"
@@ -25,19 +25,19 @@ absolute="/Users/username/project/models"
 />
 
 - ✅ **Do**
-  - Use relative path:
+  - 相対パスを使用:
     ```yml
     model-paths: ["models"]
     ```
 
 - ❌ **Don't:**
-  - Avoid absolute paths:
+  - 絶対パスは避けてください:
     ```yml
     model-paths: ["/Users/username/project/models"]
     ```
 
-## Examples
-### Use a subdirectory named `transformations` instead of `models`
+## 例
+### `models` の代わりに `transformations` という名前のサブディレクトリを使用します
 
 <File name='dbt_project.yml'>
 

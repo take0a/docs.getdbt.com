@@ -1,21 +1,18 @@
 ---
-title: What privileges does my database user need to use dbt?
-description: "Database privileges to use dbt"
-sidebar_label: 'Database privileges to use dbt'
+title: dbt を使用するには、データベース ユーザーにどのような権限が必要ですか?
+description: "dbt を使用するためのデータベース権限"
+sidebar_label: 'dbt を使用するためのデータベース権限'
 id: database-privileges
 
 ---
-Your user will need to be able to:
-* `select` from raw data in your warehouse (i.e. data to be transformed)
-* `create` schemas, and therefore create tables/views within that
-schema¹
-* read system <Term id="view">views</Term> to generate documentation (i.e. views in
-`information_schema`)
+ユーザーには以下の権限が必要です。
+* ウェアハウス内の生データ（つまり、変換対象のデータ）から `select` する
+* スキーマを `create` し、そのスキーマ内にテーブル/ビューを作成する¹
+* システム <Term id="view">views</Term> を読み取ってドキュメントを生成する（つまり、`information_schema` 内のビュー）。
 
-On Postgres, Redshift, Databricks, and Snowflake, use a series of `grants` to ensure that
-your user has the correct privileges. Check out [example permissions](/reference/database-permissions/about-database-permissions) for these warehouses.
+Postgres、Redshift、Databricks、Snowflake では、一連の `grants` を使用して、ユーザーに適切な権限が付与されていることを確認します。これらのウェアハウスの [権限の例](/reference/database-permissions/about-database-permissions) をご確認ください。
 
-On BigQuery, use the "BigQuery User" role to assign these privileges.
+BigQuery では、「BigQuery ユーザー」ロールを使用してこれらの権限を割り当てます。
 
 ---
-¹Alternatively, a separate user can create a schema for the dbt user, and then grant the user privileges to create within this schema. We generally recommend granting your dbt user the ability to create schemas, as it is less complicated to implement.
+¹あるいは、別のユーザーがdbtユーザー用のスキーマを作成し、そのスキーマ内で作成する権限をユーザーに付与することもできます。実装が比較的簡単なため、通常はdbtユーザーにスキーマ作成権限を付与することをお勧めします。

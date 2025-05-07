@@ -283,14 +283,16 @@ saved_queries:
 
 </Tabs>
 
-## Definition
-An optional configuration for assigning a group to a resource. When a resource is grouped, dbt will allow it to reference private models within the same group.
+## 定義
 
-For more details on reference access between resources in groups, check out [model access](/docs/collaborate/govern/model-access#groups).
+リソースにグループを割り当てるためのオプションの設定です。リソースをグループ化すると、dbt は同じグループ内のプライベートモデルへの参照を許可します。
 
-## Examples
-### Prevent a 'marketing' group model from referencing a private 'finance' group model
-This is useful if you want to prevent other groups from building on top of models that are rapidly changing, experimental, or otherwise internal to a group or team. 
+グループ内のリソース間の参照アクセスの詳細については、[モデルアクセス](/docs/collaborate/govern/model-access#groups) をご覧ください。
+
+## 例
+
+### 「マーケティング」グループモデルがプライベートな「財務」グループモデルを参照するのを防ぎます。
+これは、急速に変化するモデル、実験的なモデル、あるいはグループやチーム内部のモデルを他のグループが利用できないようにする場合に役立ちます。
 
 <File name='models/schema.yml'>
 
@@ -319,7 +321,7 @@ dbt.exceptions.DbtReferenceError: Parsing Error
   which is not allowed because the referenced node is private to the finance group.
 ```
 
-## Related docs
+## 関連ドキュメント
 
-* [Model Access](/docs/collaborate/govern/model-access#groups)
-* [Defining groups](/docs/build/groups)
+* [モデルアクセス](/docs/collaborate/govern/model-access#groups)
+* [グループの定義](/docs/build/groups)

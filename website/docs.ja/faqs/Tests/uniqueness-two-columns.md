@@ -1,15 +1,15 @@
 ---
-title: Can I test the uniqueness of two columns?
-description: "Options to test uniqueness of two columns"
+title: 2 つの列の一意性をテストできますか?
+description: "2つの列の一意性をテストするオプション"
 sidebar_label: 'Test the uniqueness of two columns'
 id: uniqueness-two-columns
 
 ---
 
-Yes, There's a few different options.
+はい、いくつかの選択肢があります。
 
 
-Consider an orders <Term id="table" /> that contains records from multiple countries, and the combination of ID and country code is unique:
+複数の国からのレコードが含まれ、ID と国コードの組み合わせが一意である注文 <Term id="table" /> を考えてみましょう:
 
 | order_id | country_code |
 |----------|--------------|
@@ -21,9 +21,9 @@ Consider an orders <Term id="table" /> that contains records from multiple count
 | ...      | ...          |
 
 
-Here are some approaches:
+いくつかのアプローチを以下に示します:
 
-#### 1. Create a unique key in the model and test that
+#### 1. モデルに一意のキーを作成し、それをテストします
 
 <File name='models/orders.sql'>
 
@@ -54,7 +54,7 @@ models:
 </File>
 
 
-#### 2. Test an expression
+#### 2. 式をテストする
 
 <File name='models/orders.yml'>
 
@@ -71,9 +71,9 @@ models:
 </File>
 
 
-#### 3. Use the `dbt_utils.unique_combination_of_columns` test
+#### 3. `dbt_utils.unique_combination_of_columns`テストを使用する
 
-This is especially useful for large datasets since it is more performant. Check out the docs on [packages](/docs/build/packages) for more information.
+これはパフォーマンスが向上するため、特に大規模なデータセットで役立ちます。詳細については、[パッケージ](/docs/build/packages)のドキュメントをご覧ください。
 
 <File name='models/orders.yml'>
 

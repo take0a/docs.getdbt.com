@@ -1,12 +1,12 @@
 ---
-title: How do I load data into my warehouse?
-description: "Recommendations on tools to load data to warehouse"
-sidebar_label: 'Recommendations on tools to get data into your warehouse'
+title: ウェアハウスにデータをロードするにはどうすればいいですか?
+description: "ウェアハウスにデータをロードするためのツールに関する推奨事項"
+sidebar_label: 'ウェアハウスにデータを取り込むためのツールに関する推奨事項'
 id: loading-data
 
 ---
-dbt assumes that you already have a copy of your data, in your <Term id="data-warehouse" />. We recommend you use an off-the-shelf tool like [Stitch](https://www.stitchdata.com/) or [Fivetran](https://fivetran.com/) to get data into your warehouse.
+dbt は、<Term id="data-warehouse" /> 内に既にデータのコピーが存在することを前提としています。データをウェアハウスに取り込むには、[Stitch](https://www.stitchdata.com/) や [Fivetran](https://fivetran.com/) などの市販ツールのご利用をお勧めします。
 
-**Can dbt be used to load data?**
+**dbt はデータのロードに使用できますか？**
 
-No, dbt does not extract or load data. It focuses on the transformation step only.
+いいえ、dbt はデータの抽出やロードは行いません。変換ステップのみに特化しています。

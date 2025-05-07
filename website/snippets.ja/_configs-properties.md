@@ -1,6 +1,6 @@
 
-## Example
-Here's an example that defines both `sources` and `models` for a project:
+## 例
+以下は、プロジェクトの `sources` と `models` の両方を定義する例です。
 
 <File name='models/jaffle_shop.yml'>
 
@@ -66,8 +66,8 @@ models:
 
 </File>
 
-## Related documentation
-You can find an exhaustive list of each supported property and config, broken down by resource type:
+## 関連ドキュメント
+サポートされている各プロパティと設定の詳細なリストは、リソースタイプ別に記載されています。
 * Model [properties](/reference/model-properties) and [configs](/reference/model-configs)
 * Source [properties](/reference/source-properties) and [configs](source-configs)
 * Seed [properties](/reference/seed-properties) and [configs](/reference/seed-configs)
@@ -89,19 +89,20 @@ You can find an exhaustive list of each supported property and config, broken do
 
 <Expandable alt_header="Invalid test config given in [model name]">
 
-This error occurs when your `.yml` file does not conform to the structure expected by dbt. A full error message might look like:
+このエラーは、`.yml` ファイルが dbt が想定する構造に準拠していない場合に発生します。完全なエラーメッセージは次のようになります:
+
 ```
 * Invalid test config given in models/schema.yml near {'namee': 'event', ...}
   Invalid arguments passed to "UnparsedNodeUpdate" instance: 'name' is a required property, Additional properties are not allowed ('namee' was unexpected)
 ```
 
-While verbose, an error like this should help you track down the issue. Here, the `name` field was provided as `namee` by accident. To fix this error, ensure that your `.yml` conforms to the expected structure described in this guide.
+このようなエラーは冗長ではありますが、問題の追跡に役立つはずです。ここでは、`name` フィールドが誤って `namee` として指定されています。このエラーを修正するには、`.yml` がこのガイドに記載されている想定される構造に準拠していることを確認してください。
 
 </Expandable>
 
-<Expandable alt_header="Invalid syntax in your schema.yml file" >
+<Expandable alt_header="schema.yml ファイルの構文が無効です" >
 
-If your `.yml` file is not valid yaml, then dbt will show you an error like this:
+`.yml` ファイルが有効な yaml でない場合、dbt は次のようなエラーを表示します。
 
 ```text
 Runtime Error
@@ -120,6 +121,6 @@ Runtime Error
 
 ```
 
-This error occurred because a semicolon (`;`) was accidentally used instead of a colon (`:`) after the `description` field. To resolve issues like this, find the `.yml` file referenced in the error message and fix any syntax errors present in the file. There are online YAML validators that can be helpful here, but please be mindful of submitting sensitive information to third-party applications!
+このエラーは、`description` フィールドの後にコロン (`:`) の代わりにセミコロン (`;`) が誤って使用されたために発生しました。このような問題を解決するには、エラーメッセージで参照されている `.yml` ファイルを見つけ、ファイル内の構文エラーを修正してください。オンラインの YAML バリデーターが役立ちますが、サードパーティのアプリケーションに機密情報を送信する際にはご注意ください。
 
 </Expandable>

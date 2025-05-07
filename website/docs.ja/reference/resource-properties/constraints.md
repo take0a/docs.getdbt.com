@@ -3,33 +3,33 @@ resource_types: [models]
 datatype: "{dictionary}"
 ---
 
-Constraints are a feature of many data platforms. When specified, the platform will perform additional validation on data as it is being populated in a new table or inserted into a preexisting table. If the validation fails, the table creation or update fails, the operation is rolled back, and you will see a clear error message.
+制約は多くのデータプラットフォームに備わっている機能です。制約を指定すると、プラットフォームは新しいテーブルにデータを入力する際、または既存のテーブルにデータを挿入する際に、追加の検証を実行します。検証に失敗した場合、テーブルの作成または更新は失敗し、操作はロールバックされ、明確なエラーメッセージが表示されます。
 
-When enforced, a constraint guarantees that you will never see invalid data in the table materialized by your model. Enforcement varies significantly by data platform.
+制約を適用すると、モデルによってマテリアライズされたテーブルに無効なデータが含まれることがなくなります。適用方法はデータプラットフォームによって大きく異なります。
 
-Constraints require the declaration and enforcement of a model [contract](/reference/resource-configs/contract).
+制約を適用するには、モデル [コントラクト](/reference/resource-configs/contract) の宣言と適用が必要です。
 
-**Constraints are never applied on `ephemeral` models or those materialized as `view`**. Only `table` and `incremental` models support applying and enforcing constraints.
+**制約は「エフェメラル」モデルや「ビュー」としてマテリアライズされたモデルには適用されません**。制約の適用と強制は「テーブル」モデルと「増分」モデルでのみサポートされます。
 
-## Defining constraints
+## 制約の定義
 
-Constraints may be defined for a single column, or at the model level for one or more columns. As a general rule, we recommend defining single-column constraints directly on those columns.
+制約は、単一の列に対して定義することも、モデルレベルで1つ以上の列に対して定義することもできます。原則として、単一列制約はそれらの列に直接定義することをお勧めします。
 
-If you define multiple `primary_key` constraints for a single model, those _must_ be defined at the model level. Defining multiple `primary_key` constraints at the column level is not supported. 
+単一のモデルに対して複数の `primary_key` 制約を定義する場合、それらはモデルレベルで定義する必要があります。列レベルで複数の `primary_key` 制約を定義することはサポートされていません。
 
-The structure of a constraint is:
-- `type` (required): one of `not_null`, `unique`, `primary_key`, `foreign_key`, `check`, `custom`
-- `expression`: Free text input to qualify the constraint. Required for certain constraint types, and optional for others.
-- `name` (optional): Human-friendly name for this constraint. Supported by some data platforms.
-- `columns` (model-level only): List of column names to apply the constraint over.
+制約の構造は次のとおりです。
+- `type` (必須): `not_null`、`unique`、`primary_key`、`foreign_key`、`check`、`custom` のいずれか
+- `expression`: 制約を修飾するフリーテキスト入力。特定の制約タイプでは必須、その他のタイプではオプションです。
+- `name` (オプション): この制約のわかりやすい名前。一部のデータプラットフォームでサポートされています。
+- `columns` (モデル レベルのみ): 制約を適用する列名のリスト。
 
 <VersionBlock firstVersion="1.9">
 
-Foreign key constraints accept two additional inputs:
-- `to`: A relation input, likely [`ref()`](/reference/dbt-jinja-functions/ref)] and [`source()`](/reference/dbt-jinja-functions/source), indicating the referenced table.
-- `to_columns`: A list of column(s) in that table containing the corresponding primary or unique key.
+外部キー制約には、以下の 2 つの追加入力があります。
+- `to`: 参照先テーブルを示すリレーション入力。[`ref()`](/reference/dbt-jinja-functions/ref)] や [`source()`](/reference/dbt-jinja-functions/source) などが考えられます。
+- `to_columns`: 対応する主キーまたは一意キーを含む、そのテーブル内の列のリスト。
 
-This syntax for defining foreign keys uses `ref`, meaning it will capture dependencies and works across different environments. It's available in [dbt Cloud "Latest""](/docs/dbt-versions/cloud-release-tracks) and [dbt Core v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9).
+外部キーを定義するこの構文では `ref` が使用されているため、依存関係が取得され、さまざまな環境で機能します。[dbt Cloud "最新"](/docs/dbt-versions/cloud-release-tracks) および [dbt Core v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9) で使用できます。
 
 <File name='models/schema.yml'>
 
@@ -71,9 +71,9 @@ models:
 
 </File>
 
-Supported dbt-adapters use these fields when populated, to render out the foreign key constraint instead of `expression`.
+サポートされている dbt アダプタは、これらのフィールドに値が入力されると、`expression` ではなく外部キー制約をレンダリングします。
 
-For more information on the adapters which support foreign key constraints, have a look at our guide on [Platform constraint support](/docs/collaborate/govern/model-contracts#platform-constraint-support).
+外部キー制約をサポートするアダプタの詳細については、[プラットフォーム制約のサポート](/docs/collaborate/govern/model-contracts#platform-constraint-support) に関するガイドをご覧ください。
 
 </VersionBlock>
 
@@ -125,21 +125,21 @@ models:
 
 </VersionBlock>
 
-## Platform-specific support
+## プラットフォーム固有のサポート
 
-In transactional databases, it is possible to define "constraints" on the allowed values of certain columns, stricter than just the data type of those values. For example, Postgres supports and enforces all the constraints in the ANSI SQL standard (`not null`, `unique`, `primary key`, `foreign key`), plus a flexible row-level `check` constraint that evaluates to a boolean expression.
+トランザクションデータベースでは、特定の列の許容値に対して、その値のデータ型だけでなく、より厳密な「制約」を定義することができます。例えば、PostgresはANSI SQL標準のすべての制約（「not null」、「unique」、「primary key」、「foreign key」）をサポートし、適用します。さらに、ブール式を評価する柔軟な行レベルの「check」制約もサポートしています。
 
-Most analytical data platforms support and enforce a `not null` constraint, but they either do not support or do not enforce the rest. It is sometimes still desirable to add an "informational" constraint, knowing it is _not_ enforced, for the purpose of integrating with legacy data catalog or entity-relation diagram tools ([dbt-core#3295](https://github.com/dbt-labs/dbt-core/issues/3295)). Some data platforms can optionally use primary or foreign key constraints for query optimization if you specify an additional keyword.
+ほとんどの分析データプラットフォームは「not null」制約をサポートし、適用しますが、残りの制約はサポートしていないか、適用していません。従来のデータカタログやERDツールとの統合を目的として、「情報」制約（適用されないことを前提としている）を追加することが望ましい場合もあります（[dbt-core#3295](https://github.com/dbt-labs/dbt-core/issues/3295)）。一部のデータプラットフォームでは、追加のキーワードを指定することで、クエリの最適化に主キー制約または外部キー制約をオプションで使用できます。
 
-To that end, there are two optional fields you can specify on any filter:
-- `warn_unenforced: False` to skip warning on constraints that are supported, but not enforced, by this data platform. The constraint will be included in templated DDL.
-- `warn_unsupported: False` to skip warning on constraints that aren't supported by this data platform, and therefore won't be included in templated DDL.
+そのため、フィルターには以下の2つのオプションフィールドを指定できます。
+- `warn_unenforced: False` を指定すると、このデータプラットフォームでサポートされているものの強制されていない制約に関する警告がスキップされます。この制約はテンプレートDDLに含まれます。
+- `warn_unsupported: False` を指定すると、このデータプラットフォームでサポートされていない制約に関する警告がスキップされ、テンプレートDDLには含まれません。
 
 <WHCode>
 
 <div warehouse="Postgres">
 
-* PostgreSQL constraints documentation: [here](https://www.postgresql.org/docs/current/ddl-constraints.html#id-1.5.4.6.6)
+* PostgreSQL 制約のドキュメント: [こちら](https://www.postgresql.org/docs/current/ddl-constraints.html#id-1.5.4.6.6)
 
 <File name='models/constraints_example.sql'>
 
@@ -182,7 +182,8 @@ models:
 
 </File>
 
-Expected DDL to enforce constraints:
+制約を強制する予期される DDL:
+
 <File name='target/run/.../constraints_example.sql'>
 
 ```sql
@@ -213,7 +214,7 @@ select
 
 <div warehouse="Redshift">
 
-Redshift currently only enforces `not null` constraints; all other constraints are metadata only. Additionally, Redshift does not allow column checks at the time of table creation. See more in the Redshift documentation [here](https://docs.aws.amazon.com/redshift/latest/dg/t_Defining_constraints.html).
+Redshiftは現在、「not null」制約のみを適用します。その他の制約はメタデータのみです。また、Redshiftではテーブル作成時に列チェックは許可されません。詳しくは、Redshiftのドキュメント[こちら](https://docs.aws.amazon.com/redshift/latest/dg/t_Defining_constraints.html)をご覧ください。
 
 <File name='models/constraints_example.sql'>
 
@@ -256,11 +257,12 @@ models:
         data_type: date
 ```
 
-Note that Redshift limits the maximum length of the `varchar` values to 256 characters by default (or when specified without a length). This means that any string data exceeding 256 characters might get truncated _or_ return a "value too long for character type" error. To allow the maximum length, use `varchar(max)`. For example, `data_type: varchar(max)`.  
+Redshiftでは、`varchar`値の最大長がデフォルトで256文字に制限されていることに注意してください（長さを指定しない場合も同様です）。つまり、256文字を超える文字列データは切り捨てられるか、「文字型に対して値が長すぎます」というエラーが返される可能性があります。最大長を許可するには、`varchar(max)`を使用してください。例：`data_type: varchar(max)`
 
 </File>
 
-Expected DDL to enforce constraints:
+制約を強制する予期される DDL:
+
 <File name='target/run/.../constraints_example.sql'>
 
 ```sql
@@ -291,15 +293,15 @@ select
 
 <div warehouse="Snowflake">
 
-- Snowflake constraints documentation: [here](https://docs.snowflake.com/en/sql-reference/constraints-overview.html)
-- Snowflake data types: [here](https://docs.snowflake.com/en/sql-reference/intro-summary-data-types.html)
+- Snowflakeの制約に関するドキュメント: [こちら](https://docs.snowflake.com/en/sql-reference/constraints-overview.html)
+- Snowflakeのデータ型: [こちら](https://docs.snowflake.com/en/sql-reference/intro-summary-data-types.html)
 
-Snowflake suppports four types of constraints: `unique`, `not null`, `primary key`, and `foreign key`.
+Snowflakeは、`unique`、`not null`、`primary key`、`foreign key`の4種類の制約をサポートしています。
 
-It is important to note that only the `not null` (and the `not null` property of `primary key`) are actually checked at present.
-The rest of the constraints are purely metadata, not verified when inserting data. Although Snowflake does not validate `unique`, `primary`, or `foreign_key` constraints, you may optionally instruct Snowflake to use them for query optimization by specifying [`rely`](https://docs.snowflake.com/en/user-guide/join-elimination) in the constraint `expression` field.
+現時点では、`not null`（および`primary key`の`not null`プロパティ）のみが実際にチェックされることに注意してください。
+その他の制約は純粋にメタデータであり、データの挿入時には検証されません。 Snowflake は `unique`、`primary`、`foreign_key` 制約を検証しませんが、オプションで制約 `expression` フィールドに [`rely`](https://docs.snowflake.com/en/user-guide/join-elimination) を指定することにより、クエリの最適化にこれらの制約を使用するように Snowflake に指示できます。
 
-Currently, Snowflake doesn't support the `check` syntax and dbt will skip the `check` config and raise a warning message if it is set on some models in the dbt project.
+現在、Snowflake は `check` 構文をサポートしておらず、dbt プロジェクト内の一部のモデルで `check` 構成が設定されている場合、dbt はそれをスキップして警告メッセージを表示します。
 
 <File name='models/constraints_example.sql'>
 
@@ -345,7 +347,8 @@ models:
 
 </File>
 
-Expected DDL to enforce constraints:
+制約を強制する予期される DDL:
+
 <File name='target/run/.../constraints_example.sql'>
 
 ```sql
@@ -370,11 +373,11 @@ select
 
 <div warehouse="BigQuery">
 
-BigQuery allows defining and enforcing `not null` constraints, and defining (but _not_ enforcing) `primary key` and `foreign key` constraints (which can be used for query optimization). BigQuery does not support defining or enforcing other constraints. For more information, refer to [Platform constraint support](/docs/collaborate/govern/model-contracts#platform-constraint-support)
+BigQuery では、`not null` 制約の定義と適用、およびクエリの最適化に使用できる `primary key` 制約と `foreign key` 制約の定義（ただし適用は _not_）が可能です。BigQuery は、その他の制約の定義または適用をサポートしていません。詳細については、[プラットフォーム制約のサポート](/docs/collaborate/govern/model-contracts#platform-constraint-support) をご覧ください。
 
-Documentation: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+ドキュメント: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
 
-Data types: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
+データ型: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
 
 <File name='models/constraints_example.sql'>
 
@@ -419,7 +422,7 @@ models:
 
 </File>
 
-### Column-level constraint on nested column:
+### ネストされた列に対する列レベルの制約:
 
 <File name='models/nested_column_constraints_example.sql'>
 
@@ -473,7 +476,7 @@ models:
 
 </File>
 
-### Expected DDL to enforce constraints:
+### 制約を強制する予期される DDL:
 
 <File name='target/run/.../constraints_example.sql'>
 
@@ -499,19 +502,19 @@ select
 
 <div warehouse="Databricks">
 
-Databricks allows you to define:
+Databricks では、以下の制約を定義できます。
 
-- a `not null` constraint
-- and/or additional `check` constraints, with conditional expressions including one or more columns
+- `not null` 制約
+- 条件式に 1 つ以上の列を含む、追加の `check` 制約
 
-As Databricks does not support transactions nor allows using `create or replace table` with a column schema, the table is first created without a schema, and `alter` statements are then executed to add the different constraints. 
+Databricks はトランザクションをサポートしておらず、列スキーマを使用した `create or replace table` の使用も許可していないため、まずスキーマなしでテーブルを作成し、その後 `alter` ステートメントを実行してさまざまな制約を追加します。
 
-This means that:
+つまり、以下のようになります。
 
-- The names and order of columns is checked but not their type
-- If the `constraints` and/or `constraint_check` fails, the table with the failing data will still exist in the Warehouse
+- 列の名前と順序はチェックされますが、型はチェックされません。
+- `constraints` または `constraint_check` が失敗した場合、失敗したデータを含むテーブルはウェアハウス内に残ります。
 
-See [this page](https://docs.databricks.com/tables/constraints.html) with more details about the support of constraints on Databricks.
+Databricks における制約のサポートの詳細については、[このページ](https://docs.databricks.com/tables/constraints.html) を参照してください。
 
 <File name='models/constraints_example.sql'>
 
@@ -556,7 +559,8 @@ models:
 
 </File>
 
-Expected DDL to enforce constraints:
+制約を強制する予期される DDL:
+
 <File name='target/run/.../constraints_example.sql'>
 
 ```sql
@@ -571,7 +575,7 @@ Expected DDL to enforce constraints:
 
 </File>
 
-Followed by the statements
+以下の文が続く
 
 ```sql
 alter table schema_name.my_model change column id set not null;
@@ -582,22 +586,21 @@ alter table schema_name.my_model add constraint 472394792387497234 check (id > 0
 
 </WHCode>
 
-## Custom constraints 
+## カスタム制約
 
-In dbt Cloud and dbt Core, you can use custom constraints on models for the advanced configuration of tables. Different data warehouses support different syntax and capabilities. 
+dbt Cloud および dbt Core では、モデルにカスタム制約を適用することで、テーブルの詳細な設定を行うことができます。データウェアハウスによってサポートされる構文と機能は異なります。
 
-Custom constraints allow you to add configuration to specific columns. For example:
+カスタム制約を使用すると、特定の列に設定を追加できます。例:
 
-  - Set [masking policies](https://docs.snowflake.com/en/user-guide/security-column-intro#what-are-masking-policies) in Snowflake when using a Create Table As Select (CTAS).
-  
-  - Other data warehouses (such as [Databricks](https://docs.databricks.com/en/sql/language-manual/sql-ref-syntax-ddl-create-table-using.html) and [BigQuery](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language#column_name_and_column_schema) have their own set of parameters that can be set for columns in their CTAS statements.
+- Create Table As Select (CTAS) を使用する場合は、Snowflake で [マスキングポリシー](https://docs.snowflake.com/en/user-guide/security-column-intro#what-are-masking-policies) を設定します。
 
+- 他のデータ ウェアハウス ([Databricks](https://docs.databricks.com/en/sql/language-manual/sql-ref-syntax-ddl-create-table-using.html) や [BigQuery](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language#column_name_and_column_schema) など) には、CTAS ステートメントの列に設定できる独自のパラメータ セットがあります。
 
-You can implement constraints in a couple of different ways:
+制約は、いくつかの方法で実装できます:
 
-<Expandable alt_header="Custom constraints with tags">
+<Expandable alt_header="タグでカスタム制約">
 
-Here's an example of how to implement tag-based masking policies with contracts and constraints using the following syntax:
+次の構文を使用して、契約と制約を含むタグベースのマスキング ポリシーを実装する方法の例を次に示します:
 
 <File name='models/constraints_example.yml'>
 
@@ -620,14 +623,15 @@ models:
 
 </File>
 
-Using this syntax requires configuring all the columns and their types as it’s the only way to send a create or replace `<cols_info_with_masking> mytable as ...`. It’s not possible to do it with just a partial list of columns. This means making sure the columns and constraints fields are fully defined.
+この構文を使用するには、すべての列とその型を設定する必要があります。これは、`<cols_info_with_masking> mytable as ...` という create または replace を送信する唯一の方法だからです。列のリストの一部だけを指定しても、この構文は実行できません。つまり、列と制約フィールドが完全に定義されている必要があります。
 
-To generate a YAML with all the columns, you can use `generate_model_yaml` from [dbt-codegen](https://github.com/dbt-labs/dbt-codegen/tree/0.12.1/?tab=readme-ov-file#generate_model_yaml-source).
+すべての列を含む YAML を生成するには、[dbt-codegen](https://github.com/dbt-labs/dbt-codegen/tree/0.12.1/?tab=readme-ov-file#generate_model_yaml-source) の `generate_model_yaml` を使用できます。
+
 </Expandable>
 
-<Expandable alt_header="Custom constraints without tags">
+<Expandable alt_header="タグなしのカスタム制約">
 
-Alternatively, you can add a masking policy without tags:
+あるいは、タグなしでマスキング ポリシーを追加することもできます:
 
 <File name='models/constraints_example.yml'>
  

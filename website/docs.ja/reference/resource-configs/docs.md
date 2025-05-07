@@ -1,7 +1,7 @@
 ---
 sidebar_label: "docs"
 resource_types: models
-description: "Docs - Read this in-depth guide to learn about configurations in dbt."
+description: "Docs - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: "{dictionary}"
 default_value: {show: true}
 ---
@@ -20,7 +20,7 @@ default_value: {show: true}
 
 <TabItem value="models">
 
-You can configure `docs` behavior for many resources at once by setting in `dbt_project.yml`. You can also use the `docs` config in `properties.yaml` files, to set or override documentation behaviors for specific resources:
+`dbt_project.yml` で設定することで、複数のリソースの `docs` 動作を一括で設定できます。また、`properties.yaml` ファイルの `docs` 設定を使用して、特定のリソースのドキュメント動作を設定または上書きすることもできます:
 
 
 <File name='dbt_project.yml'>
@@ -53,13 +53,13 @@ models:
 
 <TabItem value="sources">
 
-This property is not implemented for sources.
+このプロパティはソースに対して実装されていません。
 
 </TabItem>
 
 <TabItem value="seeds">
 
-You can use the docs property in YAML files, including the `dbt_project.yml`:
+`dbt_project.yml` を含む YAML ファイルで docs プロパティを使用できます。
 
 <File name='dbt_project.yml'>
 
@@ -90,7 +90,7 @@ seeds:
 
 <TabItem value="snapshots">
 
-You can use the docs property in YAML files, including the `dbt_project.yml`:
+`dbt_project.yml` を含む YAML ファイルで docs プロパティを使用できます:
 
 <File name='dbt_project.yml'>
 
@@ -122,7 +122,7 @@ snapshots:
 
 <TabItem value="analyses">
 
-You can use the docs property in YAML files, _except_ in `dbt_project.yml`. Refer to [Analysis properties](/reference/analysis-properties) for more info.
+docsプロパティはYAMLファイル（`dbt_project.yml`を除く）で使用できます。詳細については、[分析プロパティ](/reference/analysis-properties)を参照してください。
 
 
 <File name='analysis/schema.yml'>
@@ -142,7 +142,7 @@ analyses:
 
 <TabItem value="macros">
 
-You can use the docs property in YAML files, _except_ in `dbt_project.yml`. Refer to [Macro properties](/reference/macro-properties) for more info.
+docsプロパティはYAMLファイル（`dbt_project.yml`を除く）で使用できます。詳細については[マクロプロパティ](/reference/macro-properties)を参照してください。
 
 <File name='macros/schema.yml'>
 
@@ -160,16 +160,19 @@ macros:
 
 </Tabs>
 
-## Definition
-The `docs` property can be used to provide documentation-specific configuration to models. It supports the attribute `show`, which controls whether or not nodes are shown in the auto-generated documentation website. It also supports `node_color` for models, seeds, snapshots, and analyses. Other node types are not supported.
+## 定義
 
-**Note:** Hidden models will still appear in the dbt DAG visualization but will be identified as "hidden.”
+`docs` プロパティは、モデルにドキュメント固有の設定を提供するために使用できます。`show` 属性をサポートしており、自動生成されるドキュメントウェブサイトにノードを表示するかどうかを制御し、また、モデル、シード、スナップショット、および分析に対して `node_color` 属性もサポートしています。その他のノードタイプはサポートされていません。
 
-## Default
-The default value for `show` is `true`.
+**注:** 非表示のモデルも dbt DAG ビジュアライゼーションには表示されますが、「hidden」として識別されます。
 
-## Examples
-### Mark a model as hidden
+## デフォルト
+
+`show` のデフォルト値は `true` です。
+
+## 例
+
+### モデルを非表示としてマークする
 
 ```yml
 models:
@@ -178,9 +181,9 @@ models:
       show: false
 ```
 
-### Mark a subfolder of models as hidden
+### モデルのサブフォルダを非表示としてマークする
 
-**Note:** This can also hide dbt packages.
+**注:** これにより、dbt パッケージも非表示になる場合があります。
 
 <File name='dbt_project.yml'>
 
@@ -201,30 +204,31 @@ models:
 
 </File>
 
-## Custom node colors
+## カスタムノードカラー
 
-The `docs` attribute supports `node_color` to customize the display color of some node types in the DAG within [dbt Docs](/docs/build/view-documentation). You can define node colors in the following files and apply overrides where needed. 
+`docs` 属性は `node_color` をサポートしており、[dbt Docs](/docs/build/view-documentation) 内の DAG 内の一部のノードタイプの表示色をカスタマイズできます。以下のファイルでノードカラーを定義し、必要に応じてオーバーライドを適用できます。
 
-- `node_color` hierarchy:
-  - `<example-sql-file.sql>` overrides `schema.yml` overrides `dbt_project.yml`
+- `node_color` 階層:
+- `<example-sql-file.sql>` は `schema.yml` をオーバーライドし、`dbt_project.yml` はオーバーライドされます。
 
-Note, you need to run or re-run the `dbt docs generate` command to apply and view the customized colors.
+カスタマイズした色を適用して表示するには、`dbt docs generate` コマンドを実行または再実行する必要があります。
 
-:::info Custom node colors not applicable in dbt Explorer
+:::info dbt Explorer ではカスタムノードカラーは適用されません
 
-The custom `node_color` attribute isn't applicable in dbt Explorer. Instead, Explorer provides [lenses](/docs/collaborate/explore-projects#lenses), which are map layers for your <Term id="dag"/>. Lenses help you better understand your project's contextual metadata at scale and distinguish specific models or subsets of models.
+カスタム `node_color` 属性は dbt Explorer では適用されません。代わりに、Explorer は [レンズ](/docs/collaborate/explore-projects#lenses) を提供します。これは <Term id="dag"/> のマップレイヤーです。レンズを使用すると、プロジェクトのコンテキストメタデータを大規模に理解し、特定のモデルまたはモデルのサブセットを区別するのに役立ちます。
 
 :::
 
-## Examples
+## 例
 
-Add custom `node_colors` to models that support it within subdirectories based on hex codes or a plain color name.
+サブディレクトリ内でサポートされているモデルに、16進コードまたは単純な色名に基づいてカスタム `node_colors` を追加します。
 
 ![Example](../../../../website/static/img/node_color_example.png)
 
-`marts/core/fct_orders.sql` with `node_color: red` overrides `dbt_project.yml` with `node_color: gold`
+`marts/core/fct_orders.sql` の `node_color: red` は、`node_color: gold` の `dbt_project.yml` をオーバーライドします。
 
-`marts/core/schema.yml` with `node_color: #000000` overrides `dbt_project.yml` with `node_color: gold`
+`marts/core/schema.yml` の `node_color: #000000` は、`dbt_project.yml` の `node_color: gold` をオーバーライドします。
+
 <File name='dbt_project.yml'>
 
 ```yml
@@ -323,7 +327,7 @@ order by
 
 </File>
 
-If a `node_color` is incompatible with dbt docs, you will see a compile error, as in the example below.
+`node_color` が dbt ドキュメントと互換性がない場合は、次の例のようにコンパイル エラーが表示されます。
 
 ```shell
 Invalid color name for docs.node_color: aweioohafio23f. It is neither a valid HTML color name nor a valid HEX code.

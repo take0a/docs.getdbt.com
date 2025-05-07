@@ -1,30 +1,30 @@
 ---
-title: "I'm receiving a 'This run exceeded your account's run memory limits' error in my failed job"
-description: "Use incremental models or optimize queries for job failures due to exceeded memory limits."
-sidebar_label: 'Job failures due to exceeded memory limits'
+title: "失敗したジョブで 'This run exceeded your account's run memory limits' というエラーが表示されます"
+description: "メモリ制限の超過によるジョブの失敗に対しては、増分モデルを使用するか、クエリを最適化します。"
+sidebar_label: 'メモリ制限超過によるジョブの失敗'
 ---
 
-If you're receiving a `This run exceeded your account's run memory limits` error in your failed job, it means that the job exceeded the [memory limits](/docs/deploy/job-scheduler#job-memory) set for your account. All dbt Cloud accounts have a pod memory of 600Mib and memory limits are on a per run basis. They're typically influenced by the amount of result data that dbt has to ingest and process, which is small but can become bloated unexpectedly by project design choices.
+失敗したジョブで `This run exceeded your account's run memory limits` というエラーが表示される場合、ジョブがアカウントに設定されている[メモリ制限](/docs/deploy/job-scheduler#job-memory)を超えたことを意味します。すべてのdbt Cloudアカウントには600Mibのポッドメモリがあり、メモリ制限は実行ごとに設定されます。メモリ制限は通常、dbtが取り込んで処理する必要がある結果データの量によって影響を受けます。結果データの量は少量ですが、プロジェクトの設計上の選択によって予期せず肥大化する可能性があります。
 
-### Common reasons
+### 一般的な理由
 
-Some common reasons for higher memory usage are:
+メモリ使用量が増加する一般的な理由は次のとおりです。
 
-- dbt run/build:  Macros that capture large result sets from run query may not all be necessary and may be memory inefficient.
-- dbt docs generate: Source or model schemas with large numbers of tables (even if those tables aren't all used by dbt) cause the ingest of very large results for catalog queries.
+- dbt run/build: 実行クエリから大量の結果セットを取得するマクロは、必ずしもすべてが必要ではなく、メモリ効率が悪い可能性があります。
+- dbt docs generate: 多数のテーブルを含むソーススキーマまたはモデルスキーマ（それらのテーブルすべてがdbtで使用されていない場合でも）は、カタログクエリで非常に大きな結果の取り込みを引き起こします。
 
-### Resolution
+### 解決策
 
-There are various reasons why you could be experiencing this error but they are mostly the outcome of retrieving too much data back into dbt. For example, using the `run_query()` operations or similar macros, or even using database/schemas that have a lot of other non-dbt related tables/views. Try to reduce the amount of data / number of rows retrieved back into dbt by refactoring the SQL in your `run_query()` operation using `group`, `where`, or `limit` clauses. Additionally, you can also use a database/schema with fewer non-dbt related tables/views.
+このエラーが発生する原因は様々ですが、ほとんどの場合、dbt に取得するデータが多すぎることが原因です。たとえば、`run_query()` 操作や同様のマクロを使用した場合や、dbt に関連しないテーブルやビューを多数含むデータベース/スキーマを使用した場合などが挙げられます。`run_query()` 操作の SQL を `group`、`where`、または `limit` 句を使用してリファクタリングし、dbt に取得するデータ量や行数を減らしてみてください。また、dbt に関連しないテーブルやビューの数が少ないデータベース/スキーマを使用することもできます。
 
 
 
-:::tip Video example
-As an additional resource, check out [this example video](https://www.youtube.com/watch?v=sTqzNaFXiZ8), which demonstrates how to refactor the sample code by reducing the number of rows returned. 
+:::tip ビデオの例
+追加のリソースとして、[このサンプルビデオ](https://www.youtube.com/watch?v=sTqzNaFXiZ8)をご覧ください。返される行数を減らすことでサンプルコードをリファクタリングする方法が示されています。
 :::
 
 
-If you've tried the earlier suggestions and are still experiencing failed job runs with this error about hitting the memory limits of your account, please [reach out to support](mailto:support@getdbt.com). We're happy to help!
+上記の提案を試しても、アカウントのメモリ制限に達したというエラーが発生し、ジョブの実行が失敗する場合は、[サポートまでお問い合わせください](mailto:support@getdbt.com)。喜んでお手伝いさせていただきます。
 
-### Additional resources
-- [Blog post on how we shaved 90 mins off](https://docs.getdbt.com/blog/how-we-shaved-90-minutes-off-model)
+### 追加リソース
+- [90分短縮した方法についてのブログ投稿](https://docs.getdbt.com/blog/how-we-shaved-90-minutes-off-model)

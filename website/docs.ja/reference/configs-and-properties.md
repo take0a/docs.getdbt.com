@@ -1,27 +1,27 @@
 ---
-title: Configurations and properties, what are they?
-sidebar_label: Configs and properties
-intro_text: "Understand the difference between properties and configurations in dbt: properties describe resources, while configurations control how dbt builds them in the warehouse."
-description: "This page explains the difference between properties and configurations in dbt."
+title: 構成とプロパティとは何ですか?
+sidebar_label: Configs と properties
+intro_text: "dbt のプロパティと構成の違いを理解します。プロパティはリソースを記述し、構成は dbt がウェアハウスでリソースを構築する方法を制御します。"
+description: "このページでは、dbt のプロパティと構成の違いについて説明します。"
 pagination_next: "reference/define-configs"
 ---
 
-Resources in your project—models, snapshots, seeds, tests, and the rest—can have a number of declared _properties_. Resources can also define _configurations_ (configs), which are a special kind of property that bring extra abilities. What's the distinction?
-- Properties are declared for resources one-by-one in  `properties.yml` files. Configs can be defined there, nested under a `config` property. They can also be set one-by-one via a `config()` macro (right within `.sql` files), and for many resources at once in `dbt_project.yml`.
-- Because configs can be set in multiple places, they are also applied hierarchically. An individual resource might _inherit_ or _override_ configs set elsewhere.
-- You can select resources based on their config values using the `config:` selection method, but not the values of non-config properties.
-- There are slightly different naming conventions for properties and configs depending on the file type. Refer to [naming convention](/reference/dbt_project.yml#naming-convention) for more details.
+プロジェクト内のリソース（モデル、スナップショット、シード、テストなど）には、宣言済みのプロパティが多数存在します。また、リソースでは、特別な機能を提供するプロパティである構成（configurations）も定義できます。これらの違いは何でしょうか？
+- プロパティは、`properties.yml` ファイル内でリソースごとに個別に宣言されます。構成は、`config` プロパティの下にネストして定義できます。また、`config()` マクロ（`.sql` ファイル内）を使用して個別に設定することも、`dbt_project.yml` で複数のリソースに一括して設定することもできます。
+- 構成は複数の場所で設定できるため、階層的に適用されます。個々のリソースは、他の場所で設定された構成を _継承_ または _上書き_ する場合があります。
+- `config:` 選択方法を使用して、構成値に基づいてリソースを選択できますが、構成以外のプロパティの値に基づいて選択することはできません。
+- プロパティと構成ファイルの命名規則は、ファイルの種類によって若干異なります。詳しくは[命名規則](/reference/dbt_project.yml#naming-convention)を参照してください。
 
-A rule of thumb: properties declare things _about_ your project resources; configs go the extra step of telling dbt _how_ to build those resources in your warehouse. This is generally true, but not always, so it's always good to check!
+経験則として、プロパティはプロジェクトのリソースに関する情報を宣言します。一方、構成ファイルは、dbtにそれらのリソースをウェアハウスにビルドする方法を指示する役割を担います。これは一般的には当てはまりますが、常に当てはまるとは限りませんので、必ず確認することをお勧めします。
 
-For example, you can use resource **properties** to:
-* Describe models, snapshots, seed files, and their columns
-* Assert "truths" about a model, in the form of [data tests](/docs/build/data-tests), e.g. "this `id` column is unique"
-* Define pointers to existing tables that contain raw data, in the form of [sources](/docs/build/sources), and assert the expected "freshness" of this raw data
-* Define official downstream uses of your data models, in the form of [exposures](/docs/build/exposures)
+たとえば、リソース **プロパティ** を使用すると、次のことが可能になります。
+* モデル、スナップショット、シードファイル、およびそれらの列を記述する
+* モデルに関する「真実」を [データテスト](/docs/build/data-tests) の形式でアサートする (例: 「この `id` 列は一意です」
+* [sources](/docs/build/sources) の形式で、生データを含む既存のテーブルへのポインタを定義し、この生データの期待される「鮮度」をアサートします。
+* [exposures](/docs/build/exposures) の形式で、データモデルの正式な下流での使用を定義します。
 
-Whereas you can use **configurations** to:
-* Change how a model will be materialized (<Term id="table" />, <Term id="view" />, incremental, etc)
-* Declare where a seed will be created in the database (`<database>.<schema>.<alias>`)
-* Declare whether a resource should persist its descriptions as comments in the database
-* Apply tags and "meta" properties
+**構成** を使用すると、次のことが可能になります。
+* モデルの実体化方法を変更する (<Term id="table" />、<Term id="view" />、増分など)
+* データベース内のシードの作成場所を宣言する (`<database>.<schema>.<alias>`)
+* リソースの説明をデータベースにコメントとして保存するかどうかを宣言する
+* タグと「メタ」プロパティを適用する

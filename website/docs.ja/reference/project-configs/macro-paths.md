@@ -1,6 +1,6 @@
 ---
 datatype: directorypath
-description: "Read this guide to understand the macro-paths configuration in dbt."
+description: "dbt の macro-paths 構成を理解するには、このガイドをお読みください。"
 default_value: [macros]
 ---
 
@@ -12,13 +12,13 @@ macro-paths: [directorypath]
 
 </File>
 
-## Definition
-Optionally specify a custom list of directories where [macros](/docs/build/jinja-macros#macros) are located. Note that you cannot co-locate models and macros.
+## 定義
+オプションで、[マクロ](/docs/build/jinja-macros#macros)が配置されているディレクトリのカスタムリストを指定します。モデルとマクロを同じディレクトリに配置することはできないことに注意してください。
 
-## Default
-By default, dbt will search for macros in a directory named `macros`. For example, `macro-paths: ["macros"]`. 
+## デフォルト
+デフォルトでは、dbt は `macros` という名前のディレクトリ内でマクロを検索します。たとえば、`macro-paths: ["macros"]` のようになります。
 
-import RelativePath from '/snippets/_relative-path.md';
+import RelativePath from '/snippets.ja/_relative-path.md';
 
 <RelativePath 
 path="macro-paths"
@@ -26,19 +26,19 @@ absolute="/Users/username/project/macros"
 />
 
 - ✅ **Do**
-  - Use relative path:
+  - 相対パスを使用:
     ```yml
     macro-paths: ["macros"]
     ```
 
 - ❌ **Don't:**
-  - Avoid absolute paths:
+  - 絶対パスは避けてください:
     ```yml
     macro-paths: ["/Users/username/project/macros"]
     ```
 
-## Examples
-### Use a subdirectory named `custom_macros` instead of `macros`
+## 例
+### `macros` の代わりに `custom_macros` という名前のサブディレクトリを使用します
 
 <File name='dbt_project.yml'>
 

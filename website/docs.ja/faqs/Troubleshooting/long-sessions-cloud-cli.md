@@ -1,14 +1,14 @@
 ---
-title: "I'm getting a \"Session occupied\" error in dbt Cloud CLI?"
-description: "How to debug long-running sessions in dbt Cloud CLI"
-sidebar_label: 'Debug long-running sessions in dbt Cloud CLI'
+title: "dbt Cloud CLI で「Session occupied」というエラーが表示されます。"
+description: "dbt Cloud CLI で長時間実行セッションをデバッグする方法"
+sidebar_label: 'dbt Cloud CLI で長時間実行セッションをデバッグする'
 id: long-sessions-cloud-cli
 ---
 
-If you're receiving a `Session occupied` error in the dbt Cloud CLI or if you're experiencing a long-running session, you can use the `dbt invocation list` command in a separate terminal window to view the status of your active session. This helps debug the issue and identify the arguments that are causing the long-running session.
+dbt Cloud CLI で「セッションが占有されています」というエラーが表示される場合、またはセッションが長時間実行されている場合は、別のターミナルウィンドウで「dbt invocation list」コマンドを使用して、アクティブなセッションのステータスを確認できます。これは、問題をデバッグし、セッションの長時間実行の原因となっている引数を特定するのに役立ちます。
 
-To cancel an active session, use the `Ctrl + Z` shortcut.
+アクティブなセッションをキャンセルするには、「Ctrl + Z」ショートカットを使用します。
 
-To learn more about the `dbt invocation` command, see the [dbt invocation command reference](/reference/commands/invocation).
+「dbt invocation」コマンドの詳細については、[dbt invocation コマンド リファレンス](/reference/commands/invocation) をご覧ください。
 
-Alternatively, you can reattach to your existing session with <code>dbt reattach</code> and then press <code>Control-C</code> and choose to cancel the invocation.
+または、<code>dbt reattach</code> を使用して既存のセッションに再接続し、<code>Control-C</code> キーを押して呼び出しをキャンセルすることもできます。

@@ -1,14 +1,14 @@
 ---
-title: I'm receiving an `Failed ALPN` error when trying to connect to the dbt Semantic Layer.
-description: "To resolve the 'Failed ALPN' error in the dbt Semantic Layer, create a SSL interception exception for the dbt Cloud domain."
-sidebar_label: 'Use SSL exception to resolve `Failed ALPN` error'
+title: dbt セマンティック レイヤーに接続しようとすると、「Failed ALPN」エラーが表示されます。
+description: "dbt セマンティック レイヤーの「Failed ALPN」エラーを解決するには、dbt クラウド ドメインの SSL インターセプト例外を作成します。"
+sidebar_label: 'SSL例外を使用して「Failed ALPN」エラーを解決する'
 ---
 
-If you're receiving a `Failed ALPN` error when trying to connect the dbt Semantic Layer with the various [data integration tools](/docs/cloud-integrations/avail-sl-integrations) (such as Tableau, DBeaver, Datagrip, ADBC, or JDBC), it typically happens when connecting from a computer behind a corporate VPN or Proxy (like Zscaler or Check Point). 
+dbt セマンティック レイヤーを各種データ統合ツール (Tableau、DBeaver、Datagrip、ADBC、JDBC など) に接続しようとした際に「Failed ALPN」エラーが発生する場合、通常は企業 VPN またはプロキシ (Zscaler や Check Point など) の背後にあるコンピュータから接続した場合に発生します。
 
-The root cause is typically the proxy interfering with the TLS handshake as the dbt Semantic Layer uses gRPC/HTTP2 for connectivity. To resolve this:
+dbt セマンティック レイヤーは接続に gRPC/HTTP2 を使用するため、根本原因は通常、プロキシが TLS ハンドシェイクを妨害していることです。この問題を解決するには、以下の手順を実行してください。
 
-- If your proxy supports gRPC/HTTP2 but isn't configured to allow ALPN, adjust its settings accordingly to allow ALPN. Or create an exception for the dbt Cloud domain.
-- If your proxy does not support gRPC/HTTP2, add an SSL interception exception for the dbt Cloud domain in your proxy settings
+- プロキシが gRPC/HTTP2 をサポートしているものの、ALPN を許可するように構成されていない場合は、ALPN を許可するように設定を調整してください。または、dbt クラウド ドメインに対して例外を作成してください。
+- プロキシが gRPC/HTTP2 をサポートしていない場合は、プロキシ設定で dbt クラウド ドメインに対して SSL インターセプトの例外を追加してください。
 
-This should help in successfully establishing the connection without the Failed ALPN error.
+これにより、「Failed ALPN」エラーを回避し、接続を確立できるようになります。
