@@ -8,7 +8,7 @@ sidebar: "Legacy configuration"
 
 <IntroText>
 
-Use legacy SQL-based snapshot configurations with Jinja blocks in any dbt version. dbt v1.9 introduced YAML-based configs for better readability and environment awareness.
+どの dbt バージョンでも、Jinja ブロックで従来の SQL ベースのスナップショット構成を使用できます。dbt v1.9 では、読みやすさと環境認識を向上させるために YAML ベースの構成が導入されました。
 
 </IntroText>
 

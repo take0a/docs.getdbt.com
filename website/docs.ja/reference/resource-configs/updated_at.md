@@ -1,6 +1,6 @@
 ---
 resource_types: [snapshots]
-description: "Updated_at - Read this in-depth guide to learn about configurations in dbt."
+description: "Updated_at - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: column_name
 ---
 
@@ -55,23 +55,26 @@ snapshots:
 
 :::caution
 
-You will get a warning if the data type of the `updated_at` column does not match the adapter-configured default.
+`updated_at` 列のデータ型がアダプタで設定されたデフォルトと一致しない場合は警告が表示されます。
 
 :::
 
 </VersionBlock>
 
-## Description
-A column within the results of your snapshot query that represents when the record row was last updated.
+## 説明
 
-This parameter is **required if using the `timestamp` [strategy](/reference/resource-configs/strategy)**. The `updated_at` field may support ISO date strings and unix epoch integers, depending on the data platform you use. 
+スナップショットクエリの結果内の、レコード行が最後に更新された日時を表す列。
+
+このパラメータは**`timestamp` [strategy](/reference/resource-configs/strategy)**を使用する場合に必須です。`updated_at`フィールドは、使用するデータプラットフォームに応じて、ISO日付文字列とUnixエポック整数をサポートする場合があります。
 
 
-## Default
-No default is provided.
+## デフォルト
 
-## Examples
-### Use a column name `updated_at`
+デフォルトは指定されていません。
+
+## 例
+
+### 列名 `updated_at` を使用する
 
 <VersionBlock firstVersion="1.9">
 
@@ -116,16 +119,17 @@ select * from {{ source('jaffle_shop', 'orders') }}
 </File>
 </VersionBlock>
 
-### Coalesce two columns to create a reliable `updated_at` column
-Consider a data source that only has an `updated_at` column filled in when a record is updated (so a `null` value indicates that the record hasn't been updated after it was created).
+### 2つの列を結合して、信頼性の高い `updated_at` 列を作成します。
 
-Since the `updated_at` configuration only takes a column name, rather than an expression, you should update your snapshot query to include the coalesced column.
+レコードが更新された場合にのみ `updated_at` 列が入力されるデータソースを考えてみましょう（つまり、「null」値は、レコードが作成後に更新されていないことを示します）。
+
+`updated_at` 設定は式ではなく列名のみを受け入れるため、結合された列を含めるようにスナップショットクエリを更新する必要があります。
 
 
 <VersionBlock firstVersion="1.9">
 
-1. Create an staging model to perform the transformation.
-   In your `models/` directory, create a SQL file that configures an staging model to coalesce the `updated_at` and `created_at` columns into a new column `updated_at_for_snapshot`.
+1. 変換を実行するためのステージングモデルを作成します。
+  `models/` ディレクトリに、`updated_at` 列と `created_at` 列を新しい列 `updated_at_for_snapshot` に結合してステージングモデルを構成する SQL ファイルを作成します。
 
     <File name='models/staging_orders.sql'>
 
@@ -136,8 +140,8 @@ Since the `updated_at` configuration only takes a column name, rather than an ex
     ```
     </File>
 
-2. Define the snapshot configuration in a YAML file. 
-   In your `snapshots/` directory, create a YAML file that defines your snapshot and references the `updated_at_for_snapshot` staging model you just created.
+2. YAMLファイルでスナップショット設定を定義します。
+  `snapshots/`ディレクトリに、スナップショットを定義し、先ほど作成した`updated_at_for_snapshot`ステージングモデルを参照するYAMLファイルを作成します。
 
     <File name="snapshots/orders_snapshot.yml">
 
@@ -154,9 +158,9 @@ Since the `updated_at` configuration only takes a column name, rather than an ex
     ```
     </File>
 
-3. Run `dbt snapshot` to execute the snapshot.
+3. `dbt snapshot` を実行してスナップショットを実行します。
 
-Alternatively, you can also create an ephemeral model to performs the required transformations. Then, you reference this model in your snapshot's `relation` key.
+あるいは、必要な変換を実行するための一時的なモデルを作成することもできます。その場合、スナップショットの `relation` キーでこのモデルを参照します。
 
 </VersionBlock>
 

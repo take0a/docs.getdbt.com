@@ -1,11 +1,11 @@
 ---
-title: Snapshot properties
-description: "Read this guide to learn about using source properties in dbt."
+title: Snapshot プロパティ
+description: "dbt でのソース プロパティの使用については、このガイドをお読みください。"
 ---
 
 <VersionBlock firstVersion="1.9">
 
-In dbt v1.9 and later, snapshots are defined and configured in YAML files within your `snapshots/` directory (as defined by the [`snapshot-paths` config](/reference/project-configs/snapshot-paths)). Snapshot properties are declared within these YAML files, allowing you to define both the snapshot configurations and properties in one place.
+dbt v1.9 以降では、snapshot は `snapshots/` ディレクトリ内の YAML ファイルで定義および構成されます（[`snapshot-paths` 設定](/reference/project-configs/snapshot-paths) で定義されています）。snapshot のプロパティはこれらの YAML ファイル内で宣言されるため、snapshot の構成とプロパティの両方を 1 か所で定義できます。
 
 </VersionBlock>
 
@@ -19,7 +19,7 @@ Note, in dbt v1.9 and later, snapshots are defined in an updated syntax using a 
 
 </VersionBlock>
 
-We recommend that you put them in the `snapshots/` directory. You can name these files `whatever_you_want.yml`, and nest them arbitrarily deeply in subfolders within the `snapshots/` or `models/` directory.
+`snapshots/` ディレクトリに配置することをお勧めします。これらのファイルには `whatever_you_want.yml` という名前を付け、`snapshots/` または `models/` ディレクトリ内のサブフォルダに任意の深さでネストすることができます。
 
 <VersionBlock firstVersion="1.9">
 

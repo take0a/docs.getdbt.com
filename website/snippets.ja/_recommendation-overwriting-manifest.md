@@ -1,7 +1,6 @@
-To prevent the `manifest.json` from being overwritten before dbt reads it for change detection, update your workflow using one of these methods:
+dbt が変更検出のために `manifest.json` を読み取る前に上書きされないようにするには、次のいずれかの方法でワークフローを更新します。
 
-- Move the `manifest.json` to a dedicated folder (for example `state/`) after dbt generates it in the `target/ folder`. This makes sure dbt references the correct saved state instead of comparing the current state with the just-overwritten version. It also avoids issues caused by setting `--state` and `--target-path` to the same location, which can lead to non-idempotent behavior.
+- dbt が `target/ フォルダ` に `manifest.json` を生成した後、それを専用のフォルダ（例：`state/`）に移動します。これにより、dbt は現在の状態と上書きされたばかりのバージョンを比較するのではなく、正しく保存された状態を参照するようになります。また、`--state` と `--target-path` を同じ場所に設定することで発生する、べき等性のない動作につながる可能性のある問題も回避できます。
 
-
-- Write the manifest to a different `--target-path` in the build stage (where dbt would generate the `target/manifest.json`) or before it gets overwritten during job execution to avoid issues with change detection. This allows dbt to detect changes instead of comparing the current state with the just-overwritten version.
-- Pass the `--no-write-json` flag: `dbt --no-write-json ls --select state:modified --state target`: during the reproduction stage.
+- 変更検出の問題を回避するため、ビルドステージ（dbt が `target/manifest.json` を生成する場所）で、またはジョブ実行中に上書きされる前に、マニフェストを別の `--target-path` に書き込みます。これにより、dbt は現在の状態と上書きされたばかりのバージョンを比較するのではなく、変更を検出できます。
+- 再現段階で、`--no-write-json` フラグを渡します: `dbt --no-write-json ls --select state:modified --state target`:

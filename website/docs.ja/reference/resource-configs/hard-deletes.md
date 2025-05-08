@@ -1,7 +1,7 @@
 ---
 title: hard_deletes
 resource_types: [snapshots]
-description: "Use the `hard_deletes` config to control how deleted rows are tracked in your snapshot table."
+description: "`hard_deletes` 設定を使用して、 snapshot  テーブルで削除された行を追跡する方法を制御します。"
 datatype: "boolean"
 default_value: {ignore}
 id: "hard-deletes"
@@ -46,39 +46,40 @@ snapshots:
 </File>
 
 
-## Description
+## 説明
 
-The `hard_deletes` config gives you more control on how to handle deleted rows from the source. Supported options are `ignore` (default), `invalidate` (replaces the legacy `invalidate_hard_deletes=true`), and `new_record`. Note that `new_record` will create a new metadata column in the snapshot table. 
+`hard_deletes` 設定を使用すると、ソースから削除された行の処理方法をより詳細に制御できます。サポートされているオプションは、`ignore`（デフォルト）、`invalidate`（従来の `invalidate_hard_deletes=true` の置き換え）、`new_record` です。`new_record` は、 snapshot テーブルに新しいメタデータ列を作成することに注意してください。
 
-You can use `hard_deletes` with dbt-postgres, dbt-bigquery, dbt-snowflake, and dbt-redshift adapters.
+`hard_deletes` は、dbt-postgres、dbt-bigquery、dbt-snowflake、および dbt-redshift アダプタで使用できます。
 
-import HardDeletes from '/snippets/_hard-deletes.md';
+import HardDeletes from '/snippets.ja/_hard-deletes.md';
 
 <HardDeletes />
 
 :::warning
 
-If you're updating an existing snapshot to use the `hard_deletes` config, dbt _will not_ handle migrations automatically. We recommend either only using these settings for net-new snapshots, or [arranging an update](/reference/snapshot-configs#snapshot-configuration-migration) of pre-existing tables before enabling this setting.
+既存の snapshot を `hard_deletes` 設定を使用して更新する場合、dbt は移行を自動的に処理しません。これらの設定は新規の snapshot にのみ使用するか、この設定を有効にする前に既存のテーブルを[更新](/reference/snapshot-configs#snapshot-configuration-migration)することをお勧めします。
 :::
 
-## Default
+## デフォルト
 
-By default, if you don’t specify `hard_deletes`, it'll automatically default to `ignore`. Deleted rows will not be tracked and their `dbt_valid_to` column remains `NULL`.
+デフォルトでは、`hard_deletes` を指定しない場合、自動的に `ignore` が使用されます。削除された行は追跡されず、`dbt_valid_to` 列は `NULL` のままになります。
 
-The `hard_deletes` config has three methods:
+`hard_deletes` 設定には 3 つのメソッドがあります。
 
 | Methods | Description |
 | --------- | ----------- |
-| `ignore` (default) | No action for deleted records. |
-| `invalidate` | Behaves the same as the existing `invalidate_hard_deletes=true`, where deleted records are invalidated by setting `dbt_valid_to` to current time. This method replaces the `invalidate_hard_deletes` config to give you more control on how to handle deleted rows from the source. |
-| `new_record` | Tracks deleted records as new rows using the `dbt_is_deleted` meta field when records are deleted.|
+| `ignore` (default) | 削除されたレコードに対してはアクションはありません。 |
+| `invalidate` | 既存の `invalidate_hard_deletes=true` と同じように動作します。`dbt_valid_to` を現在の時刻に設定することで、削除されたレコードが無効化されます。このメソッドは `invalidate_hard_deletes` 設定に代わるもので、ソースから削除された行の処理方法をより細かく制御できます。 |
+| `new_record` | レコードが削除されたときに、`dbt_is_deleted` メタ フィールドを使用して、削除されたレコードを新しい行として追跡します。 |
 
-## Considerations
-- **Backward compatibility**: The `invalidate_hard_deletes` config is still supported for existing snapshots but can't be used alongside `hard_deletes`.
-- **New snapshots**: For new snapshots, we recommend using `hard_deletes` instead of `invalidate_hard_deletes`.
-- **Migration**: If you switch an existing snapshot to use `hard_deletes` without migrating your data, you may encounter inconsistent or incorrect results, such as a mix of old and new data formats.
+## 考慮事項
 
-## Example
+- **後方互換性**: `invalidate_hard_deletes` 設定は既存の snapshot では引き続きサポートされますが、`hard_deletes` と併用することはできません。
+- **新しい snapshot **: 新しい snapshot では、`invalidate_hard_deletes` ではなく `hard_deletes` を使用することをお勧めします。
+- **移行**: 既存の snapshot を、データを移行せずに `hard_deletes` を使用するように切り替えた場合、古いデータ形式と新しいデータ形式が混在するなど、一貫性のない結果や誤った結果が発生する可能性があります。
+
+## 例
 
 <File name='snapshots/schema.yml'>
 
@@ -100,7 +101,7 @@ snapshots:
 
 </File>
 
-The resulting snapshot table contains the `hard_deletes: new_record` configuration. If a record is deleted and later restored, the resulting snapshot table might look like this:
+結果の snapshot テーブルには、`hard_deletes: new_record` 設定が含まれます。レコードが削除され、後で復元された場合、結果の snapshot テーブルは次のようになります:
 
 | id | dbt_scd_id           |   Status | dbt_updated_at       |   dbt_valid_from    |     dbt_valid_to     | dbt_is_deleted | 
 | -- | -------------------- | -----    | -------------------- | --------------------| -------------------- | ----------- |
@@ -109,4 +110,4 @@ The resulting snapshot table contains the `hard_deletes: new_record` configurati
 |  1 | b1885d098f8bcff53... | shipped  | 2024-10-02 ...       | 2024-06-03 ...      |                      | False       | 
 |  2 | b1885d098f8bcff55... | active   | 2024-10-02 ...       | 2024-05-19 ...      |                      | False       | 
  
-In this example, the `dbt_is_deleted` column is set to `True` when the record is deleted. When the record is restored, the `dbt_is_deleted` column is set to `False`.
+この例では、レコードが削除されると `dbt_is_deleted` 列が `True` に設定されます。レコードが復元されると、 `dbt_is_deleted` 列は `False` に設定されます。

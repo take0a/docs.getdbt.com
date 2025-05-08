@@ -1,13 +1,13 @@
 ---
-title: "About dbt test command"
+title: "dbt test コマンドについて"
 sidebar_label: "test"
 id: "test"
 ---
 <VersionBlock lastVersion="1.7">
 
-`dbt test` runs tests defined on models, sources, snapshots, and seeds. It expects that you have already created those resources through the appropriate commands.
+`dbt test` は、モデル、ソース、スナップショット、シードに対して定義されたテストを実行します。これらのリソースは、適切なコマンドを使用して既に作成されていることを前提としています。
 
-The tests to run can be selected using the `--select` flag discussed [here](/reference/node-selection/syntax).
+実行するテストは、[こちら](/reference/node-selection/syntax) で説明されている `--select` フラグを使用して選択できます。
 
 ```bash
 # run tests for one_specific_model
@@ -29,15 +29,15 @@ dbt test --select "one_specific_model,test_type:singular"
 dbt test --select "one_specific_model,test_type:generic"
 ```
 
-For more information on writing tests, see the [Testing Documentation](/docs/build/data-tests).
+テストの作成方法の詳細については、[テストのドキュメント](/docs/build/data-tests)を参照してください。
 
 </VersionBlock>
 
 <VersionBlock firstVersion="1.8">
 
-`dbt test` runs data tests defined on models, sources, snapshots, and seeds and unit tests defined on SQL models. It expects that you have already created those resources through the appropriate commands.
+`dbt test` は、モデル、ソース、スナップショット、シードに対して定義されたデータテストと、SQL モデルに対して定義された単体テストを実行します。これらのリソースは、適切なコマンドを使用して既に作成されていることを前提としています。
 
-The tests to run can be selected using the `--select` flag discussed [here](/reference/node-selection/syntax).
+実行するテストは、[こちら](/reference/node-selection/syntax) で説明されている `--select` フラグを使用して選択できます。
 
 ```bash
 # run data and unit tests
@@ -68,7 +68,7 @@ dbt test --select "one_specific_model,test_type:data"
 dbt test --select "one_specific_model,test_type:unit"
 ```
 
-For more information on writing tests, read the [data testing](/docs/build/data-tests) and [unit testing](/docs/build/unit-tests) documentation.
+テストの記述方法の詳細については、[データ テスト](/docs/build/data-tests) および [ユニット テスト](/docs/build/unit-tests) のドキュメントをお読みください。
 
 </VersionBlock>
 

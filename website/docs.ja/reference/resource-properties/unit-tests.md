@@ -1,5 +1,5 @@
 ---
-title: "About unit tests property"
+title: "unit test プロパティについて"
 sidebar_label: "Unit tests"
 resource_types: [models]
 datatype: test
@@ -7,19 +7,18 @@ datatype: test
 
 <VersionCallout version="1.8" />
 
+ユニットテストは、本番環境で完全なモデルを実装する前に、少数の静的入力セットを使用して SQL モデリングロジックを検証します。テスト駆動開発アプローチをサポートし、開発者の効率とコードの信頼性の両方を向上させます。
 
-Unit tests validate your SQL modeling logic on a small set of static inputs before you materialize your full model in production. They support a test-driven development approach, improving both the efficiency of developers and reliability of code.
-
-To run only your unit tests, use the command:
+ユニットテストのみを実行するには、次のコマンドを使用します。
 `dbt test --select test_type:unit`
 
-## Before you begin
+## 始める前に
 
-- We currently only support unit testing SQL models.
-- We currently only support adding unit tests to models in your _current_ project.
-- If your model has multiple versions, by default the unit test will run on *all* versions of your model. Read [unit testing versioned models](/reference/resource-properties/unit-testing-versions) for more information.
-- Unit tests must be defined in a YML file in your `models/` directory.
-- If you want to unit test a model that depends on an ephemeral model, you must use `format: sql` for that input.
+- 現在、SQL モデルのユニットテストのみをサポートしています。
+- 現在、ユニットテストの追加は、_現在の_プロジェクト内のモデルに対してのみサポートしています。
+- モデルに複数のバージョンがある場合、デフォルトではユニットテストはモデルの*すべての*バージョンで実行されます。詳細については、[バージョン管理されたモデルのユニットテスト](/reference/resource-properties/unit-testing-versions)を参照してください。
+- ユニットテストは、`models/` ディレクトリ内の YML ファイルで定義する必要があります。
+- 一時モデルに依存するモデルのユニットテストを行う場合は、その入力に `format: sql` を使用する必要があります。
 
 <file name='dbt_project.yml'>
 
@@ -61,7 +60,7 @@ unit_tests:
 
 </file>
 
-## Examples
+## 例
 
 ```yml
 

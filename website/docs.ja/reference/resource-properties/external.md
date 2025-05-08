@@ -28,14 +28,13 @@ sources:
 
 </File>
 
-## Definition
+## 定義
 
-An extensible dictionary of metadata properties specific to sources that point to external tables.
-There are optional built-in properties, with simple type validation, that roughly correspond to 
-the Hive external <Term id="table" /> spec. You may define and use as many additional properties as you'd like.
+外部テーブルを参照するソースに固有のメタデータプロパティの拡張可能なディクショナリです。
+Hive の外部 <Term id="table" /> 仕様にほぼ対応する、シンプルな型検証を備えたオプションの組み込みプロパティがあります。必要な数だけ追加プロパティを定義して使用できます。
 
-You may wish to define the `external` property in order to:
-- Power macros that introspect [`graph.sources`](/reference/dbt-jinja-functions/graph)
-- Define metadata that you can later extract from the [manifest](/reference/artifacts/manifest-json)
+`external` プロパティを定義すると、次のようなことが可能になります。
+- [`graph.sources`](/reference/dbt-jinja-functions/graph) をイントロスペクトするマクロを強化する
+- 後で [manifest](/reference/artifacts/manifest-json) から抽出できるメタデータを定義する
 
-For an example of how this property can be used to power custom workflows, see the [`dbt-external-tables`](https://github.com/dbt-labs/dbt-external-tables) package.
+このプロパティを使用してカスタムワークフローを強化する方法の例については、[`dbt-external-tables`](https://github.com/dbt-labs/dbt-external-tables) パッケージを参照してください。

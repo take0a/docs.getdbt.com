@@ -1,19 +1,21 @@
 ---
 resource_types: [seeds]
-description: "Quote_columns - Read this in-depth guide to learn about configurations in dbt."
+description: "Quote_columns - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: boolean
 default_value: false
 ---
 
-## Definition
-An optional seed configuration, used to determine whether column names in the seed file should be quoted when the <Term id="table" /> is created.
+## 定義
 
-* When `True`, dbt will quote the column names defined in the seed file when building a table for the seed, preserving casing.
-* When `False`, dbt will not quote the column names defined in the seed file.
-* When not set, it will vary by adapter whether or not column names are quoted.
+オプションの seed 設定。<Term id="table" /> の作成時に、 seed ファイル内の列名を引用符で囲むかどうかを決定します。
 
-## Usage
-### Globally quote all seed columns
+* `True` の場合、dbt は seed 用のテーブルを作成する際に、 seed ファイルで定義された列名を引用符で囲み、大文字と小文字の区別を維持します。
+* `False` の場合、dbt は seed ファイルで定義された列名を引用符で囲みません。
+* 設定されていない場合、列名を引用符で囲むかどうかはアダプタによって異なります。
+
+## 使用法
+
+### すべての seed 列をグローバルに引用符で囲む
 
 <File name='dbt_project.yml'>
 
@@ -24,10 +26,11 @@ seeds:
 
 </File>
 
-### Only quote seeds in the `seeds/mappings` directory.
-For a project with:
-* `name: jaffle_shop` in the `dbt_project.yml` file
-* `seed-paths: ["seeds"]` in the `dbt_project.yml` file
+### `seeds/mappings` ディレクトリ内の seeds のみを引用符で囲んでください。
+
+以下のプロジェクトの場合:
+* `dbt_project.yml` ファイル内の `name: jaffle_shop`
+* `dbt_project.yml` ファイル内の `seed-paths: ["seeds"]`
 
 <File name='dbt_project.yml'>
 
@@ -55,7 +58,8 @@ seeds:
 
 </File>
 
-## Recommended configuration
-* Explicitly set this value if using seed files.
-* Apply the configuration globally rather than to individual projects/seeds.
-* Set `quote_columns: false` _unless_ your column names include a special character or casing needs to be preserved. In that case, consider renaming your seed columns (this will simplify code downstream)
+## 推奨設定
+
+* seed ファイルを使用する場合は、この値を明示的に設定してください。
+* 設定は、個々のプロジェクト/ seed ではなく、グローバルに適用してください。
+* 列名に特殊文字が含まれている場合、または大文字と小文字の区別を維持する必要がない限り、`quote_columns: false` を設定してください。その場合は、seed 列の名前を変更することを検討してください（これにより、下流のコードが簡素化されます）。

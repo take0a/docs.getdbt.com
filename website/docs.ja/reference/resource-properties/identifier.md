@@ -19,16 +19,19 @@ sources:
 
 </File>
 
-## Definition
-The <Term id="table" /> name as stored in the database.
+## 定義
 
-This parameter is useful if you want to use a source table name that differs from the table name in the database.
+データベースに保存されている <Term id="table" /> の名前。
 
-## Default
-By default, dbt will use the table's `name` parameter as the identifier.
+このパラメータは、データベース内のテーブル名とは異なるソーステーブル名を使用する場合に便利です。
 
-## Examples
-### Use a simpler name for a source table than the one in your database
+## デフォルト
+
+デフォルトでは、dbt はテーブルの `name` パラメータを識別子として使用します。
+
+## 例
+
+### ソーステーブルには、データベース内のテーブルよりも簡単な名前を使用します。
 
 <File name='models/<filename>.yml'>
 
@@ -46,17 +49,19 @@ sources:
 </File>
 
 
-In a downstream model:
+ダウンストリームモデルの場合:
+
 ```sql
 select * from {{ source('jaffle_shop', 'orders') }}
 ```
 
-Will get compiled to:
+次のようにコンパイルされます:
+
 ```sql
 select * from jaffle_shop.api_orders
 ```
 
-### Reference sharded tables as a source in BigQuery
+### BigQuery でシャード テーブルをソースとして参照する
 
 <File name='models/<filename>.yml'>
 
@@ -74,7 +79,8 @@ sources:
 </File>
 
 
-In a downstream model:
+ダウンストリームモデルの場合:
+
 ```sql
 select * from {{ source('ga', 'events') }}
 
@@ -82,7 +88,8 @@ select * from {{ source('ga', 'events') }}
 where _table_suffix > '20200101'
 ```
 
-Will get compiled to:
+次のようにコンパイルされます:
+
 ```sql
 select * from `my_project`.`ga`.`events_*`
 

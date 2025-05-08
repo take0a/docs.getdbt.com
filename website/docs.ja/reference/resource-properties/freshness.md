@@ -35,55 +35,58 @@ sources:
 
 </File>
 
-## Definition
-A freshness block is used to define the acceptable amount of time between the most recent record, and now, for a <Term id="table" /> to be considered "fresh".
+## 定義
+ freshness ブロックは、<Term id="table" /> が「最新」であるとみなされる、最新のレコードから現在までの許容時間を定義するために使用されます。
 
-In the `freshness` block, one or both of `warn_after` and `error_after` can be provided. If neither is provided, then dbt will not calculate freshness snapshots for the tables in this source.
+`freshness` ブロックでは、`warn_after` と `error_after` のどちらか、または両方を指定できます。どちらも指定されていない場合、dbt はこのソース内のテーブルのフレッシュネススナップショットを計算しません。
 
-In most cases, the `loaded_at_field` is required. Some adapters support calculating source freshness from the warehouse metadata tables and can exclude the `loaded_at_field`. <VersionBlock firstVersion="1.10">Alternatively, you can define `loaded_at_query` to use custom SQL expression to calculate the timestamp.</VersionBlock>
+ほとんどの場合、`loaded_at_field` は必須です。一部のアダプタは、ウェアハウスのメタデータテーブルからソースのフレッシュネスを計算する機能をサポートしており、`loaded_at_field` を除外できます。 <VersionBlock firstVersion="1.10">または、`loaded_at_query` を定義して、カスタム SQL 式を使用してタイムスタンプを計算することもできます。</VersionBlock>
 
-If a source has a `freshness:` block, dbt will attempt to calculate freshness for that source:
-- If `loaded_at_field` is provided, dbt will calculate freshness via a select query.
-- If `loaded_at_field` is _not_ provided, dbt will calculate freshness via warehouse metadata tables when possible (new in v1.7 on supported adapters). 
+ソースに `freshness:` ブロックがある場合、dbt はその source の鮮度を計算します。
+- `loaded_at_field` が指定されている場合、dbt は選択クエリを使用して鮮度を計算します。
+- `loaded_at_field` が指定されていない場合、dbt は可能な場合はウェアハウスメタデータテーブルを使用して鮮度を計算します（サポートされているアダプタの v1.7 の新機能）。
+
 <VersionBlock firstVersion="1.10"> 
-- If `loaded_at_query` is provided, dbt will calculate freshness via the provided custom sql query.
-- If `loaded_at_query` is provided, `loaded_at_field` should not be configured.
+- `loaded_at_query` が指定されている場合、dbt は指定されたカスタム SQL クエリを使用して鮮度を計算します。
+- `loaded_at_query` が指定されている場合、`loaded_at_field` は設定しないでください。
 </VersionBlock>
 
 
-Currently, calculating freshness from warehouse metadata tables is supported on the following adapters:
+現在、ウェアハウス メタデータ テーブルからの freshness 計算は、以下のアダプタでサポートされています。
 - [Snowflake](/reference/resource-configs/snowflake-configs)
 - [Redshift](/reference/resource-configs/redshift-configs)
-- [BigQuery](/reference/resource-configs/bigquery-configs) (Supported in [`dbt-bigquery`](https://github.com/dbt-labs/dbt-bigquery) version 1.7.3 or higher)
+- [BigQuery](/reference/resource-configs/bigquery-configs) ([`dbt-bigquery`](https://github.com/dbt-labs/dbt-bigquery) バージョン 1.7.3 以降でサポート)
 
-Support is coming soon to the [Spark](/reference/resource-configs/spark-configs) adapter.
+[Spark](/reference/resource-configs/spark-configs) アダプタも近日中にサポートされる予定です。
 
-Freshness blocks are applied hierarchically:
-- A `freshness` and `loaded_at_field` property added to a source will be applied to all tables defined in that source.
-- A `freshness` and `loaded_at_field` property added to a source _table_ will override any properties applied to the source.
+freshness ブロックは階層的に適用されます。
+-  source に追加された `freshness` プロパティと `loaded_at_field` プロパティは、その source で定義されているすべてのテーブルに適用されます。
+-  source テーブルに追加された `freshness` プロパティと `loaded_at_field` プロパティは、 source に適用されているすべてのプロパティをオーバーライドします。
 
-This is useful when all of the tables in a source have the same `loaded_at_field`, as is often the case.
+これは、 source 内のすべてのテーブルが同じ `loaded_at_field` を持つ場合に便利です。よくあるケースです。
 
-To exclude a source from freshness calculations, you have two options:
-- Don't add a `freshness:` block.
-- Explicitly set `freshness: null`.
+ source を freshness計算から除外するには、次の 2 つの方法があります。
+- `freshness:` ブロックを追加しない。
+- 明示的に `freshness: null` を設定する。
 
 ## loaded_at_field
 
-Optional on adapters that support pulling freshness from warehouse metadata tables, required otherwise.
-<br/><br/>A column name (or expression) that returns a timestamp indicating freshness.
+ウェアハウスメタデータテーブルからの鮮度情報の取得をサポートするアダプタではオプション、それ以外の場合は必須です。
+<br/><br/>freshness を示すタイムスタンプを返す列名（または式）。
 
-If using a date field, you may have to cast it to a timestamp:
+日付フィールドを使用する場合は、タイムスタンプへのキャストが必要になる場合があります。
+
 ```yml
 loaded_at_field: "completed_date::timestamp"
 ```
 
-Or, depending on your SQL variant:
+または、SQL バリアントに応じて次のようになります:
+
 ```yml
 loaded_at_field: "CAST(completed_date AS TIMESTAMP)"
 ```
 
-If using a non-UTC timestamp, cast it to UTC first:
+UTC 以外のタイムスタンプを使用する場合は、まず UTC にキャストします:
 
 ```yml
 loaded_at_field: "convert_timezone('Australia/Sydney', 'UTC', created_at_local)"
@@ -93,9 +96,9 @@ loaded_at_field: "convert_timezone('Australia/Sydney', 'UTC', created_at_local)"
 
 ## loaded_at_query
 
-Specify custom SQL to generate the `maxLoadedAt` timestamp on the source (rather than via warehouse metadata or the `loaded_at_field` config).
+ source の `maxLoadedAt` タイムスタンプを生成するためのカスタム SQL を指定します（ウェアハウスのメタデータや `loaded_at_field` 設定ではなく）。
 
-Examples: 
+例:
 
 ```yaml
 
@@ -132,37 +135,38 @@ sources:
 
 ```
 
-Should not be configured if `loaded_at_field` is also configured, but if it is, dbt will use which ever value is closest to the table.
+`loaded_at_field` も設定されている場合、これを設定する必要はありません。ただし、設定されている場合、dbt はテーブルに最も近い値を使用します。
 
-[Filter](#filter) won't work for `loaded_at_query`.
+[フィルター](#filter) は `loaded_at_query` では機能しません。
 
 </VersionBlock>
 
 ## count
-(Required)
+(必須)
 
-A positive integer for the number of periods where a data source is still considered "fresh".
+データソースがまだ「最新」とみなされる期間の数を表す正の整数。
 
 ## period
-(Required)
+(必須)
 
-The time period used in the freshness calculation. One of `minute`, `hour` or `day`
+freshness 計算に使用する期間。「分」、「時」、「日」のいずれかです。
 
 ## filter
-(optional)
+(オプション)
 
-Add a where clause to the query run by `dbt source freshness` in order to limit data scanned.
+`dbt source freshness` で実行されるクエリに where 句を追加して、スキャンするデータを制限します。
 
-This filter *only* applies to dbt's source freshness queries - it will not impact other uses of the source table.
+このフィルタは、dbt の source フレッシュネスクエリにのみ適用され、 source テーブルの他の使用には影響しません。
 
-This is particularly useful if:
-- You are using BigQuery and your source tables are [partitioned tables](https://cloud.google.com/bigquery/docs/partitioned-tables)
-- You are using Snowflake, Databricks, or Spark with large tables, and this results in a performance benefit
+これは特に次の場合に役立ちます。
+- BigQuery を使用しており、 source テーブルが [パーティション分割テーブル](https://cloud.google.com/bigquery/docs/partitioned-tables) である場合
+- 大規模なテーブルで Snowflake、Databricks、または Spark を使用しており、これによりパフォーマンスが向上する場合
 
 
-## Examples
+## 例
 
-### Complete example
+### 完全な例
+
 <File name='models/<filename>.yml'>
 
 ```yaml
@@ -196,7 +200,7 @@ sources:
 
 </File>
 
-When running `dbt source freshness`, the following query will be run:
+`dbt source freshness` を実行すると、次のクエリが実行されます。
 
 <Tabs
   defaultValue="compiled"
@@ -231,8 +235,7 @@ where {{ filter }}
 {% endif %}
 ```
 
-_[Source code](https://github.com/dbt-labs/dbt-core/blob/HEAD/core/dbt/include/global_project/macros/adapters/common.sql#L262)_
-
+_[ソースコード](https://github.com/dbt-labs/dbt-core/blob/HEAD/core/dbt/include/global_project/macros/adapters/common.sql#L262)_
 </TabItem>
 
 </Tabs>

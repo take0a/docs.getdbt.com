@@ -1,19 +1,19 @@
 ---
-title: "About dbt parse command"
+title: "dbt parse コマンドについて"
 sidebar_label: "parse"
-description: "Read this guide on how dbt's parse command can be used to parse your dbt project and write detailed timing information."
+description: "dbt の parse コマンドを使用して dbt プロジェクトを解析し、詳細なタイミング情報を書き込む方法については、このガイドをお読みください。"
 id: "parse"
 ---
 
-The `dbt parse` command parses and validates the contents of your dbt project. If your project contains Jinja or YAML syntax errors, the command will fail.
+`dbt parse` コマンドは、dbt プロジェクトの内容を解析および検証します。プロジェクトに Jinja または YAML 構文エラーが含まれている場合、コマンドは失敗します。
 
-It will also produce an artifact with detailed timing information, which is useful to understand parsing times for large projects. Refer to [Project parsing](/reference/parsing) for more information.
+また、詳細なタイミング情報を含むアーティファクトも生成されます。これは、大規模プロジェクトの解析時間を把握するのに役立ちます。詳細については、[プロジェクトの解析](/reference/parsing) を参照してください。
 
-Starting in v1.5, `dbt parse` will write or return a [manifest](/reference/artifacts/manifest-json), enabling you to introspect dbt's understanding of all the resources in your project. Since `dbt parse` doesn't connect to your warehouse, [this manifest will not contain any compiled code](/faqs/Warehouse/db-connection-dbt-compile).
+v1.5 以降、`dbt parse` は [マニフェスト](/reference/artifacts/manifest-json) を書き込んだり返したりするようになりました。これにより、プロジェクト内のすべてのリソースに対する dbt の理解状況を把握できます。`dbt parse` はウェアハウスに接続しないため、[このマニフェストにはコンパイル済みコードは含まれません](/faqs/Warehouse/db-connection-dbt-compile)。
 
-By default, the dbt Cloud IDE will attempt a "partial" parse, which means it'll only check changes since the last parse (new or updated parts of your project when you make changes). Since the dbt Cloud IDE automatically parses in the background whenever you save your work, manually running `dbt parse` yourself is likely to be fast because it's just looking at recent changes.
+デフォルトでは、dbt Cloud IDE は「部分的な」解析を試みます。つまり、前回の解析以降の変更（プロジェクトに変更を加えた際に追加された部分または更新された部分）のみをチェックします。dbt Cloud IDE は作業を保存するたびにバックグラウンドで自動的に解析を行うため、`dbt parse` を手動で実行すると、最近の変更のみを確認するため、処理が速くなる可能性があります。
 
-As an option, you can tell dbt to check the entire project from scratch by using the `--no-partial-parse` flag. This makes dbt perform a full re-parse of the project, not just the recent changes.
+オプションとして、`--no-partial-parse` フラグを使用して、dbt にプロジェクト全体を最初からチェックするように指示することもできます。これにより、dbt は最近の変更だけでなく、プロジェクト全体を再解析します。
 
 ```
 $ dbt parse

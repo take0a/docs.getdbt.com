@@ -1,23 +1,25 @@
 ---
-title: "About dbt --version"
+title: "dbt --version について"
 sidebar_label: "version"
 id: "version"
 ---
 
-The `--version` command-line flag returns information about the currently installed version of dbt Core or the dbt Cloud CLI. This flag is not supported when invoking dbt in other dbt Cloud runtimes (for example, the IDE or scheduled runs).
+`--version` コマンドラインフラグは、現在インストールされている dbt Core または dbt Cloud CLI のバージョンに関する情報を返します。このフラグは、他の dbt Cloud ランタイム（IDE やスケジュールされた実行など）で dbt を呼び出す場合にはサポートされません。
 
-- **dbt Core** &mdash; Returns the installed version of dbt-core and the versions of all installed adapters.
-- **dbt Cloud CLI** &mdash; Returns the installed version of the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) and, for the other `dbt_version` values, the _latest_ version of the dbt runtime in dbt Cloud.
+- **dbt Core** &mdash; インストールされている dbt-core のバージョンと、インストールされているすべてのアダプタのバージョンを返します。
+- **dbt Cloud CLI** &mdash; [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) のバージョンを返します。その他の `dbt_version` 値の場合は、dbt Cloud 内の dbt ランタイムの最新バージョンを返します。
 
 
-## Versioning
-To learn more about release versioning for dbt Core, refer to [How dbt Core uses semantic versioning](/docs/dbt-versions/core#how-dbt-core-uses-semantic-versioning). 
+## バージョニング
 
-If using a [dbt Cloud release track](/docs/dbt-versions/cloud-release-tracks), which provide ongoing updates to dbt, then `dbt_version` represents the release version of dbt in dbt Cloud. This also follows semantic versioning guidelines, using the `YYYY.M.D+<suffix>` format. The year, month, and day represent the date the version was built (for example, `2024.10.8+996c6a8`). The suffix provides an additional unique identification for each build.
+dbt Core のリリース バージョン管理の詳細については、[dbt Core におけるセマンティック バージョニングの仕組み](/docs/dbt-versions/core#how-dbt-core-uses-semantic-versioning) を参照してください。
 
-## Example usages
+dbt の継続的なアップデートを提供する [dbt Cloud リリース トラック](/docs/dbt-versions/cloud-release-tracks) を使用する場合、`dbt_version` は dbt Cloud における dbt のリリース バージョンを表します。これもセマンティック バージョニングのガイドラインに従い、`YYYY.M.D+<サフィックス>` 形式を使用します。年、月、日は、バージョンがビルドされた日付を表します（例: `2024.10.8+996c6a8`）。サフィックスは、各ビルドに固有の識別情報を追加します。
 
-dbt Core example: 
+## 使用例
+
+dbt Core の例:
+
 <File name='dbt Core'>
 
 ```text
@@ -31,7 +33,7 @@ Plugins:
 
 </File>
 
-dbt Cloud CLI example:
+dbt Cloud CLI の例:
 
 <File name='dbt Cloud CLI'>
 

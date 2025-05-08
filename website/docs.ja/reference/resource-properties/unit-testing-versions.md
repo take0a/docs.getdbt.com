@@ -1,9 +1,9 @@
 ---
-title: "Unit testing versioned SQL models"
+title: "バージョン管理されたSQLモデルのユニットテスト"
 sidebar_label: "Versions"
 ---
 
-If your model has multiple versions, the default unit test will run on _all_ versions of your model. To specify version(s) of your model to unit test, use `include` or `exclude` for the desired versions in your model versions config:
+モデルに複数のバージョンがある場合、デフォルトのユニットテストはモデルの_すべての_バージョンに対して実行されます。ユニットテストを実行するモデルのバージョンを指定するには、モデルバージョン設定で、必要なバージョンに対して `include` または `exclude` を使用してください:
 
 ```yaml
 

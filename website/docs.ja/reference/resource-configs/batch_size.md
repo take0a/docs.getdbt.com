@@ -3,21 +3,21 @@ title: "batch_size"
 id: "batch-size"
 sidebar_label: "batch_size"
 resource_types: [models]
-description: "dbt uses `batch_size` to determine how large batches are when running a microbatch incremental model."
+description: "dbt は、マイクロバッチ増分モデルを実行するときに、バッチの大きさを決定するために `batch_size` を使用します。"
 datatype: hour | day | month | year
 ---
 
 <VersionCallout version="1.9" />
 
-## Definition
+## 定義
 
-The `batch_size` config determines how large batches are when running a [microbatch incremental model](/docs/build/incremental-microbatch). Accepted values are `hour`, `day`, `month`, or `year`. You can configure `batch_size` for a [model](/docs/build/models) in your `dbt_project.yml` file, property YAML file, or config block.
+`batch_size` 設定は、[マイクロバッチ増分モデル](/docs/build/incremental-microbatch) を実行する際のバッチサイズを決定します。指定できる値は、`hour`、`day`、`month`、または `year` です。[モデル](/docs/build/models) の `batch_size` は、`dbt_project.yml` ファイル、プロパティ YAML ファイル、または設定ブロックで設定できます。
 
-## Examples
+## 例
 
-The following examples set `day` as the `batch_size` for the `user_sessions` model.
+以下の例では、`user_sessions` モデルの `batch_size` として `day` を設定します。
 
-Example of the `batch_size` config in the `dbt_project.yml` file:
+`dbt_project.yml` ファイル内の `batch_size` 設定の例:
 
 <File name='dbt_project.yml'>
 
@@ -29,7 +29,7 @@ models:
 ```
 </File>
 
-Example in a properties YAML file:
+プロパティ YAML ファイルの例:
 
 <File name='models/properties.yml'>
 
@@ -42,7 +42,7 @@ models:
 
 </File>
 
-Example in sql model config block:
+SQL モデル構成ブロックの例:
 
 <File name="models/user_sessions.sql">
 

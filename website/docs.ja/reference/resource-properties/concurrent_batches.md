@@ -44,18 +44,19 @@ select ...
 </TabItem>
 </Tabs>
 
-## Definition
+## 定義
 
-`concurrent_batches` is an override which allows you to decide whether or not you want to run batches in parallel or sequentially (one at a time).
+`concurrent_batches` は、バッチを並列実行するか、それとも逐次（一度に 1 つずつ）実行するかを決定できるオーバーライドです。
 
-For more information, refer to [how batch execution works](/docs/build/parallel-batch-execution#how-parallel-batch-execution-works).
-## Example
+詳細については、[バッチ実行の仕組み](/docs/build/parallel-batch-execution#how-parallel-batch-execution-works) を参照してください。
 
-By default, dbt auto-detects whether batches can run in parallel for microbatch models. However, you can override dbt's detection by setting the `concurrent_batches` config to `false` in your `dbt_project.yml` or model `.sql` file to specify parallel or sequential execution, given you meet these conditions: 
-* You've configured a [microbatch incremental strategy](/docs/build/incremental-microbatch).
-* You're working with cumulative metrics or any logic that depends on batch order.
+## 例
 
-Set `concurrent_batches` config to `false` to ensure batches are processed sequentially. For example: 
+デフォルトでは、dbt はマイクロバッチモデルでバッチを並列実行できるかどうかを自動検出します。ただし、以下の条件を満たす場合は、`dbt_project.yml` ファイルまたはモデル `.sql` ファイルで `concurrent_batches` 構成を `false` に設定して並列実行または順次実行を指定することで、dbt の検出をオーバーライドできます。
+* [マイクロバッチ増分戦略](/docs/build/incremental-microbatch) を設定している。
+* 累積メトリクス、またはバッチ順序に依存するロジックを使用している。
+
+バッチが順次処理されるようにするには、`concurrent_batches` 構成を `false` に設定します。例:
 
 <File name='dbt_project.yml'>
 

@@ -1,6 +1,6 @@
 ---
 resource_types: [snapshots]
-description: "Strategy - Read this in-depth guide to learn about configurations in dbt."
+description: "Strategy - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: timestamp | check
 ---
 
@@ -121,14 +121,17 @@ snapshots:
 
 </Tabs>
 
-## Description
-The snapshot strategy dbt should use to detect record changes. Read the guide to [snapshots](/docs/build/snapshots#detecting-row-changes) to understand the differences between the two.
+## 説明
 
-## Default
-This is a **required configuration**. There is no default value.
+dbt がレコードの変更を検出するために使用する snapshot 戦略。2 つの違いを理解するには、[ snapshot ](/docs/build/snapshots#detecting-row-changes) のガイドをお読みください。
 
-## Examples
-### Use the timestamp strategy
+## デフォルト
+
+これは**必須設定**です。デフォルト値はありません。
+
+## 例
+
+### timestamp strategy を使用する
 
 <VersionBlock firstVersion="1.9">
 <File name='snapshots/timestamp_example.yml'>
@@ -172,7 +175,7 @@ snapshots:
 </VersionBlock>
 
 
-### Use the check strategy
+### check strategy を使用する
 
 <VersionBlock firstVersion="1.9">
 <File name='snapshots/check_example.yml'>
@@ -213,15 +216,16 @@ snapshots:
 ```
 </VersionBlock>
 
-### Advanced: define and use custom snapshot strategy
-Behind the scenes, snapshot strategies are implemented as macros, named `snapshot_<strategy>_strategy`
-* [Source code](https://github.com/dbt-labs/dbt-adapters/blob/60005a0a2bd33b61cb65a591bc1604b1b3fd25d5/dbt/include/global_project/macros/materializations/snapshots/strategies.sql#L52) for the timestamp strategy
-* [Source code](https://github.com/dbt-labs/dbt-adapters/blob/60005a0a2bd33b61cb65a591bc1604b1b3fd25d5/dbt/include/global_project/macros/materializations/snapshots/strategies.sql#L136) for the check strategy
+### 上級編：カスタムスナップショット戦略の定義と使用
 
-It's possible to implement your own snapshot strategy by adding a macro with the same naming pattern to your project. For example, you might choose to create a strategy which records hard deletes, named `timestamp_with_deletes`.
+ snapshot 戦略は、`snapshot_<strategy>_strategy` という名前のマクロとして実装されています。
+* タイムスタンプ戦略の [ソースコード](https://github.com/dbt-labs/dbt-adapters/blob/60005a0a2bd33b61cb65a591bc1604b1b3fd25d5/dbt/include/global_project/macros/materializations/snapshots/strategies.sql#L52)
+* [ソースチェック戦略のコード](https://github.com/dbt-labs/dbt-adapters/blob/60005a0a2bd33b61cb65a591bc1604b1b3fd25d5/dbt/include/global_project/macros/materializations/snapshots/strategies.sql#L136)
 
-1. Create a macro named `snapshot_timestamp_with_deletes_strategy`. Use the existing code as a guide and adjust as needed.
-2. Use this strategy via the `strategy` configuration:
+同じ命名パターンを持つマクロをプロジェクトに追加することで、独自の snapshot 戦略を実装できます。例えば、物理削除を記録する戦略「timestamp_with_deletes」を作成できます。
+
+1. 「snapshot_timestamp_with_deletes_strategy」というマクロを作成します。既存のコードを参考に、必要に応じて調整してください。
+2. この戦略を「strategy」設定から使用します。
 
 <VersionBlock firstVersion="1.9">
 <File name='snapshots/<filename>.yml'>

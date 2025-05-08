@@ -3,21 +3,21 @@ resource_types: [tests]
 id: "store_failures_as"
 ---
 
-For the `test` resource type, `store_failures_as` is an optional config that specifies how test failures should be stored in the database. If [`store_failures`](/reference/resource-configs/store_failures) is also configured, `store_failures_as` takes precedence. 
+`test` リソースタイプの場合、`store_failures_as` は、テストの失敗をデータベースに保存する方法を指定するオプションの設定です。[`store_failures`](/reference/resource-configs/store_failures) も設定されている場合、`store_failures_as` が優先されます。
 
-The three supported values are:
+サポートされている 3 つの値は次のとおりです。
 
-- `ephemeral` &mdash; nothing stored in the database (default)
-- `table` &mdash; test failures stored as a database table
-- `view` &mdash; test failures stored as a database view
+- `ephemeral` &mdash; データベースに何も保存しません (デフォルト)
+- `table` &mdash; テストの失敗をデータベース テーブルとして保存します
+- `view` &mdash; テストの失敗をデータベース ビューとして保存します
 
-You can configure it in all the same places as `store_failures`, including singular tests (.sql files), generic tests (.yml files), and dbt_project.yml.
+`store_failures` と同様に、単独のテスト (.sql ファイル)、汎用テスト (.yml ファイル)、dbt_project.yml など、すべての場所で設定できます。
 
-### Examples
+### 例
 
-#### Singular test
+#### Singular テスト
 
-[Singular test](https://docs.getdbt.com/docs/build/data-tests#singular-data-tests) in `tests/singular/check_something.sql` file
+`tests/singular/check_something.sql` ファイル内の [Singular テスト](https://docs.getdbt.com/docs/build/data-tests#singular-data-tests)
 
 ```sql
 {{ config(store_failures_as="table") }}
@@ -27,9 +27,9 @@ select 1 as id
 where 1=0
 ```
 
-#### Generic test
+#### 汎用テスト
 
-[Generic tests](https://docs.getdbt.com/docs/build/data-tests#generic-data-tests) in `models/_models.yml` file
+[汎用テスト](https://docs.getdbt.com/docs/build/data-tests#generic-data-tests) (`models/_models.yml` ファイル内)
 
 ```yaml
 models:
@@ -45,9 +45,9 @@ models:
                 store_failures_as: ephemeral
 ```
 
-#### Project level
+#### プロジェクトレベル
 
-Config in `dbt_project.yml`
+`dbt_project.yml` の設定
 
 ```yaml
 name: "my_project"
@@ -64,13 +64,13 @@ tests:
       +store_failures_as: ephemeral
 ```
 
-### "Clobbering" configs
+### "上書き設定
 
-As with most other configurations, `store_failures_as` is "clobbered" when applied hierarchically. Whenever a more specific value is available, it will completely replace the less specific value.
+他のほとんどの設定と同様に、`store_failures_as` は階層的に適用された場合、「上書き」されます。より具体的な値が利用可能な場合は、より具体的な値でない値が完全に置き換えられます。
 
-Additional resources: 
+追加リソース:
 
-- [Data test configurations](/reference/data-test-configs#related-documentation)
-- [Data test-specific configurations](/reference/data-test-configs#test-data-specific-configurations)
-- [Configuring directories of models in dbt_project.yml](/reference/model-configs#configuring-directories-of-models-in-dbt_projectyml)
-- [Config inheritance](/reference/define-configs#config-inheritance)
+- [データテスト設定](/reference/data-test-configs#related-documentation)
+- [データテスト固有の設定](/reference/data-test-configs#test-data-specific-configurations)
+- [dbt_project.yml でのモデルディレクトリの設定](/reference/model-configs#configuring-directories-of-models-in-dbt_projectyml)
+- [設定の継承](/reference/define-configs#config-inheritance)

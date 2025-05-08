@@ -1,9 +1,9 @@
 ---
-title: "Syntax overview"
-description: "Node selection syntax enables you to execute dbt commands for specific models and resources."
+title: "Syntax 概要"
+description: "ノード選択構文を使用すると、特定のモデルおよびリソースに対して dbt コマンドを実行できます。"
 ---
 
-dbt's node selection syntax makes it possible to run only specific resources in a given invocation of dbt. This selection syntax is used for the following subcommands:
+dbt のノード選択構文により、特定のリソースのみを dbt の呼び出し時に実行することが可能になります。この選択構文は、以下のサブコマンドで使用されます:
 
 | command                         | argument(s)                                                          |
 | :------------------------------ | -------------------------------------------------------------------- |
@@ -17,46 +17,46 @@ dbt's node selection syntax makes it possible to run only specific resources in 
 | [build](/reference/commands/build)         | `--select`, `--exclude`, `--selector`, `--resource-type`, `--defer`  |
 | [docs generate](/reference/commands/cmd-docs) | `--select`, `--exclude`, `--selector`                  |
 
-:::info Nodes and resources
+:::info ノードとリソース
 
-We use the terms <a href="https://en.wikipedia.org/wiki/Vertex_(graph_theory)">"nodes"</a> and "resources" interchangeably. These encompass all the models, tests, sources, seeds, snapshots, exposures, and analyses in your project. They are the objects that make up dbt's DAG (directed acyclic graph).
+<a href="https://en.wikipedia.org/wiki/Vertex_(graph_theory)">「ノード」</a>と「リソース」という用語は同じ意味で使用します。これらは、プロジェクト内のすべてのモデル、テスト、ソース、シード、スナップショット、エクスポージャー、分析を包含します。これらは、dbt の DAG (有向非巡回グラフ) を構成するオブジェクトです。
 :::
 
-The `--select` and `--selector` arguments are similar in that they both allow you to select resources. To understand the difference, see [Differences between `--select` and `--selector`](/reference/node-selection/yaml-selectors#difference-between---select-and---selector).
+`--select` 引数と `--selector` 引数は、どちらもリソースを選択できるという点で似ています。違いを理解するには、[`--select` と `--selector` の違い](/reference/node-selection/yaml-selectors#difference-between---select-and---selector) を参照してください。
 
-## Specifying resources
+## リソースの指定
 
-By default, `dbt run` executes _all_ of the models in the dependency graph; `dbt seed` creates all seeds, `dbt snapshot` performs every snapshot. The `--select` flag is used to specify a subset of nodes to execute.
+デフォルトでは、`dbt run` は依存関係グラフ内のすべてのモデルを実行します。`dbt seed` はすべてのシードを作成し、`dbt snapshot` はすべてのスナップショットを実行します。`--select` フラグは、実行するノードのサブセットを指定するために使用されます。
 
-To follow [POSIX standards](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html) and make things easier to understand, we recommend CLI users use quotes when passing arguments to the `--select` or `--exclude` option (including single or multiple space-delimited, or comma-delimited arguments). Not using quotes might not work reliably on all operating systems, terminals, and user interfaces. For example, `dbt run --select "my_dbt_project_name"` runs all models in your project. 
+[POSIX 標準](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html) に準拠し、理解を容易にするために、CLI ユーザーは `--select` または `--exclude` オプションに引数を渡す際に引用符を使用することをお勧めします（単一または複数のスペース区切り、またはカンマ区切りの引数を含む）。引用符を使用しない場合、すべてのオペレーティングシステム、端末、およびユーザーインターフェースで確実に動作しない可能性があります。たとえば、`dbt run --select "my_dbt_project_name"` は、プロジェクト内のすべてのモデルを実行します。
 
-### How does selection work?
+### 選択はどのように機能しますか？
 
-1. dbt gathers all the resources that are matched by one or more of the `--select` criteria, in the order of [selection methods](/reference/node-selection/methods) (e.g. `tag:`), then [graph operators](/reference/node-selection/graph-operators) (e.g. `+`), then finally set operators ([unions](/reference/node-selection/set-operators#unions), [intersections](/reference/node-selection/set-operators#intersections), [exclusions](/reference/node-selection/exclude)).
+1. dbt は、`--select` 条件の 1 つ以上に一致するすべてのリソースを、まず [選択方法](/reference/node-selection/methods) (例: `tag:`)、次に [グラフ演算子](/reference/node-selection/graph-operators) (例: `+`)、最後に集合演算子 ([結合](/reference/node-selection/set-operators#unions)、[交差](/reference/node-selection/set-operators#intersections)、[除外](/reference/node-selection/exclude)) の順に収集します。
 
-2. The selected resources may be models, sources, seeds, snapshots, tests. (Tests can also be selected "indirectly" via their parents; see [test selection examples](/reference/node-selection/test-selection-examples) for details.)
+2. 選択されるリソースは、モデル、ソース、シード、スナップショット、テストです。 （テストは親を介して「間接的に」選択することもできます。詳細については、[テスト選択の例](/reference/node-selection/test-selection-examples)を参照してください。）
 
-3. dbt now has a list of still-selected resources of varying types. As a final step, it tosses away any resource that does not match the resource type of the current task. (Only seeds are kept for `dbt seed`, only models for `dbt run`, only tests for `dbt test`, and so on.)
+3. dbt は、選択中の様々なタイプのリソースのリストを保持します。最終ステップとして、現在のタスクのリソースタイプと一致しないリソースをすべて破棄します。（`dbt seed` の場合はシードのみ、`dbt run` の場合はモデルのみ、`dbt test` の場合はテストのみ、といった具合です。）
 
-## Shorthand
+## ショートカット
 
-Select resources to build (run, test, seed, snapshot) or check freshness: `--select`, `-s`
+ビルド（実行、テスト、シード、スナップショット）するリソースを選択、または最新かどうかをチェック: `--select`, `-s`
 
-### Examples
+### 例
 
-By default, `dbt run` will execute _all_ of the models in the dependency graph. During development (and deployment), it is useful to specify only a subset of models to run. Use the `--select` flag with `dbt run` to select a subset of models to run. Note that the following arguments (`--select`, `--exclude`, and `--selector`) also apply to other dbt tasks, such as `test` and `build`.
+デフォルトでは、`dbt run` は依存関係グラフ内のすべてのモデルを実行します。開発（およびデプロイ）時には、実行するモデルのサブセットのみを指定すると便利です。`dbt run` で `--select` フラグを使用すると、実行するモデルのサブセットを選択できます。以下の引数（`--select`、`--exclude`、`--selector`）は、`test` や `build` などの他の dbt タスクにも適用されることに注意してください。
 
 <Tabs>
 <TabItem value="select" label="Examples of select flag">
 
-The `--select` flag accepts one or more arguments. Each argument can be one of:
+`--select` フラグは1つ以上の引数を受け入れます。各引数は以下のいずれかになります。
 
-1. a package name
-2. a model name
-3. a fully-qualified path to a directory of models
-4. a selection method (`path:`, `tag:`, `config:`, `test_type:`, `test_name:`)
+1. パッケージ名
+2. モデル名
+3. モデルディレクトリへの完全修飾パス
+4. 選択方法 (`path:`, `tag:`, `config:`, `test_type:`, `test_name:`)
 
-Examples:
+例:
 
 ```bash
 dbt run --select "my_dbt_project_name"   # runs all models in your project
@@ -72,14 +72,14 @@ dbt run --select "path/to/my_model.sql"  # run a specific model by its path
 
 <TabItem value="subset" label="Examples of subsets of nodes">
 
-dbt supports a shorthand language for defining subsets of nodes. This language uses the following characters:
+dbt は、ノードのサブセットを定義するための短縮形言語をサポートしています。この言語では、以下の文字を使用します。
 
-- plus operator [(`+`)](/reference/node-selection/graph-operators#the-plus-operator)
-- at operator [(`@`)](/reference/node-selection/graph-operators#the-at-operator)
-- asterisk operator (`*`)
-- comma operator (`,`)
+- プラス演算子 [(`+`)](/reference/node-selection/graph-operators#the-plus-operator)
+- アット演算子 [(`@`)](/reference/node-selection/graph-operators#the-at-operator)
+- アスタリスク演算子 (`*`)
+- カンマ演算子 (`,`)
 
-Examples:
+例:
 
 ```bash
 # multiple arguments can be provided to --select
@@ -102,15 +102,15 @@ dbt run --select "path:marts/finance,tag:nightly,config.materialized:table"
 
 </Tabs>
 
-As your selection logic gets more complex, and becomes unwieldly to type out as command-line arguments,
-consider using a [yaml selector](/reference/node-selection/yaml-selectors). You can use a predefined definition with the `--selector` flag.
-Note that when you're using `--selector`, most other flags (namely `--select` and `--exclude`) will be ignored.
+選択ロジックが複雑になり、コマンドライン引数として入力するのが難しくなってきたら、
+[yaml セレクター](/reference/node-selection/yaml-selectors) の使用を検討してください。`--selector` フラグを使用すると、定義済みのセレクターを使用できます。
+`--selector` を使用する場合、他のほとんどのフラグ（具体的には `--select` と `--exclude`）は無視されることに注意してください。
 
-The `--select` and `--selector` arguments are similar in that they both allow you to select resources. To understand the difference between `--select` and `--selector` arguments, see [this section](/reference/node-selection/yaml-selectors#difference-between---select-and---selector) for more details.
+`--select` 引数と `--selector` 引数は、どちらもリソースを選択できるという点で似ています。`--select` 引数と `--selector` 引数の違いについては、[このセクション](/reference/node-selection/yaml-selectors#difference-between---select-and---selector) で詳細をご覧ください。
 
-### Troubleshoot with the `ls` command
+### `ls` コマンドによるトラブルシューティング
 
-Constructing and debugging your selection syntax can be challenging.  To get a "preview" of what will be selected, we recommend using the [`list` command](/reference/commands/list).  This command, when combined with your selection syntax, will output a list of the nodes that meet that selection criteria.  The `dbt ls` command supports all types of selection syntax arguments, for example:
+選択構文の構築とデバッグは難しい場合があります。選択されるノードの「プレビュー」を取得するには、[`list` コマンド](/reference/commands/list) の使用をお勧めします。このコマンドを選択構文と組み合わせると、選択条件を満たすノードのリストが出力されます。`dbt ls` コマンドは、あらゆる種類の選択構文引数をサポートしています。例:
 
 ```bash
 dbt ls --select "path/to/my/models" # Lists all models in a specific directory.

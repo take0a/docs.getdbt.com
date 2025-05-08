@@ -1,24 +1,24 @@
 ---
-title: Exposure properties
-description: "Read this guide to understand exposure properties in dbt."
+title: Exposure プロパティ
+description: "dbt の exposure プロパティを理解するには、このガイドをお読みください。"
 ---
 
-## Related documentation
-- [Using exposures](/docs/build/exposures)
-- [Declaring resource properties](/reference/configs-and-properties)
+## 関連ドキュメント
 
-## Overview
+- [エクスポージャーの使用](/docs/build/exposures)
+- [リソースプロパティの宣言](/reference/configs-and-properties)
+
+## 概要
 
 import PropsCallout from '/snippets/_config-prop-callout.md';
 
-Exposures are defined in `properties.yml` files nested under an `exposures:` key. You may define `exposures` in YAML files that also define `sources` or `models`. <PropsCallout title={frontMatter.title}/>  <br /> 
+エクスポージャーは、`exposures:` キーの下にネストされた `properties.yml` ファイルで定義されます。`sources` または `models` も定義している YAML ファイルで `exposures` を定義できます。<PropsCallout title={frontMatter.title}/> <br />
 
-Note that while most exposure properties must be configured directly in these YAML files, you can set the [`enabled`](/reference/resource-configs/enabled) config at the [project level](#project-level-configs) in the`dbt_project.yml` file.
+ほとんどのエクスポージャープロパティはこれらの YAML ファイルで直接設定する必要がありますが、[`enabled`](/reference/resource-configs/enabled) 設定は [プロジェクトレベル](#project-level-configs) の `dbt_project.yml` ファイルで設定できます。
 
+これらのファイルには `whatever_you_want.yml` という名前を付け、`models/` ディレクトリ内の任意の深さのサブフォルダにネストできます。
 
-You can name these files `whatever_you_want.yml`, and nest them arbitrarily deeply in subfolders within the `models/` directory.
-
-Exposure names must contain only letters, numbers, and underscores (no spaces or special characters). For a short human-friendly name with title casing, spaces, and special characters, use the `label` property.
+エクスポージャー名には、文字、数字、アンダースコアのみを使用してください（スペースや特殊文字は使用できません）。タイトルの大文字小文字、スペース、特殊文字を含む、人間にとって分かりやすい短い名前を作成するには、`label` プロパティを使用してください。
 
 <File name='models/<filename>.yml'>
 
@@ -105,9 +105,9 @@ exposures:
 
 </File>
 
-#### Project-level configs
+#### プロジェクトレベルの設定
 
-You can define project-level configs for exposures in the `dbt_project.yml` file under the `exposures:` key using the `+` prefix. Currently, only the [`enabled` config](/reference/resource-configs/enabled) is supported:
+`dbt_project.yml` ファイル内の `exposures:` キーに `+` プレフィックスを付けて、エクスポージャーに関するプロジェクトレベルの設定を定義できます。現在、[`enabled` 設定](/reference/resource-configs/enabled) のみがサポートされています。
 
 <File name="dbt_project.yml">
 

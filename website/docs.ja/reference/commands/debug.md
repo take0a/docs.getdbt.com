@@ -1,32 +1,32 @@
 ---
-title: "About dbt debug command"
+title: "dbt debug コマンドについて"
 sidebar_label: "debug"
-description: "Use dbt debug to test database connections and check system setup."
-intro_text: "Use dbt debug to test database connections and check system setup."
+description: "dbt debug を使用してデータベース接続をテストし、システム設定を確認します。"
+intro_text: "dbt debug を使用してデータベース接続をテストし、システム設定を確認します。"
 ---
 
-`dbt debug` is a utility function to test the database connection and display information for debugging purposes, such as the validity of your project file, the [dbt version](/reference/dbt-jinja-functions/dbt_version), and your installation of any requisite dependencies (like `git` when you run `dbt deps`).
+`dbt debug` は、データベース接続をテストし、デバッグ用の情報を表示するユーティリティ関数です。プロジェクトファイルの有効性、[dbt のバージョン](/reference/dbt-jinja-functions/dbt_version)、必要な依存関係（`dbt deps` 実行時の `git` など）のインストール状況などが表示されます。
 
-It checks your database connection, local configuration, and system setup across multiple axes to help identify potential issues before running dbt commands.
+dbt コマンドを実行する前に、データベース接続、ローカル構成、システム設定を複数の軸でチェックし、潜在的な問題を特定するのに役立ちます。
 
-By default, `dbt debug` validates:
-- **Database connection** (for configured profiles)
-- **dbt project setup** (like `dbt_project.yml` validity)
-- **System environment** (OS, Python version, installed dbt version)
-- **Required dependencies** (such as `git` for `dbt deps`)
-- **Adapter details** (installed adapter versions and compatibility)
+デフォルトでは、`dbt debug` は以下の項目を検証します。
+- **データベース接続** (構成済みプロファイルの場合)
+- **dbt プロジェクトの設定** (`dbt_project.yml` の有効性など)
+- **システム環境** (OS、Python のバージョン、インストールされている dbt のバージョン)
+- **必要な依存関係** (`dbt deps` の場合は `git` など)
+- **アダプタの詳細** (インストールされているアダプタのバージョンと互換性)
 
-*Note: Not to be confused with [debug-level logging](/reference/global-configs/logs#debug-level-logging) through the `--debug` option which increases verbosity.
+*注: `--debug` オプションによる [デバッグレベルのログ記録](/reference/global-configs/logs#debug-level-logging) と混同しないでください。デバッグレベルのログ記録は、詳細度を高めます。
 
-## Flags
+## フラグ
 
-Most of the `dbt debug` flags apply to the dbt Core CLI. Some flags also work in dbt Cloud CLI, but only `--connection` is supported in the dbt Cloud IDE.
+`dbt debug` フラグのほとんどは dbt Core CLI に適用されます。一部のフラグは dbt Cloud CLI でも機能しますが、dbt Cloud IDE では `--connection` のみがサポートされています。
 
-- dbt Core CLI: Supports all flags.
-- dbt Cloud IDE: Only supports dbt `debug` and `dbt debug --connection`.
-- dbt Cloud CLI: Only supports dbt `debug` and `dbt debug --connection`. You can also use the [`dbt environment`](/reference/commands/dbt-environment) command to interact with your dbt Cloud environment. 
+- dbt Core CLI: すべてのフラグをサポートします。
+- dbt Cloud IDE: dbt `debug` と `dbt debug --connection` のみをサポートします。
+- dbt Cloud CLI: dbt `debug` と `dbt debug --connection` のみをサポートします。[`dbt environment`](/reference/commands/dbt-environment) コマンドを使用して dbt Cloud 環境を操作することもできます。
 
-`dbt debug` supports the following flags in your terminal when using the command line interface (CLI):
+`dbt debug` は、コマンドラインインターフェース (CLI) を使用する際に、ターミナルで以下のフラグをサポートします。
 
 ```text
 Usage: dbt debug [OPTIONS]
@@ -235,15 +235,15 @@ Options:
  ```
 
 
-## Example usage
+## 使用例
 
-Only test the connection to the data platform and skip the other checks `dbt debug` looks for:
+データプラットフォームへの接続のみをテストし、`dbt debug` が行うその他のチェックはスキップします:
 
 ```shell
 dbt debug --connection
 ```
 
-Show the configured location for the `profiles.yml` file and exit:
+`profiles.yml` ファイルに設定された場所を表示して終了します:
 
 ```text
 dbt debug --config-dir
@@ -252,7 +252,7 @@ To view your profiles.yml file, run:
 open /Users/alice/.dbt
 ```
 
-Test the connection in the dbt Cloud IDE:
+dbt Cloud IDE で接続をテストします:
 
 ```text
 dbt debug --connection

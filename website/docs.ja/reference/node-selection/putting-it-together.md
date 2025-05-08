@@ -1,5 +1,5 @@
 ---
-title: "Putting it together"
+title: "まとめると"
 ---
 
 
@@ -17,8 +17,7 @@ dbt test --select "config.incremental_strategy:insert_overwrite,test_name:unique
 
 
 
-This can get complex! Let's say I want a nightly run of models that build off snowplow data
-and feed exports, while _excluding_ the biggest incremental models (and one other model, to boot).
+これはかなり複雑になります！例えば、snowplow のデータとフィードエクスポートから構築されたモデルを毎晩実行し、最大の増分モデル（と、さらにもう1つのモデル）を除外するとします。
 
 
   ```bash
@@ -26,10 +25,10 @@ dbt run --select "@source:snowplow,tag:nightly models/export" --exclude "package
 ```
 
 
-This command selects all models that:
-* Select from snowplow sources, plus their parents, _and_ are tagged "nightly"
-* Are defined in the `export` model subfolder
+このコマンドは、以下の条件を満たすすべてのモデルを選択します。
+* snowplow ソースとその親から選択し、かつ「nightly」タグが付けられているモデル
+* `export` モデルサブフォルダで定義されているモデル
 
-Except for models that are:
-* Defined in the snowplow package and materialized incrementally
-* Named `export_performance_timing`
+以下の条件を満たすモデルは除きます。
+* snowplow パッケージで定義され、増分的にマテリアライズされているモデル
+* `export_performance_timing` という名前が付けられているモデル

@@ -1,10 +1,10 @@
 ---
-title: Model properties
+title: Model プロパティ
 ---
 
-Models properties can be declared in `.yml` files in your `models/` directory (as defined by the [`model-paths` config](/reference/project-configs/model-paths)).
+モデルのプロパティは、`models/` ディレクトリ内の `.yml` ファイルで宣言できます（[`model-paths` 設定](/reference/project-configs/model-paths) で定義されています）。
 
-You can name these files `whatever_you_want.yml`, and nest them arbitrarily deeply in subfolders within the `models/` directory.
+これらのファイルには `whatever_you_want.yml` という名前を付け、`models/` ディレクトリ内のサブフォルダに任意の深さでネストできます。
 
 <File name='models/<filename>.yml'>
 

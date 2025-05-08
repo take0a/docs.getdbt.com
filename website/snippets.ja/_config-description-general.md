@@ -1,1 +1,1 @@
-General configurations provide broader operational settings applicable across multiple resource types. Like resource-specific configurations, these can also be set in the project file, property files, or within resource-specific files.
+一般設定は、複数のリソースタイプに適用可能な、より広範な操作設定を提供します。リソース固有の設定と同様に、これらもプロジェクトファイル、プロパティファイル、またはリソース固有のファイル内で設定できます。

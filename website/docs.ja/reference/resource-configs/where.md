@@ -3,24 +3,27 @@ resource_types: [tests]
 datatype: string
 ---
 
-### Definition
+### 定義
 
-Filter the resource being tested (model, source, seed, or snapshot).
+テスト対象のリソース（モデル、ソース、シード、またはスナップショット）をフィルタリングします。
 
-The `where` condition is templated into the test query by replacing the resource reference with a <Term id="subquery" />. For instance, a `not_null` test may look like:
+`where` 条件は、リソース参照を <Term id="subquery" /> に置き換えることでテストクエリにテンプレート化されます。例えば、`not_null` テストは次のようになります。
+
 ```sql
 select *
 from my_model
 where my_column is null
 ```
-If the `where` config is set to `where date_column = current_date`, then the test query will be updated to:
+
+`where` 構成が `where date_column = current_date` に設定されている場合、テスト クエリは次のように更新されます。
+
 ```sql
 select *
 from (select * from my_model where date_column = current_date) dbt_subquery
 where my_column is null
 ```
 
-### Examples
+### 例
 
 <Tabs
   defaultValue="specific"
@@ -34,7 +37,7 @@ where my_column is null
 
 <TabItem value="specific">
 
-Configure a specific instance of a generic (schema) test:
+汎用 (スキーマ) テストの特定のインスタンスを構成します:
 
 <File name='models/<filename>.yml'>
 
@@ -62,13 +65,13 @@ models:
 
 <TabItem value="one_off">
 
-This config is ignored for one-off tests.
+この設定は、1 回限りのテストでは無視されます。
 
 </TabItem>
 
 <TabItem value="generic">
 
-Set the default for all instances of a generic (schema) test, by setting the config inside its test block (definition):
+テスト ブロック (定義) 内に構成を設定して、汎用 (スキーマ) テストのすべてのインスタンスのデフォルトを設定します:
 
 <File name='macros/<filename>.sql'>
 
@@ -88,7 +91,7 @@ select ...
 
 <TabItem value="project">
 
-Set the default for all tests in a package or project:
+パッケージまたはプロジェクト内のすべてのテストのデフォルトを設定します:
 
 <File name='dbt_project.yml'>
 
@@ -108,25 +111,25 @@ tests:
 
 </Tabs>
 
-### Custom logic
+### カスタムロジック
 
-The rendering context for the `where` config is the same as for all configurations defined in `.yml` files. You have access to `{{ var() }}` and `{{ env_var() }}`, but you **do not** have access to custom macros for setting this config. If you do want to use custom macros to template out the `where` filter for certain tests, there is a workaround.
+`where` 構成のレンダリングコンテキストは、`.yml` ファイルで定義されたすべての構成と同じです。`{{ var() }}` と `{{ env_var() }}` は使用できますが、この構成を設定するためのカスタムマクロは使用できません。カスタムマクロを使用して特定のテストの `where` フィルターをテンプレート化したい場合は、回避策があります。
 
-dbt defines a `get_where_subquery` macro.
+dbt は `get_where_subquery` マクロを定義します。
 
-dbt replaces `{{ model }}` in generic test definitions with `{{ get_where_subquery(relation) }}`, where `relation` is a `ref()` or `source()` for the resource being tested. The default implementation of this macro returns:
-- `{{ relation }}` when the `where` config is not defined (`ref()` or `source()`)
-- `(select * from {{ relation }} where {{ where }}) dbt_subquery` when the `where` config is defined
+dbt は、汎用テスト定義内の `{{ model }}` を `{{ get_where_subquery(relation) }}` に置き換えます。ここで、`relation` はテスト対象リソースの `ref()` または `source()` です。このマクロのデフォルト実装では、以下を返します。
+- `where` 設定が定義されていない場合 (`ref()` または `source()`)、`{{ relationship }}` を返します。
+- `where` 設定が定義されている場合、`(select * from {{ relationship }} where {{ where }}) dbt_subquery` を返します。
 
-You can override this behavior by:
-- Defining a custom `get_where_subquery` in your root project
-- Defining a custom `<adapter>__get_where_subquery` [dispatch candidate](/reference/dbt-jinja-functions/dispatch) in your package or adapter plugin
+この動作は、以下の方法でオーバーライドできます。
+- ルートプロジェクトでカスタム `get_where_subquery` を定義する。
+- パッケージまたはアダプタプラグインでカスタム `<adapter>__get_where_subquery` [ディスパッチ候補](/reference/dbt-jinja-functions/dispatch) を定義する。
 
-Within this macro definition, you can reference whatever custom macros you want, based on static inputs from the configuration. At simplest, this enables you to DRY up code that you'd otherwise need to repeat across many different `.yml` files. Because the `get_where_subquery` macro is resolved at runtime, your custom macros can also include [fetching the results of introspective database queries](https://docs.getdbt.com/reference/dbt-jinja-functions/run_query).
+このマクロ定義内では、設定からの静的入力に基づいて、任意のカスタムマクロを参照できます。簡単に言えば、これにより、多くの異なる `.yml` ファイルで繰り返し記述する必要のあるコードを DRY 化できます。 `get_where_subquery` マクロは実行時に解決されるため、カスタム マクロには [イントロスペクティブ データベース クエリの結果の取得](https://docs.getdbt.com/reference/dbt-jinja-functions/run_query) も含めることができます。
 
-#### Example 
+#### 例
 
-Filter your test to the past N days of data, using dbt's cross-platform [`dateadd()`](/reference/dbt-jinja-functions/cross-database-macros#dateadd) utility macro. You can set the number of days in the placeholder string.
+dbtのクロスプラットフォーム [`dateadd()`](/reference/dbt-jinja-functions/cross-database-macros#dateadd) ユーティリティマクロを使用して、テストを過去N日間のデータにフィルタリングします。プレースホルダ文字列で日数を設定できます。
 
 <File name='models/config.yml'>
 

@@ -1,14 +1,15 @@
 ---
-title: "About dbt snapshot command"
+title: "dbt snapshot コマンドについて"
 sidebar_label: "snapshot"
 id: "snapshot"
 ---
 
-The `dbt snapshot` command executes the [Snapshots](/docs/build/snapshots) defined in your project.
+`dbt snapshot` コマンドは、プロジェクトで定義された [スナップショット](/docs/build/snapshots) を実行します。
 
-dbt will looks for Snapshots in the `snapshot-paths` paths defined in your `dbt_project.yml` file. By default, the `snapshot-paths` path is `snapshots/`.
+dbt は、`dbt_project.yml` ファイルで定義された `snapshot-paths` パス内でスナップショットを検索します。デフォルトでは、`snapshot-paths` パスは `snapshots/` です。
 
-**Usage:**
+**使用法：**
+
 ```
 $ dbt snapshot --help
 usage: dbt snapshot [-h] [--profiles-dir PROFILES_DIR]

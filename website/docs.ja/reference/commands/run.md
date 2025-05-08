@@ -1,32 +1,25 @@
 ---
-title: "About dbt run command"
+title: "dbt run コマンドについて"
 sidebar_label: "run"
-description: "The dbt run command executes your compiled SQL models against a target database."
+description: "dbt run コマンドは、コンパイルされた SQL モデルをターゲット データベースに対して実行します。"
 id: "run"
 ---
 
-## Overview
+## 概要
 
-`dbt run` executes compiled sql model files against the current `target`
-database. dbt connects to the target database and runs the relevant SQL required
-to materialize all data models using the specified <Term id="materialization" /> strategies.
-Models are run in the order defined by the dependency graph generated during
-compilation. Intelligent multi-threading is used to minimize execution time
-without violating dependencies.
+`dbt run` は、コンパイル済みの SQL モデルファイルを現在の `target` データベースに対して実行します。dbt はターゲットデータベースに接続し、指定された <Term id="materialization" /> 戦略を使用して、すべてのデータモデルをマテリアライズするために必要な SQL を実行します。
+モデルは、コンパイル時に生成された依存関係グラフで定義された順序で実行されます。インテリジェントなマルチスレッド処理により、依存関係に違反することなく実行時間を最小限に抑えることができます。
 
-Deploying new models frequently involves destroying prior versions of these
-models. In these cases, `dbt run` minimizes the amount of time in which a model
-is unavailable by first building each model with a temporary name, then dropping
-the existing model, then renaming the model to its correct name. The drop and
-rename happen within a single database transaction for database adapters that
-support transactions.
+新しいモデルをデプロイする際には、多くの場合、以前のバージョンのモデルを破棄する必要があります。
+このような場合、`dbt run` は、まず各モデルを一時的な名前で構築し、次に既存のモデルを削除して正しい名前に変更することで、モデルが使用できない時間を最小限に抑えます。
+トランザクションをサポートするデータベースアダプタの場合、削除と名前の変更は単一のデータベーストランザクション内で実行されます。
 
-## Refresh incremental models
+## 増分モデルの更新
 
-If you provide the `--full-refresh` flag to `dbt run`, dbt will treat incremental models as <Term id="table" /> models. This is useful when
+`dbt run` に `--full-refresh` フラグを指定すると、dbt は増分モデルを <Term id="table" /> モデルとして扱います。これは、次の場合に役立ちます。
 
-1. The schema of an incremental model changes and you need to recreate it.
-2. You want to reprocess the entirety of the incremental model because of new logic in the model code.
+1. 増分モデルのスキーマが変更され、再作成する必要がある場合。
+2. モデルコードに新しいロジックが追加されたため、増分モデル全体を再処理する必要がある場合。
 
 <File name='bash'>
 
@@ -36,9 +29,9 @@ dbt run --full-refresh
 
 </File>
 
-You can also supply the flag by its short name: `dbt run -f`.
+このフラグは、短縮名「dbt run -f」でも指定できます。
 
-In the dbt compilation context, this flag will be available as [flags.FULL_REFRESH](/reference/dbt-jinja-functions/flags). Further, the `is_incremental()` macro will return `false` for *all* models in response when the `--full-refresh` flag is specified.
+dbt コンパイルコンテキストでは、このフラグは [flags.FULL_REFRESH](/reference/dbt-jinja-functions/flags) として使用できます。さらに、`--full-refresh` フラグが指定されている場合、`is_incremental()` マクロは、*すべての*モデルに対して `false` を返します。
 
 <File name='models/example.sql'>
 
@@ -57,37 +50,37 @@ select * from all_events
 
 </File>
 
-## Running specific models
+## 特定のモデルの実行
 
-dbt will also allow you select which specific models you'd like to materialize. This can be useful during special scenarios where you may prefer running a different set of models at various intervals. This can also be helpful when you may want to limit the tables materialized while you develop and test new models.
+dbt では、マテリアライズする特定のモデルを選択することもできます。これは、異なる間隔で異なるモデルセットを実行したい特別なシナリオで役立ちます。また、新しいモデルの開発とテスト中にマテリアライズするテーブルを制限したい場合にも役立ちます。
 
-For more information, see the [Model Selection Syntax Documentation](/reference/node-selection/syntax).
+詳細については、[モデル選択構文ドキュメント](/reference/node-selection/syntax) を参照してください。
 
-For more information on running parents or children of specific models, see the [Graph Operators Documentation](/reference/node-selection/graph-operators).
+特定のモデルの親または子の実行の詳細については、[グラフ演算子ドキュメント](/reference/node-selection/graph-operators) を参照してください。
 
-## Treat warnings as errors
+## 警告をエラーとして扱う
 
-See [global configs](/reference/global-configs/warnings)
+[グローバル設定](/reference/global-configs/warnings) を参照してください
 
-## Failing fast
+## 素早く失敗すること
 
-See [global configs](/reference/global-configs/failing-fast)
+[グローバル設定](/reference/global-configs/failing-fast) を参照してください
 
-## Enable or Disable Colorized Logs
+## ログの色分けを有効または無効にする
 
-See [global configs](/reference/global-configs/print-output#print-color)
+[グローバル設定](/reference/global-configs/print-output#print-color) を参照してください
 
 <VersionBlock firstVersion="1.8">
 
-## The `--empty` flag
+## `--empty` フラグ
 
-The `run` command supports the `--empty` flag for building schema-only dry runs. The `--empty` flag limits the refs and sources to zero rows. dbt will still execute the model SQL against the target data warehouse but will avoid expensive reads of input data. This validates dependencies and ensures your models will build properly.
+`run` コマンドは、スキーマのみのドライランを作成するための `--empty` フラグをサポートしています。`--empty` フラグは、参照とソースを 0 行に制限します。dbt はターゲットデータウェアハウスに対してモデル SQL を実行しますが、入力データの高負荷な読み取りを回避します。これにより依存関係が検証され、モデルが適切に構築されることが保証されます。
 
 </VersionBlock>
 
-## Status codes
+## ステータスコード
 
-When calling the [list_runs api](/dbt-cloud/api-v2#/operations/List%20Runs), you will get a status code for each run returned. The available run status codes are as follows:
+[list_runs API](/dbt-cloud/api-v2#/operations/List%20Runs) を呼び出すと、返される実行ごとにステータスコードが返されます。使用可能な実行ステータスコードは次のとおりです。
 
 - Starting = 1
 - Running = 3

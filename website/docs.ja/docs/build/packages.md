@@ -27,7 +27,7 @@ dbt パッケージは、実際にはスタンドアロンの dbt プロジェ�
 * パッケージ内のマクロを自分のプロジェクトで使用できます。
 * dbt パッケージの定義とインストールは、[Python パッケージの定義とインストール](/docs/build/python-models#using-pypi-packages) とは異なることに注意してください。
 
-import UseCaseInfo from '/snippets/_packages_or_dependencies.md';
+import UseCaseInfo from '/snippets.ja/_packages_or_dependencies.md';
 
 <UseCaseInfo/>
 

@@ -59,27 +59,27 @@ snapshots:
 
 </File>
 
-## Description
+## 説明
 
-In order to align with an organization's naming conventions, the `snapshot_meta_column_names` config can be used to customize the names of the [metadata columns](/docs/build/snapshots#snapshot-meta-fields) within each snapshot.
+組織の命名規則に合わせるために、`snapshot_meta_column_names` 設定を使用して、各スナップショット内の [メタデータ列](/docs/build/snapshots#snapshot-meta-fields) の名前をカスタマイズできます。
 
-## Default
+## デフォルト
 
-By default, dbt snapshots use the following column names to track change history using [Type 2 slowly changing dimension](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) records:
+デフォルトでは、dbtスナップショットは[タイプ2 緩やかに変化するディメンション](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row)レコードを使用して変更履歴を追跡するために、以下の列名を使用します。
 
 | Field          | <div style={{width:'250px'}}>Meaning</div> | Notes | Example |
 | -------------- | ------- | ----- | ------- |
-| `dbt_valid_from` | The timestamp when this snapshot row was first inserted and became valid. | The value is affected by the [`strategy`](/reference/resource-configs/strategy). | `snapshot_meta_column_names: {dbt_valid_from: start_date}` |
-| `dbt_valid_to`   | The timestamp when this row is no longer valid. |  | `snapshot_meta_column_names: {dbt_valid_to: end_date}` |
-| `dbt_scd_id`     | A unique key generated for each snapshot row. | This is used internally by dbt. | `snapshot_meta_column_names: {dbt_scd_id: scd_id}` |
-| `dbt_updated_at` | The `updated_at` timestamp of the source record when this snapshot row was inserted. | This is used internally by dbt. | `snapshot_meta_column_names: {dbt_updated_at: modified_date}` |
-| `dbt_is_deleted` | A string value indicating if the record has been deleted. (`True` if deleted, `False` if not deleted). |Added when `hard_deletes='new_record'` is configured.  | `snapshot_meta_column_names: {dbt_is_deleted: is_deleted}` |
+| `dbt_valid_from` | このスナップショット行が最初に挿入され、有効になったときのタイムスタンプ。| 値は [`strategy`](/reference/resource-configs/strategy) の影響を受けます。 | `snapshot_meta_column_names: {dbt_valid_from: start_date}` |
+| `dbt_valid_to`   | この行が有効でなくなったときのタイムスタンプ。 |  | `snapshot_meta_column_names: {dbt_valid_to: end_date}` |
+| `dbt_scd_id`     | 各スナップショット行に対して生成される一意のキー。 | これは dbt によって内部的に使用されます。 | `snapshot_meta_column_names: {dbt_scd_id: scd_id}` |
+| `dbt_updated_at` | このスナップショット行が挿入されたときのソース レコードの `updated_at` タイムスタンプ。 | これは dbt によって内部的に使用されます。 | `snapshot_meta_column_names: {dbt_updated_at: modified_date}` |
+| `dbt_is_deleted` | レコードが削除されたかどうかを示す文字列値。(削除された場合は `True`、削除されていない場合は `False`)。|`hard_deletes='new_record'` が設定されている場合に追加されます。  | `snapshot_meta_column_names: {dbt_is_deleted: is_deleted}` |
 
-All of these column names can be customized using the `snapshot_meta_column_names` config. Refer to the [Example](#example) for more details. 
+これらの列名はすべて、`snapshot_meta_column_names` 設定を使用してカスタマイズできます。詳細については、[例](#example) を参照してください。
 
 :::warning  
 
-To avoid any unintentional data modification, dbt will **not** automatically apply any column renames. So if a user applies `snapshot_meta_column_names` config for a snapshot without updating the pre-existing table, they will get an error. We recommend either only using these settings for net-new snapshots, or arranging an update of pre-existing tables prior to committing a column name change.
+意図しないデータ変更を防ぐため、dbt は列名の変更を自動的には適用しません。そのため、ユーザーが既存のテーブルを更新せずにスナップショットに `snapshot_meta_column_names` 設定を適用すると、エラーが発生します。これらの設定は新規のスナップショットにのみ使用するか、列名の変更をコミットする前に既存のテーブルを更新することをお勧めします。
 
 :::
 
@@ -106,7 +106,7 @@ snapshots:
 
 </File>
 
-The resulting snapshot table contains the configured meta column names:
+結果のスナップショット テーブルには、構成されたメタ列名が含まれます。
 
 | id | scd_id               |        modified_date |           start_date |             end_date | is_deleted |
 | -- | -------------------- | -------------------- | -------------------- | -------------------- | ---------- |

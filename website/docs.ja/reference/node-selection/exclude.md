@@ -1,16 +1,17 @@
 ---
-title: "Exclude models from your run"
+title: "実行からモデルを除外する"
 sidebar_label: "Exclude"
 ---
 
-### Excluding models
-dbt provides an `--exclude` flag with the same semantics as `--select`. Models specified with the `--exclude` flag will be removed from the set of models selected with `--select`.
+### モデルの除外
+
+dbt は、`--select` と同じ意味を持つ `--exclude` フラグを提供します。`--exclude` フラグで指定されたモデルは、`--select` で選択されたモデルセットから除外されます。
 
 ```bash
 dbt run --select "my_package".*+ --exclude "my_package.a_big_model+"    # select all models in my_package and their children except a_big_model and its children
 ```
 
-Exclude a specific resource by its name or lineage:
+名前または系統によって特定のリソースを除外します:
 
 ```bash
 # test

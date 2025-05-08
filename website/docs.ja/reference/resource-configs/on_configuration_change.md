@@ -1,19 +1,19 @@
 ---
 resource_types: [models]
-description: "on_configuration_change - Read this in-depth guide to learn about configuration change monitoring in dbt."
+description: "on_configuration_change - dbt での構成変更監視について詳しくは、この詳細なガイドをお読みください。"
 datatype: "string"
 ---
 
 :::info
-This functionality is currently only supported for [materialized views](/docs/build/materializations#materialized-view) on a subset of adapters.
+この機能は現在、アダプタのサブセット上の [マテリアライズド ビュー](/docs/build/materializations#materialized-view) に対してのみサポートされています。
 :::
 
-The `on_configuration_change` config has three settings:
-- `apply` (default) &mdash; Attempt to update the existing database object if possible, avoiding a complete rebuild.
-  - *Note:* If any individual configuration change requires a full refresh, a full refresh is performed in lieu of individual alter statements.
-- `continue` &mdash; Allow runs to continue while also providing a warning that the object was left untouched.
-  - *Note:* This could result in downstream failures as those models may depend on these unimplemented changes.
-- `fail` &mdash; Force the entire run to fail if a change is detected.
+`on_configuration_change` 構成には、次の 3 つの設定があります。
+- `apply` (デフォルト) - 可能な場合は、既存のデータベースオブジェクトの更新を試行し、完全な再構築を回避します。
+  - *注:* 個々の構成変更で完全な更新が必要な場合は、個々の変更ステートメントの代わりに完全な更新が実行されます。
+- `continue` - 実行を続行しますが、オブジェクトが変更されなかったことを示す警告も表示します。
+  - *注:* 実装されていない変更がモデルに適用される可能性があるため、下流でエラーが発生する可能性があります。
+- `fail` - 変更が検出された場合、実行全体を強制的に失敗させます。
 
 <Tabs
   groupId="config-languages"
@@ -78,9 +78,9 @@ models:
 
 </Tabs>
 
-Materializations are implemented following this "drop through" life cycle:
-1. If a model does not exist with the provided path, create the new model.
-2. If a model exists, but has a different type, drop the existing model and create the new model. 
-3. If [`--full-refresh`](/reference/resource-configs/full_refresh) is supplied, replace the existing model regardless of configuration changes and the `on_configuration_change` setting.
-4. If there are no configuration changes, perform the default action for that type (e.g. apply refresh for a materialized view).
-5. Determine whether to apply the configuration changes according to the `on_configuration_change` setting.
+マテリアライゼーションは、次の「ドロップスルー」ライフサイクルに従って実装されます。
+1. 指定されたパスのモデルが存在しない場合は、新しいモデルを作成します。
+2. モデルは存在するがタイプが異なる場合は、既存のモデルを削除して新しいモデルを作成します。
+3. [`--full-refresh`](/reference/resource-configs/full_refresh) が指定されている場合は、構成の変更や `on_configuration_change` 設定に関係なく、既存のモデルを置き換えます。
+4. 構成の変更がない場合は、そのタイプのデフォルトのアクションを実行します（例：マテリアライズドビューの場合は更新を適用します）。
+5. `on_configuration_change` 設定に従って、構成の変更を適用するかどうかを決定します。

@@ -1,38 +1,38 @@
 ---
-title: "About dbt compile command"
-description: "The dbt compile command creates executable SQL from model, test, and analysis files."
+title: "dbt compile コマンドについて"
+description: "dbt compile コマンドは、モデル、テスト、および分析ファイルから実行可能な SQL を作成します。"
 sidebar_label: "compile"
 id: "compile"
 ---
 
-`dbt compile` generates executable SQL from source `model`, `test`, and `analysis` files. You can find these compiled SQL files in the `target/` directory of your dbt project.
+`dbt compile` は、ソースファイル `model`、`test`、`analysis` から実行可能な SQL を生成します。これらのコンパイル済み SQL ファイルは、dbt プロジェクトの `target/` ディレクトリにあります。
 
-The `compile` command is useful for:
+`compile` コマンドは、次の場合に便利です。
 
-1. Visually inspecting the compiled output of model files. This is useful for validating complex jinja logic or macro usage.
-2. Manually running compiled SQL. While debugging a model or schema test, it's often useful to execute the underlying `select` statement to find the source of the bug.
-3. Compiling `analysis` files. Read more about analysis files [here](/docs/build/analyses).
+1. モデルファイルのコンパイル済み出力を視覚的に検査する。これは、複雑な Jinja ロジックやマクロの使用を検証するのに役立ちます。
+2. コンパイル済み SQL を手動で実行する。モデルまたはスキーマテストのデバッグ中に、バグの原因を特定するために、基礎となる `select` ステートメントを実行することが役立つことがよくあります。
+3. `analysis` ファイルをコンパイルする。分析ファイルの詳細については、[こちら](/docs/build/analyses) を参照してください。
 
-Some common misconceptions:
-- `dbt compile` is _not_ a pre-requisite of `dbt run`, or other building commands. Those commands will handle compilation themselves.
-- If you just want dbt to read and validate your project code, without connecting to the data warehouse, use `dbt parse` instead.
+よくある誤解：
+- `dbt compile` は、`dbt run` やその他のビルドコマンドの前提条件ではありません。これらのコマンドは、コンパイル処理を自動で行います。
+- データ ウェアハウスに接続せずに、dbt でプロジェクト コードを読み取って検証するだけの場合は、代わりに `dbt parse` を使用します。
 
-### Interactive compile
+### 対話型コンパイル
 
-Starting in dbt v1.5, `compile` can be "interactive" in the CLI, by displaying the compiled code of a node or arbitrary dbt-SQL query:
-- `--select` a specific node _by name_
-- `--inline` an arbitrary dbt-SQL query
+dbt v1.5 以降では、CLI で `compile` を「対話型」に実行できるようになりました。これにより、ノードまたは任意の dbt-SQL クエリのコンパイル済みコードを表示できます。
+- `--select` で特定のノードを名前で選択
+- `--inline` で任意の dbt-SQL クエリを選択
 
-This will log the compiled SQL to the terminal, in addition to writing to the `target/` directory.
+これにより、コンパイルされた SQL が `target/` ディレクトリに書き込まれるだけでなく、ターミナルにもログ出力されます。
 
-For example:
+例:
 
 ```bash
 dbt compile --select "stg_orders"                           
 dbt compile --inline "select * from {{ ref('raw_orders') }}"
 ```
 
-returns the following:
+次を返します:
 
 ```bash
 dbt compile --select "stg_orders"                           
@@ -77,9 +77,9 @@ dbt compile --inline "select * from {{ ref('raw_orders') }}"
 select * from "jaffle_shop"."main"."raw_orders"
 ```
 
-The command accesses the data platform to cache-related metadata, and to run introspective queries. Use the flags:
-- `--no-populate-cache` to disable the initial cache population. If metadata is needed, it will be a cache miss, requiring dbt to run the metadata query. This is a `dbt` flag, which means you need to add `dbt` as a prefix. For example: `dbt --no-populate-cache`.
-- `--no-introspect` to disable [introspective queries](/faqs/Warehouse/db-connection-dbt-compile#introspective-queries). dbt will raise an error if a model's definition requires running one. This is a `dbt compile` flag, which means you need to add `dbt compile` as a prefix. For example:`dbt compile --no-introspect`.
+このコマンドは、データプラットフォームにアクセスしてキャッシュ関連のメタデータを取得し、イントロスペクティブクエリを実行します。以下のフラグを使用します。
+- `--no-populate-cache` フラグを使用すると、初期キャッシュポピュレーションが無効になります。メタデータが必要な場合はキャッシュミスとなり、dbt はメタデータクエリを実行する必要があります。これは `dbt` フラグなので、プレフィックスとして `dbt` を追加する必要があります。例: `dbt --no-populate-cache`
+- `--no-introspect` フラグを使用すると、[イントロスペクティブクエリ](/faqs/Warehouse/db-connection-dbt-compile#introspective-queries) が無効になります。モデルの定義でイントロスペクティブクエリの実行が必要な場合、dbt はエラーを生成します。これは `dbt compile` フラグなので、プレフィックスとして `dbt compile` を追加する必要があります。例: `dbt compile --no-introspect`
 
 
 ### FAQs

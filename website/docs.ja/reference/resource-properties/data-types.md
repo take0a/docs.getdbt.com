@@ -1,11 +1,11 @@
 ---
-title: "Platform-specific data types"
+title: "プラットフォーム固有のデータ型"
 sidebar_label: "Data types"
 ---
 
-Unit tests are designed to test for the expected _values_, not for the data types themselves. dbt takes the value you provide and attempts to cast it to the data type as inferred from the input and output models. 
+ユニットテストは、データ型そのものではなく、期待される_値_をテストするように設計されています。dbt は、指定された値を受け取り、入力モデルと出力モデルから推論されたデータ型にキャストしようとします。
 
-How you specify input and expected values in your unit test YAML definitions are largely consistent across data warehouses, with some variation for more complex data types. The following are platform-specific data types:
+ユニットテストの YAML 定義で入力値と期待値を指定する方法は、データウェアハウス間でほぼ一貫していますが、より複雑なデータ型の場合は多少異なります。以下はプラットフォーム固有のデータ型です:
 
 <WHCode>
 
@@ -94,7 +94,7 @@ unit_tests:
 
 ```
 
-Currently, the `array` is not supported.
+現在、`array` はサポートされていません。
 
 </div>
 
@@ -147,7 +147,7 @@ unit_tests:
 
 ```
 
-Currently, the `array` is not supported.
+現在、`array` はサポートされていません。
 
 </div>
 

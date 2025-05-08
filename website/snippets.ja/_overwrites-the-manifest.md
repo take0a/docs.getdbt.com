@@ -1,7 +1,7 @@
-dbt overwrites the `manifest.json` file during parsing, which means when you reference `--state` from the `target/ directory`, you may encounter a warning indicating that the saved manifest wasn't found.
+dbt は解析中に `manifest.json` ファイルを上書きします。つまり、`target/ directory` から `--state` を参照すると、保存されたマニフェストが見つからなかったことを示す警告が表示される場合があります。
 
 <Lightbox src="/img/docs/reference/saved-manifest-not-found.png" title="Saved manifest not found error" /> 
 
-During the next job run, dbt follows a sequence of steps that lead to the issue. First, it overwrites `target/manifest.json` before it can be used for change detection. Then, when dbt tries to read `target/manifest.json` again to detect changes, it finds none because the previous state has already been overwritten/erased.
+次回のジョブ実行時に、dbt は問題を引き起こす一連の手順を実行します。まず、変更検出に使用する前に `target/manifest.json` を上書きします。その後、dbt が変更検出のために `target/manifest.json` を再度読み込もうとすると、以前の状態が既に上書き/消去されているため、変更は検出されません。
 
-Avoid setting `--state` and `--target-path` to the same path with state-dependent features like `--defer` and `state:modified` as it can lead to non-idempotent behavior and won't work as expected.
+`--defer` や `state:modified` などの状態依存機能を使用する場合、`--state` と `--target-path` を同じパスに設定しないでください。そうしないと、べき等性が損なわれ、期待どおりに動作しなくなる可能性があります。

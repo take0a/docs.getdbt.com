@@ -1,19 +1,19 @@
 ---
-title: Snapshot configurations
-description: "Read this guide to learn about using snapshot configurations in dbt."
+title: Snapshot 構成
+description: "dbt での snapshot 構成の使用については、このガイドをお読みください。"
 meta:
   resource_type: Snapshots
 ---
 
-import ConfigResource from '/snippets/_config-description-resource.md';
-import ConfigGeneral from '/snippets/_config-description-general.md';
+import ConfigResource from '/snippets.ja/_config-description-resource.md';
+import ConfigGeneral from '/snippets.ja/_config-description-general.md';
 
-## Related documentation
-* [Snapshots](/docs/build/snapshots)
-* The `dbt snapshot` [command](/reference/commands/snapshot)
+## 関連ドキュメント
 
+* [ snapshot ](/docs/build/snapshots)
+* `dbt snapshot` [コマンド](/reference/commands/snapshot)
 
-## Available configurations
+## 利用可能な構成
 ### Snapshot-specific configurations
 
 <ConfigResource meta={frontMatter.meta} />
@@ -85,7 +85,7 @@ snapshots:
 
 <VersionBlock firstVersion="1.9">
   
-Refer to [configuring snapshots](/docs/build/snapshots#configuring-snapshots) for the available configurations.
+利用可能な構成については、[ snapshot の構成](/docs/build/snapshots#configuring-snapshots)を参照してください。
 
 <File name='snapshots/schema.yml'>
 
@@ -111,7 +111,7 @@ snapshots:
 
 <TabItem value="config-resource">
 
-import LegacySnapshotConfig from '/snippets/_legacy-snapshot-config.md';
+import LegacySnapshotConfig from '/snippets.ja/_legacy-snapshot-config.md';
 
 <LegacySnapshotConfig />
 
@@ -136,18 +136,19 @@ import LegacySnapshotConfig from '/snippets/_legacy-snapshot-config.md';
 
 </Tabs>
 
-### Snapshot configuration migration
+###  snapshot 設定の移行
 
-The latest snapshot configurations introduced in dbt Core v1.9 (such as [`snapshot_meta_column_names`](/reference/resource-configs/snapshot_meta_column_names), [`dbt_valid_to_current`](/reference/resource-configs/dbt_valid_to_current), and `hard_deletes`) are best suited for new snapshots. For existing snapshots, we recommend the following to avoid any inconsistencies in your snapshots:
+dbt Core v1.9 で導入された最新の snapshot 設定（[`snapshot_meta_column_names`](/reference/resource-configs/snapshot_meta_column_names)、[`dbt_valid_to_current`](/reference/resource-configs/dbt_valid_to_current)、`hard_deletes` など）は、新しい snapshot に最適です。既存の snapshot については、 snapshot 間の不整合を回避するために、以下の設定を推奨します。
 
-#### For existing snapshots
-- Migrate tables &mdash; Migrate the previous snapshot to the new table schema and values:
-  - Create a backup copy of your snapshots.
-  - Use `alter` statements as needed (or a script to apply `alter` statements) to ensure table consistency.
-- New configurations &mdash; Convert the configs one at a time, testing as you go. 
+#### 既存の snapshot の場合
+
+- テーブルの移行 - 以前の snapshot を新しいテーブルスキーマと値に移行します。
+  -  snapshot のバックアップコピーを作成します。
+  - 必要に応じて `alter` ステートメント（または `alter` ステートメントを適用するスクリプト）を使用して、テーブルの整合性を確保します。
+- 新しい構成 - 構成を 1 つずつ変換し、テストしながら進めます。
 
 :::warning
-If you use one of the latest configs, such as `dbt_valid_to_current`, without migrating your data, you may have mixed old and new data, leading to an incorrect downstream result.
+データを移行せずに `dbt_valid_to_current` などの最新の構成のいずれかを使用すると、古いデータと新しいデータが混在し、ダウンストリームの結果が不正確になる可能性があります。
 :::
 
 ### General configurations
@@ -279,13 +280,14 @@ snapshots:
 
 </Tabs>
 
-## Configuring snapshots
-Snapshots can be configured in multiple ways:
+##  snapshot の設定
+
+ snapshot は複数の方法で設定できます。
 
 <VersionBlock firstVersion="1.9">
 
-1. Defined in YAML files using the `config` [resource property](/reference/model-properties), typically in your [snapshots directory](/reference/project-configs/snapshot-paths) or whichever folder you pefer. Available in [the dbt Cloud release track](/docs/dbt-versions/cloud-release-tracks), dbt v1.9 and higher.
-2. From the `dbt_project.yml` file, under the `snapshots:` key. To apply a configuration to a snapshot, or directory of snapshots, define the resource path as nested dictionary keys.
+1. YAMLファイル内の`config` [リソースプロパティ](/reference/model-properties)を使用して定義されます。通常は[ snapshot ディレクトリ](/reference/project-configs/snapshot-paths)または任意のフォルダに保存されます。[dbt Cloudリリーストラック](/docs/dbt-versions/cloud-release-tracks)、dbt v1.9以降で利用可能です。
+2. `dbt_project.yml`ファイルの`snapshots:`キーの下にあります。 snapshot または snapshot のディレクトリに構成を適用するには、リソースパスをネストされた辞書キーとして定義します。
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">
@@ -297,18 +299,18 @@ Snapshots can be configured in multiple ways:
 
 Snapshot configurations are applied hierarchically in the order above with higher taking precedence. You can also apply [tests](/reference/snapshot-properties) to snapshots using the [`tests` property](/reference/resource-properties/data-tests).
 
-### Examples
+### 例
 
 <VersionBlock firstVersion="1.9">
-The following examples demonstrate how to configure snapshots using the `dbt_project.yml` file and a `.yml` file.
+次の例は、`dbt_project.yml` ファイルと `.yml` ファイルを使用して snapshot を構成する方法を示しています。
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">
 The following examples demonstrate how to configure snapshots using the `dbt_project.yml` file, a `config` block within a snapshot (legacy method), and a `.yml` file.
 </VersionBlock>
 
-- #### Apply configurations to all snapshots
-  To apply a configuration to all snapshots, including those in any installed [packages](/docs/build/packages), nest the configuration directly under the `snapshots` key:
+- #### すべての snapshot に設定を適用する
+  インストール済みの[パッケージ](/docs/build/packages)内の snapshot を含むすべての snapshot に設定を適用するには、設定を`snapshots`キーの直下にネストします。
 
     <File name='dbt_project.yml'>
 
@@ -319,10 +321,10 @@ The following examples demonstrate how to configure snapshots using the `dbt_pro
 
     </File>
 
-- #### Apply configurations to all snapshots in your project
-  To apply a configuration to all snapshots in your project only (for example, _excluding_ any snapshots in installed packages), provide your project name as part of the resource path.
+- #### プロジェクト内のすべての snapshot に設定を適用する
+  プロジェクト内のすべての snapshot にのみ設定を適用するには（たとえば、インストール済みパッケージ内の snapshot を_除外_する）、リソースパスの一部としてプロジェクト名を指定します。
 
-  For a project named `jaffle_shop`:
+  `jaffle_shop` というプロジェクトの場合：
 
     <File name='dbt_project.yml'>
 
@@ -334,9 +336,9 @@ The following examples demonstrate how to configure snapshots using the `dbt_pro
 
     </File>
 
-  Similarly, you can use the name of an installed package to configure snapshots in that package.
+  同様に、インストールされたパッケージの名前を使用して、そのパッケージ内の snapshot を構成することもできます。
 
-- #### Apply configurations to one snapshot only
+- #### 1つの snapshot にのみ構成を適用する
   
   <VersionBlock lastVersion="1.8">
   Use `config` blocks if you need to apply a configuration to one snapshot only. 
@@ -377,12 +379,12 @@ The following examples demonstrate how to configure snapshots using the `dbt_pro
            columns: true
     ```
     </File>
-   Pro-tip: Use sources in snapshots: `select * from {{ source('jaffle_shop', 'orders') }}`
+   プロのヒント:  snapshot でソースを使用する: `select * from {{ source('jaffle_shop', 'orders') }}`
     </VersionBlock>
 
-  You can also use the full resource path (including the project name, and subdirectories) to configure an individual snapshot from your `dbt_project.yml` file.
+  `dbt_project.yml` ファイルから、完全なリソースパス（プロジェクト名とサブディレクトリを含む）を使用して個別の snapshot を設定することもできます。
 
-  For a project named `jaffle_shop`, with a snapshot file within the `snapshots/postgres_app/` directory, where the snapshot is named `orders_snapshot` (as above), this would look like:
+  `jaffle_shop` というプロジェクトで、`snapshots/postgres_app/` ディレクトリ内に snapshot ファイルがあり、 snapshot の名前が `orders_snapshot` の場合（上記のように）、設定は次のようになります:
 
     <File name='dbt_project.yml'>
 
@@ -398,7 +400,7 @@ The following examples demonstrate how to configure snapshots using the `dbt_pro
 
     </File>
 
-  You can also define some common configs in a snapshot's `config` block. However, we don't recommend this for a snapshot's required configuration.
+   snapshot の `config` ブロックで一般的な設定を定義することもできます。ただし、 snapshot の必須設定にはこれを推奨しません。
 
     <File name='dbt_project.yml'>
 

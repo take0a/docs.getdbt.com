@@ -8,17 +8,17 @@ datatype: int
 ---
 
 <VersionCallout version="1.9" />
-## Definition
+## 定義
 
-Configure a `lookback` window to reprocess additional batches during [microbatch incremental model](/docs/build/incremental-microbatch) runs. It processes X batches up to the latest bookmark (the last successfully processed data point) to capture late-arriving records.  
+[マイクロバッチ増分モデル](/docs/build/incremental-microbatch)の実行中に追加バッチを再処理するための`lookback`ウィンドウを設定します。最新のブックマーク（最後に正常に処理されたデータポイント）までXバッチを処理し、遅れて到着したレコードをキャプチャします。
 
-Set the `lookback` to an integer greater than or equal to zero. The default value is `1`.  You can configure `lookback` for a [microbatch incremental model](/docs/build/incremental-microbatch) in your `dbt_project.yml` file, property YAML file, or config block.
+`lookback`には0以上の整数を設定します。デフォルト値は`1`です。[マイクロバッチ増分モデル](/docs/build/incremental-microbatch)の`lookback`は、`dbt_project.yml`ファイル、プロパティYAMLファイル、または設定ブロックで設定できます。
 
-## Examples
+## 例
 
-The following examples set `2` as the `lookback` config for the `user_sessions` model.
+以下の例では、`user_sessions` モデルの `lookback` 設定として `2` を設定します。
 
-Example in the `dbt_project.yml` file:
+`dbt_project.yml` ファイル内の例:
 
 <File name='dbt_project.yml'>
 
@@ -30,7 +30,7 @@ models:
 ```
 </File>
 
-Example in a properties YAML file:
+プロパティ YAML ファイルの例:
 
 <File name='models/properties.yml'>
 
@@ -43,7 +43,7 @@ models:
 
 </File>
 
-Example in sql model config block:
+SQL モデル構成ブロックの例:
 
 <File name="models/user_sessions.sql">
 

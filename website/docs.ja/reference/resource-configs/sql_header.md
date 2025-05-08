@@ -46,7 +46,7 @@ models:
 
 <TabItem value="seeds">
 
-This config is not implemented for seeds
+この設定は seeds には実装されていません
 
 </TabItem>
 
@@ -85,20 +85,24 @@ snapshots:
 </Tabs>
 
 
-## Definition
-An optional configuration to inject SQL above the `create table as` and `create view as` statements that dbt executes when building models and snapshots.
+## 定義
 
-`sql_header`s can be set using the config, or by `call`-ing the `set_sql_header` macro (example below).
+モデルとスナップショットの構築時に dbt が実行する `create table as` および `create view as` ステートメントの上に SQL を挿入するためのオプション設定です。
 
-## Comparison to pre-hooks
-[Pre-hooks](/reference/resource-configs/pre-hook-post-hook) also provide an opportunity to execute SQL before model creation, as a _preceding_ query. In comparison, SQL in a `sql_header` is run in the same _query_ as the `create table|view as` statement.
+`sql_header` は、設定を使用するか、`set_sql_header` マクロを `call` することで設定できます（以下の例を参照）。
 
-As a result, this makes it more useful for [Snowflake session parameters](https://docs.snowflake.com/en/sql-reference/parameters.html) and [BigQuery Temporary UDFs](https://cloud.google.com/bigquery/docs/reference/standard-sql/user-defined-functions#sql-udf-examples).
+## 事前フックとの比較
 
-## Examples
+[事前フック](/reference/resource-configs/pre-hook-post-hook) は、モデル作成前に S​​QL を _先行_ クエリとして実行する機会も提供します。これに対し、`sql_header` 内の SQL は、`create table|view as` ステートメントと同じ _クエリ_ で実行されます。
 
-### Set Snowflake session parameters for a particular model
-This uses the config block syntax:
+その結果、[Snowflake セッションパラメータ](https://docs.snowflake.com/en/sql-reference/parameters.html) や [BigQuery 一時 UDF](https://cloud.google.com/bigquery/docs/reference/standard-sql/user-defined-functions#sql-udf-examples) でより便利になります。
+
+## 例
+
+### 特定のモデルのSnowflakeセッションパラメータを設定します。
+
+これにはconfigブロック構文を使用します。
+
 <File name='models/my_model.sql'>
 
 ```sql
@@ -111,7 +115,7 @@ select * from {{ ref('other_model') }}
 
 </File>
 
-### Set Snowflake session parameters for all models
+### すべてのモデルのSnowflakeセッションパラメータを設定する
 
 <File name='dbt_project.yml'>
 
@@ -124,9 +128,9 @@ models:
 
 </File>
 
-### Create a BigQuery Temporary UDF
+### BigQuery の一時 UDF を作成します。
 
-This example calls the `set_sql_header` macro. This macro is a convenience wrapper which you may choose to use if you have a multi-line SQL statement to inject. You do not need to use the `sql_header` configuration key in this case.
+この例では、`set_sql_header` マクロを呼び出します。このマクロは、複数行の SQL 文を挿入する必要がある場合に使用できる便利なラッパーです。この場合、`sql_header` 構成キーを使用する必要はありません。
 
 <File name='models/my_model.sql'>
 

@@ -1,55 +1,55 @@
 ---
-title: "About dbt docs commands"
-description: "Generate and serve the docs for your dbt project."
+title: "dbt docs コマンドについて"
+description: "dbt プロジェクトのドキュメントを生成して提供します。"
 sidebar_label: "docs"
 id: "cmd-docs"
 ---
 
-`dbt docs` has two supported subcommands: `generate` and `serve`.
+`dbt docs` には、`generate` と `serve` という 2 つのサブコマンドがサポートされています。
 
 ### dbt docs generate
 
-The command is responsible for generating your project's documentation website by
+このコマンドは、プロジェクトのドキュメントウェブサイトを生成するために以下の処理を行います。
 
-1. Copying the website `index.html` file into the `target/` directory.
-2. Compiling the resources in your project, so that their `compiled_code` will be included in [`manifest.json`](/reference/artifacts/manifest-json).
-3. Running queries against database metadata to produce the [`catalog.json`](/reference/artifacts/catalog-json) file, which contains metadata about the tables and <Term id="view">views</Term> produced by the models in your project.
+1. ウェブサイトの `index.html` ファイルを `target/` ディレクトリにコピーします。
+2. プロジェクト内のリソースをコンパイルし、その `compiled_code` が [`manifest.json`](/reference/artifacts/manifest-json) に含まれるようにします。
+3. データベースのメタデータに対してクエリを実行し、[`catalog.json`](/reference/artifacts/catalog-json) ファイルを生成します。このファイルには、プロジェクト内のモデルによって生成されたテーブルと <Term id="view">ビュー</Term> に関するメタデータが含まれています。
 
-**Example**:
+**例**：
 
 ```
 dbt docs generate
 ```
 
-Use the `--select` argument to limit the nodes included within `catalog.json`. When this flag is provided, step (3) will be restricted to the selected nodes. All other nodes will be excluded. Step (2) is unaffected.
+`catalog.json` に含まれるノードを制限するには、`--select` 引数を使用します。このフラグが指定されている場合、ステップ (3) は選択されたノードのみに制限されます。その他のノードはすべて除外されます。ステップ (2) には影響しません。
 
-**Example**:
+**例**：
 
 ```shell
 dbt docs generate --select +orders
 ```
 
-Use the `--no-compile` argument to skip re-compilation. When this flag is provided, `dbt docs generate` will skip step (2) described above.
+再コンパイルをスキップするには、`--no-compile` 引数を使用します。このフラグが指定されると、`dbt docs generate` は上記のステップ (2) をスキップします。
 
-**Example**:
+**例**：
 
 ```
 dbt docs generate --no-compile
 ```
 
-Use the `--empty-catalog` argument to skip running the database queries to populate `catalog.json`. When this flag is provided, `dbt docs generate` will skip step (3) described above.
+`catalog.json` にデータを入力するデータベースクエリの実行をスキップするには、`--empty-catalog` 引数を使用します。このフラグが指定されると、`dbt docs generate` は上記の手順 (3) をスキップします。
 
-This is not recommended for production environments, as it means that your documentation will be missing information gleaned from database metadata (the full set of columns in each table, and statistics about those tables). It can speed up `docs generate` in development, when you just want to visualize lineage and other information defined within your project. To learn how to build your documentation in dbt Cloud, refer to [build your docs in dbt Cloud](/docs/collaborate/build-and-view-your-docs).
+これは、データベースメタデータ（各テーブルの列の完全なセットとそれらのテーブルに関する統計情報）から取得された情報がドキュメントに含まれなくなるため、本番環境では推奨されません。開発環境では、プロジェクト内で定義されたリネージやその他の情報を視覚化したいだけであれば、`docs generate` を高速化できます。dbt Cloud でドキュメントを作成する方法については、[dbt Cloud でドキュメントを作成する](/docs/collaborate/build-and-view-your-docs) を参照してください。
 
-**Example**:
+**例**：
 
 ```
 dbt docs generate --empty-catalog
 ```
 
-**Example**:
+**例**：
 
-Use the `--static` flag to generate the docs as a static page for hosting on a cloud storage provider. The `catalog.json` and `manifest.json` files will be inserted into the `index.html` file, creating a single page easily shared via email or file-sharing apps. 
+`--static` フラグを使用すると、ドキュメントをクラウドストレージプロバイダーでホスティングするための静的ページとして生成できます。`catalog.json` ファイルと `manifest.json` ファイルが `index.html` ファイルに挿入され、メールやファイル共有アプリで簡単に共有できる単一のページが作成されます。
 
 ```
 dbt docs generate --static
@@ -57,11 +57,11 @@ dbt docs generate --static
 
 ### dbt docs serve
 
-This command starts a webserver on port 8080 to serve your documentation locally and opens the documentation site in your default browser. The webserver is rooted in your `target/` directory. Be sure to run `dbt docs generate` before `dbt docs serve` because the `generate` command produces a [catalog metadata artifact](/reference/artifacts/catalog-json) that the `serve` command depends upon. You will see an error message if the catalog is missing.
+このコマンドは、ポート 8080 でウェブサーバーを起動し、ドキュメントをローカルで提供して、デフォルトのブラウザでドキュメント サイトを開きます。ウェブサーバーのルートは `target/` ディレクトリです。`generate` コマンドは、`serve` コマンドが依存する [カタログ メタデータ アーティファクト](/reference/artifacts/catalog-json) を生成するため、`dbt docs generate` を `dbt docs serve` の前に必ず実行してください。カタログが見つからない場合は、エラー メッセージが表示されます。
 
-Use the `dbt docs serve` command if you're developing locally with the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) or [dbt Core](/docs/core/installation-overview). The [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) doesn't support this command.
+[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) または [dbt Core](/docs/core/installation-overview) を使用してローカルで開発している場合は、`dbt docs serve` コマンドを使用してください。[dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) はこのコマンドをサポートしていません。
 
-**Usage:**
+**使用方法:**
 
 <VersionBlock lastVersion="1.8.1">
 ```
@@ -81,9 +81,9 @@ dbt docs serve [--profiles-dir PROFILES_DIR]
 ```
 </VersionBlock>
 
-You may specify a different port using the `--port` flag.
+`--port` フラグを使用して別のポートを指定することもできます。
 
-**Example**:
+**例**：
 
 ```
 dbt docs serve --port 8001
@@ -91,13 +91,13 @@ dbt docs serve --port 8001
 
 <VersionBlock firstVersion="1.8.2">
 
-You may specify a different host using the `--host` flag.
+`--host` フラグを使用して別のホストを指定することもできます。
 
-**Example**:
+**例**：
 
 ```shell
 dbt docs serve --host ""
 ```
 
-As of 1.8.1, the default host is `127.0.0.1`. For versions 1.8.0 and prior, the default host was `""`.
+1.8.1 以降、デフォルトのホストは `127.0.0.1` です。バージョン 1.8.0 以前では、デフォルトのホストは `""` でした。
 </VersionBlock>

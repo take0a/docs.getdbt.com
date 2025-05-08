@@ -1,13 +1,13 @@
-<Expandable alt_header="When to use the hard_deletes and invalidate_hard_deletes config?">
+<Expandable alt_header="hard_deletes および invalidate_hard_deletes 構成はいつ使用すればよいですか?">
 
-**Use `invalidate_hard_deletes` (v1.8 and earlier) if:**
-- Gaps in the snapshot history (missing records for deleted rows) are acceptable.
-- You want to invalidate deleted rows by setting their `dbt_valid_to` timestamp to the current time (implicit delete).
-- You are working with smaller datasets where tracking deletions as a separate state is unnecessary.
+**以下の場合は、`invalidate_hard_deletes` (v1.8 以前) を使用してください。**
+- スナップショット履歴にギャップ（削除された行のレコードが欠落している状態）があっても許容できる場合。
+- 削除された行の `dbt_valid_to` タイムスタンプを現在の時刻に設定して無効化する場合（暗黙的な削除）。
+- 削除を個別の状態として追跡する必要がない、小規模なデータセットで作業している場合。
 
-**Use `hard_deletes: new_record` (v1.9 and higher) if:**
-- You want to maintain continuous snapshot history without gaps.
-- You want to explicitly track deletions by adding new rows with a `dbt_is_deleted` column (explicit delete).
-- You are working with larger datasets where explicitly tracking deleted records improves data lineage clarity.
+**以下の場合は、`hard_deletes: new_record` (v1.9 以降) を使用してください。**
+- ギャップのない連続したスナップショット履歴を維持する場合。
+- `dbt_is_deleted` 列を使用して新しい行を追加することで、削除を明示的に追跡する場合（明示的な削除）。
+- 削除されたレコードを明示的に追跡することで、データ系統の明確性が向上する、大規模なデータセットで作業している場合。
 
 </Expandable>

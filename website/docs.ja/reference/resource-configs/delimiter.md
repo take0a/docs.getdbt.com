@@ -6,16 +6,16 @@ default_value: ","
 
 <VersionCallout version="1.7" />
 
-## Definition
+## 定義
 
-You can use this optional seed configuration to customize how you separate values in a [seed](/docs/build/seeds) by providing the one-character string.
+このオプションの seed 設定を使用すると、[ seed ](/docs/build/seeds) 内の値の区切り方を、1文字の文字列でカスタマイズできます。
 
-* The delimiter defaults to a comma when not specified.
-* Explicitly set the `delimiter` configuration value if you want seed files to use a different delimiter, such as "|" or ";".
+* 区切り文字を指定しない場合は、デフォルトでカンマが使用されます。
+*  seed ファイルで「|」や「;」などの別の区切り文字を使用する場合は、「delimiter」設定値を明示的に設定してください。
   
-## Usage
+## 使用方法
 
-Specify a delimiter in your `dbt_project.yml` file to customize the global separator for all seed values:
+`dbt_project.yml` ファイルで区切り文字を指定して、すべての seed 値のグローバル区切り文字をカスタマイズします。
 
 <File name='dbt_project.yml'>
 
@@ -30,7 +30,7 @@ seeds:
 </File>
 
 
-Or use a custom delimiter to override the values for a specific seed:
+または、カスタム区切り文字を使用して、特定の seed の値を上書きします:
 
 <File name='seeds/properties.yml'>
 
@@ -51,9 +51,9 @@ For a project with:
 * `name: jaffle_shop` in the `dbt_project.yml` file
 * `seed-paths: ["seeds"]` in the `dbt_project.yml` file
 
-### Use a custom delimiter to override global values
+### カスタム区切り文字を使用してグローバル値を上書き
 
-You can set a default behavior for all seeds with an exception for one seed, `seed_a`, which uses a comma:
+カンマを使用する seed 「seed_a」を除き、すべての seed に対してデフォルトの動作を設定できます:
 
 <File name='dbt_project.yml'>
 
@@ -67,7 +67,7 @@ seeds:
 
 </File>
 
-Your corresponding seed files would be formatted like this:
+対応する seed  ファイルは次のようにフォーマットされます:
 
 <File name='seeds/my_seed.csv'>
 
@@ -91,7 +91,7 @@ doug,2
 
 </File>
 
-Or you can configure custom behavior for one seed. The `country_codes` uses the ";" delimiter:
+あるいは、1つの seed に対してカスタム動作を設定することもできます。`country_codes` では「;」区切り文字を使用します:
 
 <File name='seeds/properties.yml'>
 
@@ -106,7 +106,7 @@ seeds:
 
 </File>
 
-The `country_codes` seed file would be formatted like this:
+`country_codes`  seed  ファイルは次のようにフォーマットされます:
 
 <File name='seeds/country_codes.csv'>
 

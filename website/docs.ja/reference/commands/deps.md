@@ -1,14 +1,14 @@
 ---
-title: "About dbt deps command"
+title: "dbt deps コマンドについて"
 sidebar_label: "deps"
 id: "deps"
 ---
 
-`dbt deps` pulls the most recent version of the dependencies listed in your `packages.yml` from git. See [Package-Management](/docs/build/packages) for more information.
+`dbt deps` は、`packages.yml` にリストされている依存関係の最新バージョンを Git から取得します。詳細については、[パッケージ管理](/docs/build/packages) を参照してください。
 
-Where relevant, dbt will display up to date and/or latest versions of packages that are listed on dbt Hub. Example below.
+dbt は、該当する場合、dbt Hub にリストされているパッケージの最新バージョンを表示します。以下に例を示します。
 
-> This does NOT apply to packages that are installed via git/local
+> これは、git/local 経由でインストールされたパッケージには適用されません。
 
 ```yaml
 packages:
@@ -58,29 +58,29 @@ Updates available for packages: ['tailsdotcom/dbt_artifacts', 'dbt-labs/snowplow
 Update your versions in packages.yml, then run dbt deps
 ```
 
-## Predictable package installs
+## 予測可能なパッケージインストール
 
-Starting in dbt v1.7, dbt generates a `package-lock.yml` file in the root of your project. This file ensures consistent and predictable package installs by storing the exact versions (including commit SHAs) of all resolved packages specified in your `packages.yml` or `dependencies.yml`. This consistency is crucial for maintaining stability in development and production environments, preventing unexpected issues from new releases with potential bugs.
+dbt v1.7 以降、dbt はプロジェクトのルートに `package-lock.yml` ファイルを生成します。このファイルは、`packages.yml` または `dependencies.yml` で指定されたすべての解決済みパッケージの正確なバージョン（コミット SHA を含む）を保存することで、一貫性があり予測可能なパッケージインストールを保証します。この一貫性は、開発環境と本番環境の安定性を維持し、潜在的なバグを含む新しいリリースによる予期せぬ問題を防ぐために不可欠です。
 
-When you run `dbt deps`, dbt installs packages based on the locked versions in `package-lock.yml`. To update these locked versions, you must explicitly run `dbt deps --upgrade` and commit the updated `package-lock.yml` file. Storing this file in version control guarantees consistency across all environments and for all developers.
+`dbt deps` を実行すると、dbt は `package-lock.yml` でロックされたバージョンに基づいてパッケージをインストールします。これらのロックされたバージョンを更新するには、明示的に `dbt deps --upgrade` を実行し、更新された `package-lock.yml` ファイルをコミットする必要があります。このファイルをバージョン管理に保存することで、すべての環境とすべての開発者にとって一貫性が保証されます。
 
-### Managing `package-lock.yml`
+### `package-lock.yml` の管理
 
-The `package-lock.yml` file should be committed to Git initially and updated only when you intend to change versions or uninstall a package. For example, run `dbt deps --upgrade` to get updated package versions or `dbt deps --lock` to update the lock file based on changes to the packages config without installing the packages.
+`package-lock.yml` ファイルは最初に Git にコミットし、バージョンの変更やパッケージのアンインストールを行う場合にのみ更新してください。たとえば、パッケージのバージョンを更新するには `dbt deps --upgrade` を実行し、パッケージをインストールせずにパッケージ設定の変更に基づいてロックファイルを更新するには `dbt deps --lock` を実行します。
 
-To bypass using `package-lock.yml` entirely, you can add it to your project's `.gitignore`. However, this approach sacrifices the predictability of builds. If you choose this route, we strongly recommend adding version pins for third-party packages in your `packages` config.
+`package-lock.yml` の使用を完全に回避するには、プロジェクトの `.gitignore` に追加します。ただし、この方法ではビルドの予測可能性が損なわれます。この方法を選択する場合は、`packages` 設定でサードパーティ製パッケージのバージョンピンを追加することを強くお勧めします。
 
-### Detecting changes in `packages` config
+### `packages` 設定の変更を検出しています
 
-The `package-lock.yml` file includes a `sha1_hash` of your packages config. If you update `packages.yml`, dbt will detect the change and rerun dependency resolution during the next `dbt deps` command. To update the lock file without installing the new packages, use the `--lock` flag:
+`package-lock.yml` ファイルには、パッケージ設定の `sha1_hash` が含まれています。`packages.yml` を更新すると、dbt は変更を検出し、次回の `dbt deps` コマンド実行時に依存関係解決を再実行します。新しいパッケージをインストールせずにロックファイルを更新するには、`--lock` フラグを使用します。
 
 ```shell
 dbt deps --lock
 ```
 
-### Forcing package updates
+### パッケージの強制更新
 
-To update all packages, even if `packages.yml` hasn’t changed, use the `--upgrade` flag:
+`packages.yml` が変更されていない場合でも、すべてのパッケージを更新するには、`--upgrade` フラグを使用します:
 
 ```shell
 
@@ -88,19 +88,19 @@ dbt deps --upgrade
 
 ```
 
-This is particularly useful for fetching the latest commits from the `main` branch of an internally maintained Git package. 
+これは、内部的に管理されている Git パッケージの `main` ブランチから最新のコミットを取得する場合に特に便利です。
 
 :::warning
-Forcing package upgrades may introduce build inconsistencies unless carefully managed.
+慎重に管理しないと、パッケージのアップグレードを強制するとビルドの不整合が生じる可能性があります。
 :::
 
-### Adding specific packages
+### 特定のパッケージの追加
 
-The `dbt deps` command can add or update package configurations directly, saving you from remembering exact syntax. 
+`dbt deps` コマンドを使用すると、パッケージ設定を直接追加または更新できるため、正確な構文を覚える必要がありません。
 
-#### Hub packages (default)
+#### Hub パッケージ（デフォルト）
 
-Hub packages are the default package types and the easiest to install.
+Hub パッケージはデフォルトのパッケージタイプであり、最も簡単にインストールできます。
 
 ```shell
 dbt deps --add-package dbt-labs/dbt_utils@1.0.0
@@ -109,9 +109,9 @@ dbt deps --add-package dbt-labs/dbt_utils@1.0.0
 dbt deps --add-package dbt-labs/snowplow@">=0.7.0,<0.8.0"
 ```
 
-#### Non-Hub packages
+#### Hub 以外のパッケージ
 
-Use the `--source` flag to specify the type of package to be installed:
+インストールするパッケージの種類を指定するには、`--source` フラグを使用します。
 
 ```shell
 

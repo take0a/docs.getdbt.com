@@ -1,9 +1,9 @@
 ---
-title: "Unit test overrides"
+title: "ユニットテストのオーバーライド"
 sidebar_label: "Overrides"
 ---
 
-When configuring your unit test, you can override the output of [macros](/docs/build/jinja-macros#macros), [project variables](/docs/build/project-variables), or [environment variables](/docs/build/environment-variables) for a given unit test. 
+単体テストを構成するときに、特定の単体テストの [マクロ](/docs/build/jinja-macros#macros)、[プロジェクト変数](/docs/build/project-variables)、または [環境変数](/docs/build/environment-variables) の出力をオーバーライドできます。
 
 ```yml
 
@@ -31,12 +31,12 @@ When configuring your unit test, you can override the output of [macros](/docs/b
 
 ```
 
-## Macros
+## マクロ
 
-You can override the output of any macro in your unit test defition. 
+ユニットテスト定義内のマクロの出力をオーバーライドできます。
 
-If the model you're unit testing uses these macros, you must override them:
-  - [`is_incremental`](/docs/build/incremental-models#understand-the-is_incremental-macro): If you're unit testing an incremental model, you must explicity set `is_incremental` to `true` or `false`. See more docs on unit testing incremental models [here](/docs/build/unit-tests#unit-testing-incremental-models). 
+ユニットテスト対象のモデルで以下のマクロを使用している場合は、オーバーライドする必要があります。
+  - [`is_incremental`](/docs/build/incremental-models#understand-the-is_incremental-macro): 増分モデルのユニットテストを行う場合は、`is_incremental` を明示的に `true` または `false` に設定する必要があります。増分モデルのユニットテストに関する詳細なドキュメントは、[こちら](/docs/build/unit-tests#unit-testing-incremental-models) をご覧ください。
 
   ```yml
 
@@ -51,7 +51,7 @@ If the model you're unit testing uses these macros, you must override them:
 
   ```
 
-  - [`dbt_utils.star`](/blog/star-sql-love-letter): If you're unit testing a model that uses the `star` macro, you must explicity set `star` to a list of columns. This is because the `star` only accepts a [relation](/reference/dbt-classes#relation) for the `from` argument; the unit test mock input data is injected directly into the model SQL, replacing the `ref('')` or `source('')` function, causing the `star` macro to fail unless overidden.
+  - [`dbt_utils.star`](/blog/star-sql-love-letter): `star` マクロを使用するモデルのユニットテストを行う場合、`star` を明示的に列のリストに設定する必要があります。これは、`star` が `from` 引数として [relation](/reference/dbt-classes#relation) のみを受け入れるためです。ユニットテストのモック入力データはモデルのSQLに直接挿入され、`ref('')` または `source('')` 関数を置き換えます。そのため、オーバーライドしない限り `star` マクロは失敗します。
 
   ```yml
 

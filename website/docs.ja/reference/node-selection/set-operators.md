@@ -1,13 +1,12 @@
 ---
-title: "Set operators"
+title: "集合演算子"
 ---
 
 ### Unions
-Providing multiple space-delineated arguments to the `--select` or `--exclude` flags selects
-the union of them all. If a resource is included in at least one selector, it will be
-included in the final set.
 
-Run snowplow_sessions, all ancestors of snowplow_sessions, fct_orders, and all ancestors of fct_orders:
+`--select` または `--exclude` フラグに、スペースで区切られた複数の引数を指定すると、それらすべての結合が選択されます。リソースが少なくとも 1 つのセレクターに含まれている場合、そのリソースは最終的なセットに含まれます。
+
+snowplow_sessions、snowplow_sessions のすべての祖先、fct_orders、および fct_orders のすべての祖先を実行します。
 
 
   ```bash
@@ -16,9 +15,9 @@ dbt run --select "+snowplow_sessions +fct_orders"
 
 ### Intersections
 
-If you separate multiple arguments for `--select` and `--exclude` with commas and no whitespace in between, dbt will select only resources that satisfy _all_ arguments.
+`--select` と `--exclude` に複数の引数をカンマで区切り、間に空白を入れない場合、dbt はすべての引数を満たすリソースのみを選択します。
 
-Run all the common ancestors of snowplow_sessions and fct_orders:
+snowplow_sessions と fct_orders の共通の祖先をすべて実行します。
 
 
   ```bash
@@ -26,7 +25,7 @@ dbt run --select "+snowplow_sessions,+fct_orders"
 ```
 
 
-Run all the common descendents of stg_invoices and stg_accounts:
+stg_invoices と stg_accounts の共通の子孫をすべて実行します:
 
 
   ```bash
@@ -34,7 +33,7 @@ dbt run --select "stg_invoices+,stg_accounts+"
   ```
 
 
-Run models that are in the marts/finance subdirectory *and* tagged nightly:
+marts/finance サブディレクトリにあり、nightly のタグが付けられたモデルを実行します:
 
 
   ```bash

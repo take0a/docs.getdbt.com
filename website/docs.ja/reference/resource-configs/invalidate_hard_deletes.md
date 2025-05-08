@@ -1,7 +1,7 @@
 ---
 title: invalidate_hard_deletes
 resource_types: [snapshots]
-description: "Invalidate_hard_deletes - Read this in-depth guide to learn about configurations in dbt."
+description: "Invalidate_hard_deletes - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: column_name
 sidebar_label: invalidate_hard_deletes
 ---
@@ -10,15 +10,15 @@ sidebar_label: invalidate_hard_deletes
 
 <IntroText>
 
-Legacy opt-in configuration to enable invalidating hard deleted records while snapshotting the query.
+クエリの snapshot 中にハード削除されたレコードを無効にできるようにするレガシー オプトイン構成。
 
 </IntroText>
 
-:::warning This is a legacy config &mdash; Use the [`hard_deletes`](/reference/resource-configs/hard-deletes) config instead.
+:::warning これはレガシー構成です。代わりに [`hard_deletes`](/reference/resource-configs/hard-deletes) 構成を使用してください。
 
-In dbt Cloud release tracks and dbt Core 1.9 and higher, the [`hard_deletes`](/reference/resource-configs/hard-deletes) config replaces the `invalidate_hard_deletes` config for better control over how to handle deleted rows from the source. 
+dbt Cloud リリース トラックおよび dbt Core 1.9 以降では、ソースから削除された行の処理方法をより適切に制御するために、`invalidate_hard_deletes` 構成が [`hard_deletes`](/reference/resource-configs/hard-deletes) 構成に置き換えられています。
 
-For new snapshots, set the config to `hard_deletes='invalidate'` instead of `invalidate_hard_deletes=true`. For existing snapshots, [arrange an update](/reference/snapshot-configs#snapshot-configuration-migration) of pre-existing tables before enabling this setting. 
+新しい snapshot の場合は、構成を `invalidate_hard_deletes=true` ではなく `hard_deletes='invalidate'` に設定してください。既存の snapshot の場合は、この設定を有効にする前に、既存のテーブルの更新を行ってください。
 :::
 
 <VersionBlock firstVersion="1.9">
@@ -72,14 +72,14 @@ snapshots:
 
 </File>
 
-## Description
-Opt-in feature to enable invalidating hard deleted records while snapshotting the query.
+## 説明
+クエリの snapshot 作成時に、物理的に削除されたレコードを無効化できるようにするオプトイン機能。
 
 
-## Default
-By default the feature is disabled.
+## デフォルト
+デフォルトではこの機能は無効になっています。
 
-## Example
+## 例
 
 <VersionBlock firstVersion="1.9">
 <File name='snapshots/orders.yml'>

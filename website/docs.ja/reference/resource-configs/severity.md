@@ -1,28 +1,28 @@
 ---
 title: severity, error_if, and warn_if
 id: "severity"
-description: "You can use error thresholds to configure the severity of test results and set when to produce an error or warning based on the number of failed tests."
+description: "エラーしきい値を使用して、テスト結果の重大度を構成し、失敗したテストの数に基づいてエラーまたは警告を生成するタイミングを設定できます。"
 resource_types: [tests]
 datatype: string
 keywords: [severity, error_if, warn_if]
 ---
 
-Tests return a number of failures—most often, this is the count of rows returned by the test query, but it could be a [custom calculation](/reference/resource-configs/fail_calc). Generally, if the number of failures is nonzero, the test returns an error. This makes sense, as test queries are designed to return all the rows you _don't_ want: duplicate records, null values, etc.
+テストは失敗の数を返します。これは通常、テストクエリによって返された行数ですが、[カスタム計算](/reference/resource-configs/fail_calc) が使用される場合もあります。一般的に、失敗の数が0以外の場合、テストはエラーを返します。テストクエリは、重複レコードやnull値など、不要な行をすべて返すように設計されているため、これは理にかなっています。
 
-It's possible to configure tests to return warnings instead of errors, or to make the test status conditional on the number of failures returned. Maybe 1 duplicate record can count as a warning, but 10 duplicate records should count as an error.
+テストを設定して、エラーではなく警告を返したり、返された失敗の数に応じてテストのステータスを条件付きにしたりすることも可能です。重複レコードが1件であれば警告としてカウントできますが、重複レコードが10件であればエラーとしてカウントする必要があります。
 
-The relevant configs are:
-- `severity`: `error` or `warn` (default: `error`)
-- `error_if`: conditional expression (default: `!=0`)
-- `warn_if`: conditional expression (default: `!=0`)
+関連する設定は次のとおりです。
+- `severity`: `error` または `warn` (デフォルト: `error`)
+- `error_if`: 条件式 (デフォルト: `!=0`)
+- `warn_if`: 条件式 (デフォルト: `!=0`)
 
-Conditional expressions can be any comparison logic that is supported by your SQL syntax with an integer number of failures: `> 5`, `= 0`, `between 5 and 10`, and so on.
+条件式は、SQL 構文でサポートされている任意の比較ロジックで、失敗回数は整数で指定します。`> 5`、`= 0`、`between 5 and 10` などです。
 
-Here's how those play in practice:
-- If `severity: error`, dbt will check the `error_if` condition first. If the error condition is met, the test returns an error. If it's not met, dbt will then check the `warn_if` condition (defaulted to `!=0`). If it's not specified or the warn condition is met, the test warns; if it's not met, the test passes.
-- If `severity: warn`, dbt will skip the `error_if` condition entirely and jump straight to the `warn_if` condition. If the warn condition is met, the test warns; if it's not met, the test passes.
+実際の動作は次のとおりです。
+- `severity: error` の場合、dbt はまず `error_if` 条件をチェックします。エラー条件が満たされた場合、テストはエラーを返します。満たされなかった場合、dbt は次に `warn_if` 条件 (デフォルト: `!=0`) をチェックします。指定されていない場合、または警告条件が満たされた場合、テストは警告を出力します。条件が満たされていない場合、テストは成功します。
+- `severity: warn` の場合、dbt は `error_if` 条件を完全にスキップし、直接 `warn_if` 条件に進みます。warn 条件が満たされた場合、テストは警告を出力し、満たされていない場合、テストは成功します。
 
-Note that test warn statuses will return errors instead if the [`--warn-error`](/reference/global-configs/warnings) flag is passed. Unless dbt is told to treat warnings as errors, a test with `warn` severity will never return an error.
+[`--warn-error`](/reference/global-configs/warnings) フラグが指定されている場合、テストの警告ステータスはエラーを返すことに注意してください。dbt に警告をエラーとして扱うように指示しない限り、重大度が `warn` のテストはエラーを返すことはありません。
 
 <Tabs
   defaultValue="generic"
@@ -36,7 +36,7 @@ Note that test warn statuses will return errors instead if the [`--warn-error`](
 
 <TabItem value="generic">
 
-Configure a specific instance of a out-of-the-box generic test:
+すぐに使用できる汎用テストの特定のインスタンスを構成します:
 
 <File name='models/<filename>.yml'>
 
@@ -61,7 +61,7 @@ models:
 
 <TabItem value="singular">
 
-Configure a singular test:
+単一テストを構成します:
 
 <File name='tests/<filename>.sql'>
 
@@ -77,7 +77,7 @@ select ...
 
 <TabItem value="custom-generic">
 
-Set the default for all instances of a custom generic test, by setting the config inside its test block (definition):
+テスト ブロック (定義) 内に構成を設定して、カスタム汎用テストのすべてのインスタンスのデフォルトを設定します:
 
 <File name='macros/<filename>.sql'>
 
@@ -97,7 +97,7 @@ select ...
 
 <TabItem value="project">
 
-Set the default for all tests in a package or project:
+パッケージまたはプロジェクト内のすべてのテストのデフォルトを設定します:
 
 <File name='dbt_project.yml'>
 

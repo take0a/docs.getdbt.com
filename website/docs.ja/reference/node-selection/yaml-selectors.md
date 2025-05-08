@@ -2,14 +2,14 @@
 title: "YAML Selectors"
 ---
 
-Write resource selectors in YAML, save them with a human-friendly name, and reference them using the `--selector` flag.
-By recording selectors in a top-level `selectors.yml` file:
+リソースセレクターをYAMLで記述し、わかりやすい名前で保存し、`--selector`フラグを使用して参照します。
+セレクターをトップレベルの`selectors.yml`ファイルに記録することで、以下のメリットが得られます。
 
-* **Legibility:** complex selection criteria are composed of dictionaries and arrays
-* **Version control:** selector definitions are stored in the same git repository as the dbt project
-* **Reusability:** selectors can be referenced in multiple job definitions, and their definitions are extensible (via YAML anchors)
+* **可読性:** 複雑な選択基準は、辞書と配列で構成されます。
+* **バージョン管理:** セレクター定義は、dbtプロジェクトと同じgitリポジトリに保存されます。
+* **再利用性:** セレクターは複数のジョブ定義で参照でき、定義は拡張可能です（YAMLアンカーを使用）。
 
-Selectors live in a top-level file named `selectors.yml`. Each must have a `name` and a `definition`, and can optionally define a `description` and [`default` flag](#default).
+セレクターは、トップレベルの`selectors.yml`ファイルに記述されます。各セレクターには`name`と`definition`が必要です。また、オプションで`description`と[`default`フラグ](#default)を定義できます。
 
 <File name='selectors.yml'>
 
@@ -24,14 +24,14 @@ selectors:
 ```
 </File>
 
-## Definitions
+## 定義
 
-Each `definition` is comprised of one or more arguments, which can be one of the following:
-* **CLI-style:** strings, representing CLI-style arguments
-* **Key-value:** pairs in the form `method: value`
-* **Full YAML:** fully specified dictionaries with items for `method`, `value`, operator-equivalent keywords, and support for `exclude`
+各 `definition` は、1 つ以上の引数で構成されます。引数は以下のいずれかになります。
+* **CLI スタイル:** 文字列。CLI スタイルの引数を表します。
+* **Key-Value:** ペア。`method: value` 形式
+* **Full YAML:** `method`、`value`、演算子に相当するキーワード、`exclude` のサポートを含む、完全に指定された辞書。
 
-Use the `union` and `intersection` operator-equivalent keywords to organize multiple arguments.
+複数の引数を整理するには、`union` および `intersection` 演算子に相当するキーワードを使用します。
 
 ### CLI-style
 
@@ -40,7 +40,7 @@ definition:
   'tag:nightly'
 ```
 
-This simple syntax supports use of the `+`, `@`, and `*` [graph](/reference/node-selection/graph-operators) operators, but it does not support [set](/reference/node-selection/set-operators) operators or `exclude`.
+この単純な構文は、`+`、`@`、および `*` [graph](/reference/node-selection/graph-operators) 演算子の使用をサポートしていますが、[set](/reference/node-selection/set-operators) 演算子または `exclude` はサポートしていません。
 
 ### Key-value
 
@@ -49,13 +49,13 @@ definition:
   tag: nightly
 ```
 
-This simple syntax does not support any [graph](/reference/node-selection/graph-operators) or [set](/reference/node-selection/set-operators) operators or `exclude`.
+この単純な構文は、[graph](/reference/node-selection/graph-operators) 演算子や [set](/reference/node-selection/set-operators) 演算子、あるいは `exclude` をサポートしていません。
 
 ### Full YAML
 
-This is the most thorough syntax, which can include the operator-equivalent keywords for [graph](/reference/node-selection/graph-operators) and [set](/reference/node-selection/set-operators) operators.
+これは最も包括的な構文であり、[graph](/reference/node-selection/graph-operators) および [set](/reference/node-selection/set-operators) 演算子の同等のキーワードを含めることができます。
 
-Review [methods](/reference/node-selection/methods) for the available list.
+使用可能なメソッドのリストについては、[methods](/reference/node-selection/methods) を参照してください。
 
 ```yml
 definition:
@@ -75,7 +75,8 @@ definition:
   indirect_selection: eager | cautious | buildable | empty # include all tests selected indirectly? eager by default
 ```
 
-The `*` operator to select all nodes can be written as:
+すべてのノードを選択する `*` 演算子は次のように記述できます:
+
 ```yml
 definition:
   method: fqn
@@ -84,9 +85,8 @@ definition:
 
 #### Exclude
 
-The `exclude` keyword is only supported by fully-qualified dictionaries.
-It may be passed as an argument to each dictionary, or as
-an item in a `union`. The following are equivalent:
+`exclude` キーワードは、完全修飾辞書でのみサポートされます。
+各辞書への引数として、または `union` の要素として渡すことができます。以下の式はどちらも同等です。
 
 ```yml
 - method: tag
@@ -104,16 +104,14 @@ an item in a `union`. The following are equivalent:
          value: daily
 ```
 
-Note: The `exclude` argument in YAML selectors is subtly different from
-the `--exclude` CLI argument. Here, `exclude` _always_ returns a [set difference](https://en.wikipedia.org/wiki/Complement_(set_theory)),
-and it is always applied _last_ within its scope.
+注: YAMLセレクターの`exclude`引数は、CLI引数`--exclude`とは微妙に異なります。`exclude`は常に[差集合](https://en.wikipedia.org/wiki/Complement_(set_theory))を返し、そのスコープ内では常に最後に適用されます。
 
-When more than one "yeslist" (`--select`) is passed, they are treated as a [union](/reference/node-selection/set-operators#unions) rather than an [intersection](/reference/node-selection/set-operators#intersections). Same thing when there is more than one "nolist" (`--exclude`).
+複数の「yeslist」(`--select`)が渡された場合、それらは[積集合](/reference/node-selection/set-operators#intersections)ではなく[和集合](/reference/node-selection/set-operators#unions)として扱われます。複数の「nolist」(`--exclude`)が渡された場合も同様です。
 
 
-#### Indirect selection
+#### 間接選択
 
-As a general rule, dbt will indirectly select _all_ tests if they touch _any_ resource that you're selecting directly. We call this "eager" indirect selection. You can optionally switch the indirect selection mode to "cautious", "buildable", or "empty" by setting `indirect_selection` for a specific criterion:
+原則として、dbt は、直接選択しているリソースのいずれかに関係するすべてのテストを間接的に選択します。これを「eager」間接選択と呼びます。間接選択モードを「cautious」、「buildable」、「empty」のいずれかに切り替えるには、特定の基準に対して `indirect_selection` を設定します:
 
 ```yml
 - union:
@@ -133,13 +131,13 @@ As a general rule, dbt will indirectly select _all_ tests if they touch _any_ re
       indirect_selection: empty  # will include tests for only the selected node and ignore all tests attached to model_d
 ```
 
-If provided, a YAML selector's `indirect_selection` value will take precedence over the CLI flag `--indirect-selection`. Because `indirect_selection` is defined separately for _each_ selection criterion, it's possible to mix eager/cautious/buildable/empty modes within the same definition, to achieve the exact behavior that you need. Remember that you can always test out your critiera with `dbt ls --selector`.
+YAMLセレクターの`indirect_selection`値が指定されている場合、CLIフラグ`--indirect-selection`よりも優先されます。`indirect_selection`は選択基準ごとに個別に定義されるため、同じ定義内でeager/cautious/buildable/emptyモードを混在させて、必要な動作を正確に実現できます。`dbt ls --selector`を使用して、いつでも基準をテストできます。
 
-See [test selection examples](/reference/node-selection/test-selection-examples) for more details about indirect selection.
+間接選択の詳細については、[テスト選択の例](/reference/node-selection/test-selection-examples)を参照してください。
 
-## Example
+## 例
 
-Here are two ways to represent:
+以下の2つの表現方法があります:
 
 
   ```bash
@@ -211,16 +209,17 @@ selectors:
 
 </Tabs>
 
-Then in our job definition:
+次に、ジョブ定義で次の操作を行います:
+
 ```bash
 dbt run --selector nightly_diet_snowplow
 ```
 
 ## Default
 
-Selectors may define a boolean `default` property. If a selector has `default: true`, dbt will use this selector's criteria when tasks do not define their own selection criteria.
+セレクタはブール型の「default」プロパティを定義できます。セレクタに「default: true」が指定されている場合、タスクが独自の選択基準を定義していない場合、dbt はこのセレクタの基準を使用します。
 
-Let's say we define a default selector that only selects resources defined in our root project:
+ルートプロジェクトで定義されたリソースのみを選択するデフォルトセレクタを定義するとします:
 
 ```yml
 selectors:
@@ -234,7 +233,7 @@ selectors:
       value: <my_root_project_name>
 ```
 
-If I run an "unqualified" command, dbt will use the selection criteria defined in `root_project_only`—that is, dbt will only build / freshness check / generate compiled SQL for resources defined in my root project.
+「非修飾」コマンドを実行すると、dbt は `root_project_only` で定義された選択基準を使用します。つまり、dbt はルート プロジェクトで定義されたリソースに対してのみ、ビルド/最新性チェック/コンパイル済み SQL を生成します。
 
 ```
 dbt build
@@ -242,14 +241,14 @@ dbt source freshness
 dbt docs generate
 ```
 
-If I run a command that defines its own selection criteria (via `--select`, `--exclude`, or `--selector`), dbt will ignore the default selector and use the flag criteria instead. It will not try to combine the two.
+`--select`、`--exclude`、または`--selector`を使用して独自の選択基準を定義するコマンドを実行した場合、dbtはデフォルトのセレクタを無視し、代わりにフラグ基準を使用します。2つのセレクタを組み合わせることはありません。
 
 ```bash
 dbt run --select  "model_a"
 dbt run --exclude model_a
 ```
 
-Only one selector may set `default: true` for a given invocation; otherwise, dbt will return an error. You may use a Jinja expression to adjust the value of `default` depending on the environment, however:
+呼び出しごとに `default: true` を設定できるセレクタは1つだけです。それ以外の場合、dbt はエラーを返します。ただし、環境に応じて `default` の値を調整するには、Jinja 式を使用できます。
 
 ```yml
 selectors:
@@ -261,9 +260,9 @@ selectors:
     definition: ...
 ```
 
-### Selector inheritance
+### セレクタの継承
 
-Selectors can reuse and extend definitions from other selectors, via the `selector` method.
+セレクタは、`selector` メソッドを介して他のセレクタの定義を再利用および拡張できます:
 
 ```yml
 selectors:
@@ -285,25 +284,24 @@ selectors:
               value: buzz
 ```
 
-**Note:** While selector inheritance allows the logic from another selector to be _reused_, it doesn't allow the logic from that selector to be _modified_ by means of `parents`, `children`, `indirect_selection`, and so on. 
+**注:** セレクタ継承では、別のセレクタのロジックを_再利用_できますが、`parents`、`children`、`indirect_selection`などによってそのセレクタのロジックを_変更_することはできません。
 
-The `selector` method returns the complete set of nodes returned by the named selector.
+`selector`メソッドは、指定されたセレクタによって返されるノードの完全なセットを返します。
 
-## Difference between `--select` and `--selector`
+## `--select` と `--selector` の違い
 
-In dbt, [`select`](/reference/node-selection/syntax#how-does-selection-work) and `selector` are related concepts used for choosing specific models, tests, or resources. The following tables explains the differences and when to best use them:
+dbt では、[`select`](/reference/node-selection/syntax#how-does-selection-work) と `selector` は、特定のモデル、テスト、またはリソースを選択するために使用される関連概念です。以下の表は、それらの違いと、最適な使用例を示しています。
 
 | Feature	| `--select` | `--selector` |
 | ------- | ---------- | ------------- |
-| Definition |	Ad-hoc, specified directly in the command.	| Pre-defined in `selectors.yml` file. |
-| Usage |	One-time or task-specific filtering.|	Reusable for multiple executions. |
-| Complexity	| Requires manual entry of selection criteria.	| Can encapsulate complex logic for reuse. |
-| Flexibility	| Flexible; less reusable. |	Flexible; focuses on reusable and structured logic.|
-| Example	| `dbt run --select my_model+`<br /> (runs `my_model` and all downstream dependencies with the `+` operator). |	`dbt run --selector nightly_diet_snowplow`<br /> (runs models defined by the `nightly_diet_snowplow` selector in `selectors.yml`).  |
+| Definition |	アドホック。コマンドで直接指定します。| `selectors.yml` ファイルに事前定義されています。 |
+| Usage | 1 回限りまたはタスク固有のフィルタリング。| 複数回の実行に再利用可能。|
+| 複雑さ | 選択基準を手動で入力する必要があります。| 複雑なロジックをカプセル化して再利用できます。|
+| Flexibility	| 柔軟性は低いですが、再利用性は低くなります。 | 柔軟性は高いですが、再利用可能で構造化されたロジックに重点を置いています。|
+| Example	| `dbt run --select my_model+`<br /> (`my_model` と、`+` 演算子を含むすべての下流依存関係を実行します)。 | `dbt run --selector nightly_diet_snowplow`<br /> (`selectors.yml` の `nightly_diet_snowplow` セレクターで定義されたモデルを実行します)。 |
 
-Notes:
-- You can combine `--select` with `--exclude` for ad-hoc selection of nodes.
-- The `--select` and `--selector` syntax both provide the same overall functions for node selection. Using [graph operators](/reference/node-selection/graph-operators) (such as `+`, `@`.) and [set operators](/reference/node-selection/set-operators) (such as `union` and `intersection`) in `--select` is the same as YAML-based configs in `--selector`.
+注:
+-- `--select` と `--exclude` を組み合わせて、ノードをアドホックに選択できます。
+-- `--select` と `--selector` の構文はどちらも、ノード選択において基本的に同じ機能を提供します。`--select` で [グラフ演算子](/reference/node-selection/graph-operators) (`+`、`@` など) と [集合演算子](/reference/node-selection/set-operators) (`union`、`intersection` など) を使用することは、`--selector` で YAML ベースの設定を使用するのと同じです。
 
-
-For additional examples, check out [this GitHub Gist](https://gist.github.com/jeremyyeo/1aeca767e2a4f157b07955d58f8078f7).
+その他の例については、[こちらの GitHub Gist](https://gist.github.com/jeremyyeo/1aeca767e2a4f157b07955d58f8078f7) をご覧ください。

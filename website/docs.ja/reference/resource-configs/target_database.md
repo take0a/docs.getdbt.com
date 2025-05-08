@@ -1,14 +1,14 @@
 ---
 resource_types: [snapshots]
-description: "Target_database - Read this in-depth guide to learn about configurations in dbt."
+description: "Target_database - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 datatype: string
 ---
 
 :::note
 
-Starting in dbt Core v1.9+, this functionality is no longer utilized. Use the [database](/reference/resource-configs/database) config as an alternative to define a custom database while still respecting the `generate_database_name` macro. 
+dbt Core v1.9以降では、この機能は利用できなくなりました。`generate_database_name`マクロの設定を維持しながらカスタムデータベースを定義するには、代わりに[database](/reference/resource-configs/database)設定を使用してください。
 
-Try it now in the [dbt Cloud "Latest" release track](/docs/dbt-versions/cloud-release-tracks).
+[dbt Cloud "最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks)で今すぐお試しください。
 
 :::
 

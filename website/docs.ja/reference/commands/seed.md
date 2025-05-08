@@ -1,15 +1,15 @@
 ---
-title: "About dbt seed command"
+title: dbt seed コマンドについて"
 sidebar_label: "seed"
 id: "seed"
 ---
 
-The `dbt seed` command will load `csv` files located in the `seed-paths` directory of your dbt project into your <Term id="data-warehouse" />.
+`dbt seed` コマンドは、dbt プロジェクトの `seed-paths` ディレクトリにある `csv` ファイルを <Term id="data-warehouse" /> に読み込みます。
 
 
-### Selecting seeds to run
+### 実行するシードの選択
 
-Specific seeds can be run using the `--select` flag to `dbt seed`. Example:
+`dbt seed` に `--select` フラグを指定すると、特定のシードを実行できます。例:
 
 ```
 $ dbt seed --select "country_codes"

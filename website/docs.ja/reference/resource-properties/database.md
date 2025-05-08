@@ -1,5 +1,5 @@
 ---
-title: "Defining a database source property"
+title: "source の database プロパティの定義"
 sidebar_label: "database"
 resource_types: sources
 datatype: database_name
@@ -21,20 +21,23 @@ sources:
 
 </File>
 
-## Definition
-The database that your source is stored in.
+## 定義
 
-Note that to use this parameter, your warehouse must allow cross-database queries.
+ソースが保存されているデータベース。
 
-#### BigQuery terminology
+このパラメータを使用するには、ウェアハウスでデータベース間クエリが許可されている必要があります。
 
-If you're using BigQuery, use the _project_ name as the `database:` property.
+#### BigQuery の用語
 
-## Default
-By default, dbt will search in your target database (i.e. the database that you are creating tables and <Term id="view">views</Term>).
+BigQuery を使用している場合は、`database:` プロパティとして _project_ 名を使用します。
 
-## Examples
-### Define a source that is stored in the `raw` database
+## デフォルト
+
+デフォルトでは、dbt はターゲットデータベース（つまり、テーブルと <Term id="view">ビュー</Term> を作成しているデータベース）を検索します。
+
+## 例
+
+### `raw`データベースに保存されるソースを定義する
 
 <File name='models/<filename>.yml'>
 

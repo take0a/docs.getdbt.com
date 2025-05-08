@@ -1,12 +1,12 @@
 ---
-title: Source configurations
-description: "Learn how to use source configurations in dbt."
+title: Source 構成
+description: "dbt で source 構成を使用する方法を学習します。"
 id: source-configs
 ---
 
-import ConfigGeneral from '/snippets/_config-description-general.md';
+import ConfigGeneral from '/snippets.ja/_config-description-general.md';
 
-## Available configurations
+## 利用可能な構成
 
 <VersionBlock lastVersion="1.8">
 
@@ -16,11 +16,11 @@ Sources supports [`enabled`](/reference/resource-configs/enabled) and [`meta`](/
 
 <VersionBlock firstVersion="1.9">
 
-Sources configurations support [`enabled`](/reference/resource-configs/enabled), [`event_time`](/reference/resource-configs/event-time), and [`meta`](/reference/resource-configs/meta)
+ソース構成は、[`enabled`](/reference/resource-configs/enabled)、[`event_time`](/reference/resource-configs/event-time)、[`meta`](/reference/resource-configs/meta) をサポートします。
 
 </VersionBlock>
 
-### General configurations
+### 一般的な構成
 
 <ConfigGeneral />
 
@@ -117,14 +117,14 @@ sources:
 
 </Tabs>
 
-## Configuring sources
+## ソースの設定
 
-Sources can be configured via a `config:` block within their `.yml` definitions, or from the `dbt_project.yml` file under the `sources:` key. This configuration is most useful for configuring sources imported from [a package](/docs/build/packages). 
+ソースは、`.yml` 定義内の `config:` ブロック、または `dbt_project.yml` ファイルの `sources:` キーで設定できます。この設定は、[パッケージ](/docs/build/packages) からインポートされたソースを設定する場合に最も便利です。
 
-You can disable sources imported from a package to prevent them from rendering in the documentation, or to prevent [source freshness checks](/docs/build/sources#source-data-freshness) from running on source tables imported from packages. 
+パッケージからインポートされたソースを無効にすると、ドキュメントにソースがレンダリングされないようにしたり、パッケージからインポートされたソーステーブルに対して [ソースの鮮度チェック](/docs/build/sources#source-data-freshness) が実行されないようにしたりできます。
 
-- **Note**: To disable a source table nested in a YAML file in a subfolder, you will need to supply the subfolder(s) within the path to that YAML file, as well as the source name and the table name in the `dbt_project.yml` file.<br /><br /> 
-  The following example shows how to disable a source table nested in a YAML file in a subfolder: 
+- **注**: サブフォルダ内の YAML ファイルにネストされたソーステーブルを無効にするには、その YAML ファイルへのパスにサブフォルダを指定し、`dbt_project.yml` ファイルにソース名とテーブル名を指定する必要があります。<br /><br />
+次の例は、サブフォルダ内の YAML ファイルにネストされたソーステーブルを無効にする方法を示しています。
 
   <File name='dbt_project.yml'>
 
@@ -155,21 +155,19 @@ You can disable sources imported from a package to prevent them from rendering i
   </File>
 
 
-### Examples
+### 例
 
-The following examples show how to configure sources in your dbt project.
+以下の例は、dbt プロジェクトでソースを構成する方法を示しています。
 
-&mdash; [Disable all sources imported from a package](#disable-all-sources-imported-from-a-package) <br />
-&mdash; [Conditionally enable a single source](#conditionally-enable-a-single-source) <br />
-&mdash; [Disable a single source from a package](#disable-a-single-source-from-a-package) <br />
-&mdash; [Configure a source with an `event_time`](#configure-a-source-with-an-event_time) <br />
-&mdash; [Configure meta to a source](#configure-meta-to-a-source) <br />
+&mdash; [パッケージからインポートされたすべてのソースを無効にする](#disable-all-sources-imported-from-a-package) <br />
+&mdash; [条件付きで単一のソースを有効にする](#conditionally-enable-a-single-source) <br />
+&mdash; [パッケージから単一のソースを無効にする](#disable-a-single-source-from-a-package) <br />
+&mdash; [`event_time` を使用してソースを構成する](#configure-a-source-with-an-event_time) <br />
+&mdash; [ソースにメタを構成する](#configure-meta-to-a-source) <br />
 
-#### Disable all sources imported from a package
-To apply a configuration to all sources included from a [package](/docs/build/packages),
-state your configuration under the [project name](/reference/project-configs/name.md) in the
-`sources:` config as a part of the resource path.
+#### パッケージからインポートされたすべてのソースを無効にする {#disable-all-sources-imported-from-a-package}
 
+[パッケージ](/docs/build/packages) に含まれるすべてのソースに設定を適用するには、リソースパスの一部として、`sources:` 設定の [プロジェクト名](/reference/project-configs/name.md) の下に設定を記述します。
 
 <File name='dbt_project.yml'>
 
@@ -182,9 +180,9 @@ sources:
 </File>
 
 
-#### Conditionally enable a single source
+#### 条件付きで単一のソースを有効にする {#conditionally-enable-a-single-source}
 
-When defining a source, you can disable the entire source, or specific source tables, using the inline `config` property:
+ソースを定義するときに、インライン `config` プロパティを使用して、ソース全体または特定のソース テーブルを無効にすることができます:
 
 <File name='models/sources.yml'>
 
@@ -204,7 +202,7 @@ sources:
 
 </File>
 
-You can configure specific source tables, and use [variables](/reference/dbt-jinja-functions/var) as the input to that configuration:
+特定のソース テーブルを構成し、その構成への入力として [変数](/reference/dbt-jinja-functions/var) を使用できます:
  
 <File name='models/sources.yml'>
 
@@ -221,9 +219,9 @@ sources:
 
 </File>
 
-#### Disable a single source from a package
+#### パッケージから単一のソースを無効にする {#disable-a-single-source-from-a-package}
 
-To disable a specific source from another package, qualify the resource path for your configuration with both a package name and a source name. In this case, we're disabling the `clickstream` source from the `events` package.
+別のパッケージの特定のソースを無効にするには、設定のリソースパスをパッケージ名とソース名の両方で修飾します。この例では、`events` パッケージの `clickstream` ソースを無効にします。
 
 <File name='dbt_project.yml'>
 
@@ -236,7 +234,7 @@ sources:
 
 </File>
 
-Similarly, you can disable a specific table from a source by qualifying the resource path with a package name, source name, and table name:
+同様に、リソース パスをパッケージ名、ソース名、テーブル名で修飾することで、ソースから特定のテーブルを無効にすることもできます。
 
 <File name='dbt_project.yml'>
 
@@ -251,7 +249,7 @@ sources:
 </File>
 
 
-#### Configure a source with an `event_time`
+#### `event_time` を使用してソースを構成する {#configure-a-source-with-an-event_time}
 
 <VersionBlock lastVersion="1.8">
 
@@ -261,9 +259,9 @@ Configuring an [`event_time`](/reference/resource-configs/event-time) for a sour
 
 <VersionBlock firstVersion="1.9">
 
-To configure a source with an `event_time`, specify the `event_time` field in the source configuration. This field is used to represent the actual timestamp of the event, rather than something like a loading date.
+`event_time` を含むソースを設定するには、ソース設定で `event_time` フィールドを指定します。このフィールドは、読み込み日時などの情報ではなく、イベントの実際のタイムスタンプを表すために使用されます。
 
-For example, if you had a source table called `clickstream` in the `events` source, you can use the timestamp for each event in the `event_timestamp` column as follows:
+例えば、`events` ソースに `clickstream` というソーステーブルがある場合、次のように `event_timestamp` 列で各イベントのタイムスタンプを使用できます。
 
 <File name='dbt_project.yml'>
 
@@ -275,16 +273,16 @@ sources:
 ```
 </File>
 
-In this example, the `event_time` is set to `event_timestamp`, which has the exact time each clickstream event happened.
-Not only is this required for the [incremental microbatching strategy](/docs/build/incremental-microbatch), but when you compare data across [CI and production](/docs/deploy/advanced-ci#speeding-up-comparisons) environments, dbt will use `event_timestamp` to filter and match data by this event-based timeframe, ensuring that only overlapping timeframes are compared.
+この例では、`event_time` は、各クリックストリーム イベントが発生した正確な時刻を持つ `event_timestamp` に設定されています。
+これは、[増分マイクロバッチ戦略](/docs/build/incremental-microbatch)に必要なだけでなく、[CI と本番環境](/docs/deploy/advanced-ci#speeding-up-comparisons)間でデータを比較する場合、dbt は `event_timestamp` を使用して、このイベントベースの時間枠でデータをフィルタリングおよび照合し、重複する時間枠のみが比較されるようにします。
 
 </VersionBlock>
 
-#### Configure meta to a source
+#### ソースにメタを構成する {#configure-meta-to-a-source}
 
-Use the `meta` field to assign metadata information to sources. This is useful for tracking additional context, documentation, logging, and more. 
+`meta` フィールドを使用して、ソースにメタデータ情報を割り当てます。これは、追加のコンテキスト、ドキュメント、ログなどの追跡に役立ちます。
 
-For example, you can add `meta` information to a `clickstream` source to include information about the data source system:
+例えば、`clickstream` ソースに `meta` 情報を追加して、データソースシステムに関する情報を含めることができます。
 
 <File name='dbt_project.yml'>
 
@@ -298,10 +296,11 @@ sources:
 ```
 </File>
 
-## Example source configuration
-The following is a valid source configuration for a project with:
+## ソース構成の例
+
+以下は、以下のプロジェクトに有効なソース構成です。
 * `name: jaffle_shop`
-* A package called `events` containing multiple source tables
+* 複数のソーステーブルを含む `events` というパッケージ
 
 
 <File name='dbt_project.yml'>

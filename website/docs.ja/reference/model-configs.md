@@ -1,19 +1,20 @@
 ---
-title: Model configurations
-description: "Reference guide for the model configs available in dbt."
+title: Model 構成
+description: "dbt で使用可能な model 構成のリファレンス ガイド。"
 meta:
   resource_type: Models
 ---
 
-import ConfigResource from '/snippets/_config-description-resource.md';
-import ConfigGeneral from '/snippets/_config-description-general.md';
+import ConfigResource from '/snippets.ja/_config-description-resource.md';
+import ConfigGeneral from '/snippets.ja/_config-description-general.md';
 
-## Related documentation
-* [Models](/docs/build/models)
-* [`run` command](/reference/commands/run)
+## 関連ドキュメント
+* [モデル](/docs/build/models)
+* [`run` コマンド](/reference/commands/run)
 
-## Available configurations
-### Model-specific configurations
+## 利用可能な構成
+
+### モデル固有の構成
 
 <ConfigResource meta={frontMatter.meta}/>
 
@@ -151,7 +152,7 @@ models:
 </Tabs>
 
 
-### General configurations
+### 一般的な構成
 
 <ConfigGeneral />
 
@@ -325,31 +326,32 @@ models:
 
 </Tabs>
 
-### Warehouse-specific configurations
-* [BigQuery configurations](/reference/resource-configs/bigquery-configs)
-* [Redshift configurations](/reference/resource-configs/redshift-configs)
-* [Snowflake configurations](/reference/resource-configs/snowflake-configs)
-* [Databricks configurations](/reference/resource-configs/databricks-configs)
-* [Spark configurations](/reference/resource-configs/spark-configs)
+### ウェアハウス固有の構成
 
-## Configuring models 
+* [BigQuery 構成](/reference/resource-configs/bigquery-configs)
+* [Redshift 構成](/reference/resource-configs/redshift-configs)
+* [Snowflake 構成](/reference/resource-configs/snowflake-configs)
+* [Databricks 構成](/reference/resource-configs/databricks-configs)
+* [Spark 構成](/reference/resource-configs/spark-configs)
 
-Model configurations are applied hierarchically. You can configure models from within an installed package and also from within your dbt project in the following ways, listed in order of precedence: 
+## モデルの構成
 
-1. Using a `config()` Jinja macro within a model.
-2. Using a `config` [resource property](/reference/model-properties) in a `.yml` file.
-3. From the `dbt_project.yml` project file, under the `models:` key. In this case, the model that's nested the deepest will have the highest priority. 
-  - Note, the model name configuration must match the _filename_ of a model &mdash; including case sensitivity. Any mismatched casing can prevent dbt from applying configurations correctly and may affect metadata in [dbt Explorer](/docs/collaborate/explore-projects).
+モデル構成は階層的に適用されます。インストール済みパッケージ内、および dbt プロジェクト内から、以下の方法でモデルを構成できます（優先順位順）。
 
-The most specific configuration always takes precedence. In the project file, for example, configurations applied to a `marketing` subdirectory will take precedence over configurations applied to the entire `jaffle_shop` project. To apply a configuration to a model or directory of models, define the [resource path](/reference/resource-configs/resource-path) as nested dictionary keys.
+1. モデル内で `config()` Jinja マクロを使用する。
+2. `.yml` ファイルで `config` [リソースプロパティ](/reference/model-properties) を使用する。
+3. `dbt_project.yml` プロジェクト ファイルの `models:` キーの下から。この場合、最も深くネストされたモデルが最も優先されます。
+- モデル名の構成は、大文字と小文字の区別を含め、モデルの _filename_ と一致している必要があることに注意してください。大文字と小文字が一致していないと、dbt が構成を正しく適用できず、[dbt Explorer](/docs/collaborate/explore-projects) のメタデータに影響する可能性があります。
 
-Model configurations in your root dbt project have _higher_ precedence than configurations in installed packages. This enables you to override the configurations of installed packages, providing more control over your dbt runs. 
+最も具体的な構成が常に優先されます。例えば、プロジェクトファイルでは、`marketing` サブディレクトリに適用された構成は、`jaffle_shop` プロジェクト全体に適用された構成よりも優先されます。モデルまたはモデルのディレクトリに構成を適用するには、[リソースパス](/reference/resource-configs/resource-path) をネストされた辞書キーとして定義します。
 
-## Example
+ルート dbt プロジェクト内のモデル構成は、インストール済みパッケージ内の構成よりも _高い_ 優先順位_ を持ちます。これにより、インストール済みパッケージの構成をオーバーライドして、dbt 実行をより細かく制御できるようになります。
 
-### Configuring directories of models in `dbt_project.yml`
+## 例
 
-To configure models in your `dbt_project.yml` file, use the `models:` configuration option. Be sure to namespace your configurations to your project (shown below):
+### `dbt_project.yml` でのモデルディレクトリの設定
+
+`dbt_project.yml` ファイルでモデルを設定するには、`models:` 設定オプションを使用します。設定にはプロジェクトの名前空間を指定してください（以下を参照）。
 
 <File name='dbt_project.yml'>
 
@@ -379,9 +381,9 @@ models:
 
 </File>
 
-### Apply configurations to one model only
+### 設定を1つのモデルのみに適用する
 
-Some types of configurations are specific to a particular model. In these cases, placing configurations in the `dbt_project.yml` file can be unwieldy. Instead, you can specify these configurations at the top of a model `.sql` file, or in its individual YAML properties.
+一部の設定は特定のモデルに固有のものです。このような場合、`dbt_project.yml` ファイルに設定を配置するのは扱いにくい場合があります。代わりに、これらの設定をモデルの `.sql` ファイルの先頭、または個々の YAML プロパティに指定できます。
 
 <File name='models/events/base/base_events.sql'>
 

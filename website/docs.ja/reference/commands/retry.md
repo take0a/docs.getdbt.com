@@ -1,12 +1,12 @@
 ---
-title: "About dbt retry command"
+title: "dbt retry コマンドについて"
 sidebar_label: "retry"
 id: "retry"
 ---
 
-`dbt retry` re-executes the last `dbt` command from the node point of failure. If the previously executed `dbt` command was successful, `retry` will finish as `no operation`. 
+`dbt retry` は、ノードの障害発生時点から最後に実行した `dbt` コマンドを再実行します。前回実行した `dbt` コマンドが成功した場合、`retry` は `no action` として終了します。
 
-Retry works with the following commands:
+再試行は、以下のコマンドで機能します:
 
 - [`build`](/reference/commands/build)
 - [`compile`](/reference/commands/compile)
@@ -18,12 +18,11 @@ Retry works with the following commands:
 - [`run`](/reference/commands/run)
 - [`run-operation`](/reference/commands/run-operation)
 
-`dbt retry` references [run_results.json](/reference/artifacts/run-results-json) to determine where to start. Executing `dbt retry` without correcting the previous failures will garner <Term id="idempotent" /> results.
+`dbt retry` は [run_results.json](/reference/artifacts/run-results-json) を参照して実行開始位置を決定します。以前の失敗を修正せずに `dbt retry` を実行すると、<Term id="idempotent" /> の結果が取得されます。
 
-`dbt retry` reuses the [selectors](/reference/node-selection/yaml-selectors) from the previously executed command.
+`dbt retry` は、以前実行したコマンドの [セレクター](/reference/node-selection/yaml-selectors) を再利用します。
 
-
-Example results of executing `dbt retry` after a successful `dbt run`:
+`dbt run` が成功した後に `dbt retry` を実行した場合の結果の例:
 
 ```shell
 Running with dbt=1.6.1
@@ -33,7 +32,7 @@ Found 5 models, 3 seeds, 20 tests, 0 sources, 0 exposures, 0 metrics, 348 macros
 Nothing to do. Try checking your model configs and model specification args
 ```
 
-Example of when `dbt run` encounters a syntax error in a model: 
+`dbt run` がモデル内で構文エラーに遭遇した場合の例:
 
 ```shell
 Running with dbt=1.6.1
@@ -64,7 +63,7 @@ Done. PASS=4 WARN=0 ERROR=1 SKIP=0 TOTAL=5
 ```
 
 
-Example of a subsequent failed `dbt retry` run without fixing the error(s):
+エラーを修正せずに `dbt retry` 実行が失敗した後続の例:
 
 ```shell
 Running with dbt=1.6.1
@@ -79,7 +78,7 @@ Concurrency: 24 threads (target='dev')
 Done. PASS=4 WARN=0 ERROR=1 SKIP=0 TOTAL=5
 ```
 
-Example of a successful `dbt retry` run after fixing error(s):
+エラーを修正した後の `dbt retry` 実行の成功例:
 
 ```shell
 Running with dbt=1.6.1
@@ -98,4 +97,4 @@ Completed successfully
 Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
 ```
 
-In each scenario `dbt retry` picks up from the error rather than running all of the upstream dependencies again. 
+それぞれのシナリオにおいて、`dbt retry` は上流の依存関係をすべて再度実行するのではなく、エラーから回復します。

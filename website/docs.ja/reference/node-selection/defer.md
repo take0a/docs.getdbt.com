@@ -2,51 +2,52 @@
 title: "Defer"
 ---
 
-Defer is a powerful feature that makes it possible to run a subset of models or tests in a [sandbox environment](/docs/environments-in-dbt) without having to first build their upstream parents. This can save time and computational resources when you want to test a small number of models in a large project.
+Deferは、上流の親を事前にビルドすることなく、モデルやテストのサブセットを[サンドボックス環境](/docs/environments-in-dbt)で実行できるようにする強力な機能です。これにより、大規模プロジェクトで少数のモデルをテストする場合に、時間と計算リソースを節約できます。
 
 <Lightbox src src="/img/docs/reference/defer-diagram.png" width="50%" title="Use 'defer' to modify end-of-pipeline models by pointing to production models, instead of running everything upstream." />
 
-Defer requires that a manifest from a previous dbt invocation be passed to the `--state` flag or env var. Together with the `state:` selection method, these features enable "Slim CI". Read more about [state](/reference/node-selection/syntax#about-node-selection).
+defer を使用するには、以前の dbt 呼び出しのマニフェストを `--state` フラグまたは環境変数に渡す必要があります。`state:` 選択方法と組み合わせることで、これらの機能により「スリム CI」が実現します。[state](/reference/node-selection/syntax#about-node-selection) の詳細については、こちらをご覧ください。
 
-An alternative command that accomplishes similar functionality for different use cases is `dbt clone` - see the docs for [clone](/reference/commands/clone#when-to-use-dbt-clone-instead-of-deferral) for more information.
+異なるユースケースで同様の機能を実現する代替コマンドとして `dbt clone` があります。詳細については、[clone](/reference/commands/clone#when-to-use-dbt-clone-instead-of-deferral) のドキュメントをご覧ください。
 
-It is possible to use separate state for `state:modified` and `--defer`, by passing paths to different manifests to each of the `--state`/`DBT_STATE` and `--defer-state`/`DBT_DEFER_STATE`. This enables more granular control in cases where you want to compare against logical state from one environment or past point in time, and defer to applied state from a different environment or point in time. If `--defer-state` is not specified, deferral will use the manifest supplied to `--state`. In most cases, you will want to use the same state for both: compare logical changes against production, and also "fail over" to the production environment for unbuilt upstream resources.
+`--state`/`DBT_STATE` と `--defer-state`/`DBT_DEFER_STATE` にそれぞれ異なるマニフェストへのパスを渡すことで、`state:modified` と `--defer` で別々の状態を使用できます。これにより、ある環境または過去の時点の論理状態と比較し、別の環境または時点の適用済み状態に遅延させるといった、よりきめ細かな制御が可能になります。`--defer-state` が指定されていない場合、遅延は `--state` に指定されたマニフェストを使用します。ほとんどの場合、論理的な変更を本番環境と比較し、未構築の上流リソースについては本番環境に「フェイルオーバー」するなど、両方で同じ状態を使用することになります。
 
-### Usage
+### 使用法
 
 ```shell
 dbt run --select [...] --defer --state path/to/artifacts
 dbt test --select [...] --defer --state path/to/artifacts
 ```
 
-By default, dbt uses the [`target`](/reference/dbt-jinja-functions/target) namespace to resolve `ref` calls.
+デフォルトでは、dbt は [`target`](/reference/dbt-jinja-functions/target) 名前空間を使用して `ref` 呼び出しを解決します。
 
-When `--defer` is enabled, dbt resolves ref calls using the state manifest instead, but only if:
+`--defer` が有効になっている場合、dbt は ref 呼び出しを状態マニフェストを使用して解決しますが、次の条件を満たす場合のみです。
 
-1. The node isn’t among the selected nodes, _and_
-2. It doesn’t exist in the database (or `--favor-state` is used).
+1. ノードが選択されたノードに含まれていない。_かつ_
+2. ノードがデータベースに存在しない（または `--favor-state` が使用されている）。
 
-Ephemeral models are never deferred, since they serve as "passthroughs" for other `ref` calls.
+エフェメラルモデルは、他の `ref` 呼び出しの「パススルー」として機能するため、遅延されることはありません。
 
-When using defer, you may be selecting from production datasets, development datasets, or a mix of both. Note that this can yield unexpected results
-- if you apply env-specific limits in dev but not prod, as you may end up selecting more data than you expect
-- when executing tests that depend on multiple parents (e.g. `relationships`), since you're testing "across" environments
+defer を使用する場合、本番環境データセット、開発データセット、またはその両方から選択できます。ただし、予期しない結果が生じる可能性があるので注意してください。
+- 開発環境では環境固有の制限を適用し、本番環境では適用しない場合、予想よりも多くのデータが選択される可能性があります。
+- 複数の親（例：リレーションシップ）に依存するテストを実行する場合（複数の環境をまたいでテストするため）
 
-Deferral requires both `--defer` and `--state` to be set, either by passing flags explicitly or by setting environment variables (`DBT_DEFER` and `DBT_STATE`). If you use dbt Cloud, read about [how to set up CI jobs](/docs/deploy/continuous-integration).
+遅延を実行するには、フラグを明示的に渡すか、環境変数（DBT_DEFER と DBT_STATE）を設定することで、`--defer` と `--state` の両方を設定する必要があります。dbt Cloud を使用する場合は、[CI ジョブの設定方法](/docs/deploy/continuous-integration) をご覧ください。
 
 
-#### Favor state
+#### 状態を優先
 
-When `--favor-state` is passed, dbt prioritizes node definitions from the `--state directory`. However, this doesn’t apply if the node is also part of the selected nodes.
+`--favor-state` が指定された場合、dbt は `--state directory` 内のノード定義を優先します。ただし、指定されたノードが選択されたノードの一部でもある場合は、この設定は適用されません。
 
-### Example
+### 例
 
-In my local development environment, I create all models in my target schema, `dev_alice`. In production, the same models are created in a schema named `prod`.
+ローカル開発環境では、すべてのモデルをターゲットスキーマ「dev_alice」内に作成します。本番環境では、同じモデルが「prod」というスキーマ内に作成されます。
 
-I access the dbt-generated [artifacts](/docs/deploy/artifacts) (namely `manifest.json`) from a production run, and copy them into a local directory called `prod-run-artifacts`.
+本番環境で実行した dbt によって生成された [アーティファクト](/docs/deploy/artifacts) (つまり「manifest.json」) にアクセスし、「prod-run-artifacts」というローカルディレクトリにコピーします。
 
-### run
-I've been working on `model_b`:
+### 実行
+
+`model_b` に取り組んでいました。
 
 <File name='models/model_b.sql'>
 
@@ -60,7 +61,7 @@ from {{ ref('model_a') }}
 group by 1
 ```
 
-I want to test my changes. Nothing exists in my development schema, `dev_alice`.
+変更内容をテストしたいのですが、開発スキーマ `dev_alice` には何も存在しません。
 
 </File>
 
@@ -94,7 +95,7 @@ create or replace view dev_me.model_b as (
 )
 ```
 
-Unless I had previously run `model_a` into this development environment, `dev_alice.model_a` will not exist, thereby causing a database error.
+以前にこの開発環境で `model_a` を実行していなければ、 `dev_alice.model_a` は存在せず、データベース エラーが発生します。
 
 </File>
 </TabItem>
@@ -123,14 +124,14 @@ create or replace view dev_me.model_b as (
 
 </File>
 
-Because `model_a` is unselected, dbt will check to see if `dev_alice.model_a` exists. If it doesn't exist, dbt will resolve all instances of `{{ ref('model_a') }}` to `prod.model_a` instead.
+`model_a` が選択されていないため、dbt は `dev_alice.model_a` が存在するかどうかを確認します。存在しない場合、dbt は `{{ ref('model_a') }}` のすべてのインスタンスを `prod.model_a` に解決します。
 
 </TabItem>
 </Tabs>
 
-### test
+### テスト
 
-I also have a `relationships` test that establishes referential integrity between `model_a` and `model_b`:
+`model_a` と `model_b` 間の参照整合性を確立する `relationships` テストもあります:
 
 <File name='models/resources.yml'>
 
@@ -147,7 +148,7 @@ models:
               field: id
 ```
 
-(A bit silly, since all the data in `model_b` had to come from `model_a`, but suspend your disbelief.)
+(`model_b` のすべてのデータは `model_a` から取得する必要があったため、少しばかげていますが、信じられないかもしれません。)
 
 </File>
 
@@ -179,7 +180,7 @@ where child.id is not null
   and parent.id is null
 ```
 
-The `relationships` test requires both `model_a` and `model_b`. Because I did not build `model_a` in my previous `dbt run`, `dev_alice.model_a` does not exist and this test query fails.
+`relationships` テストには `model_a` と `model_b` の両方が必要です。前回の `dbt run` で `model_a` をビルドしなかったため、`dev_alice.model_a` は存在せず、このテストクエリは失敗します。
 
 </File>
 </TabItem>
@@ -206,13 +207,13 @@ where child.id is not null
 
 </File>
 
-dbt will check to see if `dev_alice.model_a` exists. If it doesn't exist, dbt will resolve all instances of `{{ ref('model_a') }}`, including those in schema tests, to use `prod.model_a` instead. The query succeeds. Whether I really want to test for referential integrity across environments is a different question.
+dbtは`dev_alice.model_a`が存在するかどうかを確認します。存在しない場合、dbtはスキーマテスト内のものも含め、`{{ ref('model_a') }}`のすべてのインスタンスを解決し、代わりに`prod.model_a`を使用します。クエリは成功します。環境間で参照整合性をテストする必要があるかどうかは別の問題です。
 
 </TabItem>
 </Tabs>
 
-## Related docs
+## 関連ドキュメント
 
-- [Using defer in dbt Cloud](/docs/cloud/about-cloud-develop-defer)
+- [dbt Cloud での defer の使用](/docs/cloud/about-cloud-develop-defer)
 - [on_configuration_change](/reference/resource-configs/on_configuration_change)
 

@@ -3,23 +3,23 @@ title: "begin"
 id: "begin"
 sidebar_label: "begin"
 resource_types: [models]
-description: "dbt uses `begin` to determine when a microbatch incremental model should begin from. When defined on a micorbatch incremental model, `begin` is used as the lower time bound when the model is built for the first time or fully refreshed."
+description: "dbt は、マイクロバッチ増分モデルの開始時点を決定するために「begin」を使用します。マイクロバッチ増分モデルで定義される場合、「begin」は、モデルが初めて構築されるとき、または完全に更新されるときの下限時間として使用されます。"
 datatype: string
 ---
 
 <VersionCallout version="1.9" />
 
-## Definition
+## 定義
 
-Set the `begin` config to the timestamp value at which your [microbatch incremental model](/docs/build/incremental-microbatch) data should begin &mdash; at the point the data becomes relevant for the microbatch model.  
+`begin` 設定を、[マイクロバッチ増分モデル](/docs/build/incremental-microbatch) のデータの開始タイムスタンプ値、つまりデータがマイクロバッチモデルに関連し始める時点に設定します。
 
-You can configure `begin` for a [model](/docs/build/models) in your `dbt_project.yml` file, property YAML file, or config block. The value for `begin` must be a string representing an ISO-formatted date, _or_ date and time, _or_ [relative dates](#set-begin-to-use-relative-dates). Check out the [examples](#examples) in the next section for more details.
+[モデル](/docs/build/models) の `begin` は、`dbt_project.yml` ファイル、プロパティ YAML ファイル、または設定ブロックで設定できます。`begin` の値は、ISO 形式の日付、日時、または [相対日付](#set-begin-to-use-relative-dates) を表す文字列である必要があります。詳細については、次のセクションの [例](#examples) をご覧ください。
 
-## Examples
+## 例
 
-The following examples set `2024-01-01 00:00:00` as the `begin` config for the `user_sessions` model.
+次の例では、`user_sessions` モデルの `begin` 設定として `2024-01-01 00:00:00` を設定します。
 
-#### Example in the `dbt_project.yml` file
+#### `dbt_project.yml` ファイルの例
 
 <File name='dbt_project.yml'>
 
@@ -31,7 +31,7 @@ models:
 ```
 </File>
 
-#### Example in a properties YAML file
+#### プロパティYAMLファイルの例
 
 <File name='models/properties.yml'>
 
@@ -44,7 +44,7 @@ models:
 
 </File>
 
-#### Example in sql model config block
+#### SQLモデル構成ブロックの例
 
 <File name="models/user_sessions.sql">
 
@@ -56,11 +56,11 @@ models:
 
 </File> 
 
-#### Set `begin` to use relative dates
+#### `begin` で相対日付を使用するように設定
 
-To configure `begin` to use relative dates, you can use modules variables [`modules.datetime`](/reference/dbt-jinja-functions/modules#datetime) and [`modules.pytz`](/reference/dbt-jinja-functions/modules#pytz) to dynamically specify relative timestamps, such as yesterday's date or the start of the current week.
+`begin` で相対日付を使用するように設定するには、モジュール変数 [`modules.datetime`](/reference/dbt-jinja-functions/modules#datetime) と [`modules.pytz`](/reference/dbt-jinja-functions/modules#pytz) を使用して、昨日の日付や今週の開始日などの相対タイムスタンプを動的に指定できます。
 
-For example, to set `begin` to yesterday's date:
+例えば、`begin` を昨日の日付に設定するには、次のようにします:
 
 ```sql
 {{

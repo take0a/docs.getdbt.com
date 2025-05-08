@@ -1,6 +1,6 @@
 ---
 resource_types: [snapshots]
-description: "Use the `dbt_valid_to_current` config to set a custom indicator for the value of `dbt_valid_to` in current snapshot records"
+description: "`dbt_valid_to_current` 設定を使用して、現在の snapshot  レコードの `dbt_valid_to` の値のカスタム インジケーターを設定します。"
 datatype: "{<dictionary>}"
 default_value: {NULL}
 id: "dbt_valid_to_current"
@@ -45,48 +45,48 @@ snapshots:
 
 </File>
 
-## Description
+## 説明
 
-Use the `dbt_valid_to_current` config to set a custom indicator for the value of `dbt_valid_to` in current snapshot records (like a future date). By default, this value is `NULL`. When set, dbt will use this specified value instead of `NULL` for `dbt_valid_to` for current records in the snapshot table.
+`dbt_valid_to_current` 設定を使用して、現在の snapshot レコードの `dbt_valid_to` の値（将来の日付など）にカスタムインジケーターを設定します。デフォルトでは、この値は `NULL` です。設定すると、dbt は snapshot テーブル内の現在のレコードの `dbt_valid_to` に `NULL` ではなく、この指定された値を使用します。
 
-This approach makes it easier to assign a custom date, work in a join, or perform range-based filtering that requires an end date.
+この方法により、カスタム日付の割り当て、結合の操作、終了日を必要とする範囲ベースのフィルタリングの実行が容易になります。
 
 :::warning
 
-To avoid any unintentional data modification, dbt will _not_ automatically adjust the current value in the existing `dbt_valid_to` column. Existing current records will still have `dbt_valid_to` set to `NULL`.
+意図しないデータ変更を防ぐため、dbt は既存の `dbt_valid_to` 列の現在の値を自動的に調整しません。既存の現在のレコードの `dbt_valid_to` は引き続き `NULL` に設定されます。
 
-Any new records inserted _after_ applying the `dbt_valid_to_current` configuration will have `dbt_valid_to` set to the specified value (like '9999-12-31'), instead of the default `NULL` value.
+`dbt_valid_to_current` 設定を適用した後に挿入された新しいレコードの `dbt_valid_to` は、デフォルトの `NULL` 値ではなく、指定された値（「9999-12-31」など）に設定されます。
 
 :::
 
-### Considerations
+### 考慮事項
 
-- **Date expressions** &mdash; Provide a hardcoded date expression compatible with your data platform, such as `to_date('9999-12-31')`. Note that syntax may vary by warehouse (for example, `to_date('YYYY-MM-DD'`) or `date(YYYY, MM, DD)`).
+- **日付式** - データプラットフォームと互換性のあるハードコードされた日付式（例：`to_date('9999-12-31')`）を使用してください。構文はウェアハウスによって異なる場合がありますのでご注意ください（例：`to_date('YYYY-MM-DD'`）または`date(YYYY, MM, DD)`）。
 
-- **Jinja limitation** &mdash; `dbt_valid_to_current` only accepts static SQL expressions. Jinja expressions (like `{{ var('my_future_date') }}`) are not supported.
+- **Jinja の制限事項** - `dbt_valid_to_current` は静的 SQL 式のみを受け入れます。Jinja 式（例：`{{ var('my_future_date') }}`）はサポートされていません。
 
-- **Deferral and `state:modified`** &mdash; Changes to `dbt_valid_to_current` are compatible with deferral and `--select state:modified`. When this configuration changes, it'll appear in `state:modified` selections, raising a warning to manually make the necessary snapshot updates.
+- **遅延と `state:modified`** - `dbt_valid_to_current` への変更は、遅延および `--select state:modified` と互換性があります。この構成が変更されると、`state:modified` 選択に表示され、必要な snapshot の更新を手動で行うように警告が表示されます。
 
-## Default
+## デフォルト
 
-By default, `dbt_valid_to` is set to `NULL` for current (most recent) records in your snapshot table. This means that these records are still valid and have no defined end date.
+デフォルトでは、 snapshot テーブル内の現在の（最新の）レコードの `dbt_valid_to` は `NULL` に設定されています。つまり、これらのレコードは引き続き有効であり、終了日は定義されていません。
 
-If you prefer to use a specific value instead of `NULL` for `dbt_valid_to` in current and future records, you can use the `dbt_valid_to_current` configuration option. For example, setting a date in the far future, `9999-12-31`.
+現在および将来のレコードの `dbt_valid_to` に `NULL` ではなく特定の値を使用したい場合は、`dbt_valid_to_current` 設定オプションを使用できます。例えば、遠い将来の日付（`9999-12-31`）を設定できます。
 
-The value assigned to `dbt_valid_to_current` should be a string representing a valid date or timestamp, depending on your database's requirements. Use expressions that work within the data platform.
+`dbt_valid_to_current` に割り当てる値は、データベースの要件に応じて、有効な日付またはタイムスタンプを表す文字列である必要があります。データプラットフォーム内で機能する式を使用してください。
 
 
-## Impact on snapshot records
+##  snapshot レコードへの影響
 
-When you set `dbt_valid_to_current`, it affects how dbt manages the `dbt_valid_to` column in your snapshot table:
+`dbt_valid_to_current` を設定すると、dbt が snapshot テーブル内の `dbt_valid_to` 列を管理する方法に影響します。
 
-- **For existing records** &mdash; To avoid any unintentional data modification, dbt will _not_ automatically adjust the current value in the existing `dbt_valid_to` column. Existing current records will still have `dbt_valid_to` set to `NULL`.
+- **既存レコードの場合** - 意図しないデータ変更を防ぐため、dbt は既存の `dbt_valid_to` 列の現在の値を自動的に調整しません。既存の現在のレコードの `dbt_valid_to` は引き続き `NULL` に設定されます。
 
-- **For new records** &mdash;  Any new records inserted after applying the `dbt_valid_to_current` configuration will have `dbt_valid_to` set to the specified value (for example, '9999-12-31'), instead of `NULL`.
+- **新規レコードの場合** - `dbt_valid_to_current` 設定を適用した後に挿入された新しいレコードでは、`dbt_valid_to` は `NULL` ではなく、指定された値（例: '9999-12-31'）に設定されます。
 
-This means your snapshot table will have current records with `dbt_valid_to` values of both `NULL` (from existing data) and the new specified value (from new data). If you'd rather have consistent `dbt_valid_to` values for current records, you can manually update existing records in your snapshot table (where `dbt_valid_to` is `NULL`) to match your `dbt_valid_to_current` value.
+つまり、 snapshot テーブルには、`dbt_valid_to` 値が `NULL`（既存データ）と新しく指定された値（新規データ）の両方である現在のレコードが含まれることになります。現在のレコードに対して一貫した `dbt_valid_to` 値を保持したい場合は、 snapshot  テーブル内の既存のレコード (`dbt_valid_to` が `NULL` の場合) を手動で更新して、`dbt_valid_to_current` 値と一致させることができます。
 
-## Example
+## 例
 
 <File name='snapshots/schema.yml'>
 
@@ -109,7 +109,7 @@ snapshots:
 
 </File>
 
-The resulting snapshot table contains the configured dbt_valid_to column value:
+結果の snapshot テーブルには、構成された dbt_valid_to 列の値が含まれます:
 
 | id | dbt_scd_id           |    dbt_updated_at    |       dbt_valid_from |     dbt_valid_to     |
 | -- | -------------------- | -------------------- | -------------------- | -------------------- |

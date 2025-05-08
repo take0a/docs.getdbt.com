@@ -1,13 +1,13 @@
 ---
-title: "Graph operators"
+title: "Graph 演算子"
 ---
 
-### The "plus" operator
-The `+` operator expands your selection to include ancestors (upstream dependencies) or descendants (downstream dependencies) of a resource. This operator works for individual models, tags, and other resources.
+### 「プラス」演算子
+`+` 演算子は、リソースの祖先（上流の依存関係）または子孫（下流の依存関係）を含むように選択範囲を拡張します。この演算子は、個々のモデル、タグ、その他のリソースに使用できます。
 
-- Placed after a model/resource &mdash; Includes the resource itself and all its descendants (downstream dependencies).
-- Placed before a model/resource &mdash; Includes the resource itself and all its ancestors (upstream dependencies).
-- Placed on both sides of a model/resource &mdash; Includes the resource itself, all its ancestors, and all its descendants.
+- モデル/リソースの後に配置する場合 - リソース自体とそのすべての子孫（下流の依存関係）が含まれます。
+- モデル/リソースの前に配置する場合 - リソース自体とそのすべての祖先（上流の依存関係）が含まれます。
+- モデル/リソースの両側に配置する場合 - リソース自体、そのすべての祖先、およびすべての子孫が含まれます。
 
 ```bash
 dbt run --select "my_model+"         # select my_model and all descendants
@@ -15,12 +15,11 @@ dbt run --select "+my_model"         # select my_model and all ancestors
 dbt run --select "+my_model+"        # select my_model, and all of its ancestors and descendants
 ```
 
-You can use it with selectors for a more specific scope in your commands. You can also combine it with [`--exclude`](/reference/node-selection/exclude) flag for even more finer control over what gets included in your command.
+セレクターと組み合わせて使用​​することで、コマンドの適用範囲をより限定的に指定できます。また、[`--exclude`](/reference/node-selection/exclude) フラグと組み合わせることで、コマンドに含める内容をさらに細かく制御できます。
 
-### The "n-plus" operator
+### 「nプラス」演算子
 
-You can adjust the behavior of the `+` operator by quantifying the number of edges
-to step through.
+ステップスルーするエッジの数を数値化することで、「+」演算子の動作を調整できます。
 
 
   ```bash
@@ -30,10 +29,10 @@ dbt run --select "3+my_model+4"      # select my_model, its ancestors up to the 
   ```
 
 
-### The "at" operator
-The `@` operator is similar to `+`, but will also include _all ancestors of all descendants of the selected model_. This is useful in continuous integration environments where you want to build a model and all of its descendants, but the _ancestors_ of those descendants might not exist in the schema yet. The `@` operator (which can only be placed at the front of the model name) will select as many degrees of ancestors ("parents," "grandparents," and so on) as is needed to successfully build all descendants of the specified model. 
+### 「at」演算子
+`@` 演算子は `+` に似ていますが、_選択したモデルのすべての子孫のすべての祖先_ も含めます。これは、モデルとそのすべての子孫を構築したいものの、それらの子孫の祖先がまだスキーマに存在しない可能性がある継続的インテグレーション環境で役立ちます。`@` 演算子（モデル名の先頭にのみ配置可能）は、指定されたモデルのすべての子孫を正常に構築するために必要な数の祖先（「親」、「祖父母」など）を選択します。
 
-The selector `@snowplow_web_page_context` will build all three models shown in the diagram below.
+セレクタ `@snowplow_web_page_context` は、下の図に示す 3 つのモデルすべてを構築します。
 
 <Lightbox src="/img/docs/running-a-dbt-project/command-line-interface/1643e30-Screen_Shot_2019-03-11_at_7.18.20_PM.png" title="@snowplow_web_page_context will select all of the models shown here"/>
 

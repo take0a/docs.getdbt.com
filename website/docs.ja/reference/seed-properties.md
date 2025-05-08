@@ -1,10 +1,10 @@
 ---
-title: Seed properties
+title: Seed プロパティ
 ---
 
-Seed properties can be declared in `.yml` files under a `seed` key.
+シードプロパティは、`seed` キーの下の `.yml` ファイルで宣言できます。
 
-We recommend that you put them in the `seeds/` directory. You can name these files `whatever_you_want.yml`, and nest them arbitrarily deeply in subfolders within that directory.
+`seeds/` ディレクトリに配置することをお勧めします。これらのファイルは `whatever_you_want.yml` という名前で、そのディレクトリ内のサブフォルダに任意の深さでネストできます。
 
 <File name='seeds/<filename>.yml'>
 

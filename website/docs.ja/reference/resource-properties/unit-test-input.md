@@ -1,17 +1,17 @@
 ---
-title: "Input for unit tests"
+title: "ユニットテストの入力"
 sidebar_label: "Input"
 ---
 
-Use inputs in your unit tests to reference a specific model or source for the test:
+ユニットテストで入力を使用して、テストの特定のモデルまたはソースを参照します。
 
--  For `input:`, use a string that represents a `ref` or `source` call:
-    - `ref('my_model')` or `ref('my_model', v='2')` or `ref('dougs_project', 'users')`
-    - `source('source_schema', 'source_name')`
-- Optionally use for seeds:
-    - If you don’t supply an input for a seed, we will use the seed _as_ the input.
-    - If you do supply an input for a seed, we will use that input instead.
-- Use “empty” inputs by setting rows to an empty list `rows: []`
+- `input:` には、`ref` または `source` 呼び出しを表す文字列を使用します。
+  - `ref('my_model')` または `ref('my_model', v='2')` または `ref('dougs_project', 'users')`
+  - `source('source_schema', 'source_name')`
+- オプションで seed に使用します。
+  - seed に入力を指定しない場合は、seed が入力として使用されます。
+  - seed に入力を指定した場合は、代わりにその入力が使用されます。
+- rows に空のリスト `rows: []` を設定することで、「空」の入力を使用します。
 
 ```yml
 

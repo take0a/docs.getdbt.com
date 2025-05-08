@@ -1,13 +1,13 @@
 ---
-title: "About dbt ls (list) command"
+title: "dbt ls (list) コマンドについて"
 sidebar_label: "ls (list)"
-description: "Read this guide on how dbt's ls (list) command can be used to list resources in your dbt project."
+description: "dbt の ls (list) コマンドを使用して dbt プロジェクト内のリソースを一覧表示する方法については、このガイドをお読みください。"
 id: "list"
 ---
 
-The `dbt ls` command lists resources in your dbt project. It accepts selector arguments that are similar to those provided in [dbt run](/reference/commands/run). `dbt list` is an alias for `dbt ls`. While `dbt ls` will read your [connection profile](/docs/core/connect-data-platform/connection-profiles) to resolve [`target`](/reference/dbt-jinja-functions/target)-specific logic, this command will not connect to your database or run any queries.
+`dbt ls` コマンドは、dbt プロジェクト内のリソースを一覧表示します。このコマンドは、[dbt run](/reference/commands/run) で提供されるものと同様のセレクター引数を受け入れます。`dbt list` は `dbt ls` のエイリアスです。`dbt ls` は [接続プロファイル](/docs/core/connect-data-platform/connection-profiles) を読み取り、[`target`](/reference/dbt-jinja-functions/target) 固有のロジックを解決しますが、データベースに接続したりクエリを実行したりすることはありません。
 
-### Usage
+### 使用法
 
 ```
 dbt ls
@@ -20,22 +20,22 @@ dbt ls
      [--output-keys KEY_NAME [KEY_NAME]]
 ```
 
-See [resource selection syntax](/reference/node-selection/syntax) for more information on how to select resources in dbt
+dbt でリソースを選択する方法の詳細については、[リソース選択構文](/reference/node-selection/syntax) を参照してください。
 
-**Arguments**:
-- `--resource-type`: This flag restricts the "resource types" returned by dbt in the `dbt ls` command. By default, all resource types are included in the results of `dbt ls` except for the analysis type.
-- `--select`: This flag specifies one or more selection-type arguments used to filter the nodes returned by the `dbt ls` command
-- `--models`: Like the `--select` flag, this flag is used to select nodes. It implies `--resource-type=model`, and will only return models in the results of the `dbt ls` command. Supported for backwards compatibility only.
-- `--exclude`: Specify selectors that should be _excluded_ from the list of returned nodes.
-- `--selector`: This flag specifies one named selector, defined in a `selectors.yml` file.
-- `--output`: This flag controls the format of output from the `dbt ls` command.
-- `--output-keys`: If `--output json`, this flag controls which node properties are included in the output.
+**引数**:
+- `--resource-type`: このフラグは、`dbt ls` コマンドで dbt が返す「リソースタイプ」を制限します。デフォルトでは、分析タイプを除くすべてのリソースタイプが `dbt ls` の結果に含まれます。
+- `--select`: このフラグは、`dbt ls` コマンドによって返されるノードをフィルタリングするために使用する、1 つ以上の選択タイプの引数を指定します。
+- `--models`: `--select` フラグと同様に、このフラグはノードを選択するために使用されます。これは `--resource-type=model` を意味し、`dbt ls` コマンドの結果にはモデルのみが返されます。後方互換性のためにのみサポートされています。
+- `--exclude`: 返されるノードのリストから _除外_ するセレクターを指定します。
+- `--selector`: このフラグは、`selectors.yml` ファイルで定義された名前付きセレクターを 1 つ指定します。
+- `--output`: このフラグは、`dbt ls` コマンドの出力形式を制御します。
+- `--output-keys`: `--output json` の場合、このフラグは出力に含めるノードプロパティを制御します。
 
-Note that the `dbt ls` command does not include models which are disabled or schema tests which depend on models which are disabled. All returned resources will have a `config.enabled` value of `true`.
+`dbt ls` コマンドは、無効化されたモデルや、無効化されたモデルに依存するスキーマテストを出力に含めないことに注意してください。返されるすべてのリソースの `config.enabled` 値は `true` になります。
 
-### Example usage
+### 使用例
 
-**Listing models by package**
+**パッケージ別にモデルを一覧表示**
 ```
 $ dbt ls --select snowplow.*
 snowplow.snowplow_base_events
@@ -46,7 +46,7 @@ snowplow.snowplow_sessions
 ...
 ```
 
-**Listing tests by tag name**
+**タグ名によるテストの一覧表示**
 ```
 $ dbt ls --select tag:nightly --resource-type test
 my_project.schema_test.not_null_orders_order_id
@@ -56,14 +56,14 @@ my_project.schema_test.unique_products_product_id
 ...
 ```
 
-**Listing schema tests of incremental models**
+**増分モデルのスキーマテストの一覧表示**
 ```
 $ dbt ls --select config.materialized:incremental,test_type:schema
 model.my_project.logs_parsed
 model.my_project.events_categorized
 ```
 
-**Listing JSON output**
+**JSON出力の一覧表示**
 ```
 $ dbt ls --select snowplow.* --output json
 {"name": "snowplow_events", "resource_type": "model", "package_name": "snowplow",  ...}
@@ -71,7 +71,7 @@ $ dbt ls --select snowplow.* --output json
 ...
 ```
 
-**Listing JSON output with custom keys**
+**カスタムキーを使用した JSON 出力の一覧表示**
 
 ```
 $ dbt ls --select snowplow.* --output json --output-keys "name resource_type description"
@@ -80,14 +80,14 @@ $ dbt ls --select snowplow.* --output json --output-keys "name resource_type des
 ...
 ```
 
-**Listing Semantic models**
+**セマンティックモデルの一覧表示**
 
 List all resources upstream of your orders semantic model:
 ```
 dbt ls -s +semantic_model:orders
 ```
 
-**Listing file paths**
+**ファイルパスの一覧表示**
 ```
 dbt ls --select snowplow.* --output path
 models/base/snowplow_base_events.sql

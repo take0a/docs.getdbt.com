@@ -3,7 +3,7 @@ resource_types: [tests]
 datatype: integer
 ---
 
-Limit the number of failures that will be returned by a test query. We recommend using this config when working with large datasets and [storing failures in the database](/reference/resource-configs/store_failures).
+テストクエリによって返される失敗の数を制限します。大規模なデータセットを扱い、[失敗をデータベースに保存](/reference/resource-configs/store_failures)する場合は、この設定を使用することをお勧めします:
 
 <Tabs
   defaultValue="specific"
@@ -17,7 +17,7 @@ Limit the number of failures that will be returned by a test query. We recommend
 
 <TabItem value="specific">
 
-Configure a specific instance of a generic (schema) test:
+汎用 (スキーマ) テストの特定のインスタンスを構成します:
 
 <File name='models/<filename>.yml'>
 
@@ -41,7 +41,7 @@ models:
 
 <TabItem value="one_off">
 
-Configure a one-off (data) test:
+1 回限りの (データ) テストを構成します:
 
 <File name='tests/<filename>.sql'>
 
@@ -57,7 +57,7 @@ select ...
 
 <TabItem value="generic">
 
-Set the default for all instances of a generic (schema) test, by setting the config inside its test block (definition):
+テスト ブロック (定義) 内に構成を設定して、汎用 (スキーマ) テストのすべてのインスタンスのデフォルトを設定します:
 
 <File name='macros/<filename>.sql'>
 
@@ -77,7 +77,7 @@ select ...
 
 <TabItem value="project">
 
-Set the default for all tests in a package or project:
+パッケージまたはプロジェクト内のすべてのテストのデフォルトを設定します:
 
 <File name='dbt_project.yml'>
 

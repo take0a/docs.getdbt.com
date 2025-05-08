@@ -1,30 +1,32 @@
 ---
-title: "About dbt show command"
+title: "dbt show コマンドについて"
 sidebar_label: "show"
 id: "show"
 ---
 
-Use `dbt show` to:
-- Compile the dbt-SQL definition of a `model`, `test`, `analysis`, or an arbitrary dbt-SQL query passed `--inline`
-  - `dbt show` does not support [Python (dbt-py)](/docs/build/python-models) models.
-- Run that query against the data warehouse
-- Preview the results in the terminal
+`dbt show` を使用すると、次の操作を実行できます:
+- `model`、`test`、`analysis`、または `--inline` で渡された任意の dbt-SQL クエリの dbt-SQL 定義をコンパイルする
+- `dbt show` は [Python (dbt-py)](/docs/build/python-models) モデルをサポートしていません。
+- データウェアハウスに対してクエリを実行する
+- ターミナルで結果をプレビューする
 
-By default, `dbt show` will display the first 5 rows from the query result. This can be customized by passing the flag `--limit n`, where `n` is the number of rows to display.
+デフォルトでは、`dbt show` はクエリ結果の最初の 5 行を表示します。これは、フラグ `--limit n` を渡すことでカスタマイズできます。`n` は表示する行数です。
 
-The results of the preview query are not materialized in the data warehouse, or stored in any dbt file. They are only included in dbt's logs and displayed in the terminal. Note also that, if previewing a model, dbt will always compile and run the compiled query from source. It will not select from the already-materialized database relation, even if you've just run the model. (We may support that in the future; if you're interested, upvote or comment on [dbt-core#7391](https://github.com/dbt-labs/dbt-core/issues/7391).)
+プレビュークエリの結果は、データウェアハウスにマテリアライズされず、dbt ファイルにも保存されません。dbt のログにのみ含まれ、ターミナルに表示されます。また、モデルをプレビューする場合、dbt は常にソースからコンパイルされたクエリをコンパイルして実行することに注意してください。モデルを実行した直後であっても、既にマテリアライズされたデータベースリレーションからは選択されません。(将来的にはサポートされる可能性があります。ご興味があれば、[dbt-core#7391](https://github.com/dbt-labs/dbt-core/issues/7391) に賛成票を投じるか、コメントを投稿してください。)
 
-Example:
+例:
 
 ```
 dbt show --select "model_name.sql"
 ```
-or
+
+または
+
 ```
 dbt show --inline "select * from {{ ref('model_name') }}"
 ```
 
-The following is an example of `dbt show` output for a model named `stg_orders`:
+以下は、`stg_orders` という名前のモデルの `dbt show` 出力の例です:
 
 ```bash
 dbt show --select "stg_orders"
@@ -44,7 +46,7 @@ dbt show --select "stg_orders"
 
 ```
 
-For example, if you've just built a model that has a failing test, you can quickly preview the test failures right in the terminal, to find values of `id` that are duplicated:
+たとえば、失敗したテストがあるモデルを構築したばかりの場合は、ターミナル内でテストの失敗をすぐにプレビューして、重複している `id` の値を見つけることができます:
 
 ```bash
 $ dbt build -s "my_model_with_duplicates"

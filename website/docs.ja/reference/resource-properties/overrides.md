@@ -18,12 +18,11 @@ sources:
 
 </File>
 
-## Definition
-Override a source defined in an included package. The properties defined
-in the overriding source will be applied on top of the base properties of the
-overridden source.
+## 定義
 
-The following source properties can be overridden:
+インクルードされたパッケージで定義されたソースをオーバーライドします。オーバーライド元のソースで定義されたプロパティは、オーバーライド先のソースの基本プロパティの上に適用されます。
+
+以下のソースプロパティをオーバーライドできます:
  - [description](/reference/resource-properties/description)
  - [meta](/reference/resource-configs/meta)
  - [database](/reference/resource-properties/database)
@@ -34,12 +33,12 @@ The following source properties can be overridden:
  - [loaded_at_field](/reference/resource-properties/freshness#loaded_at_field)
  - [tags](/reference/resource-configs/tags)
 
-## Examples
-### Supply your database and schema name for a source defined in a package
+## 例
 
-This example is based on the [Fivetran GitHub Source package](https://github.com/fivetran/dbt_github_source/blob/830ba43ac2948e4853a3c167ab7ee88b8b425fa0/models/src_github.yml#L3-L29).
-Here, the database and schema is overridden in the parent dbt project which
-includes the `github_source` package.
+### パッケージで定義されたソースのデータベース名とスキーマ名を指定します
+
+この例は、[Fivetran GitHub ソースパッケージ](https://github.com/fivetran/dbt_github_source/blob/830ba43ac2948e4853a3c167ab7ee88b8b425fa0/models/src_github.yml#L3-L29) に基づいています。
+ここでは、`github_source` パッケージを含む親 dbt プロジェクトでデータベースとスキーマがオーバーライドされています。
 
 <File name='models/src_github.yml'>
 
@@ -57,9 +56,9 @@ sources:
 
 </File>
 
-### Configure your own source freshness for a source table in a package
+### パッケージ内のソーステーブルに対して、独自のソース鮮度を設定します。
 
-You can override configurations at both the source and the <Term id="table" /> level
+ソースレベルと <Term id="table" /> レベルの両方で設定をオーバーライドできます。
 
 <File name='models/src_github.yml'>
 

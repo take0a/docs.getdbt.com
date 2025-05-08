@@ -1,5 +1,5 @@
 ---
-description: "Snapshot-name - Read this in-depth guide to learn about configurations in dbt."
+description: "Snapshot-name - dbt の構成について詳しく知るには、この詳細なガイドをお読みください。"
 ---
 
 <VersionBlock firstVersion="1.9">
@@ -40,16 +40,16 @@ import SnapshotYaml from '/snippets/_snapshot-yaml-spec.md';
 
 </VersionBlock>
 
-## Description
+## 説明
 
-The name of a snapshot, which is used when selecting from a snapshot using the [`ref` function](/reference/dbt-jinja-functions/ref)
+[`ref` 関数](/reference/dbt-jinja-functions/ref) を使用して snapshot から選択する際に使用される snapshot の名前です。
 
-This name must not conflict with the name of any other "refable" resource (models, seeds, other snapshots) defined in this project or package.
+この名前は、このプロジェクトまたはパッケージで定義されている他の「参照可能な」リソース（モデル、シード、他の snapshot ）の名前と競合してはなりません。
 
-The name does not need to match the file name. As a result, snapshot filenames do not need to be unique.
+名前はファイル名と一致する必要はありません。したがって、 snapshot のファイル名は一意である必要はありません。
 
-## Examples
-### Name a snapshot `order_snapshot`
+## 例
+###  snapshot に「order_snapshot」という名前を付けます
 
 <VersionBlock firstVersion="1.9">
 <File name='snapshots/order_snapshot.yml'>
@@ -84,7 +84,7 @@ snapshots:
 
 </VersionBlock>
 
-To select from this snapshot in a downstream model:
+下流モデルでこの snapshot から選択するには:
 
 ```sql
 select * from {{ ref('orders_snapshot') }}

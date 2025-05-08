@@ -1,3 +1,3 @@
-Resource-specific configurations are applicable to only one dbt resource type rather than multiple resource types. You can define these settings in the project file (`dbt_project.yml`), a property file (`models/properties.yml` for models, similarly for other resources), or within the resource’s file using the `{{ config() }}` macro.<br />
+リソース固有の設定は、複数のリソースタイプではなく、1つのdbtリソースタイプにのみ適用されます。これらの設定は、プロジェクトファイル（`dbt_project.yml`）、プロパティファイル（モデルの場合は`models/properties.yml`、他のリソースも同様）、またはリソースファイル内で`{{ config() }}`マクロを使用して定義できます。<br />
 
-<span>The following resource-specific configurations are only available to {props.meta.resource_type}</span>:
+<span>次のリソース固有の設定は、{props.meta.resource_type} でのみ使用できます。</span>:

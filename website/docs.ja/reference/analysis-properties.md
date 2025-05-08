@@ -1,12 +1,12 @@
 ---
-title: Analysis properties
+title: Analysis プロパティ
 ---
 
-import PropsCallout from '/snippets/_config-prop-callout.md';
+import PropsCallout from '/snippets.ja/_config-prop-callout.md';
 
-We recommend you define analysis properties in your `analyses/` directory, which is illustrated in the [`analysis-paths`](/reference/project-configs/analysis-paths) configuration. <PropsCallout title={frontMatter.title}/>  <br /> 
+analysis プロパティは、`analyses/` ディレクトリで定義することをお勧めします。これは、[`analysis-paths`](/reference/project-configs/analysis-paths) 構成で示されています。<PropsCallout title={frontMatter.title}/> <br />
 
-You can name these files `whatever_you_want.yml`, and nest them arbitrarily deeply in subfolders within the `analyses/` or `models/` directory.
+これらのファイルには `whatever_you_want.yml` という名前を付け、`analyses/` または `models/` ディレクトリ内のサブフォルダに任意の深さでネストできます。
 
 <File name='analyses/<filename>.yml'>
 

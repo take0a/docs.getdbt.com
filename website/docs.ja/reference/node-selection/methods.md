@@ -1,28 +1,26 @@
 ---
-title: "Node selector methods"
+title: "Node selector メソッド"
 sidebar: "Node selector methods"
 ---
 
-Selector methods return all resources that share a common property, using the
-syntax `method:value`. While it is recommended to explicitly denote the method,
-you can omit it (the default value will be one of `path`, `file` or `fqn`).
+Selector メソッドは、`method:value` という構文を使用して、共通のプロパティを持つすべてのリソースを返します。メソッドを明示的に指定することをお勧めしますが、省略することも可能です（デフォルト値は `path`、`file`、`fqn` のいずれかになります）。
 
-<Expandable alt_header="Differences between --select and --selector">
+<Expandable alt_header="--select と --selector の違い">
 
-The `--select` and `--selector` arguments sound similar, but they are different. To understand the difference, see [Differences between `--select` and `--selector`](/reference/node-selection/yaml-selectors#difference-between---select-and---selector).
+`--select` 引数と `--selector` 引数は似ていますが、実際には異なります。違いを理解するには、[`--select` と `--selector` の違い](/reference/node-selection/yaml-selectors#difference-between---select-and---selector) を参照してください。
 
 </Expandable>
 
-Many of the methods below support Unix-style wildcards:
+以下のメソッドの多くは Unix スタイルのワイルドカードをサポートしています。
 
 | Wildcard | Description                                               |
 | -------- | --------------------------------------------------------- |
-| \*       | matches any number of any characters (including none)     |
-| ?        | matches any single character                              |
-| [abc]    | matches one character given in the bracket                |
-| [a-z]    | matches one character from the range given in the bracket |
+| \*       | 任意の数の任意の文字（0文字を含む）に一致します    |
+| ?        | 任意の1文字に一致する                              |
+| [abc]    | 括弧内の1文字に一致する                |
+| [a-z]    | 括弧内の範囲の1文字に一致する |
 
-For example:
+例えば：
 ```
 dbt list --select "*.folder_name.*"
 dbt list --select "package:*_source"
@@ -30,7 +28,7 @@ dbt list --select "package:*_source"
 
 ### access
 
-The `access` method selects models based on their [access](/reference/resource-configs/access) property.
+`access` メソッドは、[access](/reference/resource-configs/access) プロパティに基づいてモデルを選択します。
 
 ```bash
 dbt list --select "access:public"      # list all public models
@@ -40,7 +38,7 @@ dbt list --select "access:protected"       # list all protected models
 
 ### config
 
-The `config` method is used to select models that match a specified [node config](/reference/configs-and-properties).
+`config` メソッドは、指定された [ノード構成](/reference/configs-and-properties) に一致するモデルを選択するために使用されます。
 
 
 
@@ -50,9 +48,9 @@ dbt run --select "config.schema:audit"              # run all models that are cr
 dbt run --select "config.cluster_by:geo_country"      # run all models clustered by `geo_country`
 ```
 
-While most config values are strings, you can also use the `config` method to match boolean configs, dictionary keys, and values in lists.
+ほとんどの設定値は文字列ですが、`config` メソッドを使用して、ブール値の設定、辞書のキー、リスト内の値を一致させることもできます。
 
-For example, given a model with the following configurations:
+例えば、次の設定を持つモデルがあるとします:
 
 ```bash
 {{ config(
@@ -66,7 +64,8 @@ For example, given a model with the following configurations:
 select ...
 ```
 
- You can select using any of the following:
+次のいずれかを使用して選択できます:
+
 ```bash
 dbt ls -s config.materialized:incremental
 dbt ls -s config.unique_key:column_a
@@ -78,7 +77,7 @@ dbt ls -s config.transient:true
 
 ### exposure
 
-The `exposure` method is used to select parent resources of a specified [exposure](/docs/build/exposures). Use in conjunction with the `+` operator.
+`exposure`メソッドは、指定された[exposure](/docs/build/exposures)の親リソースを選択するために使用されます。`+`演算子と組み合わせて使用​​してください。
 
 
   ```bash
@@ -89,7 +88,7 @@ dbt ls --select "+exposure:*" --resource-type source    # list all source tables
 
 ### file
 
-The `file` method can be used to select a model by its filename, including the file extension (`.sql`).
+`file` メソッドを使用すると、ファイル拡張子 (`.sql`) を含むファイル名でモデルを選択できます。
 
 ```bash
 # These are equivalent
@@ -100,7 +99,7 @@ dbt run --select "some_model"
 
 ### fqn
 
-The `fqn` method is used to select nodes based off their "fully qualified names" (FQN) within the dbt graph. The default output of [`dbt list`](/reference/commands/list) is a listing of FQN. The default FQN format is composed of the project name, subdirectories within the path, and the file name (without extension) separated by periods.
+`fqn` メソッドは、dbt グラフ内の「完全修飾名」（FQN）に基づいてノードを選択するために使用されます。[`dbt list`](/reference/commands/list) のデフォルトの出力は、FQN のリストです。デフォルトの FQN 形式は、プロジェクト名、パス内のサブディレクトリ、およびファイル名（拡張子なし）をピリオドで区切ったもので構成されます。
 
 ```bash
 dbt run --select "fqn:some_model"
@@ -113,7 +112,7 @@ dbt run --select "fqn:your_project.some_path.some_model"
 
 ### group
 
-The `group` method is used to select models defined within a [group](/reference/resource-configs/group).
+`group` メソッドは、[グループ](/reference/resource-configs/group) 内で定義されたモデルを選択するために使用されます。
 
 
 ```bash
@@ -122,7 +121,7 @@ dbt run --select "group:finance" # run all models that belong to the finance gro
 
 ### metric
 
-The `metric` method is used to select parent resources of a specified [metric](/docs/build/build-metrics-intro). Use in conjunction with the `+` operator.
+`metric` メソッドは、指定された [metric](/docs/build/build-metrics-intro) の親リソースを選択するために使用されます。`+` 演算子と組み合わせて使用​​してください。
 
 ```bash
 dbt build --select "+metric:weekly_active_users"       # build all resources upstream of weekly_active_users metric
@@ -131,9 +130,7 @@ dbt ls    --select "+metric:*" --resource-type source  # list all source tables 
 
 ### package
 
-The `package` method is used to select models defined within the root project
-or an installed dbt package. While the `package:` prefix is not explicitly required, it may be used to make
-selectors unambiguous.
+`package` メソッドは、ルートプロジェクト内またはインストールされた dbt パッケージ内で定義されたモデルを選択するために使用されます。`package:` プレフィックスは明示的には必須ではありませんが、セレクターを明確にするために使用できます。
 
 
   ```bash
@@ -143,15 +140,15 @@ selectors unambiguous.
   dbt run --select "snowplow.*"
 ```
 
-Use the `this` package to select nodes from the current project. From the example, running `dbt run --select "package:this"` from the `snowplow` project runs the exact same set of models as the other three selectors.
+現在のプロジェクトからノードを選択するには、`this` パッケージを使用します。例では、`snowplow` プロジェクトから `dbt run --select "package:this"` を実行すると、他の 3 つのセレクターとまったく同じモデルセットが実行されます。
 
-Since `this` always refers to the current project, using `package:this` ensures that you're only selecting models from the project you're working in.
+`this` は常に現在のプロジェクトを参照するため、`package:this` を使用すると、作業中のプロジェクトからのみモデルが選択されます。
 
 ### path
-The `path` method is used to select models/sources defined at or under a specific path.
-Model definitions are in SQL/Python files (not YAML), and source definitions are in YAML files.
-While the `path` prefix is not explicitly required, it may be used to make
-selectors unambiguous.
+
+`path` メソッドは、特定のパスまたはその配下で定義されたモデル/ソースを選択するために使用されます。
+モデル定義は SQL/Python ファイル（YAML ではありません）で、ソース定義は YAML ファイルで行われます。
+`path` プレフィックスは明示的に必須ではありませんが、セレクターを明確にするために使用できます。
 
 
   ```bash
@@ -165,7 +162,8 @@ selectors unambiguous.
   ```
 
 ### resource_type
-Use the `resource_type` method to select nodes of a particular type (`model`, `test`, `exposure`, and so on). This is similar to the `--resource-type` flag used by the [`dbt ls` command](/reference/commands/list).
+
+特定のタイプのノード（`model`、`test`、`exposure` など）を選択するには、`resource_type` メソッドを使用します。これは、[`dbt ls` コマンド](/reference/commands/list) で使用される `--resource-type` フラグに似ています。
 
   ```bash
 dbt build --select "resource_type:exposure"    # build all resources upstream of exposures
@@ -175,7 +173,7 @@ dbt list --select "resource_type:source"       # list all sources in your projec
 
 ### result
 
-The `result` method is related to the `state` method described above and can be used to select resources based on their result status from a prior run. Note that one of the dbt commands [`run`, `test`, `build`, `seed`] must have been performed in order to create the result on which a result selector operates. You can use `result` selectors in conjunction with the `+` operator. 
+`result` メソッドは前述の `state` メソッドと関連しており、前回の実行結果のステータスに基づいてリソースを選択するために使用できます。結果セレクターが操作する結果を作成するには、dbt コマンド [`run`、`test`、`build`、`seed`] のいずれかを実行する必要があります。`result` セレクターは `+` 演算子と組み合わせて使用​​できます。
 
 ```bash
 dbt run --select "result:error" --state path/to/artifacts # run all models that generated errors on the prior invocation of dbt run
@@ -186,7 +184,7 @@ dbt seed --select "result:error" --state path/to/artifacts # run all seeds that 
 
 ### saved_query
 
-The `saved_query` method selects [saved queries](/docs/build/saved-queries).
+`saved_query` メソッドは [保存されたクエリ](/docs/build/saved-queries) を選択します。
 
 ```bash
 dbt list --select "saved_query:*"                    # list all saved queries 
@@ -195,7 +193,7 @@ dbt list --select "+saved_query:orders_saved_query"  # list your saved query nam
 
 ### semantic_model
 
-The `semantic_model` method selects [semantic models](/docs/build/semantic-models).
+`semantic_model` メソッドは [セマンティック モデル](/docs/build/semantic-models) を選択します。
 
 ```bash
 dbt list --select "semantic_model:*"        # list all semantic models 
@@ -203,7 +201,8 @@ dbt list --select "+semantic_model:orders"  # list your semantic model named "or
 ```
 
 ### source
-The `source` method is used to select models that select from a specified [source](/docs/build/sources#using-sources). Use in conjunction with the `+` operator.
+
+`source` メソッドは、指定された [source](/docs/build/sources#using-sources) からモデルを選択するために使用されます。`+` 演算子と組み合わせて使用​​してください。
 
 
   ```bash
@@ -212,12 +211,12 @@ dbt run --select "source:snowplow+"    # run all models that select from Snowplo
 
 ### source_status
   
-Another element of job state is the `source_status` of a prior dbt invocation. After executing `dbt source freshness`, for example, dbt creates the `sources.json` artifact which contains execution times and `max_loaded_at` dates for dbt sources. You can read more about `sources.json` on the ['sources'](/reference/artifacts/sources-json) page. 
+ジョブ状態のもう 1 つの要素は、以前の dbt 呼び出しの `source_status` です。たとえば、`dbt source freshness` を実行すると、dbt は `sources.json` アーティファクトを作成します。このアーティファクトには、dbt ソースの実行時間と `max_loaded_at` 日付が含まれます。`sources.json` の詳細については、['sources'](/reference/artifacts/sources-json) ページをご覧ください。
 
-The following dbt commands produce `sources.json` artifacts whose results can be referenced in subsequent dbt invocations:  
+以下の dbt コマンドは、`sources.json` アーティファクトを生成します。その結果は、以降の dbt 呼び出しで参照できます。
 - `dbt source freshness`
 
-After issuing one of the above commands, you can reference the source freshness results by adding a selector to a subsequent command as follows: 
+上記のいずれかのコマンドを実行した後、次のように後続のコマンドにセレクターを追加することで、ソースの鮮度の結果を参照できます。
 
 
 ```bash
@@ -228,13 +227,13 @@ dbt build --select "source_status:fresher+" --state path/to/prod/artifacts
 
 ### state
 
-**N.B.** [State-based selection](/reference/node-selection/state-selection) is a powerful, complex feature. Read about [known caveats and limitations](/reference/node-selection/state-comparison-caveats) to state comparison.
+**注** [状態ベースの選択](/reference/node-selection/state-selection)は強力かつ複雑な機能です。状態比較については、[既知の注意事項と制限事項](/reference/node-selection/state-comparison-caveats)をご覧ください。
 
-The `state` method is used to select nodes by comparing them against a previous version of the same project, which is represented by a [manifest](/reference/artifacts/manifest-json). The file path of the comparison manifest _must_ be specified via the `--state` flag or `DBT_STATE` environment variable.
+`state`メソッドは、同じプロジェクトの以前のバージョン（[マニフェスト](/reference/artifacts/manifest-json)で表されます）と比較してノードを選択するために使用されます。比較マニフェストのファイルパスは、`--state`フラグまたは`DBT_STATE`環境変数で指定する必要があります。
 
-`state:new`: There is no node with the same `unique_id` in the comparison manifest
+`state:new`: 比較マニフェスト内に同じ`unique_id`を持つノードが存在しません。
 
-`state:modified`: All new nodes, plus any changes to existing nodes.
+`state:modified`: すべての新規ノードと、既存のノードへの変更。
 
   ```bash
 dbt test --select "state:new" --state path/to/artifacts      # run all tests on new models + and new tests on old models
@@ -242,62 +241,63 @@ dbt run --select "state:modified" --state path/to/artifacts  # run all models th
 dbt ls --select "state:modified" --state path/to/artifacts   # list all modified nodes (not just models)
   ```
 
-Because state comparison is complex, and everyone's project is different, dbt supports subselectors that include a subset of the full `modified` criteria:
-- `state:modified.body`: Changes to node body (e.g. model SQL, seed values)
-- `state:modified.configs`: Changes to any node configs, excluding `database`/`schema`/`alias`
-- `state:modified.relation`: Changes to `database`/`schema`/`alias` (the database representation of this node), irrespective of `target` values or `generate_x_name` macros
-- `state:modified.persisted_descriptions`: Changes to relation- or column-level `description`, _if and only if_ `persist_docs` is enabled at each level
-- `state:modified.macros`: Changes to upstream macros (whether called directly or indirectly by another macro)
-- `state:modified.contract`: Changes to a model's [contract](/reference/resource-configs/contract), which currently include the `name` and `data_type` of `columns`. Removing or changing the type of an existing column is considered a breaking change, and will raise an error.
+状態の比較は複雑で、プロジェクトごとに異なるため、dbt は完全な `modified` 基準のサブセットを含むサブセレクタをサポートしています。
+- `state:modified.body`: ノード本体の変更 (例: モデル SQL、シード値)
+- `state:modified.configs`: `database`/`schema`/`alias` を除くすべてのノード構成の変更
+- `state:modified.relation`: `database`/`schema`/`alias` (このノードのデータベース表現) の変更 (`target` 値や `generate_x_name` マクロとは無関係)
+- `state:modified.persisted_descriptions`: リレーションレベルまたは列レベルの `description` の変更 (各レベルで `persist_docs` が有効になっている場合のみ)
+- `state:modified.macros`: アップストリームマクロの変更 (直接呼び出されたか、 (別のマクロによって間接的に)
+- `state:modified.contract`: モデルの [コントラクト](/reference/resource-configs/contract) の変更。現在、`columns` の `name` と `data_type` が含まれます。既存の列の型を削除または変更すると、互換性を破る変更とみなされ、エラーが発生します。
 
-Remember that `state:modified` includes _all_ of the criteria above, as well as some extra resource-specific criteria, such as modifying a source's `freshness` or `quoting` rules or an exposure's `maturity` property. (View the source code for the full set of checks used when comparing [sources](https://github.com/dbt-labs/dbt-core/blob/9e796671dd55d4781284d36c035d1db19641cd80/core/dbt/contracts/graph/parsed.py#L660-L681), [exposures](https://github.com/dbt-labs/dbt-core/blob/9e796671dd55d4781284d36c035d1db19641cd80/core/dbt/contracts/graph/parsed.py#L768-L783), and [executable nodes](https://github.com/dbt-labs/dbt-core/blob/9e796671dd55d4781284d36c035d1db19641cd80/core/dbt/contracts/graph/parsed.py#L319-L330).)
+`state:modified` には、上記のすべての基準に加えて、ソースの `freshness` や `quoting` ルール、エクスポージャーの `maturity` プロパティの変更など、リソース固有の追加基準も含まれることに注意してください。 ([ソース](https://github.com/dbt-labs/dbt-core/blob/9e796671dd55d4781284d36c035d1db19641cd80/core/dbt/contracts/graph/parsed.py#L660-L681)、[エクスポージャー](https://github.com/dbt-labs/dbt-core/blob/9e796671dd55d4781284d36c035d1db19641cd80/core/dbt/contracts/graph/parsed.py#L768-L783)、および[実行可能ファイル]を比較する際に使用されるチェックの完全なセットについては、ソースコードを参照してください。ノード](https://github.com/dbt-labs/dbt-core/blob/9e796671dd55d4781284d36c035d1db19641cd80/core/dbt/contracts/graph/parsed.py#L319-L330)
 
-There are two additional `state` selectors that complement `state:new` and `state:modified` by representing the inverse of those functions:
-- `state:old` &mdash; A node with the same `unique_id` exists in the comparison manifest
-- `state:unmodified` &mdash; All existing nodes with no changes 
+`state:new` および `state:modified` を補完し、これらの機能の逆を表す `state` セレクターが 2 つあります。
+- `state:old` &mdash; 比較マニフェストに同じ `unique_id` を持つノードが存在する
+- `state:unmodified` &mdash; 変更のない既存のすべてのノード
 
-These selectors can help you shorten run times by excluding unchanged nodes. Currently, no subselectors are available at this time, but that might change as use cases evolve. 
+これらのセレクターを使用すると、変更されていないノードを除外することで実行時間を短縮できます。現時点ではサブセレクターは利用できませんが、ユースケースの進化に伴い変更される可能性があります。
 
-#### `state:modified` node and reference impacts
+#### `state:modified` ノードと参照への影響
 
-`state:modified` identifies any new nodes added, changes to existing nodes, and any changes made to:
+`state:modified` は、追加された新しいノード、既存のノードへの変更、および以下の変更を識別します。
 
-- [access](/reference/resource-configs/access) permissions
+- [access](/reference/resource-configs/access) 権限
 - [`deprecation_date` ](/reference/resource-properties/deprecation_date)
 - [`latest_version` ](/reference/resource-properties/latest_version)
 
-If a node changes its group, downstream references may break, potentially causing build failures.
+ノードがグループを変更すると、下流の参照が壊れ、ビルドが失敗する可能性があります。
 
-As `group` is a config, and configs are generally included in `state:modified` detection, modifying the group name everywhere it’s referenced will flag those nodes as "modified".
+`group` は構成であり、構成は通常 `state:modified` の検出に含まれるため、参照されているすべての場所でグループ名を変更すると、それらのノードは「変更済み」としてフラグ付けされます。
 
-Depending on whether partial parsing is enabled, you will catch the breakage as part of CI workflows.
+部分解析が有効になっているかどうかに応じて、CI ワークフローの一部として破損を検出できます。
 
-- If you change a group name everywhere it’s referenced, and partial parsing is enabled, dbt may only re-parse the changed model.
-- If you update a group name in all its references without partial parsing enabled, dbt will re-parse all models and identify any invalid downstream references.
+- 参照されているすべての場所でグループ名を変更し、部分解析が有効になっている場合、dbt は変更されたモデルのみを再解析することがあります。
+- 部分解析を有効にせずにすべての参照でグループ名を更新した場合、dbt はすべてのモデルを再解析し、無効な下流参照を特定します。
 
-An error along the lines of “there’s nothing to do” can occur when you change the group name *and* something is picked up to be run via `dbt build --select state:modified`. This error will be caught at runtime so long as the CI job is selecting `state:modified+` (including downstreams).
+グループ名を変更し、かつ `dbt build --select state:modified` によって実行対象として何かが選択されると、「何もする必要はありません」というエラーが発生する可能性があります。このエラーは、CI ジョブが `state:modified+`（下流を含む）を選択している限り、実行時に検出されます。
 
-Certain factors can affect how references are used or resolved later on, including:
+参照の使用方法や解決方法には、次のような要因が影響する可能性があります。
 
-- Modifying access: if permissions or access rules change, some references might stop working.
-- Modifying `deprecation_date`: if a reference or model version is marked  deprecated, new warnings might appear that affect how references are  processed.
-- Modifying `latest_version`: if there’s no tie to a specific version, the reference or model will point to the latest version.
-  -  If a newer version is released, the reference will automatically resolve to the new version, potentially changing the behavior or output of the system that relies on it.
+- アクセスの変更：権限またはアクセスルールが変更されると、一部の参照が機能しなくなる可能性があります。
+- `deprecation_date` の変更：参照またはモデルバージョンが非推奨としてマークされている場合、参照の処理方法に影響する新しい警告が表示されることがあります。
+- `latest_version` の変更: 特定のバージョンへの関連付けがない場合、参照またはモデルは最新バージョンを指します。
+  - 新しいバージョンがリリースされた場合、参照は自動的に新しいバージョンに解決されるため、それに依存するシステムの動作や出力が変更される場合があります。
 
-#### Overwrites the `manifest.json`
+#### `manifest.json` を上書きします
 
-import Overwritesthemanifest from '/snippets/_overwrites-the-manifest.md';
+import Overwritesthemanifest from '/snippets.ja/_overwrites-the-manifest.md';
 
 <Overwritesthemanifest />
 
-#### Recommendation
+#### おすすめ
 
-import Recommendationoverwritesthemanifest from '/snippets/_recommendation-overwriting-manifest.md'; 
+import Recommendationoverwritesthemanifest from '/snippets.ja/_recommendation-overwriting-manifest.md'; 
 
 <Recommendationoverwritesthemanifest />
 
 ### tag
-The `tag:` method is used to select models that match a specified [tag](/reference/resource-configs/tags).
+
+`tag:` メソッドは、指定された [タグ](/reference/resource-configs/tags) に一致するモデルを選択するために使用されます。
 
 
   ```bash
@@ -306,9 +306,7 @@ dbt run --select "tag:nightly"    # run all models with the `nightly` tag
 
 ### test_name
 
-The `test_name` method is used to select tests based on the name of the generic test
-that defines it. For more information about how generic tests are defined, read about
-[tests](/docs/build/data-tests).
+`test_name` メソッドは、そのテストを定義するジェネリックテストの名前に基づいてテストを選択するために使用されます。ジェネリックテストの定義方法の詳細については、[テスト](/docs/build/data-tests) をご覧ください。
 
 
   ```bash
@@ -321,7 +319,7 @@ dbt test --select "test_name:range_min_max"     # run all instances of a custom 
 
 <VersionBlock lastVersion="1.7">
 
-The `test_type` method is used to select tests based on their type, `singular` or `generic`:
+`test_type` メソッドは、テストのタイプ (`singular` または `generic`) に基づいてテストを選択するために使用されます:
 
 ```bash
 dbt test --select "test_type:generic"        # run all generic tests
@@ -332,10 +330,10 @@ dbt test --select "test_type:singular"       # run all singular tests
 
 <VersionBlock firstVersion="1.8">
 
-The `test_type` method is used to select tests based on their type: 
+`test_type` メソッドは、テストの種類に基づいてテストを選択するために使用されます。
 
-- [Unit tests](/docs/build/unit-tests)
-- [Data tests](/docs/build/data-tests):
+- [ユニットテスト](/docs/build/unit-tests)
+- [データテスト](/docs/build/data-tests):
   - [Singular](/docs/build/data-tests#singular-data-tests)
   - [Generic](/docs/build/data-tests#generic-data-tests)
 
@@ -356,7 +354,7 @@ Supported in v1.8 or newer.
 </VersionBlock>
 <VersionBlock firstVersion="1.8">
 
-The `unit_test` method selects [unit tests](/docs/build/unit-tests).
+`unit_test` メソッドは [ユニット テスト](/docs/build/unit-tests) を選択します。
 
 ```bash
 dbt list --select "unit_test:*"                        # list all unit tests 
@@ -367,7 +365,7 @@ dbt list --select "+unit_test:orders_with_zero_items"  # list your unit test nam
 
 ### version
 
-The `version` method selects [versioned models](/docs/collaborate/govern/model-versions) based on their [version identifier](/reference/resource-properties/versions) and [latest version](/reference/resource-properties/latest_version).
+`version` メソッドは、[バージョン識別子](/reference/resource-properties/versions) と [最新バージョン](/reference/resource-properties/latest_version) に基づいて [バージョン管理されたモデル](/docs/collaborate/govern/model-versions) を選択します。
 
 ```bash
 dbt list --select "version:latest"      # only 'latest' versions

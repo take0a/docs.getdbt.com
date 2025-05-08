@@ -1,6 +1,6 @@
 ---
 resource_types: [snapshots]
-description: "Read this guide to understand the check_cols configuration in dbt."
+description: "dbt の check_cols 構成を理解するには、このガイドをお読みください。"
 datatype: "[column_name] | all"
 ---
 
@@ -53,19 +53,21 @@ snapshots:
 
 </File>
 
-## Description
-A list of columns within the results of your snapshot query to check for changes.
+## 説明
 
-Alternatively, use all columns using the `all` value (however this may be less performant).
+ snapshot クエリの結果内で変更を確認する列のリストです。
 
-This parameter is **required if using the `check` [strategy](/reference/resource-configs/strategy)**.
+または、`all` 値を使用してすべての列を使用することもできます（ただし、パフォーマンスが低下する可能性があります）。
 
-## Default
-No default is provided.
+このパラメータは、**`check` [strategy](/reference/resource-configs/strategy)** を使用する場合に必須です。
 
-## Examples
+## デフォルト
 
-### Check a list of columns for changes
+デフォルトは指定されていません。
+
+## 例
+
+### 列のリストの変更を確認する
 
 <VersionBlock firstVersion="1.9">
 
@@ -85,7 +87,7 @@ snapshots:
 ```
 </File>
 
-To select from this snapshot in a downstream model: `select * from {{ ref('orders_snapshot_check') }}`
+下流モデルでこの snapshot から選択するには: `select * from {{ ref('orders_snapshot_check') }}`
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">
@@ -108,7 +110,7 @@ To select from this snapshot in a downstream model: `select * from {{ ref('order
 
 </VersionBlock>
 
-### Check all columns for changes
+### すべての列の変更を確認する
 
 <VersionBlock firstVersion="1.9">
 
@@ -126,7 +128,7 @@ snapshots:
   ```
 </File>
 
-To select from this snapshot in a downstream model: `select * from {{{ ref('orders_snapshot_check') }}`
+下流モデルでこの snapshot から選択するには: `select * from {{{ ref('orders_snapshot_check') }}`
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">

@@ -1,22 +1,22 @@
 ---
-title: "About dbt source command"
+title: "dbt source コマンドについて"
 sidebar_label: "source"
 id: "source"
 ---
 
-The `dbt source` command provides subcommands that are useful when working with source data. This command provides one subcommand, `dbt source freshness`.
+`dbt source` コマンドは、ソースデータの操作に役立つサブコマンドを提供します。このコマンドには、`dbt source freshness` というサブコマンドが1つあります。
 
 
 
 ### dbt source freshness
 
-If your dbt project is [configured with sources](/docs/build/sources), then the `dbt source freshness` command will query all of your defined source tables, determining the "freshness" of these tables. If the tables are stale (based on the `freshness` config specified for your sources) then dbt will report a warning or error accordingly. If a source <Term id="table" /> is in a stale state, then dbt will exit with a nonzero exit code.
+dbt プロジェクトが [ソースを使用して構成](/docs/build/sources) されている場合、`dbt source freshness` コマンドは定義済みのすべてのソーステーブルをクエリし、これらのテーブルの「鮮度」を判断します。テーブルが古い場合（ソースに指定された `freshness` 構成に基づきます）、dbt はそれに応じて警告またはエラーを報告します。ソース <Term id="table" /> が古い状態の場合、dbt はゼロ以外の終了コードで終了します。
 
-You can also use [source freshness commands](/reference/commands/source#source-freshness-commands) to help make sure the data you get is new and not old or outdated.
+[ソース鮮度コマンド](/reference/commands/source#source-freshness-commands) を使用して、取得するデータが古くなったり期限切れになったりしていないことを確認することもできます。
 
-### Configure source freshness
+### ソースの鮮度を設定する
 
-The example below, shows how to configure source freshness in dbt. Refer to [Declaring source freshness](/docs/build/sources#declaring-source-freshness) for more information. 
+以下の例は、dbt でソースの鮮度を設定する方法を示しています。詳細については、[ソースの鮮度を宣言する](/docs/build/sources#declaring-source-freshness) を参照してください。
 
 <File name='models/<filename>.yml'>
 
@@ -49,25 +49,25 @@ sources:
 ```
 </File>
 
-This helps to monitor the data pipeline health.
+これは、データパイプラインの健全性をモニタリングするのに役立ちます。
 
-You can also configure source freshness in the **Execution settings** section in your dbt Cloud job **Settings** page. For more information, refer to [Enabling source freshness snapshots](/docs/deploy/source-freshness#enabling-source-freshness-snapshots).
+dbt Cloud ジョブの [**設定**] ページの [**実行設定**] セクションでソースの鮮度を設定することもできます。詳細については、[ソース鮮度スナップショットの有効化](/docs/deploy/source-freshness#enabling-source-freshness-snapshots) をご覧ください。
 
-### Source freshness commands
+### Source freshness コマンド
 
-Source freshness commands ensure you're receiving the most up-to-date, relevant, and accurate information. 
+Source freshness コマンドを使用すると、最新かつ関連性が高く、正確な情報を確実に受け取ることができます。
 
-Some of the typical commands you can use are:
+使用できる代表的なコマンドは以下のとおりです:
 
 | **Command**                                                                 | **Description**                  | 
 | ----------------------------------------------------------------------------| ---------------------------------|
-|[`dbt source freshness`](/reference/commands/source#dbt-source-freshness)    |Checks the "freshness" for all sources.|
-|[`dbt source freshness --output target/source_freshness.json`](/reference/commands/source#configuring-source-freshness-output)|Output of "freshness" information to a different path.|
-|[`dbt source freshness --select "source:source_name"`](/reference/commands/source#specifying-sources-to-snapshot)|Checks the "freshness" for specific sources.|
+|[`dbt source freshness`](/reference/commands/source#dbt-source-freshness)    | すべてのソースの「鮮度」をチェックします。 |
+|[`dbt source freshness --output target/source_freshness.json`](/reference/commands/source#configuring-source-freshness-output)|「鮮度」情報を別のパスに出力します。|
+|[`dbt source freshness --select "source:source_name"`](/reference/commands/source#specifying-sources-to-snapshot)|特定のソースの「鮮度」をチェックします。|
 
-### Specifying sources to snapshot
+### スナップショットを作成するソースの指定
 
-By default, `dbt source freshness` will calculate freshness information for all of the sources in your project. To snapshot freshness for a subset of these sources, use the `--select` flag.
+デフォルトでは、`dbt source freshness` はプロジェクト内のすべてのソースの鮮度情報を計算します。これらのソースのサブセットの鮮度情報をスナップショットするには、`--select` フラグを使用します。
 
 ```bash
 # Snapshot freshness for all Snowplow tables:
@@ -77,9 +77,9 @@ $ dbt source freshness --select "source:snowplow"
 $ dbt source freshness --select "source:snowplow.event"
 ```
 
-### Configuring source freshness output
+### ソース鮮度出力の設定
 
-When `dbt source freshness` completes, a <Term id="json" /> file containing information about the freshness of your sources will be saved to `target/sources.json`. An example `sources.json` will look like:
+`dbt source freshness` が完了すると、ソースの鮮度に関する情報を含む <Term id="json" /> ファイルが `target/sources.json` に保存されます。`sources.json` の例は以下のとおりです:
 
 <File name='target/sources.json'>
 
@@ -113,19 +113,20 @@ When `dbt source freshness` completes, a <Term id="json" /> file containing info
 
 </File>
 
-To override the destination for this `sources.json` file, use the `-o` (or `--output`) flag:
+この `sources.json` ファイルの宛先を上書きするには、`-o` (または `--output`) フラグを使用します:
+
 ```
 # Output source freshness info to a different path
 $ dbt source freshness --output target/source_freshness.json
 ```
 
-### Using source freshness
+### ソース鮮度の活用
 
-Snapshots of source freshness can be used to understand:
+ソース鮮度のスナップショットは、以下の点を把握するために使用できます。
 
-1. If a specific data source is in a delayed state
-2. The trend of data source freshness over time
+1. 特定のデータソースが遅延状態にあるかどうか
+2. データソース鮮度の経時的な傾向
 
-This command can be run manually to determine the state of your source data freshness at any time. It is also recommended that you run this command on a schedule, storing the results of the freshness snapshot at regular intervals. These longitudinal snapshots will make it possible to be alerted when source data freshness SLAs are violated, as well as understand the trend of freshness over time.
+このコマンドは手動で実行することで、いつでもソースデータの鮮度を確認できます。また、このコマンドをスケジュールに従って実行し、鮮度スナップショットの結果を定期的に保存することをお勧めします。これらの長期的なスナップショットにより、ソースデータの鮮度に関するSLA違反が発生した場合にアラートを受け取ったり、鮮度の経時的な傾向を把握したりすることが可能になります。
 
-dbt Cloud makes it easy to snapshot source freshness on a schedule, and provides a dashboard out of the box indicating the state of freshness for all of the sources defined in your project. For more information on snapshotting freshness in dbt Cloud, check out the [docs](/docs/build/sources#source-data-freshness).
+dbt Cloud を使用すると、スケジュールに従ってソース鮮度のスナップショットを簡単に取得できます。また、プロジェクトで定義されているすべてのソースの鮮度状態を示すダッシュボードがすぐに使用できます。dbt Cloud での鮮度のスナップショット取得の詳細については、[ドキュメント](/docs/build/sources#source-data-freshness) をご覧ください。

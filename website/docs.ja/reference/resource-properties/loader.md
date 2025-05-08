@@ -19,11 +19,13 @@ sources:
 
 </File>
 
-## Definition
-Describe the tool that loads this source into your warehouse. Note that this property is for documentation purposes only — dbt does not meaningfully use this.
+## 定義
 
-## Examples
-### Indicate which EL tool loaded data
+このソースをウェアハウスにロードするツールについて記述します。このプロパティはドキュメント作成のみを目的としており、dbt では意味のある用途で使用されません。
+
+## 例
+
+### どのELツールがデータをロードしたかを示す
 
 <File name='models/<filename>.yml'>
 

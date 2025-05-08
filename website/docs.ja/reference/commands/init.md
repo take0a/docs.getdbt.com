@@ -1,39 +1,39 @@
 ---
-title: "About dbt init command"
+title: "dbt init コマンドについて"
 sidebar_label: "init"
 id: "init"
 ---
 
-`dbt init` helps get you started using dbt Core!
+`dbt init` は、dbt Core の使用を開始するのに役立ちます。
 
-## New project
+## 新規プロジェクト
 
-If this is your first time ever using the tool, it will:
-- ask you to name your project
-- ask you which database adapter you're using (or to [Supported Data Platforms](/docs/supported-data-platforms))
-- prompt you for each piece of information that dbt needs to connect to that database: things like `account`, `user`, `password`, etc
+このツールを初めて使用する場合は、以下の手順が表示されます。
+- プロジェクト名の入力を求められます。
+- 使用しているデータベースアダプタ（または[サポートされているデータプラットフォーム](/docs/supported-data-platforms)）の入力を求められます。
+- dbt がデータベースに接続するために必要な情報（アカウント、ユーザー、パスワードなど）の入力を求められます。
 
-Then, it will:
-- Create a new folder with your project name and sample files, enough to get you started with dbt
-- Create a connection profile on your local machine. The default location is `~/.dbt/profiles.yml`. Read more in [configuring your profile](/docs/core/connect-data-platform/connection-profiles).
+その後、以下の手順が表示されます。
+- プロジェクト名とサンプルファイルを含む新しいフォルダが作成されます。dbt を使い始めるのに十分な情報です。
+- ローカルマシンに接続プロファイルが作成されます。デフォルトの場所は `~/.dbt/profiles.yml` です。詳しくは、[プロファイルの設定](/docs/core/connect-data-platform/connection-profiles) をご覧ください。
 
-When using `dbt init` to initialize your project, include the `--profile` flag to specify an existing `profiles.yml` as the `profile:` key to use instead of creating a new one. For example, `dbt init --profile profile_name`.
+`dbt init` を使用してプロジェクトを初期化する際、`--profile` フラグを指定して、`profile:` キーとして既存の `profiles.yml` を指定します。新しいプロファイルを作成する必要はありません。たとえば、`dbt init --profile profile_name` のように指定します。
 
-If the profile does not exist in `profiles.yml` or the command is run inside an existing project, the command raises an error.
+`profiles.yml` にプロファイルが存在しない場合、または既存のプロジェクト内でコマンドを実行すると、エラーが発生します。
 
 
-## Existing project
+## 既存のプロジェクト
 
-If you've just cloned or downloaded an existing dbt project, `dbt init` can still help you set up your connection profile so that you can start working quickly. It will prompt you for connection information, as above, and add a profile (using the `profile` name from the project) to your local `profiles.yml`, or create the file if it doesn't already exist.
+既存の dbt プロジェクトをクローンまたはダウンロードした場合でも、`dbt init` を使用すると接続プロファイルを設定でき、すぐに作業を開始できます。上記のように接続情報の入力を求められ、プロジェクトの `profile` 名を使用してローカルの `profiles.yml` にプロファイルが追加されます。ファイルがまだ存在しない場合は作成されます。
 
 
 ## profile_template.yml
 
-`dbt init` knows how to prompt for connection information by looking for a file named `profile_template.yml`. It will look for this file in two places:
+`dbt init` は、`profile_template.yml` というファイルを検索することで接続情報の入力を求めます。このファイルは、以下の 2 つの場所で検索されます。
 
-- **Adapter plugin:** What's the bare minumum Postgres profile? What's the type of each field, what are its defaults? This information is stored in a file called [`dbt/include/postgres/profile_template.yml`](https://github.com/dbt-labs/dbt-postgres/blob/main/dbt/include/postgres/profile_template.yml). If you're the maintainer of an adapter plugin, we highly recommend that you add a `profile_template.yml` to your plugin, too. Refer to the [Build, test, document, and promote adapters](/guides/adapter-creation) guide for more information.
+- **アダプタプラグイン:** 最低限必要な Postgres プロファイルは何ですか？各フィールドのタイプとデフォルト値は何ですか？この情報は、[`dbt/include/postgres/profile_template.yml`](https://github.com/dbt-labs/dbt-postgres/blob/main/dbt/include/postgres/profile_template.yml) というファイルに保存されています。アダプタプラグインのメンテナーの方は、プラグインにも `profile_template.yml` を追加することを強くお勧めします。詳細については、[アダプタのビルド、テスト、ドキュメント化、およびプロモート](/guides/adapter-creation) ガイドを参照してください。
 
-- **Existing project:** If you're the maintainer of an existing project, and you want to help new users get connected to your database quickly and easily, you can include your own custom `profile_template.yml` in the root of your project, alongside `dbt_project.yml`. For common connection attributes, set the values in `fixed`; leave user-specific attributes in `prompts`, but with custom hints and defaults as you'd like.
+- **既存プロジェクト:** 既存プロジェクトのメンテナーで、新規ユーザーがデータベースに迅速かつ簡単に接続できるようにしたい場合は、プロジェクトのルートに `dbt_project.yml` と並んで、独自のカスタム `profile_template.yml` を含めることができます。共通の接続属性については `fixed` で値を設定し、ユーザー固有の属性は `prompts` に残し、必要に応じてカスタムヒントとデフォルトを設定できます。
 
 <File name='profile_template.yml'>
 

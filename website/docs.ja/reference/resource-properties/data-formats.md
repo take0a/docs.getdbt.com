@@ -1,19 +1,19 @@
 ---
-title: "Supported data formats for unit tests"
+title: "ユニットテストでサポートされているデータ形式"
 sidebar_label: "Data formats"
 ---
 
-Currently, mock data for unit testing in dbt supports three formats:
+現在、dbt のユニットテスト用のモックデータは、以下の 3 つの形式をサポートしています:
 
-- `dict` (default): Inline dictionary values.
-- `csv`: Inline CSV values or a CSV file.
-- `sql`: Inline SQL query or a SQL file. Note: For this format you must supply mock data for _all rows_. 
+- `dict` (デフォルト): インライン辞書値。
+- `csv`: インライン CSV 値または CSV ファイル。
+- `sql`: インライン SQL クエリまたは SQL ファイル。注: この形式では、すべての行のモックデータを提供する必要があります。
 
 ## dict
 
-The `dict` data format is the default if no `format` is defined.
+`format` が定義されていない場合、`dict` データ形式がデフォルトになります。
 
-`dict` requires an inline dictionary for `rows`:
+`dict` では、`rows` にインライン辞書が必要です。
 
 ```yml
 
@@ -31,7 +31,7 @@ unit_tests:
 
 ## csv
 
-When using the `csv` format, you can use either an inline CSV string for `rows`:
+`csv` 形式を使用する場合、`rows` にインライン CSV 文字列を使用できます:
 
 ```yml
 
@@ -48,7 +48,7 @@ unit_tests:
 
 ```
 
-Or, you can provide the name of a CSV file in the `tests/fixtures` directory (or the configured `test-paths` location) of your project for `fixture`: 
+または、プロジェクトの `tests/fixtures` ディレクトリ (または構成された `test-paths` の場所) にある `fixture` の CSV ファイルの名前を指定することもできます:
 
 ```yml
 
@@ -64,13 +64,13 @@ unit_tests:
 
 ## sql
 
-Using this format:
-- Provides more flexibility for the types of data you can unit test
-- Allows you to unit test a model that depends on an ephemeral model
+この形式を使用すると、以下のメリットがあります:
+- ユニットテストできるデータの種類に対して柔軟性が高まります。
+- 一時的なモデルに依存するモデルのユニットテストが可能になります。
 
-However, when using `format: sql` you must supply mock data for _all rows_.
+ただし、`format: sql` を使用する場合は、_すべての行_ に対してモックデータを提供する必要があります。
 
-When using the `sql` format, you can use either an inline SQL query for `rows`:
+`sql` 形式を使用する場合、`rows` に対してインライン SQL クエリを使用できます:
 
 ```yml
 
@@ -86,7 +86,7 @@ unit_tests:
 
 ```
 
-Or, you can provide the name of a SQL file in the `tests/fixtures` directory (or the configured `test-paths` location) of your project for `fixture`: 
+または、プロジェクトの `tests/fixtures` ディレクトリ (または構成された `test-paths` の場所) にある SQL ファイルの名前を `fixture` に指定することもできます:
 
 ```yml
 
@@ -100,4 +100,4 @@ unit_tests:
 
 ```
 
-**Note:** Jinja is unsupported in SQL fixtures for unit tests.
+**注意:** Jinja は、ユニット テストの SQL フィクスチャではサポートされていません。

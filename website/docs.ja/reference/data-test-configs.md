@@ -1,27 +1,27 @@
 ---
-title: Data test configurations
-description: "Read this guide to learn about using data test configurations in dbt."
+title: Data test 構成
+description: "dbt で data test 構成を使用する方法については、このガイドをお読みください。"
 meta:
   resource_type: Data tests
 ---
-import ConfigResource from '/snippets/_config-description-resource.md';
-import ConfigGeneral from '/snippets/_config-description-general.md';
+import ConfigResource from '/snippets.ja/_config-description-resource.md';
+import ConfigGeneral from '/snippets.ja/_config-description-general.md';
 
 
-## Related documentation
+## 関連ドキュメント
 
-* [Data tests](/docs/build/data-tests)
+* [データテスト](/docs/build/data-tests)
 
-Data tests can be configured in a few different ways:
-1. Properties within `.yml` definition (generic tests only, see [test properties](/reference/resource-properties/data-tests) for full syntax)
-2. A `config()` block within the test's SQL definition
-3. In `dbt_project.yml`
+データテストは、いくつかの方法で設定できます。
+1. `.yml` 定義内のプロパティ（汎用テストのみ。完全な構文については、[テストプロパティ](/reference/resource-properties/data-tests) を参照してください）
+2. テストの SQL 定義内の `config()` ブロック
+3. `dbt_project.yml` 内
 
-Data test configs are applied hierarchically, in the order of specificity outlined above. In the case of a singular test, the `config()` block within the SQL definition takes precedence over configs in the project file. In the case of a specific instance of a generic test, the test's `.yml` properties would take precedence over any values set in its generic SQL definition's `config()`, which in turn would take precedence over values set in `dbt_project.yml`.
+データテストの設定は、上記の詳細度に基づいて階層的に適用されます。単一のテストの場合、SQL 定義内の `config()` ブロックがプロジェクトファイル内の設定よりも優先されます。汎用テストの特定のインスタンスの場合、テストの `.yml` プロパティは、汎用 SQL 定義の `config()` で設定された値よりも優先され、さらに `dbt_project.yml` で設定された値よりも優先されます。
 
-## Available configurations
+## 利用可能な構成
 
-Click the link on each configuration option to read more about what it can do.
+各構成オプションのリンクをクリックすると、その機能の詳細をご覧いただけます。
 
 ### Data test-specific configurations
 
@@ -115,7 +115,7 @@ version: 2
                 [where](/reference/resource-configs/where): <string>
 ```
 
-This configuration mechanism is supported for specific instances of generic tests only. To configure a specific singular test, you should use the `config()` macro in its SQL definition.
+この設定メカニズムは、汎用テストの特定のインスタンスに対してのみサポートされます。特定のテストを設定するには、SQL定義で `config()` マクロを使用する必要があります。
 
 
 </TabItem>
@@ -123,7 +123,7 @@ This configuration mechanism is supported for specific instances of generic test
 </Tabs>
 
 
-### General configurations
+### 一般的な構成
 
 <ConfigGeneral />
 
@@ -212,7 +212,7 @@ version: 2
                 [alias](/reference/resource-configs/alias): <string>
 ```
 
-This configuration mechanism is supported for specific instances of generic data tests only. To configure a specific singular test, you should use the `config()` macro in its SQL definition.
+この設定メカニズムは、汎用データテストの特定のインスタンスに対してのみサポートされます。特定のテストを設定するには、SQL定義で `config()` マクロを使用する必要があります。
 
 
 </TabItem>
@@ -220,11 +220,11 @@ This configuration mechanism is supported for specific instances of generic data
 
 </Tabs>
 
-### Examples
+### 例
 
-#### Add a tag to one test
+#### 1つのテストにタグを追加する
 
-If a specific instance of a generic data test:
+汎用データテストの特定のインスタンスの場合:
 
 <File name='models/<filename>.yml'>
 
@@ -240,7 +240,7 @@ models:
 
 </File>
 
-If a singular data test:
+特異データテストの場合:
 
 <File name='tests/<filename>.sql'>
 
@@ -252,7 +252,7 @@ select ...
 
 </File>
 
-#### Set the default severity for all instances of a generic data test
+#### 汎用データテストのすべてのインスタンスのデフォルトの重大度を設定します
 
 <File name='macros/<filename>.sql'>
 
@@ -268,7 +268,7 @@ select ...
 
 </File>
 
-#### Disable all data tests from a package
+#### パッケージからすべてのデータテストを無効にする
 
 <File name='dbt_project.yml'>
 
@@ -280,9 +280,9 @@ tests:
 
 </File>
 
-#### Specify custom configurations for generic data tests
+#### 汎用データテストのカスタム設定の指定
 
-Beginning in dbt v1.9, you can use any custom config key to specify custom configurations for data tests. For example, the following specifies the `snowflake_warehouse` custom config that dbt should use when executing the `accepted_values` data test:
+dbt v1.9 以降では、任意のカスタム設定キーを使用してデータテストのカスタム設定を指定できます。例えば、次の例は、dbt が `accepted_values` データテストを実行する際に使用する `snowflake_warehouse` カスタム設定を指定します:
 
 ```yml
 
@@ -299,13 +299,13 @@ models:
 
 ```
 
-Given the config, the data test runs on a different Snowflake virtual warehouse than the one in your default connection to enable better price-performance with a different warehouse size or more granular cost allocation and visibility.
+構成が指定されると、データ テストは、デフォルトの接続とは異なる Snowflake 仮想ウェアハウスで実行され、異なるウェアハウス サイズやよりきめ細かなコスト割り当てと可視性によって、より優れた価格パフォーマンスが実現されます。
 
-#### Add a description to generic and singular tests
+#### 汎用テストと特異テストに説明を追加する
 
-Starting from dbt v1.9 (also available to dbt Cloud [release tracks](/docs/dbt-versions/cloud-release-tracks)), you can add [descriptions](/reference/resource-properties/data-tests#description) to both generic and singular tests.
+dbt v1.9（dbt Cloud [リリーストラック](/docs/dbt-versions/cloud-release-tracks)でも利用可能）以降では、汎用テストと特異テストの両方に[説明](/reference/resource-properties/data-tests#description)を追加できます。
 
-For a generic test, add the description in line with the existing YAML:
+汎用テストの場合は、既存のYAMLに合わせて説明を追加します:
 
 <File name='models/staging/<filename>.yml'>
 
@@ -323,9 +323,9 @@ models:
 ```
 </File>
 
-You can also add descriptions to the Jinja macro that provides the core logic of a generic data test. Refer to the [Add description to generic data test logic](/best-practices/writing-custom-generic-tests#add-description-to-generic-data-test-logic) for more information.
+汎用データテストのコアロジックを提供するJinjaマクロに説明を追加することもできます。詳細については、[汎用データテストのロジックに説明を追加する](/best-practices/writing-custom-generic-tests#add-description-to-generic-data-test-logic)を参照してください。
 
-For a singular test, define it in the test's directory:
+単一のテストの場合は、テストのディレクトリに定義します:
 
 <File name='tests/my_custom_test.yml'>
 
@@ -338,5 +338,5 @@ data_tests:
 ```
 </File>
 
-For more information refer to [Add a description to a data test](/reference/resource-properties/description#add-a-description-to-a-data-test).
+詳細については、「データ テストに説明を追加する」 (/reference/resource-properties/description#add-a-description-to-a-data-test) を参照してください。
 

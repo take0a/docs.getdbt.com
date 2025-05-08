@@ -1,42 +1,42 @@
 
-## Use cases
+## ユースケース
 
-The following setup will work for every dbt project:
+以下の設定は、すべての dbt プロジェクトで機能します。
 
-- Add [any package dependencies](/docs/collaborate/govern/project-dependencies#when-to-use-project-dependencies) to `packages.yml`
-- Add [any project dependencies](/docs/collaborate/govern/project-dependencies#when-to-use-package-dependencies) to `dependencies.yml`
+- [任意のパッケージ依存関係](/docs/collaborate/govern/project-dependencies#when-to-use-project-dependencies) を `packages.yml` に追加します。
+- [任意のプロジェクト依存関係](/docs/collaborate/govern/project-dependencies#when-to-use-package-dependencies) を `dependencies.yml` に追加します。
 
-However, you may be able to consolidate both into a single `dependencies.yml` file. Read the following section to learn more.
+ただし、両方を 1 つの `dependencies.yml` ファイルに統合できる場合があります。詳細については、次のセクションをご覧ください。
 
-#### About packages.yml and dependencies.yml
-The `dependencies.yml`. file can contain both types of dependencies: "package" and "project" dependencies.
-- [Package dependencies](/docs/build/packages#how-do-i-add-a-package-to-my-project) lets you add source code from someone else's dbt project into your own, like a library.
-- Project dependencies provide a different way to build on top of someone else's work in dbt.
+#### packages.yml と dependency.yml について
+`dependencies.yml` ファイルには、「パッケージ」依存関係と「プロジェクト」依存関係の両方の種類の依存関係を含めることができます。
+- [パッケージ依存関係](/docs/build/packages#how-do-i-add-a-package-to-my-project) を使用すると、ライブラリのように、他の dbt プロジェクトのソースコードを自分のプロジェクトに追加できます。
+- プロジェクト依存関係は、他のユーザーが dbt で作成したソースコードを基にビルドを行う別の方法を提供します。
 
-If your dbt project doesn't require the use of Jinja within the package specifications, you can simply rename your existing `packages.yml` to `dependencies.yml`. However, something to note is if your project's package specifications use Jinja, particularly for scenarios like adding an environment variable or a [Git token method](/docs/build/packages#git-token-method) in a private Git package specification, you should continue using the `packages.yml` file name.
+dbt プロジェクトでパッケージ仕様内で Jinja を使用する必要がない場合は、既存の `packages.yml` の名前を `dependencies.yml` に変更するだけで済みます。ただし、プロジェクトのパッケージ仕様で Jinja を使用している場合、特にプライベート Git パッケージ仕様に環境変数や [Git トークンメソッド](/docs/build/packages#git-token-method) を追加するようなシナリオでは、引き続き `packages.yml` ファイル名を使用する必要があります。
 
-Use the following toggles to understand the differences and determine when to use `dependencies.yml` or `packages.yml` (or both). Refer to the [FAQs](#faqs) for more info.
+以下のトグルを使用して違いを理解し、`dependencies.yml` と `packages.yml`（あるいは両方）のどちらを使用するかを判断してください。詳細については、[FAQ](#faqs) を参照してください。
 
-<Expandable alt_header="When to use Project dependencies" >
+<Expandable alt_header="プロジェクトの依存関係を使用する場合" >
 
-Project dependencies are designed for the [dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro) and [cross-project reference](/docs/collaborate/govern/project-dependencies#how-to-write-cross-project-ref) workflow:
+プロジェクト依存関係は、[dbt Mesh](/best-practices/how-we-mesh/mesh-1-intro) および [プロジェクト間参照](/docs/collaborate/govern/project-dependencies#how-to-write-cross-project-ref) ワークフロー向けに設計されています。
 
-- Use `dependencies.yml` when you need to set up cross-project references between different dbt projects, especially in a dbt Mesh setup.
-- Use `dependencies.yml` when you want to include both projects and non-private dbt packages in your project's dependencies.
-  - Private packages are not supported in `dependencies.yml` because they intentionally don't support Jinja rendering or conditional configuration. This is to maintain static and predictable configuration and ensures compatibility with other services, like dbt Cloud.
-- Use `dependencies.yml` for organization and maintainability if you're using both [cross-project refs](/docs/collaborate/govern/project-dependencies#how-to-write-cross-project-ref) and [dbt Hub packages](https://hub.getdbt.com/). This reduces the need for multiple YAML files to manage dependencies.
+- 異なる dbt プロジェクト間、特に dbt Mesh セットアップでプロジェクト間参照を設定する必要がある場合は、`dependencies.yml` を使用します。
+- プロジェクトの依存関係にプロジェクトと非プライベート dbt パッケージの両方を含める場合は、`dependencies.yml` を使用します。
+- プライベートパッケージは、Jinja レンダリングや条件付き構成を意図的にサポートしていないため、`dependencies.yml` ではサポートされていません。これは、静的で予測可能な構成を維持し、dbt Cloud などの他のサービスとの互換性を確保するためです。
+- [プロジェクト間参照](/docs/collaborate/govern/project-dependencies#how-to-write-cross-project-ref)と[dbt Hubパッケージ](https://hub.getdbt.com/)の両方を使用している場合は、整理と保守性のために`dependencies.yml`を使用してください。これにより、依存関係を管理するために複数のYAMLファイルを作成する必要性が軽減されます。
 
 </Expandable>
 
-<Expandable alt_header="When to use Package dependencies" >
+<Expandable alt_header="パッケージ依存関係を使用する場合" >
 
-Package dependencies allow you to add source code from someone else's dbt project into your own, like a library:
+パッケージ依存関係を使用すると、ライブラリのように、他の dbt プロジェクトのソースコードを自分のプロジェクトに追加できます。
 
-- If you only use packages like those from the [dbt Hub](https://hub.getdbt.com/), remain with `packages.yml`.
-- Use `packages.yml` when you want to download dbt packages, such as dbt projects, into your root or parent dbt project. Something to note is that it doesn't contribute to the dbt Mesh workflow.
-- Use `packages.yml` to include packages, including private packages, in your project's dependencies. If you have private packages that you need to reference, `packages.yml` is the way to go.
-- `packages.yml` supports Jinja rendering for historical reasons, allowing dynamic configurations. This can be useful if you need to insert values, like a [Git token method](/docs/build/packages#git-token-method) from an environment variable, into your package specifications.
+- [dbt Hub](https://hub.getdbt.com/) などのパッケージのみを使用する場合は、`packages.yml` をそのまま使用してください。
+- dbt プロジェクトなどの dbt パッケージをルートまたは親 dbt プロジェクトにダウンロードする場合は、`packages.yml` を使用します。ただし、これは dbt Mesh ワークフローには影響しないことに注意してください。
+- プロジェクトの依存関係にパッケージ（プライベートパッケージを含む）を含めるには、`packages.yml` を使用します。参照する必要があるプライベートパッケージがある場合は、`packages.yml` を使用することをお勧めします。
+- `packages.yml` は、歴史的な理由から Jinja レンダリングをサポートしており、動的な構成が可能です。これは、[Git トークンメソッド](/docs/build/packages#git-token-method) のような環境変数から値をパッケージ仕様に挿入する必要がある場合に便利です。
 
-Currently, to use private git repositories in dbt, you need to use a workaround that involves embedding a git token with Jinja. This is not ideal as it requires extra steps like creating a user and sharing a git token. We're planning to introduce a simpler method soon that won't require Jinja-embedded secret environment variables. For that reason, `dependencies.yml` does not support Jinja.
+現在、dbt でプライベート Git リポジトリを使用するには、Jinja を使用して Git トークンを埋め込む回避策を使用する必要があります。これは、ユーザーの作成や Git トークンの共有といった追加の手順が必要となるため、理想的ではありません。近日中に、Jinja に埋め込まれたシークレット環境変数を必要としない、よりシンプルな方法を導入する予定です。そのため、`dependencies.yml` は Jinja をサポートしていません。
 
 </Expandable>

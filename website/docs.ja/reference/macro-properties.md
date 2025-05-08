@@ -1,13 +1,13 @@
 ---
-title: Macro properties
+title: Macro プロパティ
 id: macro-properties
 ---
 
-import PropsCallout from '/snippets/_config-prop-callout.md';
+import PropsCallout from '/snippets.ja/_config-prop-callout.md';
 
-Macro properties can be declared in any `properties.yml` file. <PropsCallout title={frontMatter.title}/> 
+マクロプロパティは、任意の `properties.yml` ファイルで宣言できます。<PropsCallout title={frontMatter.title}/>
 
-You can name these files `whatever_you_want.yml` and nest them arbitrarily deep in sub-folders.
+これらのファイルには `whatever_you_want.yml` という名前を付け、任意の深さのサブフォルダにネストできます。
 
 <File name='macros/<filename>.yml'>
 

@@ -1,20 +1,19 @@
 ---
-title: "Source properties"
-description: "Learn how to use source properties in dbt."
+title: "Source プロパティ"
+description: "dbt で source プロパティを使用する方法を学習します。"
 ---
 
-## Related documentation
-- [Using sources](/docs/build/sources)
-- [Declaring resource properties](/reference/configs-and-properties)
+## 関連ドキュメント
+- [ソースの使用](/docs/build/sources)
+- [リソースプロパティの宣言](/reference/configs-and-properties)
 
-## Overview
+## 概要
 
 import PropsCallout from '/snippets/_config-prop-callout.md';
 
-Source properties can be declared in any `properties.yml` file in your `models/` directory (as defined by the [`model-paths` config](/reference/project-configs/model-paths)). <PropsCallout title={frontMatter.title}/>  <br /> 
+ソースプロパティは、`models/` ディレクトリ内の任意の `properties.yml` ファイルで宣言できます（[`model-paths` 設定](/reference/project-configs/model-paths) で定義されています）。<PropsCallout title={frontMatter.title}/> <br />
 
-
-You can name these files `whatever_you_want.yml`, and nest them arbitrarily deeply in subfolders within the `models/` directory:
+これらのファイルの名前を `whatever_you_want.yml` とし、`models/` ディレクトリ内の任意の階層にサブフォルダとしてネストできます。
 
 <File name='models/<filename>.yml'>
 

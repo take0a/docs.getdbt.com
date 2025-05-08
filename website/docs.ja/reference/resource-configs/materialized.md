@@ -1,6 +1,6 @@
 ---
 resource_types: [models]
-description: "Materialized - Read this in-depth guide to learn about materializations in dbt."
+description: "Materialized - dbt でのマテリアライゼーションについて詳しくは、この詳細なガイドをお読みください。"
 datatype: "string"
 ---
 
@@ -69,26 +69,26 @@ select ...
 
 </Tabs>
 
-## Definition 
+## 定義
 
-[Materializations](/docs/build/materializations#materializations) are strategies for persisting dbt models in a warehouse. These are the materialization types built into dbt:
+[マテリアライゼーション](/docs/build/materializations#materializations) は、dbt モデルをウェアハウスに永続化するための戦略です。dbt には以下のマテリアライゼーション タイプが組み込まれています。
 
-- `ephemeral` &mdash; [ephemeral](/docs/build/materializations#ephemeral) models are not directly built into the database
-- `table` &mdash; a model is rebuilt as a [table](/docs/build/materializations#table) on each run
-- `view` &mdash; a model is rebuilt as a [view](/docs/build/materializations#view) on each run
-- `materialized_view` &mdash; allows the creation and maintenance of [materialized views](/docs/build/materializations#materialized-view) in the target database
-- `incremental` &mdash; [incremental](/docs/build/materializations#incremental) models allow dbt to insert or update records into a table since the last time that model was run
+- `ephemeral` - [ephemeral](/docs/build/materializations#ephemeral) モデルはデータベースに直接構築されません。
+- `table` - モデルは実行ごとに [table](/docs/build/materializations#table) として再構築されます。
+- `view` - モデルは実行ごとに [view](/docs/build/materializations#view) として再構築されます。
+- `materialized_view` - ターゲット データベースに [マテリアライズド ビュー](/docs/build/materializations#materialized-view) を作成および管理できます。
+- `incremental` - [増分](/docs/build/materializations#incremental)モデルを使用すると、dbtは前回のモデル実行以降にテーブルにレコードを挿入または更新できます。
 
-You can also configure [custom materializations](/guides/create-new-materializations?step=1) in dbt. Custom materializations are a powerful way to extend dbt's functionality to meet your specific needs.
+dbtでは[カスタムマテリアライゼーション](/guides/create-new-materializations?step=1)も設定できます。カスタムマテリアライゼーションは、特定のニーズに合わせてdbtの機能を拡張する強力な手段です。
 
-## Creation Precedence
+## 作成の優先順位
+
 <!-- This text is copied from /reference/resource-configs/on_configuration_change.md -->
-Materializations are implemented following this "drop through" life cycle:
+マテリアライズは、以下の「ドロップスルー」ライフサイクルに従って実装されます。
 
-1. If a model does not exist with the provided path, create the new model.
-2. If a model exists, but has a different type, drop the existing model and create the new model.
-3. If [`--full-refresh`](/reference/resource-configs/full_refresh) is supplied, replace the existing model regardless of configuration changes and the [`on_configuration_change`](/reference/resource-configs/on_configuration_change) setting.
-4. If there are no configuration changes, perform the default action for that type (e.g. apply refresh for a materialized view).
-5. Determine whether to apply the configuration changes according to the `on_configuration_change` setting.
-
+1. 指定されたパスのモデルが存在しない場合は、新しいモデルを作成します。
+2. モデルは存在するがタイプが異なる場合は、既存のモデルを削除して新しいモデルを作成します。
+3. [`--full-refresh`](/reference/resource-configs/full_refresh) が指定されている場合は、設定変更や [`on_configuration_change`](/reference/resource-configs/on_configuration_change) の設定に関係なく、既存のモデルを置き換えます。
+4. 設定変更がない場合は、そのタイプのデフォルトのアクションを実行します（例：マテリアライズドビューの場合は更新を適用します）。
+5. `on_configuration_change` 設定に従って、設定変更を適用するかどうかを決定します。
 

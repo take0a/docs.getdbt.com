@@ -1,48 +1,53 @@
 ---
-title: "About dbt clean command"
+title: "dbt clean コマンドについて"
 sidebar_label: "clean"
 id: "clean"
 ---
 
-`dbt clean` is a utility function that deletes the paths specified within the [`clean-targets`](/reference/project-configs/clean-targets) list in the `dbt_project.yml` file. It helps by removing unnecessary files or directories generated during the execution of other dbt commands, ensuring a clean state for the project.
+`dbt clean` は、`dbt_project.yml` ファイルの [`clean-targets`](/reference/project-configs/clean-targets) リスト内で指定されたパスを削除するユーティリティ関数です。他の dbt コマンドの実行中に生成された不要なファイルやディレクトリを削除することで、プロジェクトをクリーンな状態に保ちます。
 
-## Example usage
+## 使用例
+
 ```
 dbt clean
 ```
 
-## Supported flags
+## サポートされているフラグ
 
-This section will briefly explain the following flags:
+このセクションでは、以下のフラグについて簡単に説明します。
 
-- [`--clean-project-files-only`](#--clean-project-files-only) (default)
+- [`--clean-project-files-only`](#--clean-project-files-only) (デフォルト)
 - [`--no-clean-project-files-only`](#--no-clean-project-files-only)
 
-To view the list of all supported flags for the `dbt clean` command in the terminal, use the `--help` flag, which will display detailed information about the available flags you can use, including its description and usage:
+ターミナルで `dbt clean` コマンドでサポートされているすべてのフラグのリストを表示するには、`--help` フラグを使用します。これにより、使用可能なフラグに関する詳細情報（説明や使用方法など）が表示されます。
 
 ```shell
 dbt clean --help
 ```
 
 ### --clean-project-files-only
-By default, dbt deletes all the paths within the project directory specified in `clean-targets`.
+
+デフォルトでは、dbt は `clean-targets` で指定されたプロジェクト ディレクトリ内のすべてのパスを削除します。
 
 :::note
-Avoid using paths outside the dbt project; otherwise, you will see an error.
+dbt プロジェクト外のパスを使用しないでください。そうしないと、エラーが表示されます。
 :::
   
 
-#### Example usage
+#### 使用例
+
 ```shell
 dbt clean --clean-project-files-only
 ```
 
 ### --no-clean-project-files-only
-Deletes all the paths specified in the `clean-targets` list of `dbt_project.yml`, including those outside the current dbt project.
+
+現在の dbt プロジェクト外のパスも含め、`dbt_project.yml` の `clean-targets` リストで指定されたすべてのパスを削除します。
 
 ```shell
 dbt clean --no-clean-project-files-only
 ```
 
-## dbt clean with remote file system
-To avoid complex permissions issues and potentially deleting crucial aspects of the remote file system without access to fix them, this command does not work when interfacing with the RPC server that powers the dbt Cloud IDE. Instead, when working in dbt Cloud, the `dbt deps` command cleans before it installs packages automatically. The `target` folder can be manually deleted from the sidebar file tree if needed.
+## リモートファイルシステムでのdbt clean
+
+複雑な権限の問題や、修正権限がないままリモートファイルシステムの重要な部分が削除される可能性を回避するため、このコマンドはdbt Cloud IDEを動かすRPCサーバーとのインターフェースでは機能しません。dbt Cloud内で作業する場合、`dbt deps`コマンドはパッケージを自動的にインストールする前にクリーンアップを実行します。`target`フォルダは、必要に応じてサイドバーのファイルツリーから手動で削除できます。

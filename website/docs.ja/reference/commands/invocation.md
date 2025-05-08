@@ -1,25 +1,25 @@
 ---
-title: "About dbt invocation command"
+title: "dbt invocation コマンドについて"
 sidebar_label: "invocation"
 id: invocation
 ---
 
-The `dbt invocation` command is available in the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) and allows you to:
-- List active invocations to debug long-running or hanging invocations.
-- Identify and investigate sessions causing the `Session occupied` error.
-- Monitor currently active dbt commands (like `run`, `build`) in real-time.
+`dbt invocation` コマンドは [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) で使用でき、次の操作を実行できます。
+- アクティブな呼び出しを一覧表示して、長時間実行されている呼び出しやハングしている呼び出しをデバッグします。
+- `Session supplied` エラーの原因となっているセッションを特定して調査します。
+- 現在アクティブな dbt コマンド (`run`、`build` など) をリアルタイムで監視します。
 
-The `dbt invocation` command only lists _active invocations_. If no sessions are running, the list will be empty. Completed sessions aren't included in the output.
+`dbt invocation` コマンドは、_アクティブな呼び出し_ のみを一覧表示します。実行中のセッションがない場合、リストは空になります。完了したセッションは出力に含まれません。
 
-## Usage
+## 使用方法
 
-This page lists the command and flag you can use with `dbt invocation`. To use them, add a command or option like this: `dbt invocation [command]`.
+このページでは、`dbt invocation` で使用できるコマンドとフラグの一覧を示します。これらを使用するには、`dbt invocation [command]` のようにコマンドまたはオプションを追加します。
 
-Available flags in the command line interface (CLI) are [`help`](#dbt-invocation-help) and [`list`](#dbt-invocation-list).
+コマンドラインインターフェース (CLI) で使用できるフラグは、[`help`](#dbt-invocation-help) と [`list`](#dbt-invocation-list) です。
 
 ### dbt invocation help
 
-The `help` command provides you with the help output for the `invocation` command in the CLI, including the available flags.
+`help` コマンドは、使用可能なフラグを含む、CLI の `invocation` コマンドのヘルプ出力を提供します。
 
 ```shell
 dbt invocation help
@@ -31,7 +31,7 @@ or
 dbt help invocation
 ```
 
-The command returns the following information:
+このコマンドは次の情報を返します。
 
 ```bash
 dbt invocation help
@@ -57,13 +57,13 @@ Use "dbt invocation [command] --help" for more information about a command.
 
 ### dbt invocation list
 
-The `list` command provides you with a list of active invocations in your dbt Cloud CLI. When a long-running session is active, you can use this command in a separate terminal window to view the active session to help debug the issue.
+`list` コマンドは、dbt Cloud CLI でアクティブな呼び出しのリストを表示します。長時間実行セッションがアクティブな場合は、別のターミナルウィンドウでこのコマンドを使用してアクティブなセッションを表示し、問題のデバッグに役立てることができます。
 
 ```shell
 dbt invocation list
 ```
 
-The command returns the following information, including the `ID`, `status`, `type`, `arguments`, and `started at` time of the active session:
+このコマンドは、アクティブ セッションの `ID`、`status`、`type`、`arguments`、`started at` 時間など、次の情報を返します:
 
 ```bash
 dbt invocation list
@@ -80,13 +80,13 @@ Active Invocations:
 
 :::tip
 
-To cancel an active session in the terminal, use the `Ctrl + Z` shortcut.
+ターミナルでアクティブなセッションをキャンセルするには、`Ctrl + Z` ショートカットを使用します。
 
 :::
 
-## Related docs
+## 関連ドキュメント
 
-- [Install dbt Cloud CLI](/docs/cloud/cloud-cli-installation)
-- [Troubleshooting dbt Cloud CLI 'Session occupied' error](/faqs/Troubleshooting/long-sessions-cloud-cli)
+- [dbt Cloud CLI のインストール](/docs/cloud/cloud-cli-installation)
+- [dbt Cloud CLI の「セッションが占有されています」エラーのトラブルシューティング](/faqs/Troubleshooting/long-sessions-cloud-cli)
 
 

@@ -1,60 +1,60 @@
 ---
-title: "dbt Command reference"
+title: "dbt コマンドリファレンス"
 ---
 
-You can run dbt using the following tools:
+dbt は以下のツールを使用して実行できます:
 
-- In your browser with the [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) 
-- On the command line interface using the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) or open-source [dbt Core](/docs/core/installation-overview).
-  
-A key distinction with the tools mentioned, is that dbt Cloud CLI and IDE are designed to support safe parallel execution of dbt commands, leveraging dbt Cloud's infrastructure and its comprehensive [features](/docs/cloud/about-cloud/dbt-cloud-features). In contrast, `dbt-core` _doesn't support_ safe parallel execution for multiple invocations in the same process. Learn more in the [parallel execution](#parallel-execution) section.
+- ブラウザで [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) を使用する
+- コマンドラインインターフェースで [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) またはオープンソースの [dbt Core](/docs/core/installation-overview) を使用する
 
-## Parallel execution
+上記のツールとの主な違いは、dbt Cloud CLI と IDE は、dbt Cloud のインフラストラクチャとその包括的な [機能](/docs/cloud/about-cloud/dbt-cloud-features) を活用して、dbt コマンドの安全な並列実行をサポートするように設計されていることです。一方、`dbt-core` は、同一プロセス内での複数の呼び出しの安全な並列実行をサポートしていません。詳しくは、[並列実行](#parallel-execution) セクションをご覧ください。
 
-dbt Cloud allows for concurrent execution of commands, enhancing efficiency without compromising data integrity. This enables you to run multiple commands at the same time. However, it's important to understand which commands can be run in parallel and which can't.
+## 並列実行 {#parallel-execution}
 
-In contrast, [`dbt-core` _doesn't_ support](/reference/programmatic-invocations#parallel-execution-not-supported) safe parallel execution for multiple invocations in the same process, and requires users to manage concurrency manually to ensure data integrity and system stability.
+dbt Cloud ではコマンドの同時実行が可能で、データの整合性を損なうことなく効率性を高めることができます。これにより、複数のコマンドを同時に実行できます。ただし、どのコマンドが並列実行可能で、どのコマンドが並列実行不可能かを理解することが重要です。
 
-To ensure your dbt workflows are both efficient and safe, you can run different types of dbt commands at the same time (in parallel) &mdash; for example, `dbt build` (write operation) can safely run alongside `dbt parse` (read operation) at the same time. However, you can't run `dbt build` and `dbt run` (both write operations) at the same time.
+一方、[`dbt-core` は、同一プロセス内での複数の呼び出しの安全な並列実行を_サポート_していません](/reference/programmatic-invocations#parallel-execution-not-supported)。そのため、ユーザーはデータの整合性とシステムの安定性を確保するために、同時実行を手動で管理する必要があります。
 
-dbt commands can be `read` or `write` commands:
+dbt ワークフローの効率性と安全性を確保するために、異なる種類の dbt コマンドを同時に（並列に）実行できます。たとえば、`dbt build`（書き込み操作）と `dbt parse`（読み取り操作）を同時に安全に実行できます。ただし、`dbt build` と `dbt run`（どちらも書き込み操作）を同時に実行することはできません。
+
+dbt コマンドは `read` コマンドまたは `write` コマンドになります:
 
 | Command type | Description | <div style={{width:'200px'}}>Example</div> |
 |------|-------------|---------|
-| **Write** | These commands perform actions that change data or metadata in your data platform.<br /><br /> Limited to one invocation at any given time, which prevents any potential conflicts, such as overwriting the same table in your data platform at the same time. | `dbt build`<br />`dbt run` |
-| **Read** | These commands involve operations that fetch or read data without making any changes to your data platform.<br /><br /> Can have multiple invocations in parallel and aren't limited to one invocation at any given time. This means read commands can run in parallel with other read commands and a single write command.| `dbt parse`<br />`dbt compile`|
+| **Write** | これらのコマンドは、データ プラットフォーム内のデータまたはメタデータを変更するアクションを実行します。<br /><br /> 一度に 1 回の呼び出しに制限されているため、データ プラットフォーム内の同じテーブルを同時に上書きするなどの潜在的な競合を回避できます。 | `dbt build`<br />`dbt run` |
+| **Read** | これらのコマンドは、データプラットフォームに変更を加えることなく、データの取得または読み取りを行う操作です。<br /><br /> 複数の呼び出しを並行して実行でき、一度に1つの呼び出しに限定されません。つまり、読み取りコマンドは、他の読み取りコマンドや単一の書き込みコマンドと並行して実行できます。| `dbt parse`<br />`dbt compile`|
 
-## Available commands
+## 利用可能なコマンド
 
-The following sections outline the commands supported by dbt and their relevant flags. They are available in all tools and all [supported versions](/docs/dbt-versions/core) unless noted otherwise. You can run these commands in your specific tool by prefixing them with `dbt` &mdash; for example, to run the `test` command, type `dbt test`.
+以下のセクションでは、dbt でサポートされているコマンドとその関連フラグについて説明します。特に記載がない限り、これらのコマンドはすべてのツールとすべての[サポート対象バージョン](/docs/dbt-versions/core)で使用できます。これらのコマンドの前に「dbt」を付けることで、特定のツールで実行できます。たとえば、「test」コマンドを実行するには、「dbt test」と入力します。
 
-For information about selecting models on the command line, refer to [Model selection syntax](/reference/node-selection/syntax).
+コマンドラインでのモデル選択については、[モデル選択構文](/reference/node-selection/syntax)を参照してください。
 
-Commands with a ('❌') indicate write commands, commands with a ('✅') indicate read commands, and commands with a (N/A) indicate it's not relevant to the parallelization of dbt commands.
+('❌') が付いたコマンドは書き込みコマンド、('✅') が付いたコマンドは読み取りコマンド、(N/A) が付いたコマンドは dbt コマンドの並列化に関係しないことを示します。
 
-| Command | Description | Parallel execution | <div style={{width:'250px'}}>Caveats</div> |
+| Command | Description | Parallel execution | <div style={{width:'250px'}}>注意点</div> |
 |---------|-------------| :-----------------:| ------------------------------------------ |
-| [build](/reference/commands/build) | Builds and tests all selected resources (models, seeds, snapshots, tests) |  ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) | 
-| cancel | Cancels the most recent invocation. | N/A | dbt Cloud CLI <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
-| [clean](/reference/commands/clean) | Deletes artifacts present in the dbt project |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [clone](/reference/commands/clone) | Clones selected models from the specified state |  ❌ | All tools <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
-| [compile](/reference/commands/compile) | Compiles (but does not run) the models in a project |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [debug](/reference/commands/debug) | Debugs dbt connections and projects | ✅ | dbt Cloud IDE, dbt Cloud CLI, dbt Core <br /> All [supported versions](/docs/dbt-versions/core) |
-| [deps](/reference/commands/deps) | Downloads dependencies for a project |  ✅ |  All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [docs](/reference/commands/cmd-docs) | Generates documentation for a project |   ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [environment](/reference/commands/dbt-environment) | Enables you to interact with your dbt Cloud environment. |   N/A | dbt Cloud CLI <br /> Requires [dbt v1.5 or higher](/docs/dbt-versions/core) |
-| help | Displays help information for any command | N/A | dbt Core, dbt Cloud CLI <br /> All [supported versions](/docs/dbt-versions/core) |
-| [init](/reference/commands/init) | Initializes a new dbt project |   ✅ | dbt Core<br /> All [supported versions](/docs/dbt-versions/core) |
-| [invocation](/reference/commands/invocation) | Enables users to debug long-running sessions by interacting with active invocations.|  N/A | dbt Cloud CLI<br /> Requires [dbt v1.5 or higher](/docs/dbt-versions/core) |
-| [list](/reference/commands/list) | Lists resources defined in a dbt project |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [parse](/reference/commands/parse) | Parses a project and writes detailed timing info |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| reattach | Reattaches to the most recent invocation to retrieve logs and artifacts. |   N/A | dbt Cloud CLI <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
-| [retry](/reference/commands/retry) | Retry the last run `dbt` command from the point of failure |  ❌ | All tools <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
-| [run](/reference/commands/run) | Runs the models in a project |   ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [run-operation](/reference/commands/run-operation) | Invokes a macro, including running arbitrary maintenance SQL against the database | ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [seed](/reference/commands/seed) | Loads CSV files into the database |  ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [show](/reference/commands/show) | Previews table rows post-transformation | ✅ |  All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [snapshot](/reference/commands/snapshot) | Executes "snapshot" jobs defined in a project |  ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-| [source](/reference/commands/source) | Provides tools for working with source data (including validating that sources are "fresh") | ✅ | All tools<br /> All [supported versions](/docs/dbt-versions/core) |
-| [test](/reference/commands/test) | Executes tests defined in a project  |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
-Note, use the [`--version`](/reference/commands/version) flag to display the installed dbt Core or dbt Cloud CLI version. (Not applicable for the dbt Cloud IDE). Available on all [supported versions](/docs/dbt-versions/core).
+| [build](/reference/commands/build) | 選択したすべてのリソース（モデル、シード、スナップショット、テスト）をビルドしてテストします |  ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) | 
+| cancel | 最新の呼び出しをキャンセルします。 | N/A | dbt Cloud CLI <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
+| [clean](/reference/commands/clean) | dbt プロジェクトに存在するアーティファクトを削除します |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [clone](/reference/commands/clone) | 指定された状態から選択したモデルを複製します |  ❌ | All tools <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
+| [compile](/reference/commands/compile) | プロジェクト内のモデルをコンパイルします（実行はしません）。 |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [debug](/reference/commands/debug) | dbt接続とプロジェクトをデバッグします | ✅ | dbt Cloud IDE, dbt Cloud CLI, dbt Core <br /> All [supported versions](/docs/dbt-versions/core) |
+| [deps](/reference/commands/deps) | プロジェクトの依存関係をダウンロードします |  ✅ |  All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [docs](/reference/commands/cmd-docs) | プロジェクトのドキュメントを生成する |   ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [environment](/reference/commands/dbt-environment) |dbt Cloud 環境と対話できるようになります。 |   N/A | dbt Cloud CLI <br /> Requires [dbt v1.5 or higher](/docs/dbt-versions/core) |
+| help | 任意のコマンドのヘルプ情報を表示します | N/A | dbt Core, dbt Cloud CLI <br /> All [supported versions](/docs/dbt-versions/core) |
+| [init](/reference/commands/init) | 新しいdbtプロジェクトを初期化します |   ✅ | dbt Core<br /> All [supported versions](/docs/dbt-versions/core) |
+| [invocation](/reference/commands/invocation) | アクティブな呼び出しを操作して、長時間実行されるセッションをユーザーがデバッグできるようにします。 |  N/A | dbt Cloud CLI<br /> Requires [dbt v1.5 or higher](/docs/dbt-versions/core) |
+| [list](/reference/commands/list) | dbt プロジェクトで定義されたリソースを一覧表示します |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [parse](/reference/commands/parse) | プロジェクトを解析し、詳細なタイミング情報を書き込みます |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| reattach | 最新の呼び出しに再接続して、ログと成果物を取得します。 |   N/A | dbt Cloud CLI <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
+| [retry](/reference/commands/retry) | 最後に実行した`dbt`コマンドを失敗した時点から再試行します |  ❌ | All tools <br /> Requires [dbt v1.6 or higher](/docs/dbt-versions/core) |
+| [run](/reference/commands/run) | プロジェクト内のモデルを実行します |   ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [run-operation](/reference/commands/run-operation) | データベースに対して任意のメンテナンスSQLを実行するなど、マクロを呼び出します。 | ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [seed](/reference/commands/seed) | CSVファイルをデータベースにロードします |  ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [show](/reference/commands/show) | 変換後のテーブル行をプレビューします | ✅ |  All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [snapshot](/reference/commands/snapshot) | プロジェクトで定義された「スナップショット」ジョブを実行します |  ❌ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+| [source](/reference/commands/source) | ソースデータを操作するためのツールを提供します（ソースが「最新」であることの検証を含む） | ✅ | All tools<br /> All [supported versions](/docs/dbt-versions/core) |
+| [test](/reference/commands/test) | プロジェクトで定義されたテストを実行します  |  ✅ | All tools <br /> All [supported versions](/docs/dbt-versions/core) |
+インストールされているdbt Coreまたはdbt Cloud CLIのバージョンを表示するには、[`--version`](/reference/commands/version)フラグを使用してください。(dbt Cloud IDEには適用されません)。すべての[サポート対象バージョン](/docs/dbt-versions/core)で利用できます。

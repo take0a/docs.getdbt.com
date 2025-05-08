@@ -1,16 +1,15 @@
 ---
-title: "About dbt rpc command"
+title: "dbt rpc コマンド"
 sidebar_label: "rpc"
 id: "rpc"
-description: "Remote Procedure Call (rpc) dbt server compiles and runs queries, and provides methods that enable you to list and terminate running processes. "
+description: "リモート プロシージャ コール (rpc) dbt サーバーは、クエリをコンパイルして実行し、実行中のプロセスを一覧表示して終了できるようにするメソッドを提供します。"
 ---
 
-:::caution The dbt-rpc plugin is deprecated
+:::caution dbt-rpc プラグインは非推奨となりました。
 
+dbt Labs は、dbt-core バージョン 1.5 までの互換性のために `dbt-rpc` を積極的にメンテナンスしてきました。dbt-core バージョン 1.6 (2023 年 7 月リリース) 以降、`dbt-rpc` は継続的な互換性のためにサポートされなくなります。
 
-dbt Labs actively maintained `dbt-rpc` for compatibility with dbt-core versions up to v1.5. Starting with dbt-core v1.6 (released in July 2023), `dbt-rpc` is no longer supported for ongoing compatibility. 
-
-In the meantime, dbt Labs will be performing critical maintenance only for `dbt-rpc`, until the last compatible version of dbt-core has reached the [end of official support](/docs/dbt-versions/core#latest-releases). At that point, dbt Labs will archive this repository to be read-only.
+その間、dbt Labs は、dbt-core の最後の互換性バージョンが [公式サポート終了](/docs/dbt-versions/core#latest-releases) に達するまで、`dbt-rpc` のみの重要なメンテナンスを実施します。公式サポート終了時点で、dbt Labs はこのリポジトリを読み取り専用としてアーカイブします。
 
 :::
 

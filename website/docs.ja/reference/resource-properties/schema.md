@@ -1,5 +1,5 @@
 ---
-title: "Defining a schema source property"
+title: "source の schema プロパティの定義"
 sidebar_label: "schema"
 resource_types: sources
 datatype: schema_name
@@ -22,23 +22,25 @@ version: 2
 
 </File>
 
-## Definition
-The schema name as stored in the database.
+## 定義
 
-This parameter is useful if you want to use a [source](/reference/source-properties) name that differs from the schema name.
+データベースに保存されているスキーマ名。
+
+このパラメータは、スキーマ名とは異なる [source](/reference/source-properties) 名を使用する場合に便利です。
 
 
-:::info BigQuery terminology
+:::info BigQuery 用語
 
-If you're using BigQuery, use the _dataset_ name as the `schema` property.
+BigQuery を使用している場合は、_dataset_ 名を `schema` プロパティとして使用します。
 
 :::
 
-## Default
-By default, dbt will use the source's `name` parameter as the schema name.
+## デフォルト
 
-## Examples
-### Use a simpler name for a source schema than the one in your database
+デフォルトでは、dbt はソースの `name` パラメータをスキーマ名として使用します。
+
+## 例
+### ソーススキーマには、データベース内のスキーマよりも単純な名前を使用します。
 
 <File name='models/<filename>.yml'>
 
@@ -56,12 +58,14 @@ sources:
 </File>
 
 
-In a downstream model:
+ダウンストリームモデルの場合:
+
 ```sql
 select * from {{ source('jaffle_shop', 'orders') }}
 ```
 
-Will get compiled to:
+次のようにコンパイルされます:
+
 ```sql
 select * from postgres_backend_public_schema.orders
 ```

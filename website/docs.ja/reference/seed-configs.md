@@ -1,16 +1,17 @@
 ---
-title: Seed configurations
-description: "Read this guide to learn about using seed configurations in dbt."
+title: Seed 構成
+description: "dbt での seed 構成の使用については、このガイドをお読みください。"
 meta:
   resource_type: Seeds
 ---
 
-import ConfigResource from '/snippets/_config-description-resource.md';
-import ConfigGeneral from '/snippets/_config-description-general.md';
+import ConfigResource from '/snippets.ja/_config-description-resource.md';
+import ConfigGeneral from '/snippets.ja/_config-description-general.md';
 
 
-## Available configurations
-### Seed-specific configurations
+## 利用可能な構成
+
+###  seed 固有の構成
 
 <ConfigResource meta={frontMatter.meta} />
 
@@ -62,7 +63,7 @@ seeds:
 
 </Tabs>
 
-### General configurations
+### 一般的な構成
 
 <ConfigGeneral />
 
@@ -179,14 +180,17 @@ seeds:
 </TabItem>
 </Tabs>
 
-## Configuring seeds
-Seeds can only be configured from YAML files, either in `dbt_project.yml` or within an individual seed's YAML properties. It is not possible to configure a seed from within its CSV file.
+## seed の設定
 
-Seed configurations, like model configurations, are applied hierarchically — configurations applied to a `marketing` subdirectory will take precedence over configurations applied to the entire `jaffle_shop` project, and configurations defined in a specific seed's properties will override configurations defined in `dbt_project.yml`.
+seed は、`dbt_project.yml` または個々の seed の YAML プロパティ内の YAML ファイルからのみ設定できます。CSV ファイル内から seed を設定することはできません。
 
-### Examples
-#### Apply the `schema` configuration to all seeds
-To apply a configuration to all seeds, including those in any installed [packages](/docs/build/packages), nest the configuration directly under the `seeds` key:
+モデル設定と同様に、 seed 設定は階層的に適用されます。つまり、`marketing` サブディレクトリに適用された設定は、`jaffle_shop` プロジェクト全体に適用された設定よりも優先されます。また、特定の seed のプロパティで定義された設定は、`dbt_project.yml` で定義された設定をオーバーライドします。
+
+### 例
+
+#### すべての seed に `schema` 設定を適用する
+
+インストール済みの [パッケージ](/docs/build/packages) 内の seed も含め、すべての seed に設定を適用するには、設定を `seeds` キーの直下にネストします。
 
 <File name='dbt_project.yml'>
 
@@ -199,10 +203,11 @@ seeds:
 </File>
 
 
-#### Apply the `schema` configuration to all seeds in your project
-To apply a configuration to all seeds in your project only (i.e. _excluding_ any seeds in installed packages), provide your [project name](/reference/project-configs/name.md) as part of the resource path.
+#### プロジェクト内のすべての seed に `schema` 設定を適用する
 
-For a project named `jaffle_shop`:
+プロジェクト内のすべての seed にのみ設定を適用するには（つまり、インストール済みパッケージ内の seed は_除外_）、リソースパスの一部として [プロジェクト名](/reference/project-configs/name.md) を指定します。
+
+`jaffle_shop` というプロジェクトの場合：
 
 <File name='dbt_project.yml'>
 
@@ -215,10 +220,11 @@ seeds:
 
 </File>
 
-Similarly, you can use the name of an installed package to configure seeds in that package.
+同様に、インストールされたパッケージの名前を使用して、そのパッケージ内の seed を設定することもできます。
 
-#### Apply the `schema` configuration to one seed only
-To apply a configuration to one seed only, provide the full resource path (including the project name, and subdirectories).
+#### `schema` 構成を 1 つの seed にのみ適用する
+
+構成を 1 つの seed にのみ適用するには、完全なリソースパス（プロジェクト名とサブディレクトリを含む）を指定します。
 
 <File name='seeds/marketing/properties.yml'>
 
@@ -233,7 +239,7 @@ seeds:
 
 </File>
 
-In older versions of dbt, you must define configurations in `dbt_project.yml` and include the full resource path (including the project name, and subdirectories). For a project named `jaffle_shop`, with a seed file at `seeds/marketing/utm_parameters.csv`, this would look like:
+dbtの古いバージョンでは、`dbt_project.yml`で設定を定義し、リソースの完全なパス（プロジェクト名とサブディレクトリを含む）を含める必要があります。`jaffle_shop`というプロジェクトで、 seed ファイルが`seeds/marketing/utm_parameters.csv`にある場合、以下のようになります。
 
 <File name='dbt_project.yml'>
 
@@ -248,11 +254,12 @@ seeds:
 </File>
 
 
-## Example seed configuration
-The following is a valid seed configuration for a project with:
+## seed 設定の例
+
+以下のプロジェクトに有効な seed 設定は次のとおりです。
 * `name: jaffle_shop`
-* A seed file at `seeds/country_codes.csv`, and
-* A seed file at `seeds/marketing/utm_parameters.csv`
+* `seeds/country_codes.csv` にある seed ファイル、および
+* `seeds/marketing/utm_parameters.csv` にある seed ファイル
 
 
 <File name='dbt_project.yml'>

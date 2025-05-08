@@ -1,55 +1,55 @@
 ---
-title: "About dbt build command"
+title: "dbt build コマンドについて"
 sidebar_label: "build"
 id: "build"
 ---
 
-The `dbt build` command will:
+`dbt build` コマンドは、以下の処理を実行します。
 - run models
 - test tests
 - snapshot snapshots
 - seed seeds
 
-In DAG order, for selected resources or an entire project.
+選択したリソースまたはプロジェクト全体に対して、DAG 順に実行します。
 
-## Details
+## 詳細
 
-**Artifacts:** The `build` task will write a single [manifest](/reference/artifacts/manifest-json) and a single [run results artifact](/reference/artifacts/run-results-json). The run results will include information about all models, tests, seeds, and snapshots that were selected to build, combined into one file.
+**アーティファクト:** `build` タスクは、1 つの [マニフェスト](/reference/artifacts/manifest-json) と 1 つの [実行結果アーティファクト](/reference/artifacts/run-results-json) を出力します。実行結果には、ビルド対象として選択されたすべてのモデル、テスト、シード、スナップショットに関する情報が 1 つのファイルにまとめられます。
 
-**Skipping on failures:** Tests on upstream resources will block downstream resources from running, and a test failure will cause those downstream resources to skip entirely. E.g. If `model_b` depends on `model_a`, and a `unique` test on `model_a` fails, then `model_b` will `SKIP`.
-- Don't want a test to cause skipping? Adjust its [severity or thresholds](/reference/resource-configs/severity) to `warn` instead of `error`
-- In the case of a test with multiple parents, where one parent depends on the other (e.g. a `relationships` test between `model_a` + `model_b`), that test will block-and-skip children of the most-downstream parent only (`model_b`).
+**失敗時のスキップ:** 上流リソースのテストは下流リソースの実行をブロックし、テストが失敗すると、それらの下流リソースは完全にスキップされます。例: `model_b` が `model_a` に依存しており、`model_a` の `unique` テストが失敗した場合、`model_b` は `SKIP` されます。
+- テストによってスキップが発生しないようにしたいですか？ [重大度またはしきい値](/reference/resource-configs/severity) を `error` ではなく `warn` に調整します。
+- 複数の親を持つテストで、一方の親がもう一方の親に依存している場合（例: `model_a` と `model_b` 間の `relationships` テスト）、そのテストは最下流の親（`model_b`）の子のみをブロックしてスキップします。
 
-**Selecting resources:** The `build` task supports standard selection syntax (`--select`, `--exclude`, `--selector`), as well as a `--resource-type` flag that offers a final filter (just like `list`). Whichever resources are selected, those are the ones that `build` will run/test/snapshot/seed.
-- Remember that tests support indirect selection, so `dbt build -s model_a` will both run _and_ test `model_a`. What does that mean? Any tests that directly depend on `model_a` will be included, so long as those tests don't also depend on other unselected parents. See [test selection](/reference/node-selection/test-selection-examples) for details and examples.
+**リソースの選択:** `build` タスクは、標準的な選択構文（`--select`、`--exclude`、`--selector`）と、最終フィルターを提供する `--resource-type` フラグ（`list` と同様に）をサポートしています。どのリソースが選択されても、`build` はそれらのリソースに対して実行/テスト/スナップショット/シードを行います。
+- テストは間接選択をサポートしているため、`dbt build -s model_a` は `model_a` の実行とテストの両方を実行します。これはどういう意味でしょうか？`model_a` に直接依存するテストはすべて含まれますが、それらのテストが他の選択されていない親にも依存していない限りです。詳細と例については、[テストの選択](/reference/node-selection/test-selection-examples) を参照してください。
 
-**Flags:** The `build` task supports all the same flags as `run`, `test`, `snapshot`, and `seed`. For flags that are shared between multiple tasks (e.g. `--full-refresh`), `build` will use the same value for all selected resource types (e.g. both models and seeds will be full refreshed).
+**フラグ:** `build` タスクは、`run`、`test`、`snapshot`、`seed` と同じフラグをすべてサポートしています。複数のタスク間で共有されるフラグ（例: `--full-refresh`）の場合、`build` は選択されたすべてのリソースタイプに対して同じ値を使用します（例: モデルとシードの両方がフルリフレッシュされます）。
 
 <VersionBlock firstVersion="1.8">
 
-### The `--empty` flag
+### `--empty` フラグ
 
-The `build` command supports the `--empty` flag for building schema-only dry runs. The `--empty` flag limits the refs and sources to zero rows. dbt will still execute the model SQL against the target data warehouse but will avoid expensive reads of input data. This validates dependencies and ensures your models will build properly.
+`build` コマンドは、スキーマのみのドライランを構築するための `--empty` フラグをサポートしています。`--empty` フラグは、参照とソースを 0 行に制限します。dbt はターゲットデータウェアハウスに対してモデル SQL を実行しますが、入力データの高コストな読み取りを回避します。これにより依存関係が検証され、モデルが適切に構築されることが保証されます。
 
-import SQLCompilationError from '/snippets/_render-method.md';
+import SQLCompilationError from '/snippets.ja/_render-method.md';
 
 <SQLCompilationError />
 
-## Tests
+## テスト
 
-When `dbt build` is executed with unit tests applied, the models will be processed according to their lineage and dependencies. The tests will be executed as follows:
+ユニットテストを適用して `dbt build` を実行すると、モデルは系統と依存関係に基づいて処理されます。テストは次のように実行されます。
 
-- [Unit tests](/docs/build/unit-tests) are run on a SQL model.
-- The model is materialized.
-- [Data tests](/docs/build/data-tests) are run on the model.
+- [ユニットテスト](/docs/build/unit-tests) は SQL モデルに対して実行されます。
+- モデルがマテリアライズされます。
+- [データテスト](/docs/build/data-tests) はモデルに対して実行されます。
 
-This saves on warehouse spend as the model will only be materialized if the unit tests pass successfully.
+ユニットテストが正常に完了した場合にのみモデルがマテリアライズされるため、ウェアハウスのコストを削減できます。
 
-Unit tests and data tests can be selected using `--select test_type:unit` or `--select test_type:data` for `dbt build` (same for the `--exclude` flag).
+ユニットテストとデータテストは、`dbt build` で `--select test_type:unit` または `--select test_type:data` を使用して選択できます（`--exclude` フラグも同様です）。
 
 </VersionBlock>
 
-### Examples
+### 例
 
 
 ```

@@ -4,7 +4,7 @@ resource_types: macro_argument
 datatype: argument_type
 ---
 
-import MacroArgsNote from '/snippets/_validate-macro-args.md';
+import MacroArgsNote from '/snippets.ja/_validate-macro-args.md';
 
 
 <File name='macros/<filename>.yml'>
@@ -22,13 +22,15 @@ macros:
 
 </File>
 
-## Definition
-The data type of your argument. Note that this is only used for documentation purposes — there are no restrictions on the values you can use here.
+## 定義
+
+引数のデータ型。これはドキュメント作成のみを目的としており、使用できる値に制限はありません。
 
 <MacroArgsNote />
 
-## Examples
-### Document a macro
+## 例
+
+### マクロを文書化する
 
 <File name='macros/cents_to_dollars.sql'>
 

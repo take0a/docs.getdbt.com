@@ -3,13 +3,15 @@ resource_types: [seeds]
 datatype: {column_name: datatype}
 ---
 
-## Description
-Optionally specify the database type of columns in a [seed](/docs/build/seeds), by providing a dictionary where the keys are the column names, and the values are a valid datatype (this varies across databases).
+## 説明
 
-Without specifying this, dbt will infer the datatype based on the column values in your seed file.
+[seed](/docs/build/seeds) 内の列のデータベースタイプをオプションで指定します。キーが列名、値が有効なデータ型（データベースによって異なります）である辞書を指定します。
 
-## Usage
-Specify column types in your `dbt_project.yml` file:
+これを指定しない場合、dbt は seed ファイル内の列値に基づいてデータ型を推測します。
+
+## 使用方法
+
+`dbt_project.yml` ファイルで列タイプを指定します。
 
 <File name='dbt_project.yml'>
 
@@ -43,9 +45,9 @@ seeds:
 
 </File>
 
-If you have previously run `dbt seed`, you'll need to run `dbt seed --full-refresh` for the changes to take effect.
+以前に `dbt seed` を実行したことがある場合は、変更を有効にするために `dbt seed --full-refresh` を実行する必要があります。
 
-Note that you will need to use the fully directory path of a seed when configuring `column_types`. For example, for a seed file at `seeds/marketing/utm_mappings.csv`, you will need to configure it like so:
+`column_types` を設定する際は、シードの完全なディレクトリパスを使用する必要があります。例えば、`seeds/marketing/utm_mappings.csv` にあるシードファイルの場合は、次のように設定する必要があります。
 
 <File name='dbt_project.yml'>
 
@@ -61,9 +63,9 @@ seeds:
 
 </File>
 
-## Examples
+## 例
 
-### Use a varchar column type to preserve leading zeros in a zipcode
+### 郵便番号の先頭のゼロを保持するには、varchar 列型を使用します。
 
 <File name='dbt_project.yml'>
 
@@ -77,8 +79,10 @@ seeds:
 
 </File>
 
-## Recommendation
-Use this configuration only when required, i.e. when the type inference is not working as expected. Otherwise you can omit this configuration.
+## 推奨事項
 
-## Troubleshooting
-Note: The `column_types` configuration is case-sensitive, regardless of quoting configuration. If you specify a column as `Country_Name` in your Seed, you should reference it as `Country_Name`, and not `country_name`.  
+この設定は、型推論が期待どおりに動作しないなど、必要な場合にのみ使用してください。それ以外の場合は、この設定を省略できます。
+
+## トラブルシューティング
+
+注: `column_types` 設定は、引用符の設定に関わらず、大文字と小文字が区別されます。シードで列を `Country_Name` として指定する場合は、`country_name` ではなく `Country_Name` として参照する必要があります。

@@ -15,9 +15,10 @@ models:
 
 </File>
 
-## Definition
-The name of the model you are declaring properties for. Must match the _filename_ of a model &mdash; including case sensitivity. Any mismatched casing can prevent dbt from applying configurations correctly and may affect metadata in dbt Explorer.
+## 定義
 
-## Default
+プロパティを宣言するモデルの名前。モデルの_ファイル名_と一致する必要があります（大文字と小文字の区別を含む）。大文字と小文字が一致しないと、dbt が設定を正しく適用できず、dbt Explorer のメタデータに影響する可能性があります。
 
-This is a **required property**, no default exists.
+## デフォルト
+
+これは**必須プロパティ**であり、デフォルトは存在しません。

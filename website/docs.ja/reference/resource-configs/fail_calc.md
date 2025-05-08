@@ -3,18 +3,18 @@ resource_types: [tests]
 datatype: string
 ---
 
-Test queries are written to return a set of failing records, ones not matching the expectation or assertion declared by that test: duplicate records, null values, etc.
+テストクエリは、テストで宣言された期待値やアサーションに一致しない、失敗したレコードのセットを返すように記述されます。これには重複レコードや null 値などが含まれます。
 
-Most often, this is the count of rows returned by the test query: the default value of `fail_calc` is `count(*)`. But it can also be a custom calculation, whether an aggregate calculation or simply the name of a column to be selected from the test query.
+多くの場合、これはテストクエリによって返される行数です。`fail_calc` のデフォルト値は `count(*)` です。ただし、集計計算やテストクエリから選択される列名など、カスタム計算を指定することもできます。
 
-Most tests do not use the `fail_calc` config, preferring to return a count of failing rows. For the tests that do, the most common place to set the `fail_calc` config is right within a generic test block, alongside its query definition. All the same, `fail_calc` can be set in all the same places as other configs.
+ほとんどのテストでは `fail_calc` 設定を使用せず、失敗した行数を返すことを優先します。`fail_calc` 設定を使用するテストでは、`fail_calc` 設定を設定する最も一般的な場所は、汎用テストブロック内、クエリ定義と一緒の場所です。同様に、`fail_calc` は他の設定と同様に設定できます。
 
-For instance, you can configure a `unique` test to return `sum(n_records)` instead of `count(*)` as the failure calculation: that is, the number of rows in the model containing a duplicated column value, rather than the number of distinct column values that are duplicated.
+たとえば、失敗の計算として `count(*)` ではなく `sum(n_records)` を返すように `unique` テストを設定できます。つまり、重複している個別の列値の数ではなく、重複した列値を含むモデル内の行の数です。
 
 :::tip Tip
-Beware using functions like `sum()` for `fail_calc` in any test that has the potential to return no rows at all.
+行が返されない可能性のあるテストでは、`fail_calc` に `sum()` などの関数を使用することに注意してください。
 
-If no rows are returned, the test won't pass or fail but will return the following error: 
+行が返されない場合、テストは成功も失敗も判定されず、次のエラーが返されます:
 
 ```
 None is not of type 'integer'
@@ -26,7 +26,7 @@ On instance['failures']:
     None
 ```
 
-To avoid this issue, use a case statement to ensure that `0` is returned when no rows exist:
+この問題を回避するには、case ステートメントを使用して、行が存在しない場合に `0` が返されるようにします:
 
 ```yaml
 fail_calc: "case when count(*) > 0 then sum(n_records) else 0 end"
@@ -46,7 +46,7 @@ fail_calc: "case when count(*) > 0 then sum(n_records) else 0 end"
 
 <TabItem value="specific">
 
-Configure a specific instance of a generic (schema) test:
+汎用 (スキーマ) テストの特定のインスタンスを構成します:
 
 <File name='models/<filename>.yml'>
 
@@ -69,7 +69,7 @@ models:
 
 <TabItem value="one_off">
 
-Configure a one-off (data) test:
+1 回限りの (データ) テストを構成します:
 
 <File name='tests/<filename>.sql'>
 
@@ -85,7 +85,7 @@ select ...
 
 <TabItem value="generic">
 
-Set the default for all instances of a generic (schema) test, by setting the config inside its test block (definition):
+テスト ブロック (定義) 内に構成を設定して、汎用 (スキーマ) テストのすべてのインスタンスのデフォルトを設定します:
 
 <File name='macros/<filename>.sql'>
 
@@ -105,7 +105,7 @@ select ...
 
 <TabItem value="project">
 
-Set the default for all tests in a package or project:
+パッケージまたはプロジェクト内のすべてのテストのデフォルトを設定します:
 
 <File name='dbt_project.yml'>
 
