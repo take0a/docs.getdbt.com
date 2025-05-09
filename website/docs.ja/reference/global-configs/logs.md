@@ -4,11 +4,11 @@ id: "logs"
 sidebar: "logs"
 ---
 
-### Log Formatting
+### ログのフォーマット
 
-dbt outputs logs to two different locations: CLI console and the log file.
+dbt は、CLI コンソールとログファイルの 2 つの異なる場所にログを出力します。
 
-The `LOG_FORMAT` and `LOG_FORMAT_FILE` configs specify how dbt's logs should be formatted, and they each have the same options: `json`, `text`, and `debug`.
+`LOG_FORMAT` および `LOG_FORMAT_FILE` 設定は、dbt のログのフォーマット方法を指定します。それぞれに、`json`、`text`、`debug` という同じオプションがあります。
 
 <File name='Usage'>
 
@@ -18,29 +18,28 @@ dbt --log-format json run
 
 </File>
 
-The `text` format is the default for console logs and has plain text messages prefixed with a simple timestamp:
+`text` 形式はコンソール ログのデフォルトであり、単純なタイムスタンプがプレフィックスとして付いたプレーン テキスト メッセージが含まれます:
 
 ```
 23:30:16  Running with dbt=1.8.0
 23:30:17  Registered adapter: postgres=1.8.0
 ```
 
-The `debug` format is the default for the log file and is the same as the `text` format but with a more detailed timestamp and also includes the [`invocation_id`](/reference/dbt-jinja-functions/invocation_id), [`thread_id`](/reference/dbt-jinja-functions/thread_id), and [log level](/reference/global-configs/logs#log-level) of each message:
-
+`debug` 形式はログ ファイルのデフォルトであり、`text` 形式と同じですが、より詳細なタイムスタンプが付き、各メッセージの [`invocation_id`](/reference/dbt-jinja-functions/invocation_id)、[`thread_id`](/reference/dbt-jinja-functions/thread_id)、および [ログ レベル](/reference/global-configs/logs#log-level) も含まれます:
 ```
 ============================== 16:12:08.555032 | 9089bafa-4010-4f38-9b42-564ec9106e07 ==============================
 16:12:08.555032 [info ] [MainThread]: Running with dbt=1.8.0
 16:12:08.751069 [info ] [MainThread]: Registered adapter: postgres=1.8.0
 ```
 
-The `json` format outputs fully structured logs in the <Term id="json" /> format:
+`json` 形式では、<Term id="json" /> 形式で完全に構造化されたログが出力されます:
 
 ```json
 {"data": {"log_version": 3, "version": "=1.8.0"}, "info": {"category": "", "code": "A001", "extra": {}, "invocation_id": "82131fa0-d2b4-4a77-9436-019834e22746", "level": "info", "msg": "Running with dbt=1.8.0", "name": "MainReportVersion", "pid": 7875, "thread": "MainThread", "ts": "2024-05-29T23:32:54.993336Z"}}
 {"data": {"adapter_name": "postgres", "adapter_version": "=1.8.0"}, "info": {"category": "", "code": "E034", "extra": {}, "invocation_id": "82131fa0-d2b4-4a77-9436-019834e22746", "level": "info", "msg": "Registered adapter: postgres=1.8.0", "name": "AdapterRegistered", "pid": 7875, "thread": "MainThread", "ts": "2024-05-29T23:32:56.437986Z"}}
 ```
 
-When the `LOG_FORMAT` is set explicitly, it will take affect in both the console and log files whereas the `LOG_FORMAT_FILE` only affects the log file.
+`LOG_FORMAT` が明示的に設定されている場合、コンソールとログ ファイルの両方に影響しますが、`LOG_FORMAT_FILE` はログ ファイルにのみ影響します。
 
 <File name='Usage'>
 
@@ -50,50 +49,51 @@ dbt --log-format-file json run
 
 </File>
 
-:::tip Tip: verbose structured logs
+:::tip Tip: 詳細な構造化ログ
 
-Use `json` formatting value in conjunction with the `DEBUG` config to produce rich log information which can be piped into monitoring tools for analysis:
+`json` 形式の値を `DEBUG` 設定と組み合わせて使用​​することで、豊富なログ情報が生成され、監視ツールにパイプして分析できます:
 
 ```text
 dbt --debug --log-format json run
 ```
 
-See [structured logging](/reference/events-logging#structured-logging) for more details.
+詳細については、[構造化ログ](/reference/events-logging#structured-logging)を参照してください。
 
 :::
 
-### Log Level
+### ログレベル
 
-The `LOG_LEVEL` config sets the minimum severity of events captured in the console and file logs. This is a more flexible alternative to the `--debug` flag. The available options for the log levels are `debug`, `info`, `warn`, `error`, or `none`.
+`LOG_LEVEL` 設定は、コンソールログとファイルログに記録されるイベントの最小重大度を設定します。これは `--debug` フラグよりも柔軟な代替手段です。ログレベルには `debug`、`info`、`warn`、`error`、`none` のいずれかを選択できます。
 
-- Setting the `--log-level` will configure console and file logs. 
+- `--log-level` を設定すると、コンソールログとファイルログが設定されます。
 
   ```text
   dbt --log-level debug run
   ```
 
-- Setting the `LOG_LEVEL` to `none` will disable information from being sent to either the console or file logs. 
+- `LOG_LEVEL` を `none` に設定すると、コンソールまたはファイル ログへの情報の送信が無効になります。
   
   ```text
   dbt --log-level none
   ```
 
-- To set the file log level as a different value than the console, use the `--log-level-file` flag. 
+- ファイル ログ レベルをコンソールとは異なる値に設定するには、`--log-level-file` フラグを使用します。
 
   ```text
   dbt --log-level-file error run
   ```
 
-- To only disable writing to the logs file but keep console logs, set `LOG_LEVEL_FILE` config to none.
+- ログ ファイルへの書き込みを無効にしてコンソール ログを保持するには、`LOG_LEVEL_FILE` 構成を none に設定します。
+
   ```text
   dbt --log-level-file none
   ```
 
-### Debug-level logging
+### デバッグレベルのログ出力
 
-The `DEBUG` config redirects dbt's debug logs to standard output. This has the effect of showing debug-level log information in the terminal in addition to the `logs/dbt.log` file. This output is verbose.
+`DEBUG` 設定は、dbt のデバッグログを標準出力にリダイレクトします。これにより、`logs/dbt.log` ファイルに加えて、ターミナルにもデバッグレベルのログ情報が表示されます。この出力は詳細です。
 
-The `--debug` flag is also available via shorthand as `-d`.
+`--debug` フラグは、`-d` という短縮形でも使用できます。
 
 <File name='Usage'>
 
@@ -106,16 +106,15 @@ dbt --debug run
 </File>  
 
 
-### Log and target paths
+### ログとターゲットのパス
 
-By default, dbt will write logs to a directory named `logs/`, and all other artifacts to a directory named `target/`. Both of those directories are located relative to `dbt_project.yml` of the active project.
+デフォルトでは、dbt はログを `logs/` というディレクトリに書き込み、その他のすべてのアーティファクトを `target/` というディレクトリに書き込みます。これらのディレクトリはどちらも、アクティブプロジェクトの `dbt_project.yml` を基準とした相対パスで配置されます。
 
-Just like other global configs, it is possible to override these values for your environment or invocation by using CLI options (`--target-path`, `--log-path`) or environment variables (`DBT_TARGET_PATH`, `DBT_LOG_PATH`).
+他のグローバル設定と同様に、CLI オプション (`--target-path`、`--log-path`) または環境変数 (`DBT_TARGET_PATH`、`DBT_LOG_PATH`) を使用して、環境や呼び出しに合わせてこれらの値を上書きできます。
 
+### エラー以外のログを出力から抑制する
 
-### Suppress non-error logs in output
-
-By default, dbt shows all logs in standard out (stdout). You can use the `QUIET` config to show only error logs in stdout. Logs will still include the output of anything passed to the [`print()`](/reference/dbt-jinja-functions/print) macro.  For example, you might suppress all but error logs to more easily find and debug a jinja error.
+デフォルトでは、dbt はすべてのログを標準出力 (stdout) に表示します。`QUIET` 設定を使用すると、エラーログのみを標準出力に表示できます。ログには、[`print()`](/reference/dbt-jinja-functions/print) マクロに渡されたすべての出力が含まれます。例えば、エラーログ以外のログを抑制して、Jinja エラーの検出とデバッグを容易にすることができます。
 
 <File name='profiles.yml'>
 
@@ -126,35 +125,34 @@ config:
 
 </File>
 
-Supply the `-q` or `--quiet` flag to `dbt run` to show only error logs and suppress non-error logs.
+エラー ログのみを表示し、エラー以外のログを抑制したい場合は、`dbt run` に `-q` または `--quiet` フラグを指定します。
 
 ```text
 dbt --quiet run
 ...
 ```
 
-### dbt list logging
+### dbt list のログ出力
 
-In [dbt version 1.5](/docs/dbt-versions/core-upgrade/Older%20versions/upgrading-to-v1.5#behavior-changes), we updated the logging behavior of the [dbt list](/reference/commands/list) command to include `INFO` level logs by default.
+[dbt バージョン 1.5](/docs/dbt-versions/core-upgrade/Older%20versions/upgrading-to-v1.5#behavior-changes) では、[dbt list](/reference/commands/list) コマンドのログ出力動作が更新され、デフォルトで `INFO` レベルのログが含まれるようになりました。
+
+以下のいずれかのパラメータを使用することで、結果を [`jq`](https://jqlang.github.io/jq/manual/)、ファイル、または別のプロセスにパイプするなど、下流のプロセスと互換性のあるクリーンな出力を得ることができます。
+
+- `dbt --log-level warn list` (推奨。以前のデフォルトと同等)
+- `dbt --quiet list` (「印刷」されたメッセージとリスト出力を除き、`ERROR` レベル未満のすべてのログ出力を抑制)
 
 
-You can use either of these parameters to ensure clean output that's compatible with downstream processes, such as piping results to [`jq`](https://jqlang.github.io/jq/manual/), a file, or another process:
+### リレーショナルキャッシュイベントのログ記録
 
-- `dbt --log-level warn list` (recommended; equivalent to previous default)
-- `dbt --quiet list` (suppresses all logging less than `ERROR` level, except for "printed" messages and list output)
-
-
-### Logging relational cache events
-
-import LogLevel from '/snippets/_log-relational-cache.md';
+import LogLevel from '/snippets.ja/_log-relational-cache.md';
 
 <LogLevel
 event={<a href="https://docs.getdbt.com/reference/global-configs/cache">relational cache</a>}
 />
 
-### Color
+### 色
 
-You can set the color preferences for the file logs only within `profiles.yml` or using the `--use-colors-file / --no-use-colors-file` flags.
+ファイルログの色設定は、`profiles.yml` 内、または `--use-colors-file / --no-use-colors-file` フラグを使用してのみ設定できます。
 
 <File name='profiles.yml'>
 

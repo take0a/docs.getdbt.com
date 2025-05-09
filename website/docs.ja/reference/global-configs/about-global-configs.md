@@ -1,28 +1,29 @@
 ---
-title: "About flags (global configs)"
+title: "フラグについて（グローバル設定）"
 id: "about-global-configs"
-sidebar: "About flags (global configs)"
+sidebar: "フラグについて（グローバル設定）"
 pagination_next: null
 ---
 
-In dbt, "flags" (also called "global configs") are configurations for fine-tuning _how_ dbt runs your project. They differ from [resource-specific configs](/reference/configs-and-properties) that tell dbt about _what_ to run.
+dbt において、「フラグ」（「グローバル設定」とも呼ばれます）は、dbt がプロジェクトをどのように実行するかを微調整するための設定です。これは、dbt に何を実行するかを指示する [リソース固有の設定](/reference/configs-and-properties) とは異なります。
 
-Flags control things like the visual output of logs, whether to treat specific warning messages as errors, or whether to "fail fast" after encountering the first error. Flags are "global" configs because they are available for all dbt commands and they can be set in multiple places.
+フラグは、ログの視覚的な出力、特定の警告メッセージをエラーとして扱うかどうか、最初のエラー発生後に「fail fast」するかどうかなどを制御します。フラグはすべての dbt コマンドで使用でき、複数の場所で設定できるため、「グローバル」設定と呼ばれます。
 
-There is a significant overlap between dbt's flags and dbt's command line options, but there are differences:
-- Certain flags can only be set in [`dbt_project.yml`](/reference/dbt_project.yml) and cannot be overridden for specific invocations via CLI options.
-- If a CLI option is supported by specific commands, rather than supported by all commands ("global"), it is generally not considered to be a "flag".
+dbt のフラグと dbt のコマンドラインオプションには多くの共通点がありますが、違いもあります。
+- 一部のフラグは [`dbt_project.yml`](/reference/dbt_project.yml) でのみ設定でき、特定の呼び出しに対して CLI オプションで上書きすることはできません。
+- CLI オプションがすべてのコマンド (「グローバル」) でサポートされているのではなく、特定のコマンドでサポートされている場合、通常は「フラグ」とは見なされません。
 
-### Setting flags
+### フラグの設定
 
-There are multiple ways of setting flags, which depend on the use case:
-- **[Project-level `flags` in `dbt_project.yml`](/reference/global-configs/project-flags):** Define version-controlled defaults for everyone running this project. Also, opt in or opt out of [behavior changes](/reference/global-configs/behavior-changes) to manage your migration off legacy functionality.
-- **[Environment variables](/reference/global-configs/environment-variable-configs):** Define different behavior in different runtime environments (development vs. production vs. [continuous integration](/docs/deploy/continuous-integration), or different behavior for different users in development (based on personal preferences).
-- **[CLI options](/reference/global-configs/command-line-options):** Define behavior specific to _this invocation_. Supported for all dbt commands.
+フラグの設定方法はユースケースに応じて複数あります。
+- **[`dbt_project.yml` 内のプロジェクトレベルの `flags`](/reference/global-configs/project-flags):** このプロジェクトを実行するすべてのユーザーに対して、バージョン管理されたデフォルトを定義します。また、[動作の変更](/reference/global-configs/behavior-changes)をオプトインまたはオプトアウトすることで、従来の機能からの移行を管理できます。
+- **[環境変数](/reference/global-configs/environment-variable-configs):** 異なるランタイム環境（開発環境、本番環境、継続的インテグレーション）ごとに異なる動作を定義したり、開発環境のユーザーごとに異なる動作（個人の好みに基づいて）を定義したりします。
+- **[CLI オプション](/reference/global-configs/command-line-options):** _この呼び出し_ に固有の動作を定義します。すべての dbt コマンドでサポートされています。
 
-The most specific setting "wins." If you set the same flag in all three places, the CLI option will take precedence, followed by the environment variable, and finally, the value in `dbt_project.yml`. If you set the flag in none of those places, it will use the default value defined within dbt.
+最も具体的な設定が「優先」されます。3 つの場所すべてで同じフラグを設定した場合、CLI オプションが優先され、次に環境変数、最後に `dbt_project.yml` の値が優先されます。これらのいずれの場所でもフラグを設定しない場合は、dbt 内で定義されたデフォルト値が使用されます。
 
-Most flags can be set in all three places:
+ほとんどのフラグは、3 つの場所すべてで設定できます:
+
 ```yaml
 # dbt_project.yml
 flags:
@@ -39,13 +40,13 @@ dbt run --fail-fast # set to True for this specific invocation
 dbt run --no-fail-fast # set to False
 ```
 
-There are two categories of exceptions:
-1. **Flags setting file paths:** Flags for file paths that are relevant to runtime execution (for example, `--log-path` or `--state`) cannot be set in `dbt_project.yml`. To override defaults, pass CLI options or set environment variables (`DBT_LOG_PATH`, `DBT_STATE`). Flags that tell dbt where to find project resources (for example, `model-paths`) are set in `dbt_project.yml`, but as a top-level key, outside the `flags` dictionary; these configs are expected to be fully static and never vary based on the command or execution environment.
-2. **Opt-in flags:** Flags opting in or out of [behavior changes](/reference/global-configs/behavior-changes) can _only_ be defined in `dbt_project.yml`. These are intended to be set in version control and migrated via pull/merge request. Their values should not diverge indefinitely across invocations, environments, or users.
+例外は 2 つのカテゴリに分かれています:
+1. **ファイルパスを設定するフラグ:** ランタイム実行に関連するファイルパスのフラグ (例: `--log-path` または `--state`) は、`dbt_project.yml` では設定できません。デフォルトをオーバーライドするには、CLI オプションを渡すか、環境変数 (`DBT_LOG_PATH`、`DBT_STATE`) を設定します。プロジェクト リソースの場所を dbt に指示するフラグ (例: `model-paths`) は、`dbt_project.yml` で設定されますが、`flags` ディクショナリの外側にある最上位キーとして設定されます。これらの構成は完全に静的であり、コマンドや実行環境によって変化することはありません。
+2. **オプトイン フラグ:** [動作の変更](/reference/global-configs/behavior-changes) をオプトインまたはオプトアウトするフラグは、`dbt_project.yml` でのみ定義できます。これらはバージョン管理で設定され、プル/マージリクエストによって移行されることを想定しています。これらの値は、呼び出し、環境、またはユーザー間で無期限に異なるべきではありません。
 
-### Accessing flags
+### フラグへのアクセス
 
-Custom user-defined logic, written in Jinja, can check the values of flags using [the `flags` context variable](/reference/dbt-jinja-functions/flags).
+Jinja で記述されたカスタムユーザー定義ロジックでは、[`flags` コンテキスト変数](/reference/dbt-jinja-functions/flags) を使用してフラグの値を確認できます。
 
 ```yaml
 # dbt_project.yml
@@ -54,9 +55,9 @@ on-run-start:
   - '{{ log("I will stop at the first sign of trouble", info = true) if flags.FAIL_FAST }}'
 ```
 
-Because the values of `flags` can differ across invocations, we strongly advise against using `flags` as an input to configurations or dependencies (`ref` + `source`) that dbt resolves [during parsing](/reference/parsing#known-limitations).
+`flags` の値は呼び出しごとに異なる可能性があるため、dbt が [解析中](/reference/parsing#known-limitations) に解決する構成または依存関係 (`ref` + `source`) への入力として `flags` を使用しないことを強くお勧めします。
 
-## Available flags
+## 利用可能なフラグ
 
 | Flag name | Type | Default | Supported in project? | Environment variable | Command line option | Supported in Cloud CLI? |
 |-----------|------|---------|-----------------------|----------------------|---------------------|-------------------------|

@@ -4,25 +4,25 @@ id: "print-output"
 sidebar: "Print output"
 ---
 
-### Suppress `print()` messages in stdout
+### 標準出力（stdout）の `print()` メッセージを抑制
 
-By default, dbt includes [`print()`](/reference/dbt-jinja-functions/print) messages in standard out (stdout). You can use the `DBT_PRINT` environment variable to prevent these messages from showing up in stdout.
+デフォルトでは、dbt は [`print()`](/reference/dbt-jinja-functions/print) メッセージを標準出力（stdout）に出力します。`DBT_PRINT` 環境変数を使用すると、これらのメッセージが標準出力に表示されないようにすることができます。
 
-:::warning Syntax deprecation
+:::warning 構文の非推奨
 
-The original `DBT_NO_PRINT` environment variable has been deprecated, starting with dbt v1.5. Backward compatibility is supported but will be removed in an as-of-yet-undetermined future release.
+dbt v1.5 以降、従来の `DBT_NO_PRINT` 環境変数は非推奨となりました。下位互換性は維持されますが、将来のリリース（現時点では未定）で削除される予定です。
 
 :::
 
-Supply `--no-print` flag to `dbt run` to suppress `print()` messages from showing in stdout.
+`print()` メッセージが stdout に表示されないようにするには、`dbt run` に `--no-print` フラグを指定します。
 
 ```text
 dbt --no-print run
 ```
 
-### Printer width
+### プリンタ幅
 
-By default, dbt will print out lines padded to 80 characters wide. You can change this setting by adding the following to your `profiles.yml` file:
+デフォルトでは、dbt は行を 80 文字幅にパディングして出力します。この設定を変更するには、`profiles.yml` ファイルに以下のコードを追加します:
 
 <File name='profiles.yml'>
 
@@ -33,9 +33,9 @@ config:
 
 </File>
 
-### Print color
+### 印刷色
 
-By default, dbt will colorize the output it prints in your terminal. You can turn this off by adding the following to your `profiles.yml` file:
+デフォルトでは、dbt はターミナルに出力する出力を色分けします。これを無効にするには、`profiles.yml` ファイルに以下のコードを追加します:
 
 <File name='profiles.yml'>
 
@@ -51,7 +51,7 @@ dbt --use-colors run
 dbt --no-use-colors run
 ```
 
-You can set the color preferences for the file logs only within `profiles.yml` or using the `--use-colors-file / --no-use-colors-file` flags.
+ファイル ログの色設定は、`profiles.yml` 内、または `--use-colors-file / --no-use-colors-file` フラグを使用してのみ設定できます。
 
 <File name='profiles.yml'>
 

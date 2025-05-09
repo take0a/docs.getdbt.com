@@ -1,33 +1,33 @@
 ---
 title: "Semantic manifest"
 id: sl-manifest
-description: "Learn about the semantic manifest.json file and how you can use artifacts to gain insights about your dbt Semantic Layer."
+description: "セマンティックの manifest.json ファイルについて、またアーティファクトを使用して dbt セマンティック レイヤーに関する分析情報を取得する方法について学習します。"
 tags: [Semantic Layer, APIs]
 sidebar_label: "Semantic manifest"
 pagination_next: null
 ---
 
-**Produced by:**  Any command that parses your project. This includes all commands _except_ [`deps`](/reference/commands/deps), [`clean`](/reference/commands/clean), [`debug`](/reference/commands/debug), and [`init`](/reference/commands/init).
+**生成元:** プロジェクトを解析する任意のコマンド。これには、[`deps`](/reference/commands/deps)、[`clean`](/reference/commands/clean)、[`debug`](/reference/commands/debug)、[`init`](/reference/commands/init)を除くすべてのコマンドが含まれます。
 
-dbt creates an [artifact](/reference/artifacts/dbt-artifacts) file called the _Semantic Manifest_ (`semantic_manifest.json`), which MetricFlow requires to build and run metric queries properly for the dbt Semantic Layer. This artifact contains comprehensive information about your dbt Semantic Layer. It is an internal file that acts as the integration point with MetricFlow. 
+dbt は、_セマンティックマニフェスト_ (`semantic_manifest.json`) と呼ばれる [アーティファクト](/reference/artifacts/dbt-artifacts) ファイルを作成します。これは、MetricFlow が dbt セマンティックレイヤーのメトリッククエリを適切に構築および実行するために必要なものです。このアーティファクトには、dbt セマンティックレイヤーに関する包括的な情報が含まれています。これは、MetricFlow との統合ポイントとして機能する内部ファイルです。
 
-By using the semantic manifest produced by dbt Core, MetricFlow will instantiate a data flow plan and generate SQL from Semantic Layer query requests. It's a valuable reference that you can use to understand the structure and details of your data models.
+dbt Core によって生成されたセマンティックマニフェストを使用して、MetricFlow はデータフロープランをインスタンス化し、セマンティックレイヤーのクエリリクエストから SQL を生成します。これは、データモデルの構造と詳細を理解するのに役立つ貴重なリファレンスです。
 
-Similar to the [`manifest.json` file](/reference/artifacts/manifest-json), the `semantic_manifest.json` file also lives in the [target directory](/reference/global-configs/json-artifacts) of your dbt project where dbt stores various artifacts (such as compiled models and tests) generated during the execution of your project.
+[`manifest.json` ファイル](/reference/artifacts/manifest-json) と同様に、`semantic_manifest.json` ファイルも dbt プロジェクトの [ターゲットディレクトリ](/reference/global-configs/json-artifacts) に配置されます。このディレクトリには、dbt がプロジェクトの実行中に生成するさまざまなアーティファクト（コンパイル済みモデルやテストなど）が格納されます。
 
-There are two reasons why `semantic_manifest.json` exists alongside `manifest.json`:
+`semantic_manifest.json` が `manifest.json` と共存する理由は 2 つあります。
 
-- Deserialization: `dbt-core` and MetricFlow use different libraries for handling data serialization.
-- Efficiency and performance: MetricFlow and the dbt Semantic Layer need specific semantic details from the manifest. By trimming down the information printed into `semantic_manifest.json`, the process becomes more efficient and enables faster data handling between `dbt-core` and MetricFlow.
+- デシリアライゼーション: `dbt-core` と MetricFlow は、データのシリアル化を処理するために異なるライブラリを使用します。
+- 効率性とパフォーマンス: MetricFlow と dbt セマンティックレイヤーは、マニフェストから特定のセマンティック詳細を必要とします。 `semantic_manifest.json` に出力される情報を削減することで、プロセスがより効率的になり、`dbt-core` と MetricFlow 間のデータ処理が高速化されます。
 
-## Top-level keys
+## トップレベルキー
 
-Top-level keys for the semantic manifest are:
--  `semantic_models` &mdash; Starting points of data with entities, dimensions, and measures, and correspond to models in your dbt project. 
--  `metrics` &mdash; Functions combining measures, constraints, and so on to define quantitative indicators.
-- `project_configuration` &mdash; Contains information around your project configurations 
+セマンティックマニフェストのトップレベルキーは次のとおりです。
+- `semantic_models` - エンティティ、ディメンション、メジャーを含むデータの開始点であり、dbt プロジェクト内のモデルに対応します。
+- `metrics` - メジャー、制約などを組み合わせて定量的な指標を定義する関数です。
+- `project_configuration` - プロジェクト構成に関する情報が含まれます。
 
-### Example
+### 例
 
 <File name="target/semantic_manifest.json"> 
 
@@ -117,7 +117,7 @@ Top-level keys for the semantic manifest are:
 
 </File>
 
-## Related docs
+## 関連ドキュメント
 
-- [dbt Semantic Layer API](/docs/dbt-cloud-apis/sl-api-overview)
-- [About dbt artifacts](/reference/artifacts/dbt-artifacts)
+- [dbt セマンティックレイヤー API](/docs/dbt-cloud-apis/sl-api-overview)
+- [dbt アーティファクトについて](/reference/artifacts/dbt-artifacts)

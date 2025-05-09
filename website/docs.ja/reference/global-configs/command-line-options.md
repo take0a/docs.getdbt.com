@@ -1,39 +1,39 @@
 ---
-title: "Command line options"
+title: "コマンドラインオプション"
 id: "command-line-options"
-sidebar: "Command line options"
+sidebar: "コマンドラインオプション"
 ---
 
-For consistency, command-line interface (CLI) flags should come right after the `dbt` prefix and its subcommands. This includes "global" flags (supported for all commands). For a list of all dbt CLI flags you can set, refer to [Available flags](/reference/global-configs/about-global-configs#available-flags). When set, CLI flags override [environment variables](/reference/global-configs/environment-variable-configs) and [project flags](/reference/global-configs/project-flags).
+一貫性を保つため、コマンドラインインターフェース (CLI) フラグは `dbt` プレフィックスとそのサブコマンドの直後に記述する必要があります。これには「グローバル」フラグ（すべてのコマンドでサポートされます）も含まれます。設定可能なすべての dbt CLI フラグのリストについては、[使用可能なフラグ](/reference/global-configs/about-global-configs#available-flags) を参照してください。CLI フラグを設定すると、[環境変数](/reference/global-configs/environment-variable-configs) と [プロジェクトフラグ](/reference/global-configs/project-flags) がオーバーライドされます。
 
-Environment variables contain a `DBT_` prefix. 
+環境変数には `DBT_` プレフィックスが含まれます。
 
-For example, instead of using:
+例えば、次のように記述する代わりに:
 
 ```bash
 dbt --no-populate-cache run
 ```
 
-You should use:
+こうすべきです:
 
 ```bash
 dbt run --no-populate-cache
 ```
 
-Historically, passing flags (such as "global flags") _before_ the subcommand is a legacy functionality that dbt Labs can remove at any time. We do not support using the same flag before and after the subcommand. 
+従来、サブコマンドの前にフラグ（「グローバルフラグ」など）を渡すことはレガシー機能であり、dbt Labs はいつでもこれを削除できます。サブコマンドの前後で同じフラグを使用することはサポートされていません。
 
-## Using boolean and non-boolean flags
+## ブール型フラグと非ブール型フラグの使用
 
-You can construct your commands with boolean flags to enable or disable or with non-boolean flags that use specific values, such as strings. 
+ブール型フラグを使用してコマンドを有効化または無効化したり、文字列などの特定の値を使用する非ブール型フラグを使用してコマンドを構成したりできます。
 
 <Tabs>
 
 <TabItem value="nonboolean" label="Non-boolean config">
 
-Use this non-boolean config structure:
-- Replacing `<SUBCOMMAND>`  with the command this config applies to.
-- `<THIS-CONFIG>` with the config you are enabling or disabling, and
-- `<SETTING>` with the new setting for the config.
+以下の非ブール型構成構造を使用します。
+- `<SUBCOMMAND>` を、この構成が適用されるコマンドに置き換えます。
+- `<THIS-CONFIG>` を、有効化または無効化する構成に置き換えます。
+- `<SETTING>` を、構成の新しい設定に置き換えます。
 
 <File name='CLI flags'>
 
@@ -46,7 +46,7 @@ Use this non-boolean config structure:
 
 </File>
 
-### Example
+### 例
 
 <File name='CLI flags'>
 
@@ -64,11 +64,10 @@ dbt test --indirect-selection=eager
 
 <TabItem value="boolean" label="Boolean config">
 
-To enable or disable boolean configs:
-- Use `<SUBCOMMAND>` this config applies to.
-- Followed by `--<THIS-CONFIG>` to turn it on, or `--no-<THIS-CONFIG>` to turn it off.
-- Replace `<THIS-CONFIG>` with the config you are enabling or disabling
-
+ブール型設定を有効化または無効化するには、以下の手順に従います。
+- この設定を適用する `<SUBCOMMAND>` を使用します。
+- 有効にするには `--<THIS-CONFIG>` を、無効にするには `--no-<THIS-CONFIG>` を続けます。
+- `<THIS-CONFIG>` を、有効化または無効化する設定に置き換えます。
 
 <File name='CLI flags'>
 
@@ -81,7 +80,7 @@ dbt <SUBCOMMAND> --no-<THIS-CONFIG>
 
 </File>
 
-### Example
+### 例
 
 <File name='CLI flags'>
 

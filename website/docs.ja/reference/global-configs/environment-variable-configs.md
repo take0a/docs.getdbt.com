@@ -1,10 +1,10 @@
 ---
-title: "Environment variable configs"
+title: "環境変数の設定"
 id: "environment-variable-configs"
-sidebar: "Environment variable configs"
+sidebar: "環境変数の設定"
 ---
 
-Environment variables contain a `DBT_` prefix. For a list of all dbt environment variables you can set, refer to [Available flags](/reference/global-configs/about-global-configs#available-flags).
+環境変数には「DBT_」というプレフィックスが含まれます。設定可能なすべてのdbt環境変数の一覧については、[利用可能なフラグ](/reference/global-configs/about-global-configs#available-flags)を参照してください。
 
 <File name='Env var'>
 
@@ -17,4 +17,4 @@ dbt run
 
 </File>
 
-For more detailed information, read our [environment variables page](/docs/build/environment-variables).
+詳細については、[環境変数ページ](/docs/build/environment-variables)をご覧ください。

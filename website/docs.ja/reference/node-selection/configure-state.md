@@ -1,47 +1,47 @@
 ---
-title: "Configure state selection"
-description: "Learn how to configure state selection in dbt."
+title: "state での選択の構成"
+description: "dbt で状態選択を構成する方法を学習します。"
 pagination_next: "reference/node-selection/state-comparison-caveats"
 ---
 
-State and [defer](/reference/node-selection/defer) can be set by environment variables as well as CLI flags:
+状態と[defer](/reference/node-selection/defer)は、環境変数とCLIフラグで設定できます。
 
-- `--state` or `DBT_STATE`: file path
-- `--defer` or `DBT_DEFER`: boolean
-- `--defer-state` or `DBT_DEFER_STATE`: file path to use for deferral only (optional)
+- `--state` または `DBT_STATE`: ファイルパス
+- `--defer` または `DBT_DEFER`: ブール値
+- `--defer-state` または `DBT_DEFER_STATE`: 遅延処理のみに使用するファイルパス（オプション）
 
-If `--defer-state` is not specified, deferral will use the artifacts supplied by `--state`. This enables more granular control in cases where you want to compare against logical state from one environment or past point in time, and defer to applied state from a different environment or point in time.
+`--defer-state` が指定されていない場合、遅延処理は `--state` によって提供されるアーティファクトを使用します。これにより、ある環境または過去の時点の論理状態と比較し、別の環境または時点の適用済み状態に遅延処理を延期する場合に、よりきめ細かな制御が可能になります。
 
-If both the flag and env var are provided, the flag takes precedence.
+フラグと環境変数の両方が指定されている場合、フラグが優先されます。
 
-#### Notes
-- The `--state` artifacts must be of schema versions that are compatible with the currently running dbt version.
-- These are powerful, complex features. Read about [known caveats and limitations](/reference/node-selection/state-comparison-caveats) to state comparison.
+#### 注意事項
+- `--state` アーティファクトは、現在実行中の dbt バージョンと互換性のあるスキーマバージョンである必要があります。
+- これらは強力かつ複雑な機能です。状態比較については、[既知の注意事項と制限事項](/reference/node-selection/state-comparison-caveats) をご覧ください。
 
-:::warning Syntax deprecated
+:::warning 構文の非推奨化
 
-In [dbt v1.5](/docs/dbt-versions/core-upgrade/Older%20versions/upgrading-to-v1.5#behavior-changes), we deprecated the original syntax for state (`DBT_ARTIFACT_STATE_PATH`) and defer (`DBT_DEFER_TO_STATE`). Although dbt supports backward compatibility with the old syntax, we will remove it in a future release that we have not yet determined.
+[dbt v1.5](/docs/dbt-versions/core-upgrade/Older%20versions/upgrading-to-v1.5#behavior-changes) では、state (`DBT_ARTIFACT_STATE_PATH`) と defer (`DBT_DEFER_TO_STATE`) の旧構文が非推奨となりました。dbt は旧構文との下位互換性をサポートしていますが、将来のリリースで削除される予定です。
 
 :::
 
-### The "result" status
+### 「結果」ステータス
 
-Another element of job state is the `result` of a prior dbt invocation. After executing a `dbt run`, for example, dbt creates the `run_results.json` artifact which contains execution times and success / error status for dbt models. You can read more about `run_results.json` on the ['run results'](/reference/artifacts/run-results-json) page. 
+ジョブ状態のもう1つの要素は、以前のdbt呼び出しの「結果」です。たとえば、「dbt run」を実行すると、dbtは「run_results.json」アーティファクトを作成します。このアーティファクトには、dbtモデルの実行時間と成功/エラーステータスが含まれます。「run_results.json」の詳細については、[「実行結果」](/reference/artifacts/run-results-json) ページをご覧ください。
 
-The following dbt commands produce `run_results.json` artifacts whose results can be referenced in subsequent dbt invocations:  
+以下のdbtコマンドは、「ru​​n_results.json」アーティファクトを生成します。その結果は、後続のdbt呼び出しで参照できます。
 - `dbt run`
 - `dbt test`
 - `dbt build`
-- `dbt seed` 
+- `dbt seed`
 
-After issuing one of the above commands, you can reference the results by adding a selector to a subsequent command as follows: 
+上記のコマンドのいずれかを実行した後、次のように後続のコマンドにセレクタを追加することで、結果を参照できます。
 
 ```bash
 # You can also set the DBT_STATE environment variable instead of the --state flag.
 dbt run --select "result:<status>" --defer --state path/to/prod/artifacts
 ```
 
-The available options depend on the resource (node) type: 
+利用可能なオプションは、リソース (ノード) の種類によって異なります:
 
 |      `result:\<status>`        | model | seed | snapshot | test |
 |----------------|-------|------|------|----------|
@@ -52,31 +52,31 @@ The available options depend on the resource (node) type:
 | `result:warn`    |     |      |      |  ✅      |
 | `result:pass`    |     |      |      |  ✅      |
 
-### Combining `state` and `result` selectors
+### `state` セレクタと `result` セレクタの組み合わせ
 
-The state and result selectors can also be combined in a single invocation of dbt to capture errors from a previous run OR any new or modified models.
+状態セレクタと結果セレクタを dbt の 1 回の呼び出しで組み合わせて、前回の実行時や新規モデル、あるいは変更されたモデルのエラーを取得することもできます。
 
 ```bash
 dbt run --select "result:<status>+" state:modified+ --defer --state ./<dbt-artifact-path>
 ```
 
-### The "source_status" status
+### 「source_status」ステータス
 
-Another element of job state is the `source_status` of a prior dbt invocation. After executing `dbt source freshness`, for example, dbt creates the `sources.json` artifact which contains execution times and `max_loaded_at` dates for dbt sources. You can read more about `sources.json` on the ['sources'](/reference/artifacts/sources-json) page. 
+ジョブの状態を表すもう1つの要素は、以前のdbt呼び出しの「source_status」です。例えば、「dbt source freshness」を実行すると、dbtは「sources.json」アーティファクトを作成します。このアーティファクトには、dbtソースの実行時間と「max_loaded_at」日付が含まれます。「sources.json」の詳細については、['sources'](/reference/artifacts/sources-json) ページをご覧ください。
 
-The `dbt source freshness` command produces a `sources.json` artifact whose results can be referenced in subsequent dbt invocations. 
+「dbt source freshness」コマンドは「sources.json」アーティファクトを生成します。このアーティファクトの結果は、以降のdbt呼び出しで参照できます。
 
-When a job is selected, dbt Cloud will surface the artifacts from that job's most recent successful run. dbt will then use those artifacts to determine the set of fresh sources. In your job commands, you can signal dbt to run and test only on the fresher sources and their children by including the `source_status:fresher+` argument. This requires both the previous and current states to have the `sources.json` artifact available. Or plainly said, both job states need to run `dbt source freshness`.
+ジョブを選択すると、dbt Cloudはそのジョブの最新の成功した実行のアーティファクトを表示します。dbtはこれらのアーティファクトを使用して、新しいソースのセットを決定します。ジョブコマンドに `source_status:fresher+` 引数を含めることで、dbt に最新のソースとその子のみを実行およびテストするように指示できます。この場合、以前の状態と現在の状態の両方で `sources.json` アーティファクトが利用可能である必要があります。つまり、両方のジョブ状態で `dbt source freshness` を実行する必要があります。
 
-After issuing the `dbt source freshness` command, you can reference the source freshness results by adding a selector to a subsequent command:
+`dbt source freshness` コマンドを実行した後、後続のコマンドにセレクターを追加することで、ソースの鮮度結果を参照できます。
 
 ```bash
 # You can also set the DBT_STATE environment variable instead of the --state flag.
 dbt source freshness # must be run again to compare current to previous state
 dbt build --select "source_status:fresher+" --state path/to/prod/artifacts
 ```
-For more example commands, refer to [Pro-tips for workflows](/best-practices/best-practice-workflows#pro-tips-for-workflows).
+その他のコマンド例については、[ワークフローに関するプロのヒント](/best-practices/best-practice-workflows#pro-tips-for-workflows)を参照してください。
 
-## Related docs
-- [About state in dbt](/reference/node-selection/state-selection)
-- [State comparison caveats](/reference/node-selection/state-comparison-caveats)
+## 関連ドキュメント
+- [dbt における状態について](/reference/node-selection/state-selection)
+- [状態比較に関する注意事項](/reference/node-selection/state-comparison-caveats)

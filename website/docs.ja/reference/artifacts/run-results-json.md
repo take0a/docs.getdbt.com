@@ -1,67 +1,66 @@
 ---
-title: "Run results JSON file"
+title: "実行結果のJSONファイル"
 sidebar_label: "Run results"
 ---
 
-**Current schema**: [`v6`](https://schemas.getdbt.com/dbt/run-results/v6/index.html)
+**現在のスキーマ**: [`v6`](https://schemas.getdbt.com/dbt/run-results/v6/index.html)
 
- **Produced by:**
- [`build`](/reference/commands/build)
- [`clone`](/reference/commands/clone)
- [`compile`](/reference/commands/compile)
- [`docs generate`](/reference/commands/cmd-docs)
- [`retry`](/reference/commands/retry)
- [`run`](/reference/commands/run)
- [`seed`](/reference/commands/seed)
- [`show`](/reference/commands/show)
- [`snapshot`](/reference/commands/snapshot)
- [`test`](/reference/commands/test) 
- [`run-operation`](/reference/commands/run-operation)
- 
+**生成元:**
+[`build`](/reference/commands/build)
+[`clone`](/reference/commands/clone)
+[`compile`](/reference/commands/compile)
+[`docs generate`](/reference/commands/cmd-docs)
+[`retry`](/reference/commands/retry)
+[`run`](/reference/commands/run)
+[`seed`](/reference/commands/seed)
+[`show`](/reference/commands/show)
+[`snapshot`](/reference/commands/snapshot)
+[`test`](/reference/commands/test)
+[`run-operation`](/reference/commands/run-operation)
 
-This file contains information about a completed invocation of dbt, including timing and status info for each node (model, test, etc) that was executed. In aggregate, many `run_results.json` can be combined to calculate average model runtime, test failure rates, the number of record changes captured by snapshots, etc.
+このファイルには、実行された各ノード（モデル、テストなど）のタイミングとステータス情報を含む、dbt の完了した呼び出しに関する情報が含まれています。複数の `run_results.json` を組み合わせることで、平均モデル実行時間、テスト失敗率、スナップショットによってキャプチャされたレコード変更数などを計算できます。
 
-Note that only executed nodes appear in the run results. If you have multiple run or test steps with different critiera, each will produce different run results.
+実行結果には実行されたノードのみが表示されることに注意してください。異なる基準を持つ複数の実行ステップまたはテストステップがある場合、それぞれが異なる実行結果を生成します。
 
-Note: `dbt source freshness` produces a different artifact, [`sources.json`](/reference/artifacts/sources-json), with similar attributes.
+注: `dbt source freshness` は、同様の属性を持つ別のアーティファクト [`sources.json`](/reference/artifacts/sources-json) を生成します。
 
-### Top-level keys
+### 最上位キー
 
 - [`metadata`](/reference/artifacts/dbt-artifacts#common-metadata)
-- `args`: Dictionary of arguments passed to the CLI command or RPC method that produced this artifact. Most useful is `which` (command) or `rpc_method`. This dict excludes null values, and includes default values if they are not null. Equivalent to [`invocation_args_dict`](/reference/dbt-jinja-functions/flags#invocation_args_dict) in the dbt-Jinja context.
-- `elapsed_time`: Total invocation time in seconds.
-- `results`: Array of node execution details.
+- `args`: このアーティファクトを生成したCLIコマンドまたはRPCメソッドに渡された引数の辞書。最も有用なのは`which` (コマンド)または`rpc_method`です。この辞書はnull値を除外し、nullでない場合はデフォルト値を含めます。dbt-Jinjaコンテキストの[`invocation_args_dict`](/reference/dbt-jinja-functions/flags#invocation_args_dict)に相当します。
+- `elapsed_time`: 呼び出し時間の合計（秒）。
+- `results`: ノード実行の詳細の配列。
 
-Each entry in `results` is a [`Result` object](/reference/dbt-classes#result-objects), with one difference: Instead of including the entire `node` object, only the `unique_id` is included. (The full `node` object is recorded in [`manifest.json`](/reference/artifacts/manifest-json).)
+`results` の各エントリは [`Result` オブジェクト](/reference/dbt-classes#result-objects) ですが、1 つの違いがあります。`node` オブジェクト全体ではなく、`unique_id` のみが含まれます。(`node` オブジェクト全体は [`manifest.json`](/reference/artifacts/manifest-json) に記録されます。)
 
-- `unique_id`: Unique node identifier, which maps results to `nodes` in the [manifest](/reference/artifacts/manifest-json)
-- `status`: dbt's interpretation of runtime success, failure, or error
-- `thread_id`: Which thread executed this node? E.g. `Thread-1`
-- `execution_time`: Total time spent executing this node
-- `timing`: Array that breaks down execution time into steps (often `compile` + `execute`)
-- `message`: How dbt will report this result on the CLI, based on information returned from the database
+- `unique_id`: 結果を [manifest](/reference/artifacts/manifest-json) 内の `nodes` にマッピングする一意のノード識別子です。
+- `status`: dbt による実行時の成功、失敗、またはエラーの解釈です。
+- `thread_id`: このノードを実行したスレッド。例: `Thread-1`
+- `execution_time`: このノードの実行に費やされた合計時間
+- `timing`: 実行時間をステップ（通常は `compile` + `execute`）に分割した配列
+- `message`: データベースから返された情報に基づいて、dbt が CLI にこの結果をどのように報告するか
 
-import RowsAffected from '/snippets/_run-result.md';
+import RowsAffected from '/snippets.ja/_run-result.md';
 
 <RowsAffected/>
 
 <!-- this partial comes from https://github.com/dbt-labs/docs.getdbt.com/tree/current/website/snippets/_run-result-->
 
-The run_results.json includes three attributes related to the `applied` state that complement `unique_id`:
+run_results.json には、`unique_id` を補完する `applied` 状態に関連する 3 つの属性が含まれています:
 
-- `compiled`: Boolean entry of the node compilation status (`False` after parsing, but `True` after compiling).
-- `compiled_code`: Rendered string of the code that was compiled (empty after parsing, but full string after compiling).
-- `relation_name`: The fully-qualified name of the object that was (or will be) created/updated within the database.
+- `compiled`: ノードのコンパイル状態を表すブール値エントリ（解析後は `False` ですが、コンパイル後は `True` になります）。
+- `compiled_code`: コンパイルされたコードのレンダリングされた文字列（解析後は空ですが、コンパイル後は完全な文字列になります）。
+- `relation_name`: データベース内で作成/更新された（または作成/更新される）オブジェクトの完全修飾名。
 
-Continue to look up additional information about the `logical` state of nodes using the full node object in manifest.json via the `unique_id`.
+manifest.json 内の完全なノードオブジェクトを使用して、`unique_id` を介してノードの `logical` 状態に関する追加情報を引き続き検索します。
 
-## Examples
+## 例
 
-Here are a few examples and the resulting output to the `run_results.json` file.
+以下にいくつかの例と、その結果が `run_results.json` ファイルに出力された結果を示します。
 
-### Compile model results
+### モデル結果をコンパイルする
 
-Let's say that you have a model that looks like this:
+次のようなモデルがあるとします:
 
 <File name='models/my_model.sql'>
 
@@ -71,13 +70,13 @@ select {{ dbt.current_timestamp() }} as created_at
 
 </File>
 
-Compile the model:
+モデルをコンパイルします:
 
 ```shell
 dbt compile -s my_model
 ```
 
-Here's a printed snippet from the `run_results.json`:
+以下は `run_results.json` に出力されたスニペットです:
 
 ```json
     {
@@ -106,9 +105,9 @@ Here's a printed snippet from the `run_results.json`:
     }
 ```
 
-### Run generic data tests
+### 汎用データテストを実行する
 
-Use the [`store_failures_as`](/reference/resource-configs/store_failures_as) config to store failures for only one data test in the database:
+[`store_failures_as`](/reference/resource-configs/store_failures_as) 設定を使用して、1 つのデータテストのみの失敗をデータベースに保存します:
 
 <File name='models/_models.yml'>
 
@@ -128,13 +127,13 @@ models:
 
 </File>
 
-Run the built-in `unique` test and store the failures as a table:
+組み込みの `unique` テストを実行し、失敗をテーブルとして保存します:
 
 ```shell
 dbt test -s my_model
 ```
 
-Here's a printed snippet from the `run_results.json`:
+以下は `run_results.json` から印刷されたスニペットです:
 
 ```json
   "results": [

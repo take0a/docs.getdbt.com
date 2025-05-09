@@ -12,17 +12,17 @@ The `--resource-type` and `--exclude-resource-type` flags include or exclude res
 
 <VersionBlock firstVersion="1.9">
 
-The `--resource-type` and `--exclude-resource-type` flags include or exclude resource types from the `dbt build`, `dbt test`, `dbt clone`, and `dbt list` commands.
+`--resource-type` フラグと `--exclude-resource-type` フラグは、`dbt build`、`dbt test`、`dbt clone`、および `dbt list` コマンドにリソース タイプを含めるか除外します。
 
 </VersionBlock>
 
-This means the flags enable you to specify which types of resources to include or exclude when running the commands, instead of targeting specific resources.
+つまり、フラグを使用すると、特定のリソースをターゲットにするのではなく、コマンドを実行するときに含めるまたは除外するリソースの種類を指定できます。
 
 :::tip Note
-The `--exclude-resource-type` flag is only available in dbt version 1.8 and higher. If you're using older versions, this flag won't be available.
+`--exclude-resource-type` フラグは、dbt バージョン 1.8 以降でのみ使用できます。それより古いバージョンをご利用の場合、このフラグは使用できません。
 :::
 
-The available resource types are:
+利用可能なリソースの種類は次のとおりです:
 
 <VersionBlock lastVersion="1.7">
 
@@ -55,11 +55,11 @@ The available resource types are:
 
 </VersionBlock>
 
-## Example
+## 例
 
-Instead of targeting specific resources, use the `--resource-flag` or `--exclude-resource-type` flags to target all resources of a certain type: `dbt build --resource-type RESOURCE_TYPE` replacing `RESOURCE_TYPE` with the resource type you want to include.
+特定のリソースをターゲットにする代わりに、`--resource-flag` または `--exclude-resource-type` フラグを使用して、特定のタイプのすべてのリソースをターゲットにします。`dbt build --resource-type RESOURCE_TYPE` で、`RESOURCE_TYPE` は含めたいリソースタイプに置き換えてください。
 
-- For example, use the following command to include _all_ snapshots from your dbt build process:
+- たとえば、dbt ビルドプロセスからすべてのスナップショットを含めるには、次のコマンドを使用します:
 
     <File name='Usage'>
 
@@ -70,7 +70,7 @@ Instead of targeting specific resources, use the `--resource-flag` or `--exclude
     </File>
 
 
-- In this example, run the following command to include _all_ saved queries with the `--resource-type` flag:
+- この例では、次のコマンドを実行して、`--resource-type` フラグを使用して保存されたすべてのクエリを含めます:
 
     <File name='Usage'>
 
@@ -82,7 +82,7 @@ Instead of targeting specific resources, use the `--resource-flag` or `--exclude
 
 <VersionBlock firstVersion="1.8">
 
--  In this example, use the following command to exclude _all_ unit tests from your dbt build process. Note that the `--exclude-resource-type` flag is only available in dbt version 1.8 and higher:
+- この例では、以下のコマンドを使用して、dbt ビルドプロセスからすべてのユニットテストを除外します。`--exclude-resource-type` フラグは dbt バージョン 1.8 以降でのみ使用可能です:
 
     <File name='Usage'>
 
@@ -92,7 +92,7 @@ Instead of targeting specific resources, use the `--resource-flag` or `--exclude
 
     </File>
 
-- In this example, use the following command to include all data tests in your build process:
+- この例では、次のコマンドを使用して、すべてのデータ テストをビルド プロセスに含めます:
 
     <File name='Usage'>
 
@@ -106,7 +106,7 @@ Instead of targeting specific resources, use the `--resource-flag` or `--exclude
 
 <VersionBlock firstVersion="1.9">
 
--  In this example, use the following command to exclude _all_ unit tests when running tests:
+- この例では、テストの実行時にすべての単体テストを除外するには、次のコマンドを使用します:
 
     <File name='Usage'>
 
@@ -116,7 +116,7 @@ Instead of targeting specific resources, use the `--resource-flag` or `--exclude
 
     </File>
 
-- In this example, use the following command to include all data tests when running tests:
+- この例では、テストを実行するときにすべてのデータ テストを含めるために次のコマンドを使用します:
 
     <File name='Usage'>
 

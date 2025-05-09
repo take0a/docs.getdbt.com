@@ -1,24 +1,24 @@
-You can use the following modes to configure the behavior when performing indirect selection (with `eager` mode as the default). Test exclusion is always greedy: if ANY parent is explicitly excluded, the test will be excluded as well.
+以下のモードを使用して、間接選択を実行する際の動作を設定できます（デフォルトは「eager」モード）。テストの除外は常に貪欲です。つまり、いずれかの親が明示的に除外された場合、テストも除外されます。
 
-:::tip Building subsets of a DAG
-The `buildable` and `cautious` modes can be useful when you're only building a subset of your DAG, and you want to avoid test failures in `eager` mode caused by unbuilt resources. You can also achieve this with [deferral](/reference/node-selection/defer).
+:::tip DAG のサブセットの構築
+DAG のサブセットのみを構築する場合、`buildable` モードと `cautious` モードは、構築されていないリソースによって `eager` モードでテストが失敗するのを回避したいときに便利です。[deferral](/reference/node-selection/defer) を使用することで、これを実現することもできます。
 :::
 
 
 
-#### Eager mode
+#### Eager モード
 
-By default, runs tests if any of the parent nodes are selected, regardless of whether all dependencies are met. This includes ANY tests that reference the selected nodes. Models will be built if they depend on the selected model. In this mode, any tests depending on unbuilt resources will raise an error.
+デフォルトでは、すべての依存関係が満たされているかどうかに関係なく、親ノードのいずれかが選択されていればテストを実行します。これには、選択されたノードを参照するすべてのテストが含まれます。モデルは、選択されたモデルに依存する場合はビルドされます。このモードでは、ビルドされていないリソースに依存するテストはすべてエラーになります。
 
-#### Buildable mode
+#### Buildable モード
 
-Only runs tests that refer to selected nodes (or their ancestors). This mode is slightly more inclusive than `cautious` by including tests whose references are each within the selected nodes (or their ancestors). This mode is useful when a test depends on a model _and_ a direct ancestor of that model, like confirming an aggregation has the same totals as its input.
+選択したノード（またはその祖先）を参照するテストのみを実行します。このモードは、選択したノード（またはその祖先）を参照するテストも含めるため、「慎重」モードよりもやや包括的です。このモードは、テストがモデルとその直接の祖先に依存する場合、例えば集計の合計が入力と同じであることを確認する場合などに便利です。
 
-#### Cautious mode
+#### Cautious モード
 
-Ensures that tests are executed and models are built only when all necessary dependencies of the selected models are met. Restricts tests to only those that exclusively reference selected nodes. Tests will only be executed if all the nodes they depend on are selected, which prevents tests from running if one or more of its parent nodes are unselected and, consequently, unbuilt.
+選択したモデルに必要な依存関係がすべて満たされている場合にのみ、テストが実行され、モデルがビルドされます。テストは、選択したノードのみを参照するテストのみに制限されます。テストは、依存するすべてのノードが選択されている場合にのみ実行されます。これにより、親ノードの1つ以上が選択解除され、結果としてビルドされていない場合、テストは実行されません。
 
-#### Empty mode
+#### Empty モード
 
-Restricts the build to only the selected node and ignores any indirect dependencies, including tests. It doesn't execute any tests, whether they are directly attached to the selected node or not. The empty mode does not include any tests and is automatically used for [interactive compilation](/reference/commands/compile#interactive-compile).
+ビルドを選択したノードのみに制限し、テストを含む間接的な依存関係を無視します。選択したノードに直接アタッチされているかどうかに関係なく、テストは実行されません。空モードにはテストが含まれず、[対話型コンパイル](/reference/commands/compile#interactive-compile)に自動的に使用されます。
 

@@ -1,10 +1,10 @@
 ---
-title: "Events and logs"
+title: "イベントとログ"
 ---
 
-As dbt runs, it generates events. The most common way to see those events is as log messages, written in real time to two places:
-- The command line terminal (`stdout`), to provide interactive feedback while running dbt.
-- The debug log file (`logs/dbt.log`), to enable detailed [debugging of errors](/guides/debug-errors) when they occur. The text-formatted log messages in this file include all `DEBUG`-level events, as well as contextual information, such as log level and thread name. The location of this file can be configured via [the `log-path` flag](/reference/global-configs/logs).
+dbt の実行中、イベントが生成されます。これらのイベントを確認する最も一般的な方法は、以下の 2 つの場所にリアルタイムで書き込まれるログメッセージです。
+- コマンドラインターミナル (`stdout`)。dbt 実行中にインタラクティブなフィードバックを提供します。
+- デバッグログファイル (`logs/dbt.log`)。エラー発生時に詳細な [デバッグ](/guides/debug-errors) を可能にします。このファイル内のテキスト形式のログメッセージには、すべての `DEBUG` レベルのイベントに加え、ログレベルやスレッド名などのコンテキスト情報が含まれます。このファイルの場所は、[`log-path` フラグ](/reference/global-configs/logs) で設定できます。
 
 <File name='CLI'>
 
@@ -28,50 +28,50 @@ As dbt runs, it generates events. The most common way to see those events is as 
 
 </File>
 
-## Structured logging
+## 構造化ログ
 
-_For more details about how the eventing system has been implemented in dbt-core, see the [`events` module README](https://github.com/dbt-labs/dbt-core/blob/HEAD/core/dbt/events/README.md)._
+_dbt-core におけるイベントシステムの実装方法の詳細については、[`events` モジュールの README](https://github.com/dbt-labs/dbt-core/blob/HEAD/core/dbt/events/README.md) をご覧ください。_
 
-The structure of each event in `dbt-core` is backed by a schema defined using [protocol buffers](https://developers.google.com/protocol-buffers). All schemas are defined in the [`types.proto`](https://github.com/dbt-labs/dbt-core/blob/3bf148c443e6b1da394b62e88a08f1d7f1d8ccaa/core/dbt/events/core_types.proto) file within the `dbt-core` codebase.
+`dbt-core` の各イベントの構造は、[プロトコルバッファ](https://developers.google.com/protocol-buffers) を使用して定義されたスキーマに基づいています。すべてのスキーマは、`dbt-core` コードベース内の [`types.proto`](https://github.com/dbt-labs/dbt-core/blob/3bf148c443e6b1da394b62e88a08f1d7f1d8ccaa/core/dbt/events/core_types.proto) ファイルで定義されています。
 
-Every event has the same two top-level keys:
-- `info`: Information common to all events. See the table below for the breakdown.
-- `data`: Additional structured data specific to this event. If this event relates to a specific node within your dbt project, it will contain a `node_info` dictionary with common attributes.
+すべてのイベントには、同じ2つのトップレベルキーがあります。
+- `info`: すべてのイベントに共通する情報。内訳については、以下の表をご覧ください。
+- `data`: このイベントに固有の追加の構造化データ。このイベントがdbtプロジェクト内の特定のノードに関連する場合、共通属性を持つ`node_info`ディクショナリが含まれます。
 
 ### `info` fields
 
 | Field       | Description   |
 |-------------|---------------|
-| `category` | Placeholder for future use (see [dbt-labs/dbt-core#5958](https://github.com/dbt-labs/dbt-core/issues/5958)) |
-| `code` | Unique shorthand identifier for this event type, e.g. `A123` |
-| `extra` | Dictionary of custom environment metadata, based on environment variables prefixed with `DBT_ENV_CUSTOM_ENV_` |
-| [`invocation_id`](/reference/dbt-jinja-functions/invocation_id) | A unique identifier for this invocation of dbt |
-| `level` | A string representation of the log level (`debug`, `info`, `warn`, `error`) |
-| `log_version` | Integer indicating version |
-| `msg` | Human-friendly log message, constructed from structured `data`. **Note**: This message is not intended for machine consumption. Log messages are subject to change in future versions of dbt. |
-| `name` | Unique name for this event type, matching the proto schema name |
-| `pid` | The process ID for the running dbt invocation which produced this log message |
-| `thread_name` | The thread in which the log message was produced, helpful for tracking queries when dbt is run with multiple threads |
-| `ts` | When the log line was printed |
+| `category` | 将来使用するためのプレースホルダー（[dbt-labs/dbt-core#5958](https://github.com/dbt-labs/dbt-core/issues/5958) を参照） |
+| `code` | このイベントタイプの一意の短縮識別子（例：`A123`） |
+| `extra` |`DBT_ENV_CUSTOM_ENV_` で始まる環境変数に基づくカスタム環境メタデータの辞書 |
+| [`invocation_id`](/reference/dbt-jinja-functions/invocation_id) | この dbt 呼び出しの一意の識別子 |
+| `level` |ログ レベルの文字列表現 (`debug`、`info`、`warn`、`error`) |
+| `log_version` | バージョンを示す整数 |
+| `msg` | 構造化された「データ」から構築された、人間が理解しやすいログメッセージです。**注**: このメッセージは機械による処理を想定したものではありません。ログメッセージは、dbt の将来のバージョンで変更される可能性があります。 |
+| `name` | このイベントタイプの一意の名前（プロトスキーマ名と一致する） |
+| `pid` | このログメッセージを生成した実行中の dbt 呼び出しのプロセス ID |
+| `thread_name` | ログ メッセージが生成されたスレッド。dbt が複数のスレッドで実行されるときにクエリを追跡するのに役立ちます。|
+| `ts` | ログラインが印刷されたとき |
 
-### `node_info` fields
+### `node_info` フィールド
 
-Many events are fired while compiling or running a specific DAG node (model, seed, test, etc). When it's available, the `node_info` object will include:
+特定の DAG ノード（モデル、シード、テストなど）のコンパイル中または実行中に、多くのイベントが発生します。`node_info` オブジェクトが利用可能な場合、以下の情報が含まれます:
 
 | Field       | Description   |
 |-------------|---------------|
-| `materialized` | view, table, incremental, etc. |
-| `meta` | User-configured [`meta` dictionary](/reference/resource-configs/meta) for this node |
-| `node_finished_at` | Timestamp when node processing completed |
-| `node_name` | Name of this model/seed/test/etc |
-| `node_path` | File path to where this resource is defined |
-| `node_relation` | Nested object containing this node's database representation: `database`, `schema`, `alias`, and full `relation_name` with quoting & inclusion policies applied |
-| `node_started_at` | Timestamp when node processing started |
-| `node_status` | Current status of the node, either `RunningStatus` (while running) or `NodeStatus` (finished) as defined in [the result contract](https://github.com/dbt-labs/dbt-core/blob/eba90863ed4043957330ea44ca267db1a2d81fcd/core/dbt/contracts/results.py#L75-L88) |
-| `resource_type` | `model`, `test`, `seed`, `snapshot`, etc. |
-| `unique_id` | The unique identifier for this resource, which can be used to look up more contextual information in the [manifest](/reference/artifacts/manifest-json) |
+| `materialized` | ビュー、テーブル、増分など。 |
+| `meta` | このノードのユーザー設定の [`meta` 辞書](/reference/resource-configs/meta) |
+| `node_finished_at` | ノード処理が完了したときのタイムスタンプ |
+| `node_name` | このモデル/シード/テスト/その他の名前 |
+| `node_path` | このリソースが定義されているファイルパス |
+| `node_relation` | このノードのデータベース表現を含むネストされたオブジェクト: `database`、`schema`、`alias`、および引用と包含ポリシーが適用された完全な `relation_name` |
+| `node_started_at` | ノード処理が開始されたタイムスタンプ |
+| `node_status` | ノードの現在のステータス。[結果コントラクト](https://github.com/dbt-labs/dbt-core/blob/eba90863ed4043957330ea44ca267db1a2d81fcd/core/dbt/contracts/results.py#L75-L88)で定義されている「RunningStatus」（実行中）または「NodeStatus」（終了）のいずれかです。 |
+| `resource_type` | `model`、`test`、`seed`、`snapshot` など。 |
+| `unique_id` | このリソースの一意の識別子。これを使用して、[マニフェスト](/reference/artifacts/manifest-json) 内のより詳細なコンテキスト情報を検索できます。 |
 
-### Example
+### 例
 
 ```json
 {
@@ -117,11 +117,10 @@ Many events are fired while compiling or running a specific DAG node (model, see
 }
 ```
 
-## Python interface
+## Python インターフェース
 
-Older versions of `dbt-core` made available a full history of events fired during an invocation, in the form of an `EVENT_HISTORY` object.
+以前のバージョンの `dbt-core` では、呼び出し中に発生したイベントの完全な履歴を `EVENT_HISTORY` オブジェクトの形式で利用できました。
 
-When [invoking dbt programmatically](programmatic-invocations#registering-callbacks), it is possible to register a callback on dbt's `EventManager`. This allows access to structured events as Python objects, to enable custom logging and integration with other systems.
+[dbt をプログラムで呼び出す](programmatic-invocations#registering-callbacks) 場合、dbt の `EventManager` にコールバックを登録できます。これにより、構造化イベントに Python オブジェクトとしてアクセスできるようになり、カスタムログ記録や他のシステムとの統合が可能になります。
 
-
-The Python interface into events is significantly less mature than the structured logging interface. For all standard use cases, we recommend parsing JSON-formatted logs.
+イベントへの Python インターフェースは、構造化ログ記録インターフェースに比べて大幅に未成熟です。標準的なユースケースでは、JSON 形式のログを解析することをお勧めします。

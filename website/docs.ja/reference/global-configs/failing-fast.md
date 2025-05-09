@@ -1,12 +1,12 @@
 ---
-title: "Failing fast"
+title: "早く失敗する"
 id: "failing-fast"
-sidebar: "Failing fast"
+sidebar: "早く失敗する"
 ---
 
-Supply the `-x` or `--fail-fast` flag to `dbt run` to make dbt exit immediately if a single resource fails to build. If other models are in-progress when the first model fails, then dbt will terminate the connections for these still-running models.
+`dbt run` に `-x` または `--fail-fast` フラグを指定すると、1 つのリソースのビルドに失敗した場合、dbt は直ちに終了します。最初のモデルが失敗したときに他のモデルが実行中だった場合、dbt はこれらの実行中のモデルの接続を終了します。
 
-For example, you can select four models to run, but if a failure occurs in the first model, the failure will prevent other models from running:
+例えば、実行するモデルを 4 つ選択し、最初のモデルでエラーが発生すると、そのエラーによって他のモデルは実行されなくなります。
 
 ```text
 dbt -x run --threads 1

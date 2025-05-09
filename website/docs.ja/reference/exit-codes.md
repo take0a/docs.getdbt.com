@@ -1,14 +1,14 @@
 ---
-title: "Exit codes"
+title: "終了コード"
 id: "exit-codes"
 ---
 
-When dbt exits, it will return an exit code of either 0, 1, or 2.
+dbt が終了すると、0、1、または 2 のいずれかの終了コードが返されます。
 
 | Exit Code | Condition |
 | --------- | --------- |
-| 0 | The dbt invocation completed without error. |
-| 1 | The dbt invocation completed with at least one handled error (eg. model syntax error, bad permissions, etc). The run was completed, but some models may have been skipped. |
-| 2 | The dbt invocation completed with an unhandled error (eg. ctrl-c, network interruption, etc). |
+| 0 | dbt 呼び出しはエラーなしで完了しました。 |
+| 1 | dbt 呼び出しは、少なくとも 1 つの処理済みエラー（例: モデルの構文エラー、不正な権限など）を伴って完了しました。実行は完了しましたが、一部のモデルがスキップされた可能性があります。. |
+| 2 | dbt 呼び出しは、処理されないエラー (例: Ctrl + C、ネットワーク中断など) で完了しました。 |
 
-While these exit codes may change in the future, a zero exit code will always imply success whereas a nonzero exit code will always imply failure.
+これらの終了コードは将来変更される可能性がありますが、終了コードがゼロの場合は常に成功を意味し、ゼロ以外の終了コードの場合は常に失敗を意味します。

@@ -2,18 +2,17 @@
 title: "dbt Classes"
 ---
 
-dbt has a number of classes it uses to represent objects in a <Term id="data-warehouse" />, parts of a dbt project, and the results of a command.
+dbt には、<Term id="data-warehouse" /> 内のオブジェクト、dbt プロジェクトの一部、およびコマンドの結果を表すために使用するクラスが多数あります。
 
-These classes are often useful when building advanced dbt models and macros.
+これらのクラスは、高度な dbt モデルやマクロを構築するときに役立ちます。
 
 ## Relation
 
-The `Relation` object is used to interpolate schema and <Term id="table" /> names into SQL code with appropriate quoting. This object should _always_ be used instead of interpolating values with `{{ schema }}.{{ table }}` directly. Quoting of the Relation object can be configured using the [`quoting` config](/reference/project-configs/quoting).
+`Relation` オブジェクトは、適切な引用符を用いてスキーマ名と <Term id="table" /> 名を SQL コードに挿入するために使用されます。`{{ schema }}.{{ table }}` を直接使用して値を挿入するのではなく、常にこのオブジェクトを使用する必要があります。Relation オブジェクトの引用符の指定は、[`quoting` 設定](/reference/project-configs/quoting) で設定できます。
 
+### リレーションの作成
 
-### Creating relations
-
-A `Relation` can be created by calling the `create` class method on the `Relation` class.
+`Relation` は、`Relation` クラスの `create` クラスメソッドを呼び出すことで作成できます。
 
 <File name='Relation.create'>
 
@@ -31,9 +30,10 @@ class Relation:
 
 </File>
 
-### Using relations
+### リレーションの使用
 
-In addition to `api.Relation.create`, dbt returns a Relation when you use [`ref`](/reference/dbt-jinja-functions/ref), [`source`](/reference/dbt-jinja-functions/source) or  [`this`](/reference/dbt-jinja-functions/this).
+`api.Relation.create` に加えて、dbt は [`ref`](/reference/dbt-jinja-functions/ref)、[`source`](/reference/dbt-jinja-functions/source)、または [`this`](/reference/dbt-jinja-functions/this) を使用した場合にもリレーションを返します。
+
 <File name='relation_usage.sql'>
 
 ```jinja2
@@ -66,7 +66,8 @@ In addition to `api.Relation.create`, dbt returns a Relation when you use [`ref`
 
 
 ## Column
-The `Column` object is used to encode information about a column in a relation.
+
+`Column` オブジェクトは、リレーション内の列に関する情報をエンコードするために使用されます。
 
 <File name='column.py'>
 
@@ -96,31 +97,32 @@ col.numeric_type('numeric', 12, 4) # numeric(12,4)
 
 ### Column API
 
-### Properties
+### プロパティ
 
-- **char_size**: Returns the maximum size for character varying columns
-- **column**: Returns the name of the column
-- **data_type**: Returns the data type of the column (with size/precision/scale included)
-- **dtype**: Returns the data type of the column (without any size/precision/scale included)
-- **name**: Returns the name of the column (identical to `column`, provided as an alias).
-- **numeric_precision**: Returns the maximum precision for fixed decimal columns
-- **numeric_scale**: Returns the maximum scale for fixed decimal columns
-- **quoted**: Returns the name of the column wrapped in quotes
+- **char_size**: 文字可変列の最大サイズを返します。
+- **column**: 列名を返します。
+- **data_type**: 列のデータ型を返します（サイズ/精度/スケールを含む）。
+- **dtype**: 列のデータ型を返します（サイズ/精度/スケールを含まない）。
+- **name**: 列名を返します（エイリアスとして指定された `column` と同一）。
+- **numeric_precision**: 固定小数点列の最大精度を返します。
+- **numeric_scale**: 固定小数点列の最大スケールを返します。
+- **quoted**: 列名を引用符で囲んで返します。
 
-### Instance methods
+### インスタンスメソッド
 
-- **is_string()**: Returns True if the column is a String type (eg. text, varchar), else False
-- **is_numeric()**: Returns True if the column is a fixed-precision Numeric type (eg. `numeric`), else False
-- **is_number()**: Returns True if the column is a number-y type (eg. `numeric`, `int`, `float`, or similar), else False
-- **is_integer()**: Returns True if the column is an integer (eg. `int`, `bigint`, `serial` or similar), else False
-- **is_float()**: Returns True if the column is a float type (eg. `float`, `float64`, or similar), else False
-- **string_size()**: Returns the width of the column if it is a string type, else, an exception is raised
+- **is_string()**: 列が文字列型（例：text、varchar）の場合、True を返します。それ以外の場合は False を返します。
+- **is_numeric()**: 列が固定精度の数値型（例：`numeric`）の場合、True を返します。それ以外の場合は False を返します。
+- **is_number()**: 列が数値型（例：`numeric`、`int`、`float` など）の場合、True を返します。それ以外の場合は False を返します。
+- **is_integer()**: 列が整数型（例：`int`、`bigint`、`serial` など）の場合、True を返します。それ以外の場合は False を返します。
+- **is_float()**: 列が浮動小数点型（例：`float`、`float64` など）の場合、True を返します。それ以外の場合は False を返します。
+- **string_size()**: 列が文字列型の場合、列の幅を返します。それ以外の場合は、例外が発生する
 
-### Static methods
-- **string_type(size)**:  Returns a database-useable representation of the string type (eg. `character varying(255)`)
-- **numeric_type(dtype, precision, scale)**: Returns a database-useable representation of the numeric type (eg. `numeric(12, 4)`)
+### 静的メソッド
 
-### Using columns
+- **string_type(size)**: 文字列型のデータベースで使用可能な表現を返します (例: `character varying(255)`)
+- **numeric_type(dtype, precision, scale)**: 数値型のデータベースで使用可能な表現を返します (例: `numeric(12, 4)`)
+
+### 列の使用
 
 <File name='column_usage.sql'>
 
@@ -173,14 +175,17 @@ col.numeric_type('numeric', 12, 4) # numeric(12,4)
 </File>
 
 ## BigQuery columns
-The `Column` type is overridden as a `BigQueryColumn` in BigQuery dbt projects. This object works the same as the `Column` type described above, with the exception of extra properties and methods:
 
-### Properties
-- **fields**: Returns the list of subfields contained within a field (if the column is a STRUCT)
-- **mode**: Returns the "mode" of the column, eg. `REPEATED`
+BigQuery dbt プロジェクトでは、`Column` 型は `BigQueryColumn` としてオーバーライドされます。このオブジェクトは、追加のプロパティとメソッドを除いて、上記の `Column` 型と同じように動作します。
 
-### Instance methods
-**flatten()**: Return a flattened list of `BigQueryColumns` in which subfields are expanded into their own columns. For example, this nested field:
+### プロパティ
+
+- **fields**: フィールドに含まれるサブフィールドのリストを返します（列が構造体の場合）。
+- **mode**: 列の「モード」を返します（例: `REPEATED`）。
+
+### インスタンスメソッド
+
+**flatten()**: サブフィールドがそれぞれの列に展開された、フラット化された `BigQueryColumns` リストを返します。例えば、次のネストされたフィールドは、
 
 ```
 [{"hits": {"pageviews": 1, "bounces": 0}}]
@@ -191,17 +196,17 @@ will be expanded to:
 [{"hits.pageviews": 1, "hits.bounces": 0}]
 ```
 
-## Result objects
+## 結果オブジェクト
 
-The execution of a resource in dbt generates a `Result` object. This object contains information about the executed node, timing, status, and metadata returned by the adapter. At the end of an invocation, dbt records these objects in [`run_results.json`](/reference/artifacts/run-results-json).
+dbt でリソースを実行すると、`Result` オブジェクトが生成されます。このオブジェクトには、実行されたノード、タイミング、ステータス、アダプタから返されたメタデータに関する情報が含まれます。呼び出しの終了時に、dbt はこれらのオブジェクトを [`run_results.json`](/reference/artifacts/run-results-json) に記録します。
 
-- `node`: Full object representation of the dbt resource (model, seed, snapshot, test) executed, including its `unique_id`
-- `status`: dbt's interpretation of runtime success, failure, or error
-- `thread_id`: Which thread executed this node? E.g. `Thread-1`
-- `execution_time`: Total time spent executing this node, measured in seconds.
-- `timing`: Array that breaks down execution time into steps (often `compile` + `execute`)
-- `message`: How dbt will report this result on the CLI, based on information returned from the database
+- `node`: 実行された dbt リソース (モデル、シード、スナップショット、テスト) の完全なオブジェクト表現。`unique_id` も含まれます。
+- `status`: dbt による実行時の成功、失敗、またはエラーの解釈。
+- `thread_id`: このノードを実行したスレッド。例: `Thread-1`
+- `execution_time`: このノードの実行にかかった合計時間 (秒単位)。
+- `timing`: 実行時間をステップ（多くの場合 `compile` + `execute`）に分割した配列
+- `message`: データベースから返された情報に基づいて、dbt が CLI にこの結果をどのように報告するか
 
-import RowsAffected from '/snippets/_run-result.md'; 
+import RowsAffected from '/snippets.ja/_run-result.md'; 
 
 <RowsAffected/>

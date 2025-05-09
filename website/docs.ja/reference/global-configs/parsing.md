@@ -4,9 +4,9 @@ id: "parsing"
 sidebar: "Parsing"
 ---
 
-### Partial Parsing
+### 部分解析
 
-The `PARTIAL_PARSE` config can turn partial parsing on or off in your project. See [the docs on parsing](/reference/parsing#partial-parsing) for more details.
+`PARTIAL_PARSE` 設定を使用すると、プロジェクト内で部分解析を有効または無効にできます。詳細については、[解析に関するドキュメント](/reference/parsing#partial-parsing)をご覧ください。
 
 <File name='profiles.yml'>
 
@@ -27,9 +27,9 @@ dbt --no-partial-parse run
 
 </File>
 
-### Static parser
+### 静的パーサー
 
-The `STATIC_PARSER` config can enable or disable the use of the static parser. See [the docs on parsing](/reference/parsing#static-parser) for more details.
+`STATIC_PARSER` 設定で、静的パーサーの使用を有効または無効にできます。詳細については、[パーシングに関するドキュメント](/reference/parsing#static-parser)を参照してください。
 
 <File name='profiles.yml'>
 
@@ -42,6 +42,6 @@ config:
 
 </File>
 
-### Experimental parser
+### 試験的なパーサー
 
-Not currently in use.
+現在は使用されていません。

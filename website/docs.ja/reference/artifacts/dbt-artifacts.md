@@ -1,58 +1,58 @@
 ---
-title: "About dbt artifacts"
-sidebar_label: "About dbt artifacts"
+title: "dbtアーティファクトについて"
+sidebar_label: "dbtアーティファクトについて"
 ---
 
-With every invocation, dbt generates and saves one or more *artifacts*. Several of these are <Term id="json" /> files (`semantic_manifest.json`, `manifest.json`, `catalog.json`, `run_results.json`, and `sources.json`) that are used to power:
+呼び出しごとに、dbt は 1 つ以上の *アーティファクト* を生成して保存します。これらのうちいくつかは <Term id="json" /> ファイル (`semantic_manifest.json`、`manifest.json`、`catalog.json`、`run_results.json`、`sources.json`) であり、以下の機能を実現するために使用されます。
 
-- [documentation](/docs/collaborate/build-and-view-your-docs)
-- [state](/reference/node-selection/syntax#about-node-selection)
-- [visualizing source freshness](/docs/build/sources#source-data-freshness)
+- [ドキュメント](/docs/collaborate/build-and-view-your-docs)
+- [状態](/reference/node-selection/syntax#about-node-selection)
+- [ソースの鮮度を視覚化する](/docs/build/sources#source-data-freshness)
 
-They could also be used to:
+これらは以下の目的にも使用できます。
 
-- gain insights into your [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl)
-- calculate project-level test coverage
-- perform longitudinal analysis of run timing
-- identify historical changes in <Term id="table" /> structure
-- do much, much more
+- [dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) に関する洞察を得る
+- プロジェクトレベルのテスト カバレッジを計算する
+- 実行時間の長期分析を実行する
+- <Term id="table" /> 構造の履歴的な変化を特定する
+- その他、様々なことを行う
 
-### When are artifacts produced? <Lifecycle status="team,enterprise"/>
+### アーティファクトはいつ生成されますか？ <Lifecycle status="team,enterprise"/>
 
-Most dbt commands (and corresponding RPC methods) produce artifacts:
-- [semantic manifest](/reference/artifacts/sl-manifest): produced whenever your dbt project is parsed
-- [manifest](/reference/artifacts/manifest-json): produced by commands that read and understand your project
-- [run results](/reference/artifacts/run-results-json): produced by commands that run, compile, or catalog nodes in your DAG
-- [catalog](catalog-json): produced by `docs generate`
-- [sources](/reference/artifacts/sources-json): produced by `source freshness`
+ほとんどの dbt コマンド（および対応する RPC メソッド）は、以下のアーティファクトを生成します。
+- [セマンティック マニフェスト](/reference/artifacts/sl-manifest): dbt プロジェクトが解析されるたびに生成されます。
+- [マニフェスト](/reference/artifacts/manifest-json): プロジェクトを読み込んで理解するコマンドによって生成されます。
+- [実行結果](/reference/artifacts/run-results-json): DAG 内のノードを実行、コンパイル、またはカタログ化するコマンドによって生成されます。
+- [カタログ](catalog-json): `docs generate` によって生成されます。
+- [ソース](/reference/artifacts/sources-json): `source freshness` によって生成されます。
 
-When running commands from the [dbt Cloud CLI](/docs/cloud/cloud-cli-installation), all artifacts are downloaded by default. If you want to change this behavior, refer to [How to skip artifacts from being downloaded](/docs/cloud/configure-cloud-cli#how-to-skip-artifacts-from-being-downloaded).
+[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) からコマンドを実行すると、すべてのアーティファクトがデフォルトでダウンロードされます。この動作を変更する場合は、[アーティファクトのダウンロードをスキップする方法](/docs/cloud/configure-cloud-cli#how-to-skip-artifacts-from-being-downloaded)を参照してください。
 
-## Where are artifacts produced?
+## アーティファクトはどこに生成されますか？
 
-By default, artifacts are written to the `/target` directory of your dbt project. You can configure the location using the [`target-path` flag](/reference/global-configs/json-artifacts).
+デフォルトでは、アーティファクトはdbtプロジェクトの `/target` ディレクトリに書き込まれます。[`target-path` フラグ](/reference/global-configs/json-artifacts) を使用して場所を設定できます。
 
-## Common metadata
+## 共通メタデータ
 
-All artifacts produced by dbt include a `metadata` dictionary with these properties:
+dbt によって生成されるすべてのアーティファクトには、以下のプロパティを持つ `metadata` ディクショナリが含まれます。
 
-- `dbt_version`: Version of dbt that produced this artifact. For details about release versioning, refer to [Versioning](/reference/commands/version#versioning). 
-- `dbt_schema_version`: URL of this artifact's schema. See notes below.
-- `generated_at`: Timestamp in UTC when this artifact was produced.
-- `adapter_type`: The adapter (database), e.g. `postgres`, `spark`, etc.
-- `env`: Any environment variables prefixed with `DBT_ENV_CUSTOM_ENV_` will be included in a dictionary, with the prefix-stripped variable name as its key.
-- [`invocation_id`](/reference/dbt-jinja-functions/invocation_id): Unique identifier for this dbt invocation
+- `dbt_version`: このアーティファクトを生成した dbt のバージョン。リリースのバージョン管理の詳細については、[バージョン管理](/reference/commands/version#versioning) を参照してください。
+- `dbt_schema_version`: このアーティファクトのスキーマの URL。下記の注記を参照してください。
+- `generated_at`: このアーティファクトが生成された UTC でのタイムスタンプ。
+- `adapter_type`: アダプタ（データベース）。例: `postgres`、`spark` など。
+- `env`: `DBT_ENV_CUSTOM_ENV_` で始まる環境変数は、プレフィックスを除いた変数名をキーとしてディクショナリに含まれます。
+- [`invocation_id`](/reference/dbt-jinja-functions/invocation_id): この dbt 呼び出しの一意の識別子
 
-In the manifest, the `metadata` may also include:
-- `send_anonymous_usage_stats`: Whether this invocation sent [anonymous usage statistics](/reference/global-configs/usage-stats) while executing.
-- `project_name`: The `name` defined in the root project's `dbt_project.yml`. (Added in manifest v10 / dbt Core v1.6)
-- `project_id`: Project identifier, hashed from `project_name`, sent with anonymous usage stats if enabled.
-- `user_id`: User identifier, stored by default in `~/dbt/.user.yml`, sent with anonymous usage stats if enabled.
+マニフェストでは、`metadata` に以下の情報も含まれる場合があります。
+- `send_anonymous_usage_stats`: この呼び出しが実行中に [匿名使用状況統計](/reference/global-configs/usage-stats) を送信したかどうか。
+- `project_name`: ルートプロジェクトの `dbt_project.yml` で定義された `name`。(マニフェスト v10 / dbt Core v1.6 で追加)
+- `project_id`: `project_name` からハッシュ化されたプロジェクト識別子。匿名使用状況統計が有効になっている場合は、匿名使用状況統計とともに送信されます。
+- `user_id`: ユーザー識別子。デフォルトで `~/dbt/.user.yml` に保存され、匿名使用状況統計が有効になっている場合は、匿名使用状況統計とともに送信されます。
 
-#### Notes:
+#### 注記:
 
-- The structure of dbt artifacts is canonized by [JSON schemas](https://json-schema.org/), which are hosted at [schemas.getdbt.com](https://schemas.getdbt.com/).
-- Artifact versions may change in any minor version of dbt (`v1.x.0`). Each artifact is versioned independently.
+- dbt アーティファクトの構造は、[JSON スキーマ](https://json-schema.org/) によって標準化されており、[schemas.getdbt.com](https://schemas.getdbt.com/) でホストされています。
+- アーティファクトのバージョンは、dbt のマイナーバージョン (`v1.x.0`) で変更される可能性があります。各アーティファクトは個別にバージョン管理されます。
 
-## Related docs
-- [Other artifacts](/reference/artifacts/other-artifacts) files such as `index.html` or `graph_summary.json`.
+## 関連ドキュメント
+- [その他のアーティファクト](/reference/artifacts/other-artifacts) ファイル（`index.html` や `graph_summary.json` など）。

@@ -1,39 +1,39 @@
 ---
-title: "Other artifact files"
+title: "その他のアーティファクトファイル"
 sidebar_label: "Other artifacts"
 ---
 
 ### index.html
 
-**Produced by:** [`docs generate`](/reference/commands/cmd-docs)
+**作成元:** [`docs generate`](/reference/commands/cmd-docs)
 
-This file is the skeleton of the [auto-generated dbt documentation website](/docs/collaborate/build-and-view-your-docs). The contents of the site are populated by the [manifest](/reference/artifacts/manifest-json) and [catalog](catalog-json).
+このファイルは、[自動生成された dbt ドキュメント ウェブサイト](/docs/collaborate/build-and-view-your-docs) の骨組みです。サイトの内容は、[マニフェスト](/reference/artifacts/manifest-json) と [カタログ](catalog-json) によって生成されます。
 
-Note: the source code for `index.json` comes from the [dbt-docs repo](https://github.com/dbt-labs/dbt-docs). Head over there if you want to make a bug report, suggestion, or contribution relating to the documentation site.
+注: `index.json` のソースコードは [dbt-docs リポジトリ](https://github.com/dbt-labs/dbt-docs) から取得されています。ドキュメント サイトに関するバグ報告、提案、または貢献を行う場合は、リポジトリにアクセスしてください。
 
 ### partial_parse.msgpack
 
-**Produced by:** [manifest commands](/reference/artifacts/manifest-json) + [`parse`](/reference/commands/parse)
+**生成元:** [マニフェストコマンド](/reference/artifacts/manifest-json) + [`parse`](/reference/commands/parse)
 
-This file is used to store a compressed representation of files dbt has parsed. If you have [partial parsing](/reference/parsing#partial-parsing) enabled, dbt will use this file to identify the files that have changed and avoid re-parsing the rest.
+このファイルは、dbt が解析したファイルの圧縮表現を保存するために使用されます。[部分解析](/reference/parsing#partial-parsing) が有効になっている場合、dbt はこのファイルを使用して変更されたファイルを識別し、残りのファイルの再解析を回避します。
 
 ### graph.gpickle
 
-**Produced by:** commands supporting [node selection](/reference/node-selection/syntax)
+**生成元:** [ノード選択](/reference/node-selection/syntax)をサポートするコマンド
 
-Stores the network representation of the dbt resource DAG.
+dbtリソースDAGのネットワーク表現を格納します。
 
 ### graph_summary.json
 
-**Produced by:** [manifest commands](/reference/artifacts/manifest-json)
+**生成元:** [マニフェストコマンド](/reference/artifacts/manifest-json)
 
-This file is useful for investigating performance issues in dbt Core's graph algorithms.
+このファイルは、dbt Core のグラフアルゴリズムにおけるパフォーマンスの問題を調査するのに役立ちます。
 
-It is more anonymized and compact than [`manifest.json`](/reference/artifacts/manifest-json) and [`graph.gpickle`](#graph.gpickle).
+[`manifest.json`](/reference/artifacts/manifest-json) や [`graph.gpickle`](#graph.gpickle) よりも匿名化され、コンパクトになっています。
 
-It includes that information at two separate points in time:
-1. `linked` &mdash; immediately after the graph is linked together, and
-2. `with_test_edges` &mdash; after test edges have been added.
+このファイルには、2つの異なる時点の情報が含まれています。
+1. `linked` - グラフがリンクされた直後、および
+2. `with_test_edges` - テストエッジが追加された直後。
 
-Each of those points in time contains the `name` and `type` of each node and `succ` contains the keys of its child nodes.
+これらの時点には、各ノードの `name` と `type` が含まれ、`succ` には子ノードのキーが含まれます。
 

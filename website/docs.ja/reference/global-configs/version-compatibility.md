@@ -1,12 +1,12 @@
 ---
-title: "Checking version compatibility"
+title: "バージョンの互換性を確認する"
 id: "version-compatibility"
-sidebar: "Version compatibility"
+sidebar: "バージョン互換性"
 ---
 
-For the first several years of dbt Core's development, breaking changes were more common. For this reason, we encouraged setting [dbt version requirements](/reference/project-configs/require-dbt-version) &mdash; especially if they use features that are newer or which may break in future versions of dbt Core. By default, if you run a project with an incompatible dbt version, dbt will raise an error.
+dbt Core の開発開始から数年間は、互換性を破る変更がより頻繁に発生していました。そのため、[dbt のバージョン要件](/reference/project-configs/require-dbt-version) を設定することを推奨していました。特に、新しい機能や将来のバージョンの dbt Core で互換性がなくなる可能性のある機能を使用する場合は、この設定が重要です。デフォルトでは、互換性のない dbt バージョンでプロジェクトを実行すると、dbt はエラーを生成します。
 
-You can use the `VERSION_CHECK` config to disable this check and suppress the error message:
+`VERSION_CHECK` 設定を使用すると、このチェックを無効にしてエラーメッセージを抑制できます。
 
 ```
 dbt --no-version-check run

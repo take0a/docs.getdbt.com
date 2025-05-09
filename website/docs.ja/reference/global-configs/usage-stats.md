@@ -1,24 +1,24 @@
 ---
-title: "Anonymous usage stats"
+title: "匿名の使用統計"
 id: "usage-stats"
-sidebar: "Anonymous usage stats"
+sidebar: "匿名の使用統計"
 ---
 
-dbt Labs is on a mission to build the best version of dbt possible, and a crucial part of that is understanding how users work with dbt. To this end, we've added some simple event tracking (or telemetry) to dbt using Snowplow. Importantly, we do not track credentials, raw model contents, or model names: we consider these private, and frankly none of our business. 
+dbt Labs は、可能な限り最高の dbt バージョンを構築することを使命としており、その重要な部分は、ユーザーが dbt をどのように使用しているかを理解することです。この目的のため、Snowplow を使用して dbt にシンプルなイベントトラッキング（テレメトリ）機能を追加しました。重要なのは、認証情報、生のモデルコンテンツ、モデル名を追跡しないことです。これらはプライベートな情報であり、率直に言って dbt Labs には関係のない情報であると考えています。
 
-The data we collect is used for use cases such as industry identification, use-case research, improvements of sales, marketing, product features, and services. Telemetry allows users to seamlessly contribute to the continuous improvement of dbt, enabling us to better serve the data community.
+収集したデータは、業界の特定、ユースケースの調査、販売、マーケティング、製品機能、サービスの改善といったユースケースに使用されます。テレメトリにより、ユーザーは dbt の継続的な改善にシームレスに貢献することができ、データコミュニティへのより良いサービス提供が可能になります。
 
-Usage statistics are fired when dbt is invoked and when models are run. These events contain basic platform information (OS + Python version) and metadata such as:
-- Whether the invocation succeeded.
-- How long it took.
-- An anonymized hash key representing the raw model content.
-- Number of nodes that were run.
+使用状況統計は、dbt が呼び出されたとき、およびモデルが実行されたときに生成されます。これらのイベントには、基本的なプラットフォーム情報（OS + Python バージョン）と、次のようなメタデータが含まれます。
+- 呼び出しが成功したかどうか。
+- 実行にかかった時間。
+- 生のモデルコンテンツを表す匿名化されたハッシュキー。
+- 実行されたノードの数。
 
-For full transparency, you can see all the event definitions in [`tracking.py`](https://github.com/dbt-labs/dbt-core/blob/HEAD/core/dbt/tracking.py).
+完全な透明性を確保するため、すべてのイベント定義は [`tracking.py`](https://github.com/dbt-labs/dbt-core/blob/HEAD/core/dbt/tracking.py) でご確認いただけます。
 
-- dbt Cloud has telemetry enabled by default to help us enhance the user experience and improve the product by using real user feedback and usage patterns. While it cannot be disabled, we ensure the data is [secure](https://www.getdbt.com/security) and used responsibly. Collecting this data enables us to provide a better product experience, including improvements to the performance of dbt. 
+- dbt Cloud では、実際のユーザーからのフィードバックや使用パターンを活用してユーザーエクスペリエンスを向上させ、製品を改善するため、テレメトリがデフォルトで有効になっています。テレメトリを無効にすることはできませんが、データは [安全](https://www.getdbt.com/security) かつ責任ある使用が保証されます。このデータを収集することで、dbt のパフォーマンス向上など、製品エクスペリエンスを向上させることができます。
 
-- dbt Core users have telemetry enabled by default to help us understand usage patterns and improve the product. You can opt out of event tracking at any time by adding the following to your `dbt_project.yml` file:
+- dbt Core ユーザーは、使用パターンを把握し、製品を改善するため、テレメトリがデフォルトで有効になっています。`dbt_project.yml` ファイルに以下のコードを追加することで、いつでもイベントトラッキングをオプトアウトできます。
 
   <File name="dbt_project.yml">
 
@@ -28,6 +28,6 @@ For full transparency, you can see all the event definitions in [`tracking.py`](
   ```
   </File>
 
-  dbt Core users can also use the `DO_NOT_TRACK` environment variable to enable or disable sending anonymous data. For more information, see [Environment variables](/docs/build/environment-variables).
+  dbt Core ユーザーは、`DO_NOT_TRACK` 環境変数を使用して匿名データの送信を有効または無効にすることもできます。詳細については、[環境変数](/docs/build/environment-variables) を参照してください。
 
-  `DO_NOT_TRACK=1` is the same as `DBT_SEND_ANONYMOUS_USAGE_STATS=False`
+  `DO_NOT_TRACK=1` は `DBT_SEND_ANONYMOUS_USAGE_STATS=False` と同じです。

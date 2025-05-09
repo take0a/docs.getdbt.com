@@ -1,20 +1,20 @@
 ---
-title: "Indirect selection"
+title: "間接選択"
 id: "indirect-selection"
-sidebar: "Indirect selection"
+sidebar: "間接選択"
 ---
 
-import IndirSelect from '/snippets/_indirect-selection-definitions.md';
+import IndirSelect from '/snippets.ja/_indirect-selection-definitions.md';
 
-Use the `--indirect-selection` flag to `dbt test` or `dbt build` to configure which tests to run for the nodes you specify. You can set this as a CLI flag or an environment variable. In dbt Core, you can also configure user configurations in [YAML selectors](/reference/node-selection/yaml-selectors) or in the `flags:` block of `dbt_project.yml`, which sets project-level flags.
+`dbt test` または `dbt build` に `--indirect-selection` フラグを使用して、指定したノードで実行するテストを設定します。これは CLI フラグまたは環境変数として設定できます。dbt Core では、[YAML セレクター](/reference/node-selection/yaml-selectors) または `dbt_project.yml` の `flags:` ブロックでユーザー設定を行うこともできます。このブロックはプロジェクトレベルのフラグを設定します。
 
-When all flags are set, the order of precedence is as follows. Refer to [About global configs](/reference/global-configs/about-global-configs) for more details:
+すべてのフラグが設定されている場合、優先順位は次のとおりです。詳細については、[グローバル設定について](/reference/global-configs/about-global-configs) を参照してください。
 
-1. CLI configurations
-1. Environment variables
-1. User configurations
+1. CLI 設定
+1. 環境変数
+1. ユーザー設定
 
-You can set the flag to: `empty`, `buildable`, `cautious`, or `eager` (default). By default, dbt indirectly selects all tests if they touch any resource you select. Learn more about these options in [Indirect selection in Test selection examples](/reference/node-selection/test-selection-examples?indirect-selection-mode=eager#indirect-selection).
+フラグは、`empty`、`buildable`、`cautious`、または `eager` (デフォルト) に設定できます。デフォルトでは、dbt は選択したリソースに関係するすべてのテストを間接的に選択します。これらのオプションの詳細については、[テスト選択例における間接選択](/reference/node-selection/test-selection-examples?indirect-selection-mode=eager#indirect-selection)を参照してください。
 
 <IndirSelect features={'/snippets/indirect-selection-definitions.md'}/>
 
@@ -34,7 +34,7 @@ The following is a visualization of the impact `--indirect-selection` and the va
 
 </DocCarousel>
 
-For example, you can run tests that only refer to selected nodes using a CLI configuration:
+たとえば、CLI 構成を使用して、選択したノードのみを参照するテストを実行できます:
 
 <File name='Usage'>
 
@@ -44,7 +44,7 @@ dbt test --indirect-selection cautious
 
 </File>
 
-Or you can run tests that only refer to selected nodes using an environment variable:
+または、環境変数を使用して、選択したノードのみを参照するテストを実行することもできます:
 
 <File name='Env var'>
 
@@ -57,7 +57,7 @@ dbt run
 
 </File>
 
-You can also run tests that only refer to selected nodes using `dbt_project.yml` project-level flags:
+また、`dbt_project.yml` プロジェクト レベルのフラグを使用して、選択したノードのみを参照するテストを実行することもできます:
 
 <File name='dbt_project.yml'>
 

@@ -1,67 +1,67 @@
 ---
-title: "Caveats to state comparison"
-description: "Learn about caveats to state comparison in dbt."
+title: "状態比較に関する注意事項"
+description: "dbt での状態の比較に関する注意点について学びます。"
 pagination_prev: "reference/node-selection/configure-state"
 ---
 
-import StateModified from '/snippets/_state-modified-compare.md';
+import StateModified from '/snippets.ja/_state-modified-compare.md';
 
-The [`state:` selection method](/reference/node-selection/methods#state) is a powerful feature, with a lot of underlying complexity. Below are a handful of considerations when setting up automated jobs that leverage state comparison.
+[`state:` 選択メソッド](/reference/node-selection/methods#state) は強力な機能ですが、その背後には多くの複雑な要素が存在します。以下は、状態比較を活用した自動ジョブを設定する際に考慮すべき点です。
 
 ### Seeds
 
-dbt stores a file hash of seed files that are &lt;1 MiB in size. If the contents of these seeds is modified, the seed will be included in `state:modified`.
+dbt は、サイズが 1MiB 未満のシードファイルのファイルハッシュを保存します。これらのシードの内容が変更された場合、シードは `state:modified` に含まれます。
 
-If a seed file is >1 MiB in size, dbt cannot compare its contents and will raise a warning as such. Instead, dbt will use only the seed's file path to detect changes. If the file path has changed, the seed will be included in `state:modified`; if it hasn't, it won't.
+シードファイルのサイズが 1MiB を超える場合、dbt はその内容を比較できず、警告を表示します。代わりに、dbt はシードのファイルパスのみを使用して変更を検出します。ファイルパスが変更された場合、シードは `state:modified` に含まれます。変更されていない場合は含まれません。
 
 ### Macros
 
-dbt will mark modified any resource that depends on a changed macro, or on a macro that depends on a changed macro.
+dbt は、変更されたマクロに依存するリソース、または変更されたマクロに依存するマクロに依存するリソースを変更済みとしてマークします。
 
 ### Vars
 
-If a model uses a `var` or `env_var` in its definition, dbt is unable today to identify that lineage in such a way that it can include the model in `state:modified` because the `var` or `env_var` value has changed. It's likely that the model will be marked modified if the change in variable results in a different configuration.
+モデルの定義に `var` または `env_var` が使用されている場合、dbt は現時点ではその系統を識別できず、モデルを `state:modified` に含めることができません。これは、`var` または `env_var` の値が変更されているためです。変数の変更によって構成が変化すると、モデルが変更済みとしてマークされる可能性があります。
 
 ### Tests
 
-The command `dbt test -s state:modified` will include both:
-- tests that select from a new/modified resource
-- tests that are themselves new or modified
+コマンド `dbt test -s state:modified` は、以下の両方を含みます。
+- 新規/変更されたリソースから選択するテスト
+- それ自体が新規または変更されたテスト
 
-As long as you're adding or changing tests at the same time that you're adding or changing the resources (models, seeds, snapshots) they select from, all should work the way you expect with "simple" state selection:
+テストの追加または変更と、テストの選択対象となるリソース（モデル、シード、スナップショット）の追加または変更を同時に行う限り、すべてが「シンプルな」状態選択で期待どおりに動作するはずです。
 
 ```shell
 dbt run -s "state:modified"
 dbt test -s "state:modified"
 ```
 
-This can get complicated, however. If you add a new test without modifying its underlying model, or add a test that selects from a new model and an old unmodified one, you may need to test a model without having first run it.
+ただし、これは複雑になる可能性があります。基盤となるモデルを変更せずに新しいテストを追加したり、新しいモデルと変更されていない古いモデルの両方から選択するテストを追加したりする場合は、モデルを事前に実行せずにテストする必要があるかもしれません。
 
-You can defer upstream references when testing. For example, if a test selects from a model that doesn't exist as a database object in your current environment, dbt will look to the other environment instead—the one defined in your state manifest. This enables you to use "simple" state selection without risk of query failure, but it may have some surprising consequences for tests with multiple parents. For instance, if you have a `relationships` test that depends on one modified model and one unmodified model, the test query will select from data "across" two different environments. If you limit or sample your data in development and CI, it may not make much sense to test for referential integrity, knowing there's a good chance of mismatch.
+テスト時に上流の参照を遅延させることができます。たとえば、テストが現在の環境にデータベースオブジェクトとして存在しないモデルから選択する場合、dbt は代わりに別の環境（状態マニフェストで定義されている環境）を参照します。これにより、クエリが失敗するリスクなしに「シンプルな」状態選択を使用できますが、複数の親を持つテストでは予期しない結果が生じる可能性があります。たとえば、変更されたモデルと変更されていないモデルをそれぞれ 1 つずつ依存する `relationships` テストがある場合、テストクエリは 2 つの異なる環境にまたがるデータから選択します。開発環境や CI でデータを制限またはサンプリングする場合、不一致が発生する可能性が高いため、参照整合性テストを行うことはあまり意味がありません。
 
-If you're a frequent user of `relationships` tests or data tests, or frequently find yourself adding tests without modifying their underlying models, consider tweaking the selection criteria of your CI job. For instance:
+`relationships` テストやデータテストを頻繁に使用する場合、または基盤となるモデルを変更せずにテストを追加することが多い場合は、CI ジョブの選択基準を調整することを検討してください。例えば、次のようになります:
 
 ```shell
 dbt run -s "state:modified"
 dbt test -s "state:modified" --exclude "test_name:relationships"
 ```
-### Overwrites the `manifest.json`
+### `manifest.json` を上書きします
 
-import Overwritesthemanifest from '/snippets/_overwrites-the-manifest.md';
+import Overwritesthemanifest from '/snippets.ja/_overwrites-the-manifest.md';
 
 <Overwritesthemanifest />
 
-#### Recommendation
+#### おすすめ
 
-import Recommendationoverwritesthemanifest from '/snippets/_recommendation-overwriting-manifest.md'; 
+import Recommendationoverwritesthemanifest from '/snippets.ja/_recommendation-overwriting-manifest.md'; 
 
 <Recommendationoverwritesthemanifest />
 
-### False positives
+### 誤検知
 
 <VersionBlock firstVersion="1.9">
 
-To reduce false positives during `state:modified` selection due to env-aware logic, you can set the `state_modified_compare_more_unrendered_values` [behavior flag](/reference/global-configs/behavior-changes#behavior-change-flags) to `True`.
+環境対応ロジックによる `state:modified` 選択時の誤検知を減らすには、`state_modified_compare_more_unrendered_values` [動作フラグ](/reference/global-configs/behavior-changes#behavior-change-flags) を `True` に設定します。
 
 <StateModified features={'/snippets/_state-modified-compare.md'}/>
 
@@ -99,10 +99,10 @@ That means the following config—functionally identical to the snippet above—
 ```
 </VersionBlock>
 
-### Final note
+### 最後に
 
-State comparison is complex. We hope to reach eventual consistency between all configuration options, as well as providing users with the control they need to reliably return all modified resources, and only the ones they expect. If you're interested in learning more, read [open issues tagged "state"](https://github.com/dbt-labs/dbt-core/issues?q=is%3Aopen+is%3Aissue+label%3Astate) in the dbt repository.
+状態の比較は複雑です。すべての設定オプション間で結果整合性を実現するとともに、ユーザーが変更されたすべてのリソースを確実に、そして期待どおりのものだけを返すために必要な制御を提供したいと考えています。詳細については、dbtリポジトリの[「state」タグのオープンな問題](https://github.com/dbt-labs/dbt-core/issues?q=is%3Aopen+is%3Aissue+label%3Astate)をご覧ください。
 
-## Related docs
-- [About state in dbt](/reference/node-selection/state-selection)
-- [Configure state selection](/reference/node-selection/configure-state)
+## 関連ドキュメント
+- [dbt における状態について](/reference/node-selection/state-selection)
+- [状態選択の設定](/reference/node-selection/configure-state)

@@ -4,7 +4,7 @@ id: "warnings"
 sidebar: "Warnings"
 ---
 
-Turning on the `WARN_ERROR` config will convert dbt warnings into errors. Any time dbt would normally warn, it will instead raise an error. Examples include `--select` criteria that selects no resources, deprecations, configurations with no associated models, invalid test configurations, or tests and freshness checks that are configured to return warnings.
+`WARN_ERROR` 設定を有効にすると、dbt の警告がエラーに変換されます。dbt が通常警告を出力する箇所では、エラーが発生します。例としては、リソースを全く選択しない `--select` 条件、非推奨、モデルが関連付けられていない設定、無効なテスト設定、警告を返すように設定されているテストやフレッシュネスチェックなどが挙げられます。
 
 <File name='Usage'>
 
@@ -16,7 +16,7 @@ dbt --warn-error run
 </File>
 
 
-Converting any warnings to errors may suit your needs perfectly, but there may be some warnings you just don't care about, and some you care about a lot. The `WARN_ERROR_OPTIONS` config gives you more granular control over _exactly which types of warnings_ are treated as errors. 
+警告をエラーに変換することはニーズに完全に合致するかもしれませんが、中にはそれほど重要でない警告もあれば、非常に重要な警告もあるかもしれません。`WARN_ERROR_OPTIONS` 設定を使用すると、_どの種類の警告_をエラーとして扱うかをより細かく制御できます。
 
 <VersionBlock lastVersion="1.7">
 
@@ -28,11 +28,11 @@ The `include` parameter can be set to `"all"` or `"*"` to treat all warnings as 
 
 <VersionBlock firstVersion="1.8">
 
-- Warnings that should be treated as errors can be specified through `error` and/or `warn` parameters. Warning names can be found in [dbt-core's types.py file](https://github.com/dbt-labs/dbt-core/blob/main/core/dbt/events/types.py), where each class name that inherits from `WarnLevel` corresponds to a warning name (e.g. `AdapterDeprecationWarning`, `NoNodesForSelectionCriteria`).
+- エラーとして扱うべき警告は、`error` および `warn` パラメータで指定できます。警告名は [dbt-core の types.py ファイル](https://github.com/dbt-labs/dbt-core/blob/main/core/dbt/events/types.py) に記載されています。`WarnLevel` を継承する各クラス名は、警告名に対応しています (例: `AdapterDeprecationWarning`、`NoNodesForSelectionCriteria`)。
 
-- The `error` parameter can be set to `"all"` or `"*"` to treat all warnings as exceptions, or to a list of specific warning names to treat as exceptions. When `error` is set to `"all"` or `"*"`, the optional `warn` parameter can be set to exclude specific warnings from being treated as exceptions.
+- `error` パラメータを `"all"` または `"*"` に設定すると、すべての警告を例外として扱うことができます。また、例外として扱う特定の警告名のリストを設定することもできます。`error` を `"all"` または `"*"` に設定すると、オプションの `warn` パラメータを設定することで、特定の警告を例外として扱わないようにすることができます。
 
-- Use the `silence` parameter to ignore warnings through project flags, without needing to re-specify the silence list every time. For example, to silence deprecation warnings or certain warnings you want to ignore across your project, you can specify them in the `silence` parameter. This is useful in large projects where certain warnings aren't critical and can be ignored to keep the noise low and logs clean.
+- `silence` パラメータを使用すると、プロジェクトフラグを通じて警告を無視できます。毎回、警告リストを再指定する必要はありません。例えば、非推奨の警告やプロジェクト全体で無視したい特定の警告を `silence` パラメータで指定できます。これは、大規模プロジェクトで特定の警告が重要ではなく、ノイズを抑えてログをクリーンに保つために無視できる場合に便利です。
 
 
 <File name='dbt_project.yml'>
@@ -54,8 +54,8 @@ flags:
 </VersionBlock>
 
 
-:::info `WARN_ERROR` and `WARN_ERROR_OPTIONS` are mutually exclusive
-`WARN_ERROR` and `WARN_ERROR_OPTIONS` are mutually exclusive. You can only specify one, even when you're specifying the config in multiple places (e.g. env var + CLI flag), otherwise, you'll see a usage error.
+:::info `WARN_ERROR` と `WARN_ERROR_OPTIONS` は相互に排他的です。
+`WARN_ERROR` と `WARN_ERROR_OPTIONS` は相互に排他的です。複数の場所（例：環境変数 + CLI フラグ）で設定を指定する場合でも、どちらか一方しか指定できません。それ以外の場合は、使用方法エラーが表示されます。
 :::
 
 <VersionBlock lastVersion="1.7">

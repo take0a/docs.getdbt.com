@@ -1,7 +1,7 @@
 ---
-title: "Project flags"
+title: "プロジェクトフラグ"
 id: "project-flags"
-sidebar: "Project flags"
+sidebar: "プロジェクトフラグ"
 ---
 
 <File name='dbt_project.yml'>
@@ -15,9 +15,9 @@ flags:
 
 </File>
 
-Reference the [table of all flags](/reference/global-configs/about-global-configs#available-flags) to see which global configs are available for setting in [`dbt_project.yml`](/reference/dbt_project.yml).
+[`dbt_project.yml`](/reference/dbt_project.yml) で設定可能なグローバル設定を確認するには、[すべてのフラグの一覧](/reference/global-configs/about-global-configs#available-flags)を参照してください。
 
-The `flags` dictionary is the _only_ place you can opt out of [behavior changes](/reference/global-configs/behavior-changes), while the legacy behavior is still supported.
+`flags` ディクショナリは、[動作の変更](/reference/global-configs/behavior-changes) をオプトアウトできる唯一の場所ですが、従来の動作は引き続きサポートされます。
 
 <VersionBlock lastVersion="1.7">
 

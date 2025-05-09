@@ -1,2 +1,2 @@
-- `adapter_response`: Dictionary of metadata returned from the database, which varies by adapter. For example, success `code`, number of `rows_affected`, total `bytes_processed`, and so on. Not applicable for [tests](/docs/build/data-tests).
-    * `rows_affected` returns the number of rows modified by the last statement executed. In cases where the query's row count can't be determined or isn't applicable (such as when creating a <Term id="view">view</Term>), a [standard value](https://peps.python.org/pep-0249/#rowcount) of `-1` is returned for `rowcount`.
+- `adapter_response`: データベースから返されるメタデータのディクショナリ。アダプタによって異なります。たとえば、成功コード、影響された行数、処理された合計バイト数などです。[テスト](/docs/build/data-tests)には適用されません。
+    * `rows_affected` は、最後に実行されたステートメントによって変更された行数を返します。クエリの行数を特定できない場合、または適用できない場合 (<Term id="view">ビュー</Term> を作成する場合など)、`rowcount` には [標準値](https://peps.python.org/pep-0249/#rowcount) である `-1` が返されます。

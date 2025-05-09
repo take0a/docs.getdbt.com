@@ -1,3 +1,3 @@
-You need to build the state directory using dbt v1.9 or higher, or [the dbt Cloud "Latest" release track](/docs/dbt-versions/cloud-release-tracks), and you need to set `state_modified_compare_more_unrendered_values` to `true` within your dbt_project.yml.
+状態ディレクトリは、dbt v1.9 以降、または [dbt Cloud の「最新」リリーストラック](/docs/dbt-versions/cloud-release-tracks) を使用してビルドする必要があります。また、dbt_project.yml 内で `state_modified_compare_more_unrendered_values` を `true` に設定する必要があります。
 
-If the state directory was built with an older dbt version or if the `state_modified_compare_more_unrendered_values` behavior change flag was either not set or set to `false`, you need to rebuild the state directory to avoid false positives during state comparison with `state:modified`.
+状態ディレクトリが古いバージョンの dbt を使用してビルドされた場合、または `state_modified_compare_more_unrendered_values` 動作変更フラグが設定されていないか `false` に設定されている場合、`state:modified` との状態比較中に誤検知を回避するために、状態ディレクトリを再構築する必要があります。

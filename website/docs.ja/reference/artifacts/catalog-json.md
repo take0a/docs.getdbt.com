@@ -1,35 +1,35 @@
 ---
-title: "Catalog JSON file"
+title: "カタログJSONファイル"
 sidebar_label: "Catalog"
 ---
 
-**Current schema**: [`v1`](https://schemas.getdbt.com/dbt/catalog/v1.json)
-    
-**Produced by:** [`docs generate`](/reference/commands/cmd-docs)
+**現在のスキーマ**: [`v1`](https://schemas.getdbt.com/dbt/catalog/v1.json)
 
-This file contains information from your <Term id="data-warehouse" /> about the tables and <Term id="view">views</Term> produced and defined by the resources in your project. Today, dbt uses this file to populate metadata, such as column types and <Term id="table" /> statistics, in the [docs site](/docs/collaborate/build-and-view-your-docs).
+**生成元:** [`docs generate`](/reference/commands/cmd-docs)
 
-### Top-level keys
+このファイルには、プロジェクト内のリソースによって生成および定義されたテーブルと<Term id="view">ビュー</Term>に関する、<Term id="data-warehouse" /> からの情報が含まれています。現在、dbt はこのファイルを使用して、[ドキュメントサイト](/docs/collaborate/build-and-view-your-docs) に列タイプや<Term id="table" /> 統計などのメタデータを入力します。
+
+### 最上位キー
 
 - [`metadata`](/reference/artifacts/dbt-artifacts#common-metadata)
-- `nodes`: Dictionary containing information about database objects corresponding to dbt models, seeds, and snapshots.
-- `sources`: Dictionary containing information about database objects corresponding to dbt sources.
-- `errors`: Errors received while running metadata queries during `dbt docs generate`.
+- `nodes`: dbt モデル、シード、スナップショットに対応するデータベースオブジェクトに関する情報を含む辞書。
+- `sources`: dbt ソースに対応するデータベースオブジェクトに関する情報を含む辞書。
+- `errors`: `dbt docs generate` 実行中にメタデータクエリを実行中に発生したエラー。
 
-### Resource details
+### リソースの詳細
 
-Within `sources` and `nodes`, each dictionary key is a resource `unique_id`. Each nested resource contains:
-- `unique_id`: `<resource_type>.<package>.<resource_name>`, same as dictionary key, maps to `nodes` and `sources` in the [manifest](/reference/artifacts/manifest-json)
+`sources` と `nodes` 内の各辞書キーは、リソースの `unique_id` です。ネストされた各リソースには、以下の要素が含まれます。
+- `unique_id`: `<resource_type>.<package>.<resource_name>`。辞書キーと同じで、[マニフェスト](/reference/artifacts/manifest-json) 内の `nodes` と `sources` にマッピングされます。
 - `metadata`
-    - `type`: table, view, etc.
+    - `type`: テーブル、ビューなど。
     - `database`
     - `schema`
     - `name`
     - `comment`
     - `owner`
-- `columns` (array)
+- `columns` (配列)
     - `name`
-    - `type`: data type
+    - `type`: データ型
     - `comment`
-    - `index`: ordinal
-- `stats`: differs by database and relation type
+    - `index`: 序数
+- `stats`: データベースとリレーションの種類によって異なります。
