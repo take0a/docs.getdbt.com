@@ -16,11 +16,11 @@ snapshot-paths: [directorypath]
 オプションで、[スナップショット](/docs/build/snapshots)が配置されているディレクトリのカスタムリストを指定します。
 
 <VersionBlock firstVersion="1.9">
-dbt Core v1.9 以降では、[最新の YAML 構文を使用して定義されている](/docs/build/snapshots) 場合、スナップショットをモデルと同じ場所に配置できます。
+<Constant name="core" /> v1.9 以降では、[最新の YAML 構文を使用して定義されている](/docs/build/snapshots) 場合、スナップショットをモデルと同じ場所に配置できます。
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">
-Note that you cannot co-locate models and snapshots. However, in dbt Core v1.9+, you can co-locate your snapshots with models if they are [defined using the latest YAML syntax](/docs/build/snapshots).
+Note that you cannot co-locate models and snapshots. However, in <Constant name="core" /> v1.9+, you can co-locate your snapshots with models if they are [defined using the latest YAML syntax](/docs/build/snapshots).
 </VersionBlock>
 
 ## デフォルト

@@ -5,19 +5,19 @@ sidebar_label: "dbtアーティファクトについて"
 
 呼び出しごとに、dbt は 1 つ以上の *アーティファクト* を生成して保存します。これらのうちいくつかは <Term id="json" /> ファイル (`semantic_manifest.json`、`manifest.json`、`catalog.json`、`run_results.json`、`sources.json`) であり、以下の機能を実現するために使用されます。
 
-- [ドキュメント](/docs/collaborate/build-and-view-your-docs)
+- [ドキュメント](/docs/explore/build-and-view-your-docs)
 - [状態](/reference/node-selection/syntax#about-node-selection)
 - [ソースの鮮度を視覚化する](/docs/build/sources#source-data-freshness)
 
 これらは以下の目的にも使用できます。
 
-- [dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) に関する洞察を得る
+- [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) に関する洞察を得る
 - プロジェクトレベルのテスト カバレッジを計算する
 - 実行時間の長期分析を実行する
 - <Term id="table" /> 構造の履歴的な変化を特定する
 - その他、様々なことを行う
 
-### アーティファクトはいつ生成されますか？ <Lifecycle status="team,enterprise"/>
+### アーティファクトはいつ生成されますか？ <Lifecycle status="self_service,managed"/>
 
 ほとんどの dbt コマンド（および対応する RPC メソッド）は、以下のアーティファクトを生成します。
 - [セマンティック マニフェスト](/reference/artifacts/sl-manifest): dbt プロジェクトが解析されるたびに生成されます。
@@ -26,7 +26,7 @@ sidebar_label: "dbtアーティファクトについて"
 - [カタログ](catalog-json): `docs generate` によって生成されます。
 - [ソース](/reference/artifacts/sources-json): `source freshness` によって生成されます。
 
-[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) からコマンドを実行すると、すべてのアーティファクトがデフォルトでダウンロードされます。この動作を変更する場合は、[アーティファクトのダウンロードをスキップする方法](/docs/cloud/configure-cloud-cli#how-to-skip-artifacts-from-being-downloaded)を参照してください。
+[<Constant name="cloud" /> CLI](/docs/cloud/cloud-cli-installation) からコマンドを実行すると、すべてのアーティファクトがデフォルトでダウンロードされます。この動作を変更する場合は、[アーティファクトのダウンロードをスキップする方法](/docs/cloud/configure-cloud-cli#how-to-skip-artifacts-from-being-downloaded)を参照してください。
 
 ## アーティファクトはどこに生成されますか？
 

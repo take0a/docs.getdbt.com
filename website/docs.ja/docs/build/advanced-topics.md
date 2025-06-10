@@ -4,9 +4,9 @@ description: "Learn about advanced topics for dbt Semantic Layer and MetricFlow,
 pagination_prev: null
 ---
 
-dbt セマンティックレイヤーと MetricFlow は、dbt プロジェクトでメトリクスとセマンティックモデルを定義できる強力なツールです。
+<Constant name="semantic_layer" /> と MetricFlow は、dbt プロジェクトでメトリクスとセマンティックモデルを定義できる強力なツールです。
 
-このセクションでは、データモデリングワークフローなど、dbt セマンティックレイヤーと MetricFlow の高度なトピックについて説明します。
+このセクションでは、データモデリングワークフローなど、<Constant name="semantic_layer" /> と MetricFlow の高度なトピックについて説明します。
 <!--
 - [Fill null values for simple and derived or ratio metrics](/docs/build/fill-nulls-advanced) &mdash; Use `fill_nulls_with` to set null metric values to zero, ensuring numeric values for every data row, even with derived metrics.
 -->

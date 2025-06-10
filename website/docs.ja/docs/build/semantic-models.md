@@ -13,7 +13,7 @@ import CopilotBeta from '/snippets/_dbt-copilot-avail.md';
 
 <CopilotBeta resource='semantic models' />
 
-セマンティックモデルは、MetricFlow におけるデータ定義の基盤であり、dbt セマンティックレイヤーの基盤となります。
+セマンティックモデルは、MetricFlow におけるデータ定義の基盤であり、<Constant name="semantic_layer" />の基盤となります。
 
 - セマンティックモデルは、セマンティックグラフ内のエンティティによって接続されたノードと考えてください。
 - MetricFlow は、メトリクスのクエリを実行するために、YAML 構成ファイルを使用してこのグラフを作成します。
@@ -290,4 +290,4 @@ import SetUpPages from '/snippets/\_metrics-dependencies.md';
 - [Dimensions](/docs/build/dimensions)
 - [Entities](/docs/build/entities)
 - [Measures](/docs/build/measures)
-- [Semantic Layer best practices guide](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro)
+- [<Constant name="semantic_layer" /> best practices guide](/best-practices/how-we-build-our-metrics/semantic-layer-1-intro)

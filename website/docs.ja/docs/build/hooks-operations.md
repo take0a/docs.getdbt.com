@@ -149,7 +149,7 @@ Privileges granted
 
 コミュニティからのこれらの例は、フックと操作のユースケースの一部を示しています。
 
-* [フックとオペレーションを使用した権限付与の詳細な説明（dbt Core バージョン 1.2 より前）](https://discourse.getdbt.com/t/the-exact-grant-statements-we-use-in-a-dbt-project/430)
+* [フックとオペレーションを使用した権限付与の詳細な説明（<Constant name="core" />  バージョン 1.2 より前）](https://discourse.getdbt.com/t/the-exact-grant-statements-we-use-in-a-dbt-project/430)
 * [外部テーブルのステージング](https://github.com/dbt-labs/dbt-external-tables)
 * [Snowflake でゼロコピークローンを実行して開発環境をリセットする](https://discourse.getdbt.com/t/creating-a-dev-environment-quickly-on-snowflake/1151/2)
 * [Redshift ウェアハウスで `vacuum` と `analyze` を実行する](https://github.com/dbt-labs/redshift/tree/0.2.3/#redshift_maintenance_operation-source)

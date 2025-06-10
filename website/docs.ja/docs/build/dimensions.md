@@ -7,7 +7,7 @@ tags: [Metrics, Semantic Layer]
 ---
 
 ディメンションは、データセット内の集計不可能な列を表します。ディメンションは、データを説明または分類する属性、特徴、または特性です。
-dbt セマンティック レイヤーのコンテキストでは、ディメンションはセマンティック モデルと呼ばれるより大きな構造の一部です。
+<Constant name="semantic_layer" />のコンテキストでは、ディメンションはセマンティック モデルと呼ばれるより大きな構造の一部です。
 ディメンションは、[エンティティ](/docs/build/entities) や [メジャー](/docs/build/measures) などの他の要素とともに作成され、データに詳細情報を追加するために使用されます。
 SQL では、ディメンションは通常、SQL クエリの `group by` 句に含まれます。
 
@@ -186,7 +186,7 @@ dimensions:
 たとえば、`users_created` メトリクスは `created_at` を使用し、`users_deleted` メトリクスは `deleted_at` を使用します。
 
 ```bash
-# dbt Cloud users
+# dbt users
 dbt sl query --metrics users_created,users_deleted --group-by metric_time__year --order-by metric_time__year
 
 # dbt Core users
@@ -202,7 +202,7 @@ You can set `is_partition` for time to define specific time spans. Additionally,
 特定の期間にディメンションが存在することを示すには、`is_partition: True` を使用します。
 
 たとえば、日付でパーティション分割されたディメンションテーブルなどです。
-異なるテーブルからメトリクスをクエリする場合、dbt セマンティックレイヤーはこのパラメータを使用して、正しいディメンション値がメジャーに結合されていることを確認します。
+異なるテーブルからメトリクスをクエリする場合、<Constant name="semantic_layer" />はこのパラメータを使用して、正しいディメンション値がメジャーに結合されていることを確認します。
 
 <VersionBlock firstVersion="1.9">
 
@@ -292,7 +292,7 @@ MetricFlow は、基になる列を指定された粒度に変換します。
 * quarter
 * year
 
-粒度の異なるメトリクス間の集計が可能です。セマンティックレイヤーは、デフォルトで最も粗い粒度で結果を返します。
+粒度の異なるメトリクス間の集計が可能です。<Constant name="semantic_layer" />は、デフォルトで最も粗い粒度で結果を返します。
 例えば、日次と月次の粒度で2つのメトリクスをクエリした場合、結果として得られる集計は月次レベルになります。
 
 ```yaml
@@ -335,7 +335,7 @@ Our supported granularities are:
 * quarter
 * year
 
-Aggregation between metrics with different granularities is possible, with the Semantic Layer returning results at the coarsest granularity by default. For example, when querying two metrics with daily and monthly granularity, the resulting aggregation will be at the monthly level.
+Aggregation between metrics with different granularities is possible, with the <Constant name="semantic_layer" /> returning results at the coarsest granularity by default. For example, when querying two metrics with daily and monthly granularity, the resulting aggregation will be at the monthly level.
 
 ```yaml
 dimensions: 
@@ -589,7 +589,7 @@ SCDテーブルには、営業担当者の階層とその階層の期間に関�
 次のコマンドまたはコードは、各営業階層で生成されたトランザクション数を月ごとに返す方法を示しています:
 
 ```bash
-# dbt Cloud users
+# dbt platform users
 dbt sl query --metrics transactions --group-by metric_time__month,sales_person__tier --order-by metric_time__month,sales_person__tier
 
 # dbt Core users

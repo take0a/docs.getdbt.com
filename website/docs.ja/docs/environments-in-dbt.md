@@ -13,13 +13,13 @@ pagination_next: null
 
 従来のソフトウェア エンジニアリングでは、異なる環境で完全に異なるアーキテクチャが使用されることがよくあります。たとえば、Web サイトの開発バージョンと本番バージョンでは、異なるサーバーとデータベースが使用されることがあります。<Term id="data-warehouse">データ ウェアハウス</Term> も、別々の環境を持つように設計できます。 _production_ 環境は、エンドユーザーがクエリを実行する (多くの場合、BI ツール経由) リレーション (スキーマ、テーブル、<Term id="view">ビュー</Term> など) を指します。
 
-開発および本番環境でプロジェクトをビルドして実行する方法を dbt Cloud または dbt Core に指示するように環境を構成します。
+開発および本番環境でプロジェクトをビルドして実行する方法を <Constant name="cloud" /> または <Constant name="core" /> に指示するように環境を構成します。
 
 <div className="grid--2-col">
 
 <Card
-    title="Environments in dbt Cloud"
-    body="Seamlessly configure development and deployment environments in dbt Cloud to control how your project runs in both the dbt Cloud IDE, dbt Cloud CLI, and dbt jobs."
+    title="Environments in dbt"
+    body="Seamlessly configure development and deployment environments in dbt to control how your project runs in both the Studio IDE, dbt CLI, and dbt jobs."
     link="/docs/dbt-cloud-environments"
     icon="dbt-bit"/>
 
@@ -33,8 +33,8 @@ pagination_next: null
 
 ## 関連ドキュメント
 
-- [dbt Cloud 環境のベスト プラクティス](/guides/set-up-ci)
+- [<Constant name="cloud" /> 環境のベスト プラクティス](/guides/set-up-ci)
 - [デプロイメント環境](/docs/deploy/deploy-environments)
-- [dbt Core のバージョンについて](/docs/dbt-versions/core)
-- [dbt Cloud で環境変数を設定する](/docs/build/environment-variables#special-environment-variables)
+- [<Constant name="core" /> のバージョンについて](/docs/dbt-versions/core)
+- [<Constant name="cloud" /> で環境変数を設定する](/docs/build/environment-variables#special-environment-variables)
 - [jinja で環境変数を使用する](/reference/dbt-jinja-functions/env_var)

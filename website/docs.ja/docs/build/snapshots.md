@@ -10,6 +10,13 @@ id: "snapshots"
 * [スナップショット プロパティ](/reference/snapshot-properties)
 * [`snapshot` コマンド](/reference/commands/snapshot)
 
+import CourseCallout from '/snippets/_materialization-video-callout.md';
+
+<CourseCallout resource="Snapshots" 
+url="https://learn.getdbt.com/courses/snapshots"
+course="Snapshots"
+/>
+
 ## スナップショットとは何ですか?
 アナリストは、多くの場合、可変テーブル内の以前のデータ状態を「過去にさかのぼって」確認する必要があります。一部のソース データ システムは、履歴データへのアクセスを可能にする方法で構築されていますが、常にそうであるとは限りません。dbt は、可変 <Term id="table" /> への変更を時間の経過とともに記録するメカニズム (**スナップショット**) を提供します。
 
@@ -37,9 +44,9 @@ id: "snapshots"
 
 <VersionBlock lastVersion="1.8" >
 
-In old versions of dbt Core (v1.8 and earlier), snapshots must be defined in snapshot blocks inside of your [snapshots directory](/reference/project-configs/snapshot-paths). These snapshots do not have native support for environments or deferral, making previewing changes in development difficult. 
+In old versions of <Constant name="core" /> (v1.8 and earlier), snapshots must be defined in snapshot blocks inside of your [snapshots directory](/reference/project-configs/snapshot-paths). These snapshots do not have native support for environments or deferral, making previewing changes in development difficult. 
 
-The modern, environment-aware way to create snapshots is to define them in YAML. This requires dbt Core v1.9 or later, or to be on any [dbt Cloud release track](/docs/dbt-versions/cloud-release-tracks).
+The modern, environment-aware way to create snapshots is to define them in YAML. This requires <Constant name="core" /> v1.9 or later, or to be on any [<Constant name="cloud" /> release track](/docs/dbt-versions/cloud-release-tracks).
 
 - For more information about configuring snapshots in a `.sql` file, refer to the [Legacy snapshot configurations](/reference/resource-configs/snapshots-jinja-legacy) page. 
 
@@ -630,7 +637,7 @@ Note, in v1.9 and higher, the [`hard_deletes`](/reference/resource-configs/hard-
 
 スナップショット <Term id="table">テーブル</Term> は、ソースデータセットのクローンとして作成され、追加のメタフィールド* が追加されます。
 
-dbt Core v1.9 以降（または [dbt Cloud の「最新」リリーストラック](/docs/dbt-versions/cloud-release-tracks) でより早く利用可能）では、次のようになります。
+<Constant name="core" /> v1.9 以降（または [<Constant name="cloud" /> の「最新」リリーストラック](/docs/dbt-versions/cloud-release-tracks) でより早く利用可能）では、次のようになります。
 - これらの列名は、[`snapshot_meta_column_names`](/reference/resource-configs/snapshot_meta_column_names) 設定を使用して、チームまたは組織の慣例に合わせてカスタマイズできます。
 - [`dbt_valid_to_current` 設定](/reference/resource-configs/dbt_valid_to_current) を使用して、現在のスナップショットレコードの `dbt_valid_to` の値にカスタムインジケーター（`9999-12-31` などの将来の日付など）を設定できます。デフォルトでは、この値は `NULL` です。設定すると、dbt はスナップショットテーブル内の現在のレコードの `dbt_valid_to` に `NULL` ではなくこの指定された値を使用します。
 - `hard_deletes='new_record'` フィールドを使用する場合、削除されたレコードを `dbt_is_deleted` メタフィールドの新しい行として追跡するには、[`hard_deletes`](/reference/resource-configs/hard-deletes) 設定を使用します。

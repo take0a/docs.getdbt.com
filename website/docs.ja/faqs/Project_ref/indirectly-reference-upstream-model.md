@@ -5,7 +5,7 @@ id: indirectly-reference-upstream-model
 description: 間接的に参照されている上流のパブリックモデルがエクスプローラーに表示されない理由を説明します。
 ---
 
-dbt Mesh の [プロジェクト依存関係](/docs/collaborate/govern/project-dependencies) について、[dbt Explorer](/docs/collaborate/explore-multiple-projects) には、上流プロジェクトから直接参照されている [パブリックモデル](/docs/collaborate/govern/model-access) のみが表示されます。上流モデルが別のパブリックモデルに間接的に依存している場合でも同様です。
+<Constant name="mesh" /> の [プロジェクト依存関係](/docs/mesh/govern/project-dependencies) について、[<Constant name="explorer" />](/docs/explore/explore-multiple-projects) には、上流プロジェクトから直接参照されている [パブリックモデル](/docs/mesh/govern/model-access) のみが表示されます。上流モデルが別のパブリックモデルに間接的に依存している場合でも同様です。
 
 たとえば、次の場合:
 
@@ -16,6 +16,6 @@ dbt Mesh の [プロジェクト依存関係](/docs/collaborate/govern/project-d
 次のようになります:
 
 - Explorer には、直接参照されているパブリックモデル (この場合は `upstream_b`) のみが表示されます。
-- ただし、[dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) の系統ビューでは、dbt Cloud が依存関係グラフ全体を動的に解決するため、`upstream_a` (間接依存関係) が表示されます。
+- ただし、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) の系統ビューでは、<Constant name="cloud" /> が依存関係グラフ全体を動的に解決するため、`upstream_a` (間接依存関係) が表示されます。
 
-この動作により、エクスプローラーには特定のプロジェクトで利用可能な直接依存関係のみが表示されます。
+この動作により、<Constant name="explorer" />には特定のプロジェクトで利用可能な直接依存関係のみが表示されます。

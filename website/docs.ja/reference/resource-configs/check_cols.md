@@ -128,7 +128,7 @@ snapshots:
   ```
 </File>
 
-下流モデルでこの snapshot から選択するには: `select * from {{{ ref('orders_snapshot_check') }}`
+下流モデルでこの snapshot から選択するには: `select * from {{ ref('orders_snapshot_check') }}`
 </VersionBlock>
 
 <VersionBlock lastVersion="1.8">

@@ -18,7 +18,7 @@ id: 2-how-we-style-our-sql
 - 🫧 フィールドまたはテーブルにエイリアスを付ける場合は、`as` キーワードを明示的に使用する必要があります。
 
 :::info
-☁️ dbt Cloud ユーザーは、組み込みの [SQLFluff Cloud IDE 統合](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format) を使用して、SQL を自動的に lint およびフォーマットできます。デフォルトのスタイル シートは、このガイドで説明されている dbt Labs スタイルに基づいていますが、ニーズに合わせてカスタマイズできます。外部ツールを設定する必要はなく、`Lint` を押すだけです。また、そのスタイルが好みであれば、より独自の [sqlfmt](http://sqlfmt.com/) フォーマッタも利用できます。
+☁️ <Constant name="cloud" /> ユーザーは、組み込みの [SQLFluff <Constant name="cloud_ide" /> 統合](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format) を使用して、SQL を自動的に lint およびフォーマットできます。デフォルトのスタイル シートは、このガイドで説明されている dbt Labs スタイルに基づいていますが、ニーズに合わせてカスタマイズできます。外部ツールを設定する必要はなく、`Lint` を押すだけです。また、そのスタイルが好みであれば、より独自の [sqlfmt](http://sqlfmt.com/) フォーマッタも利用できます。
 :::
 
 ## フィールド、集計、グループ化

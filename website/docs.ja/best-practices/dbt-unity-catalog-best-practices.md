@@ -17,13 +17,13 @@ Bronze レイヤーの生データは、dbt [ソース](https://docs.getdbt.com/
 
 環境に応じてソース データのデータ カタログ/スキーマが異なる場合は、[target.name](https://docs.getdbt.com/reference/dbt-jinja-functions/target#use-targetname-to-change-your-source-database) を使用して、環境に応じて取得するデータ カタログ/スキーマを変更できます。
 
-複数の Databricks ワークスペースを使用して開発と運用を分離する場合は、接続構成文字列で dbt Cloud の [環境変数](https://docs.getdbt.com/docs/build/environment-variables) を使用して、1 つの dbt Cloud プロジェクトから複数のワークスペースを参照できます。SQL ウェアハウスでも同じことを実行して、環境に応じて異なるサイズにすることもできます。
+複数の Databricks ワークスペースを使用して開発と運用を分離する場合は、接続構成文字列で <Constant name="cloud" /> の [環境変数](https://docs.getdbt.com/docs/build/environment-variables) を使用して、1 つの <Constant name="cloud" /> プロジェクトから複数のワークスペースを参照できます。SQL ウェアハウスでも同じことを実行して、環境に応じて異なるサイズにすることもできます。
 
 これを行うには、接続設定で、Databricks ワークスペース URL のサーバー ホスト名と SQL ウェアハウスの HTTP パスに dbt の [環境変数構文](https://docs.getdbt.com/docs/dbt-cloud/using-dbt-cloud/cloud-environment-variables#special-environment-variables) を使用します。サーバー ホスト名は、検証チェックに合格するために有効なドメイン名である必要があるため、URL のドメイン サフィックス (例: `{{env_var('DBT_HOSTNAME')}}.cloud.databricks.com`) とウェアハウスのパス プレフィックス (例: `/sql/1.0/warehouses/{{env_var('DBT_HTTP_PATH')}}`) をハードコードする必要があります。
 
 <Lightbox src="/img/guides/databricks-guides/databricks-connection-env-vars.png" title="Using environment variable syntax in connection configs" />
 
-dbt Cloud で環境を作成するときに、環境変数を割り当てて接続情報を動的に入力できます。これらの環境の認証情報で使用するトークンが、関連付けられているワークスペースから生成されたものであることを確認してください。
+<Constant name="cloud" /> で環境を作成するときに、環境変数を割り当てて接続情報を動的に入力できます。これらの環境の認証情報で使用するトークンが、関連付けられているワークスペースから生成されたものであることを確認してください。
 
 <Lightbox src="/img/guides/databricks-guides/databricks-env-variables.png" title="Defining default environment variable values" />
 

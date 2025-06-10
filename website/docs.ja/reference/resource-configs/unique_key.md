@@ -114,7 +114,7 @@ snapshots:
 * 増分モデルの場合、dbt は古い行を置き換えます（マージキーや upsert のように）。
 * スナップショットの場合、dbt は履歴を保持し、時間の経過とともに変化する同じ `unique_key` の複数の行を保存します。
 
-dbt Cloud の「最新」リリーストラックおよび dbt v1.9 以降では、[スナップショット](/docs/build/snapshots) は `snapshots/` ディレクトリ内の YAML ファイルで定義および構成されます。スナップショット YAML ファイルの `config` キー内で、1 つまたは複数の `unique_key` 値を指定できます。
+<Constant name="cloud" /> の「最新」リリーストラックおよび dbt v1.9 以降では、[スナップショット](/docs/build/snapshots) は `snapshots/` ディレクトリ内の YAML ファイルで定義および構成されます。スナップショット YAML ファイルの `config` キー内で、1 つまたは複数の `unique_key` 値を指定できます。
 
 :::caution 
 

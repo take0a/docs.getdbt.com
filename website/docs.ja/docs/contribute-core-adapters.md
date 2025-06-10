@@ -12,8 +12,8 @@ dbt コミュニティは、分析の専門家が知識を共有し、他のユ�
 
 コミュニティでサポートされているプラ​​グインは開発中であり、誰でもテストやコードの作成を通じて貢献できます。貢献に興味がある場合は、次の手順に従ってください。
 
-- [dbt Slack](https://community.getdbt.com/) の専用チャネル [#adapter-ecosystem](https://getdbt.slack.com/archives/C030A0UF5LM) と、アダプタのデータ ストアのチャネルの両方に参加してください。[dbt Core プラットフォーム](/docs/core/connect-data-platform/profiles.yml) ページの **Slack チャネル** リンクを参照してください。
-- プラグインのソース リポジトリで未解決の問題を確認してください。[dbt Core プラットフォーム](/docs/core/connect-data-platform/profiles.yml) ページの関連する **GitHub リポジトリ** リンクを使用してください。
+- [dbt Slack](https://community.getdbt.com/) の専用チャネル [#adapter-ecosystem](https://getdbt.slack.com/archives/C030A0UF5LM) と、アダプタのデータ ストアのチャネルの両方に参加してください。[<Constant name="core" /> プラットフォーム](/docs/core/connect-data-platform/profiles.yml) ページの **Slack チャネル** リンクを参照してください。
+- プラグインのソース リポジトリで未解決の問題を確認してください。[<Constant name="core" /> プラットフォーム](/docs/core/connect-data-platform/profiles.yml) ページの関連する **GitHub リポジトリ** リンクを使用してください。
 
 ### 新しいアダプターを作成する
 

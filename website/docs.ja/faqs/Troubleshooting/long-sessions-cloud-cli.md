@@ -1,11 +1,11 @@
 ---
-title: "dbt Cloud CLI で「Session occupied」というエラーが表示されます。"
-description: "dbt Cloud CLI で長時間実行セッションをデバッグする方法"
-sidebar_label: 'dbt Cloud CLI で長時間実行セッションをデバッグする'
+title: "dbt CLI で「Session occupied」というエラーが表示されます。"
+description: "dbt CLI で長時間実行セッションをデバッグする方法"
+sidebar_label: 'dbt CLI で長時間実行セッションをデバッグする'
 id: long-sessions-cloud-cli
 ---
 
-dbt Cloud CLI で「セッションが占有されています」というエラーが表示される場合、またはセッションが長時間実行されている場合は、別のターミナルウィンドウで「dbt invocation list」コマンドを使用して、アクティブなセッションのステータスを確認できます。これは、問題をデバッグし、セッションの長時間実行の原因となっている引数を特定するのに役立ちます。
+<Constant name="cloud_cli" /> で「セッションが占有されています」というエラーが表示される場合、またはセッションが長時間実行されている場合は、別のターミナルウィンドウで「dbt invocation list」コマンドを使用して、アクティブなセッションのステータスを確認できます。これは、問題をデバッグし、セッションの長時間実行の原因となっている引数を特定するのに役立ちます。
 
 アクティブなセッションをキャンセルするには、「Ctrl + Z」ショートカットを使用します。
 

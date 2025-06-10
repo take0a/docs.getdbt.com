@@ -24,4 +24,4 @@ pagination_next: "reference/define-configs"
 * モデルの実体化方法を変更する (<Term id="table" />、<Term id="view" />、増分など)
 * データベース内のシードの作成場所を宣言する (`<database>.<schema>.<alias>`)
 * リソースの説明をデータベースにコメントとして保存するかどうかを宣言する
-* タグと「メタ」プロパティを適用する
+* タグとメタをリソースに適用する

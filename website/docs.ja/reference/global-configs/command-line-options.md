@@ -4,7 +4,7 @@ id: "command-line-options"
 sidebar: "コマンドラインオプション"
 ---
 
-一貫性を保つため、コマンドラインインターフェース (CLI) フラグは `dbt` プレフィックスとそのサブコマンドの直後に記述する必要があります。これには「グローバル」フラグ（すべてのコマンドでサポートされます）も含まれます。設定可能なすべての dbt CLI フラグのリストについては、[使用可能なフラグ](/reference/global-configs/about-global-configs#available-flags) を参照してください。CLI フラグを設定すると、[環境変数](/reference/global-configs/environment-variable-configs) と [プロジェクトフラグ](/reference/global-configs/project-flags) がオーバーライドされます。
+一貫性を保つため、コマンドラインインターフェース (CLI) フラグは `dbt` プレフィックスとそのサブコマンドの直後に記述する必要があります。これには「グローバル」フラグ（すべてのコマンドでサポートされます）も含まれます。設定可能なすべての <Constant name="cloud_cli" /> フラグのリストについては、[使用可能なフラグ](/reference/global-configs/about-global-configs#available-flags) を参照してください。CLI フラグを設定すると、[環境変数](/reference/global-configs/environment-variable-configs) と [プロジェクトフラグ](/reference/global-configs/project-flags) がオーバーライドされます。
 
 環境変数には `DBT_` プレフィックスが含まれます。
 

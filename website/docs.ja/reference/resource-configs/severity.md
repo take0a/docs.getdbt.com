@@ -22,7 +22,12 @@ keywords: [severity, error_if, warn_if]
 - `severity: error` の場合、dbt はまず `error_if` 条件をチェックします。エラー条件が満たされた場合、テストはエラーを返します。満たされなかった場合、dbt は次に `warn_if` 条件 (デフォルト: `!=0`) をチェックします。指定されていない場合、または警告条件が満たされた場合、テストは警告を出力します。条件が満たされていない場合、テストは成功します。
 - `severity: warn` の場合、dbt は `error_if` 条件を完全にスキップし、直接 `warn_if` 条件に進みます。warn 条件が満たされた場合、テストは警告を出力し、満たされていない場合、テストは成功します。
 
-[`--warn-error`](/reference/global-configs/warnings) フラグが指定されている場合、テストの警告ステータスはエラーを返すことに注意してください。dbt に警告をエラーとして扱うように指示しない限り、重大度が `warn` のテストはエラーを返すことはありません。
+By default, a test with `severity: warn` will only ever return a warning, and not cause errors. However, you can promote warnings to errors using:
+
+* `--warn-error`: Promotes _all_ dbt warnings (including test warnings, Jinja warnings, deprecations, and so on.) to errors.
+* `--warn-error-options`: Promotes _only specific types_ of warnings. 
+
+Learn more about [Warnings](/reference/global-configs/warnings).
 
 <Tabs
   defaultValue="generic"

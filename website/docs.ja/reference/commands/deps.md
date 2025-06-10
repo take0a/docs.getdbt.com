@@ -21,9 +21,9 @@ packages:
     version: 0.4.0
   - package: calogica/dbt_expectations
     version: 0.4.1
-  - git: https://github.com/dbt-labs/dbt-audit-helper.git
+  - git: https://github.com/dbt-labs/dbt_audit_helper.git
     revision: 0.4.0
-  - git: "https://github.com/dbt-labs/dbt-labs-experimental-features" # git URL
+  - git: "https://github.com/dbt-labs/dbt_labs-experimental-features" # git URL
     subdirectory: "materialized-views" # name of subdirectory containing `dbt_project.yml`
     revision: 0.0.1
   - package: dbt-labs/snowplow
@@ -42,9 +42,9 @@ Installing dbt-labs/codegen@0.4.0
 Installing calogica/dbt_expectations@0.4.1
   Installed from version 0.4.1
   Up to date!
-Installing https://github.com/dbt-labs/dbt-audit-helper.git@0.4.0
+Installing https://github.com/dbt-labs/dbt_audit_helper.git@0.4.0
   Installed from revision 0.4.0
-Installing https://github.com/dbt-labs/dbt-labs-experimental-features@0.0.1
+Installing https://github.com/dbt-labs/dbt_labs-experimental-features@0.0.1
   Installed from revision 0.0.1
    and subdirectory materialized-views
 Installing dbt-labs/snowplow@0.13.0
@@ -60,9 +60,13 @@ Update your versions in packages.yml, then run dbt deps
 
 ## 予測可能なパッケージインストール
 
-dbt v1.7 以降、dbt はプロジェクトのルートに `package-lock.yml` ファイルを生成します。このファイルは、`packages.yml` または `dependencies.yml` で指定されたすべての解決済みパッケージの正確なバージョン（コミット SHA を含む）を保存することで、一貫性があり予測可能なパッケージインストールを保証します。この一貫性は、開発環境と本番環境の安定性を維持し、潜在的なバグを含む新しいリリースによる予期せぬ問題を防ぐために不可欠です。
+dbt generates a `package-lock.yml` file in the root of your project. This file records the exact resolved versions (including commit SHAs) of all packages defined in your `packages.yml` or `dependencies.yml` file. The `package-lock.yml` file ensures consistent and repeatable installs across all environments.
 
-`dbt deps` を実行すると、dbt は `package-lock.yml` でロックされたバージョンに基づいてパッケージをインストールします。これらのロックされたバージョンを更新するには、明示的に `dbt deps --upgrade` を実行し、更新された `package-lock.yml` ファイルをコミットする必要があります。このファイルをバージョン管理に保存することで、すべての環境とすべての開発者にとって一貫性が保証されます。
+When you run `dbt deps`, dbt installs packages based on the versions locked in the `package-lock.yml`. This means that as long as your packages file hasn’t changed, the exact same dependency versions will be installed even if newer versions of those packages have been released. This consistency is important to maintain stability in development and production environments, and to prevent unexpected issues from new releases with potential bugs.
+
+If the `packages.yml` file has changed (for example, a new package is added or a version range is updated), then `dbt deps` automatically resolves the new set of dependencies and updates the lock file accordingly. You can also manually trigger an upgrade by running `dbt deps --upgrade`.
+
+To maintain consistency, commit the `package-lock.yml` file to version control. This guarantees consistency across all environments and for all developers.
 
 ### `package-lock.yml` の管理
 
@@ -83,9 +87,7 @@ dbt deps --lock
 `packages.yml` が変更されていない場合でも、すべてのパッケージを更新するには、`--upgrade` フラグを使用します:
 
 ```shell
-
 dbt deps --upgrade
-
 ```
 
 これは、内部的に管理されている Git パッケージの `main` ブランチから最新のコミットを取得する場合に特に便利です。

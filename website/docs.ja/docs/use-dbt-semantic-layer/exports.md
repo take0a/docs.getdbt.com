@@ -5,22 +5,24 @@ sidebar_label: "Write queries with exports"
 keywords: [DBT_INCLUDE_SAVED_QUERY, exports, DBT_EXPORTS_SAVED_QUERY, dbt Cloud, Semantic Layer]
 ---
 
+# Write queries with exports <Lifecycle status="self_service,managed,managed_plus" />
+
 エクスポートは、[保存済みクエリ](/docs/build/saved-queries) の機能を強化します。保存済みクエリを実行し、その出力をデータ プラットフォーム内のテーブルまたはビューに書き込むことで、この機能を強化します。保存済みクエリは、MetricFlow でよく使用されるクエリを保存して再利用する方法ですが、エクスポートではこの機能をさらに強化し、次のことが可能になります。
 
-- dbt Cloud ジョブ スケジューラを使用して、データ プラットフォーム内でこれらのクエリを記述できるようになります。
-- 指標とディメンションのテーブルを公開することで、dbt セマンティック レイヤーをネイティブにサポートしていないツールとの統合パスを提供します。
+- <Constant name="cloud" /> ジョブ スケジューラを使用して、データ プラットフォーム内でこれらのクエリを記述できるようになります。
+- 指標とディメンションのテーブルを公開することで、<Constant name="semantic_layer" />をネイティブにサポートしていないツールとの統合パスを提供します。
 
-基本的に、エクスポートはデータ プラットフォーム内の他のテーブルと同様です。つまり、エクスポートを使用することで、任意の SQL インターフェースを介して指標定義をクエリしたり、高度な [セマンティック レイヤー統合](/docs/cloud-integrations/avail-sl-integrations) を使用せずに下流のツールに接続したりできます。エクスポートを実行すると、[クエリされた指標](/docs/cloud/billing#what-c​​ounts-as-a-queried-metric) の使用量としてカウントされます。エクスポートからの結果のテーブルまたはビューをクエリしても、クエリされたメトリックの使用にはカウントされません。
+基本的に、エクスポートはデータ プラットフォーム内の他のテーブルと同様です。つまり、エクスポートを使用することで、任意の SQL インターフェースを介して指標定義をクエリしたり、高度な [<Constant name="semantic_layer" />統合](/docs/cloud-integrations/avail-sl-integrations) を使用せずに下流のツールに接続したりできます。エクスポートを実行すると、[クエリされた指標](/docs/cloud/billing#what-c​​ounts-as-a-queried-metric) の使用量としてカウントされます。エクスポートからの結果のテーブルまたはビューをクエリしても、クエリされたメトリックの使用にはカウントされません。
 
 ## 前提条件
 
-- [Team または Enterprise](https://www.getdbt.com/pricing/) プランの dbt Cloud アカウントをお持ちであること。
+- You have a <Constant name="cloud" /> account on a [Starter or Enterprise-tier](https://www.getdbt.com/pricing/) plan. 
 - Snowflake、BigQuery、Databricks、Redshift、Postgres のいずれかのデータプラットフォームを使用していること。
 - [dbt バージョン](/docs/dbt-versions/upgrade-dbt-version-in-cloud) が 1.7 以降であること。
-- dbt プロジェクトで dbt セマンティック レイヤーが [構成済み](/docs/use-dbt-semantic-layer/setup-sl) であること。
-- [ジョブ スケジューラ](/docs/deploy/job-scheduler) が有効になっている dbt Cloud 環境があること。
+- dbt プロジェクトで <Constant name="semantic_layer" />が [構成済み](/docs/use-dbt-semantic-layer/setup-sl) であること。
+- [ジョブ スケジューラ](/docs/deploy/job-scheduler) が有効になっている <Constant name="cloud" /> 環境があること。
 - dbt プロジェクトに [保存済みクエリ](/docs/build/saved-queries) と [エクスポート設定済み](/docs/build/saved-queries#configure-exports) があります。設定で [キャッシュ](/docs/use-dbt-semantic-layer/sl-cache) を活用して、よく使用するクエリをキャッシュし、パフォーマンスを向上させ、コンピューティングコストを削減してください。
-- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) がインストールされています。なお、エクスポートは dbt Cloud IDE ではまだサポートされていません。
+- [<Constant name="cloud" /> CLI](/docs/cloud/cloud-cli-installation) がインストールされています。なお、エクスポートは <Constant name="cloud_ide" /> ではまだサポートされていません。
 
 ## エクスポートのメリット
 
@@ -47,16 +49,17 @@ keywords: [DBT_INCLUDE_SAVED_QUERY, exports, DBT_EXPORTS_SAVED_QUERY, dbt Cloud,
 - ビジネスユーザーは、数十、数百、あるいは数千ものテーブルからデータを取得するのに苦労する可能性があり、適切なテーブルを選択するのが難しい場合があります。
 - ビジネスユーザーは、事前に構築されたテーブルからデータを集計およびフィルタリングする際に、ミスを犯す可能性があります。
 
-これらのユースケースでは、エクスポートではなく、動的な[dbtセマンティックレイヤーAPI](/docs/dbt-cloud-apis/sl-api-overview)を使用してください。
+これらのユースケースでは、エクスポートではなく、動的な[<Constant name="semantic_layer" /> API](/docs/dbt-cloud-apis/sl-api-overview)を使用してください。
 
 ## エクスポートを実行する
 
-開発環境または本番環境でエクスポートを実行する前に、dbt プロジェクトで [保存済みクエリとエクスポートを設定](/docs/build/saved-queries) する必要があります。保存済みクエリ設定では、dbt Cloud ジョブスケジューラによる [キャッシュ](/docs/use-dbt-semantic-layer/sl-cache) を活用して、よく使用するクエリをキャッシュし、パフォーマンスを向上させ、コンピューティングコストを削減することもできます。
+開発環境または本番環境でエクスポートを実行する前に、dbt プロジェクトで [保存済みクエリとエクスポートを設定](/docs/build/saved-queries) する必要があります。保存済みクエリ設定では、<Constant name="cloud" /> ジョブスケジューラによる [キャッシュ](/docs/use-dbt-semantic-layer/sl-cache) を活用して、よく使用するクエリをキャッシュし、パフォーマンスを向上させ、コンピューティングコストを削減することもできます。
 
 エクスポートを実行する方法は 2 つあります。
 
-- [開発環境でエクスポートを実行](#exports-in-development) [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) を使用して、本番環境へのデプロイ前に出力をテストします (dbt Cloud IDE でエクスポートを設定できますが、IDE で直接実行することはまだサポートされていません)。dbt Cloud IDE を使用している場合は、`dbt build` を使用してエクスポートを実行します。 [環境変数](#set-environment-variable)が有効になっていることを確認してください。
-- [dbt Cloud ジョブ スケジューラ](/docs/deploy/job-scheduler)を使用して[本番環境でエクスポートを実行](#exports-in-production)し、データ プラットフォーム内でこれらのクエリを記述します。
+- [開発環境でエクスポートを実行](#exports-in-development) [<Constant name="cloud" /> CLI](/docs/cloud/cloud-cli-installation) を使用して、本番環境へのデプロイ前に出力をテストします (<Constant name="cloud_ide" /> でエクスポートを設定できますが、IDE で直接実行することはまだサポートされていません)。
+  - <Constant name="cloud_ide" /> を使用している場合は、`dbt build` を使用してエクスポートを実行します。 [環境変数](#set-environment-variable)が有効になっていることを確認してください。
+- [<Constant name="cloud" /> ジョブ スケジューラ](/docs/deploy/job-scheduler)を使用して[本番環境でエクスポートを実行](#exports-in-production)し、データ プラットフォーム内でこれらのクエリを記述します。
 
 ## 開発環境でのエクスポート
 
@@ -68,9 +71,11 @@ keywords: [DBT_INCLUDE_SAVED_QUERY, exports, DBT_EXPORTS_SAVED_QUERY, dbt Cloud,
 
 - 複数の保存済みクエリに対してエクスポートを一度に実行するには、[`dbt sl export-all` コマンド](#exports-for-multiple-saved-queries) を使用します。このコマンドを使用すると、複数のクエリのエクスポートを同時に管理および実行できるため、時間と労力を節約できます。
 
+- If you're using the <Constant name="cloud_ide" />, use `dbt build` to run exports. Make sure you have the [environment variable](#set-environment-variable) enabled before running the command.
+
 ### 保存済みの単一クエリのエクスポート
 
-dbt Cloud CLI でエクスポートを実行するには、次のコマンドを使用します:
+<Constant name="cloud" /> CLI でエクスポートを実行するには、次のコマンドを使用します:
 
 ```bash
 dbt sl export
@@ -153,38 +158,23 @@ Polling completed
 
 ## 本番環境でのエクスポート
 
-dbt Cloud でエクスポートを有効にして実行すると、データワークフローが最適化され、リアルタイムのデータアクセスが確保されます。これにより、効率性とガバナンスが向上し、よりスマートな意思決定が可能になります。
+<Constant name="cloud" /> でエクスポートを有効にして実行すると、データワークフローが最適化され、リアルタイムのデータアクセスが確保されます。これにより、効率性とガバナンスが向上し、よりスマートな意思決定が可能になります。
 
 エクスポートでは、本番環境のデフォルトの認証情報が使用されます。エクスポートを有効にして保存済みのクエリを実行し、データプラットフォーム内で書き込むには、次の手順を実行します。
 
-1. dbt Cloud で [環境変数を設定](#set-environment-variable)します。
+1. <Constant name="cloud" /> で [環境変数を設定](#set-environment-variable)します。
 2. [エクスポートジョブを作成して実行](#create-and-execute-exports)します。
 
 ### 環境変数を設定する
-<!-- for version 1.7 -->
-<VersionBlock firstVersion lastVersion="1.7">
-
-1. Click **Deploy** in the top navigation bar and choose **Environments**.
-2. Select **Environment variables**.
-3. [Set the environment variable](/docs/build/environment-variables#setting-and-overriding-environment-variables) key to `DBT_INCLUDE_SAVED_QUERY` and the environment variable's value to `TRUE` (`DBT_INCLUDE_SAVED_QUERY=TRUE`).
-
-This ensures saved queries and exports are included in your dbt build job. For example, running `dbt build --select sq_name` runs the equivalent of `dbt sl export --saved-query sq_name` in the dbt Cloud Job scheduler. 
-
-If exports aren't needed, you can set the value(s) to `FALSE` (`DBT_INCLUDE_SAVED_QUERY=FALSE`).
-
-<Lightbox src="/img/docs/dbt-cloud/semantic-layer/deploy_exports.jpg" width="90%" title="Add an environment variable to run exports in your production run." />
-
-</VersionBlock>
-
 <!-- for Release Tracks -->
 <VersionBlock firstVersion="1.8">
 
 1. 上部のナビゲーションバーで  **Deploy** をクリックし、**Environments** を選択します。
 2. **Environment variables** を選択します。
 3. [環境変数](/docs/build/environment-variables#setting-and-overriding-environment-variables) キーを `DBT_EXPORT_SAVED_QUERIES` に設定し、環境変数の値を `TRUE` (`DBT_EXPORT_SAVED_QUERIES=TRUE`) に設定します。
-*注: dbt v1.7 を使用している場合は、環境変数キーを `DBT_INCLUDE_SAVED_QUERY` に設定してください。詳細を表示するには、ドキュメント切り替えを使用してバージョン「1.7」を選択してください。
 
-これにより、保存されたクエリとエクスポートが dbt ビルドジョブに含まれるようになります。たとえば、`dbt build -s sq_name` を実行すると、dbt Cloud Job Scheduler で `dbt sl export --saved-query sq_name` と同等の機能が実行されます。
+
+これにより、保存されたクエリとエクスポートが dbt ビルドジョブに含まれるようになります。たとえば、`dbt build -s sq_name` を実行すると、<Constant name="cloud" /> Job Scheduler で `dbt sl export --saved-query sq_name` と同等の機能が実行されます。
 
 エクスポートが不要な場合は、値を `FALSE` に設定できます（`DBT_EXPORT_SAVED_QUERIES=FALSE`）。
 
@@ -195,17 +185,6 @@ If exports aren't needed, you can set the value(s) to `FALSE` (`DBT_INCLUDE_SAVE
 ビルドジョブを実行すると、そのジョブ内の dbt モデルの下流にある保存済みのクエリも実行されます。エクスポートデータが最新であることを確認するには、下流ステップ（モデルの後に）としてエクスポートを実行してください。
 
 ### エクスポートの作成と実行
-<VersionBlock firstVersion lastVersion="1.7">
-
-1. Create a [deploy job](/docs/deploy/deploy-jobs) and ensure the `DBT_INCLUDE_SAVED_QUERY=TRUE` environment variable is set, as described in [Set environment variable](#set-environment-variable).
-   - This enables you to run any export that needs to be refreshed after a model is built.
-   - Use the [selector syntax](/reference/node-selection/syntax) `--select` or `-s` option in your build command to specify a particular dbt model or saved query to run. For example, to run all saved queries downstream of the `orders` semantic model, use the following command:
-    ```bash
-      dbt build --select orders+
-      ```
-
-</VersionBlock>
-
 <VersionBlock firstVersion="1.8">
 
 1. [デプロイジョブ](/docs/deploy/deploy-jobs)を作成し、[環境変数の設定](#set-environment-variable)の説明に従って、`DBT_EXPORT_SAVED_QUERIES=TRUE`環境変数が設定されていることを確認します。

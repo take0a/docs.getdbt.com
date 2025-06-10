@@ -7,7 +7,7 @@ tags: [Metrics, Semantic Layer]
 ---
 
 検証とは、システムまたは構成が期待される要件または制約を満たしているかどうかを確認するプロセスを指します。
-MetricFlow を搭載したセマンティックレイヤーには、[解析](#parsing)、[セマンティック](#semantic)、[データプラットフォーム](#data-platform) という 3 つの組み込み検証があります。
+MetricFlow を搭載した<Constant name="semantic_layer" />には、[解析](#parsing)、[セマンティック](#semantic)、[データプラットフォーム](#data-platform) という 3 つの組み込み検証があります。
 
 これらの検証により、構成ファイルが期待されるスキーマに準拠していること、セマンティックグラフが制約に違反していないこと、そしてグラフ内のセマンティック定義が物理テーブルに存在することが保証され、効果的なデータガバナンスがサポートされます。
 
@@ -17,8 +17,8 @@ MetricFlow を搭載したセマンティックレイヤーには、[解析](#pa
 
 ## 検証コマンド
 
-以下の[MetricFlow コマンド](/docs/build/metricflow-commands)を使用して、dbt Cloud またはコマンドラインから検証を実行できます。
-dbt Cloud では、IDE または CLI で `dbt sl validate-configs` を実行するには開発者認証情報、CI で実行するにはデプロイメント認証情報が必要です。
+以下の[MetricFlow コマンド](/docs/build/metricflow-commands)を使用して、<Constant name="cloud" /> またはコマンドラインから検証を実行できます。
+<Constant name="cloud" /> では、IDE または CLI で `dbt sl validate-configs` を実行するには開発者認証情報、CI で実行するにはデプロイメント認証情報が必要です。
 
 ```bash
 dbt sl validate # dbt Cloud users
@@ -38,7 +38,7 @@ mf validate-configs # dbt Core users
 ## セマンティック構文
 
 この構文検証ステップは、セマンティックグラフを構築した後に実行されます。
-MetricFlow を活用したセマンティックレイヤーは、セマンティックグラフが制約に違反していないことを確認するための一連のテストを実行します。
+MetricFlow を活用した<Constant name="semantic_layer" />は、セマンティックグラフが制約に違反していないことを確認するための一連のテストを実行します。
 
 例えば、メジャー名が一意であるか、マテリアライズで参照されているメトリクスが存在するかを確認します。
 現在、チェックするセマンティックルールは以下のとおりです。

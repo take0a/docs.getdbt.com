@@ -8,7 +8,7 @@ datatype: string
 
 dbt Core v1.9以降では、この機能は利用できなくなりました。`generate_schema_name`マクロを尊重しつつカスタムスキーマを定義するには、代わりに[schema](/reference/resource-configs/schema)設定を使用してください。
 
-[dbt Cloud "最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks)で今すぐお試しください。
+[<Constant name="cloud" /> "最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks)で今すぐお試しください。
 
 :::
 
@@ -42,7 +42,7 @@ On **BigQuery**, this is analogous to a `dataset`.
 ## Default
 
 <VersionBlock lastVersion="1.8" >This is a required parameter, no default is provided. </VersionBlock>
-<VersionBlock firstVersion="1.9.1">In dbt Core v1.9+ and dbt Cloud "Latest" release track, this is not a required parameter. </VersionBlock>
+<VersionBlock firstVersion="1.9.1">In dbt Core v1.9+ and <Constant name="cloud" /> "Latest" release track, this is not a required parameter. </VersionBlock>
 
 ## Examples
 ### Build all snapshots in a schema named `snapshots`

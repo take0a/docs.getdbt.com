@@ -43,9 +43,10 @@ version: 2
 
 models:
   - name: model_name
-    docs:
-      show: true | false
-      node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
+    config:
+      docs: # changed to config in v1.10
+        show: true | false
+        node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
 ```
 </File>
 
@@ -80,9 +81,10 @@ version: 2
 
 seeds:
   - name: seed_name
-    docs:
-      show: true | false
-      node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
+    config:
+      docs: # changed to config in v1.10
+        show: true | false
+        node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
 ```
 </File>
 
@@ -112,9 +114,10 @@ version: 2
 
 snapshots:
   - name: snapshot_name
-    docs:
-      show: true | false
-      node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
+    config:
+      docs: # changed to config in v1.10
+        show: true | false
+        node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
 ```
 </File>
 
@@ -132,9 +135,10 @@ version: 2
 
 analyses:
   - name: analysis_name
-    docs:
-      show: true | false
-      node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
+    config:
+      docs: # changed to config in v1.10
+        show: true | false
+        node_color: color_id # Use name (such as node_color: purple) or hex code with quotes (such as node_color: "#cd7f32")
 ```
 </File>
 
@@ -151,8 +155,9 @@ version: 2
 
 macros:
   - name: macro_name
-    docs:
-      show: true | false
+    config:
+      docs: # changed to config in v1.10
+        show: true | false
 ```
 </File>
 
@@ -213,9 +218,9 @@ models:
 
 カスタマイズした色を適用して表示するには、`dbt docs generate` コマンドを実行または再実行する必要があります。
 
-:::info dbt Explorer ではカスタムノードカラーは適用されません
+:::info <Constant name="explorer" /> ではカスタムノードカラーは適用されません
 
-カスタム `node_color` 属性は dbt Explorer では適用されません。代わりに、Explorer は [レンズ](/docs/collaborate/explore-projects#lenses) を提供します。これは <Term id="dag"/> のマップレイヤーです。レンズを使用すると、プロジェクトのコンテキストメタデータを大規模に理解し、特定のモデルまたはモデルのサブセットを区別するのに役立ちます。
+カスタム `node_color` 属性は dbt Explorer では適用されません。代わりに、Explorer は [レンズ](/docs/explore/explore-projects#lenses) を提供します。これは <Term id="dag"/> のマップレイヤーです。レンズを使用すると、プロジェクトのコンテキストメタデータを大規模に理解し、特定のモデルまたはモデルのサブセットを区別するのに役立ちます。
 
 :::
 

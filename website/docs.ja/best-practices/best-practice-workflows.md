@@ -10,9 +10,9 @@ id: "best-practice-workflows"
 ### dbt プロジェクトのバージョン管理
 すべての dbt プロジェクトはバージョン管理で管理する必要があります。新しい機能の開発とバグ修正を管理するには、Git ブランチを作成する必要があります。すべてのコード変更は、`main` などの本番ブランチにマージする前に、同僚 (または自分自身) がプル リクエストでレビューする必要があります。
 
-:::info Git ガイド
+:::info <Constant name="git" /> ガイド
 
-私たちは Git のベストプラクティスを [Git ガイド](https://github.com/dbt-labs/corp/blob/main/git-guide.md) にまとめました。
+私たちは <Constant name="git" /> のベストプラクティスを [<Constant name="git" /> ガイド](https://github.com/dbt-labs/corp/blob/main/git-guide.md) にまとめました。
 
 :::
 
@@ -109,7 +109,7 @@ dbt は、モデルによって生成された結果に関する仮定をテス�
 開発時には、現在作業中のモデルと下流のモデルのみを実行するのが合理的であることがよくあります。[モデル選択構文](/reference/node-selection/syntax)を使用して、実行するモデルを選択できます。
 
 ### 変更をテストするために変更されたモデルのみを実行する (「スリム CI」)
-コード変更を自信を持ってマージするには、それらの変更がプロジェクトの他の場所で破損を引き起こさないことを確認する必要があります。そのため、git ワークフローの自動チェックとして、本番データから分離されたサンドボックス環境でモデルとテストを実行することをお勧めします。(GitHub と dbt Cloud を使用する場合は、[CI ジョブの設定方法](/docs/deploy/ci-jobs) についてお読みください。
+コード変更を自信を持ってマージするには、それらの変更がプロジェクトの他の場所で破損を引き起こさないことを確認する必要があります。そのため、git ワークフローの自動チェックとして、本番データから分離されたサンドボックス環境でモデルとテストを実行することをお勧めします。(GitHub と <Constant name="cloud" /> を使用する場合は、[CI ジョブの設定方法](/docs/deploy/ci-jobs) についてお読みください。
 
 同時に、プロジェクト内のすべてのモデルを実行してテストするには時間 (と費用) がかかります。PR で少数のモデルの変更のみを提案している場合は、この非効率性が特に痛手となります。
 
@@ -202,4 +202,4 @@ where created_at >= dateadd('day', -3, current_date)
 モデルでマクロやその他の Jinja 要素を使用している場合、コンパイルされた SQL (`target/compiled` ディレクトリにあります) に不要な空白が含まれている可能性があります。生成された空白を制御する方法については、[Jinja ドキュメント](http://jinja.pocoo.org/docs/2.10/templates/#whitespace-control) を参照してください。
 
 ## 関連ドキュメント
-- [権限付与ガイドラインの更新: dbt Core v1.2 での構成としての許可](https://docs.getdbt.com/blog/configuring-grants)
+- [権限付与ガイドラインの更新: <Constant name="core" /> v1.2 での構成としての許可](https://docs.getdbt.com/blog/configuring-grants)

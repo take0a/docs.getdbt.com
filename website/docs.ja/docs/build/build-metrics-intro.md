@@ -10,14 +10,16 @@ pagination_prev: null
 ---
 
 dbt で MetricFlow を使用して、メトリクスを一元的に定義します。
-[dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) の主要コンポーネントである MetricFlow は、SQL クエリの構築と、dbt セマンティック モデルおよびメトリクスの仕様定義を担当します。
+[<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) の主要コンポーネントである MetricFlow は、SQL クエリの構築と、dbt セマンティック モデルおよびメトリクスの仕様定義を担当します。
 セマンティック モデルやメトリクスなどの使い慣れた構成要素を使用することで、コーディングの重複を回避し、開発ワークフローを最適化し、企業メトリクスのデータガバナンスを確保し、データ コンシューマーの一貫性を保証します。
+
+<Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-concept.png" width="50%" title="This diagram shows how the dbt Semantic Layer works with your data stack." />
 
 MetricFlow を使用すると、次のことが可能になります。
 - dbt プロジェクトで直感的にメトリクスを定義
-- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation)、[dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud)、[dbt Core](/docs/core/installation-overview) など、お好みの環境で開発
+- [<Constant name="cloud" /> CLI](/docs/cloud/cloud-cli-installation)、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud)、[<Constant name="core" />](/docs/core/installation-overview) など、お好みの環境で開発
 - [MetricFlow コマンド](/docs/build/metricflow-commands) を使用して、開発環境でこれらのメトリクスをクエリおよびテスト
-- ユニバーサル dbt セマンティック レイヤーの真の魔法を活用し、ダウンストリーム ツールでこれらのメトリクスを動的にクエリ (dbt Cloud [Team または Enterprise](https://www.getdbt.com/pricing/) アカウントのみで利用可能)
+- ユニバーサル <Constant name="semantic_layer" /> の真の魔法を活用し、ダウンストリーム ツールでこれらのメトリクスを動的にクエリ (<Constant name="cloud" /> [Starter、Enterprise  または Enterprise+](https://www.getdbt.com/pricing/) アカウントのみで利用可能)
 
 <div className="grid--3-col">
 
@@ -67,7 +69,7 @@ MetricFlow を使用すると、次のことが可能になります。
 
 ## 関連ドキュメント
 
-- [dbt セマンティック レイヤー クイックスタート ガイド](/guides/sl-snowflake-qs)
-- [dbt セマンティック レイヤー：今後の展望](https://www.getdbt.com/blog/dbt-semantic-layer-whats-next/) ブログ
-- [dbt セマンティック レイヤー オンデマンド コース](https://learn.getdbt.com/courses/semantic-layer)
-- [dbt セマンティック レイヤーに関する FAQ](/docs/use-dbt-semantic-layer/sl-faqs)
+- [<Constant name="semantic_layer" /> クイックスタート ガイド](/guides/sl-snowflake-qs)
+- [<Constant name="semantic_layer" />：今後の展望](https://www.getdbt.com/blog/dbt-semantic-layer-whats-next/) ブログ
+- [<Constant name="semantic_layer" /> オンデマンド コース](https://learn.getdbt.com/courses/semantic-layer)
+- [<Constant name="semantic_layer" /> に関する FAQ](/docs/use-dbt-semantic-layer/sl-faqs)

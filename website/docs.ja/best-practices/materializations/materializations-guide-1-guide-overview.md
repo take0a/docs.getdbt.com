@@ -9,6 +9,13 @@ hoverSnippet: Read this guide to understand how using materializations in dbt is
 
 `dbt build` と入力すると、実際に何が起こるのでしょうか。一般に信じられていることとは反対に、極小のデータ エルフの優秀なチームがデータを 1 行ずつ構築するわけではありませんが、真実は同じように魔法のようです。このガイドでは、ウェアハウスに構築されるオブジェクトの概要、それらが重要な理由、および dbt が構築するものを認識する方法について説明します。
 
+import CourseCallout from '/snippets/_materialization-video-callout.md';
+
+<CourseCallout resource="Snapshots" 
+url="https://learn.getdbt.com/courses/snapshots"
+course="Snapshots"
+/>
+
 dbt にこれらのオブジェクトの構築方法を指示する構成は _マテリアライゼーション_ と呼ばれ、それらの使用方法を知ることは、効果的な分析エンジニアリングに不可欠なスキルです。このガイドを完了すると、最も一般的な分析エンジニアリング状況をカバーする 3 つのコア マテリアライゼーションを使用できるようになります。
 
 :::info

@@ -111,6 +111,6 @@ select
 なぜ `sync_all_columns` ではなく `append_new_columns` (または `fail`) を使用するのでしょうか？既存の列を削除すると、コントラクトモデルにとって互換性のない変更となるためです。 `sync_all_columns` は `append_new_columns` と同様に機能しますが、削除された列も削除します。これは、バージョンをアップグレードしない限り、縮小モデルでは実行されないはずです。
 
 ## 関連ドキュメント
-- [モデル契約とは](/docs/collaborate/govern/model-contracts)
+- [モデル契約とは](/docs/mesh/govern/model-contracts)
 - [`columns` の定義](/reference/resource-properties/columns)
 - [`constraints` の定義](/reference/resource-properties/constraints)

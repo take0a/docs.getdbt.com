@@ -21,7 +21,7 @@ Selector メソッドは、`method:value` という構文を使用して、共�
 | [a-z]    | 括弧内の範囲の1文字に一致する |
 
 例えば：
-```
+```bash
 dbt list --select "*.folder_name.*"
 dbt list --select "package:*_source"
 ```
@@ -173,14 +173,34 @@ dbt list --select "resource_type:source"       # list all sources in your projec
 
 ### result
 
-`result` メソッドは前述の `state` メソッドと関連しており、前回の実行結果のステータスに基づいてリソースを選択するために使用できます。結果セレクターが操作する結果を作成するには、dbt コマンド [`run`、`test`、`build`、`seed`] のいずれかを実行する必要があります。`result` セレクターは `+` 演算子と組み合わせて使用​​できます。
+The `result` method is related to the [`state` method](/reference/node-selection/methods#state) and can be used to select resources based on their result status from a prior run. Note that one of the dbt commands [`run`, `test`, `build`, `seed`] must have been performed in order to create the result on which a result selector operates. 
+
+You can use `result` selectors in conjunction with the `+` operator. 
 
 ```bash
-dbt run --select "result:error" --state path/to/artifacts # run all models that generated errors on the prior invocation of dbt run
-dbt test --select "result:fail" --state path/to/artifacts # run all tests that failed on the prior invocation of dbt test
-dbt build --select "1+result:fail" --state path/to/artifacts # run all the models associated with failed tests from the prior invocation of dbt build
-dbt seed --select "result:error" --state path/to/artifacts # run all seeds that generated errors on the prior invocation of dbt seed.
+# run all models that generated errors on the prior invocation of dbt run
+dbt run --select "result:error" --state path/to/artifacts 
+
+# run all tests that failed on the prior invocation of dbt test
+dbt test --select "result:fail" --state path/to/artifacts 
+
+# run all the models associated with failed tests from the prior invocation of dbt build
+dbt build --select "1+result:fail" --state path/to/artifacts
+
+# run all seeds that generated errors on the prior invocation of dbt seed
+dbt seed --select "result:error" --state path/to/artifacts 
 ```
+
+- Only use `result:fail` when you want to re-run tests that failed during the last invocation. This selector is specific to test nodes. Tests don't have downstream nodes in the DAG, so using the `result:fail+` selector will only return the failed test itself and not the model or anything built on top of it.
+- On the other hand, `result:error` selects any resource (models, tests, snapshots, and more) that returned an error.
+- As an example, to re-run upstream and downstream resources associated with failed tests, you can use one of the following selectors:
+  ```bash
+  # reruns all the models associated with failed tests from the prior invocation of dbt build
+  dbt build --select "1+result:fail" --state path/to/artifacts
+
+  # reruns the models associated with failed tests and all downstream dependencies - especially useful in deferred state workflows
+  dbt build --select "1+result:fail+" --state path/to/artifacts
+  ```
 
 ### saved_query
 
@@ -317,17 +337,6 @@ dbt test --select "test_name:range_min_max"     # run all instances of a custom 
 
 ### The test_type
 
-<VersionBlock lastVersion="1.7">
-
-`test_type` メソッドは、テストのタイプ (`singular` または `generic`) に基づいてテストを選択するために使用されます:
-
-```bash
-dbt test --select "test_type:generic"        # run all generic tests
-dbt test --select "test_type:singular"       # run all singular tests
-```
-
-</VersionBlock>
-
 <VersionBlock firstVersion="1.8">
 
 `test_type` メソッドは、テストの種類に基づいてテストを選択するために使用されます。
@@ -349,9 +358,6 @@ dbt test --select "test_type:singular"       # run all singular data tests
 
 ### unit_test
 
-<VersionBlock lastVersion="1.7">
-Supported in v1.8 or newer.
-</VersionBlock>
 <VersionBlock firstVersion="1.8">
 
 `unit_test` メソッドは [ユニット テスト](/docs/build/unit-tests) を選択します。
@@ -365,7 +371,7 @@ dbt list --select "+unit_test:orders_with_zero_items"  # list your unit test nam
 
 ### version
 
-`version` メソッドは、[バージョン識別子](/reference/resource-properties/versions) と [最新バージョン](/reference/resource-properties/latest_version) に基づいて [バージョン管理されたモデル](/docs/collaborate/govern/model-versions) を選択します。
+`version` メソッドは、[バージョン識別子](/reference/resource-properties/versions) と [最新バージョン](/reference/resource-properties/latest_version) に基づいて [バージョン管理されたモデル](/docs/mesh/govern/model-versions) を選択します。
 
 ```bash
 dbt list --select "version:latest"      # only 'latest' versions

@@ -199,7 +199,7 @@ Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
 
 ```
 3. 次のいずれかの方法で、SQL dbt が実行されていることを確認します。
-   * **dbt Cloud:** [詳細] タブを確認します。
+   * **<Constant name="cloud" />:** [詳細] タブを確認します。
    * **dbt Core:** `target/compiled` ディレクトリを確認します。
 
 
@@ -291,12 +291,6 @@ where {{ column_name }} is null
 
 
 ## 新しい `data_tests:` 構文
-
-<VersionBlock lastVersion="1.7">
-
-dbt バージョン 1.8 では、`tests` 構成が `data_tests` に更新されました。詳細については、ドキュメント ナビゲーション メニューからバージョン v1.8 を選択してください。
-
-</VersionBlock>
 
 <VersionBlock firstVersion="1.8">
   

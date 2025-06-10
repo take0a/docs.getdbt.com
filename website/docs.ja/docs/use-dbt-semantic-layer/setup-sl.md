@@ -1,14 +1,16 @@
 ---
 title: "dbtセマンティックレイヤーを設定する"
 id: setup-sl
-description: "直感的なナビゲーションを使用して、dbt Cloud で dbt セマンティック レイヤーをシームレスに設定します。"
+description: "Seamlessly set up the dbt Semantic Layer in dbt using intuitive navigation."
 sidebar_label: "Set up the Semantic Layer"
 tags: [Semantic Layer]
 pagination_next: "docs/use-dbt-semantic-layer/sl-architecture"
 pagination_prev: "guides/sl-snowflake-qs"
 ---
 
-dbt セマンティック レイヤーを使用すると、ビジネス メトリックを一元的に定義し、コードの重複と不整合を削減し、下流のツールでセルフサービスを作成するなどが可能になります。
+# Set up the dbt Semantic Layer <Lifecycle status="self_service,managed,managed_plus" />
+
+<Constant name="semantic_layer" />を使用すると、ビジネス メトリックを一元的に定義し、コードの重複と不整合を削減し、下流のツールでセルフサービスを作成するなどが可能になります。
 
 ## 前提条件
 
@@ -39,11 +41,11 @@ import SlSetUp from '/snippets/_new-sl-setup.md';
 
 ## 次のステップ
 
-- dbt セマンティック レイヤーの設定が完了したら、[利用可能な統合](/docs/cloud-integrations/avail-sl-integrations)を使用してメトリクスのクエリを開始します。
+- <Constant name="semantic_layer" />の設定が完了したら、[利用可能な統合](/docs/cloud-integrations/avail-sl-integrations)を使用してメトリクスのクエリを開始します。
 - 宣言型キャッシュを使用して、[クエリのパフォーマンスを最適化](/docs/use-dbt-semantic-layer/sl-cache)します。
 - [CI でセマンティック ノードを検証](/docs/deploy/ci-jobs#semantic-validations-in-ci)し、dbt モデルへのコード変更によってこれらのメトリクスが損なわれないことを確認します。
 - まだお試しでない場合は、お好みの開発ツールで[メトリクスとセマンティック モデルを構築する](/docs/build/build-metrics-intro)方法を学習してください。
-- [dbt セマンティック レイヤーに関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)をご確認ください。
+- [<Constant name="semantic_layer" />に関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)をご確認ください。
 
 ## FAQs
 

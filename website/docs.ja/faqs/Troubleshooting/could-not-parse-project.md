@@ -4,7 +4,7 @@ description: "dbt Cloud で 'Could not parse dbt_project.yml' というエラー
 sidebar_label: 'dbt Cloud で dbt_project.yml を解析できませんでした'
 ---
 
-dbt Cloud ジョブの実行中または開発中に `Could not parse dbt_project.yml: while scanning for...` というエラーメッセージが表示される場合、通常はいくつかの原因が考えられます。
+<Constant name="cloud" /> ジョブの実行中または開発中に `Could not parse dbt_project.yml: while scanning for...` というエラーメッセージが表示される場合、通常はいくつかの原因が考えられます。
 
 - YAML ファイルの解析エラー（タブインデントや Unicode 文字など）
 - `dbt_project.yml` ファイルにフィールドが欠落しているか、フォーマットが正しくありません。
@@ -14,4 +14,4 @@ dbt Cloud ジョブの実行中または開発中に `Could not parse dbt_projec
 - オンライン YAML パーサーまたはバリデータを使用して、YAML ファイルに解析エラーがないか確認します。既知の解析エラーには、フィールドの欠落、フォーマットが正しくない、タブインデントなどがあります。
 - または、`dbt_project.yml` ファイルが存在することを確認してください。
 
-問題を特定したら、エラーを修正して dbt Cloud ジョブを再実行できます。
+問題を特定したら、エラーを修正して <Constant name="cloud" /> ジョブを再実行できます。

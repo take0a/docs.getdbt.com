@@ -16,7 +16,7 @@ sidebar_label: invalidate_hard_deletes
 
 :::warning これはレガシー構成です。代わりに [`hard_deletes`](/reference/resource-configs/hard-deletes) 構成を使用してください。
 
-dbt Cloud リリース トラックおよび dbt Core 1.9 以降では、ソースから削除された行の処理方法をより適切に制御するために、`invalidate_hard_deletes` 構成が [`hard_deletes`](/reference/resource-configs/hard-deletes) 構成に置き換えられています。
+<Constant name="cloud" />  リリース トラックおよび dbt Core 1.9 以降では、ソースから削除された行の処理方法をより適切に制御するために、`invalidate_hard_deletes` 構成が [`hard_deletes`](/reference/resource-configs/hard-deletes) 構成に置き換えられています。
 
 新しい snapshot の場合は、構成を `invalidate_hard_deletes=true` ではなく `hard_deletes='invalidate'` に設定してください。既存の snapshot の場合は、この設定を有効にする前に、既存のテーブルの更新を行ってください。
 :::

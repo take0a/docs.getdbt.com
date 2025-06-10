@@ -13,7 +13,7 @@ id: 3-how-we-style-our-python
   - [ruff](https://pypi.org/project/ruff/) linter
 
   :::info
-  ☁️ dbt Cloud には、SQL を自動的に lint してフォーマットする [black formatter が組み込まれています](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format)。ダウンロードや設定は一切不要で、Python モデルで「Format」をクリックするだけで準備完了です。
+  ☁️ <Constant name="cloud" /> には、SQL を自動的に lint してフォーマットする [black formatter が組み込まれています](/docs/cloud/dbt-cloud-ide/lint-format)。ダウンロードや設定は一切不要で、Python モデルで「Format」をクリックするだけで準備完了です。
   :::
 
 ## Pythonの例

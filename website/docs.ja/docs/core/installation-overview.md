@@ -5,9 +5,9 @@ pagination_next: "docs/core/pip-install"
 pagination_prev: null
 ---
 
-[dbt Core](https://github.com/dbt-labs/dbt-core) は、コマンドラインから開発して dbt プロジェクトを実行できるオープンソース プロジェクトです。
+[<Constant name="core" />](https://github.com/dbt-labs/dbt-core) は、コマンドラインから開発して dbt プロジェクトを実行できるオープンソース プロジェクトです。
 
-dbt Core を使用する場合、ワークフローは通常次のようになります。
+<Constant name="core" /> を使用する場合、ワークフローは通常次のようになります。
 
 1. **コード エディターで dbt プロジェクトをビルドします。** 一般的な選択肢としては、VSCode や Atom などがあります。
 
@@ -15,7 +15,7 @@ dbt Core を使用する場合、ワークフローは通常次のようにな�
 
 :::info dbt プロジェクトで作業するためにコンピューターを設定する方法
 
-dbt Core を使用して dbt プロジェクトを実行する場合に推奨されるセットアップについては、[ガイド](https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243) を作成しました。
+<Constant name="core" /> を使用して dbt プロジェクトを実行する場合に推奨されるセットアップについては、[ガイド](https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243) を作成しました。
 
 :::
 
@@ -23,12 +23,12 @@ dbt Core を使用して dbt プロジェクトを実行する場合に推奨さ
 
 ## dbt Core をインストールする
 
-次のいずれかの方法を使用して、コマンド ラインで dbt Core をインストールできます。
+次のいずれかの方法を使用して、コマンド ラインで <Constant name="core" /> をインストールできます。
 
 - [pip を使用して dbt をインストールする](/docs/core/pip-install) (推奨)
 - [Docker イメージを使用して dbt をインストールする](/docs/core/docker-install)
 - [ソースから dbt をインストールする](/docs/core/source-install)
-- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) を使用してローカルで開発することもできます。dbt Cloud CLI と dbt Core はどちらも、dbt コマンドを実行できるコマンド ライン ツールです。主な違いは、dbt Cloud CLI は dbt Cloud のインフラストラクチャに合わせて調整されており、そのすべての [機能](/docs/cloud/about-cloud/dbt-cloud-features) と統合されていることです。
+- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) を使用してローカルで開発することもできます。dbt Cloud CLI と <Constant name="core" /> はどちらも、dbt コマンドを実行できるコマンド ライン ツールです。主な違いは、dbt Cloud CLI は <Constant name="cloud" /> のインフラストラクチャに合わせて調整されており、そのすべての [機能](/docs/cloud/about-cloud/dbt-cloud-features) と統合されていることです。
 
 ## dbt Core のアップグレード
 
@@ -38,7 +38,7 @@ dbt は、dbt プロジェクトのアップグレード中に [一般的なベ�
 
 ## dbt データ プラットフォームとアダプタについて
 
-dbt は、さまざまなデータ プラットフォーム (データベース、クエリ エンジン、その他の SQL 対応テクノロジ) で動作します。これは、それぞれ専用の _アダプタ_ を使用して行われます。dbt Core をインストールするときは、データベースに固有のアダプタもインストールする必要があります。詳細については、[サポートされているデータ プラットフォーム](/docs/supported-data-platforms) を参照してください。
+dbt は、さまざまなデータ プラットフォーム (データベース、クエリ エンジン、その他の SQL 対応テクノロジ) で動作します。これは、それぞれ専用の _アダプタ_ を使用して行われます。<Constant name="core" /> をインストールするときは、データベースに固有のアダプタもインストールする必要があります。詳細については、[サポートされているデータ プラットフォーム](/docs/supported-data-platforms) を参照してください。
 
 :::tip Pro tip: --helpフラグの使用
 

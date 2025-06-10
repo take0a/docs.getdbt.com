@@ -22,9 +22,9 @@ intro_text: "マテリアライゼーションの増分戦略は、新しいデ�
 
 ### アダプタ別にサポートされている増分戦略
 
-この表は、dbt Cloud の [最新リリーストラック](/docs/dbt-versions/cloud-release-tracks) で利用可能なアダプタにおける各増分戦略のサポート状況を示しています。「最新」ではなく、機能が「互換」トラックにリリースされていない場合、一部の戦略は利用できない場合があります。
+この表は、<Constant name="cloud" /> の [最新リリーストラック](/docs/dbt-versions/cloud-release-tracks) で利用可能なアダプタにおける各増分戦略のサポート状況を示しています。「最新」ではなく、機能が「互換」トラックにリリースされていない場合、一部の戦略は利用できない場合があります。
 
-dbt Core でのみ利用可能なアダプタにご興味がある場合は、[アダプタの個別の構成ページ](/reference/resource-configs/resource-configs) で詳細をご確認ください。
+<Constant name="core" /> でのみ利用可能なアダプタにご興味がある場合は、[アダプタの個別の構成ページ](/reference/resource-configs/resource-configs) で詳細をご確認ください。
 
 サポートされている増分戦略の詳細については、次の表でアダプタ名をクリックしてください:
 
@@ -38,7 +38,7 @@ dbt Core でのみ利用可能なアダプタにご興味がある場合は、[�
 | [dbt-snowflake](/reference/resource-configs/snowflake-configs#merge-behavior-incremental-models)    |     ✅    |    ✅   | ✅  | ✅ | ✅  |
 | [dbt-trino](/reference/resource-configs/trino-configs#incremental)                                  |     ✅    |    ✅   | ✅  |    |    |
 | [dbt-fabric](/reference/resource-configs/fabric-configs#incremental)                                |     ✅    |         | ✅  |    |    |
-| [dbt-athena](/reference/resource-configs/athena-configs#incremental-models)                         |     ✅    |    ✅   |     | ✅ |    |
+| [dbt-athena](/reference/resource-configs/athena-configs#incremental-models)                         |     ✅    |    ✅   |     | ✅ | ✅ |
 | [dbt-teradata](/reference/resource-configs/teradata-configs#valid_history-incremental-materialization-strategy)  | ✅    |  ✅   |   ✅   |    |         ✅    |
 
 ### 増分戦略の設定

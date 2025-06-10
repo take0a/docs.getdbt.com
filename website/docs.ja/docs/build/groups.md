@@ -95,8 +95,8 @@ select ...
 ```yml
 models:
   - name: finance_private_model
-    access: private
     config:
+      access: private # changed to config in v1.10
       group: finance
 
   # in a different group!
@@ -123,6 +123,6 @@ dbt.exceptions.DbtReferenceError: Parsing Error
 
 ## 関連ドキュメント
 
-* [モデルアクセス](/docs/collaborate/govern/model-access#groups)
+* [モデルアクセス](/docs/mesh/govern/model-access#groups)
 * [グループ設定](/reference/resource-configs/group)
 * [グループ選択](/reference/node-selection/methods#group)

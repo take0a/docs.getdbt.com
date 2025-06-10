@@ -1,5 +1,5 @@
 ---
-title: "dbt Cloud で「Partial parsing enabled: 1 files deleted, 0 files added, 2 files changed」というコンパイル エラーが発生します。"
+title: "dbt で「Partial parsing enabled: 1 files deleted, 0 files added, 2 files changed」というコンパイル エラーが発生します。"
 description: "partial_parse ファイルを削除する"
 sidebar_label: 'IDE の Partial_parse エラー'
 id: partial-parsing-error

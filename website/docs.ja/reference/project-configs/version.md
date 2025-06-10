@@ -17,7 +17,7 @@ dbt プロジェクトには 2 つの異なるタイプの `version` タグが�
 
 dbt バージョン 1.5 以降、`dbt_project.yml` 内の `version` は *オプションパラメータ* です。バージョンを指定する場合は、`1.0.0` などの [セマンティックバージョン](https://semver.org/) 形式にする必要があります。指定されていない場合のデフォルト値は `None` です。dbt バージョン 1.4 以前のバージョンをご利用の場合、このタグは必須ですが、現時点では dbt では意味のある意味で使用されていません。
 
-Core バージョンの詳細については、[dbt Core バージョンについて](/docs/dbt-versions/core) を参照してください。
+Core バージョンの詳細については、[<Constant name="core" /> バージョンについて](/docs/dbt-versions/core) を参照してください。
 
 <File name='dbt_project.yml'>
 

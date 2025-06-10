@@ -7,11 +7,11 @@ hoverSnippet: Learn how to clone incremental models for CI jobs.
 ---
 
 始める前に、いくつかの条件に注意する必要があります:
-- `dbt clone` は、dbt バージョン 1.6 以降でのみ使用できます。dbt Cloud で新しいバージョンを有効にする方法については、[アップグレード ガイド](/docs/dbt-versions/upgrade-dbt-version-in-cloud) を参照してください。
+- `dbt clone` は、dbt バージョン 1.6 以降でのみ使用できます。<Constant name="cloud" /> で新しいバージョンを有効にする方法については、[アップグレード ガイド](/docs/dbt-versions/upgrade-dbt-version-in-cloud) を参照してください。
 - この戦略は、ゼロ コピー クローン作成をサポートするウェアハウスでのみ機能します (それ以外の場合、`dbt clone` はポインター ビューを作成するだけです)。
 - チームによっては、増分モデルが増分モードとフル リフレッシュ モードの両方で実行されることをテストする必要がある場合があります。
 
-dbt Cloud で [Slim CI ジョブ](/docs/deploy/continuous-integration) を作成し、次のように構成されているとします。
+<Constant name="cloud" /> で [Slim CI ジョブ](/docs/deploy/continuous-integration) を作成し、次のように構成されているとします。
 
 - 本番環境に従います。
 - コマンド `dbt build --select state:modified+` を実行して、変更したすべてのモデルとその下流の依存関係を実行してテストします。
@@ -37,7 +37,7 @@ CI ジョブは変更されたモデルを PR 固有のスキーマに構築す�
 
 これらの問題は、CI ジョブの最初のステップとして `dbt clone` コマンドを使用して、関連する既存の増分モデルを PR 固有のスキーマにゼロ コピー クローンすることで軽減できます。この方法では、`dbt build --select state:modified+` コマンドを最初に実行するときに、増分モデルが PR 固有のスキーマに既に存在するため、`is_incremental` フラグは `true` になります。
 
-dbt Cloud CI チェックを実行するには、次の 2 つのコマンドが必要です:
+<Constant name="cloud" /> CI チェックを実行するには、次の 2 つのコマンドが必要です:
 1. 変更された、または変更された別のモデルの下流にある既存の増分モデルをすべて複製します:
   ```shell
   dbt clone --select state:modified+,config.materialized:incremental,state:old

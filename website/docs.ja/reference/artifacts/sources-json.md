@@ -7,7 +7,7 @@ sidebar_label: "Sources"
 
 **生成元:** [`source freshness`](/reference/commands/source)
 
-このファイルには、[フレッシュネスチェックが行われたソース](/docs/build/sources#checking-source-freshness)に関する情報が含まれています。現在、dbt Cloud はこのファイルを使用して、[ソースフレッシュネスの可視化](/docs/build/sources#source-data-freshness)を実現しています。
+このファイルには、[フレッシュネスチェックが行われたソース](/docs/build/sources#checking-source-freshness)に関する情報が含まれています。現在、<Constant name="cloud" /> はこのファイルを使用して、[ソースフレッシュネスの可視化](/docs/build/sources#source-data-freshness)を実現しています。
 
 ### 最上位キー
 

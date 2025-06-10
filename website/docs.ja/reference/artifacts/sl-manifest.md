@@ -11,7 +11,7 @@ pagination_next: null
 
 dbt は、_セマンティックマニフェスト_ (`semantic_manifest.json`) と呼ばれる [アーティファクト](/reference/artifacts/dbt-artifacts) ファイルを作成します。これは、MetricFlow が dbt セマンティックレイヤーのメトリッククエリを適切に構築および実行するために必要なものです。このアーティファクトには、dbt セマンティックレイヤーに関する包括的な情報が含まれています。これは、MetricFlow との統合ポイントとして機能する内部ファイルです。
 
-dbt Core によって生成されたセマンティックマニフェストを使用して、MetricFlow はデータフロープランをインスタンス化し、セマンティックレイヤーのクエリリクエストから SQL を生成します。これは、データモデルの構造と詳細を理解するのに役立つ貴重なリファレンスです。
+<Constant name="core" /> によって生成されたセマンティックマニフェストを使用して、MetricFlow はデータフロープランをインスタンス化し、<Constant name="semantic_layer" />のクエリリクエストから SQL を生成します。これは、データモデルの構造と詳細を理解するのに役立つ貴重なリファレンスです。
 
 [`manifest.json` ファイル](/reference/artifacts/manifest-json) と同様に、`semantic_manifest.json` ファイルも dbt プロジェクトの [ターゲットディレクトリ](/reference/global-configs/json-artifacts) に配置されます。このディレクトリには、dbt がプロジェクトの実行中に生成するさまざまなアーティファクト（コンパイル済みモデルやテストなど）が格納されます。
 
@@ -119,5 +119,5 @@ dbt Core によって生成されたセマンティックマニフェストを�
 
 ## 関連ドキュメント
 
-- [dbt セマンティックレイヤー API](/docs/dbt-cloud-apis/sl-api-overview)
+- [<Constant name="semantic_layer" /> API](/docs/dbt-cloud-apis/sl-api-overview)
 - [dbt アーティファクトについて](/reference/artifacts/dbt-artifacts)

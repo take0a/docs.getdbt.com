@@ -11,7 +11,7 @@ import ManifestVersions from '/snippets.ja/_manifest-versions.md';
 
 このファイルには、dbtプロジェクトのリソース（モデル、テスト、マクロなど）の完全な表現が含まれており、すべてのノード構成とリソースプロパティが含まれます。一部のモデルやテストのみを実行している場合でも、すべてのリソースが（無効化されていない限り）ほとんどのプロパティと共にマニフェストに表示されます。 （`compiled_sql` など、一部のノードプロパティは実行されたノードにのみ表示されます。）
 
-現在、dbt はこのファイルを使用して [ドキュメントサイト](/docs/collaborate/build-and-view-your-docs) に情報を入力し、[状態の比較](/reference/node-selection/syntax#about-node-selection) を実行します。コミュニティのメンバーは、このファイルを使用して、説明とテストを持つモデルの数を確認しています。
+現在、dbt はこのファイルを使用して [ドキュメントサイト](/docs/explore/build-and-view-your-docs) に情報を入力し、[状態の比較](/reference/node-selection/syntax#about-node-selection) を実行します。コミュニティのメンバーは、このファイルを使用して、説明とテストを持つモデルの数を確認しています。
 
 ### 最上位キー
 

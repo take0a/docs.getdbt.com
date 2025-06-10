@@ -68,7 +68,7 @@ dbt --debug --log-format json run
 - `--log-level` を設定すると、コンソールログとファイルログが設定されます。
 
   ```text
-  dbt --log-level debug run
+  dbt run --log-level debug
   ```
 
 - `LOG_LEVEL` を `none` に設定すると、コンソールまたはファイル ログへの情報の送信が無効になります。
@@ -80,7 +80,7 @@ dbt --debug --log-format json run
 - ファイル ログ レベルをコンソールとは異なる値に設定するには、`--log-level-file` フラグを使用します。
 
   ```text
-  dbt --log-level-file error run
+  dbt run --log-level-file error
   ```
 
 - ログ ファイルへの書き込みを無効にしてコンソール ログを保持するには、`LOG_LEVEL_FILE` 構成を none に設定します。
@@ -138,7 +138,7 @@ dbt --quiet run
 
 以下のいずれかのパラメータを使用することで、結果を [`jq`](https://jqlang.github.io/jq/manual/)、ファイル、または別のプロセスにパイプするなど、下流のプロセスと互換性のあるクリーンな出力を得ることができます。
 
-- `dbt --log-level warn list` (推奨。以前のデフォルトと同等)
+- `dbt list --log-level warn` (推奨。以前のデフォルトと同等)
 - `dbt --quiet list` (「印刷」されたメッセージとリスト出力を除き、`ERROR` レベル未満のすべてのログ出力を抑制)
 
 

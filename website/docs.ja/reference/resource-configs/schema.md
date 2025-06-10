@@ -51,7 +51,7 @@ seeds:
 
 <VersionBlock lastVersion="1.8">
 
-Available in dbt Core v1.9 and higher. Select v1.9 or newer from the version dropdown to view the configs. Try it now in the [dbt Cloud "Latest" release track](/docs/dbt-versions/cloud-release-tracks).
+Available in <Constant name="core" /> v1.9 and higher. Select v1.9 or newer from the version dropdown to view the configs. Try it now in the [<Constant name="cloud" /> "Latest" release track](/docs/dbt-versions/cloud-release-tracks).
 
 </VersionBlock>
 
@@ -134,7 +134,7 @@ tests:
 
 オプションで、[モデル](/docs/build/sql-models)、[シード](/docs/build/seeds)、[スナップショット](/docs/build/snapshots)、[保存済みクエリ](/docs/build/saved-queries)、または[テスト](/docs/build/data-tests)のカスタムスキーマを指定します。
 
-dbt Cloud v1.8 以前のバージョンをご利用の場合は、[`target_schema` 設定](/reference/resource-configs/target_schema) を使用してスナップショットのカスタムスキーマを指定します。
+<Constant name="cloud" /> v1.8 以前のバージョンをご利用の場合は、[`target_schema` 設定](/reference/resource-configs/target_schema) を使用してスナップショットのカスタムスキーマを指定します。
 
 dbt がデータベースにリレーション (<Term id="table" />/<Term id="view" />) を作成する場合、`{{ database }}.{{ schema }}.{{ identifier }}` という形式で作成されます。例: `analytics.finance.payments`
 

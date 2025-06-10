@@ -7,7 +7,7 @@ sidebar_label: "Other artifacts"
 
 **作成元:** [`docs generate`](/reference/commands/cmd-docs)
 
-このファイルは、[自動生成された dbt ドキュメント ウェブサイト](/docs/collaborate/build-and-view-your-docs) の骨組みです。サイトの内容は、[マニフェスト](/reference/artifacts/manifest-json) と [カタログ](catalog-json) によって生成されます。
+このファイルは、[自動生成された dbt ドキュメント ウェブサイト](/docs/explore/build-and-view-your-docs) の骨組みです。サイトの内容は、[マニフェスト](/reference/artifacts/manifest-json) と [カタログ](catalog-json) によって生成されます。
 
 注: `index.json` のソースコードは [dbt-docs リポジトリ](https://github.com/dbt-labs/dbt-docs) から取得されています。ドキュメント サイトに関するバグ報告、提案、または貢献を行う場合は、リポジトリにアクセスしてください。
 
@@ -27,7 +27,7 @@ dbtリソースDAGのネットワーク表現を格納します。
 
 **生成元:** [マニフェストコマンド](/reference/artifacts/manifest-json)
 
-このファイルは、dbt Core のグラフアルゴリズムにおけるパフォーマンスの問題を調査するのに役立ちます。
+このファイルは、<Constant name="core" /> のグラフアルゴリズムにおけるパフォーマンスの問題を調査するのに役立ちます。
 
 [`manifest.json`](/reference/artifacts/manifest-json) や [`graph.gpickle`](#graph.gpickle) よりも匿名化され、コンパクトになっています。
 

@@ -37,7 +37,7 @@ MetricFlow は、以下の種類のメトリックとディメンションにつ
 - [緩やかに変化するディメンション](/docs/build/dimensions#scd-type-ii)
 - [メトリック](/docs/build/metrics-overview) で、`join_to_timespine` 構成が true に設定されている
 
-時間スパイン結合を使用するメトリックおよびディメンション タイプに対して生成された SQL を確認するには、それぞれのドキュメントを参照するか、セマンティック レイヤーをクエリするときに `compile=true` フラグを追加して、コンパイルされた SQL を返します。
+時間スパイン結合を使用するメトリックおよびディメンション タイプに対して生成された SQL を確認するには、それぞれのドキュメントを参照するか、<Constant name="semantic_layer" />をクエリするときに `compile=true` フラグを追加して、コンパイルされた SQL を返します。
 
 ## YAMLでタイムスパインを設定する
 
@@ -54,15 +54,15 @@ MetricFlow は、以下の種類のメトリックとディメンションにつ
 
 - プロジェクトにタイムスパインSQLテーブルが定義されていることを確認してください。
 - 説明やテストを追加するのと同じように、その[モデルのプロパティ](/reference/model-properties)の`time_spine`キーの下に設定を追加します。
-- セマンティックレイヤーが認識するタイムスパインモデルのみを設定する必要があります。
+- <Constant name="semantic_layer" />が認識するタイムスパインモデルのみを設定する必要があります。
 - 少なくとも、日単位の粒度のタイムスパインテーブルを定義してください。
 - オプションで、時間単位など、異なる粒度のタイムスパインテーブルを追加定義することもできます。作成するテーブルを決定する際は、[粒度に関する考慮事項](#granularity-considerations)を確認してください。
 - MetricFlowが基になる列を必要な粒度に変換できるように、時間ディメンションの粒度を指定する場合は、[時間粒度に関するドキュメント](/docs/build/dimensions?dimension=time_gran)を参照してください。
 
 :::tip
 - 以前に `metricflow_time_spine.sql` モデルを使用していた場合は、YAML で `time_spine` プロパティを設定した後、このモデルを削除できます。
-セマンティックレイヤーは新しい設定を自動的に認識します。追加の `.yml` ファイルは必要ありません。
-- セマンティックレイヤーの `model` 設定を更新することで、プロジェクトに既に存在する日付ディメンションまたはタイムスパインテーブルを使用するように MetricFlow を構成することもできます。
+<Constant name="semantic_layer" />は新しい設定を自動的に認識します。追加の `.yml` ファイルは必要ありません。
+- <Constant name="semantic_layer" />の `model` 設定を更新することで、プロジェクトに既に存在する日付ディメンションまたはタイムスパインテーブルを使用するように MetricFlow を構成することもできます。
 - 日付ディメンションテーブルがない場合は、[次のセクション](#creating-a-time-spine-table) のコードスニペットを使用してタイムスパインモデルを構築することで作成できます。
 :::
 
@@ -134,7 +134,7 @@ models:
 - `columns` キーの下に定義された列（この場合はそれぞれ `date_hour` と `date_day`）を参照する必要があります。
 - `granularity` キー（この場合はそれぞれ `hour` と `day`）を使用して、列レベルの粒度を設定します。
 - MetricFlow は、タイムスパインテーブルを別のソーステーブルに結合する際に、`standard_granularity_column` を結合キーとして使用します。
-- [`custom_granularities` フィールド](#custom-calendar) (dbt Cloud 最新版および dbt Core v1.9 以降で利用可能) を使用すると、組織で使用できる `fiscal_year` や `retail_month` などの非標準期間を指定できます。
+- [`custom_granularities` フィールド](#custom-calendar) (<Constant name="cloud" /> 最新版および dbt Core v1.9 以降で利用可能) を使用すると、組織で使用できる `fiscal_year` や `retail_month` などの非標準期間を指定できます。
 
 サンプルプロジェクトについては、[Jaffle ショップ](https://github.com/dbt-labs/jaffle-sl-template/blob/main/models/marts/_models.yml) の例を参照してください。
 
@@ -440,7 +440,8 @@ You only need to include the `date_day` column in the table. MetricFlow can hand
 
 <VersionBlock lastVersion="1.8">
 
-The ability to configure custom calendars, such as a fiscal calendar, is available now in [the "Latest" release track in dbt Cloud](/docs/dbt-versions/cloud-release-tracks), and it will be available in [dbt Core v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9). 
+The ability to configure custom calendars, such as a fiscal calendar, is available now in [the "Latest" release track in <Constant name="cloud" />](/docs/dbt-versions/cloud-release-tracks), and it will be available in [<Constant name="core" /> v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9). 
+
 
 </VersionBlock>
 
@@ -472,7 +473,7 @@ MetricFlow でカスタムカレンダーを使用する場合は、以下の点
 
 ### カスタム粒度の追加
 
-カスタム粒度を追加するために、セマンティックレイヤーはカスタムカレンダー設定をサポートしています。これにより、ユーザーは　`fiscal_year` や `retail_month` といった標準以外の期間を使用してデータをクエリできます。
+カスタム粒度を追加するために、<Constant name="semantic_layer" />はカスタムカレンダー設定をサポートしています。これにより、ユーザーは　`fiscal_year` や `retail_month` といった標準以外の期間を使用してデータをクエリできます。
 これらのカスタム粒度（すべて小文字）は、モデルのYAML構成を次のように変更することで定義できます。
 
 <File name="models/_models.yml">

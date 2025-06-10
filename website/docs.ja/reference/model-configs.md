@@ -31,88 +31,101 @@ import ConfigGeneral from '/snippets.ja/_config-description-general.md';
 
 <File name='dbt_project.yml'>
 
-<VersionBlock lastVersion="1.8">
+<VersionBlock lastVersion="1.9">
 
 ```yaml
 models:
   [<resource-path>](/reference/resource-configs/resource-path):
     [+](/reference/resource-configs/plus-prefix)[materialized](/reference/resource-configs/materialized): <materialization_name>
     [+](/reference/resource-configs/plus-prefix)[sql_header](/reference/resource-configs/sql_header): <string>
-    [+](/reference/resource-configs/plus-prefix)[on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail # Only for materialized views on supported adapters
+    [+](/reference/resource-configs/plus-prefix)[on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail #only for materialized views on supported adapters
     [+](/reference/resource-configs/plus-prefix)[unique_key](/reference/resource-configs/unique_key): <column_name_or_expression>
+
 ```
 
 </VersionBlock>
 
-<VersionBlock firstVersion="1.9">
+<VersionBlock firstVersion="1.10">
 
 ```yaml
 models:
   [<resource-path>](/reference/resource-configs/resource-path):
     [+](/reference/resource-configs/plus-prefix)[materialized](/reference/resource-configs/materialized): <materialization_name>
     [+](/reference/resource-configs/plus-prefix)[sql_header](/reference/resource-configs/sql_header): <string>
-    [+](/reference/resource-configs/plus-prefix)[on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail # Only for materialized views on supported adapters
+    [+](/reference/resource-configs/plus-prefix)[on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail #only for materialized views on supported adapters
     [+](/reference/resource-configs/plus-prefix)[unique_key](/reference/resource-configs/unique_key): <column_name_or_expression>
-    [+](/reference/resource-configs/plus-prefix)[batch_size](/reference/resource-configs/batch-size): day | hour | month | year
-    [+](/reference/resource-configs/plus-prefix)[begin](/reference/resource-configs/begin): "<ISO formatted date or datetime (like, "2024-01-15T12:00:00Z")>"
-    [+](/reference/resource-configs/plus-prefix)[lookback](/reference/resource-configs/lookback): <integer>
-    [+](/reference/resource-configs/plus-prefix)[concurrent_batches](/reference/resource-properties/concurrent_batches): true | false
-```
+    [+](/reference/resource-configs/plus-prefix)[build_after](/reference/resource-configs/build-after): <dict>
+
+  ```
 
 </VersionBlock>
 </File>
 
 </TabItem>
-
 
 <TabItem value="property-yaml">
 
+<VersionBlock lastVersion="1.9">
+
 <File name='models/properties.yml'>
 
-<VersionBlock lastVersion="1.8">
+```yaml
+version: 2
+
+models:
+  - name: [<model-name>]
+    config:
+      [materialized](/reference/resource-configs/materialized): <materialization_name>
+      [sql_header](/reference/resource-configs/sql_header): <string>
+      [on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail #only for materialized views on supported adapters
+      [unique_key](/reference/resource-configs/unique_key): <column_name_or_expression>
+
+```
+</File>
+</VersionBlock>
+
+<VersionBlock firstVersion="1.10">
+
+<File name='models/properties.yml'>
 
 ```yaml
 version: 2
 
 models:
-  - name: [<model-name>] #  Must match the filename of a model -- including case sensitivity.
+  - name: [<model-name>]
     config:
       [materialized](/reference/resource-configs/materialized): <materialization_name>
       [sql_header](/reference/resource-configs/sql_header): <string>
-      [on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail # Only for materialized views on supported adapters
+      [on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail #only for materialized views on supported adapters
       [unique_key](/reference/resource-configs/unique_key): <column_name_or_expression>
-
 ```
-</VersionBlock>
-
-<VersionBlock firstVersion="1.9">
-
-```yaml
-version: 2
-
-models:
-  - name: [<model-name>] #  Must match the filename of a model -- including case sensitivity.
-    config:
-      [materialized](/reference/resource-configs/materialized): <materialization_name>
-      [sql_header](/reference/resource-configs/sql_header): <string>
-      [on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail # Only for materialized views on supported adapters
-      [unique_key](/reference/resource-configs/unique_key): <column_name_or_expression>
-      [batch_size](/reference/resource-configs/batch-size): day | hour | month | year
-      [begin](/reference/resource-configs/begin): "<ISO formatted date or datetime (like, "2024-01-15T12:00:00Z")>"
-      [lookback](/reference/resource-configs/lookback): <integer>
-      [concurrent_batches](/reference/resource-properties/concurrent_batches): true | false
-
-```
-</VersionBlock>
 </File>
 
+Note, most model configurations are defined under `config`, while `build_after` is set under `freshness`.
+
+<File name='models/properties.yml'>
+
+```yaml
+version: 2
+
+models:
+  - name: [<model-name>]
+    config:
+      freshness:
+        # build_after is nested under freshness
+        [build_after](/reference/resource-configs/build-after): <dict>
+```
+
+</File>
+</VersionBlock>
 </TabItem>
+
 
 <TabItem value="config">
 
 <File name='models/<model_name>.sql'>
 
-<VersionBlock lastVersion="1.8">
+<VersionBlock lastVersion="1.9">
 
 ```sql
 
@@ -124,23 +137,20 @@ models:
 ) }}
 
 ```
+
 </VersionBlock>
 
-<VersionBlock firstVersion="1.9">
+<VersionBlock firstVersion="1.10">
 
 ```sql
 
 {{ config(
     [materialized](/reference/resource-configs/materialized)="<materialization_name>",
     [sql_header](/reference/resource-configs/sql_header)="<string>"
-    [on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail # Only for materialized views for supported adapters
+    [on_configuration_change](/reference/resource-configs/on_configuration_change): apply | continue | fail #only for materialized views for supported adapters
     [unique_key](/reference/resource-configs/unique_key)='column_name_or_expression'
-    [batch_size](/reference/resource-configs/batch-size)='day' | 'hour' | 'month' | 'year'
-    [begin](/reference/resource-configs/begin)="<ISO formatted date or datetime (like, "2024-01-15T12:00:00Z")>"
-    [lookback](/reference/resource-configs/lookback)= <integer>
-    [concurrent_batches](/reference/resource-properties/concurrent_batches)= true | false
+    [build_after](/reference/resource-configs/build-after)="<dict>"
 ) }}
-
 ```
 
 </VersionBlock>
@@ -227,7 +237,7 @@ models:
 version: 2
 
 models:
-  - name: [<model-name>] # Must match the filename of a model -- including case sensitivity.
+  - name: [<model-name>]
     config:
       [enabled](/reference/resource-configs/enabled): true | false
       [tags](/reference/resource-configs/tags): <string> | [<string>]
@@ -250,7 +260,7 @@ models:
 version: 2
 
 models:
-  - name: [<model-name>] #  Must match the filename of a model -- including case sensitivity.
+  - name: [<model-name>]
     config:
       [enabled](/reference/resource-configs/enabled): true | false
       [tags](/reference/resource-configs/tags): <string> | [<string>]
@@ -326,6 +336,7 @@ models:
 
 </Tabs>
 
+
 ### ウェアハウス固有の構成
 
 * [BigQuery 構成](/reference/resource-configs/bigquery-configs)
@@ -341,7 +352,7 @@ models:
 1. モデル内で `config()` Jinja マクロを使用する。
 2. `.yml` ファイルで `config` [リソースプロパティ](/reference/model-properties) を使用する。
 3. `dbt_project.yml` プロジェクト ファイルの `models:` キーの下から。この場合、最も深くネストされたモデルが最も優先されます。
-- モデル名の構成は、大文字と小文字の区別を含め、モデルの _filename_ と一致している必要があることに注意してください。大文字と小文字が一致していないと、dbt が構成を正しく適用できず、[dbt Explorer](/docs/collaborate/explore-projects) のメタデータに影響する可能性があります。
+- モデル名の構成は、大文字と小文字の区別を含め、モデルの _filename_ と一致している必要があることに注意してください。大文字と小文字が一致していないと、dbt が構成を正しく適用できず、[<Constant name="explorer" />](/docs/explore/explore-projects) のメタデータに影響する可能性があります。
 
 最も具体的な構成が常に優先されます。例えば、プロジェクトファイルでは、`marketing` サブディレクトリに適用された構成は、`jaffle_shop` プロジェクト全体に適用された構成よりも優先されます。モデルまたはモデルのディレクトリに構成を適用するには、[リソースパス](/reference/resource-configs/resource-path) をネストされた辞書キーとして定義します。
 
@@ -416,3 +427,28 @@ models:
 ```
 
 </File>
+
+<VersionBlock firstVersion="1.10">
+
+### Configuring source freshness
+
+The model `freshness` config rebuilds models only when new source or upstream data is available. This is useful for models that depend on other models but only need to be updated periodically. For more information, see [freshness](/reference/resource-configs/freshness).
+
+See the following example of a `my_model.yml` file using the `freshness` config:
+
+<File name="models/my_model.yml">
+  
+```yml
+models:
+  - name: stg_orders
+    config:
+      freshness:
+        build_after:  # build this model no more often than every X amount of time, as long as as it has new data
+          count: positive_integer
+          period: minute | hour | day
+          updates_on: any | all # optional config
+```
+  
+</File>
+
+</VersionBlock>

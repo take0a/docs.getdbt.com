@@ -25,7 +25,7 @@ models:
 
 この値は、文字列または数値（整数または浮動小数点数）です。このモデルの `versions` リストで指定されている [バージョン識別子](/reference/resource-properties/versions#v) のいずれかである必要があります。
 
-モデルの最新バージョンを実行するには、[`--select` フラグ](/reference/node-selection/syntax) を使用します。詳細と構文については、[モデル バージョン](/docs/collaborate/govern/model-versions#run-a-model-with-multiple-versions) を参照してください。
+モデルの最新バージョンを実行するには、[`--select` フラグ](/reference/node-selection/syntax) を使用します。詳細と構文については、[モデル バージョン](/docs/mesh/govern/model-versions#run-a-model-with-multiple-versions) を参照してください。
 
 ## デフォルト
 

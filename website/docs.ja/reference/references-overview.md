@@ -2,13 +2,13 @@
 title: "リファレンスについて"
 id: "references-overview"
 sidebar_label: "リファレンスについて"
-description: "専用のアダプタプラグインを使用して、dbt Cloud または dbt Core の任意のデータプラットフォームに dbt を接続します。"
+description: "専用のアダプタプラグインを使用して、dbt platform または dbt Core の任意のデータプラットフォームに dbt を接続します。"
 hide_table_of_contents: true
 pagination_next: null
 pagination_prev: null
 ---
 
-リファレンスセクションには、dbt Cloud や dbt Core など、dbt を使った開発に関する参考資料が掲載されています。
+リファレンスセクションには、<Constant name="cloud" /> や <Constant name="core" /> など、dbt を使った開発に関する参考資料が掲載されています。
 
 dbt プロジェクトまたはアダプタに構成を追加する方法、プロパティを使用して機能を追加する方法、dbt コマンドを参照する方法、強力な Jinja 関数を使用して dbt プロジェクトを効率化する方法、dbt アーティファクトの使用方法について学習します。  <br />
 

@@ -8,7 +8,7 @@ datatype: string
 
 dbt Core v1.9以降では、この機能は利用できなくなりました。`generate_database_name`マクロの設定を維持しながらカスタムデータベースを定義するには、代わりに[database](/reference/resource-configs/database)設定を使用してください。
 
-[dbt Cloud "最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks)で今すぐお試しください。
+[<Constant name="cloud" />  "最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks)で今すぐお試しください。
 
 :::
 

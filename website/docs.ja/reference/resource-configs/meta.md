@@ -13,6 +13,7 @@ hide_table_of_contents: true
     { label: 'Seeds', value: 'seeds', },
     { label: 'Snapshots', value: 'snapshots', },
     { label: 'Tests', value: 'tests', },
+    { label: 'Unit tests', value: 'unit tests', },
     { label: 'Analyses', value: 'analyses', },
     { label: 'Macros', value: 'macros', },
     { label: 'Exposures', value: 'exposures', },
@@ -46,17 +47,18 @@ models:
 
     columns:
       - name: column_name
-        meta: {<dictionary>}
+        config:
+          meta: {<dictionary>} # changed to config in v1.10
 
 ```
 
 </File>
 
-`meta` 設定は、以下の場所でも定義できます。
-- `dbt_project.yml` の `models` 設定ブロック内
-- モデルの SQL ファイル内の `config()` Jinja マクロ内
+The `meta` config can also be defined:
+- under the `models` config block in `dbt_project.yml`
+- in a `config()` Jinja macro within a model's SQL file
 
-詳細については、[設定とプロパティ](/reference/configs-and-properties) を参照してください。
+See [configs and properties](/reference/configs-and-properties) for details.
 
 </TabItem>
 
@@ -88,7 +90,8 @@ version: 2
 
         columns:
           - name: column_name
-            meta: {<dictionary>}
+            config:
+              meta: {<dictionary>} # changed to config in v1.10
 
 ```
 
@@ -119,13 +122,14 @@ seeds:
 
     columns:
       - name: column_name
-        meta: {<dictionary>}
+        config:
+          meta: {<dictionary>} # changed to config in v1.10
 
 ```
 
 </File>
 
-`meta` 設定は、`dbt_project.yml` の `seeds` 設定ブロック内でも定義できます。詳細は [設定とプロパティ](/reference/configs-and-properties) を参照してください。
+The `meta` config can also be defined under the `seeds` config block in `dbt_project.yml`. See [configs and properties](/reference/configs-and-properties) for details.
 
 </TabItem>
 
@@ -152,29 +156,57 @@ snapshots:
 
     columns:
       - name: column_name
-        meta: {<dictionary>}
+        config:
+          meta: {<dictionary>} # changed to config in v1.10
 
 ```
 
 </File>
 
-`meta` 設定は、以下の場所でも定義できます。
-- `dbt_project.yml` の `snapshots` 設定ブロック内
-- スナップショットの SQL ブロック内の `config()` Jinja マクロ内
+The `meta` config can also be defined:
+- under the `snapshots` config block in `dbt_project.yml`
+- in a `config()` Jinja macro within a snapshot's SQL block
 
-詳細については、[設定とプロパティ](/reference/configs-and-properties) を参照してください。
+See [configs and properties](/reference/configs-and-properties) for details.
 
 </TabItem>
 
 <TabItem value="tests">
 
-[汎用テスト](/docs/build/data-tests#generic-data-tests)にはYAMLの`meta`設定を追加できません。ただし、[特異なテスト](/docs/build/data-tests#singular-data-tests)には、テストファイルの先頭で`config()`を使用することで、`meta`プロパティを追加できます。
+You can't add YAML `meta` configs for [generic tests](/docs/build/data-tests#generic-data-tests). However, you can add `meta` properties to [singular tests](/docs/build/data-tests#singular-data-tests) using `config()` at the top of the test file. 
+
+</TabItem>
+
+<TabItem value="unit tests">
+
+<VersionCallout version="1.8" />
+
+<File name='dbt_project.yml'>
+
+```yml
+[unit_tests](/reference/resource-properties/unit-tests):
+  [<resource-path>](/reference/resource-configs/resource-path):
+    +meta: {<dictionary>}
+```
+</File>
+
+<File name='models/<filename>.yml'>
+
+```yml
+unit_tests:
+  - name: <test-name>
+    config:
+      [meta](/reference/snapshot-properties): {<dictionary>}
+
+```
+
+</File>
 
 </TabItem>
 
 <TabItem value="analyses">
 
-`meta` 設定は現在、analyses ではサポートされていません。
+The `meta` config is not currently supported for analyses.
 
 </TabItem>
 
@@ -196,7 +228,8 @@ version: 2
 
 [macros](/reference/macro-properties):
   - name: macro_name
-    meta: {<dictionary>}
+    config:
+      meta: {<dictionary>} # changed to config in v1.10
 
     arguments:
       - name: argument_name
@@ -225,7 +258,8 @@ version: 2
 
 exposures:
   - name: exposure_name
-    meta: {<dictionary>}
+    config:
+      meta: {<dictionary>} # changed to config in v1.10
 
 ```
 
@@ -235,7 +269,7 @@ exposures:
 
 <TabItem value="semantic models">
 
-[セマンティック モデル](/docs/build/semantic-models) YAML ファイル内、または `dbt_project.yml` ファイルの `semantic-models` 構成ブロック内で `meta` を構成します。
+Configure `meta` in the your [semantic models](/docs/build/semantic-models) YAML file or under the `semantic-models` config block in the `dbt_project.yml` file. 
 
 <VersionBlock lastVersion="1.9">
 
@@ -286,7 +320,7 @@ semantic_models:
 
 </File>
 
-[ディメンション](/docs/build/dimensions)、[エンティティ](/docs/build/entities)、[メジャー](/docs/build/measures) にも独自の `meta` 構成を設定できます。
+[Dimensions](/docs/build/dimensions), [entities](/docs/build/entities), and [measures](/docs/build/measures) can also have their own `meta` configurations.
 
 <File name='models/semantic_models.yml'>
 
@@ -317,39 +351,11 @@ semantic_models:
 
 </VersionBlock>
 
-`meta` 設定は、`dbt_project.yml` の `semantic-models` 設定ブロックでも定義できます。詳細は [設定とプロパティ](/reference/configs-and-properties) を参照してください。
+The `meta` config can also be defined under the `semantic-models` config block in `dbt_project.yml`. See [configs and properties](/reference/configs-and-properties) for details.
 
 </TabItem>
 
 <TabItem value="metrics">
-
-<VersionBlock lastVersion="1.7">
-
-<File name='dbt_project.yml'>
-
-```yml
-metrics:
-  [<resource-path>](/reference/resource-configs/resource-path):
-    +meta: {<dictionary>}
-```
-</File>
-
-<File name='models/metrics.yml'>
-
-```yml
-metrics:
-  - name: number_of_people
-    label: "Number of people"
-    description: Total count of people
-    type: simple
-    type_params:
-      measure: people
-    meta:
-      my_meta_direct: 'direct'
-```
-
-</File>
-</VersionBlock>
 
 <VersionBlock firstVersion="1.8"> 
 
@@ -406,18 +412,15 @@ saved_queries:
 </TabItem>
 </Tabs>
 
-## 定義
+## Definition
+The `meta` field can be used to set metadata for a resource and accepts any key-value pairs. This metadata is compiled into the `manifest.json` file generated by dbt, and is viewable in the auto-generated documentation.
 
-`meta` フィールドはリソースのメタデータを設定するために使用でき、任意のキーと値のペアを受け入れます。このメタデータは、dbt によって生成される `manifest.json` ファイルにコンパイルされ、自動生成されるドキュメントで確認できます。
-
-設定するリソースによっては、`meta` が `config` プロパティ内、または最上位キーとして使用できる場合があります。(後方互換性のため、`meta` は多くの場合 (常にではありませんが) 最上位キーとしてサポートされますが、設定の継承機能は利用できません。)
+Depending on the resource you're configuring, `meta` may be available within the `config` property, and/or as a top-level key. (For backwards compatibility, `meta` is often (but not always) supported as a top-level key, though without the capabilities of config inheritance.)
 
 
-## 例
-
-### モデルオーナーを指定します。
-
-さらに、「model_maturity:」キーを使用してモデルの成熟度を示します。
+## Examples
+### Designate a model owner
+Additionally, indicate the maturity of a model using a `model_maturity:` key.
 
 <File name='models/schema.yml'>
 
@@ -426,39 +429,41 @@ version: 2
 
 models:
   - name: users
-    meta:
-      owner: "@alice"
-      model_maturity: in dev
+    config:
+      meta:
+        owner: "@alice"
+        model_maturity: in dev
 
 ```
 
 </File>
 
 
-### ソース列にPIIが含まれるように指定する
+### Designate a source column as containing PII
 
 <File name='models/schema.yml'>
 
 ```yml
 version: 2
 
-[sources](/reference/source-properties):
+sources:
   - name: salesforce
-
     tables:
       - name: account
-        meta:
-          contains_pii: true
+        config:
+          meta:
+            contains_pii: true
         columns:
           - name: email
-            meta:
-              contains_pii: true
+            config:
+              meta: # changed to config in v1.10
+                contains_pii: true
 
 ```
 
 </File>
 
-### すべてのシードに対して1つのメタ属性を設定する
+### Configure one meta attribute for all seeds
 
 <File name='dbt_project.yml'>
 
@@ -470,7 +475,7 @@ seeds:
 
 </File>
 
-### 1つのモデルの1つのメタ属性をオーバーライドする
+### Override one meta attribute for a single model
 
 <File name='models/my_model.sql'>
 
@@ -484,7 +489,7 @@ select 1 as id
 
 </File><br />
 
-### dbt_project.yml に owner と favorite_color を設定プロパティとして割り当てます。
+### Assign owner and favorite_color in the dbt_project.yml as a config property
 
 <File name='dbt_project.yml'>
 
@@ -498,9 +503,10 @@ models:
 
 </File>
 
-### セマンティックモデルにメタ値を割り当てる
+### Assign meta to semantic model
 
-次の例は、`semantic_model.yml` ファイルと `dbt_project.yml` ファイルで [セマンティックモデル](/docs/build/semantic-models) に `meta` 値を割り当てる方法を示しています。
+
+The following example shows how to assign a `meta` value to a [semantic model](/docs/build/semantic-models) in the `semantic_model.yml` file and  `dbt_project.yml` file:
 
 <Tabs>
 <TabItem value="semantic_model" label="Semantic model">
@@ -531,7 +537,7 @@ semantic-models:
 </TabItem>
 </Tabs>
 
-### ディメンション、メジャー、エンティティにメタを割り当てる
+### Assign meta to dimensions, measures, entities
 
 <VersionBlock lastVersion="1.8">
 
@@ -544,7 +550,7 @@ Available in dbt version 1.9 and later.
 <Tabs>
 <TabItem value="semantic_model" label="Semantic model">
 
-次の例は、セマンティック モデル内の [ディメンション](/docs/build/dimensions)、[エンティティ](/docs/build/entities)、および [メジャー](/docs/build/measures) に `meta` 値を割り当てる方法を示しています:
+The following example shows how to assign a `meta` value to a [dimension](/docs/build/dimensions), [entity](/docs/build/entities), and [measure](/docs/build/measures) in a semantic model:
 
 <File name='semantic_model.yml'>
 
@@ -580,7 +586,7 @@ semantic_models:
 
 <TabItem value="project.yml" label="dbt_project.yml">
 
-この2番目の例は、`dbt_project.yml`ファイル内のディメンションに`data_owner`と追加のメタデータ値を`+meta`構文を使用して割り当てる方法を示しています。同様の構文は、エンティティとメジャーにも使用できます。
+This second example shows how to assign a `data_owner` and additional metadata value to a dimension in the `dbt_project.yml` file using the `+meta` syntax. The similar syntax can be used for entities and measures.
 
 <File name='dbt_project.yml'>
 

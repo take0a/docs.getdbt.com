@@ -5,7 +5,7 @@ sidebar_label: 'CIジョブをトリガーできません'
 id: gitlab-webhook
 ---
 
-dbt Cloud を GitLab リポジトリに接続すると、GitLab はバックグラウンドで自動的に Webhook を登録します。登録された Webhook はリポジトリ設定で確認できます。この Webhook は、リポジトリへのプッシュ時に [CI ジョブ](/docs/deploy/ci-jobs) をトリガーするためにも使用されます。
+<Constant name="cloud" /> を GitLab リポジトリに接続すると、GitLab はバックグラウンドで自動的に Webhook を登録します。登録された Webhook はリポジトリ設定で確認できます。この Webhook は、リポジトリへのプッシュ時に [CI ジョブ](/docs/deploy/ci-jobs) をトリガーするためにも使用されます。
 
 CI ジョブをトリガーできない場合は、通常、Webhook の登録が欠落しているか、正しくないことを示しています。
 

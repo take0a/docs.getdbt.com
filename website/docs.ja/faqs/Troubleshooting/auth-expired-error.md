@@ -4,7 +4,7 @@ description: "`authentication has expired` というエラーが表示された�
 sidebar_label: 'IDEで `authentication has expired` というエラーが表示される'
 ---
 
-dbt Cloud IDE でクエリを実行しようとしたときに `authentication has expired` というエラーが表示される場合は、Snowflake と dbt Cloud 間の [OAuth](/docs/cloud/manage-access/set-up-snowflake-oauth) 接続の有効期限が切れていることを意味します。
+<Constant name="cloud_ide" /> でクエリを実行しようとしたときに `authentication has expired` というエラーが表示される場合は、Snowflake と <Constant name="cloud" /> 間の [OAuth](/docs/cloud/manage-access/set-up-snowflake-oauth) 接続の有効期限が切れていることを意味します。
 
 この問題を解決するには、2 つのツールを再接続する必要があります。
 

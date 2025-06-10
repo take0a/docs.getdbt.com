@@ -13,7 +13,7 @@ id: "clone"
 `clone` コマンドは、次のような場合に役立ちます。
 - Blue/Green 継続的デプロイメント（ゼロコピー クローニング テーブルをサポートするデータ ウェアハウスの場合）
 - 現在の本番環境状態を開発スキーマにクローニングする
-- dbt Cloud CI ジョブで増分モデルを処理する（ゼロコピー クローニング テーブルをサポートするデータ ウェアハウスの場合）
+- <Constant name="cloud" /> CI ジョブで増分モデルを処理する（ゼロコピー クローニング テーブルをサポートするデータ ウェアハウスの場合）
 - BI ツールで下流の依存関係におけるコード変更をテストする
 
 
@@ -37,19 +37,19 @@ defer とは異なり、`dbt clone` ではある程度の計算処理とデー�
 
 例えば、`dbt clone` は実際のデータウェアハウスオブジェクトを作成することで、dbt 外部の下流依存関係（BI ツールなど）でコード変更をテストできます。
 
-別の例として、ゼロコピークローンをサポートするウェアハウスでコストのかかる `full-refresh` ビルドを回避するために、dbt Cloud CI ジョブの最初のステップとして、変更した増分モデルを `clone` することができます。
+別の例として、ゼロコピークローンをサポートするウェアハウスでコストのかかる `full-refresh` ビルドを回避するために、<Constant name="cloud" /> CI ジョブの最初のステップとして、変更した増分モデルを `clone` することができます。
 
-## dbt Cloud でのクローン作成
+## dbt でのクローン作成
 
-dbt Cloud では、`dbt clone` コマンドを使用して、状態間でノードをクローンできます。このコマンドは [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) と [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) で利用でき、[`--defer`](/reference/node-selection/defer) 機能を使用します。dbt Cloud での defer の詳細については、[dbt Cloud での defer の使用](/docs/cloud/about-cloud-develop-defer) をご覧ください。
+<Constant name="cloud" /> では、`dbt clone` コマンドを使用して、状態間でノードをクローンできます。このコマンドは [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) と [<Constant name="cloud_cli" />](/docs/cloud/cloud-cli-installation) で利用でき、[`--defer`](/reference/node-selection/defer) 機能を使用します。<Constant name="cloud" /> での defer の詳細については、[<Constant name="cloud" /> での defer の使用](/docs/cloud/about-cloud-develop-defer) をご覧ください。
 
-- **dbt Cloud CLI の使用** &mdash; dbt Cloud CLI の `dbt clone` コマンドには、`--defer` フラグが自動的に含まれます。つまり、追加の設定なしで `dbt clone` コマンドを使用できます。
+- **<Constant name="cloud_cli" /> の使用** &mdash; <Constant name="cloud_cli" /> の `dbt clone` コマンドには、`--defer` フラグが自動的に含まれます。つまり、追加の設定なしで `dbt clone` コマンドを使用できます。
 
-- **dbt Cloud IDE の使用** &mdash; dbt Cloud IDE で `dbt clone` コマンドを使用するには、`dbt clone` コマンドを実行する前に以下の手順を実行してください。
+- **<Constant name="cloud_ide" /> の使用** &mdash; <Constant name="cloud_ide" /> で `dbt clone` コマンドを使用するには、`dbt clone` コマンドを実行する前に以下の手順を実行してください。
 
   - **本番環境** をセットアップし、ジョブを正常に実行します。
   - コマンドバーの右下にあるスイッチを切り替えて、**本番環境への延期** を有効にします。
-  <Lightbox src="/img/docs/dbt-cloud/defer-toggle.jpg" width="80%" title="dbt Cloud IDE で延期を有効にするには、コマンドバーの右下にある [本番環境への延期] トグルを選択します。"/>
+  <Lightbox src="/img/docs/dbt-cloud/defer-toggle.jpg" width="80%" title="dbt Studio IDE で延期を有効にするには、コマンドバーの右下にある [本番環境への延期] トグルを選択します。"/>
   - コマンドバーから `dbt clone` コマンドを実行します。
 
 `dbt clone` と defer のどちらを使用するかについてのベストプラクティスの詳細については、[こちらの開発者ブログ投稿](https://docs.getdbt.com/blog/to-defer-or-to-clone) をご覧ください。

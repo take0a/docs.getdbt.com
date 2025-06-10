@@ -59,7 +59,7 @@ on-run-start:
 
 ## 利用可能なフラグ
 
-| Flag name | Type | Default | Supported in project? | Environment variable | Command line option | Supported in Cloud CLI? |
+| Flag name | Type | Default | Supported in project? | Environment variable | Command line option | Supported in <Constant name="cloud_cli" />? |
 |-----------|------|---------|-----------------------|----------------------|---------------------|-------------------------|
 | [cache_selected_only](/reference/global-configs/cache) | boolean | False | ✅ | `DBT_CACHE_SELECTED_ONLY` | `--cache-selected-only`, `--no-cache-selected-only` | ✅ |
 | [debug](/reference/global-configs/logs#debug-level-logging) | boolean | False | ✅ | `DBT_DEBUG` | `--debug`, `--no-debug` | ✅ |

@@ -7,6 +7,8 @@ description: "dbtはevent_timeを使用してイベントの発生時刻を把�
 datatype: string
 ---
 
+import EventTimeRequired from '/snippets/_event_time_required.md';
+
 <VersionCallout version="1.9" />
 
 <Tabs>
@@ -139,6 +141,8 @@ sources:
 ## 定義
 
 dbt は、イベントが発生したタイミングを把握するために `event_time` を使用します。`dbt_project.yml` ファイル、プロパティ YAML ファイル、または [models](/docs/build/models)、[seeds](/docs/build/seeds)、[sources](/docs/build/sources) の設定ブロックで設定してください。
+
+<EventTimeRequired/>
 
 ### 使用方法
 

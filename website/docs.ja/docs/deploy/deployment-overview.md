@@ -1,7 +1,7 @@
 ---
 title: "dbtをデプロイする"
 id: "deployments"
-sidebar: "dbt Cloud の機能を使用して、本番環境で dbt ジョブをシームレスに実行します。"
+sidebar: "dbt の機能を使用して、本番環境で dbt ジョブをシームレスに実行します。"
 hide_table_of_contents: true
 tags: ["scheduler"]
 pagination_next: "docs/deploy/job-scheduler"
@@ -10,23 +10,24 @@ pagination_prev: null
 
 <IntroText>
 
-dbt Cloud の機能を活用することで、本番環境またはステージング環境で dbt ジョブをシームレスに実行できます。コマンドラインから手動で dbt コマンドを実行する代わりに、[dbt Cloud のアプリ内スケジューリング](/docs/deploy/job-scheduler) を活用して、dbt の実行方法とタイミングを自動化できます。
+<Constant name="cloud" /> の機能を活用することで、本番環境またはステージング環境で dbt ジョブをシームレスに実行できます。コマンドラインから手動で dbt コマンドを実行する代わりに、[<Constant name="cloud" /> のアプリ内スケジューリング](/docs/deploy/job-scheduler) を活用して、dbt の実行方法とタイミングを自動化できます。
 
 </IntroText>
 
-dbt Cloudは、dbtプロジェクトを本番環境で実行するための最も簡単かつ信頼性の高い方法を提供します。開発段階から本番環境へと高品質なコードを容易に移行し、ビジネスインテリジェンスツールやエンドユーザーがビジネス上の意思決定に活用できる最新のデータ資産を構築できます。 dbt Cloud を使用した <Term id="deploying">デプロイ</Term> により、次のことが可能になります。
+<Constant name="dbt_platform" />は、dbtプロジェクトを本番環境で実行するための最も簡単かつ信頼性の高い方法を提供します。開発段階から本番環境へと高品質なコードを容易に移行し、ビジネスインテリジェンスツールやエンドユーザーがビジネス上の意思決定に活用できる最新のデータ資産を構築できます。 <Constant name="cloud" /> を使用した <Term id="deploying">デプロイ</Term> により、次のことが可能になります。
 - 本番環境データをタイムリーに最新の状態に保つ
 - CI および本番環境パイプラインの効率性を確保する
 - デプロイメント環境における障害の根本原因を特定する
 - 本番環境で高品質なコードとデータを維持する
-- デプロイメント ジョブ、モデル、テストの [健全性](/docs/collaborate/data-tile) を可視化する
+- デプロイメント ジョブ、モデル、テストの [健全性](/docs/explore/data-tile) を可視化する
 - [エクスポート](/docs/use-dbt-semantic-layer/exports) を使用して、データ プラットフォームに [保存済みクエリ](/docs/build/saved-queries) を記述し、信頼性の高い高速なメトリクス レポートを作成する
-- 下流のエクスポージャーを [視覚化](/docs/cloud-integrations/downstream-exposures-tableau) および [オーケストレーション](/docs/cloud-integrations/orchestrate-exposures) することで、下流のツールでモデルがどのように使用されているかを把握し、スケジュールされた dbt ジョブ中に基盤となるデータソースをプロアクティブに更新する。 <Lifecycle status="enterprise"/>
-- [dbt Cloud の Git リポジトリ キャッシュ](/docs/cloud/account-settings#git-repository-caching) を使用して、サードパーティの障害から保護し、ジョブ実行の信頼性を向上させます。<Lifecycle status="enterprise" />
+- 下流のエクスポージャーを [視覚化](/docs/cloud-integrations/downstream-exposures-tableau) および [オーケストレーション](/docs/cloud-integrations/orchestrate-exposures) することで、下流のツールでモデルがどのように使用されているかを把握し、スケジュールされた dbt ジョブ中に基盤となるデータソースをプロアクティブに更新する。 <Lifecycle status="managed,managed_plus"/>
+- [<Constant name="cloud" /> の Git リポジトリ キャッシュ](/docs/cloud/account-settings#git-repository-caching) を使用して、サードパーティの障害から保護し、ジョブ実行の信頼性を向上させます。<Lifecycle status="managed,managed_plus" />
+- Use [Hybrid projects](/docs/deploy/hybrid-projects) to upload dbt Core artifacts into dbt Cloud for central visibility, cross-project referencing, and easier collaboration. <Lifecycle status="beta,managed_plus" />
 
 続行する前に、dbt の [デプロイメント環境](/docs/deploy/deploy-environments) に対するアプローチを理解していることを確認してください。
 
-dbt Cloud の機能を活用して、チームがタイムリーかつ高品質な本番環境データをより簡単に提供できるようにする方法を学びましょう。
+<Constant name="cloud" /> の機能を活用して、チームがタイムリーかつ高品質な本番環境データをより簡単に提供できるようにする方法を学びましょう。
 
 ## Deploy with dbt
 
@@ -34,7 +35,7 @@ dbt Cloud の機能を活用して、チームがタイムリーかつ高品質�
 
 <Card
     title="Job scheduler"
-    body="ジョブ スケジューラは、dbt Cloud でジョブを実行するためのバックボーンであり、継続的インテグレーション環境と実稼働環境の両方でデータ パイプラインの構築にパワーとシンプルさをもたらします。"
+    body="ジョブ スケジューラは、dbt platform でジョブを実行するためのバックボーンであり、継続的インテグレーション環境と実稼働環境の両方でデータ パイプラインの構築にパワーとシンプルさをもたらします。"
     link="/docs/deploy/job-scheduler"
     icon="dbt-bit"/>
 
@@ -42,6 +43,12 @@ dbt Cloud の機能を活用して、チームがタイムリーかつ高品質�
     title="Deploy jobs"
     body="ジョブ スケジューラが実行するジョブを作成し、スケジュールします。<br /><br />スケジュールに従って、API によって、または別のジョブの完了後に実行されます。"
     link="/docs/deploy/deploy-jobs"
+    icon="dbt-bit"/>
+
+<Card
+    title="State-aware orchestration"
+    body="Intelligently determines which models to build by detecting changes in code or data at each job run."
+    link="/docs/deploy/state-aware-about"
     icon="dbt-bit"/>
 
 <Card
@@ -70,13 +77,13 @@ dbt Cloud の機能を活用して、チームがタイムリーかつ高品質�
 
 <Card
     title="Visualize and orchestrate exposures"
-    body="dbt Cloud を使用してダッシュボードからダウンストリーム エクスポージャーを自動的に生成し、スケジュールされた dbt ジョブ中に基礎となるデータ ソースをプロアクティブに更新する方法を学習します。"
+    body="dbt を使用してダッシュボードからダウンストリーム エクスポージャーを自動的に生成し、スケジュールされた dbt ジョブ中に基礎となるデータ ソースをプロアクティブに更新する方法を学習します。"
     link="/docs/deploy/orchestrate-exposures"
     icon="dbt-bit"/>
 
 <Card
     title="Artifacts"
-    body="dbt Cloud を使用してダッシュボードからダウンストリーム エクスポージャーを自動的に生成し、スケジュールされた dbt ジョブ中に基礎となるデータ ソースをプロアクティブに更新する方法を学習します。"
+    body="dbt を使用してダッシュボードからダウンストリーム エクスポージャーを自動的に生成し、スケジュールされた dbt ジョブ中に基礎となるデータ ソースをプロアクティブに更新する方法を学習します。"
     link="/docs/deploy/artifacts"
     icon="dbt-bit"/>
 
@@ -118,6 +125,17 @@ dbt Cloud の機能を活用して、チームがタイムリーかつ高品質�
 
 </div> <br />
 
+## Hybrid projects <Lifecycle status="beta,managed" />
+
+<div className="grid--3-col">
+
+<Card
+    title="Hybrid projects"
+    body="Use Hybrid projects to upload dbt Core artifacts into dbt Cloud for central visibility, cross-project referencing, and easier collaboration."
+    link="/docs/deploy/hybrid-projects"
+    icon="dbt-bit"/>
+
+</div> <br />
 
 <!--
 <a href="https://docs.getdbt.com/docs/deploy/dbt-cloud-job" target="_blank" class="pagination-nav__label nav-create-account button button--primary">Try deploying with dbt Cloud</a> 

@@ -7,7 +7,7 @@ sidebar_label: "Cache common queries"
 ---
 
 
-dbt セマンティックレイヤーを使用すると、よく使用するクエリをキャッシュしてパフォーマンスを向上させ、高負荷なクエリの計算負荷を軽減できます。
+<Constant name="semantic_layer" />を使用すると、よく使用するクエリをキャッシュしてパフォーマンスを向上させ、高負荷なクエリの計算負荷を軽減できます。
 
 キャッシュには2つの種類があります。
 
@@ -21,8 +21,8 @@ dbt セマンティックレイヤーを使用すると、よく使用するク�
 - 宣言型キャッシュでは、キャッシュによるパフォーマンス上のメリットを損なうことなく、ダッシュボードを動的にフィルタリングすることもできます。これは、ディメンションのフィルタ（保存済みクエリ設定に既に存在するもの）がキャッシュを使用するためです。
 
 ## 前提条件
-- dbt Cloud [Team または Enterprise](https://www.getdbt.com/) プラン。
-- dbt Cloud 環境は、従来の dbt Core バージョンではなく、[リリーストラック](/docs/dbt-versions/cloud-release-tracks) である必要があります。
+- <Constant name="cloud" /> [Enterprise or Enterprise+](https://www.getdbt.com/) プラン。
+- <Constant name="cloud" /> 環境は、従来の <Constant name="core" /> バージョンではなく、[リリーストラック](/docs/dbt-versions/cloud-release-tracks) である必要があります。
 - ジョブが正常に実行され、[本番環境](/docs/deploy/deploy-environments#set-as-production-environment) が設定されている必要があります。
 - 宣言型キャッシュを使用するには、[保存済みクエリ](/docs/build/saved-queries) YAML 構成ファイルに [エクスポート](/docs/use-dbt-semantic-layer/exports) が定義されている必要があります。
 
@@ -58,7 +58,7 @@ Snowflake を例に、キャッシュの仕組みを説明します。他のデ�
 
 宣言型キャッシュの仕組み:
 - 保存済みクエリのYAML設定ファイルに[エクスポート](/docs/use-dbt-semantic-layer/exports)が定義されていることを確認してください。
-- 保存済みクエリを実行すると、dbtセマンティックレイヤーがトリガーされ、次の処理が実行されます。
+- 保存済みクエリを実行すると、<Constant name="semantic_layer" />がトリガーされ、次の処理が実行されます。
   - エクスポートが定義された保存済みクエリから、データプラットフォームにキャッシュされたテーブルを構築します。
   - 保存済みクエリの入力に一致するクエリリクエストでキャッシュが使用されるようにし、より迅速にデータを返します。
   - キャッシュされたテーブル内の指標に関連する上流モデルで新しい最新データが検出されると、キャッシュが自動的に無効化されます。
@@ -68,13 +68,13 @@ Snowflake を例に、キャッシュの仕組みを説明します。他のデ�
 
 <summary> 📹 宣言型キャッシュがどのように機能するかを確認するには、このビデオ デモをご覧ください。</summary>
 
-このビデオでは、宣言型キャッシュの概念、dbt Cloud スケジューラを使用してそれを実行する方法、そしてその結果としてダッシュボードがどれだけ速く読み込まれるかについて説明します。
+このビデオでは、宣言型キャッシュの概念、<Constant name="cloud" /> スケジューラを使用してそれを実行する方法、そしてその結果としてダッシュボードがどれだけ速く読み込まれるかについて説明します。
 
 <LoomVideo id='aea82a4dee364dfdb536e7b8068684e7' />
 
 </details>
 
-dbt セマンティック レイヤーがクエリ要求を受信したときに何が起こるかを示す次の図を参照してください:
+<Constant name="semantic_layer" />がクエリ要求を受信したときに何が起こるかを示す次の図を参照してください:
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/declarative-cache-query-flow.jpg" width="70%" title="Overview of the declarative cache query flow" />
 
@@ -113,11 +113,11 @@ saved-queries:
 
 ### 宣言型キャッシュを実行する
 
-YAML 構成で宣言型キャッシュを設定したら、dbt Cloud ジョブスケジューラで [exports](/docs/use-dbt-semantic-layer/exports) を実行し、保存済みクエリからデータプラットフォームにキャッシュされたテーブルを構築できます。
+YAML 構成で宣言型キャッシュを設定したら、<Constant name="cloud" /> ジョブスケジューラで [exports](/docs/use-dbt-semantic-layer/exports) を実行し、保存済みクエリからデータプラットフォームにキャッシュされたテーブルを構築できます。
 
-- [exports を使用してジョブを設定する](/docs/use-dbt-semantic-layer/exports) を使用して、保存済みクエリを dbt Cloud で実行します。
+- [exports を使用してジョブを設定する](/docs/use-dbt-semantic-layer/exports) を使用して、保存済みクエリを <Constant name="cloud" /> で実行します。
 - dbt Semantic Layer は、専用の `dbt_sl_cache` スキーマを使用して、データプラットフォームにキャッシュテーブルを構築します。
-- キャッシュスキーマとテーブルは、デプロイメント認証情報を使用して作成されます。Semantic Layer ユーザーにこのスキーマへの読み取りアクセス権を付与する必要があります。
+- キャッシュスキーマとテーブルは、デプロイメント認証情報を使用して作成されます。<Constant name="semantic_layer" /> ユーザーにこのスキーマへの読み取りアクセス権を付与する必要があります。
 - キャッシュは、保存済みクエリジョブと同じスケジュールで更新（または再構築）されます。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/cache-creation-flow.jpg" width="70%" title="Overview of the cache creation flow." />
@@ -126,9 +126,9 @@ YAML 構成で宣言型キャッシュを設定したら、dbt Cloud ジョブ�
 
 ## キャッシュ管理
 
-dbt Cloud は、dbt モデル実行から得られたメタデータを使用して、キャッシュの無効化をインテリジェントに管理します。dbt ジョブを開始すると、前回のモデル実行時間が記録され、キャッシュの上流にあるメトリクスの最新状態がチェックされます。
+<Constant name="cloud" />  は、dbt モデル実行から得られたメタデータを使用して、キャッシュの無効化をインテリジェントに管理します。dbt ジョブを開始すると、前回のモデル実行時間が記録され、キャッシュの上流にあるメトリクスの最新状態がチェックされます。
 
-上流モデルに、キャッシュ作成後に作成されたデータが含まれている場合、dbt Cloud はキャッシュを無効化します。つまり、クエリは古いケースを使用せず、ソースデータから直接クエリを実行します。古くなったキャッシュテーブルは定期的に削除され、保存されたクエリが次に実行されるときに、dbt Cloud は新しいキャッシュを書き込みます。
+上流モデルに、キャッシュ作成後に作成されたデータが含まれている場合、<Constant name="cloud" /> はキャッシュを無効化します。つまり、クエリは古いケースを使用せず、ソースデータから直接クエリを実行します。古くなったキャッシュテーブルは定期的に削除され、保存されたクエリが次に実行されるときに、<Constant name="cloud" /> は新しいキャッシュを書き込みます。
 
 [dbt セマンティック レイヤー API](/docs/dbt-cloud-apis/sl-api-overview) の `InvalidateCacheResult` フィールドを使用して、キャッシュを手動で無効化できます。
 
@@ -146,4 +146,4 @@ dbt Cloud は、dbt モデル実行から得られたメタデータを使用し
 ## 関連ドキュメント
 - [CI でセマンティックノードを検証する](/docs/deploy/ci-jobs#semantic-validations-in-ci)
 - [保存されたクエリ](/docs/build/saved-queries)
-- [dbt セマンティックレイヤーに関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)
+- [<Constant name="semantic_layer" />に関するよくある質問](/docs/use-dbt-semantic-layer/sl-faqs)

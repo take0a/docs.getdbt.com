@@ -22,4 +22,4 @@ dbt は、`config()` ブロックと `dbt_project.yml` に加えて、`.yml` フ
 - [`quote`](/reference/resource-properties/columns#quote)
 - [`source` プロパティ](/reference/source-properties) (例: `loaded_at_field`、`freshness`)
 - [`exposure` プロパティ](/reference/exposure-properties) (例: `type`、 `maturity`)
-- [`macro` プロパティ](/reference/macro-properties) (例: `arguments`)
+- [`macro` プロパティ](/reference/resource-properties/arguments) (例: `arguments`)

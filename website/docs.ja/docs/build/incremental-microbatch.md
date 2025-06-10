@@ -6,6 +6,8 @@ id: "incremental-microbatch"
 intro_text: "マイクロバッチ増分モデルを使用して、大規模な時系列データセットを効率的に処理します。"
 ---
 
+import EventTimeRequired from '/snippets/_event_time_required.md';
+
 :::info
 
 [dbt Cloud "最新"](/docs/dbt-versions/cloud-release-tracks) および dbt Core v1.9 以降でご利用いただけます。
@@ -21,11 +23,12 @@ intro_text: "マイクロバッチ増分モデルを使用して、大規模な�
 dbt の増分モデルは、前回の実行以降に追加された新しいデータまたは変更されたデータのみを変換してロードすることで、データウェアハウス テーブルを効率的に更新するように設計された [マテリアライゼーション](/docs/build/materializations) です。増分モデルでは、データセット全体を毎回再処理するのではなく、少数の行を処理し、既存のテーブルにそれらの行を追加、更新、または置換します。これにより、データ変換に必要な時間とリソースを大幅に削減できます。
 
 マイクロバッチは、大規模な時系列データセット向けに設計された増分戦略です。
-- フィルタリングのための時間ベースの範囲を定義するために、時間列（[`event_time`](/reference/resource-configs/event-time)）のみを使用します。マイクロバッチモデルとその直接の親（上流モデル）に `event_time` 列を設定します。これは、行をパーティションにグループ化する `partition_by` とは異なることに注意してください。
+- フィルタリングのための時間ベースの範囲を定義するために、時間列（[`event_time`](/reference/resource-configs/event-time)）のみを使用します。
+- マイクロバッチモデルとその直接の親（上流モデル）に `event_time` 列を設定します。これは、行をパーティションにグループ化する `partition_by` とは異なることに注意してください。
+  <EventTimeRequired/>
 - マイクロバッチは、バッチ処理の効率性とシンプルさに重点を置くことで、既存の増分戦略を置き換えるのではなく、補完します。
 - 従来の増分戦略とは異なり、マイクロバッチでは、[失敗したバッチの再処理](/docs/build/incremental-microbatch#retry)、[並列バッチ実行](/docs/build/parallel-batch-execution)、[バックフィル](#backfills)のための複雑な条件ロジックの実装が不要になります。
-
-- マイクロバッチは、すべてのユースケースに最適な戦略ではないことに注意してください。信頼性の高い `event_time` 列がない場合や、増分ロジックをより細かく制御する必要がある場合など、ユースケースによっては他の戦略を検討してください。詳しくは、[`microbatch` と他の増分戦略の比較](#how-microbatch-compares-to-other-incremental-strategies)をご覧ください。
+- マイクロバッチは、すべてのユースケースに最適な[戦略](/docs/build/incremental-strategy)ではないことに注意してください。信頼性の高い `event_time` 列がない場合や、増分ロジックをより細かく制御する必要がある場合など、ユースケースによっては他の戦略を検討してください。詳しくは、[`microbatch` と他の増分戦略の比較](#how-microbatch-compares-to-other-incremental-strategies)をご覧ください。
 
 ## マイクロバッチの仕組み
 
@@ -104,7 +107,7 @@ customers as (
     -- this ref won't
     select * from {{ ref('customers') }}
 
-),
+)
 
 select
   page_views.id as session_id,
@@ -112,7 +115,7 @@ select
   customers.*
   from page_views
   left join customers
-    on page_views.customer_id = customer.id
+    on page_views.customer_id = customers.id
 ```
 
 </File>
@@ -243,7 +246,21 @@ from {{ source('sales', 'transactions') }}
 
 ### フルリフレッシュ
 
-ベストプラクティスとして、マイクロバッチモデルで [`full_refresh: false` を設定](/reference/resource-configs/full_refresh) し、`--full-refresh` フラグを指定した呼び出しを無視することを推奨します。履歴データを再処理する必要がある場合は、開始日と終了日を明示的に指定したターゲットバックフィルを使用してください。
+ベストプラクティスとして、マイクロバッチモデルで [`full_refresh: false` を設定](/reference/resource-configs/full_refresh) し、`--full-refresh` フラグを指定した呼び出しを無視することを推奨します。
+
+Note that running `dbt run --full-refresh` on a microbatch model by itself will not reset or reload data unless you also specify `--event-time-start` and `--event-time-end`. Without these flags, dbt has no way of knowing what time range to rebuild. Use explicit backfills to reset data:
+
+✅ Correct:
+```bash
+dbt run --full-refresh --event-time-start "2024-01-01" --event-time-end "2024-02-01"
+```
+
+❌ Incorrect:
+```bash
+dbt run --full-refresh
+```
+
+If you need to reprocess historical data, we recommend using a targeted backfill with `--event-time-start` and `--event-time-end`.
 
 ## 使用方法
 

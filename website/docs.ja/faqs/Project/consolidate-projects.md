@@ -1,6 +1,6 @@
 ---
-title: dbt Cloud でプロジェクトを統合するにはどうすればよいですか?
-description: "dbt Cloudでプロジェクトを統合する"
+title: dbt でプロジェクトを統合するにはどうすればよいですか?
+description: "dbt でプロジェクトを統合する"
 sidebar_label: 'プロジェクトを統合する方法'
 id: consolidate-projects
 

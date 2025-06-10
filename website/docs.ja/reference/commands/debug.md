@@ -20,11 +20,11 @@ dbt コマンドを実行する前に、データベース接続、ローカル�
 
 ## フラグ
 
-`dbt debug` フラグのほとんどは dbt Core CLI に適用されます。一部のフラグは dbt Cloud CLI でも機能しますが、dbt Cloud IDE では `--connection` のみがサポートされています。
+`dbt debug` フラグのほとんどは <Constant name="core" /> CLI に適用されます。一部のフラグは <Constant name="cloud_cli" /> でも機能しますが、<Constant name="cloud_ide" /> では `--connection` のみがサポートされています。
 
-- dbt Core CLI: すべてのフラグをサポートします。
-- dbt Cloud IDE: dbt `debug` と `dbt debug --connection` のみをサポートします。
-- dbt Cloud CLI: dbt `debug` と `dbt debug --connection` のみをサポートします。[`dbt environment`](/reference/commands/dbt-environment) コマンドを使用して dbt Cloud 環境を操作することもできます。
+- <Constant name="core" /> CLI: すべてのフラグをサポートします。
+- <Constant name="cloud_ide" />: dbt `debug` と `dbt debug --connection` のみをサポートします。
+- <Constant name="cloud_cli" />: dbt `debug` と `dbt debug --connection` のみをサポートします。[`dbt environment`](/reference/commands/dbt-environment) コマンドを使用して <Constant name="cloud" /> 環境を操作することもできます。
 
 `dbt debug` は、コマンドラインインターフェース (CLI) を使用する際に、ターミナルで以下のフラグをサポートします。
 
@@ -252,7 +252,7 @@ To view your profiles.yml file, run:
 open /Users/alice/.dbt
 ```
 
-dbt Cloud IDE で接続をテストします:
+<Constant name="cloud_ide" /> で接続をテストします:
 
 ```text
 dbt debug --connection

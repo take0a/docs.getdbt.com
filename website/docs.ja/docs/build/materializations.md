@@ -16,6 +16,13 @@ pagination_next: "docs/build/incremental-models"
 
 dbt では、[カスタム マテリアライゼーション](/guides/create-new-materializations?step=1) を構成することもできます。カスタム マテリアライゼーションは、特定のニーズに合わせて dbt の機能を拡張する強力な手段です。
 
+import CourseCallout from '/snippets/_materialization-video-callout.md';
+
+<CourseCallout resource="Materializations" 
+url="https://learn.getdbt.com/courses/materializations-fundamentals" 
+course="Materializations fundamentals" 
+/>
+
 ## マテリアライゼーションの設定
 デフォルトでは、dbt モデルは「ビュー」としてマテリアライズされます。以下のタブに示すように、[`materialized` 設定](/reference/resource-configs/materialized) パラメータを指定することで、モデルを異なるマテリアライゼーションで設定できます。
 <Tabs>
@@ -132,7 +139,7 @@ models:
   * このモデルから直接選択することはできません。
   * [オペレーション](/docs/build/hooks-operations#about-operations) (たとえば、[`dbt run-operation`](/reference/commands/run-operation) を使用して呼び出されるマクロは、エフェメラルノードを `ref()` できません)
   * エフェメラルマテリアライゼーションを過度に使用すると、クエリのデバッグが困難になることもあります。
-  * エフェメラルマテリアライゼーションは、[モデルコントラクト](/docs/collaborate/govern/model-contracts#where-are-contracts-supported) をサポートしていません。
+  * エフェメラルマテリアライゼーションは、[モデルコントラクト](/docs/mesh/govern/model-contracts#where-are-contracts-supported) をサポートしていません。
 * **アドバイス:** エフェメラルマテリアライゼーションは次の場合に使用します。
   * DAG の初期段階にある非常に軽量な変換
   * 1 つまたは 2 つの下流モデルでのみ使用され、
@@ -163,7 +170,7 @@ models:
 たとえば、`dbt run` コマンドは、設定または SQL に変更の可能性がある場合にのみ必要です。これは実質的にはデプロイアクションです。
 一方、`dbt run` コマンドは、同じシナリオでテーブルに対して実行され、かつテーブル内のデータを更新する必要がある場合にも必要です。
 これは、テーブルを基盤とする増分モデルやスナップショットモデルにも当てはまります。
-テーブルの場合、スケジュールメカニズムは dbt Cloud またはローカルスケジューラのいずれかです。
+テーブルの場合、スケジュールメカニズムは <Constant name="cloud" />  またはローカルスケジューラのいずれかです。
 テーブルの背後にあるデータを自動的に更新する組み込み機能は用意されていません。
 ただし、ほとんどのプラットフォーム（Postgres を除く）では、マテリアライズド・ビューの自動更新を設定する機能が提供されています。
 したがって、マテリアライズド・ビューは増分モデルと同様に動作し、データを更新するために dbt を実行する必要がないという利点があります。

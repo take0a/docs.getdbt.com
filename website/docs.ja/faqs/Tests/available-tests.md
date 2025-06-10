@@ -16,4 +16,4 @@ dbt には、以下のテストが標準で付属しています。
 
 [dbt-utils パッケージ](https://github.com/dbt-labs/dbt-utils?#generic-tests) には、追加のカスタムスキーマテストがオープンソース化されています。これらのテストをプロジェクトで利用できるようにする方法については、[パッケージ](/docs/build/packages) のドキュメントをご覧ください。
 
-現時点ではデータテストをドキュメント化することはできませんが、dbt コミュニティがアイデアを共有している [dbt Core のディスカッション](https://github.com/dbt-labs/dbt-core/issues/2578) を確認することをお勧めします。
+現時点ではデータテストをドキュメント化することはできませんが、dbt コミュニティがアイデアを共有している [<Constant name="core" /> のディスカッション](https://github.com/dbt-labs/dbt-core/issues/2578) を確認することをお勧めします。

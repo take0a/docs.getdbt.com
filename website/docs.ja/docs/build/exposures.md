@@ -10,8 +10,8 @@ id: "exposures"
 
 エクスポージャーは、以下の 2 つの方法で定義できます。
 - 手動 - プロジェクトの YAML ファイルで [明示的に](/docs/build/exposures#declaring-an-exposure) 宣言します。
-- 自動 - dbt Cloud は、サポートされている統合に対して [ダウンストリーム エクスポージャーを自動的に作成および視覚化](/docs/cloud-integrations/downstream-exposures) するため、手動での YAML 定義は不要になります。
-これらのダウンストリーム エクスポージャーは、dbt のメタデータ システムに保存され、[dbt Explorer](/docs/collaborate/explore-projects) に表示され、手動で定義したエクスポージャーと同様に動作します。
+- 自動 - <Constant name="cloud" /> は、サポートされている統合に対して [ダウンストリーム エクスポージャーを自動的に作成および視覚化](/docs/cloud-integrations/downstream-exposures) するため、手動での YAML 定義は不要になります。
+これらのダウンストリーム エクスポージャーは、dbt のメタデータ システムに保存され、[<Constant name="explorer" />](/docs/explore/explore-projects) に表示され、手動で定義したエクスポージャーと同様に動作します。
 ただし、YAML ファイルには存在しません。
 
 ### エクスポージャーの宣言
@@ -82,7 +82,7 @@ dbt test -s +exposure:weekly_jaffle_report
 
 ```
 
-[dbt Explorer サイト](/docs/collaborate/explore-projects) を生成すると、公開内容が表示されます:
+[<Constant name="explorer" /> サイト](/docs/explore/explore-projects) を生成すると、公開内容が表示されます:
 
 <Lightbox src="/img/docs/building-a-dbt-project/dbt-explorer-exposures.jpg" title="Exposures has a dedicated section, under the 'Resources' tab in dbt Explorer,  which lists each exposure in your project."/>
 <Lightbox src="/img/docs/building-a-dbt-project/dag-exposures.png" title="Exposures appear as nodes in the dbt Explorer DAG. It displays an orange 'EXP' indicator within the node. "/>
@@ -91,4 +91,4 @@ dbt test -s +exposure:weekly_jaffle_report
 
 * [エクスポージャープロパティ](/reference/exposure-properties)
 * [`exposure:` 選択方法](/reference/node-selection/methods#exposure)
-* [データヘルスタイル](/docs/collaborate/data-tile)
+* [データヘルスタイル](/docs/explore/data-tile)

@@ -4,7 +4,7 @@ sidebar_label: "init"
 id: "init"
 ---
 
-`dbt init` は、dbt Core の使用を開始するのに役立ちます。
+`dbt init` は、<Constant name="core" /> の使用を開始するのに役立ちます。
 
 ## 新規プロジェクト
 

@@ -11,7 +11,7 @@ id: 1-how-we-style-our-dbt-models
 - dbt モデルの命名にはアンダースコアを使用し、ドットは使用しないでください。
   - ✅  `models_without_dots`
   - ❌ `models.with.dots`
-  - ほとんどのデータ プラットフォームでは、`database.schema.object` を区切るためにドットが使用されるため、ドットの代わりにアンダースコアを使用すると、[引用符](/reference/resource-properties/quoting)の必要性が減り、dbt Cloud の特定の部分で問題が発生するリスクも減ります。詳細については、[この GitHub の問題](https://github.com/dbt-labs/dbt-core/issues/3246) を参照してください。
+  - ほとんどのデータ プラットフォームでは、`database.schema.object` を区切るためにドットが使用されるため、ドットの代わりにアンダースコアを使用すると、[引用符](/reference/resource-properties/quoting)の必要性が減り、<Constant name="cloud" /> の特定の部分で問題が発生するリスクも減ります。詳細については、[この GitHub の問題](https://github.com/dbt-labs/dbt-core/issues/3246) を参照してください。
 - 🔑 キーは文字列データ型である必要があります。
 - 🔑 一貫性が重要です。可能な場合は、モデル間で同じフィールド名を使用します。たとえば、`customers` テーブルのキーの名前は、`user_id` や 'id' ではなく、`customer_id` にする必要があります。
 - ❌ 略語や別名は使用しないでください。簡潔さよりも読みやすさを重視してください。たとえば、`customer` の代わりに `cust` を使用したり、`orders` の代わりに `o` を使用したりしないでください。

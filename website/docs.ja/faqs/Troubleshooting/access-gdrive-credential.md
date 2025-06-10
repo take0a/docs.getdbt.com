@@ -6,13 +6,13 @@ id: access-gdrive-credential
 
 ---
 
-IDE で Google Drive ドキュメントからデータセットをクエリしようとしたときに以下のエラーが表示される場合、IDE で以下のエラー メッセージが表示されるため、以下の手順で問題を解決できるよう最善を尽くします。
+<Constant name="cloud_ide" /> で Google Drive ドキュメントからデータセットをクエリしようとしたときに以下のエラーが表示される場合、<Constant name="cloud_ide" /> で以下のエラー メッセージが表示されるため、以下の手順で問題を解決できるよう最善を尽くします。
 
 ```
 Access denied: BigQuery BigQuery: Permission denied while getting Drive credentials
 ```
 
-通常、このエラーは、BigQuery サービス アカウントに特定の Google ドライブ ドキュメントへのアクセスを許可していないことを示します。このエラーが表示される場合は、dbt Cloud で BigQuery 接続に使用しているサービス アカウント（[こちら](/docs/cloud/connect-data-platform/connect-bigquery) に記載されているクライアントのメール アドレス）に、Google ドライブまたは Google スプレッドシートへのアクセス権限を付与してみてください。この操作は、Google ドキュメント内で直接実行し、**Share** ボタンをクリックしてクライアントのメール アドレスを入力してください。
+通常、このエラーは、BigQuery サービス アカウントに特定の Google ドライブ ドキュメントへのアクセスを許可していないことを示します。このエラーが表示される場合は、<Constant name="cloud" /> で BigQuery 接続に使用しているサービス アカウント（[こちら](/docs/cloud/connect-data-platform/connect-bigquery) に記載されているクライアントのメール アドレス）に、Google ドライブまたは Google スプレッドシートへのアクセス権限を付与してみてください。この操作は、Google ドキュメント内で直接実行し、**Share** ボタンをクリックしてクライアントのメール アドレスを入力してください。
 
 OAuth の使用時にこのエラーが発生し、Google スプレッドシートへのアクセスを検証済みの場合は、gcloud に Google ドライブへのアクセス権限を付与する必要がある可能性があります。
 

@@ -8,7 +8,7 @@ tags: [Metrics, Semantic Layer]
 
 保存済みクエリは、MetricFlowでよく使用するクエリを保存する方法です。論理的に関連する指標、ディメンション、フィルターをグループ化して、保存済みクエリを作成できます。保存済みクエリはノードとして、dbt <Term id="dag" /> に表示されます。
 
-保存済みクエリは基本的な構成要素として機能し、保存済みクエリ設定で[エクスポートを構成](#configure-exports)できます。エクスポートではこの機能がさらに強化され、[dbt Cloud のジョブスケジューラ](/docs/deploy/job-scheduler)を使用してデータプラットフォーム内で直接[保存済みクエリのスケジュール設定と書き込み](/docs/use-dbt-semantic-layer/exports)が可能になります。
+保存済みクエリは基本的な構成要素として機能し、保存済みクエリ設定で[エクスポートを構成](#configure-exports)できます。エクスポートではこの機能がさらに強化され、[<Constant name="cloud" /> のジョブスケジューラ](/docs/deploy/job-scheduler)を使用してデータプラットフォーム内で直接[保存済みクエリのスケジュール設定と書き込み](/docs/use-dbt-semantic-layer/exports)が可能になります。
 
 ## パラメータ
 
@@ -64,34 +64,13 @@ tags: [Metrics, Semantic Layer]
 
 </VersionBlock> 
 
-<!-- For versions 1.7 and lower-->
-<VersionBlock firstVersion="1.7" lastVersion="1.7">
-
-| Parameter | Type    | Required | Description    |
-|-------|---------|----------|----------------|
-| `name`       | String    | Required     | Name of the saved query object.          |
-| `description`     | String      | Required     | A description of the saved query.     |
-| `label`     | String      | Required     | The display name for your saved query. This value will be shown in downstream tools.    |
-| `query_params`       | Structure   | Required     | Contains the query parameters. |
-| `query_params::metrics`   | List or String   | Optional    | Metrics nested with the `query_params`: a list of the metrics to be used in the query as specified in the command line interface. |
-| `query_params::group_by`    | List or String          | Optional    | Grouping nested with the `query_params`: a list of the Entities and Dimensions to be used in the query, which include the `Dimension` or `TimeDimension`. |
-| `query_params::where`        | List or String | Optional  | Conditions nested with the `query_params`: a list of strings that may include the `Dimension` or `TimeDimension` objects. |
-| `exports`     | List or Structure | Optional    | A list of exports to be specified within the exports structure.     |
-| `exports::name`       | String               | Required     | Name of export object, nested within `exports`.   |
-| `exports::config`     | List or Structure     | Required     | A [`config`](/reference/resource-properties/config) property for any parameters specifying the export, nested within `exports`.  |
-| `exports::config::export_as` | String    | Required     |  Specifies the type of export: table, view, or upcoming cache options. Nested within `exports` and `config`.   |
-| `exports::config::schema`   | String   | Optional    | Schema for creating the table or view, not applicable for caching. Nested within `exports` and `config`.   |
-| `exports::config::alias`  | String     | Optional    | Table alias used to write to the table or view.  This option can't be used for caching. Nested within `exports` and `config`.  |
-
-</VersionBlock>
-
 保存済みクエリで複数の指標を使用する場合、`group_by` 句または `where` 句では、これらの指標に共通するディメンションのみを参照できます。ディメンションオブジェクトには、`Dimension('user__ds')` のように、エンティティ名プレフィックスを使用してください。
 
 ## 保存済みクエリの設定
 
-保存済みクエリを使用して、指標やディメンションを含む一般的なセマンティックレイヤークエリをYAMLで定義および管理できます。保存済みクエリを使用すると、dbtプロジェクト内でよく使用されるMetricFlowクエリを整理して再利用できます。たとえば、関連する指標をグループ化して整理しやすくしたり、よく使用するディメンションやフィルターを含めたりできます。
+保存済みクエリを使用して、指標やディメンションを含む一般的な<Constant name="semantic_layer" />クエリをYAMLで定義および管理できます。保存済みクエリを使用すると、dbtプロジェクト内でよく使用されるMetricFlowクエリを整理して再利用できます。たとえば、関連する指標をグループ化して整理しやすくしたり、よく使用するディメンションやフィルターを含めたりできます。
 
-保存済みクエリの設定では、dbt Cloudジョブスケジューラで[キャッシュ](/docs/use-dbt-semantic-layer/sl-cache)を活用することで、よく使用するクエリをキャッシュし、パフォーマンスを向上させ、コンピューティングコストを削減することもできます。
+保存済みクエリの設定では、<Constant name="cloud" /> ジョブスケジューラで[キャッシュ](/docs/use-dbt-semantic-layer/sl-cache)を活用することで、よく使用するクエリをキャッシュし、パフォーマンスを向上させ、コンピューティングコストを削減することもできます。
 
 <!-- For versions 1.9 and higher -->
 
@@ -179,36 +158,6 @@ filter: |
 ```
 </VersionBlock>
 
-<!-- For versions 1.7 and lower-->
-<VersionBlock lastVersion="1.7">
-
-In the following example, you can set the saved query in the `semantic_model.yml` file:
-
-<File name='semantic_model.yml'>
-
-```yaml
-saved_queries:
-  - name: test_saved_query
-    description: "{{ doc('saved_query_description') }}"
-    label: Test saved query
-    query_params:
-      metrics:
-        - simple_metric
-      group_by:
-        - "Dimension('user__ds')"
-      where:
-        - "{{ Dimension('user__ds', 'DAY') }} <= now()"
-        - "{{ Dimension('user__ds', 'DAY') }} >= '2023-01-01'"
-    exports:
-      - name: my_export
-        config:
-          export_as: table
-          alias: my_export_alias
-          schema: my_export_schema_name
-```
-</File>
-</VersionBlock>
-
 #### プロジェクトレベルの保存済みクエリ
 
 プロジェクトレベルで保存済みクエリを有効にするには、[`dbt_project.yml` ファイル](/reference/dbt_project.yml) で `saved-queries` 設定を設定します。これにより、各ファイルで保存済みクエリを設定する手間が省けます。
@@ -225,7 +174,9 @@ saved-queries:
 
 `dbt_project.yml` と設定の命名規則の詳細については、[dbt_project.yml リファレンスページ](/reference/dbt_project.yml#naming-convention) を参照してください。
 
-`saved_queries` をビルドするには、[`--resource-type` フラグ](/reference/global-configs/resource-type) を使用して、コマンド `dbt build --resource-type saved_query` を実行します。
+To build `saved_queries`:
+- Make sure you set the right [environment variable](/docs/use-dbt-semantic-layer/exports#set-environment-variable) in your environment.
+- Run the command `dbt build --resource-type saved_query` using the [`--resource-type` flag](/reference/global-configs/resource-type).
 
 ## エクスポートの設定
 
@@ -301,7 +252,7 @@ saved_queries:
 
 ## エクスポートの実行
 
-エクスポートの設定が完了したら、[dbt Cloud のジョブスケジューラ](/docs/deploy/job-scheduler)を使用してエクスポートを実行し、保存済みのクエリをデータプラットフォーム内に自動的に書き込むことで、さらに高度な機能を実現できます。この機能は、[dbt Cloud のセマンティックレイヤー](/docs/use-dbt-semantic-layer/dbt-sl)でのみ利用できます。
+エクスポートの設定が完了したら、[<Constant name="cloud" /> のジョブスケジューラ](/docs/deploy/job-scheduler)を使用してエクスポートを実行し、保存済みのクエリをデータプラットフォーム内に自動的に書き込むことで、さらに高度な機能を実現できます。この機能は、[<Constant name="cloud" /> の <Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl)でのみ利用できます。
 
 エクスポートの実行方法の詳細については、[エクスポート](/docs/use-dbt-semantic-layer/exports)のドキュメントをご覧ください。
 

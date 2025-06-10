@@ -31,7 +31,7 @@ pagination_prev: null
 
 <Card
     title="カスタム ターゲット名"
-    body="dbt Cloud ジョブのカスタム ターゲット名を定義する方法を学習します。"
+    body="dbt ジョブのカスタム ターゲット名を定義する方法を学習します。"
     link="/docs/build/custom-target-names"
     icon="dbt-bit"/>
 

@@ -4,7 +4,7 @@ sidebar_label: "invocation"
 id: invocation
 ---
 
-`dbt invocation` コマンドは [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) で使用でき、次の操作を実行できます。
+`dbt invocation` コマンドは [<Constant name="cloud_cli" />](/docs/cloud/cloud-cli-installation) で使用でき、次の操作を実行できます。
 - アクティブな呼び出しを一覧表示して、長時間実行されている呼び出しやハングしている呼び出しをデバッグします。
 - `Session supplied` エラーの原因となっているセッションを特定して調査します。
 - 現在アクティブな dbt コマンド (`run`、`build` など) をリアルタイムで監視します。
@@ -57,7 +57,7 @@ Use "dbt invocation [command] --help" for more information about a command.
 
 ### dbt invocation list
 
-`list` コマンドは、dbt Cloud CLI でアクティブな呼び出しのリストを表示します。長時間実行セッションがアクティブな場合は、別のターミナルウィンドウでこのコマンドを使用してアクティブなセッションを表示し、問題のデバッグに役立てることができます。
+`list` コマンドは、<Constant name="cloud_cli" /> でアクティブな呼び出しのリストを表示します。長時間実行セッションがアクティブな場合は、別のターミナルウィンドウでこのコマンドを使用してアクティブなセッションを表示し、問題のデバッグに役立てることができます。
 
 ```shell
 dbt invocation list
@@ -86,7 +86,7 @@ Active Invocations:
 
 ## 関連ドキュメント
 
-- [dbt Cloud CLI のインストール](/docs/cloud/cloud-cli-installation)
-- [dbt Cloud CLI の「セッションが占有されています」エラーのトラブルシューティング](/faqs/Troubleshooting/long-sessions-cloud-cli)
+- [<Constant name="cloud_cli" /> のインストール](/docs/cloud/cloud-cli-installation)
+- [<Constant name="cloud_cli" /> の「セッションが占有されています」エラーのトラブルシューティング](/faqs/Troubleshooting/long-sessions-cloud-cli)
 
 

@@ -13,7 +13,18 @@ pagination_next: null
 - [高度なヒントとテクニック](#advanced-tips-and-techniques)は、dbt を最大限に活用するのに役立ちます。
 
 
-dbt Cloud IDE を使用して開発している場合は、[キーボード ショートカット](/docs/cloud/dbt-cloud-ide/keyboard-shortcuts) ページを参照して、開発の生産性を高め、すべてのユーザーにとって簡単にすることができます。
+<Constant name="cloud_ide" /> を使用して開発している場合は、[キーボード ショートカット](/docs/cloud/dbt-cloud-ide/keyboard-shortcuts) ページを参照して、開発の生産性を高め、すべてのユーザーにとって簡単にすることができます。
+
+## YAML tips
+
+This section clarifies where you can use [Jinja](/docs/build/jinja-macros), nest [vars](/reference/dbt-jinja-functions/var) and [`env_var`](/reference/dbt-jinja-functions/env_var) in your YAML files.
+
+- You can use Jinja in almost every YAML file in dbt _except_ the [`dependencies.yml` file](/docs/build/packages#use-cases). This is because the `dependencies.yml` file doesn't support Jinja.
+- Use `vars` in any YAML file that supports Jinja (like `schema.yml`, `snapshots.yml`). However, note that:
+  - In `dbt_project.yml`, `packages.yml`, and `profiles.yml` files, you must pass `vars` through the CLI using `--vars`, not defined inside the `vars:` block in the YAML file. This is because these files are parsed before Jinja is rendered.
+- You can use `env_var()` in all YAML files that support Jinja. Only `profiles.yml` and `packages.yml` support environment variables for secure values (using the `DBT_ENV_SECRET_` prefix). These are masked in logs and intended for credentials or secrets.
+
+For additional information, check out [<Constant name="core" />'s context docs](https://github.com/dbt-labs/dbt-core/blob/main/core/dbt/context/README.md).
 
 ## パッケージのヒント {#package-tips}
 
@@ -52,5 +63,5 @@ dbt Cloud IDE を使用して開発している場合は、[キーボード シ�
 ## 関連ドキュメント
 
 - [クイックスタート ガイド](/guides)
-- [dbt Cloud について](/docs/cloud/about-cloud/dbt-cloud-features)
+- [<Constant name="cloud" /> について](/docs/cloud/about-cloud/dbt-cloud-features)
 - [クラウドでの開発](/docs/cloud/about-develop-dbt)

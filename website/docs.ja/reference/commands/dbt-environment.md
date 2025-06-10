@@ -4,16 +4,16 @@ sidebar_label: "environment"
 id: dbt-environment
 ---
 
-`dbt environment` コマンドを使用すると、dbt Cloud 環境を操作できます。このコマンドは次の目的で使用できます。
+`dbt environment` コマンドを使用すると、<Constant name="cloud" /> 環境を操作できます。このコマンドは次の目的で使用できます。
 
 - ローカル構成の詳細（アカウント ID、アクティブ プロジェクト ID、デプロイメント環境など）の表示。
-- dbt Cloud 構成の詳細（環境 ID、環境名、接続タイプなど）の表示。
+- <Constant name="cloud" /> 構成の詳細（環境 ID、環境名、接続タイプなど）の表示。
 
-このガイドでは、[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) の `dbt environment` で使用できるすべてのコマンドとオプションを一覧表示しています。これらを使用するには、`dbt environment [command]` のようにコマンドまたはオプションを追加するか、短縮形 `dbt env [command]` を使用します。
+このガイドでは、[<Constant name="cloud_cli" />](/docs/cloud/cloud-cli-installation) の `dbt environment` で使用できるすべてのコマンドとオプションを一覧表示しています。これらを使用するには、`dbt environment [command]` のようにコマンドまたはオプションを追加するか、短縮形 `dbt env [command]` を使用します。
 
 ### dbt environment show
 
-`show` コマンド &mdash; ローカルおよび dbt Cloud の設定の詳細を表示します。dbt Cloud CLI でこのコマンドを実行するには、次のコマンドのいずれか（省略形を含む）を入力します。
+`show` コマンド &mdash; ローカルおよび <Constant name="cloud" /> の設定の詳細を表示します。<Constant name="cloud_cli" /> でこのコマンドを実行するには、次のコマンドのいずれか（省略形を含む）を入力します。
 
 ```shell
 dbt environment show
@@ -56,7 +56,7 @@ Snowflake Connection Details:
   Client session keep alive      false 
 ```
 
-dbt Cloud は秘密鍵を何も返さず、構成されていないフィールドには「NA」を返すことに注意してください。
+<Constant name="cloud" /> は秘密鍵を何も返さず、構成されていないフィールドには「NA」を返すことに注意してください。
 
 ### dbt environment flags
 

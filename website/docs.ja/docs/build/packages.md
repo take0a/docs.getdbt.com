@@ -128,7 +128,7 @@ packages:
 
 </File>
 
-パッケージの Git URL を追加し、必要に応じてリビジョンを指定します。リビジョンは次のいずれかになります。
+パッケージの <Constant name="git" /> URL を追加し、必要に応じてリビジョンを指定します。リビジョンは次のいずれかになります。
 - ブランチ名
 - タグ付きリリース
 - 特定のコミット（40文字のハッシュ全体）
@@ -145,7 +145,7 @@ packages:
 
 ### 内部でホストされている tarball URL
 
-組織によっては、セキュリティ要件によりリソースを内部サービスからのみプルする必要がある場合があります。Artifactory やクラウドストレージバケットなどのホスト環境からパッケージをインストールする必要性に対応するため、dbt Core では内部でホストされている tarball URL からパッケージをインストールできます。 
+組織によっては、セキュリティ要件によりリソースを内部サービスからのみプルする必要がある場合があります。Artifactory やクラウドストレージバケットなどのホスト環境からパッケージをインストールする必要性に対応するため、 <Constant name="core" /> では内部でホストされている tarball URL からパッケージをインストールできます。 
 
 
 ```yaml
@@ -160,11 +160,11 @@ packages:
 
 ### ネイティブプライベートパッケージ <Lifecycle status='beta'/> 
 
-dbt Cloud は、環境内の既存の [構成](/docs/cloud/git/git-configuration-in-dbt-cloud) を活用して、[サポート対象](#前提条件) Git リポジトリからのプライベートパッケージをサポートします。以前は、プライベートリポジトリからパッケージを取得するには [トークン](#git-token-method) を設定する必要がありました。
+<Constant name="cloud" /> は、環境内の既存の [構成](/docs/cloud/git/git-configuration-in-dbt-cloud) を活用して、[サポート対象](#前提条件) <Constant name="git" /> リポジトリからのプライベートパッケージをサポートします。以前は、プライベートリポジトリからパッケージを取得するには [トークン](#git-token-method) を設定する必要がありました。
 
 #### 前提条件
 
-- ネイティブのプライベートパッケージを使用するには、**Account settings** の **Integrations** セクションで、以下のいずれかの Git プロバイダーが設定されている必要があります。
+- ネイティブのプライベートパッケージを使用するには、**Account settings** の **Integrations** セクションで、以下のいずれかの <Constant name="git" /> プロバイダーが設定されている必要があります。
   - [GitHub](/docs/cloud/git/connect-github)
   - [Azure DevOps](/docs/cloud/git/connect-azure-devops)
     - プライベートパッケージは、単一の Azure DevOps プロジェクト内でのみ機能します。リポジトリが同じ組織内の異なるプロジェクトにある場合、現時点では `private` キーでそれらを参照することはできません。
@@ -173,7 +173,7 @@ dbt Cloud は、環境内の既存の [構成](/docs/cloud/git/git-configuration
 
 #### 構成
 
-`packages.yml` または `dependencies.yml` 内の `private` キーを使用すると、アクセストークンをプロビジョニングしたり、dbt Cloud 環境変数を作成したりすることなく、既存の dbt Cloud Git 統合を使用してパッケージリポジトリをクローンできます。
+`packages.yml` または `dependencies.yml` 内の `private` キーを使用すると、アクセストークンをプロビジョニングしたり、<Constant name="cloud" /> 環境変数を作成したりすることなく、既存の <Constant name="cloud" /> Git 統合を使用してパッケージリポジトリをクローンできます。
 
 
 <File name="packages.yml">
@@ -212,7 +212,7 @@ packages:
   
 ```
 
-複数の Git 統合を使用している場合は、プロバイダー キーを追加して曖昧さを解消します:
+複数の <Constant name="git" /> 統合または dbt Fusion エンジンを使用している場合は、プロバイダー キーを追加します:
 
 ```yaml
 packages:
@@ -221,7 +221,9 @@ packages:
 
 ```
 
-この方法を使用すると、接続するための追加の手順なしで、統合された Git プロバイダーからプライベート パッケージを取得できます。
+この方法を使用すると、接続するための追加の手順なしで、統合された <Constant name="git" /> プロバイダーからプライベート パッケージを取得できます。
+
+Using `provider` with Fusion carries the expectation that you have a SSH key configured on your machine to use for git cloning.
 
 ### SSHキー方式（コマンドラインのみ）
 コマンドラインを使用している場合、プライベートパッケージはSSHとSSHキーを介してクローンできます。
@@ -238,14 +240,14 @@ packages:
 
 </File>
 
-dbt Cloud を使用している場合、SSH キー メソッドは機能しませんが、[HTTPS Git トークン メソッド](https://docs.getdbt.com/docs/build/packages#git-token-method) を使用できます。
+<Constant name="cloud" /> を使用している場合、SSH キー メソッドは機能しませんが、[HTTPS Git トークン メソッド](https://docs.getdbt.com/docs/build/packages#git-token-method) を使用できます。
 
 
 ### Gitトークンメソッド {#git-token-method}
 
 :::note
 
-dbt Cloud は、GitHub および Azure DevOps（GitLab は近日提供開始）で Git ホストされたプライベートパッケージを[ネイティブサポート](#native-private-packages)します。サポートされている [統合 Git 環境](/docs/cloud/git/git-configuration-in-dbt-cloud) をご利用の場合は、プライベートパッケージを取得するために Git トークンを設定する必要がなくなりました。
+<Constant name="cloud" /> は、GitHub および Azure DevOps（GitLab は近日提供開始）で <Constant name="git" /> ホストされたプライベートパッケージを[ネイティブサポート](#native-private-packages)します。サポートされている [統合 <Constant name="git" /> 環境](/docs/cloud/git/git-configuration-in-dbt-cloud) をご利用の場合は、プライベートパッケージを取得するために <Constant name="git" /> トークンを設定する必要がなくなりました。
 
 :::
 
@@ -376,7 +378,7 @@ packages:
 
 ### パッケージの固定
 
-v1.7 以降では、[`dbt deps`](/reference/commands/deps) を実行すると、`p​​ackages.yml` が記録されている _project_root_ に `package-lock.yml` ファイルを作成または更新することで、各パッケージが「固定」されます。
+[`dbt deps`](/reference/commands/deps) を実行すると、`p​​ackages.yml` が記録されている _project_root_ に `package-lock.yml` ファイルを作成または更新することで、各パッケージが「固定」されます。
 
 - `package-lock.yml` ファイルには、インストールされているすべてのパッケージの記録が含まれます。
 - 後続の `dbt deps` 実行で `dependencies.yml` または `packages.yml` に変更がない場合、dbt-core は `package-lock.yml` からインストールします。
@@ -419,7 +421,7 @@ seeds:
 
 ### ピン留めされていない Git パッケージの指定
 
-プロジェクトで「ピン留めされていない」 Git パッケージを指定した場合、次のような警告が表示されることがあります:
+プロジェクトで「ピン留めされていない」 <Constant name="git" /> パッケージを指定した場合、次のような警告が表示されることがあります:
 
 ```
 The git package "https://github.com/dbt-labs/dbt-utils.git" is not pinned.

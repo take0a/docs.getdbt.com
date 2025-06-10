@@ -27,10 +27,10 @@ version: 2
 sources:
   - name: jaffle_shop
     database: raw
-
-    freshness:
-      warn_after: {count: 12, period: hour}
-      error_after: {count: 24, period: hour}
+    config:
+      freshness: # changed to config in v1.9
+        warn_after: {count: 12, period: hour}
+        error_after: {count: 24, period: hour}
 
     loaded_at_field: _etl_loaded_at
 
@@ -38,20 +38,23 @@ sources:
       - name: customers
 
       - name: orders
-        freshness:
-          warn_after: {count: 6, period: hour}
-          error_after: {count: 12, period: hour}
-          filter: datediff('day', _etl_loaded_at, current_timestamp) < 2
+        config:
+          freshness: 
+            warn_after: {count: 6, period: hour}
+            error_after: {count: 12, period: hour}
+            filter: datediff('day', _etl_loaded_at, current_timestamp) < 2
 
       - name: product_skus
-        freshness: null
+        config:
+          freshness: null 
+          
 
 ```
 </File>
 
 これは、データパイプラインの健全性をモニタリングするのに役立ちます。
 
-dbt Cloud ジョブの [**設定**] ページの [**実行設定**] セクションでソースの鮮度を設定することもできます。詳細については、[ソース鮮度スナップショットの有効化](/docs/deploy/source-freshness#enabling-source-freshness-snapshots) をご覧ください。
+<Constant name="cloud" /> ジョブの [**設定**] ページの [**実行設定**] セクションでソースの鮮度を設定することもできます。詳細については、[ソース鮮度スナップショットの有効化](/docs/deploy/source-freshness#enabling-source-freshness-snapshots) をご覧ください。
 
 ### Source freshness コマンド
 
@@ -129,4 +132,4 @@ $ dbt source freshness --output target/source_freshness.json
 
 このコマンドは手動で実行することで、いつでもソースデータの鮮度を確認できます。また、このコマンドをスケジュールに従って実行し、鮮度スナップショットの結果を定期的に保存することをお勧めします。これらの長期的なスナップショットにより、ソースデータの鮮度に関するSLA違反が発生した場合にアラートを受け取ったり、鮮度の経時的な傾向を把握したりすることが可能になります。
 
-dbt Cloud を使用すると、スケジュールに従ってソース鮮度のスナップショットを簡単に取得できます。また、プロジェクトで定義されているすべてのソースの鮮度状態を示すダッシュボードがすぐに使用できます。dbt Cloud での鮮度のスナップショット取得の詳細については、[ドキュメント](/docs/build/sources#source-data-freshness) をご覧ください。
+<Constant name="cloud" /> を使用すると、スケジュールに従ってソース鮮度のスナップショットを簡単に取得できます。また、プロジェクトで定義されているすべてのソースの鮮度状態を示すダッシュボードがすぐに使用できます。<Constant name="cloud" /> での鮮度のスナップショット取得の詳細については、[ドキュメント](/docs/build/sources#source-data-freshness) をご覧ください。

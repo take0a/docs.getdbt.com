@@ -19,9 +19,9 @@ dbt を実行すると、モデル間のリンクの有向非巡回グラフ (DA
 
 dbt コマンドを実行するときに `--threads` オプションを使用すると、ターゲットで定義されている値とは異なるスレッド数を使用できます。
 
-スレッド数は、プロファイルの `profiles.yml` ファイル (dbt Core ユーザーのみ)、dbt Cloud ジョブ定義、および dbt Cloud 開発認証情報で定義します。
+スレッド数は、プロファイルの `profiles.yml` ファイル (dbt Core ユーザーのみ)、<Constant name="cloud" /> ジョブ定義、および <Constant name="cloud" /> 開発認証情報で定義します。
 
 
 ## 関連ドキュメント
 - [profiles.yml について](/docs/core/connect-data-platform/profiles.yml)
-- [dbt Cloud ジョブ スケジューラ](/docs/deploy/job-scheduler)
+- [<Constant name="cloud" /> ジョブ スケジューラ](/docs/deploy/job-scheduler)

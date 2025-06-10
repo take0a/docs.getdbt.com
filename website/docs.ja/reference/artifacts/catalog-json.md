@@ -7,7 +7,7 @@ sidebar_label: "Catalog"
 
 **生成元:** [`docs generate`](/reference/commands/cmd-docs)
 
-このファイルには、プロジェクト内のリソースによって生成および定義されたテーブルと<Term id="view">ビュー</Term>に関する、<Term id="data-warehouse" /> からの情報が含まれています。現在、dbt はこのファイルを使用して、[ドキュメントサイト](/docs/collaborate/build-and-view-your-docs) に列タイプや<Term id="table" /> 統計などのメタデータを入力します。
+このファイルには、プロジェクト内のリソースによって生成および定義されたテーブルと<Term id="view">ビュー</Term>に関する、<Term id="data-warehouse" /> からの情報が含まれています。現在、dbt はこのファイルを使用して、[ドキュメントサイト](/docs/explore/build-and-view-your-docs) に列タイプや<Term id="table" /> 統計などのメタデータを入力します。
 
 ### 最上位キー
 

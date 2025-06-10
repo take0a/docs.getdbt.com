@@ -6,7 +6,7 @@ id: runtime-packages.yml
 
 ---
 
-packages.yml フォルダーで以下のランタイム エラーが表示される場合は、現在の dbt Cloud バージョンと互換性のない古いバージョンの dbt_utils パッケージが原因である可能性があります。
+packages.yml フォルダーで以下のランタイム エラーが表示される場合は、現在の <Constant name="cloud" /> バージョンと互換性のない古いバージョンの dbt_utils パッケージが原因である可能性があります。
 
 ```shell
 Running with dbt=xxx

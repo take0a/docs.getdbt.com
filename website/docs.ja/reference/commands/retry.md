@@ -4,7 +4,11 @@ sidebar_label: "retry"
 id: "retry"
 ---
 
-`dbt retry` は、ノードの障害発生時点から最後に実行した `dbt` コマンドを再実行します。前回実行した `dbt` コマンドが成功した場合、`retry` は `no action` として終了します。
+`dbt retry` re-executes the last `dbt` command from the node point of failure. 
+- If no nodes are executed before the failure (for example, if a run failed early due to a warehouse connection or permission errors), `dbt retry` won't run anything since there's no recorded nodes to retry from.
+- In these cases, we recommend checking your [`run_results.json` file](/reference/artifacts/run-results-json) and manually re-running the full job so the nodes build. 
+- Once some nodes have run, you can use `dbt retry` to re-execute from any new point of failure.
+- If the previously executed command completed successfully, `dbt retry` will finish as `no operation`. 
 
 再試行は、以下のコマンドで機能します:
 

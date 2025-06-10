@@ -14,7 +14,7 @@ tags: ['dbt Core','Quickstart']
 
 ## はじめに
 
-このクイックスタート ガイドでは、dbt Core を DuckDB とともに使用して、迅速かつ効率的にセットアップする方法を学びます。[DuckDB](https://duckdb.org/) は、分析ワークロード向けに設計されたオープンソースのデータベース管理システムです。大規模なデータセットに迅速かつ簡単にアクセスできるように設計されているため、データ分析タスクに最適です。
+このクイックスタート ガイドでは、<Constant name="core" /> を DuckDB とともに使用して、迅速かつ効率的にセットアップする方法を学びます。[DuckDB](https://duckdb.org/) は、分析ワークロード向けに設計されたオープンソースのデータベース管理システムです。大規模なデータセットに迅速かつ簡単にアクセスできるように設計されているため、データ分析タスクに最適です。
 
 
 このガイドでは、次の方法を説明します。
@@ -39,7 +39,7 @@ tags: ['dbt Core','Quickstart']
 
 ## 前提条件
 
-- DuckDB を dbt Core で使用する場合は、dbt コマンドライン インターフェース (CLI) を使用する必要があります。現在、DuckDB は dbt Cloud ではサポートされていません。
+- DuckDB を <Constant name="core" />  で使用する場合は、dbt コマンドライン インターフェース (CLI) を使用する必要があります。現在、DuckDB は <Constant name="cloud" /> ではサポートされていません。
 - ターミナルの基本を理解しておくことが重要です。特に、コンピューターのディレクトリ構造を簡単にナビゲートするには、`cd`、`ls`、`pwd` を理解しておく必要があります。
 - [GitHub アカウント](https://github.com/join) を持っていること。
 
@@ -83,7 +83,7 @@ tags: ['dbt Core','Quickstart']
 
     ```shell
 
-    cd jaffle_shop_duck_db
+    cd jaffle_shop_duckdb
 
     ```
 
@@ -257,12 +257,12 @@ tags: ['dbt Core','Quickstart']
 年数を増やすと、Jaffle Shop の店舗数と規模が拡大するため、データの生成にかかる時間は飛躍的に増加します。データ サイズと構築時間のバランスを適切に保つために、dbt Labs では最大 6 年を推奨しています。
 ## 次のステップ
 
-dbt Core、DuckDB、Jaffle Shop データが稼働しているので、dbt の機能を調べることができます。dbt プロジェクトとコマンドについて理解を深めるには、次の資料を参照してください。
+<Constant name="core" />、DuckDB、Jaffle Shop データが稼働しているので、dbt の機能を調べることができます。dbt プロジェクトとコマンドについて理解を深めるには、次の資料を参照してください。
 
 - [プロジェクトについて](/docs/build/projects) ページでは、dbt プロジェクトの構造とそのコンポーネントについて説明します。
 - [dbt コマンド リファレンス](/reference/dbt-commands) では、使用可能なさまざまなコマンドとその機能について説明します。
 - [dbt Labs コース](https://courses.getdbt.com/collections) では、dbt エキスパートになるために役立つように設計された、さまざまな初級、中級、上級の学習モジュールを提供しています。
-- dbt の可能性と組織で何ができるかがわかったら、[dbt Cloud](https://www.getdbt.com/signup) の無料トライアルにサインアップしてください。これは、今日 dbt を展開する最も速くて簡単な方法です。
+- dbt の可能性と組織で何ができるかがわかったら、[<Constant name="cloud" />](https://www.getdbt.com/signup) の無料トライアルにサインアップしてください。これは、今日 dbt を展開する最も速くて簡単な方法です。
 - 既存のデータ ウェアハウスへの統合を開始するには、他の [クイックスタート ガイド](/guides?tags=Quickstart) を確認してください。
 
 さらに、DuckDB の使用の基本を新たに理解したら、[プロジェクトを文書化](/guides/duckdb#document-your-project)、[変更をコミット](/guides/duckdb#commit-your-changes)、[ジョブをスケジュール](/guides/duckdb#schedule-a-job)してセットアップを最適化することを検討してください。
@@ -291,7 +291,7 @@ git push
 
 ### ジョブをスケジュールする
 
-1. dbt Core がインストールされ、DuckDB インスタンスに接続するように構成されていることを確認します。
+1. <Constant name="core" /> がインストールされ、DuckDB インスタンスに接続するように構成されていることを確認します。
 2. dbt プロジェクトを作成し、[`models`](/docs/build/models)、[`seeds`](/reference/seed-properties)、[`tests`](/reference/commands/test) を定義します。
 3. [Prefect](/docs/deploy/deployment-tools#prefect) などのスケジューラを使用して、dbt の実行をスケジュールします。指定した間隔で dbt コマンドをトリガーする DAG (有向非巡回グラフ) を作成できます。
 4. [`dbt run`](/reference/commands/run)、`dbt test` などの dbt コマンドを実行するスクリプトを作成します。

@@ -5,9 +5,9 @@ sidebar_label: "Integrate with other tools"
 pagination_next: null
 ---
 
-[dbt Cloud](/docs/deploy/jobs)に加えて、このページで説明されているようなツールを活用して、dbtジョブをスケジュールして実行する他の方法もご確認ください。
+[<Constant name="cloud" />](/docs/deploy/jobs)に加えて、このページで説明されているようなツールを活用して、dbtジョブをスケジュールして実行する他の方法もご確認ください。
 
-これらのツールをビルドしてインストールすることで、データワークフローを自動化し、dbtジョブ（dbt Cloudでホストされているジョブを含む）をトリガーし、手間のかからない操作性を実現し、時間を節約し、効率性を向上させることができます。
+これらのツールをビルドしてインストールすることで、データワークフローを自動化し、dbtジョブ（<Constant name="cloud" />でホストされているジョブを含む）をトリガーし、手間のかからない操作性を実現し、時間を節約し、効率性を向上させることができます。
 
 ## Airflow
 
@@ -15,9 +15,9 @@ pagination_next: null
 
 <Tabs>
 
-<TabItem value="airflowcloud" label="dbt Cloud">
+<TabItem value="airflowcloud" label="dbt platform">
 
-dbt Cloud ジョブをオーケストレーションするために、[dbt Cloud Provider](https://airflow.apache.org/docs/apache-airflow-providers-dbt-cloud/stable/index.html) をインストールします。このパッケージには、dbt Cloud 内でさまざまなアクションを実行するための複数のフック、オペレーター、センサーが含まれています。
+<Constant name="cloud" /> ジョブをオーケストレーションするために、[dbt Cloud Provider](https://airflow.apache.org/docs/apache-airflow-providers-dbt-cloud/stable/index.html) をインストールします。このパッケージには、<Constant name="cloud" /> 内でさまざまなアクションを実行するための複数のフック、オペレーター、センサーが含まれています。
 
 <Lightbox src="/img/docs/running-a-dbt-project/airflow_dbt_connector.png" title="Airflow DAG using DbtCloudRunJobOperator"/>
 <Lightbox src="/img/docs/running-a-dbt-project/dbt_cloud_airflow_trigger.png" title="dbt Cloud job triggered by Airflow"/>
@@ -26,7 +26,7 @@ dbt Cloud ジョブをオーケストレーションするために、[dbt Cloud
 
 <TabItem value="airflowcore" label="dbt Core">
 
-[BashOperator](https://registry.astronomer.io/providers/apache-airflow/modules/bashoperator) を介して dbt Core ジョブを呼び出す。この場合、Airflow と dbt 間の依存関係の競合による問題を回避するため、dbt を仮想環境にインストールしてください。
+[BashOperator](https://registry.astronomer.io/providers/apache-airflow/modules/bashoperator) を介して <Constant name="core" /> ジョブを呼び出す。この場合、Airflow と dbt 間の依存関係の競合による問題を回避するため、dbt を仮想環境にインストールしてください。
 
 </TabItem>
 </Tabs>
@@ -39,22 +39,22 @@ dbt Cloud ジョブをオーケストレーションするために、[dbt Cloud
 
 ## Azure Data Factory
 
-dbt Cloud と [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/) (ADF) を統合することで、データの取り込みから変換まで、スムーズなデータ処理が可能になります。ADF の [dbt API](/docs/dbt-cloud-apis/overview) を使用することで、取り込みジョブの完了時に dbt Cloud ジョブをシームレスにトリガーできます。
+<Constant name="cloud" /> と [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/) (ADF) を統合することで、データの取り込みから変換まで、スムーズなデータ処理が可能になります。ADF の [dbt API](/docs/dbt-cloud-apis/overview) を使用することで、取り込みジョブの完了時に <Constant name="cloud" /> ジョブをシームレスにトリガーできます。
 
-次のビデオでは、Azure Data Factory の API を介して dbt Cloud ジョブをトリガーする方法の詳細な概要を説明しています。
+次のビデオでは、Azure Data Factory の API を介して <Constant name="cloud" /> ジョブをトリガーする方法の詳細な概要を説明しています。
 
 <LoomVideo id="8dcc1d22a0bf43a1b89ecc6f6b6d0b18" /> 
 
 
-dbt API を使用して ADF 経由で dbt Cloud のジョブをトリガーするには、次の手順を実行します。
+dbt API を使用して ADF 経由で <Constant name="cloud" /> のジョブをトリガーするには、次の手順を実行します。
 
-1. dbt Cloud で、日次本番ジョブのジョブ設定に移動し、[**トリガー**] セクションでスケジュールされた実行をオフにします。
-2. ADF で dbt Cloud ジョブをトリガーするためのパイプラインを作成します。
-3. パイプラインの最初のステップとして Web 呼び出しを使用して、ADF のキー コンテナーから dbt Cloud サービス トークンを安全に取得します。
-4. パイプラインで、dbt Cloud アカウント ID、ジョブ ID、キー コンテナーの名前、サービス トークンを含むシークレットなどのパラメータを設定します。
-* dbt Cloud ジョブとアカウント ID は URL に記載されています。たとえば、URL が `https://YOUR_ACCESS_URL/deploy/88888/projects/678910/jobs/123456` の場合、アカウント ID は 88888、ジョブ ID は 123456 です。
-5. ADF でパイプラインをトリガーして dbt Cloud ジョブを開始し、ADF で dbt Cloud ジョブのステータスを監視します。
-6. dbt Cloud で、ジョブのステータスと、dbt Cloud でジョブがどのようにトリガーされたかを確認できます。
+1. <Constant name="cloud" /> で、日次本番ジョブのジョブ設定に移動し、[**トリガー**] セクションでスケジュールされた実行をオフにします。
+2. ADF で <Constant name="cloud" /> ジョブをトリガーするためのパイプラインを作成します。
+3. パイプラインの最初のステップとして Web 呼び出しを使用して、ADF のキー コンテナーから <Constant name="cloud" /> サービス トークンを安全に取得します。
+4. パイプラインで、<Constant name="cloud" /> アカウント ID、ジョブ ID、キー コンテナーの名前、サービス トークンを含むシークレットなどのパラメータを設定します。
+* <Constant name="cloud" /> ジョブとアカウント ID は URL に記載されています。たとえば、URL が `https://YOUR_ACCESS_URL/deploy/88888/projects/678910/jobs/123456` の場合、アカウント ID は 88888、ジョブ ID は 123456 です。
+5. ADF でパイプラインをトリガーして <Constant name="cloud" /> ジョブを開始し、ADF で <Constant name="cloud" /> ジョブのステータスを監視します。
+6. <Constant name="cloud" /> で、ジョブのステータスと、<Constant name="cloud" /> でジョブがどのようにトリガーされたかを確認できます。
 
 ## Cron
 
@@ -62,25 +62,25 @@ cronはbashコマンドをスケジュールするのに有効な手段です。
 
 ## Dagster
 
-組織で [Dagster](https://dagster.io/) をご利用の場合は、[dagster_dbt](https://docs.dagster.io/_apidocs/libraries/dagster-dbt) ライブラリを使用して、dbt コマンドをパイプラインに統合できます。このライブラリは、dbt Cloud または dbt Core を介した dbt の実行をサポートしています。Dagster から dbt を実行すると、dbt 実行に関するメタデータが自動的に集約されます。詳細については、[サンプルパイプライン](https://dagster.io/blog/dagster-dbt) を参照してください。
+組織で [Dagster](https://dagster.io/) をご利用の場合は、[dagster_dbt](https://docs.dagster.io/_apidocs/libraries/dagster-dbt) ライブラリを使用して、dbt コマンドをパイプラインに統合できます。このライブラリは、<Constant name="cloud" /> または <Constant name="core" /> を介した dbt の実行をサポートしています。Dagster から dbt を実行すると、dbt 実行に関するメタデータが自動的に集約されます。詳細については、[サンプルパイプライン](https://dagster.io/blog/dagster-dbt) を参照してください。
 
 ## Databricks ワークフロー
 
-Databricks ワークフローを使用して dbt Cloud ジョブ API を呼び出すと、他の ETL プロセスとの統合、dbt Cloud ジョブ機能の活用、関心の分離、カスタム条件またはロジックに基づくカスタムジョブのトリガーなど、さまざまなメリットが得られます。これらのメリットにより、モジュール性の向上、デバッグの効率化、dbt Cloud ジョブのスケジュール設定の柔軟性が向上します。
+Databricks ワークフローを使用して <Constant name="cloud" /> ジョブ API を呼び出すと、他の ETL プロセスとの統合、<Constant name="cloud" /> ジョブ機能の活用、関心の分離、カスタム条件またはロジックに基づくカスタムジョブのトリガーなど、さまざまなメリットが得られます。これらのメリットにより、モジュール性の向上、デバッグの効率化、<Constant name="cloud" /> ジョブのスケジュール設定の柔軟性が向上します。
 
-詳細については、[Databricks ワークフローと dbt Cloud ジョブ](/guides/how-to-use-databricks-workflows-to-run-dbt-cloud-jobs) に関するガイドを参照してください。
+詳細については、[Databricks ワークフローと <Constant name="cloud" /> ジョブ](/guides/how-to-use-databricks-workflows-to-run-dbt-cloud-jobs) に関するガイドを参照してください。
 
 ## Kestra
 
-組織で [Kestra](http://kestra.io/) を使用している場合は、[dbt プラグイン](https://kestra.io/plugins/plugin-dbt) を利用して dbt Cloud ジョブと dbt Core ジョブをオーケストレーションできます。Kestra のユーザー インターフェース (UI) には [ブループリント](https://kestra.io/docs/user-interface-guide/blueprints) が組み込まれており、すぐに使用できるワークフローが提供されています。左側のナビゲーション メニューの [ブループリント](https://kestra.io/docs/user-interface-guide/blueprints) ページで [dbt タグを選択](https://demo.kestra.io/ui/blueprints/community?selectedTag=36) すると、データ パイプラインの一部として dbt Core コマンドと dbt Cloud ジョブをスケジュールするいくつかの例が表示されます。スケジュールされたワークフローまたはアドホック ワークフローの実行ごとに、Kestra UI の [出力] タブで、すべての dbt ビルド成果物をダウンロードしてプレビューできます。ガントチャートとトポロジビューでは、メタデータも表示され、dbtモデルとテストの依存関係と実行時間を視覚化できます。dbt Cloudタスクには、Kestraとdbt Cloud UI間を簡単に移動するための便利なリンクが用意されています。
+組織で [Kestra](http://kestra.io/) を使用している場合は、[dbt プラグイン](https://kestra.io/plugins/plugin-dbt) を利用して <Constant name="cloud" /> ジョブと <Constant name="core" /> ジョブをオーケストレーションできます。Kestra のユーザー インターフェース (UI) には [ブループリント](https://kestra.io/docs/user-interface-guide/blueprints) が組み込まれており、すぐに使用できるワークフローが提供されています。左側のナビゲーション メニューの [ブループリント](https://kestra.io/docs/user-interface-guide/blueprints) ページで [dbt タグを選択](https://demo.kestra.io/ui/blueprints/community?selectedTag=36) すると、データ パイプラインの一部として <Constant name="core" /> コマンドと <Constant name="cloud" /> ジョブをスケジュールするいくつかの例が表示されます。スケジュールされたワークフローまたはアドホック ワークフローの実行ごとに、Kestra UI の [出力] タブで、すべての dbt ビルド成果物をダウンロードしてプレビューできます。ガントチャートとトポロジビューでは、メタデータも表示され、dbtモデルとテストの依存関係と実行時間を視覚化できます。<Constant name="cloud" />タスクには、Kestraと<Constant name="cloud" /> UI間を簡単に移動するための便利なリンクが用意されています。
 
 ## Orchestra
 
-組織で [Orchestra](https://getorchestra.io) を使用している場合は、dbt Cloud API を使用して dbt ジョブをトリガーできます。dbt Cloud アカウントから API トークンを作成し、これを使用して [Orchestra ポータル](https://app.getorchestra.io) で Orchestra を認証します。詳細については、[dbt Cloud の Orchestra ドキュメント](https://orchestra-1.gitbook.io/orchestra-portal/integrations/transformation/dbt-cloud) を参照してください。
+組織で [Orchestra](https://getorchestra.io) を使用している場合は、<Constant name="cloud" /> API を使用して dbt ジョブをトリガーできます。<Constant name="cloud" /> アカウントから API トークンを作成し、これを使用して [Orchestra ポータル](https://app.getorchestra.io) で Orchestra を認証します。詳細については、[<Constant name="cloud" /> の Orchestra ドキュメント](https://orchestra-1.gitbook.io/orchestra-portal/integrations/transformation/dbt-cloud) を参照してください。
 
 Orchestra は実行からメタデータを自動的に収集するため、dbt ジョブを他のデータスタックのコンテキストで表示できます。
 
-以下は、Orchestra によってトリガーされたジョブの dbt Cloud での実行詳細の例です。
+以下は、Orchestra によってトリガーされたジョブの <Constant name="cloud" /> での実行詳細の例です。
 
 <Lightbox src="/img/docs/running-a-dbt-project/dbt_cloud_orchestra_trigger.png" title="Example of Orchestra triggering a dbt job"/>
 
@@ -91,7 +91,7 @@ Orchestra は実行からメタデータを自動的に収集するため、dbt 
 
 ## Prefect
 
-組織で[Prefect](https://www.prefect.io/)をご利用の場合、ジョブの実行方法は、dbtのバージョンと、dbt Cloudジョブとdbt Coreジョブのどちらをオーケストレーションするかによって異なります。以下のオプションをご参照ください:
+組織で[Prefect](https://www.prefect.io/)をご利用の場合、ジョブの実行方法は、dbtのバージョンと、<Constant name="cloud" />ジョブと<Constant name="core" />ジョブのどちらをオーケストレーションするかによって異なります。以下のオプションをご参照ください:
 
 <Lightbox src="/img/docs/running-a-dbt-project/prefect_dag_dbt_cloud.jpg" width="75%" title="Prefect DAG using a dbt Cloud job run flow"/> 
 
@@ -100,7 +100,7 @@ Orchestra は実行からメタデータを自動的に収集するため、dbt 
 
 <Tabs>
 
-<TabItem value="prefect2cloud" label="dbt Cloud">
+<TabItem value="prefect2cloud" label="dbt platform">
 
 - [trigger_dbt_cloud_job_run_and_wait_for_completion](https://prefecthq.github.io/prefect-dbt/cloud/jobs/#prefect_dbt.cloud.jobs.trigger_dbt_cloud_job_run_and_wait_for_completion) フローを使用します。
 - ジョブの実行中に、[Prefect ユーザーインターフェース (UI)](https://docs.prefect.io/ui/overview/) を介して dbt をポーリングし、ジョブが失敗なく完了したかどうかを確認できます。
@@ -122,9 +122,9 @@ Orchestra は実行からメタデータを自動的に収集するため、dbt 
 
 <Tabs>
 
-<TabItem value="prefect1cloud" label="dbt Cloud">
+<TabItem value="prefect1cloud" label="dbt platform">
 
-- [DbtCloudRunJob](https://docs.prefect.io/api/latest/tasks/dbt.html#dbtcloudrunjob) タスクを使用して、dbt Cloud ジョブをトリガーします。
+- [DbtCloudRunJob](https://docs.prefect.io/api/latest/tasks/dbt.html#dbtcloudrunjob) タスクを使用して、<Constant name="cloud" /> ジョブをトリガーします。
 - このタスクを実行すると、Prefect UI で表示可能なマークダウン アーティファクトが生成されます。
 - このアーティファクトには、ジョブ実行の結果として生成された dbt アーティファクトへのリンクが含まれます。
 
@@ -142,7 +142,7 @@ Orchestra は実行からメタデータを自動的に収集するため、dbt 
 
 ## 関連ドキュメント
 
-- [dbt Cloud のプランと料金](https://www.getdbt.com/pricing/)
+- [<Constant name="cloud" /> のプランと料金](https://www.getdbt.com/pricing/)
 - [クイックスタートガイド](/guides)
 - [ジョブ用 Webhook](/docs/deploy/webhooks)
 - [オーケストレーションガイド](https://docs.getdbt.com/guides/orchestration)

@@ -35,7 +35,7 @@ import StateModified from '/snippets.ja/_state-modified-compare.md';
 - dbt は、ログ イベント内のわかりやすいメッセージの言語を更新しました。
 - dbt は、デフォルトを持つ新しいフィールドを追加するか、デフォルトを持つフィールドを削除することで、契約されたメタデータ成果物に非破壊的な変更を加えます ([README](https://github.com/dbt-labs/dbt-core/blob/37d382c8e768d1e72acd767e0afdcb1f0dc5e9c5/core/dbt/artifacts/README.md#non-breaking-changes))。
 
-変更の大部分は動作変更ではありません。これらの変更の導入にはユーザー側でのアクションは必要ないため、dbt Cloud の継続リリースと dbt Core のパッチリリースに含まれています。
+変更の大部分は動作変更ではありません。これらの変更の導入にはユーザー側でのアクションは必要ないため、<Constant name="cloud" /> の継続リリースと <Constant name="core" /> のパッチリリースに含まれています。
 
 一方、動作変更の移行は、動作変更フラグによって促進され、数か月かけてゆっくりと行われます。フラグは特定の dbt ランタイムバージョンに疎結合されています。フラグを設定することで、ユーザーはこれらの変更をオプトイン（および後でオプトアウト）するかどうかを制御できます。
 
@@ -54,10 +54,12 @@ import StateModified from '/snippets.ja/_state-modified-compare.md';
 
 ```yml
 flags:
-  require_explicit_package_overrides_for_builtin_materializations: False
-  require_model_names_without_spaces: False
-  source_freshness_run_project_hooks: False
+  require_explicit_package_overrides_for_builtin_materializations: True
+  require_model_names_without_spaces: True
+  source_freshness_run_project_hooks: True
   restrict_direct_pg_catalog_access: False
+  skip_nodes_if_on_run_start_fails: False
+  state_modified_compare_more_unrendered_values: False
   require_yaml_configuration_for_mf_time_spines: False
   require_batched_execution_for_custom_microbatch_strategy: False
   require_nested_cumulative_type_params: False
@@ -66,13 +68,13 @@ flags:
 
 </File>
 
-この表は、dbt Cloud の「最新」リリース トラックのどの月と、どのバージョンの dbt Core に動作変更の導入 (デフォルトでは無効) または成熟 (デフォルトでは有効) が含まれているかを示しています。
+この表は、<Constant name="cloud" /> の「最新」リリース トラックのどの月と、どのバージョンの <Constant name="core" /> に動作変更の導入 (デフォルトでは無効) または成熟 (デフォルトでは有効) が含まれているかを示しています。
 
 | Flag                                                            | dbt Cloud "Latest": Intro | dbt Cloud "Latest": Maturity | dbt Core: Intro | dbt Core: Maturity | 
 |-----------------------------------------------------------------|------------------|---------------------|-----------------|--------------------|
 | [require_explicit_package_overrides_for_builtin_materializations](#package-override-for-built-in-materialization) | 2024.04          | 2024.06             | 1.6.14, 1.7.14  | 1.8.0             |
-| [require_resource_names_without_spaces](#no-spaces-in-resource-names)                           | 2024.05          | TBD*                | 1.8.0           | 1.10.0             |
-| [source_freshness_run_project_hooks](#project-hooks-with-source-freshness)                              | 2024.03          | TBD*                | 1.8.0           | 1.10.0             |
+| [require_resource_names_without_spaces](#no-spaces-in-resource-names)                           | 2024.05          | 2025.05                | 1.8.0           | 1.10.0             |
+| [source_freshness_run_project_hooks](#project-hooks-with-source-freshness)                              | 2024.03          | 2025.05                | 1.8.0           | 1.10.0    
 | [restrict_direct_pg_catalog_access](/reference/global-configs/redshift-changes#the-restrict_direct_pg_catalog_access-flag) [Redshift]   | 2024.09          | TBD*                | dbt-redshift v1.9.0           | 1.9.0             |
 | [skip_nodes_if_on_run_start_fails](#failures-in-on-run-start-hooks)                                | 2024.10          | TBD*                | 1.9.0           | TBD*              |
 | [state_modified_compare_more_unrendered_values](#source-definitions-for-state)                   | 2024.10          | TBD*                | 1.9.0           | TBD*              |
@@ -81,7 +83,7 @@ flags:
 | [cumulative_type_params](#cumulative-metrics)         |   2024.11         | TBD*                 | 1.9.0           | TBD*            |
 | [validate_macro_args](#macro-argument-validation)         | 2025.03           | TBD*                 | 1.10.0          | TBD*            | 
 
-dbt クラウド成熟度が「TBD」の場合、これらのフラグのデフォルト値が変更される正確な日付はまだ決定されていません。影響を受けるユーザーには、それまでの間、非推奨の警告が表示され、成熟期日前に事前警告を知らせるメールが送信されます。それまでの間、非推奨の警告が表示されている場合は、次のいずれかを実行できます。
+<Constant name="cloud" /> 成熟度が「TBD」の場合、これらのフラグのデフォルト値が変更される正確な日付はまだ決定されていません。影響を受けるユーザーには、それまでの間、非推奨の警告が表示され、成熟期日前に事前警告を知らせるメールが送信されます。それまでの間、非推奨の警告が表示されている場合は、次のいずれかを実行できます。
 - プロジェクトを新しい動作をサポートするように移行し、フラグを「True」に設定して警告を表示しないようにします。
 - フラグを「False」に設定します。成熟期日（デフォルト値が変更される日）以降も、警告は引き続き表示され、従来の動作が維持されます。
 
@@ -127,17 +129,11 @@ dbt クラウド成熟度が「TBD」の場合、これらのフラグのデフ�
 
 将来的には、プロジェクト レベルの [`dispatch` 構成](/reference/project-configs/dispatch-config) を拡張して、組み込みのマテリアライゼーションをオーバーライドするための承認済みパッケージのリストをサポートする可能性があります。
 
-<VersionBlock lastVersion="1.7">
-
-The following flags were introduced in a future version of dbt Core. If you're still using an older version, then you have the legacy behavior by default (when each flag is `False`). 
-
-</VersionBlock>
-
 ### リソース名にスペースを使用しないでください
 
 `require_resource_names_without_spaces` フラグは、リソース名にスペースが含まれていないことを強制します。
 
-dbt リソース（モデル、ソースなど）の名前には、文字、数字、アンダースコアを含める必要があります。その他の文字、特にスペースの使用は強く推奨されません。そのため、リソース名でのスペースの使用は非推奨となりました。`require_resource_names_without_spaces` フラグを `True` に設定すると、dbt はリソース名にスペースが含まれていることを検出した場合、非推奨警告ではなく例外を発生させます。
+dbt リソース（たとえば、モデル）の名前には、文字、数字、アンダースコアを含める必要があります。その他の文字、特にスペースの使用は強く推奨されません。そのため、リソース名でのスペースの使用は非推奨となりました。`require_resource_names_without_spaces` フラグを `True` に設定すると、dbt はリソース名にスペースが含まれていることを検出した場合、非推奨警告ではなく例外を発生させます。
 
 <File name='models/model name with spaces.sql'>
 
@@ -184,7 +180,7 @@ MetricFlow YAML ファイルには `time_spine:` フィールドが必要です�
 
 ### 累積メトリクス
 
-[累積型メトリクス](/docs/build/cumulative#parameters)は、[dbt Cloud "最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks)、dbt Core v1.9以降では、`cumulative_type_params`フィールドの下にネストされます。現在、累積メトリクスが不適切にネストされている場合、dbtはユーザーに警告を表示します。新しい形式を適用するには（警告ではなくエラーになります）、`require_nested_cumulative_type_params`を`True`に設定してください。
+[累積型メトリクス](/docs/build/cumulative#parameters)は、[<Constant name="cloud" /> "最新" リリーストラック](/docs/dbt-versions/cloud-release-tracks)、dbt Core v1.9以降では、`cumulative_type_params`フィールドの下にネストされます。現在、累積メトリクスが不適切にネストされている場合、dbtはユーザーに警告を表示します。新しい形式を適用するには（警告ではなくエラーになります）、`require_nested_cumulative_type_params`を`True`に設定してください。
 
 例として、v1.9より前の構文で構成された次のメトリクスを使用します:
 
@@ -197,7 +193,7 @@ MetricFlow YAML ファイルには `time_spine:` フィールドが必要です�
 
 ```
 
-Core v1.9 または [dbt Cloud "最新" リリース トラック](/docs/dbt-versions/cloud-release-tracks) でその構文を使用して `dbt parse` を実行すると、次のような警告が表示されます:
+Core v1.9 または [<Constant name="cloud" /> "最新" リリース トラック](/docs/dbt-versions/cloud-release-tracks) でその構文を使用して `dbt parse` を実行すると、次のような警告が表示されます:
 
 ```bash
 
@@ -235,7 +231,7 @@ https://docs.getdbt.com/reference/global-configs/behavior-changes.
 
 dbt は、`validate_macro_args` フラグを使用したマクロ引数の検証（オプション）をサポートしています。デフォルトでは、`validate_macro_args` フラグは `False` に設定されており、これは dbt がドキュメント化されたマクロ引数の名前または型を検証しないことを意味します。
 
-これまで、dbt は YAML 形式のマクロ引数の [`type`](/reference/resource-properties/argument-type) フィールドに標準的な語彙を強制していませんでした。そのため、`type` フィールドはドキュメント化のみに使用され、dbt は以下の点を確認していませんでした。
+これまで、dbt は YAML 形式のマクロ引数の [`type`](/reference/resource-properties/arguments#type) フィールドに標準的な語彙を強制していませんでした。そのため、`type` フィールドはドキュメント化のみに使用され、dbt は以下の点を確認していませんでした。
 - 引数名がマクロ内の引数名と一致している
 - 引数の型が有効であるか、またはマクロの Jinja 定義と一致している
 
@@ -257,22 +253,5 @@ macros:
 `validate_macro_args` フラグを `True` に設定すると、dbt は以下の処理を行います。
 - YAML 内のすべての引数名がマクロ定義の引数名と一致していることを確認します。
 - 名前または型が一致しない場合は警告を発します。
-- `types` 値が、次のセクションで説明するサポートされている形式に従っていることを確認します。
-- このフラグを使用し、YAML に引数が記述されていない場合、dbt はマクロから引数を推測し、[`manifest.json` ファイル](/reference/artifacts/manifest-json) に含めます。
-
-#### サポートされている型
-
-dbt は、マクロ引数として以下の型をサポートしています。
-
-- `string` または `str`
-- `boolean` または `bool`
-- `integer` または `int`
-- `float`
-- `any`
-- `list[<Type>]`（例：`list[string]`）
-- `dict[<Type>, <Type>]`（例：`dict[str, list[int]]`）
-- `optional[<Type>]`（例：`optional[integer]`）
-- [`relation`](/reference/dbt-classes#relation)
-- [`column`](/reference/dbt-classes#column)
-
-これらの型は Python 風のスタイルに従っていますが、ドキュメント作成と検証のみに使用されます。Python の型ではありません。
+- Validate that the [`type` values follow the supported format](/reference/resource-properties/arguments#supported-types).
+- If no arguments are documented in the YAML, infer them from the macro and include them in the [`manifest.json` file](/reference/artifacts/manifest-json)

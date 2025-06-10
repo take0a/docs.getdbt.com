@@ -1,13 +1,13 @@
 ---
-title: dbt Cloud でプロジェクトを削除するにはどうすればよいですか?
-description: "dbt Cloud でプロジェクトを削除する"
+title: dbt でプロジェクトを削除するにはどうすればよいですか?
+description: "dbt でプロジェクトを削除する"
 sidebar_label: 'プロジェクトを削除する方法'
 id: delete-a-project
 
 ---
-dbt Cloud でプロジェクトを削除するには、アカウント所有者であるか、管理者権限を持っている必要があります。
+<Constant name="cloud" /> でプロジェクトを削除するには、アカウント所有者であるか、管理者権限を持っている必要があります。
 
-1. dbt Cloud の左側のメニューでアカウント名をクリックし、**Account settings** を選択します。
+1. <Constant name="cloud" /> の左側のメニューでアカウント名をクリックし、**Account settings** を選択します。
 
 <Lightbox src="/img/docs/dbt-cloud/Navigate-to-account-settings.png" title="Navigate to account settings" />
 

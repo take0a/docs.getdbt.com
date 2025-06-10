@@ -4,11 +4,11 @@ description: "You can install dbt Core from its GitHub code source."
 pagination_next: null
 ---
 
-dbt Core とそのアダプタ プラグインのほぼすべてはオープン ソース ソフトウェアです。そのため、コードベースはソースからダウンロードしてビルドすることができます。最新のコードが必要な場合や、特定のコミットから dbt をインストールする場合は、ソースからインストールできます。これは、変更をコントリビュートする場合や、過去の変更をデバッグする場合に役立ちます。
+<Constant name="core" /> とそのアダプタ プラグインのほぼすべてはオープン ソース ソフトウェアです。そのため、コードベースはソースからダウンロードしてビルドすることができます。最新のコードが必要な場合や、特定のコミットから dbt をインストールする場合は、ソースからインストールできます。これは、変更をコントリビュートする場合や、過去の変更をデバッグする場合に役立ちます。
 
 ソースからダウンロードするには、GitHub からリポジトリをクローンしてローカル コピーを作成し、`pip` を使用してローカル バージョンをインストールします。
 
-dbt Core をダウンロードしてビルドすると、バグを修正したり、求められている機能を実装したりして、プロジェクトに貢献できます。詳細については、[コントリビュート ガイドライン](https://github.com/dbt-labs/dbt-core/blob/HEAD/CONTRIBUTING.md) をお読みください。
+<Constant name="core" /> をダウンロードしてビルドすると、バグを修正したり、求められている機能を実装したりして、プロジェクトに貢献できます。詳細については、[コントリビュート ガイドライン](https://github.com/dbt-labs/dbt-core/blob/HEAD/CONTRIBUTING.md) をお読みください。
 
 ### dbt Core のインストール
 
@@ -26,17 +26,6 @@ python -m pip install -r requirements.txt
 
 </VersionBlock>
 
-<VersionBlock lastVersion="1.7">
-
-To install `dbt-core` and `dbt-postgres` from the GitHub code source:
-
-```shell
-git clone https://github.com/dbt-labs/dbt-core.git
-cd dbt-core
-python -m pip install -r requirements.txt
-```
-</VersionBlock>
-
 ローカルで行った変更が編集可能モードでインストールするには、次の手順を実行します:
 
 ```shell
@@ -52,11 +41,6 @@ instead.
 
 アダプタ プラグインをインストールする前に、`dbt-core` もインストールする必要があります。
 
-</VersionBlock>
-
-<VersionBlock lastVersion="1.7">
-
-You do _not_ need to install `dbt-core` before installing an adapter plugin -- the plugin includes `dbt-core` among its dependencies, and it will install the latest compatible version automatically.
 </VersionBlock>
 
 ```shell

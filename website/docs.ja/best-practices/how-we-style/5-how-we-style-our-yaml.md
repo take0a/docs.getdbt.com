@@ -10,10 +10,11 @@ id: 5-how-we-style-our-yaml
 - 🔠 単一のエントリを持つリスト項目は文字列にすることができます。たとえば、`'select': 'other_user'` ですが、明示的なリストとして引数を指定するのがベストプラクティスです。たとえば、`'select': ['other_user']`
 - 🆕 適切な場合は、辞書のリスト項目を新しい行で区切ってください。
 - 📏 YAML の行は 80 文字以内にする必要があります。
-- 🛠️ 互換性のある IDE と YAML フォーマッタ ([Prettier](https://prettier.io/) を併用) で [dbt JSON スキーマ](https://github.com/dbt-labs/dbt-jsonschema) を使用して、YAML ファイルを検証し、自動的にフォーマットします。
+- 🛠️ 互換性のある <Constant name="cloud_ide" /> と YAML フォーマッタ ([Prettier](https://prettier.io/) を併用) で [dbt JSON スキーマ](https://github.com/dbt-labs/dbt-jsonschema) を使用して、YAML ファイルを検証し、自動的にフォーマットします。
+Note, refer to [YAML tips](/docs/build/dbt-tips#yaml-tips) for more YAML information.
 
 :::info
-☁️ Python や SQL と同様に、dbt Cloud IDE には Prettier による YAML ファイル (Markdown と JSON も!) のフォーマット機能が組み込まれています。[Format] ボタンをクリックするだけで、完璧なスタイルになります。他のツールと同様に、[フォーマット ルールをカスタマイズ](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format#format-yaml-markdown-json) して、会社のスタイル ガイドに合うようにすることもできます。
+☁️ Python や SQL と同様に、<Constant name="cloud_ide" /> には Prettier による YAML ファイル (Markdown と JSON も!) のフォーマット機能が組み込まれています。[Format] ボタンをクリックするだけで、完璧なスタイルになります。他のツールと同様に、[フォーマット ルールをカスタマイズ](https://docs.getdbt.com/docs/cloud/dbt-cloud-ide/lint-format#format-yaml-markdown-json) して、会社のスタイル ガイドに合うようにすることもできます。
 :::
 
 ### YAML の例

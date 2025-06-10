@@ -5,31 +5,31 @@ description: "Learn how to develop your dbt projects using dbt Cloud."
 sidebar_label: "About developing in dbt" 
 pagination_next: "docs/cloud/about-cloud-develop-defer"
 hide_table_of_contents: true
-intro_text: "dbt Cloud を使用して dbt プロジェクトを開発します。これは、単一の Web ベースの UI で dbt を展開し、プロジェクトを管理するための、より高速で信頼性の高い方法です。"
+intro_text: "Develop dbt projects using the dbt platform, a faster and more reliable way to deploy dbt and manage your project in a single, web-based UI."
 ---
 
-dbt クラウドベースのコマンド ライン インターフェース (CLI)、統合開発環境 (IDE)、またはビジュアル エディターを使用して、ブラウザーで開発できます。
+<Constant name="cloud" />ベースのコマンド ライン インターフェース (CLI)、統合開発環境 (<Constant name="cloud_ide" />)、または<Constant name="visual_editor" />を使用して、ブラウザーで開発できます。
 
 <div className="grid--3-col" >
 
 <Card
-    title="dbt Cloud CLI"
-    body="Allows you to develop and run dbt commands from your local command line or code editor against your dbt Cloud development environment."
+    title="dbt CLI"
+    body="Allows you to develop and run dbt commands from your local command line or code editor against your dbt development environment."
     link="/docs/cloud/cloud-cli-installation"
     icon="dbt-bit"/>
 
   <Card
-    title="dbt Cloud IDE"
+    title="dbt Studio IDE"
     body="Develop directly in your browser, making dbt project development efficient by compiling code into SQL and managing project changes seamlessly using an intuitive user interface."
     link="/docs/cloud/dbt-cloud-ide/develop-in-the-cloud"
     icon="dbt-bit"/>
 
    <Card
-    title="Visual editor (beta)"
-    body="Develop with the Visual Editor, a seamless drag-and-drop experience that helps analysts quickly create and visualize dbt models in dbt Cloud."
-    link="/docs/cloud/visual-editor"
+    title="dbt Canvas"
+    body="Develop with Canvas, a seamless drag-and-drop experience that helps analysts quickly create and visualize dbt models in dbt."
+    link="/docs/cloud/canvas"
     icon="dbt-bit"/>
 
 </div><br />
 
-開始するには、[dbt Cloud](https://www.getdbt.com/signup) アカウントと開発者シートが必要です。dbt での開発に関するより包括的なガイドについては、[クイックスタート ガイド](/docs/get-started-dbt) を参照してください。
+開始するには、[<Constant name="cloud" />](https://www.getdbt.com/signup) アカウントと開発者シートが必要です。dbt での開発に関するより包括的なガイドについては、[クイックスタート ガイド](/docs/get-started-dbt) を参照してください。

@@ -16,7 +16,7 @@ Python 仮想環境は、Python プロジェクト用の分離されたワーク
 
 [conda](https://anaconda.org/anaconda/conda)、[poetry](https://python-poetry.org/docs/managing-environments/)、`venv` などのツールを使用して仮想環境を作成できます。このガイドでは、軽量で追加の依存関係が最も少なく、デフォルトで Python に含まれている `venv` を使用します。
 
-[dbt Core](/docs/core/installation-overview) や [dbt Cloud CLI](/docs/cloud/cloud-cli-installation#install-a-virtual-environment) などで dbt をローカルで実行したいユーザーは、Python 仮想環境をインストールすることをお勧めします。
+[<Constant name="core" />](/docs/core/installation-overview) や [dbt Cloud CLI](/docs/cloud/cloud-cli-installation#install-a-virtual-environment) などで dbt をローカルで実行したいユーザーは、Python 仮想環境をインストールすることをお勧めします。
 
 ### 前提条件
 
@@ -88,7 +88,7 @@ Python 仮想環境を設定するには、プロジェクト ディレクトリ
   </TabItem>
 </Tabs>
 
-dbt Core を使用している場合は、仮想環境を作成した後、[pip を使用して dbt Core をインストールするためのベスト プラクティスは何ですか?](/faqs/Core/install-pip-best-practices.md#using-virtual-environments) を参照してください。
+<Constant name="core" /> を使用している場合は、仮想環境を作成した後、[pip を使用して <Constant name="core" /> をインストールするためのベスト プラクティスは何ですか?](/faqs/Core/install-pip-best-practices.md#using-virtual-environments) を参照してください。
 
 dbt Cloud CLI を使用している場合は、仮想環境を作成した後、[pip で dbt Cloud CLI をインストール](/docs/cloud/cloud-cli-installation#install-dbt-cloud-cli-in-pip) できます。
 
@@ -112,20 +112,12 @@ alias env_dbt='source <PATH_TO_VIRTUAL_ENV_CONFIG>/bin/activate'
 
 ## アダプタのインストール
 
-使用する [アダプタ](/docs/supported-data-platforms) を決定したら、コマンド ラインを使用してインストールできます。v1.8 以降では、アダプタをインストールしても `dbt-core` は自動的にインストールされません。これは、アダプタと dbt Core バージョンが互いに分離され、既存の dbt-core インストールを上書きしないようにしたためです。
+使用する [アダプタ](/docs/supported-data-platforms) を決定したら、コマンド ラインを使用してインストールできます。v1.8 以降では、アダプタをインストールしても `dbt-core` は自動的にインストールされません。これは、アダプタと <Constant name="core" /> バージョンが互いに分離され、既存の dbt-core インストールを上書きしないようにしたためです。
 
 <VersionBlock firstVersion="1.8">
 
 ```shell
 python -m pip install dbt-core dbt-ADAPTER_NAME
-```
-
-</VersionBlock>
-
-<VersionBlock lastVersion="1.7">
-
-```shell
-python -m pip install dbt-ADAPTER_NAME
 ```
 
 </VersionBlock>
@@ -154,28 +146,6 @@ Plugins:
 すべてのアダプタは `dbt-core` 上に構築されます。一部のアダプタは他のアダプタにも依存します。たとえば、`dbt-redshift` は `dbt-postgres` 上に構築されます。その場合、特定のインストールにそれらのアダプタも含まれることになります。
 </VersionBlock>
 
-<VersionBlock lastVersion="1.7">
-
-```shell
-python -m pip install dbt-postgres
-```
-
-これにより、`dbt-core` と `dbt-postgres` のみがインストールされます:
-
-```shell
-$ dbt --version
-installed version: 1.0.0
-   latest version: 1.0.0
-
-Up to date!
-
-Plugins:
-  - postgres: 1.0.0
-```
-
-一部のアダプタは他のアダプタに依存します。たとえば、`dbt-redshift` は `dbt-postgres` の上に構築されます。その場合、特定のインストールにそれらのアダプタも含まれることになります。
-</VersionBlock>
-
 ### アダプタのアップグレード
 
 特定のアダプタ プラグインをアップグレードするには:
@@ -186,7 +156,7 @@ python -m pip install --upgrade dbt-ADAPTER_NAME
 
 ### dbt-core のみをインストールする
 
-dbt Core と統合するツールを構築する場合は、データベース アダプターなしでコア ライブラリのみをインストールすることをお勧めします。dbt を CLI ツールとして使用することはできないことに注意してください。
+<Constant name="core" /> と統合するツールを構築する場合は、データベース アダプターなしでコア ライブラリのみをインストールすることをお勧めします。dbt を CLI ツールとして使用することはできないことに注意してください。
 
 ```shell
 python -m pip install dbt-core
@@ -194,7 +164,7 @@ python -m pip install dbt-core
 
 ## dbt Core のバージョンを変更する
 
-コマンドライン (CLI) で `--upgrade` オプションを使用すると、dbt Core のバージョンをアップグレードまたはダウングレードできます。詳細については、[Core バージョンのアップグレードに関するベスト プラクティス](/docs/dbt-versions/core#best-practices-for-upgrading) を参照してください。
+コマンドライン (CLI) で `--upgrade` オプションを使用すると、<Constant name="core" /> のバージョンをアップグレードまたはダウングレードできます。詳細については、[Core バージョンのアップグレードに関するベスト プラクティス](/docs/dbt-versions/core#best-practices-for-upgrading) を参照してください。
 
 dbt を最新バージョンにアップグレードするには:
 
@@ -236,7 +206,7 @@ python -m pip install \
 
 最終的な安定バージョンより前にプレリリース バージョンを使用すると、バージョンが完全に最適化されていないため、予期しない動作が発生する可能性があります。さらに、プレリリース フェーズ中に頻繁に更新やパッチを適用すると、メンテナンスに余分な時間と労力が必要になる場合があります。さらに、`--pre フラグ` により、他の依存関係の互換性のあるプレリリース バージョンがインストールされる可能性があり、不安定さが増す可能性があります。
 
-dbt Core とアダプターのプレリリース バージョンをインストールするには、このコマンドを使用します (`dbt-adapter-name` をアダプターに置き換えます)
+<Constant name="core" /> とアダプターのプレリリース バージョンをインストールするには、このコマンドを使用します (`dbt-adapter-name` をアダプターに置き換えます)
 
 ```shell
 python3 -m pip install --pre dbt-core dbt-adapter-name
@@ -314,19 +284,5 @@ dbt --version
 
 </Expandable>
 
-
-</VersionBlock>
-
-<VersionBlock lastVersion="1.7">
-
-### Installing prereleases
-
-`dbt-adapters` is only compatible with dbt Core 1.8 and higher. If you're on dbt Core v1.7 or lower, follow these steps to upgrade to v1.8 or higher to install prereleases of `dbt-adapters`.
-
-```shell
-python -m pip uninstall -y dbt-adapters
-python -m pip install --upgrade --pre dbt-core dbt-common dbt-adapters
-dbt --version
-```
 
 </VersionBlock>

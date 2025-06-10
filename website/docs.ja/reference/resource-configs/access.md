@@ -10,7 +10,8 @@ version: 2
 
 models:
   - name: model_name
-    access: private | protected | public
+    config:
+      access: private | protected | public # changed to config in v1.10
 ```
 
 </File>
@@ -28,12 +29,14 @@ models:
   
   models:
     - name: my_public_model
-      access: public # Older method, still supported
+      config:
+        access: public # Older method, still supported
+          # changed to config in v1.10
       
   ```
   </File>
   
-- `properties.yml` で新しいメソッドを使用します（バージョン 1.7 以降）。同じモデルに対して、古いメソッドと新しいメソッドのどちらか一方のみを使用してください。
+- `properties.yml` で新しいメソッドを使用します。同じモデルに対して、古いメソッドと新しいメソッドのどちらか一方のみを使用してください。
 
   <File name='models/properties_my_public_model.yml'>
   
@@ -43,7 +46,7 @@ models:
   models:
     - name: my_public_model
       config:
-        access: public # newly supported in v1.7
+        access: public
       
   ```
   </File>
@@ -105,5 +108,5 @@ dbt.exceptions.DbtReferenceError: Parsing Error
 
 ## 関連ドキュメント
 
-* [モデルアクセス](/docs/collaborate/govern/model-access#groups)
+* [モデルアクセス](/docs/mesh/govern/model-access#groups)
 * [グループ設定](/reference/resource-configs/group)

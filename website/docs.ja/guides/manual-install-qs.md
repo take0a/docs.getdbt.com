@@ -13,15 +13,15 @@ hide_table_of_contents: true
 
 ## 導入
 
-dbt Core を使用して dbt を操作する場合、コード エディターを使用してローカルでファイルを編集し、コマンド ライン インターフェース (CLI) を使用してプロジェクトを実行します。
+<Constant name="core" /> を使用して dbt を操作する場合、コード エディターを使用してローカルでファイルを編集し、コマンド ライン インターフェース (CLI) を使用してプロジェクトを実行します。
 
-Web ベースの dbt 統合開発環境 (IDE) を使用してファイルを編集し、プロジェクトを実行する場合は、[dbt Cloud クイックスタート](/guides) を参照してください。また、[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) (dbt Cloud を利用したコマンド ライン) を使用して dbt コマンドを開発および実行することもできます。
+Web ベースの dbt 統合開発環境 (<Constant name="cloud_ide" />) を使用してファイルを編集し、プロジェクトを実行する場合は、[<Constant name="cloud" /> クイックスタート](/guides) を参照してください。また、[<Constant name="cloud" /> CLI](/docs/cloud/cloud-cli-installation) (<Constant name="cloud" /> を利用したコマンド ライン) を使用して dbt コマンドを開発および実行することもできます。
 
 ### 前提条件
 
 * dbt Core を使用するには、ターミナルの基本をいくつか知っておくことが重要です。特に、コンピューターのディレクトリ構造を簡単にナビゲートするために、`cd`、`ls`、`pwd` を理解しておく必要があります。
-* オペレーティング システムの [インストール手順](/docs/core/installation-overview) を使用して、dbt Core をインストールします。
-* dbt Cloud シリーズのクイックスタートで、適切な設定とデータの読み込みの手順を完了します。たとえば、BigQuery の場合は、[設定 (BigQuery 内)](/guides/bigquery?step=2) と [データの読み込み (BigQuery)](/guides/bigquery?step=3) を完了します。
+* オペレーティング システムの [インストール手順](/docs/core/installation-overview) を使用して、<Constant name="core" /> をインストールします。
+* <Constant name="cloud" /> シリーズのクイックスタートで、適切な設定とデータの読み込みの手順を完了します。たとえば、BigQuery の場合は、[設定 (BigQuery 内)](/guides/bigquery?step=2) と [データの読み込み (BigQuery)](/guides/bigquery?step=3) を完了します。
 * まだお持ちでない場合は、[GitHub アカウントを作成](https://github.com/join) します。
 
 ### スタータープロジェクトを作成する
@@ -30,7 +30,7 @@ BigQuery を dbt で動作するように設定したら、独自のモデルを
 
 ## リポジトリを作成する
 
-次の手順では、このガイドの Git プロバイダーとして [GitHub](https://github.com/) を使用しますが、任意の Git プロバイダーを使用できます。[GitHub アカウントを作成](https://github.com/join) している必要があります。
+次の手順では、このガイドの <Constant name="git" /> プロバイダーとして [GitHub](https://github.com/) を使用しますが、任意の <Constant name="git" /> プロバイダーを使用できます。[GitHub アカウントを作成](https://github.com/join) している必要があります。
 
 1. [`dbt-tutorial` という名前の新しい GitHub リポジトリを作成](https://github.com/new) します。
 2. リポジトリを他のユーザーと共有できるように、**パブリック** を選択します。後でいつでも非公開にすることができます。
@@ -465,12 +465,12 @@ select * from final
 
 ## ジョブをスケジュールする
 
-[ジョブをデプロイ](/docs/deploy/deployments)し、本番環境で dbt プロジェクトを自動化する最も簡単で信頼性の高い方法として、dbt Cloud を使用することをお勧めします。
+[ジョブをデプロイ](/docs/deploy/deployments)し、本番環境で dbt プロジェクトを自動化する最も簡単で信頼性の高い方法として、<Constant name="cloud" /> を使用することをお勧めします。
 
 開始方法の詳細については、[ジョブの作成とスケジュール](/docs/deploy/deploy-jobs#create-and-schedule-jobs) を参照してください。
 
-<Lightbox src="/img/docs/dbt-cloud/deployment/run-overview.jpg" width="90%" title="Overview of a dbt Cloud job run, which includes the job run details, trigger type, commit SHA, environment name, detailed run steps, logs, and more."/>
+<Lightbox src="/img/docs/dbt-cloud/deployment/run-overview.jpg" width="90%" title="Overview of a dbt job run, which includes the job run details, trigger type, commit SHA, environment name, detailed run steps, logs, and more."/>
 
-dbt Core を使用してジョブをスケジュールする方法の詳細については、[dbt airflow](/blog/dbt-airflow-spiritual-alignment) のブログ投稿を参照してください。
+<Constant name="core" /> を使用してジョブをスケジュールする方法の詳細については、[dbt airflow](/blog/dbt-airflow-spiritual-alignment) のブログ投稿を参照してください。
 
 </div>

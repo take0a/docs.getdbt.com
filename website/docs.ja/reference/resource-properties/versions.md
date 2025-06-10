@@ -68,13 +68,20 @@ models:
 
 モデルの最上位レベルの `columns` プロパティで定義されている列のうち、バージョン管理されたモデル実装に含めるか除外するかを指定します。
 
-`include` は次のいずれかです。
-- 含める列名のリスト
-- `'*'` または `'all'`。これは、最上位レベルの `columns` プロパティの **すべての** 列をバージョン管理されたモデルに含めることを示します。
+- `include` は次のいずれかです。
+  - 含める列名のリスト
+  - `'*'` または `'all'`。これは、最上位レベルの `columns` プロパティの **すべての** 列をバージョン管理されたモデルに含めることを示します。
 
-`exclude` は除外する列名のリストです。`include` が `'*'` または `'all'` のいずれかに設定されている場合にのみ宣言できます。
+- `exclude` は除外する列名のリストです。`include` が `'*'` または `'all'` のいずれかに設定されている場合にのみ宣言できます。
 
-バージョン管理されたモデルの `columns` リストには、最大で 1 つの `include/exclude` 要素を含めることができます。
+<VersionBlock firstVersion="1.8">
+
+:::tip
+Not to be confused with the `--select/--exclude` [syntax](/reference/node-selection/exclude), which is used for model selection.
+:::
+</VersionBlock>
+
+The `columns` list of a versioned model can have _at most one_ `include/exclude` element. However, if none of your model versions specify columns, you don't need to define columns at all and can omit the `columns/include`/`exclude` keys from the versioned model. In this case, dbt will automatically use all top-level columns for all versions. 
 
 バージョンの `columns` リスト内に追加の列を宣言できます。バージョン固有の列の `name` が最上位レベルから含められる列と一致する場合、そのバージョンではバージョン固有のエントリがその列をオーバーライドします。
 

@@ -83,8 +83,8 @@ models:
 
 dbt では、生成されたドキュメントと説明を表示するための 2 つの補完的な方法を提供しています:
 
-- [**dbt Docs**:](/docs/build/view-documentation#dbt-docs) モデルの系統、メタデータ、ドキュメントを含む静的ドキュメント サイト。Web サーバー (S3 や Netlify など) でホストできます。dbt Core または dbt Cloud Developer プランで利用できます。
-- [**dbt Explorer**](/docs/collaborate/explore-projects): dbt Docs を基盤として、拡張メタデータ、カスタマイズ可能なビュー、より詳細なプロジェクト インサイト、コラボレーション ツールを備えた動的なリアルタイム インターフェースを提供します。dbt Cloud Team または Enterprise プランで利用できます。
+- [**dbt Docs**:](/docs/build/view-documentation#dbt-docs) モデルの系統、メタデータ、ドキュメントを含む静的ドキュメント サイト。Web サーバー (S3 や Netlify など) でホストできます。 <Constant name="core" /> または <Constant name="cloud" /> Developer プランで利用できます。
+- [**<Constant name="explorer" />**](/docs/explore/explore-projects): dbt Docs を基盤として、拡張メタデータ、カスタマイズ可能なビュー、より詳細なプロジェクト インサイト、コラボレーション ツールを備えた動的なリアルタイム インターフェースを提供します。Available on <Constant name="cloud" /> [Starter, Enterprise, or Enterprise+ plans](https://www.getdbt.com/pricing).
 
 dbt プロジェクトのドキュメントを最大限に活用するには、[ドキュメントの表示](/docs/build/view-documentation) を参照してください。
 

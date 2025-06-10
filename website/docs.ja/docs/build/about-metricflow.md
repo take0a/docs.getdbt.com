@@ -8,25 +8,25 @@ pagination_next: "docs/build/join-logic"
 pagination_prev: null
 ---
 
-このガイドでは、MetricFlow を初めて使用する方のために、その基本的な考え方を紹介します。dbt セマンティック レイヤーを支える MetricFlow は、企業のメトリクスのロジックの定義と管理を支援します。
+このガイドでは、MetricFlow を初めて使用する方のために、その基本的な考え方を紹介します。<Constant name="semantic_layer" />を支える MetricFlow は、企業のメトリクスのロジックの定義と管理を支援します。
 MetricFlow は独自の抽象化セットであり、データ コンシューマーがデータ プラットフォームからメトリクス データセットを迅速かつ効率的に取得するのに役立ちます。
 
 MetricFlow は SQL クエリの構築を処理し、dbt セマンティック モデルとメトリクスの仕様を定義します。
-MetricFlow を使用すると、dbt プロジェクトでメトリクスを定義し、[MetricFlow コマンド](/docs/build/metricflow-commands) を使用して dbt Cloud でも dbt Core でもクエリを実行できます。
+MetricFlow を使用すると、dbt プロジェクトでメトリクスを定義し、[MetricFlow コマンド](/docs/build/metricflow-commands) を使用して <Constant name="cloud" /> でも <Constant name="core" /> でもクエリを実行できます。
 
 開始する前に、以下のガイドラインをご確認ください。
 
 - YAML でメトリクスを定義し、これらの [新しいメトリクス仕様](https://github.com/dbt-labs/dbt-core/discussions/7456) を使用してクエリを実行します。
 - MetricFlow を使用するには、[dbt バージョン](/docs/dbt-versions/upgrade-dbt-version-in-cloud) 1.6 以上が必要です。
-- MetricFlow は、Snowflake、BigQuery、Databricks、Postgres (dbt Core のみ)、または Redshift で使用できます。
-- [dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) とその多様な [利用可能な統合](/docs/cloud-integrations/avail-sl-integrations) を使用して、インサイトを発見し、メトリクスをクエリします。
+- MetricFlow は、Snowflake、BigQuery、Databricks、Postgres (<Constant name="core" /> のみ)、または Redshift で使用できます。
+- [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) とその多様な [利用可能な統合](/docs/cloud-integrations/avail-sl-integrations) を使用して、インサイトを発見し、メトリクスをクエリします。
 
 ## MetricFlow
 
 MetricFlow は、多様なビジネスニーズに対応するために、異なるデータディメンションにわたるメトリクス作成を効率化するように設計された SQL クエリ生成ツールです。
 - YAML ファイルを介して動作し、セマンティックグラフによって言語とデータがリンクされます。このグラフは、[セマンティックモデル](/docs/build/semantic-models) (データエントリポイント) と [メトリクス](/docs/build/metrics-overview) (定量指標を作成するための関数) で構成されます。
 - MetricFlow は [BSL パッケージ](https://github.com/dbt-labs/metricflow) であり、コードソースが利用可能で、dbt バージョン 1.6 以降と互換性があります。データ実践者や熱心な開発者の皆様の貢献を強く推奨します。
-- dbt セマンティックレイヤーの一部である MetricFlow は、YAML 抽象化を使用して組織がメトリクスを定義できるようにします。
+- <Constant name="semantic_layer" />の一部である MetricFlow は、YAML 抽象化を使用して組織がメトリクスを定義できるようにします。
 - メトリクスディメンション、ディメンション値のクエリ、および構成の検証を行うには、[MetricFlow コマンド](/docs/build/metricflow-commands) を使用します。
 
 
@@ -51,7 +51,7 @@ MetricFlow は以下の原則に従います。
 これは、接続がタスク間の依存関係を示すDAGとは異なります。
 
 MetricFlowは、メトリクスを生成する際に、SQLエンジンを使用して、セマンティックモデルとメトリクス用のYAMLファイルで定義されたフレームワークに基づき、テーブル間の最適なパスを計算します。
-これらのモデルとメトリックが正しく定義されると、dbt セマンティック レイヤーの統合により下流で使用できるようになります。
+これらのモデルとメトリックが正しく定義されると、<Constant name="semantic_layer" />の統合により下流で使用できるようになります。
 
 ### セマンティックモデル
 
@@ -257,9 +257,9 @@ metrics:
 
 いいえ、全く問題ありません！クリーンアップされ、適切にモデル化されたデータセットは非常に強力で理想的な入力データですが、生のデータセットから完全に非正規化されたデータセットまで、あらゆるデータセットを使用できます。
 
-上流アプリケーションでは、不良データのフィルタリング、共通オブジェクトの正規化、キーとテーブルのデータモデリングなど、高品質なデータ整合性を適用することをお勧めします。セマンティックレイヤーは、正規化ではなく非正規化を行う方が効率的です。
+上流アプリケーションでは、不良データのフィルタリング、共通オブジェクトの正規化、キーとテーブルのデータモデリングなど、高品質なデータ整合性を適用することをお勧めします。<Constant name="semantic_layer" />は、正規化ではなく非正規化を行う方が効率的です。
 
-データ整合性に投資していなくても問題ありません。セマンティックレイヤーは、SQLクエリや式を使用して一貫性のあるデータセットを定義できます。
+データ整合性に投資していなくても問題ありません。<Constant name="semantic_layer" />は、SQLクエリや式を使用して一貫性のあるデータセットを定義できます。
 
 </DetailsToggle>
 
@@ -277,7 +277,7 @@ MetricFlow の原則の一つは、ロジックの重複を減らすことです
 
 </DetailsToggle>
 <DetailsToggle alt_header="dbt セマンティック レイヤーは結合をどのように処理しますか?">
-MetricFlow を搭載した dbt セマンティックレイヤーは、エンティティに渡されるキーとパラメータの型に基づいて結合を構築します。結合の構築方法について詳しくは、結合の種類に関するドキュメントをご覧ください。
+MetricFlow を搭載した dbt <Constant name="semantic_layer" />は、エンティティに渡されるキーとパラメータの型に基づいて結合を構築します。結合の構築方法について詳しくは、結合の種類に関するドキュメントをご覧ください。
 
 MetricFlow は、任意の結合ロジックをキャプチャするのではなく、各識別子の型をキャプチャし、ユーザーが適切な結合を選択できるように支援します。これにより、ファンアウト結合やキャズム結合の構築を回避し、読みやすい SQL を生成できます。
 </DetailsToggle>

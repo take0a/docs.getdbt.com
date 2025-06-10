@@ -223,12 +223,6 @@ unit_tests:
 
 </VersionBlock>
 
-<VersionBlock lastVersion="1.7">
-
-The `description` property is available for [unit tests](/docs/build/unit-tests) beginning in dbt v1.8.
-
-</VersionBlock>
-
 </TabItem>
 
 </Tabs>
@@ -246,7 +240,7 @@ The `description` property is available for [unit tests](/docs/build/unit-tests)
 - data tests, and data test columns
 - unit tests for models
 
-これらの説明は、dbt によって表示されるドキュメントウェブサイトで使用されます（[ドキュメントガイド](/docs/build/documentation) または [dbt Explorer](/docs/collaborate/explore-projects) を参照してください）。
+これらの説明は、dbt によって表示されるドキュメントウェブサイトで使用されます（[ドキュメントガイド](/docs/build/documentation) または [<Constant name="explorer" />](/docs/explore/explore-projects) を参照してください）。
 
 説明には、マークダウンと [`doc` jinja 関数](/reference/dbt-jinja-functions/doc) を使用できます。
 
@@ -407,9 +401,9 @@ models:
 
 ### 説明にリポジトリの画像を含める {#include-an-image-from-your-repo-in-your-description}
 
-このセクションは dbt Core ユーザーのみに適用されます。リポジトリの画像を含めることで、画像のバージョン管理が確実に行われます。
+このセクションは <Constant name="core" /> ユーザーのみに適用されます。リポジトリの画像を含めることで、画像のバージョン管理が確実に行われます。
 
-dbt Cloud ユーザーと dbt Core ユーザーの両方が [Web からの画像を含める](#説明に Web からの画像を含める) ことができます。これにより、動的なコンテンツ、リポジトリサイズの削減、アクセシビリティ、そして共同作業の容易さが実現します。
+<Constant name="cloud" /> ユーザーと <Constant name="core" /> ユーザーの両方が [Web からの画像を含める](#説明に Web からの画像を含める) ことができます。これにより、動的なコンテンツ、リポジトリサイズの削減、アクセシビリティ、そして共同作業の容易さが実現します。
 
 モデルの `description` フィールドに画像を含めるには:
 
@@ -451,7 +445,7 @@ models:
 
 ### 説明にウェブ上の画像を含める {#include-an-image-from-the-web-in-your-descriptions}
 
-このセクションは、dbt Cloud および dbt Core ユーザーに適用されます。ウェブ上の画像を含めることで、動的なコンテンツ、リポジトリサイズの削減、アクセシビリティの向上、そして共同作業の容易化といったメリットが得られます。
+このセクションは、<Constant name="cloud" /> および <Constant name="core" /> ユーザーに適用されます。ウェブ上の画像を含めることで、動的なコンテンツ、リポジトリサイズの削減、アクセシビリティの向上、そして共同作業の容易化といったメリットが得られます。
 
 ウェブ上の画像を含めるには、モデルの「description」フィールドに画像の URL を指定します:
 

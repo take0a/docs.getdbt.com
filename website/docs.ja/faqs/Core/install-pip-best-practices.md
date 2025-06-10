@@ -5,7 +5,7 @@ sidebar_label: 'pip で dbt Core をインストールする'
 id: install-pip-best-practices.md
 ---
 
-Python のローカル環境の管理は難しい場合があります。これらのベストプラクティスを活用して、pip を使用した dbt Core のインストールを改善できます。
+Python のローカル環境の管理は難しい場合があります。これらのベストプラクティスを活用して、pip を使用した <Constant name="core" />  のインストールを改善できます。
 
 ### 仮想環境の使用
 

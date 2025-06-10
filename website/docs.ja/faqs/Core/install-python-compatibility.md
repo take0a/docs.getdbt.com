@@ -7,7 +7,7 @@ id: install-python-compatibility
 
 import Pythonmatrix from '/snippets/_python-compatibility-matrix.md';
 
-この表を使用して、dbt-core のバージョンと互換性のある Python のバージョンを照合してください。新しい [dbt マイナーバージョン](/docs/dbt-versions/core#minor-versions) では、すべての依存関係がサポートできる場合、新しい Python3 マイナーバージョンのサポートが追加されます。また、dbt マイナーバージョンでは、古い Python3 マイナーバージョンのサポートが [サポート終了](https://endoflife.date/python) 前に終了します。
+この表を使用して、<Constant name="core" /> のバージョンと互換性のある Python のバージョンを照合してください。新しい [dbt マイナーバージョン](/docs/dbt-versions/core#minor-versions) では、すべての依存関係がサポートできる場合、新しい Python3 マイナーバージョンのサポートが追加されます。また、dbt マイナーバージョンでは、古い Python3 マイナーバージョンのサポートが [サポート終了](https://endoflife.date/python) 前に終了します。
 
 <Pythonmatrix/>
 

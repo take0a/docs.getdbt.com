@@ -39,7 +39,7 @@ dbt docs generate --no-compile
 
 `catalog.json` にデータを入力するデータベースクエリの実行をスキップするには、`--empty-catalog` 引数を使用します。このフラグが指定されると、`dbt docs generate` は上記の手順 (3) をスキップします。
 
-これは、データベースメタデータ（各テーブルの列の完全なセットとそれらのテーブルに関する統計情報）から取得された情報がドキュメントに含まれなくなるため、本番環境では推奨されません。開発環境では、プロジェクト内で定義されたリネージやその他の情報を視覚化したいだけであれば、`docs generate` を高速化できます。dbt Cloud でドキュメントを作成する方法については、[dbt Cloud でドキュメントを作成する](/docs/collaborate/build-and-view-your-docs) を参照してください。
+これは、データベースメタデータ（各テーブルの列の完全なセットとそれらのテーブルに関する統計情報）から取得された情報がドキュメントに含まれなくなるため、本番環境では推奨されません。開発環境では、プロジェクト内で定義されたリネージやその他の情報を視覚化したいだけであれば、`docs generate` を高速化できます。<Constant name="cloud" /> でドキュメントを作成する方法については、[<Constant name="cloud" /> でドキュメントを作成する](/docs/explore/build-and-view-your-docs) を参照してください。
 
 **例**：
 
@@ -59,7 +59,7 @@ dbt docs generate --static
 
 このコマンドは、ポート 8080 でウェブサーバーを起動し、ドキュメントをローカルで提供して、デフォルトのブラウザでドキュメント サイトを開きます。ウェブサーバーのルートは `target/` ディレクトリです。`generate` コマンドは、`serve` コマンドが依存する [カタログ メタデータ アーティファクト](/reference/artifacts/catalog-json) を生成するため、`dbt docs generate` を `dbt docs serve` の前に必ず実行してください。カタログが見つからない場合は、エラー メッセージが表示されます。
 
-[dbt Cloud CLI](/docs/cloud/cloud-cli-installation) または [dbt Core](/docs/core/installation-overview) を使用してローカルで開発している場合は、`dbt docs serve` コマンドを使用してください。[dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) はこのコマンドをサポートしていません。
+[<Constant name="cloud_cli" />](/docs/cloud/cloud-cli-installation) または [<Constant name="core" />](/docs/core/installation-overview) を使用してローカルで開発している場合は、`dbt docs serve` コマンドを使用してください。[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) はこのコマンドをサポートしていません。
 
 **使用方法:**
 

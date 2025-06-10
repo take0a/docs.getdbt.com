@@ -9,7 +9,7 @@ intro_text: "dbt_project.yml ファイルは、すべての dbt プロジェク�
 
 - デフォルトでは、dbt は現在の作業ディレクトリとその親ディレクトリで `dbt_project.yml` を検索しますが、`--project-dir` フラグまたは `DBT_PROJECT_DIR` 環境変数を使用して別のディレクトリを指定することもできます。
 
-- `dbt_project.yml` ファイルで、`dbt-cloud` 構成ファイルの `project-id` を使用して、dbt Cloud プロジェクト ID を指定します。 dbt Cloud プロジェクト URL でプロジェクト ID を見つけます。たとえば、`https://YOUR_ACCESS_URL/11/projects/123456` の場合、プロジェクト ID は `123456` です。
+- `dbt_project.yml` ファイルで、`dbt-cloud` 構成ファイルの `project-id` を使用して、<Constant name="cloud" />プロジェクト ID を指定します。 <Constant name="cloud" /> プロジェクト URL でプロジェクト ID を見つけます。たとえば、`https://YOUR_ACCESS_URL/11/projects/123456` の場合、プロジェクト ID は `123456` です。
 
 - `dbt_project.yml` ファイルでは、設定ファイル（[マクロ](/reference/macro-properties) など）以外の「プロパティ」を設定することはできません。これはすべての種類のリソースに適用されます。詳細については、[設定ファイルとプロパティ](/reference/configs-and-properties) を参照してください。
 

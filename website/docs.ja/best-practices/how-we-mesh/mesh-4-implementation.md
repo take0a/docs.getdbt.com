@@ -6,9 +6,9 @@ hoverSnippet: Learn how to get started with dbt Mesh
 
 ### メッシュの旅はどこから始めるべきでしょうか？
 
-dbt メッシュへの移行は、開発および展開アーキテクチャにおける重要な変更を意味します。十分に複雑なソフトウェアのリファクタリングや移行を行う前に、「なぜこれが機能しない可能性があるのか​​」を問うことが重要です。私たちが目にした最も一般的な 2 つの理由は、次のとおりです。
+<Constant name="mesh" />への移行は、開発および展開アーキテクチャにおける重要な変更を意味します。十分に複雑なソフトウェアのリファクタリングや移行を行う前に、「なぜこれが機能しない可能性があるのか​​」を問うことが重要です。私たちが目にした最も一般的な 2 つの理由は、次のとおりです。
 
-1. dbt メッシュが適切な長期アーキテクチャであるという認識の欠如
+1. <Constant name="mesh" />が適切な長期アーキテクチャであるという認識の欠如
 2. 適切にスコープ設定された開始点の調整の欠如
 
 アーキテクチャと開始点の調整を行うことは、移行を成功させるための重要なステップです。適切な開始点の決定は組織ごとに異なりますが、どこから始めるかを決定するのに役立つ経験則がいくつかあります。おそらく、組織にはすでに論理コンポーネントがあり、これらのインターフェイスに従ってプロジェクトをグループ化、構築、展開している可能性があります。目標は、これらの組織インターフェイスを定義および形式化し、これらの境界を使用してプロジェクトをドメインごとに分割することです。
@@ -19,7 +19,7 @@ dbt メッシュへの移行は、開発および展開アーキテクチャに�
   - 人々が注力しているドメインはさまざまですか?
   - 別々に処理されるデータのサイズ、形状、ソースはさまざまですか (クリック イベント データなど)?
   - ランディング データやステージング データ、マートの構築など、変換の個別のレベルに注力している人々はいますか?
-  - 現在の dbt プロジェクトの *下流* に、消費者として dbt Mesh に簡単に移行できる単一のチームがありますか?
+  - 現在の dbt プロジェクトの *下流* に、消費者として<Constant name="mesh" /> に簡単に移行できる単一のチームがありますか?
 
 プロジェクト インターフェースを定義する際には、次の点について調査することを検討してください。
 
@@ -29,7 +29,7 @@ dbt メッシュへの移行は、開発および展開アーキテクチャに�
 
 モノリシック プロジェクトを取得し、グループとアクセスを使用してインターフェースを定義し、それを複数のプロジェクトに分割するプロセスの例を見てみましょう。
 
-詳細については、無料で利用できる [dbt Mesh 学習コース](https://learn.getdbt.com/courses/dbt-mesh) を参照してください。
+詳細については、無料で利用できる [<Constant name="mesh" /> 学習コース](https://learn.getdbt.com/courses/dbt-mesh) を参照してください。
 
 
 ## グループとアクセスによるプロジェクトインターフェースの定義
@@ -55,23 +55,27 @@ groups:
 
 models: 
   - name: fct_marketing_model
-    group: marketing
+    config:
+      group: marketing # changed to config in v1.10
   - name: stg_marketing_model
-    group: marketing
+    config:
+      group: marketing # changed to config in v1.10
 ```
 
-- グループにモデルを追加したら、グループ間の接続に基づいて**モデルに [アクセス](/docs/collaborate/govern/model-access) 設定を追加** し、*現在の機能を維持する最もプライベートなアクセスを選択* できます。つまり、同じグループ内の他のモデルとのみ関係を持つモデルは `プライベート` にし、グループ間の関係を持つモデルやグループ DAG 内のターミナル ノードであるモデルは、DAG の他の部分が引き続き参照できるように `保護` する必要があります。
+- グループにモデルを追加したら、グループ間の接続に基づいて**モデルに [アクセス](/docs/mesh/govern/model-access) 設定を追加** し、*現在の機能を維持する最もプライベートなアクセスを選択* できます。つまり、同じグループ内の他のモデルとのみ関係を持つモデルは `プライベート` にし、グループ間の関係を持つモデルやグループ DAG 内のターミナル ノードであるモデルは、DAG の他の部分が引き続き参照できるように `保護` する必要があります。
 
 ```yml
 # in models/marketing/__models.yml
 
 models: 
   - name: fct_marketing_model
-    group: marketing
-    access: protected
+    config: 
+      group: marketing # changed to config in v1.10
+      access: protected # changed to config in v1.10
   - name: stg_marketing_model
-    group: marketing
-    access: private
+    config: 
+      group: marketing # changed to config in v1.10
+      access: private # changed to config in v1.10
 ```
 
 - **ジョブを段階的に移行してこれらのグループを検証**し、選択構文を介してこれらのグループを具体的に実行します。確信が持てるまで、本番ジョブと並行してこれを行うことをお勧めします。これにより、適切な場所に線を引いたかどうかを確認できます。
@@ -87,8 +91,8 @@ models:
 5. **`{{ ref }}` 関数を更新** &mdash; プロジェクト間の依存関係を持つモデルの場合 (移動したファイル内またはプロジェクト内に残っているファイル内にある可能性があります):
    1. `{{ ref() }}` 関数を更新して 2 つの引数を設定します。最初の引数はソース プロジェクトの名前、2 番目の引数はモデルの名前です。例: `{{ ref('jaffle_shop', 'my_upstream_model') }}`
    2. アップストリームのクロスプロジェクトの親の `access` 構成を `public` に更新して、どのプロジェクトでもそれらのモデルを安全に `{{ ref() }}` できるようにします。
-   3. 下流の消費者にとってデータ形状の一貫性と信頼性を確保するために、上流のモデルに [モデル契約](/docs/collaborate/govern/model-contracts) を追加することを強くお勧めします。
-6. 下流プロジェクト用の **`dependencies.yml` ファイル ([docs](/docs/collaborate/govern/project-dependencies)) を作成し**、上流プロジェクトを依存関係として宣言します。
+   3. 下流の消費者にとってデータ形状の一貫性と信頼性を確保するために、上流のモデルに [モデル契約](/docs/mesh/govern/model-contracts) を追加することを強くお勧めします。
+6. 下流プロジェクト用の **`dependencies.yml` ファイル ([docs](/docs/mesh/govern/project-dependencies)) を作成し**、上流プロジェクトを依存関係として宣言します。
 
 ```yml
 
@@ -137,7 +141,7 @@ projects:
 ## 追加リソース
 ### 私たちのプロジェクト例
 
-ここで取り上げたトピックを調べるために使用できるサンプル プロジェクトのセットを用意しました。[Jaffle Shop](https://github.com/dbt-labs/jaffle-shop) プロジェクトを、マルチリポジトリの dbt Mesh で 3 つの個別のプロジェクトに分割しました。プロジェクト間の参照は dbt Cloud の API を介して行われるため、マルチプロジェクト アーキテクチャを使用するには dbt Cloud を活用する必要があることに注意してください。
+ここで取り上げたトピックを調べるために使用できるサンプル プロジェクトのセットを用意しました。[Jaffle Shop](https://github.com/dbt-labs/jaffle-shop) プロジェクトを、マルチリポジトリの <Constant name="mesh" /> で 3 つの個別のプロジェクトに分割しました。プロジェクト間の参照は <Constant name="cloud" /> の API を介して行われるため、マルチプロジェクト アーキテクチャを使用するには<Constant name="cloud" /> を活用する必要があることに注意してください。
 
 - **[プラットフォーム](https://github.com/dbt-labs/jaffle-shop-mesh-platform)** - 集中ステージング モデルが含まれます。
 - **[マーケティング](https://github.com/dbt-labs/jaffle-shop-mesh-marketing)** - マーケティング マートが含まれます。
@@ -148,4 +152,4 @@ projects:
 これを実行するには、`dbt-meshify` [コマンドライン ツール](<https://dbt-labs.github.io/dbt-meshify/>) を使用することをお勧めします。これには、上記の手順のほとんどを自動化する CLI 操作が付属しています。
 
 ## Related docs
-- [dbt Mesh のクイックスタート](/guides/mesh-qs)
+- [<Constant name="mesh" /> のクイックスタート](/guides/mesh-qs)

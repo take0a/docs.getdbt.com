@@ -7,15 +7,15 @@ tags: [Semantic Layer]
 pagination_next: null
 ---
 
-[dbt セマンティック レイヤー](/docs/use-dbt-semantic-layer/dbt-sl) は、dbt Cloud が提供するサービスです。ユーザーは、[MetricFlow](/docs/build/about-metricflow) を使用して、dbt プロジェクト内でメトリクスを一元的に定義できます。
+[<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) は、dbt Cloud が提供するサービスです。ユーザーは、[MetricFlow](/docs/build/about-metricflow) を使用して、dbt プロジェクト内でメトリクスを一元的に定義できます。
 
-dbt セマンティック レイヤーは、以下の機能を提供します。
+<Constant name="semantic_layer" />は、以下の機能を提供します。
 
 - メトリクスを計算するための動的 SQL 生成
 - メトリクスとディメンションをクエリするための API
 - 下流ツールでこれらの一元化されたメトリクスをクエリするためのファーストクラスの [統合](/docs/cloud-integrations/avail-sl-integrations)
 
-dbt セマンティック レイヤーは、ソースコードが利用可能なコンポーネントである MetricFlow を基盤としています。
+<Constant name="semantic_layer" />は、ソースコードが利用可能なコンポーネントである MetricFlow を基盤としています。
 
 ## dbtセマンティックレイヤーの概要
 
@@ -76,6 +76,7 @@ dbt セマンティックレイヤーは、以下のデータプラットフォ�
 - BigQuery
 - Databricks
 - Redshift
+- Postgres
 
 Fabric や Trino などの他のデータプラットフォームは、現時点ではサポートされていません。リストにないデータプラットフォームで dbt セマンティックレイヤーをご利用になりたい場合は、[お問い合わせ](https://www.getdbt.com/get-started)ください。
 </Expandable>
@@ -85,14 +86,14 @@ Fabric や Trino などの他のデータプラットフォームは、現時点
 はい、dbt セマンティック レイヤーは [dbt v1.6 以上](/docs/dbt-versions/upgrade-dbt-version-in-cloud) と互換性があります。
 </Expandable>
 
-<Expandable alt_header="dbt セマンティック レイヤーには特定の dbt クラウド プランが必要ですか?">
+<Expandable alt_header="dbt セマンティック レイヤーには特定の dbt プランが必要ですか?">
 
-はい、dbt Cloud [Enterprise または Team](https://www.getdbt.com/pricing) プランのお客様は dbt セマンティック レイヤーにアクセスできます。
+Yes, <Constant name="cloud" /> [Starter, Enterprise, or Enterprise +](https://www.getdbt.com/pricing) plan customers can access the dbt Semantic Layer. Certain features like caching and using multiple credentials are available for Enterprise and Enterprise + plans.
 </Expandable>
 
 <Expandable alt_header="dbt Core で dbt セマンティック レイヤー機能を活用する方法はありますか?">
 
-dbt セマンティック レイヤーは dbt Cloud 独自のものですが、一部のコンポーネントはオープンソースです。dbt Core ユーザーは、dbt Cloud プランに加入していなくても、プロジェクト内でのメトリクスの定義など、MetricFlow の機能を使用できます。
+dbt セマンティック レイヤーは <Constant name="cloud" /> 独自のものですが、一部のコンポーネントはオープンソースです。dbt Core ユーザーは、<Constant name="cloud" /> プランに加入していなくても、プロジェクト内でのメトリクスの定義など、MetricFlow の機能を使用できます。
 
 dbt Core ユーザーは、コマンドラインを使用してセマンティック レイヤーをローカルでクエリすることもできます。ただし、[API](/docs/dbt-cloud-apis/sl-api-overview) や [利用可能な統合](/docs/cloud-integrations/avail-sl-integrations) を使用してメトリクスに動的にアクセスすることはできません。
 
@@ -131,7 +132,7 @@ dbtセマンティックレイヤーはデータの物理的なコピーを保�
 
 <Expandable alt_header="セマンティック レイヤーはデータをどのように処理しますか?">
 
-dbtセマンティックレイヤーはdbt Cloudの一部です。データチームはメトリクスを一度一元的に定義し、あらゆる統合分析ツールからアクセスすることで、多様なデータセットにわたって一貫した結果を得ることができます。このサービスを提供するにあたり、dbt Labsはクライアントがセマンティックレイヤーのメトリクスにアクセスできるようにしています。クライアントのデータは、データウェアハウスから戻る際にセマンティックレイヤーを通過します。
+dbtセマンティックレイヤーは<Constant name="dbt_platform" />の一部です。データチームはメトリクスを一度一元的に定義し、あらゆる統合分析ツールからアクセスすることで、多様なデータセットにわたって一貫した結果を得ることができます。このサービスを提供するにあたり、dbt Labsはクライアントがセマンティックレイヤーのメトリクスにアクセスできるようにしています。クライアントのデータは、データウェアハウスから戻る際にセマンティックレイヤーを通過します。
 
 dbt Labsは、クライアントのデータウェアハウスからの暗号化と認証を用いて、これを安全に処理します。場合によっては、これらのデータはdbt Labsシステムに一時的にキャッシュされることがあります（データは永続的に保存されません）。
 
@@ -141,22 +142,22 @@ dbt Labsの従業員は、通常の業務中はキャッシュされたデータ
 
 </Expandable>
 
-<Expandable alt_header="当社の契約である dbt Cloud の利用規約 (ToS) はセマンティック レイヤーに適用されますか?">
+<Expandable alt_header="当社の契約である dbt の利用規約 (ToS) はセマンティック レイヤーに適用されますか?">
 
 はい、適用されます。
 
 </Expandable>
 
-<Expandable alt_header="MetricFlow はどこでホストされていますか? クエリはどのようにして MetricFlow と dbt Cloud を通過し、エンドユーザーに戻りますか?">
+<Expandable alt_header="MetricFlow はどこでホストされていますか? クエリはどのようにして MetricFlow と dbt を通過し、エンドユーザーに戻りますか?">
 
-MetricFlowはdbt Cloudでホストされています。[セマンティックレイヤーAPI](/docs/dbt-cloud-apis/sl-api-overview)からのリクエストは、APIゲートウェイからMetricFlowにルーティングされ、そこでユーザーのリクエストに応じた計算を行うSQLが生成されます。MetricFlowはこのSQLをゲートウェイに返し、ゲートウェイはデータプラットフォームに対してSQLを実行します。
+MetricFlowは<Constant name="cloud" />でホストされています。[セマンティックレイヤーAPI](/docs/dbt-cloud-apis/sl-api-overview)からのリクエストは、APIゲートウェイからMetricFlowにルーティングされ、そこでユーザーのリクエストに応じた計算を行うSQLが生成されます。MetricFlowはこのSQLをゲートウェイに返し、ゲートウェイはデータプラットフォームに対してSQLを実行します。
 </Expandable>
 
 <Expandable alt_header="dbt セマンティック レイヤーを構成するにはどうすればよいですか?">
 
 1. YAML ファイルで [セマンティックモデル](/docs/build/semantic-models) を定義します。このモデルは、エンティティ（結合用）、メジャー（集計タイプを含む指標の構成要素）、ディメンション（指標を細分化するためのもの）など、データを記述します。
 2. 次に、これらのセマンティックモデルに基づいて指標を構築します。これはすべて、プロジェクト内の dbt モデルと並行して、`.yml` 構成で行います。
-3. 指標とセマンティックモデルを定義したら、dbt Cloud で [dbt セマンティックレイヤーを構成](/docs/use-dbt-semantic-layer/setup-sl) できます。
+3. 指標とセマンティックモデルを定義したら、<Constant name="cloud" /> で [dbt セマンティックレイヤーを構成](/docs/use-dbt-semantic-layer/setup-sl) できます。
 
 詳細については、[dbt セマンティックレイヤー クイックスタート](/guides/sl-snowflake-qs) ガイドをご覧ください。
 

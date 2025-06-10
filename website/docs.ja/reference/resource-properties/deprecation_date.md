@@ -41,7 +41,7 @@ models:
 
 dbt モデルに `deprecation_date` を宣言することで、長期的なサポートとメンテナンスの計画とタイムラインを伝え、変更管理を容易にするメカニズムが提供されます。
 
-`deprecation_date` の設定は、[モデルバージョン](/docs/collaborate/govern/model-versions) などの他の [モデルガバナンス](/docs/collaborate/govern/about-model-governance) 機能と連携して機能しますが、それらとは独立して使用することもできます。
+`deprecation_date` の設定は、[モデルバージョン](/docs/mesh/govern/model-versions) などの他の [モデルガバナンス](/docs/mesh/govern/about-model-governance) 機能と連携して機能しますが、それらとは独立して使用することもできます。
 
 ### 警告メッセージ
 

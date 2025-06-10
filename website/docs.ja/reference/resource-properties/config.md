@@ -1,5 +1,5 @@
 ---
-title: "config プロパティについて"
+title: "About config property"
 sidebar_label: "config"
 resource_types: [models, seeds, snapshots, tests, sources, metrics, exposures]
 datatype: "{dictionary}"
@@ -14,6 +14,7 @@ hide_table_of_contents: true
     { label: 'Seeds', value: 'seeds', },
     { label: 'Snapshots', value: 'snapshots', },
     { label: 'Tests', value: 'tests', },
+    { label: 'Unit tests', value: 'unit tests', },
     { label: 'Sources', value: 'sources', },
     { label: 'Metrics', value: 'metrics', },
     { label: 'Exposures', value: 'exposures', },
@@ -103,6 +104,25 @@ version: 2
                 [<test_config>](/reference/data-test-configs): <config-value>
                 ...
 
+```
+
+</File>
+
+</TabItem>
+
+<TabItem value="unit tests">
+
+<VersionCallout version="1.8" />
+
+<File name='models/<filename>.yml'>
+
+```yml
+[unit_tests](/reference/resource-properties/unit-tests):
+  - name: <test-name>
+    config:
+      [enabled](/reference/resource-configs/enabled): true | false
+      [meta](/reference/resource-configs/meta): {dictionary}
+      [tags](/reference/resource-configs/tags): <string>
 ```
 
 </File>
@@ -212,5 +232,5 @@ saved-queries:
 
 </Tabs>
 
-## 定義
-`config` プロパティを使用すると、YAML ファイルでプロパティを定義すると同時にリソースを設定できます。
+## Definition
+The `config` property allows you to configure resources at the same time you're defining properties in YAML files.

@@ -153,7 +153,7 @@ Compilation Error
 #### モデルのバージョン
 
 **関連ドキュメント:**
-- [モデルのバージョン](/docs/collaborate/govern/model-versions)
+- [モデルのバージョン](/docs/mesh/govern/model-versions)
 - [`versions`](/reference/resource-properties/versions#alias)
 
 デフォルトでは、dbt はバージョン管理されたモデルを `<model_name>_v<v>` というエイリアスで作成します。`<v>` はバージョンの一意の識別子です。この動作は、バージョン管理されていないモデルと同様に、カスタム `alias` を設定するか、`generate_alias_name` マクロを再実装することでカスタマイズできます。

@@ -86,7 +86,8 @@ resource_type:
     # Optional: Add the following specific properties for models
     columns:
       - name: column_name
-        tags: <string> | [<string>]
+        config:
+          tags: <string> | [<string>] # changed to config in v1.10
         tests:
           test-name:
             config:
@@ -142,7 +143,7 @@ models:
 [`+` 演算子](/reference/node-selection/graph-operators#the-plus-operator) を使用すると、`tag` 選択に上流または下流の依存関係を含めることができます。
 - `dbt run --select tag:my_tag+` &mdash; `my_tag` タグが付いたモデルとそのすべての下流の依存関係を実行します。
 - `dbt run --select +tag:my_tag` &mdash; `my_tag` タグが付いたモデルとそのすべての上流の依存関係を実行します。
-- `dbt run --select +model_name+` &mdash; モデルとその上流の依存関係、および下流の依存関係を実行します。
+- `dbt run --select +tag:my_tag+` &mdash; `my_tag` タグが付いたモデルとその上流の依存関係、および下流の依存関係を実行します。
 - `dbt run --select tag:my_tag+ --exclude tag:exclude_tag` &mdash; `my_tag` タグが付いたモデルとその下流の依存関係を実行し、依存関係に関係なく `exclude_tag` タグが付いたモデルを除外します。
 
 

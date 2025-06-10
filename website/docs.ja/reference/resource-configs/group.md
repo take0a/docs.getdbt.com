@@ -38,7 +38,8 @@ version: 2
 
 models:
   - name: MODEL_NAME
-    group: GROUP
+    config:
+      group: GROUP # changed to config in v1.10
 
 ```
 
@@ -77,7 +78,8 @@ models:
 ```yml
 seeds:
   - name: [SEED_NAME]
-    group: GROUP_NAME
+    config:
+      group: GROUP_NAME # changed to config in v1.10
 ```
 
 </File>
@@ -194,7 +196,8 @@ version: 2
 
 analyses:
   - name: ANALYSIS_NAME
-    group: GROUP_NAME
+    config:
+      group: GROUP_NAME # changed to config in v1.10
 ```
 
 </File>
@@ -283,26 +286,26 @@ saved_queries:
 
 </Tabs>
 
-## 定義
+## Definition
+An optional configuration for assigning a group to a resource. When a resource is grouped, dbt will allow it to reference private models within the same group.
 
-リソースにグループを割り当てるためのオプションの設定です。リソースをグループ化すると、dbt は同じグループ内のプライベートモデルへの参照を許可します。
+For more details on reference access between resources in groups, check out [model access](/docs/mesh/govern/model-access#groups).
 
-グループ内のリソース間の参照アクセスの詳細については、[モデルアクセス](/docs/collaborate/govern/model-access#groups) をご覧ください。
-
-## 例
-
-### 「マーケティング」グループモデルがプライベートな「財務」グループモデルを参照するのを防ぎます。
-これは、急速に変化するモデル、実験的なモデル、あるいはグループやチーム内部のモデルを他のグループが利用できないようにする場合に役立ちます。
+## Examples
+### Prevent a 'marketing' group model from referencing a private 'finance' group model
+This is useful if you want to prevent other groups from building on top of models that are rapidly changing, experimental, or otherwise internal to a group or team. 
 
 <File name='models/schema.yml'>
 
 ```yml
 models:
   - name: finance_model
-    access: private
-    group: finance
+    config:
+      group: finance # changed to config in v1.10
+      access: private # changed to config in v1.10
   - name: marketing_model
-    group: marketing
+    config:
+      group: marketing # changed to config in v1.10
 ```
 </File>
 
@@ -321,7 +324,7 @@ dbt.exceptions.DbtReferenceError: Parsing Error
   which is not allowed because the referenced node is private to the finance group.
 ```
 
-## 関連ドキュメント
+## Related docs
 
-* [モデルアクセス](/docs/collaborate/govern/model-access#groups)
-* [グループの定義](/docs/build/groups)
+* [Model Access](/docs/mesh/govern/model-access#groups)
+* [Defining groups](/docs/build/groups)

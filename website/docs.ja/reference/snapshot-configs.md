@@ -3,15 +3,22 @@ title: Snapshot 構成
 description: "dbt での snapshot 構成の使用については、このガイドをお読みください。"
 meta:
   resource_type: Snapshots
+intro_text: "Learn about using snapshot configurations in dbt, including snapshot-specific configurations and general configurations."
 ---
 
 import ConfigResource from '/snippets.ja/_config-description-resource.md';
 import ConfigGeneral from '/snippets.ja/_config-description-general.md';
+import CourseCallout from '/snippets/_materialization-video-callout.md';
 
 ## 関連ドキュメント
 
 * [ snapshot ](/docs/build/snapshots)
 * `dbt snapshot` [コマンド](/reference/commands/snapshot)
+
+<CourseCallout resource="Snapshots" 
+url="https://learn.getdbt.com/courses/snapshots"
+course="Snapshots"
+/>
 
 ## 利用可能な構成
 ### Snapshot-specific configurations
@@ -138,14 +145,53 @@ import LegacySnapshotConfig from '/snippets.ja/_legacy-snapshot-config.md';
 
 ###  snapshot 設定の移行
 
-dbt Core v1.9 で導入された最新の snapshot 設定（[`snapshot_meta_column_names`](/reference/resource-configs/snapshot_meta_column_names)、[`dbt_valid_to_current`](/reference/resource-configs/dbt_valid_to_current)、`hard_deletes` など）は、新しい snapshot に最適です。既存の snapshot については、 snapshot 間の不整合を回避するために、以下の設定を推奨します。
+The latest snapshot configurations introduced in dbt Core v1.9 (such as [`snapshot_meta_column_names`](/reference/resource-configs/snapshot_meta_column_names), [`dbt_valid_to_current`](/reference/resource-configs/dbt_valid_to_current), and `hard_deletes`) are best suited for new snapshots, but you can also adopt them in existing snapshots by migrating your table schema and configs carefully to avoid any inconsistencies in your snapshots. 
 
-#### 既存の snapshot の場合
+Here's how you can do it:
 
-- テーブルの移行 - 以前の snapshot を新しいテーブルスキーマと値に移行します。
-  -  snapshot のバックアップコピーを作成します。
-  - 必要に応じて `alter` ステートメント（または `alter` ステートメントを適用するスクリプト）を使用して、テーブルの整合性を確保します。
-- 新しい構成 - 構成を 1 つずつ変換し、テストしながら進めます。
+1. In your data platform, create a backup snapshot table. You can copy it to a new table:
+
+    ```sql
+    create table my_snapshot_table_backup as
+    select * from my_snapshot_table;
+    ```
+
+    This allows you to restore your snapshot if anything goes wrong during migration.
+
+2. If you want to use the new configs, add required columns to your existing snapshot table using `alter` statements as needed. Here's an example of what to add if you're going to use `dbt_valid_to_current` and `snapshot_meta_column_names`:
+
+    ```sql
+    alter table my_snapshot_table
+    add column dbt_valid_to_current string,
+    add column dbt_valid_from timestamp,
+    add column dbt_valid_to timestamp;
+    ```
+
+3. Then update your snapshot config:
+
+    ```yaml
+    snapshots:
+      - name: orders_snapshot
+        config:
+          strategy: timestamp
+          updated_at: updated_at
+          unique_key: id
+          dbt_valid_to_current: "to_date('9999-12-31')"
+          snapshot_meta_column_names:
+            dbt_valid_from: start_date
+            dbt_valid_to: end_date
+    ```
+
+4. Test each change before adopting multiple new configs by running `dbt snapshot` in development or staging. 
+5. Confirm if the snapshot run completes without errors, the new columns are created, and historical logic behaves as you’d expect. The table should look like this:
+
+    | `id`|`start_date` | `end_date` | `updated_at` |
+    | --- | --- | --- | --- | 
+    | 1 | 2024-10-01 09:00:00 | 2024-10-03 08:00:00 | 2024-10-01 09:00:00 |
+    | 2 | 2024-10-03 08:00:00 | 9999-12-31 00:00:00 | 2024-10-03 08:00:00 |
+    | 3 | 2024-10-02 11:15:00 | 9999-12-31 00:00:00 | 2024-10-02 11:15:00 |
+
+  Note: The `end_date` column (defined by `snapshot_meta_column_names`) uses the configured value from `dbt_valid_to_current` (9999-12-31) for newly inserted records, instead of the default `NULL`. Existing records will have `NULL` for `end_date`.
 
 :::warning
 データを移行せずに `dbt_valid_to_current` などの最新の構成のいずれかを使用すると、古いデータと新しいデータが混在し、ダウンストリームの結果が不正確になる可能性があります。
@@ -286,7 +332,7 @@ snapshots:
 
 <VersionBlock firstVersion="1.9">
 
-1. YAMLファイル内の`config` [リソースプロパティ](/reference/model-properties)を使用して定義されます。通常は[ snapshot ディレクトリ](/reference/project-configs/snapshot-paths)または任意のフォルダに保存されます。[dbt Cloudリリーストラック](/docs/dbt-versions/cloud-release-tracks)、dbt v1.9以降で利用可能です。
+1. YAMLファイル内の`config` [リソースプロパティ](/reference/model-properties)を使用して定義されます。通常は[ snapshot ディレクトリ](/reference/project-configs/snapshot-paths)または任意のフォルダに保存されます。[<Constant name="cloud" /> リリーストラック](/docs/dbt-versions/cloud-release-tracks)、dbt v1.9以降で利用可能です。
 2. `dbt_project.yml`ファイルの`snapshots:`キーの下にあります。 snapshot または snapshot のディレクトリに構成を適用するには、リソースパスをネストされた辞書キーとして定義します。
 </VersionBlock>
 
@@ -294,7 +340,7 @@ snapshots:
 
 1. Using a `config` block within a snapshot defined in Jinja SQL.
 2. From the `dbt_project.yml` file, under the `snapshots:` key. To apply a configuration to a snapshot, or directory of snapshots, define the resource path as nested dictionary keys.
-3. Defined in a YAML file using the `config` [resource property](/reference/model-properties), typically in your [snapshots directory](/reference/project-configs/snapshot-paths) (available in  [the dbt Cloud "Latest" release track](/docs/dbt-versions/cloud-release-tracks) and dbt v1.9 and higher).
+3. Defined in a YAML file using the `config` [resource property](/reference/model-properties), typically in your [snapshots directory](/reference/project-configs/snapshot-paths) (available in  [the <Constant name="cloud" />  "Latest" release track](/docs/dbt-versions/cloud-release-tracks) and dbt v1.9 and higher).
 </VersionBlock>
 
 Snapshot configurations are applied hierarchically in the order above with higher taking precedence. You can also apply [tests](/reference/snapshot-properties) to snapshots using the [`tests` property](/reference/resource-properties/data-tests).

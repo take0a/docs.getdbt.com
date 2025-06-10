@@ -7,9 +7,9 @@ id: "connect-adapters"
 
 このセクションでは、dbt をアダプターに接続するさまざまな方法について詳しく説明し、メンテナーとは何かについて説明します。
 
-### dbt Cloud で設定
+### dbt で設定
 
-組織全体で dbt Core を実行するホスト型アーキテクチャである dbt Cloud を使用して、dbt を展開する最も高速で信頼性の高い方法を探ります。dbt Cloud を使用すると、さまざまな [信頼できる](/docs/cloud/about-cloud-setup) データ プラットフォーム プロバイダーに dbt Cloud UI で直接シームレスに [接続](/docs/cloud/about-cloud-setup) できます。
+組織全体で dbt Core を実行するホスト型アーキテクチャである <Constant name="cloud" /> を使用して、dbt を展開する最も高速で信頼性の高い方法を探ります。<Constant name="cloud" /> を使用すると、さまざまな [信頼できる](/docs/cloud/about-cloud-setup) データ プラットフォーム プロバイダーに <Constant name="cloud" /> UI で直接シームレスに [接続](/docs/cloud/about-cloud-setup) できます。
 
 ### dbt Core でインストール
 

@@ -29,7 +29,12 @@ datatype: "{dictionary}"
 - `to`: 参照先テーブルを示すリレーション入力。[`ref()`](/reference/dbt-jinja-functions/ref)] や [`source()`](/reference/dbt-jinja-functions/source) などが考えられます。
 - `to_columns`: 対応する主キーまたは一意キーを含む、そのテーブル内の列のリスト。
 
-外部キーを定義するこの構文では `ref` が使用されているため、依存関係が取得され、さまざまな環境で機能します。[dbt Cloud "最新"](/docs/dbt-versions/cloud-release-tracks) および [dbt Core v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9) で使用できます。
+外部キーを定義するこの構文では `ref` が使用されているため、依存関係が取得され、さまざまな環境で機能します。[<Constant name="cloud" /> "最新"](/docs/dbt-versions/cloud-release-tracks) および [<Constant name="core" /> v1.9+](/docs/dbt-versions/core-upgrade/upgrading-to-v1.9) で使用できます。
+
+Since constraints support and enforcement [varies by platform](/reference/resource-properties/constraints#platform-specific-support), dbt offers two optional fields you can specify on any filter:
+
+- `warn_unenforced`: Set to `False` to skip warnings for constraints that are supported by your platform but not enforced (like `primary_key` in Snowflake).
+- `warn_unsupported`: Set to `False` to skip warnings for constraints that your platform doesn't support at all (like `check` in Redshift).
 
 <File name='models/schema.yml'>
 
@@ -45,6 +50,7 @@ models:
     constraints:
       - type: primary_key
         columns: [first_column, second_column, ...]
+        warn_unsupported: True # show a warning if unsupported
       - type: foreign_key # multi_column
         columns: [first_column, second_column, ...]
         to: ref('my_model_to') | source('source', 'source_table')
@@ -66,6 +72,7 @@ models:
           - type: foreign_key
             to: ref('my_model_to') | source('source', 'source_table')
             to_columns: [other_model_column]
+            warn_unenforced: False # skips warning if supported but not enforced
           - type: ...
 ```
 
@@ -73,7 +80,7 @@ models:
 
 サポートされている dbt アダプタは、これらのフィールドに値が入力されると、`expression` ではなく外部キー制約をレンダリングします。
 
-外部キー制約をサポートするアダプタの詳細については、[プラットフォーム制約のサポート](/docs/collaborate/govern/model-contracts#platform-constraint-support) に関するガイドをご覧ください。
+外部キー制約をサポートするアダプタの詳細については、[プラットフォーム制約のサポート](/docs/mesh/govern/model-contracts#platform-constraint-support) に関するガイドをご覧ください。
 
 </VersionBlock>
 
@@ -83,7 +90,7 @@ When using `foreign_key`, you need to specify the referenced table's schema manu
 
 `expression: "{{ target.schema }}.customers(customer_id)"` 
 
-Note that later versions of dbt will have more efficient ways of handling this. Find out more about upgrading to the latest version, refer to [About dbt Core versions](/docs/dbt-versions/core) or [Upgrade dbt version in Cloud](/docs/dbt-versions/upgrade-dbt-version-in-cloud).
+Note that later versions of <Constant name="dbt" /> will have more efficient ways of handling this. Find out more about upgrading to the latest version, refer to [About <Constant name="core" /> versions](/docs/dbt-versions/core) or [Upgrade <Constant name="dbt" /> version in Cloud](/docs/dbt-versions/upgrade-dbt-version-in-cloud).
 
 <File name='models/schema.yml'>
 
@@ -373,7 +380,7 @@ select
 
 <div warehouse="BigQuery">
 
-BigQuery では、`not null` 制約の定義と適用、およびクエリの最適化に使用できる `primary key` 制約と `foreign key` 制約の定義（ただし適用は _not_）が可能です。BigQuery は、その他の制約の定義または適用をサポートしていません。詳細については、[プラットフォーム制約のサポート](/docs/collaborate/govern/model-contracts#platform-constraint-support) をご覧ください。
+BigQuery では、`not null` 制約の定義と適用、およびクエリの最適化に使用できる `primary key` 制約と `foreign key` 制約の定義（ただし適用は _not_）が可能です。BigQuery は、その他の制約の定義または適用をサポートしていません。詳細については、[プラットフォーム制約のサポート](/docs/mesh/govern/model-contracts#platform-constraint-support) をご覧ください。
 
 ドキュメント: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
 
@@ -588,7 +595,7 @@ alter table schema_name.my_model add constraint 472394792387497234 check (id > 0
 
 ## カスタム制約
 
-dbt Cloud および dbt Core では、モデルにカスタム制約を適用することで、テーブルの詳細な設定を行うことができます。データウェアハウスによってサポートされる構文と機能は異なります。
+<Constant name="cloud" /> および <Constant name="core" /> では、モデルにカスタム制約を適用することで、テーブルの詳細な設定を行うことができます。データウェアハウスによってサポートされる構文と機能は異なります。
 
 カスタム制約を使用すると、特定の列に設定を追加できます。例:
 

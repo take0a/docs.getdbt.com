@@ -235,7 +235,8 @@ models:
       - name: id
         tests:
           - unique:
-              tags: ['my_tag']
+            config:
+              tags: ['my_tag'] # changed to config in v1.10
 ```
 
 </File>
@@ -303,7 +304,7 @@ models:
 
 #### 汎用テストと特異テストに説明を追加する
 
-dbt v1.9（dbt Cloud [リリーストラック](/docs/dbt-versions/cloud-release-tracks)でも利用可能）以降では、汎用テストと特異テストの両方に[説明](/reference/resource-properties/data-tests#description)を追加できます。
+dbt v1.9（ <Constant name="cloud" /> [リリーストラック](/docs/dbt-versions/cloud-release-tracks)でも利用可能）以降では、汎用テストと特異テストの両方に[説明](/reference/resource-properties/data-tests#description)を追加できます。
 
 汎用テストの場合は、既存のYAMLに合わせて説明を追加します:
 

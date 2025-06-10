@@ -32,7 +32,7 @@ defer を使用する場合、本番環境データセット、開発データ�
 - 開発環境では環境固有の制限を適用し、本番環境では適用しない場合、予想よりも多くのデータが選択される可能性があります。
 - 複数の親（例：リレーションシップ）に依存するテストを実行する場合（複数の環境をまたいでテストするため）
 
-遅延を実行するには、フラグを明示的に渡すか、環境変数（DBT_DEFER と DBT_STATE）を設定することで、`--defer` と `--state` の両方を設定する必要があります。dbt Cloud を使用する場合は、[CI ジョブの設定方法](/docs/deploy/continuous-integration) をご覧ください。
+遅延を実行するには、フラグを明示的に渡すか、環境変数（DBT_DEFER と DBT_STATE）を設定することで、`--defer` と `--state` の両方を設定する必要があります。<Constant name="cloud" /> を使用する場合は、[CI ジョブの設定方法](/docs/deploy/continuous-integration) をご覧ください。
 
 
 #### 状態を優先
@@ -214,6 +214,6 @@ dbtは`dev_alice.model_a`が存在するかどうかを確認します。存在�
 
 ## 関連ドキュメント
 
-- [dbt Cloud での defer の使用](/docs/cloud/about-cloud-develop-defer)
+- [<Constant name="cloud" /> での defer の使用](/docs/cloud/about-cloud-develop-defer)
 - [on_configuration_change](/reference/resource-configs/on_configuration_change)
 

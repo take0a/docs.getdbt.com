@@ -7,12 +7,12 @@ id: failed-tests
 ---
 失敗したテストをデバッグするには、dbt が実行した SQL を次のように見つけます:
 
-* dbt Cloud:
+* <Constant name="cloud" />:
   * テスト出力内で、失敗したテストをクリックし、「詳細」を選択します。
 
-* dbt Core:
+* <Constant name="core" />:
   * エラーメッセージの一部として返されたファイルパスを開きます。
   * コンパイル済みのすべてのテストクエリが格納されている `target/compiled/schema_tests` ディレクトリに移動します。
 
-SQL をクエリエディタにコピーし（dbt Cloud では、新しい `Statement` に貼り付けることができます）、クエリを実行して失敗したレコードを見つけます。
+SQL をクエリエディタにコピーし（<Constant name="cloud" />, では、新しい `Statement` に貼り付けることができます）、クエリを実行して失敗したレコードを見つけます。
 

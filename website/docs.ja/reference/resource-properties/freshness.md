@@ -6,27 +6,29 @@ version: 2
 
 sources:
   - name: <source_name>
-    freshness:
-      warn_after:
-        [count](#count): <positive_integer>
-        [period](#period): minute | hour | day
-      error_after:
-        [count](#count): <positive_integer>
-        [period](#period): minute | hour | day
-      [filter](#filter): <boolean_sql_expression>
+    config:
+      freshness: # changed to config in v1.9
+        warn_after:
+          [count](#count): <positive_integer>
+          [period](#period): minute | hour | day
+        error_after:
+          [count](#count): <positive_integer>
+          [period](#period): minute | hour | day
+        [filter](#filter): <boolean_sql_expression>
     [loaded_at_field](#loaded_at_field): <column_name_or_expression>
     [loaded_at_query](#loaded_at_query) <sql_expression> # v1.10 or higher. Should not be used if loaded_at_field is defined
 
     tables:
       - name: <table_name>
-        freshness:
-          warn_after:
-            [count](#count): <positive_integer>
-            [period](#period): minute | hour | day
-          error_after:
-            [count](#count): <positive_integer>
-            [period](#period): minute | hour | day
-          [filter](#filter): <boolean_sql_expression>
+        config:
+          freshness: 
+            warn_after:
+              [count](#count): <positive_integer>
+              [period](#period): minute | hour | day
+            error_after:
+              [count](#count): <positive_integer>
+              [period](#period): minute | hour | day
+            [filter](#filter): <boolean_sql_expression>
         [loaded_at_field](#loaded_at_field): <column_name_or_expression>
         [loaded_at_query](#loaded_at_query) <sql_expression> # v1.10 or higher. Should not be used if loaded_at_field is defined
 
@@ -44,7 +46,7 @@ sources:
 
 ソースに `freshness:` ブロックがある場合、dbt はその source の鮮度を計算します。
 - `loaded_at_field` が指定されている場合、dbt は選択クエリを使用して鮮度を計算します。
-- `loaded_at_field` が指定されていない場合、dbt は可能な場合はウェアハウスメタデータテーブルを使用して鮮度を計算します（サポートされているアダプタの v1.7 の新機能）。
+- `loaded_at_field` が指定されていない場合、dbt は可能な場合はウェアハウスメタデータテーブルを使用して鮮度を計算します。
 
 <VersionBlock firstVersion="1.10"> 
 - `loaded_at_query` が指定されている場合、dbt は指定されたカスタム SQL クエリを使用して鮮度を計算します。
@@ -104,10 +106,11 @@ loaded_at_field: "convert_timezone('Australia/Sydney', 'UTC', created_at_local)"
 
 sources:
   - name: your_source
-    freshness:
-      error_after:
-        count: 2
-        period: hour
+    config:
+      freshness: # changed to config in v1.9
+        error_after:
+          count: 2
+          period: hour
     loaded_at_query: |
       select max(_sdc_batched_at) from (
       select * from {{ this }}
@@ -123,10 +126,11 @@ sources:
   - name: ecom
     schema: raw
     description: E-commerce data for the Jaffle Shop
-    freshness:
-      warn_after:
-        count: 24
-        period: hour
+    config: 
+      freshness: 
+        warn_after:
+          count: 24
+          period: hour
     tables:
       - name: raw_orders
         description: One record per order
@@ -176,10 +180,11 @@ version: 2
 sources:
   - name: jaffle_shop
     database: raw
-
-    freshness: # default freshness
-      warn_after: {count: 12, period: hour}
-      error_after: {count: 24, period: hour}
+    config: 
+      # changed to config in v1.9
+      freshness: # default freshness
+        warn_after: {count: 12, period: hour}
+        error_after: {count: 24, period: hour}
 
     loaded_at_field: _etl_loaded_at
 
@@ -187,15 +192,17 @@ sources:
       - name: customers # this will use the freshness defined above
 
       - name: orders
-        freshness: # make this a little more strict
-          warn_after: {count: 6, period: hour}
-          error_after: {count: 12, period: hour}
-          # Apply a where clause in the freshness query
-          filter: datediff('day', _etl_loaded_at, current_timestamp) < 2
+        config:
+          freshness: # make this a little more strict
+            warn_after: {count: 6, period: hour}
+            error_after: {count: 12, period: hour}
+            # Apply a where clause in the freshness query
+            filter: datediff('day', _etl_loaded_at, current_timestamp) < 2
 
 
       - name: product_skus
-        freshness: # do not check freshness for this table
+        config:
+          freshness: # do not check freshness for this table
 ```
 
 </File>

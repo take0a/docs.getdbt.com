@@ -8,19 +8,19 @@ tags: [Metrics, Semantic Layer]
 
 dbt プロジェクトでメトリクスを定義すると、MetricFlow コマンドを使用してメトリクス、ディメンション、ディメンション値のクエリを実行し、構成を検証できるようになります。
 
-MetricFlow を使用すると、[dbt Cloud](/docs/cloud/about-develop-dbt) または [dbt Core](/docs/core/installation-overview) で dbt プロジェクト内のメトリクスを定義およびクエリできます。
-ユニバーサルな [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) のパワーを活用し、下流ツールでそれらのメトリクスを動的にクエリするには、dbt Cloud [Team または Enterprise](https://www.getdbt.com/pricing/) アカウントが必要です。
+MetricFlow を使用すると、[<Constant name="cloud" />](/docs/cloud/about-develop-dbt) または [<Constant name="core" />](/docs/core/installation-overview) で dbt プロジェクト内のメトリクスを定義およびクエリできます。
+ユニバーサルな [dbt Semantic Layer](/docs/use-dbt-semantic-layer/dbt-sl) のパワーを活用し、下流ツールでそれらのメトリクスを動的にクエリするには、<Constant name="cloud" /> [Team または Enterprise](https://www.getdbt.com/pricing/) アカウントが必要です。
 
 MetricFlow は、Python バージョン 3.8、3.9、3.10、3.11 と互換性があります。
 
 ## MetricFlow
 
 MetricFlow は、dbt プロジェクトでメトリクスの定義とクエリを実行できる dbt パッケージです。
-MetricFlow を使用すると、dbt Cloud CLI、dbt Cloud IDE、または dbt Core で dbt プロジェクト内のメトリクスをクエリできます。
+MetricFlow を使用すると、<Constant name="cloud" /> CLI、<Constant name="cloud_ide" />、または <Constant name="core" /> で dbt プロジェクト内のメトリクスをクエリできます。
 
-MetricFlow を dbt Cloud と併用すると、バージョン管理が不要になります。dbt Cloud アカウントが自動的にバージョン管理を行います。
+MetricFlow を <Constant name="cloud" /> と併用すると、バージョン管理が不要になります。<Constant name="cloud" /> アカウントが自動的にバージョン管理を行います。
 
-dbt Cloud ジョブは、`dbt sl validate` コマンドをサポートしており、[セマンティックノードを自動的にテスト](/docs/deploy/ci-jobs#semantic-validations-in-ci) します。
+<Constant name="cloud" /> ジョブは、`dbt sl validate` コマンドをサポートしており、[セマンティックノードを自動的にテスト](/docs/deploy/ci-jobs#semantic-validations-in-ci) します。
 また、MetricFlow をインストール (`python -m pip install metricflow`) することで、git プロバイダー (GitHub Actions など) で MetricFlow 検証を追加することもできます。
 これにより、PR の継続的インテグレーション チェックの一環として MetricFlow コマンドを実行できます。
 
@@ -28,24 +28,16 @@ dbt Cloud ジョブは、`dbt sl validate` コマンドをサポートしてお�
 
 <TabItem value="cloud" label="MetricFlow with dbt Cloud">
 
-dbt Cloud では、[dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) または [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) で MetricFlow コマンドを直接実行できます。
+<Constant name="cloud" /> では、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) または [<Constant name="cloud_cli" />](/docs/cloud/cloud-cli-installation) で MetricFlow コマンドを直接実行できます。
 
-dbt Cloud CLI ユーザーの場合、MetricFlow コマンドは dbt Cloud CLI に組み込まれているため、dbt Cloud CLI をインストールするとすぐに実行でき、MetricFlow を別途インストールする必要はありません。
-dbt Cloud アカウントが自動的にバージョン管理を行うため、バージョン管理は不要です。
+<Constant name="cloud_cli" /> ユーザーの場合、MetricFlow コマンドは <Constant name="cloud_cli" /> に組み込まれているため、<Constant name="cloud_cli" /> をインストールするとすぐに実行でき、MetricFlow を別途インストールする必要はありません。
+<Constant name="cloud" /> アカウントが自動的にバージョン管理を行うため、バージョン管理は不要です。
 
 </TabItem>
 
 <TabItem value="core" label="MetricFlow with dbt Core">  
 
 [MetricFlow](https://github.com/dbt-labs/metricflow#getting-started)は[PyPI](https://pypi.org/project/dbt-metricflow/)からインストールできます。WindowsまたはLinuxオペレーティングシステムにMetricFlowをインストールするには、`pip`を使用する必要があります:
-
-<VersionBlock lastVersion="1.7">
- 
-1. Create or activate your virtual environment `python -m venv venv`
-2. Run `pip install dbt-metricflow`
-  * You can install MetricFlow using PyPI as an extension of your dbt adapter in the command line. To install the adapter, run `python -m pip install "dbt-metricflow[your_adapter_name]"` and add the adapter name at the end of the command. For example, for a Snowflake adapter run `python -m pip install "dbt-metricflow[snowflake]"`
-
-</VersionBlock>
 
 <VersionBlock firstVersion="1.8">
  
@@ -55,7 +47,7 @@ dbt Cloud アカウントが自動的にバージョン管理を行うため、�
 
 </VersionBlock>
 
-**注意**: dbt Core、アダプタ、MetricFlow 間のバージョン管理が必要になります。
+**注意**: <Constant name="core" />、アダプタ、MetricFlow 間のバージョン管理が必要になります。
 
 Metafont LaTeX パッケージがインストールされている場合、MetricFlow の `mf` コマンドはエラーを返しますのでご注意ください。`mf` コマンドを実行するには、パッケージをアンインストールしてください。
 
@@ -69,13 +61,13 @@ MetricFlow は、メタデータの取得とメトリクスのクエリを実行
 <Tabs>
 <TabItem value="cloudcommands" label="Commands for dbt Cloud">
 
-コマンド名の前に「dbt sl」プレフィックスを付けると、dbt Cloud IDE または dbt Cloud CLI で実行できます。たとえば、すべてのメトリックを一覧表示するには、「dbt sl list metrics」を実行します。
+コマンド名の前に「dbt sl」プレフィックスを付けると、<Constant name="cloud_ide" /> または <Constant name="cloud_cli" /> で実行できます。たとえば、すべてのメトリックを一覧表示するには、「dbt sl list metrics」を実行します。
 
-dbt Cloud CLI ユーザーは、ターミナルで「dbt sl --help」を実行すると、MetricFlow のコマンドとフラグの完全な一覧が表示されます。
+<Constant name="cloud_cli" /> ユーザーは、ターミナルで「dbt sl --help」を実行すると、MetricFlow のコマンドとフラグの完全な一覧が表示されます。
 
-次の表は、dbt Cloud IDE および dbt Cloud CLI と互換性のあるコマンドの一覧です:
+次の表は、<Constant name="cloud_ide" /> および <Constant name="cloud_cli" /> と互換性のあるコマンドの一覧です:
 
-| <div style={{width:'250px'}}>Command</div>  | <div style={{width:'100px'}}>Description</div> | dbt Cloud IDE | dbt Cloud CLI |
+| <div style={{width:'250px'}}>Command</div>  | <div style={{width:'100px'}}>Description</div> | <Constant name="cloud_ide" /> | <Constant name="cloud_cli" /> |
 |---------|-------------|---------------|---------------|
 | [`list metrics`](#list-metrics) | ディメンションを含むメトリックを一覧表示します。 |  ✅ | ✅ |
 | [`list dimensions`](#list) | メトリックの一意のディメンションを一覧表示します。 |  ✅  | ✅ |
@@ -101,7 +93,7 @@ dbt Cloud CLI ユーザーは、ターミナルで「dbt sl --help」を実行�
 
 <Expandable alt_header="dbt Cloud CLI を使用してメトリックをクエリまたはプレビューするにはどうすればよいですか?">
 
-dbt Cloud CLI を使用してメトリックをクエリまたはプレビューする方法については、次の短いビデオ デモをご覧ください:
+<Constant name="cloud_cli" /> を使用してメトリックをクエリまたはプレビューする方法については、次の短いビデオ デモをご覧ください:
 
 <LoomVideo id='09e2b287f063497d888f4bed91469d79' />
 
@@ -111,7 +103,7 @@ dbt Cloud CLI を使用してメトリックをクエリまたはプレビュー
 
 <TabItem value="corecommands" label="dbt Core のコマンド">
 
-dbt Core で実行するには、コマンド名の前に `mf` プレフィックスを付けます。
+<Constant name="core" /> で実行するには、コマンド名の前に `mf` プレフィックスを付けます。
 たとえば、すべてのメトリックを一覧表示するには、`mf list metrics` を実行します。
 
 - [`list metrics`](#list-metrics) &mdash; ディメンションを含むメトリックを一覧表示します。
@@ -247,7 +239,7 @@ Options:
 
 次のコマンドは、構成ファイルで指定したデータプラットフォームに対してヘルスチェックを実行します。
 
-dbt Cloud では、ヘルスチェックの実行に dbt Cloud の認証情報を使用するため、`health-checks` コマンドは必要ありません。
+<Constant name="cloud" /> では、ヘルスチェックの実行に <Constant name="cloud" /> の認証情報を使用するため、`health-checks` コマンドは必要ありません。
 
 ```bash
 mf health-checks # In dbt Core
@@ -505,7 +497,7 @@ dbt sl query --saved-query <name> # In dbt Cloud
 mf query --saved-query <name> # In dbt Core
 ```
 
-たとえば、dbt Cloud を使用していて、`new_customer_orders` という名前の保存済みクエリがある場合は、`dbt sl query --saved-query new_customer_orders` を実行します。
+たとえば、<Constant name="cloud" /> を使用していて、`new_customer_orders` という名前の保存済みクエリがある場合は、`dbt sl query --saved-query new_customer_orders` を実行します。
 
 :::info 保存済みクエリのクエリに関する注意事項
 [保存済みクエリ](/docs/build/saved-queries) をクエリする際は、`where`、`limit`、`order`、`compile` などのパラメータを使用できます。
@@ -531,7 +523,7 @@ MetricFlow によって生成された SQL を表示するには、クエリに 
 # In dbt Cloud
 dbt sl query --metrics order_total --group-by metric_time,is_food_order --limit 10 --order-by -metric_time --where "is_food_order = True" --start-time '2017-08-22' --end-time '2017-08-27' --compile
 
-# In dbt Core
+# In <Constant name="core" />
 mf query --metrics order_total --group-by metric_time,is_food_order --limit 10 --order-by -metric_time --where "is_food_order = True" --start-time '2017-08-22' --end-time '2017-08-27' --explain
 ```
 
@@ -564,7 +556,7 @@ limit 10
 <TabItem value="eg7" label=" Export to CSV">
  
 クエリの結果を csv にエクスポートするには、`--csv file_name.csv` フラグを追加します。
-`--csv` フラグは dbt Core でのみ使用でき、dbt Cloud ではサポートされていません。
+`--csv` フラグは <Constant name="core" /> でのみ使用でき、dbt Cloud ではサポートされていません。
 
 **Query**
 
@@ -603,7 +595,7 @@ mf query --metrics revenue --group-by metric_time__month # In dbt Core
 また、`--select`フラグを使用して、保存済みクエリから特定のエクスポートを指定することもできます。
 詳細については、[開発中のエクスポート](/docs/use-dbt-semantic-layer/exports#exports-in-development)を参照してください。
 
-エクスポートはdbt Cloudで利用できます。
+エクスポートは<Constant name="cloud" />で利用できます。
 
 ```bash
 dbt sl export 
@@ -615,7 +607,7 @@ dbt sl export
 このコマンドを使用すると、複数のクエリのエクスポートを同時に管理および実行できるため、時間と労力を節約できます。
 詳細については、[開発中のエクスポート](/docs/use-dbt-semantic-layer/exports#exports-in-development)を参照してください。
 
-エクスポートはdbt Cloudで利用できます。
+エクスポートは<Constant name="cloud" />で利用できます。
 
 ```bash
 dbt sl export-all 
@@ -668,8 +660,8 @@ source ~/.zshrc
 
 <DetailsToggle alt_header="dbt Cloud CLI でクエリが 100 行に制限されているのはなぜですか?">
 
-dbt Cloud CLI からのクエリ発行におけるデフォルトの「limit」は 100 行です。
-dbt Cloud CLI は通常、開発プロセス中に dbt セマンティック レイヤーをクエリするために使用され、本番環境のレポート作成や大規模なデータセットへのアクセスには使用されないため、このデフォルト設定は、不必要に大きなデータセットが返されるのを防ぐためです。
+<Constant name="cloud_cli" /> からのクエリ発行におけるデフォルトの「limit」は 100 行です。
+<Constant name="cloud_cli" /> は通常、開発プロセス中に dbt セマンティック レイヤーをクエリするために使用され、本番環境のレポート作成や大規模なデータセットへのアクセスには使用されないため、このデフォルト設定は、不必要に大きなデータセットが返されるのを防ぐためです。
 ほとんどのワークフローでは、データのサブセットのみを返す必要があります。
 
 ただし、必要に応じてクエリで「--limit」オプションを設定することで、この制限を変更できます。

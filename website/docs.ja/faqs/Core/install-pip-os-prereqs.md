@@ -6,11 +6,11 @@ id: install-pip-os-prereqs.md
 
 ---
 
-お使いのオペレーティング システムによっては、pip を使用して dbt Core をインストールする前に事前設定が必要な場合があります。開発環境固有の依存関係をダウンロードしてインストールしたら、[dbt Core の pip インストール](/docs/core/pip-install) に進むことができます。
+お使いのオペレーティング システムによっては、pip を使用して <Constant name="core" /> をインストールする前に事前設定が必要な場合があります。開発環境固有の依存関係をダウンロードしてインストールしたら、[<Constant name="core" /> の pip インストール](/docs/core/pip-install) に進むことができます。
 
 ### CentOS
 
-CentOS では、dbt Core を正常にインストールして実行するには、Python とその他の依存関係が必要です。
+CentOS では、<Constant name="core" /> を正常にインストールして実行するには、Python とその他の依存関係が必要です。
 
 Python とその他の依存関係をインストールするには、以下の手順に従います:
 
@@ -23,7 +23,7 @@ sudo yum install redhat-rpm-config gcc libffi-devel \
 
 ### MacOS
 
-MacOS で dbt Core を正常にインストールして実行するには、Python 3.8 以降が必要です。
+MacOS で <Constant name="core" /> を正常にインストールして実行するには、Python 3.8 以降が必要です。
 
 Python のバージョンを確認するには:
 
@@ -39,7 +39,7 @@ python --version
 
 ### Ubuntu/Debian
 
-Ubuntu で dbt Core を正常にインストールして実行するには、Python とその他の依存関係が必要です。
+Ubuntu で <Constant name="core" /> を正常にインストールして実行するには、Python とその他の依存関係が必要です。
 
 Python とその他の依存関係をインストールするには、以下の手順に従います:
 
@@ -54,8 +54,8 @@ pip install cryptography~=3.4
 
 ### Windows
 
-Windows で dbt Core を正常にインストールして実行するには、Python と Git が必要です。
+Windows で <Constant name="core" /> を正常にインストールして実行するには、Python と Git が必要です。
 
-[Git for Windows](https://git-scm.com/downloads) と [Python バージョン 3.9 以上 (Windows 用)](https://www.python.org/downloads/windows/) をインストールしてください。
+[[<Constant name="git" /> for Windows](https://git-scm.com/downloads) と [Python バージョン 3.9 以上 (Windows 用)](https://www.python.org/downloads/windows/) をインストールしてください。
 
 その他のご質問については、[Python 互換性に関する FAQ](/faqs/Core/install-python-compatibility) をご覧ください。

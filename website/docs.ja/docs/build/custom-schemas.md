@@ -5,7 +5,7 @@ id: "custom-schemas"
 pagination_next: "docs/build/custom-databases"
 ---
 
-デフォルトでは、すべての dbt モデルは、[環境](/docs/dbt-cloud-environments) (dbt Cloud) または [プロファイルのターゲット](/docs/core/dbt-core-environments) (dbt Core) で指定されたスキーマで構築されます。このデフォルトのスキーマは、_ターゲット スキーマ_ と呼ばれます。
+デフォルトでは、すべての dbt モデルは、[環境](/docs/dbt-cloud-environments) (<Constant name="cloud" />) または [プロファイルのターゲット](/docs/core/dbt-core-environments) (<Constant name="core" />) で指定されたスキーマで構築されます。このデフォルトのスキーマは、_ターゲット スキーマ_ と呼ばれます。
 
 多数のモデルを含む dbt プロジェクトでは、複数のスキーマにまたがってモデルを構築し、類似のモデルをグループ化するのが一般的です。たとえば、次のようなことが考えられます。
 
@@ -202,11 +202,11 @@ dbt には、このユースケース用のマクロ（「generate_schema_name_f
 
 * **dev** - ローカル開発環境。コンピュータ上の `profiles.yml` ファイルで設定されています。
 * **ci** - GitHub、GitLab などのプルリクエストで実行される [継続的インテグレーション](/docs/cloud/git/connect-github) 環境。
-* **prod** - dbt Cloud、Airflow、または[類似](/docs/deploy/deployments)などのdbtプロジェクトの本番環境デプロイメント。
+* **prod** - <Constant name="cloud" />、Airflow、または[類似](/docs/deploy/deployments)などのdbtプロジェクトの本番環境デプロイメント。
 
 スキーマ名が正しく生成されていない場合は、該当する環境でターゲット名を再確認してください。
 
-詳細については、[dbt Core での環境管理](/docs/core/dbt-core-environments) ガイドをご覧ください。
+詳細については、[<Constant name="core" /> での環境管理](/docs/core/dbt-core-environments) ガイドをご覧ください。
 
 ## 関連ドキュメント
 
