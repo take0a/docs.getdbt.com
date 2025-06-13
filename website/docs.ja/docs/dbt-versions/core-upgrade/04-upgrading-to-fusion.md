@@ -5,45 +5,45 @@ description: New features and changes in Fusion
 displayed_sidebar: "docs"
 ---
 
-import FusionBeta from '/snippets/_fusion-beta-callout.md';
+import FusionBeta from '/snippets.ja/_fusion-beta-callout.md';
 
 <FusionBeta />
 
-import AboutFusion from '/snippets/_about-fusion.md';
+import AboutFusion from '/snippets.ja/_about-fusion.md';
 
 <AboutFusion />
 
-## What to know before upgrading
+## アップグレード前に知っておくべきこと
 
-<Constant name="core" />  and dbt Fusion share a common language spec—the code in your project. dbt Labs is committed to providing feature parity with <Constant name="core" />  wherever possible.
+<Constant name="core" /> と dbt Fusion は、共通の言語仕様（プロジェクト内のコード）を共有しています。dbt Labs は、可能な限り <Constant name="core" /> と同等の機能を提供することに尽力しています。
 
-At the same time, we want to take this opportunity to _strengthen the framework_ by removing deprecated functionality, rationalizing confusing behavior, and providing more rigorous validation on erroneous inputs. This means that there is some work involved in preparing an existing dbt project for readiness on Fusion.
+同時に、この機会を利用して、非推奨の機能を削除し、混乱を招く動作を合理化し、誤った入力に対するより厳格な検証を提供することで、フレームワークを強化したいと考えています。そのため、既存の dbt プロジェクトを Fusion に対応させるには、ある程度の作業が必要になります。
 
-That work is documented below — it should be simple, straightforward, and in many cases, auto-fixable with the [`dbt-autofix`](https://github.com/dbt-labs/dbt-autofix) helper.
+その作業については以下に記載しています。これはシンプルでわかりやすく、多くの場合、[`dbt-autofix`](https://github.com/dbt-labs/dbt-autofix) ヘルパーで自動的に修正できるはずです。
 
-### A clean slate
+### 白紙の状態から
 
-dbt Labs is committed to moving forward with Fusion, and it will not support any deprecated functionality:
-- All [deprecation warnings](https://docs.getdbt.com/reference/deprecations) must be resolved before upgrading to the new engine. This included historic deprecations and [new ones as of dbt Core v1.10](https://docs.getdbt.com/docs/dbt-versions/core-upgrade/upgrading-to-v1.10#deprecation-warnings). _While Fusion is in beta, it will raise validation warnings, but these warnings will become errors when Fusion goes into Preview._
-- All [behavior change flags](https://docs.getdbt.com/reference/global-configs/behavior-changes#behaviors) will be removed (generally enabled). You can no longer opt out of them using `flags:` in your `dbt_project.yml`.
+dbt Labs は Fusion の開発を推し進めることに注力しており、廃止予定の機能は一切サポートしません。
+- 新しいエンジンにアップグレードする前に、すべての [廃止予定の警告](https://docs.getdbt.com/reference/deprecations) を解決してください。これには、過去の廃止予定機能と [dbt Core v1.10 以降の新しい機能](https://docs.getdbt.com/docs/dbt-versions/core-upgrade/upgrading-to-v1.10#deprecation-warnings) が含まれます。_Fusion がベータ版の間は検証警告が表示されますが、Fusion がプレビュー版に移行した時点でこれらの警告はエラーになります。_
+- すべての [動作変更フラグ](https://docs.getdbt.com/reference/global-configs/behavior-changes#behaviors) は削除されます（通常は有効になります）。 `dbt_project.yml` で `flags:` を使用してこれらをオプトアウトすることはできなくなりました。
 
-### Ecosystem packages
+### エコシステムパッケージ
 
-The most popular `dbt-labs` packages (`dbt_utils`, `audit_helper`, `dbt_external_tables`, `dbt_project_evaluator`) are already compatible with Fusion. External packages published by organizations outside of dbt may use outdated code or incompatible features that fail to parse with the new Fusion engine. Now that we've announced Fusion in beta, we're going to work with other package maintainers to get them ready & working on Fusion. If we know that a popular package will require upgrading to a new release for Fusion compatibility, we will document it here.
+最も人気のある `dbt-labs` パッケージ (`dbt_utils`、`audit_helper`、`dbt_external_tables`、`dbt_project_evaluator`) は既に Fusion と互換性があります。dbt 以外の組織によって公開されている外部パッケージは、古いコードや互換性のない機能を使用している可能性があり、新しい Fusion エンジンで解析できない可能性があります。Fusion のベータ版を発表したので、他のパッケージメンテナーと協力して、Fusion の準備と作業を進めていきます。人気のあるパッケージで Fusion との互換性を保つために新しいリリースへのアップグレードが必要であることが判明した場合は、ここでその旨を文書化します。
 
-### Changed functionality
+### 機能変更
 
-When developing the Fusion engine, there were opportunities to improve the dbt framework - failing earlier (when possible), fixing bugs, optimizing run order, and deprecating flags that are no longer relevant. The result is a handful of specific and nuanced changes to existing behavior.
+Fusionエンジンの開発中、dbtフレームワークを改善する機会がありました。具体的には、可能な場合は早期にエラーを検知する、バグを修正する、実行順序を最適化する、不要になったフラグを廃止するといった改善が行われました。その結果、既存の動作にいくつかの具体的かつ微妙な変更が加えられました。
 
-When upgrading to Fusion, you should expect the following changes in functionality:
+Fusionにアップグレードすると、以下の機能変更が予想されます。
 
-#### Parse time printing of relations will print out the full qualified name, instead of an empty string
+#### リレーションの解析時出力では、空文字列ではなく完全修飾名が出力されます。
 
-In dbt Core v1, when printing the result of `get_relation()`, the parse time output for that Jinja would print `None` (the undefined object coerces to the string “None”).
+dbt Core v1 では、`get_relation()` の結果を出力する際、その Jinja の解析時出力には `None` が出力されていました（未定義オブジェクトは文字列「None」に強制変換されます）。
 
-In Fusion, to help with intelligent batching of `get_relation()` calls (and significantly speed up `dbt compile`), dbt needs to construct a relation object with the fully qualified name resolved at parse time for the `get_relation()` adapter call.
+Fusion では、`get_relation()` 呼び出しのインテリジェントなバッチ処理（および `dbt compile` の大幅な高速化）を支援するために、dbt は `get_relation()` アダプタ呼び出し用に、解析時に解決された完全修飾名を持つリレーションオブジェクトを構築する必要があります。
 
-Constructing a relation object with the fully qualified name in Fusion produces different behavior than dbt Core v1 in `print()`, `log()`, or any Jinja macro that outputs to `stdout` or `stderr` at parse time. 
+Fusion で完全修飾名を持つリレーションオブジェクトを構築すると、`p​​rint()`、`log()`、または解析時に `stdout` または `stderr` に出力するすべての Jinja マクロにおいて、dbt Core v1 とは異なる動作が発生します。
 
 Example:
 
@@ -63,25 +63,25 @@ identifier='a'
 {{ print('relation_via_api: ' ~ relation_via_api) }}
 ```
 
-The output after `dbt parse` in dbt Core v1:
+dbt Core v1 での `dbt parse` 後の出力:
 
 ```
 relation: None
 relation_via_api: my_db.my_schema.my_table
 ```
 
-The output after `dbt parse` in Fusion:
+Fusion での `dbt parse` 後の出力:
 
 ```
 relation: my_db.my_schema.my_table
 relation_via_api: my_db.my_schema.my_table
 ```
 
-#### Deprecated flags
+#### 非推奨のフラグ
 
-Some historic flags in dbt Core v1 will no longer do anything in Fusion. If you pass them into a dbt command using Fusion, the command will not error, but the flag will do nothing (and warn accordingly).
+dbt Core v1 で使用されていた一部のフラグは、Fusion では機能しなくなります。これらのフラグを Fusion で使用して dbt コマンドに渡した場合、コマンドはエラーにはなりませんが、フラグ自体は何も実行されません（それに応じて警告が表示されます）。
 
-One exception to this rule: The `--models` / `--model` / `-m` flag was renamed to `--select` / `--s` way back in dbt Core v0.21 (Oct 2021). Silently skipping this flag means ignoring your command's selection criteria, which could mean building your entire DAG when you only meant to select a small subset. For this reason, the `--models` / `--model` / `-m` flag **will raise an error** in Fusion. Please update your job definitions accordingly.
+このルールには例外が 1 つあります。`--models` / `--model` / `-m` フラグは、dbt Core v0.21 (2021 年 10 月) で `--select` / `--s` に名前が変更されました。このフラグを暗黙的に指定しないと、コマンドの選択基準が無視され、小さなサブセットのみを選択するつもりが DAG 全体を構築してしまう可能性があります。そのため、`--models` / `--model` / `-m` フラグは Fusion で**エラー** を発生させます。ジョブ定義を適宜更新してください。
 
 | flag name | remediation |
 | ----------| ----------- |
@@ -112,20 +112,20 @@ One exception to this rule: The `--models` / `--model` / `-m` flag was renamed t
 | `--inject-ephemeral-ctes` / `--no-inject-ephemeral-ctes` | | 
 | [`--partial-parse` / `--no-partial-parse`](https://docs.getdbt.com/reference/parsing#partial-parsing)  | No action required |
 
-#### Conflicting package versions when a local package depends on a hub package which the root package also wants will error
+#### ローカルパッケージがハブパッケージに依存し、そのハブパッケージをルートパッケージも必要としている場合、パッケージバージョンの競合によりエラーが発生します。
 
-If a local package depends on a hub package that the root package also wants, `dbt deps` doesn't resolve conflicting versions in dbt Core v1; it will install whatever the root project requests.
+ローカルパッケージがハブパッケージに依存し、そのハブパッケージをルートパッケージも必要としている場合、dbt Core v1 では `dbt deps` は競合するバージョンを解決せず、ルートプロジェクトが要求したものをすべてインストールします。
 
-Fusion will present an error:
+Fusion で次のエラーが表示されます。
 
 ```bash
 error: dbt8999: Cannot combine non-exact versions: =0.8.3 and =1.1.1
 ```
 
 
-#### Parse will fail on nonexistent macro invocations and adapter methods
+#### 存在しないマクロ呼び出しとアダプタメソッドでは解析が失敗します。
 
-When you call a nonexistent macro in dbt:
+dbt で存在しないマクロを呼び出す場合:
 
 ```sql
 select
@@ -135,19 +135,19 @@ select
 from app_data.payments
 ```
 
-Or a nonexistent adapter method:
+または存在しないアダプターメソッド:
 
 ```sql
 {{ adapter.does_not_exist() }}
 ```
 
-In dbt Core v1, `dbt parse` passes, but `dbt compile` fails.
+dbt Core v1 では、`dbt parse` は成功しますが、`dbt compile` は失敗します。
 
-Fusion will error out during `parse`.
+Fusion は `parse` 中にエラーを出力します。
 
-#### Parse will fail on missing generic test
+#### ジェネリックテストがない場合、解析は失敗します。
 
-When you have an undefined generic test in your project:
+プロジェクトに未定義のジェネリックテストがある場合:
 
 ```yaml
 
@@ -158,13 +158,13 @@ models:
 
 ```
 
-In dbt Core v1, `dbt parse` passes, but `dbt compile` fails.
+dbt Core v1 では、`dbt parse` は成功しますが、`dbt compile` は失敗します。
 
-Fusion will error out during `parse`.   
+Fusion は `parse` 中にエラーを出力します。
 
-#### Parse will fail on missing variable
+#### 変数が見つからない場合、解析は失敗します。
 
-When you have an undefined variable in your project:
+プロジェクト内に未定義の変数がある場合:
 
 ```sql
 
@@ -172,49 +172,49 @@ select {{ var('does_not_exist') }} as my_column
 
 ```
 
-In dbt Core v1, `dbt parse` passes, but `dbt compile` fails.
+dbt Core v1 では、`dbt parse` は成功しますが、`dbt compile` は失敗します。
 
-Fusion will error out during `parse`.
+Fusion は `parse` 中にエラーを出力します。
 
-#### End of support for legacy manifest versions
+#### 旧バージョンのマニフェストのサポート終了
 
-You can no longer interoperate with pre-1.8 versions of dbt-core if you're a:
-- Hybrid customer running Fusion and an old (pre-v1.8) version of dbt Core
-- Customer upgrading from the old (pre-v1.8) version of dbt Core to Fusion
+以下の場合、dbt-core 1.8 より前のバージョンとの相互運用はできなくなります。
+- Fusion と旧バージョン（v1.8 より前）の dbt Core をハイブリッドでご利用のお客様
+- 旧バージョン（v1.8 より前）の dbt Core から Fusion にアップグレードするお客様
 
-Fusion can not interoperate with the old manifest, which powers features like deferral for `state:modified` comparison.
+Fusion は、`state:modified` 比較の遅延などの機能を実現する旧マニフェストとは相互運用できません。
 
-#### `dbt clean` will not delete any files in configured resource paths or files outside the project directory
+#### `dbt clean` は、設定されたリソースパス内のファイルやプロジェクトディレクトリ外のファイルは削除しません。
 
-In dbt Core v1, `dbt clean` deletes:
-- Any files outside the project directory if `clean-targets` is configured with an absolute path or relative path containing `../`, though there is an opt-in config to disable this (`--clean-project-files-only` / `--no-clean-project-files-only`).
-- Any files in the `asset-paths` or `doc-paths` (even though other resource paths, like `model-paths` and `seed-paths`, are restricted).
+dbt Core v1 では、`dbt clean` は次のものを削除します。
+- `clean-targets` が絶対パスまたは `../` を含む相対パスで設定されている場合、プロジェクトディレクトリ外のすべてのファイル。ただし、これを無効にするオプトイン構成（`--clean-project-files-only` / `--no-clean-project-files-only`）があります。
+- `asset-paths` または `doc-paths` 内のすべてのファイル（`model-paths` や `seed-paths` などの他のリソースパスは制限されていますが）。
 
-In Fusion, `dbt clean` will not delete any files in configured resource paths or files outside the project directory.
+Fusion では、`dbt clean` は、設定されたリソースパス内のファイルやプロジェクトディレクトリ外のファイルを削除しません。
 
-#### All unit tests are run first in `dbt build`
+#### すべてのユニットテストは最初に `dbt build` で実行されます。
 
-In dbt Core v1, the direct parents of the model being unit tested needed to exist in the warehouse to retrieve the needed column name and type information. `dbt build` runs the unit tests (and their dependent models) _in lineage order_.
+dbt Core v1 では、必要な列名と型情報を取得するために、ユニットテスト対象のモデルの直接の親がウェアハウス内に存在している必要がありました。`dbt build` は、ユニットテスト（および依存モデル）を_系統順_で実行します。
 
-In Fusion, `dbt build` runs _all_ of the unit tests _first_, and then build the rest of the DAG, due to built-in column name and type awareness. 
+Fusion では、`dbt build` は組み込みの列名と型認識機能により、最初にすべてのユニットテストを実行し、その後 DAG の残りの部分をビルドします。
 
-#### Configuring `--threads`
+#### `--threads` の設定
 
-dbt Core runs with `--threads 1` by default. You can increase this number to run more nodes in parallel on the remote data platform, up to the max parallelism enabled by the DAG.
+dbt Core はデフォルトで `--threads 1` で実行されます。この数値を増やすことで、リモートデータプラットフォーム上でより多くのノードを並列実行できます。最大並列処理数は、DAG で有効になっている最大並列処理数までです。
 
-In Fusion, if `--threads` is not set, or set to `--threads 0`, dbt will use a per-adapter default value for maximum threads. Some data platforms can handle more concurrent connections than others. If there is a user-configured value for `--threads` (via CLI flag or `profiles.yml`), Fusion will use it.
+Fusion では、`--threads` が設定されていない場合、または `--threads 0` に設定されている場合、dbt は最大スレッド数としてアダプタごとのデフォルト値を使用します。データプラットフォームによっては、他のプラットフォームよりも多くの同時接続を処理できる場合があります。`--threads` にユーザーが設定した値（CLI フラグまたは `profiles.yml` 経由）がある場合、Fusion はその値を使用します。
 
-#### Continue to compile unrelated nodes after hitting a compile error
+#### コンパイルエラー発生後も無関係なノードのコンパイルを継続
 
-As soon as dbt Core's `compile` encounters an error compiling one of your models, dbt stops and doesn't compile anything else.
+dbt Core の `compile` がモデルの 1 つをコンパイル中にエラーを検出すると、dbt は直ちに停止し、他のノードのコンパイルは行いません。
 
-When Fusion's `compile` encounters an error, it will skip nodes downstream of the one that failed to compile, but it will keep compiling the rest of the DAG (in parallel, up to the number of configured / optimal threads).
+Fusion の `compile` がエラーを検出すると、コンパイルに失敗したノードの下流ノードはスキップされますが、DAG の残りのノードは（設定されたスレッド数または最適なスレッド数まで並列に）コンパイルを継続します。
 
-#### Seeds with extra commas don't result in extra columns
+#### シードに余分なカンマがあっても、列は追加されません。
 
-In dbt Core v1, if you have an additional comma on your seed, dbt creates a seed with an additional empty column.
+dbt Core v1 では、シードに余分なカンマがある場合、dbt は空の列を追加したシードを作成します。
 
-For example, the following seed file (with an extra comma):
+例えば、次のシードファイル（余分なカンマあり）は、
 
 ```
 animal,  
@@ -224,7 +224,7 @@ bear,
 
 ```
 
-Will produce this table when `dbt seed` is executed:
+`dbt seed` を実行すると、次のテーブルが生成されます:
 
 | animal | b |  
 | ------ | - |  
@@ -232,7 +232,7 @@ Will produce this table when `dbt seed` is executed:
 | cat    |   |  
 | bear   |   |  
 
-Fusion will not produce this extra column in the table resulting from `dbt seed`:
+Fusion は、`dbt seed` の結果のテーブルにこの追加の列を生成しません:
 
 | animal |  
 | ------ |  

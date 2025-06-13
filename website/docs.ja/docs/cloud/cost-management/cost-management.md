@@ -4,31 +4,31 @@ description: "Manage your data warehouse costs in dbt"
 sidebar_label: About cost management
 ---
 
-# About cost management in dbt <Lifecycle status='preview,managed,managed_plus' />
+# dbt のコスト管理について <Lifecycle status='preview,managed,managed_plus' />
 
-The cost management dashboard in <Constant name="cloud" /> gives you valuable insight into how your dbt projects impact your data warehouse costs. They will help you optimize your warehouse spending by visualizing how features, including models, tests, snapshots, and other resources, influence costs over time so that you can take action, report to stakeholders, and optimize development workflows.
+<Constant name="cloud" /> のコスト管理ダッシュボードでは、dbt プロジェクトがデータウェアハウスのコストにどのような影響を与えているかについて、貴重な洞察が得られます。モデル、テスト、スナップショット、その他のリソースなどの機能が時間の経過とともにコストにどのように影響するかを視覚化することで、ウェアハウスの支出を最適化し、対策を講じ、関係者に報告し、開発ワークフローを最適化できるようになります。
 
-Currently, only Snowflake is supported. 
+現在、Snowflake のみがサポートされています。
 
-This document will cover setup in Snowflake, <Constant name="cloud" />, and how to use the cost management dashboard to view your insights.  
+このドキュメントでは、Snowflake と <Constant name="cloud" /> の設定、そしてコスト管理ダッシュボードを使用して洞察を確認する方法について説明します。
 
-## Prerequisites
+## 前提条件
 
-To configure the cost management tools, you must have the following:
+コスト管理ツールを構成するには、以下の要件を満たす必要があります。
 
-- Proper [permission set](/docs/cloud/manage-access/enterprise-permissions) to configure connections in <Constant name="cloud" /> (such as account admin or project creator).
-- Proper [privileges](https://docs.snowflake.com/en/user-guide/security-access-control-privileges) in Snowflake to create a user and assign them database access.
-- A supported data warehouse. Note: Only Snowflake is supported at this time. More warehouses coming soon!
-- A <Constant name="cloud" /> account on the [Enterprise or Enterprise+ plan](https://www.getdbt.com/pricing).
+- <Constant name="cloud" /> で接続を構成するための適切な [権限セット](/docs/cloud/manage-access/enterprise-permissions) (アカウント管理者やプロジェクト作成者など)。
+- ユーザーを作成し、データベースアクセスを割り当てるための、Snowflake での適切な [権限](https://docs.snowflake.com/en/user-guide/security-access-control-privileges)。
+- サポートされているデータウェアハウス。注: 現時点では Snowflake のみがサポートされています。今後、他のウェアハウスもサポートされる予定です。
+- [Enterprise または Enterprise+ プラン](https://www.getdbt.com/pricing) の <Constant name="cloud" /> アカウント。
 
 
-## Set up in Snowflake
+## Snowflake での設定
 
-You must configure metadata credentials for each unique Snowflake account you want the cost management tool to monitor. To configure the proper access in Snowflake: 
+コスト管理ツールで監視する Snowflake アカウントごとに、メタデータ認証情報を設定する必要があります。Snowflake で適切なアクセスを設定するには、以下の手順に従います。
 
-1. Identify an existing or new (recommended) service user in your Snowflake account. We recommend configuring a new user for this service, for example, `dbt_cost_user`, for more flexible customization.
-2. Grant the user `read` permissions to the [`ORGANIZATION_USAGE`](https://docs.snowflake.com/en/sql-reference/organization-usage) and [`ACCOUNT_USAGE`](https://docs.snowflake.com/en/sql-reference/account-usage) schemas. 
-    - (Optional) You can scope this down to the specific tables in the warehouse if preferred using a [Snowflake database role](https://docs.snowflake.com/en/sql-reference/account-usage#enabling-other-roles-to-use-schemas-in-the-snowflake-database) assigned the following access:
+1. Snowflake アカウントで、既存または新規（推奨）のサービスユーザーを特定します。より柔軟なカスタマイズのため、このサービスには新しいユーザー（例：dbt_cost_user）を設定することをお勧めします。
+2. ユーザーに [`ORGANIZATION_USAGE`](https://docs.snowflake.com/en/sql-reference/organization-usage) および [`ACCOUNT_USAGE`](https://docs.snowflake.com/en/sql-reference/account-usage) スキーマへの `read` 権限を付与します。
+    - (オプション) 必要に応じて、次のアクセス権が割り当てられた [Snowflake データベース ロール](https://docs.snowflake.com/en/sql-reference/account-usage#enabling-other-roles-to-use-schemas-in-the-snowflake-database) を使用して、ウェアハウス内の特定のテーブルに範囲を絞り込むことができます。
         - `ACCOUNT_USAGE.QUERY_HISTORY`
         - `ACCOUNT_USAGE.QUERY_ATTRIBUTION_HISTORY`
         - `ACCOUNT_USAGE.ACCESS_HISTORY`
@@ -36,7 +36,7 @@ You must configure metadata credentials for each unique Snowflake account you wa
         - `ORGANIZATION_USAGE.USAGE_IN_CURRENCY_DAILY`
 
 
-To create a user `dbt_cost_user` and a role `dbt_cost_management` using SQL and assign the required permissions over specific tables, you'd execute something that looks like the following example:
+SQL を使用してユーザー `dbt_cost_user` とロール `dbt_cost_management` を作成し、特定のテーブルに対する必要な権限を割り当てるには、次の例のようなものを実行します:
 
 ```sql
 
@@ -62,7 +62,7 @@ GRANT SELECT ON VIEW SNOWFLAKE.ORGANIZATION_USAGE.USAGE_IN_CURRENCY_DAILY TO ROL
 
 ```
 
-For broader, account-wide access, you could assign `IMPORTED PRIVILEGES` to the user:
+より広範なアカウント全体のアクセスを実現するには、ユーザーに `IMPORTED PRIVILEGES` を割り当てることができます:
 
 ```sql
 
@@ -77,153 +77,153 @@ GRANT ROLE dbt_cost_management TO USER dbt_cost_user;
 
 ```
 
-If you prefer, you can also configure the user for key pair authentication instead of using a username and password with <Constant name="cloud" />. 
+必要に応じて、<Constant name="cloud" /> を使用して、ユーザー名とパスワードの代わりにキーペア認証を使用するようにユーザーを設定することもできます。
 
-You must repeat the user creation process in each Snowflake warehouse you want to monitor. 
+監視する各 Snowflake ウェアハウスでユーザー作成プロセスを繰り返す必要があります。
 
-Once the user is created and assigned proper privileges, it's time to configure the connection in <Constant name="cloud" />.
+ユーザーを作成し、適切な権限を割り当てたら、<Constant name="cloud" /> で接続を設定します。
 
-## Set up in dbt
+## dbt での設定
 
-Configuring the cost management features requires both a connection and a user component:
+コスト管理機能を構成するには、接続とユーザーコンポーネントの両方が必要です。
 
-- **[Connection setup](#connection-setup):** Set up the credentials used to access the data warehouse information. Only one unique [connection](/docs/cloud/connect-data-platform/about-connections#connection-management) per warehouse needs to have the credentials configured.
+- **[接続の設定](#connection-setup):** データウェアハウス情報へのアクセスに使用する認証情報を設定します。ウェアハウスごとに 1 つの固有の [接続](/docs/cloud/connect-data-platform/about-connections#connection-management) のみに認証情報を設定する必要があります。
 
-- **[Provision user access](#provision-user-access):** Add new permissions to users and/or groups to regulate access to the dashboard
+- **[ユーザーアクセスのプロビジョニング](#provision-user-access):** ダッシュボードへのアクセスを制御するために、ユーザーまたはグループに新しい権限を追加します。
 
-### Connection setup
+### 接続設定
 
-To configure the metadata connection in dbt:
+dbt でメタデータ接続を構成するには：
 
-1. Navigate to **Account Settings** and click **Connections**.
-2. Click the connection associated with the data warehouse(s) you configured in the Snowflake setup. Do not click **Edit**. This is for the broader settings and will prevent the metadata section from being altered. 
-3. Scroll down to the **Platform metadata credentials** and click **Add credentials**.
-4. Set the appropriate **Auth method** (username and password or key pair) and fill out all the fields provided.
-5. In the **Features** section, click the box to enable **Cost Management**.
+1. **Account Settings** に移動し、**Connections** をクリックします。
+2. Snowflake 設定で構成したデータウェアハウスに関連付けられた接続をクリックします。**Edit** はクリックしないでください。これはより広範な設定のためであり、メタデータセクションが変更されるのを防ぎます。
+3. **Platform metadata credentials** まで下にスクロールし、**Add credentials** をクリックします。
+4. 適切な**Auth method**（ユーザー名とパスワード、またはキーペア）を設定し、すべてのフィールドに入力します。
+5. **Features** セクションで、**Cost Management** を有効にするボックスをクリックします。
 
     <Lightbox src="/img/docs/dbt-cloud/cost-management/configure-metadata.png" width="60%" title="Fill out the fields with the appropriate information."/>
 
-6. Click **Save**.
-7. Repeat this process for each <Constant name="cloud" /> warehouse connection you want to monitor. 
+6. **Save** をクリックします。
+7. 監視する各 <Constant name="cloud" /> ウェアハウス接続に対して、このプロセスを繰り返します。
 
-After the setup, it will be a few hours before the initial sync completes and information begins to populate the dashboard. 
+セットアップ後、初期同期が完了し、ダッシュボードに情報が表示され始めるまで数時間かかります。
 
-### Provision user access
+### ユーザーアクセスのプロビジョニング
 
-Since the dashboard contains sensitive financial information, we're introducing two new permission sets to help you regulate access: `Cost Management Admin` and `Cost Mangement Viewer`.
+ダッシュボードには機密性の高い財務情報が含まれているため、アクセス制御に役立つ 2 つの新しい権限セット「コスト管理管理者」と「コスト管理閲覧者」を導入しました。
 
-The `Cost Management Viewer` role is especially useful to organizations who want to grant viewer access to the dashboard without the elevated permissions associated with admin roles.
+「コスト管理閲覧者」ロールは、管理者ロールに関連付けられた昇格された権限なしでダッシュボードへの閲覧者アクセスを許可したい組織にとって特に便利です。
 
-For example, let's say you have a group of developers in charge of cost observability and insights you wish to grant access to view the dashboard:
-1. Navigate to your **Account settings** and open **Groups and licenses**.
-2. Click the group from your list and click **Edit**.
-3. From **Accounts and permissions** click **Add permission**.
-4. Select the **Cost Management Viewer** permission from the dropdown and click **Save**.
+例えば、コストの観測性とインサイトを担当する開発者グループにダッシュボードの閲覧アクセスを許可したいとします。
+1. **Account settings** に移動し、**Groups and licenses** を開きます。
+2. リストからグループをクリックし、**Edit** をクリックします。
+3. **Accounts and permissions** から、**Add permission** をクリックします。
+4. ドロップダウンから **Cost Management Viewer** 権限を選択し、**Save** をクリックします。
 
 <Lightbox src="/img/docs/dbt-cloud/cost-management/cost-management-viewer.png" width="60%" title="The Cost Management Viewer role assigned to a group."/>
 
-By assigning these permission set to the users or groups you want to have access to the dashboard you can avoid granting broader access with the other roles. 
+ダッシュボードへのアクセスを許可するユーザーまたはグループにこれらの権限セットを割り当てることで、他のロールによるより広範なアクセス権限の付与を回避できます。
 
-## Cost management dashboard
+## コスト管理ダッシュボード
 
-The cost management dashboard can be accessed anywhere in <Constant name="cloud" /> from the left-side menu. Once enabled, **Cost management** will be an option below the **Account home** feature at the top of the sidebar. Users who don't have the proper permissions will not see the option.
+コスト管理ダッシュボードは、<Constant name="cloud" /> 内のどこからでも左側のメニューからアクセスできます。有効にすると、サイドバー上部の **Account home** 機能の下に **Cost management** オプションが表示されます。適切な権限を持たないユーザーには、このオプションは表示されません。
 
-Users with the following [permission sets](/docs/cloud/manage-access/enterprise-permissions) will be able to access the cost management dashboard:
-- Account Admin
-- Account Viewer
-- **New:** Cost Management Viewer
-- **New:** Cost Management Admin
+以下の [権限セット](/docs/cloud/manage-access/enterprise-permissions) を持つユーザーがコスト管理ダッシュボードにアクセスできます。
+- アカウント管理者
+- アカウント閲覧者
+- **新機能:** コスト管理閲覧者
+- **新機能:** コスト管理管理者
 
-Once the information syncs, you will see the results by selecting the **Cost management** dashboard option from the left-side menu. 
+情報が同期されると、左側のメニューから [**コスト管理**] ダッシュボード オプションを選択すると、結果が表示されます。
 
 <Lightbox src="/img/docs/dbt-cloud/cost-management/dashboard-upper.png" width="60%" title="The cost management overview."/>
 
 <Lightbox src="/img/docs/dbt-cloud/cost-management/dashboard.png" width="60%" title="More of the cost management dashboard overview."/>
 
-- Hover over the **Last refreshed...** date to see a list of your configured connections and their status.
+- **Last refreshed...** の日付にマウスを合わせると、構成された接続とそのステータスのリストが表示されます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/connection-status.png" width="60%" title="View your connection status."/>
-- Adjust the period you want to monitor.
+- 監視する期間を調整します。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/time-period.png" width="60%" title="Adjust the period you want to view."/>
 
-### Metrics
+### メトリクス
 
-There are metrics that will be available to view and measure your costs as you navigate the dashboard. As you filter your dashboard, you will have access to a list view that enables you to sort by these metrics. The following metrics are available in the cost management dashboard:
+ダッシュボードを操作すると、コストを表示および測定できるメトリクスがあります。ダッシュボードをフィルタリングすると、これらのメトリクスで並べ替えることができるリストビューにアクセスできます。コスト管理ダッシュボードでは、以下のメトリクスを利用できます。
 
-- **Execution queries:** The total number of queries run within the data warehouse by executing dbt resources (model builds, tests, etc.).
-- **Consumption queries:** The total number of queries of given resource across all usage in the warehouse (includes BI/analytics tools, query consoles, etc.)
-- **Execution costs:** The total warehouse cost associated with the resource(s) being executed in dbt runs.
-- **Duration (resource view only):** The total duration of queries that executed dbt resources over the time period.
+- **実行クエリ:** データウェアハウス内で dbt リソース（モデルビルド、テストなど）の実行によって実行されたクエリの総数。
+- **消費クエリ:** ウェアハウス内のすべての使用状況（BI/分析ツール、クエリコンソールなどを含む）における、特定のリソースに対するクエリの総数。
+- **実行コスト:** dbt 実行で実行されているリソースに関連するウェアハウスの総コスト。
+- **期間（リソースビューのみ）:** 期間中に dbt リソースを実行したクエリの合計期間。
 
-You can sort the list views by these metrics to see how resources are impacting individual areas and have quick views into your highest cost areas
+これらのメトリクスでリストビューを並べ替えることで、リソースが個々の領域にどのように影響しているかを確認し、最もコストの高い領域をすばやく確認できます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/sort-by-execution-cost.png" width="60%" title="Metrics sorted by execution cost."/>
     <Lightbox src="/img/docs/dbt-cloud/cost-management/sort-by-consumption-query.png" width="60%" title="Metrics sorted by consumption queries."/>
 
-### Overview 
+### 概要
 
-The **Overview** dashboard is the first display you'll see. It gives you general information about your costs:
+**Overview** ダッシュボードは最初に表示される画面です。ここでは、コストに関する一般的な情報を確認できます。
 
-- View trends in your warehouse costs for the selected time. Hover over the graph to view the difference in spend period-over-period.
+- 選択した期間における倉庫コストの傾向を表示します。グラフにマウスポインターを合わせると、期間ごとの支出の差額が表示されます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/cost-trends.png" width="60%" title="View trends over time."/>
-- The top tiles display:
-    - Warehouse spend over the selected period.
-    - Realized savings (coming soon).
+- 上部のタイルには、以下の情報が表示されます。
+    - 選択した期間の倉庫支出。
+    - 実現した節約額（近日公開予定）。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/warehouse-spend.png" width="60%" title="See your total spending."/>
-- The bar chart breaks down costs of dbt execution by project. You can click on the individual bars to view more information.
+- 棒グラフは、プロジェクトごとにdbt実行コストの内訳を示しています。個々の棒グラフをクリックすると、詳細情報が表示されます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/project-bar.png" width="60%" title="View your spending over time by project and interact with the data to view more."/>
 - 
-You'll be brought to the **Discover** tab when you click on a bar or project. Here, you can view more detailed information about your spending. 
+バーまたはプロジェクトをクリックすると、**Discover**タブが表示されます。ここでは、支出に関するより詳細な情報を確認できます。
 
-### Discover
+### 発見
 
-The **Discover** tab takes you to a pane where you can really start getting granular with your cost analysis. It is an interactive page that allows you to break down costs by project, resource, date, and various combinations of those. You'll be able to monitor specific notes in your project lineage to see which resources are impacting your spending the most and view the metadata specific to those resources.
+**Discover** タブをクリックすると、コスト分析をより詳細に分析できるパネルが表示されます。これはインタラクティブなページで、プロジェクト、リソース、日付、そしてそれらのさまざまな組み合わせごとにコストを内訳できます。プロジェクト系統内の特定のメモを監視して、支出に最も影響を与えているリソースを特定し、それらのリソース固有のメタデータを表示できます。
 
-There are multiple options for filtering the cost data views with two starting points
+コストデータビューをフィルタリングするための複数のオプションがあり、開始点として2つの選択肢があります。
 - Resources
 - Environments
 
     <Lightbox src="/img/docs/dbt-cloud/cost-management/filter-by-resource.png" width="60%" title="Filter the Discover view by resource types."/>
 
-#### Resource view
+#### リソースビュー
 
-When you filter by resources, you get valuable insights into how your projects’ resources impact warehouse costs. Use the dropdown menu or click the colored squares to add or remove resource types from the bar graph and list view. 
+リソースでフィルタリングすると、プロジェクトのリソースが倉庫コストにどのような影響を与えているかについて、貴重な洞察が得られます。ドロップダウンメニューを使用するか、色付きの四角をクリックして、棒グラフとリストビューにリソースの種類を追加または削除してください。
 
-- Filter information by following resource types:
+- 以下のリソースの種類で情報をフィルタリングします。
     - Model
     - Test
     - Operation
     - Snapshot
     - Seed
     - Source
-- Filter the graph view by project and/or resource type. 
-- View a detailed breakdown of your resources and the costs associated. You can filter by resource name and/or type and sort by each column. 
+- グラフビューをプロジェクトやリソースの種類でフィルタリングできます。
+- リソースと関連コストの詳細な内訳を表示します。リソース名や種類でフィルタリングしたり、各列で並べ替えたりできます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/resource-type.png" width="60%" title="Filter and view detailed breakdowns of your resources."/>
-- Click into a resource to view its lineage and how much each node impacts your costs. You can even open the resource in dbt Explorer from this view to better understand your metadata!
+- リソースをクリックすると、その系統と各ノードがコストにどの程度影響するかが表示されます。このビューからdbt Explorerでリソースを開いて、メタデータをより深く理解することもできます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/render-lineage.png" width="60%" title="View the resources lineage and monitor node costs."/>
 
-#### Environment view
+#### 環境ビュー
 
-When you filter by environment, select a project to view more detailed information about how each environment type impacts your warehouse costs. 
+環境でフィルタリングする場合、プロジェクトを選択すると、各環境タイプが倉庫コストにどのような影響を与えるかについての詳細情報が表示されます。
 
     <Lightbox src="/img/docs/dbt-cloud/cost-management/filter-by-environment.png" width="70%" title="Filter the Discover view by environment."/>
-- The list view will mark your production environment with a `PROD` icon. 
-- Click a colored square next to an environment name to add or remove it from the bar graph view. 
-- Hover over a bar to view the cost breakdown for each environment.
+- リストビューでは、本番環境が「PROD」アイコンで表示されます。
+- 環境名の横にある色付きの四角をクリックすると、棒グラフビューに環境を追加または削除できます。
+- 棒グラフにマウスポインターを合わせると、各環境のコストの内訳が表示されます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/environment-cost-breakdown.png" width="60%" title="The bar graph breaks down costs by environment."/>
-- Sort the list view by any of the available fields. Click an item in the list view for detailed bar graph breakdowns of cost, query execution count, and consumption count.
+- リストビューは、利用可能なフィールドで並べ替えることができます。リストビュー内の項目をクリックすると、コスト、クエリ実行回数、消費回数の詳細な棒グラフが表示されます。
     <Lightbox src="/img/docs/dbt-cloud/cost-management/individual-environment.png" width="60%" title="View individual environments and how they impact your costs."/>
 
-## Resource details
+## リソースの詳細
 
-When you click on a model or other resource from the **Discover** tab, you are provided with detailed information about the models consumption and execution:
+**Discover** タブからモデルまたはその他のリソースをクリックすると、モデルの消費量と実行に関する詳細情報が表示されます。
 
-- The first section is a description and information about the resource, including size and consumption queries over the last 30 days.
-- **Lineage:** A DAG view of different lenses with data consumption metrics:
-    - **Resource type:** View the resource type lineage for your model including other models, snapshots, seeds, and metrics.
-    - **Execution costs:** View the execution costs for each resource in your models lineage.
-    - **Consumption query history:** View the warehouse consumption metrics for the different resources in your models lineage.
-- **Cost:** A graph of the resources consumption costs over the previous 30 day period.
-- **Query execution count:** A graph of the total number of queries the resource has run against the warehouse over the previous 30 day period.
-- **Consumption queries:** A graph of the queries used to gather analytical data from the warehouse.
+- 最初のセクションには、リソースの説明と情報（過去 30 日間のサイズと消費量クエリなど）が表示されます。
+- **Lineage:** データ消費メトリクスを含む、さまざまなレンズの DAG ビューが表示されます。
+- **Resource type:** 他のモデル、スナップショット、シード、メトリクスなど、モデルのリソースタイプの系統が表示されます。
+- **Execution cost:** モデル系統内の各リソースの実行コストが表示されます。
+- **Consuming query history:** モデル系統内のさまざまなリソースのウェアハウス消費メトリクスが表示されます。
+- **Cost:** 過去 30 日間のリソース消費コストのグラフが表示されます。
+- **Query execute count:** 過去 30 日間にリソースがウェアハウスに対して実行したクエリの合計数のグラフが表示されます。
+- **消費クエリ:** ウェアハウスから分析データを収集するために使用されるクエリのグラフ。
 
 <DocCarousel slidesPerView={1}>
 <Lightbox src="/img/docs/dbt-cloud/cost-management/resource-description.png" width="90%" title="The resource description" />
@@ -235,15 +235,15 @@ When you click on a model or other resource from the **Discover** tab, you are p
 <Lightbox src="/img/docs/dbt-cloud/cost-management/consumption-queries.png" width="90%" title="The consumption query history" />
 </DocCarousel>
 
-## Known limitations
+## 既知の制限事項
 
-The following are some of the known limitations and caveats for the cost management dashboard:
+コスト管理ダッシュボードに関する既知の制限事項と注意事項を以下に示します。
 
-- The dashboard doesn't currently reflect the costs of development environments.
-- There may be discrepancies in cost comparison between the dashboard and the data platform UI, as they may reflect different numbers depending on the time period or range selected.
-- The cost metric may not perfectly reflect queries with very small durations, which may also skew the average.
-- The consumption metric includes all queries of a given model in the warehouse, beyond just analytics use cases, so it is best for relative comparison between resources.
-- The consumption metric relies on mapping the dbt model to its tables in the warehouse, so it may be imprecise depending on how the mapping changes
-- A dbt run results in multiple executions (run steps) issuing queries, which makes it less intuitive to reason about, so in the future, moving toward more run-centric metrics (grouping/aggregating)
-- Core costs are dependent on using dbt v1.10 or higher to associate queries with dbt workloads.
-- Snowflake can take up to 72 hours to report accurate cost data, so the past three days may undercount until the data is updated.
+- 現在、ダッシュボードには開発環境のコストは反映されません。
+- ダッシュボードとデータプラットフォーム UI のコスト比較には、選択した期間または範囲によって異なる数値が反映される場合があり、差異が生じる可能性があります。
+- コスト指標は、実行時間が非常に短いクエリを完全に反映しない可能性があり、平均値に歪みが生じる可能性があります。
+- 消費指標には、分析ユースケースだけでなく、ウェアハウス内の特定モデルのすべてのクエリが含まれるため、リソース間の相対的な比較に最適です。
+- 消費量メトリックは、dbt モデルをウェアハウス内のテーブルにマッピングすることに依存しているため、マッピングの変更方法によっては不正確になる可能性があります。
+- dbt を実行すると、クエリが発行される実行ステップが複数回発生するため、直感的に判断しにくくなります。そのため、将来的には、より実行中心のメトリック（グループ化/集計）に移行していく予定です。
+- コアコストは、dbt v1.10 以降を使用してクエリを dbt ワークロードに関連付けることに依存します。
+- Snowflake が正確なコストデータを報告するまでに最大 72 時間かかるため、データが更新されるまでは過去 3 日間のコストが実際よりも少なくカウントされる可能性があります。

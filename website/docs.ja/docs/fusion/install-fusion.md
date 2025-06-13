@@ -4,115 +4,115 @@ description: "Install the Fusion engine locally to take data transformation to t
 id: install-fusion
 ---
 
-# About Fusion installation <Lifecycle status="beta" />
+# Fusionのインストールについて <Lifecycle status="beta" />
 
-import FusionBeta from '/snippets/_fusion-beta-callout.md';
+import FusionBeta from '/snippets.ja/_fusion-beta-callout.md';
 import FusionDWH from '/snippets/_fusion-dwh.md';
 import FusionA from '/snippets/_fusion-auth.md';
 
 <FusionBeta />
 
-This guide walks you through installing Fusion locally, including important prerequisites, step-by-step installation instructions, troubleshooting common issues, and configuration guidance.
+このガイドでは、重要な前提条件、段階的なインストール手順、一般的な問題のトラブルシューティング、構成ガイダンスなど、Fusion をローカルにインストールする手順について説明します。
 
-## Prerequisites
+## 前提条件
 
-Before installing Fusion, ensure:
+Fusion をインストールする前に、以下の点をご確認ください。
 
-- You have administrative privileges to install software on your local machine.
-- You are familiar with command-line interfaces (Terminal on macOS/Linux, PowerShell on Windows).
-- You are using a supported adapter. More adapter support coming soon!
+- ローカルマシンにソフトウェアをインストールするための管理者権限を持っていること。
+- コマンドラインインターフェース（macOS/Linux の場合はターミナル、Windows の場合は PowerShell）に精通していること。
+- サポートされているアダプターを使用していること。今後、さらに多くのアダプターのサポートが追加される予定です。
   <FusionDWH /> 
-- You are using a supported authentication method:
+- サポートされている認証方法を使用しています:
   <FusionA /> 
 
 ## Install Fusion
 
-Fusion can be installed via the command line from our official CDN:
+Fusion は、公式 CDN からコマンド ライン経由でインストールできます:
 
 - **macOS/Linux:** Using `curl`
 - **Windows:** Using `irm`
 
-### macOS & Linux installation
+### macOSおよびLinuxへのインストール
 
-Run the following command in the terminal:
+ターミナルで次のコマンドを実行します:
 
 ```shell
 curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
 ```
 
-To use `dbtf` immediately after installation, reload your shell so that the new `$PATH` is recognized:
+インストール後すぐに `dbtf` を使用するには、新しい `$PATH` が認識されるようにシェルをリロードします。
 
 ```shell
 exec $SHELL
 ```
 
-Or, close and reopen your Terminal window. This will load the updated environment settings into the new session.
+または、ターミナルウィンドウを閉じて再度開きます。これにより、更新された環境設定が新しいセッションに読み込まれます。
 
-### Windows installation (PowerShell)
+### Windows インストール (PowerShell)
 
-Run the following command in PowerShell:
+PowerShell で次のコマンドを実行します:
 
 ```powershell
 irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex
 ```
 
-To use `dbtf` immediately after installation, reload your shell so that the new `Path` is recognized:
+インストール後すぐに `dbtf` を使用するには、新しい `Path` が認識されるようにシェルをリロードします:
 
 ```powershell
 Start-Process powershell
 ```
 
-Or, close and reopen PowerShell. This will load the updated environment settings into the new session.
+または、PowerShell を閉じて再度開きます。これにより、更新された環境設定が新しいセッションに読み込まれます。
 
-### Verify the installation
+### インストールの確認
 
-After installation, open a new command-line window and verify that Fusion is installed correctly by checking the version. You can run these commands using `dbt`, or use `dbtf` as an unambiguous alias for Fusion, if you have another dbt CLI installed on your machine.
+インストール後、新しいコマンドラインウィンドウを開き、バージョンを確認して Fusion が正しくインストールされていることを確認してください。これらのコマンドは `dbt` を使用して実行できます。また、マシンに別の dbt CLI がインストールされている場合は、Fusion の明確なエイリアスとして `dbtf` を使用することもできます。
 
 ```bash
 dbtf --version
 ```
 
-Fusion will be installed in the following locations:
+Fusion は次の場所にインストールされます:
 
 - **macOS & Linux:** `$HOME/.local/bin/dbt`
 - **Windows:** `C:\Users\<YourUsername>\.local\bin\dbt.exe`
 
-This location is automatically added to your path to easily execute the `dbtf` command, but it requires reloading your shell.
+この場所は、`dbtf` コマンドを簡単に実行できるようにパスに自動的に追加されますが、シェルをリロードする必要があります。
 
-### Update Fusion
+### Fusion を更新
 
-The following command will update to the latest version of Fusion and adapter code:
+次のコマンドを実行すると、Fusion とアダプタコードが最新バージョンに更新されます:
 
 ```shell
 dbtf system update
 ```
 
-### Uninstall
+### アンインストール
 
-This command will uninstall the Fusion binary from your system (but aliases will remain wherever they are installed, for example `~/.zshrc`):
+このコマンドは、システムから Fusion バイナリをアンインストールします（ただし、エイリアスはインストールされた場所に残ります（例: `~/.zshrc`）。
 
 ```shell
 dbtf system uninstall
 ```
 
-### Adapter installation
+### アダプタのインストール
 
-The Fusion install automatically includes the Snowflake adapter. Other adapters will be available at a later date. 
+Fusion のインストールには、Snowflake アダプタが自動的に含まれます。その他のアダプタは後日提供開始予定です。
 
-## Troubleshooting
+## トラブルシューティング
 
-Common issues and resolutions:
+よくある問題と解決策:
 
-- **dbt command not found:** Ensure installation location is correctly added to your `$PATH`.
-- **Version conflicts:** Verify no existing dbt Core or dbt Cloud CLI versions are installed (or active) that could conflict with Fusion.
-- **Installation permissions:** Confirm your user has appropriate permissions to install software locally.
+- **dbt コマンドが見つかりません:** インストール場所が `$PATH` に正しく追加されていることを確認してください。
+- **バージョンの競合:** Fusion と競合する可能性のある既存の dbt Core または dbt Cloud CLI バージョンがインストール (またはアクティブ) されていないことを確認してください。
+- **インストール権限:** ユーザーにソフトウェアをローカルにインストールするための適切な権限があることを確認してください。
 
 ## Frequently asked questions
 
-- Can I revert to my previous dbt installation?
+- 以前の dbt インストールに戻すことはできますか？
 
-    Yes. If you want to test Fusion without affecting your existing workflows, consider isolating or managing your installation via separate environments or virtual machines.
+    はい。既存のワークフローに影響を与えずに Fusion をテストしたい場合は、インストールを別の環境または仮想マシンで分離または管理することを検討してください。
 
-import AboutFusion from '/snippets/_about-fusion.md';
+import AboutFusion from '/snippets.ja/_about-fusion.md';
 
 <AboutFusion />

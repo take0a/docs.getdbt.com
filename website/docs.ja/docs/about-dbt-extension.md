@@ -6,43 +6,44 @@ sidebar_label: "About the dbt VS Code extension"
 pagination_next: "docs/install-dbt-extension"
 ---
 
-# About the dbt VS Code Extension <Lifecycle status="beta" />
+# dbt VS Code拡張機能について <Lifecycle status="beta" />
 
-The dbt extension brings a hyper-fast, intelligent, and cost-efficient dbt development experience to VS Code.
-This is the only way to enjoy all the power of the new dbt Fusion engine while developing locally.
+dbt拡張機能は、VS Codeに超高速、インテリジェント、そしてコスト効率に優れたdbt開発エクスペリエンスをもたらします。
 
-_Save time and resources_ with near-instant parsing, live error detection, powerful IntelliSense capabilities, and more.
+これは、ローカル開発中に新しいdbt Fusionエンジンのパワーをすべて活用できる唯一の方法です。
 
-_Stay in flow_ with a seamless, end-to-end dbt development experience designed from scratch for local dbt development.
+_時間とリソースを節約_、ほぼ瞬時の解析、ライブエラー検出、強力なIntelliSense機能などを活用します。
 
-_This is a public beta release. Behavior may change ahead of the broader generally available (GA) release._
+_ローカルdbt開発向けにゼロから設計されたシームレスでエンドツーエンドのdbt開発エクスペリエンスで、_開発フローを維持_します。
 
-## Productivity features
+_これはパブリックベータリリースです。より広範な一般公開（GA）リリースの前に動作が変更される場合があります。_
 
-The following extension features help you get more done, fast:
+## 生産性向上機能
 
-- **[Live error detection](#live-error-detection):** Automatically validate your SQL code to detect errors and surface warnings, without hitting the warehouse. This includes both dbt errors (like invalid `ref`) and SQL errors (like invalid column name or SQL syntax).
-- **[Lightning-fast parse times](#lightning-fast-parse-times):** Parse even the largest projects up to 30x faster than dbt Core.
-- **[Powerful IntelliSense](#powerful-intellisense):** Autocomplete SQL functions, model names, columns, macros, and more.
-- **[Instant refactoring](#instant-refactoring):** Rename models or columns and see references update project-wide.
-- **[Go-to-definition](#go-to-definition-and-reference):** Jump to the definition of any `ref`, macro, model, or column with a single click. Particularly useful in large projects with many models and macros.
-- **[Hover insights](#hover-insights):** See context on tables, columns, and functions without leaving your code. Simply hover over any SQL element to see details like column names and data types.
-- **[Live CTE previews](#live-preview-for-models-and-ctes):** Preview a CTE’s output directly from inside your dbt model for faster validation and debugging.
-- **[Rich lineage in context](#rich-lineage-in-context):** See lineage at the column or table level as you develop with no context switching or breaking the flow.
-- **[View compiled code](#view-compiled-code):** Get a live view of the SQL code your models will build alongside your dbt code.
-- **[Build flexibly](#build-flexibly):** Use the command palette to build models with complex selectors.
+以下の拡張機能は、より多くの作業をより速く、より効率的に行うのに役立ちます。
+
+- **[ライブエラー検出](#live-error-detection):** ウェアハウスにアクセスすることなく、SQLコードを自動的に検証し、エラーを検出して警告を表示します。これには、dbtエラー（無効な `ref` など）とSQLエラー（無効な列名やSQL構文など）の両方が含まれます。
+- **[超高速解析時間](#lightning-fast-parse-times):** 大規模なプロジェクトでも、dbt Coreよりも最大30倍高速に解析できます。
+- **[強力なIntelliSense](#powerful-intellisense):** SQL関数、モデル名、列、マクロなどを自動補完します。
+- **[インスタントリファクタリング](#instant-refactoring):** モデルまたは列の名前を変更すると、プロジェクト全体で参照が更新されます。
+- **[定義へ移動](#go-to-definition-and-reference):** ワンクリックで任意の `ref`、マクロ、モデル、または列の定義に移動できます。特に、多数のモデルとマクロを含む大規模プロジェクトで便利です。
+- **[ホバーインサイト](#hover-insights):** コードを離れることなく、テーブル、列、関数のコンテキストを確認できます。SQL 要素にマウスを合わせるだけで、列名やデータ型などの詳細が表示されます。
+- **[ライブ CTE プレビュー](#live-preview-for-models-and-ctes):** dbt モデル内から直接 CTE の出力をプレビューできるため、検証とデバッグを高速化できます。
+- **[コンテキスト内の豊富なリネージ](#rich-lineage-in-context):** 開発中に、コンテキストを切り替えたりフローを中断したりすることなく、列またはテーブルレベルでリネージを確認できます。
+- **[コンパイル済みコードを表示](#view-compiled-code):** モデルがビルドする SQL コードを dbt コードと一緒にライブビューで表示します。
+- **[柔軟なビルド](#build-flexibly):** コマンドパレットを使用して、複雑なセレクターを含むモデルを構築します。
  
 ### Live error detection
 
-Automatically validate your SQL code to detect errors and surface warnings without hitting the warehouse.
+SQLコードを自動的に検証し、ウェアハウスにアクセスすることなくエラーを検出し、警告を表面化させます。
 
-- Displays diagnostics (red squiggles) for:
-  - Syntax errors (missing commas, misspelled keywords, etc).
-  - Invalid / missing column names (for example, `select not_a_column from {{ ref('real_model') }}`).
-  - Missing `group by` clauses, or columns that are neither grouped nor aggregated.
-  - Invalid function names or arguments
-- Hover over red squiggles to display errors.
-- Full diagnostic information is available in the “Problems”.
+- 以下のエラーについて診断情報（赤い波線）を表示します。
+  - 構文エラー（カンマの欠落、キーワードのスペルミスなど）。
+  - 列名が無効または欠落している（例：`select not_a_column from {{ ref('real_model') }}`）。
+  - `group by`句が欠落している、またはグループ化も集計もされていない列。
+  - 関数名または引数が無効。
+- 赤い波線にマウスポインターを合わせるとエラーが表示されます。
+- 診断情報の詳細は「問題」をご覧ください。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/live-error-detection.webm" type="video/webm" />
@@ -50,7 +51,7 @@ Automatically validate your SQL code to detect errors and surface warnings witho
 
 ### Lightning-fast parse times
 
-Parse even the largest projects up to 30x faster than with dbt Core.
+最大規模のプロジェクトでも、dbt Core より最大 30 倍高速に解析します。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/zoomzoom.webm" type="video/webm" />
@@ -58,11 +59,11 @@ Parse even the largest projects up to 30x faster than with dbt Core.
 
 ### Powerful IntelliSense
 
-Autocomplete SQL functions, model names, columns, macros and more.
+SQL 関数、モデル名、列、マクロなどを自動補完します。
 
-Usage:
-- Autocomplete `ref`s and `source` calls. For example, type `{{ ref(`  or `{{ source(` and you will see a list of available resources and their type complete the function call.
-- Autocomplete dialect-specific function names.
+使用方法:
+- `ref` および `source` 呼び出しを自動補完します。たとえば、`{{ ref(` または `{{ source(` と入力すると、利用可能なリソースとその型の一覧が表示され、関数呼び出しが補完されます。
+- 方言固有の関数名を自動補完します。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/intellisense.webm" type="video/webm" />
@@ -70,19 +71,19 @@ Usage:
 
 ### Instant refactoring
 
-Renaming models:
- - Right-click on a file in the file tree and select **Rename**.
- - After renaming the file, you'll get a prompt asking if you want to make refactoring changes.
-  - Select **OK** to apply the changes, or **Show Preview** to display a preview of refactorings.
- - After applying your changes, `ref`s should be updated to use the updated model name.
+モデル名の変更:
+- ファイルツリー内のファイルを右クリックし、**名前の変更** を選択します。
+- ファイル名を変更すると、リファクタリングの変更を行うかどうかを確認するメッセージが表示されます。
+- 変更を適用するには**OK** を選択するか、リファクタリングのプレビューを表示するには**プレビューの表示** を選択します。
+- 変更を適用すると、`ref` が更新され、更新されたモデル名が使用されるようになります。
 
-Renaming columns:
-- Right-click on a column alias and select **Rename Symbol**.
-- After renaming the column, you'll get a prompt asking if you want to make refactoring changes.
-  - Select **OK** to apply the changes, or **Show Preview** to show a preview of refactorings.
-- After applying your changes, downstream references to the column should be updated to use the new column name.
+列名の変更:
+- 列のエイリアスを右クリックし、**シンボル名の変更** を選択します。
+- 列名を変更すると、リファクタリングの変更を行うかどうかを確認するメッセージが表示されます。
+- 変更を適用するには**OK** を選択するか、リファクタリングのプレビューを表示するには**プレビューの表示** を選択します。
+- 変更を適用すると、列への下流の参照が更新され、新しい列名が使用されるようになります。
 
-Note: Renaming models and columns is not yet supported for snapshots, or any resources defined in a .yml file.
+注: スナップショット、または .yml ファイルで定義されたリソースでは、モデルと列の名前変更はまだサポートされていません。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/refactor.webm" type="video/webm" />
@@ -90,12 +91,12 @@ Note: Renaming models and columns is not yet supported for snapshots, or any res
 
 ### Go-to-definition and reference
 
-Jump to the definition of any `ref`, macro, model, or column with a single click. Particularly useful in large projects with many models and macros.
+`ref`、マクロ、モデル、または列の定義にワンクリックで移動できます。特に、多数のモデルやマクロを含む大規模プロジェクトで便利です。
 
-Usage:
-- Command or Ctrl-click to go to the definition for an identifier.
-- You can also right-click an identifier or and select **Go to Definition** or **Go to References**.
-- Supports CTE names, column names, `*`, macro names, and dbt `ref()` and `source()` call.
+使用方法:
+- Command キーまたは Ctrl キーを押しながらクリックすると、識別子の定義に移動します。
+- 識別子を右クリックして、**定義へ移動** または **参照へ移動** を選択することもできます。
+- CTE 名、列名、`*`、マクロ名、および dbt `ref()` および `source()` 呼び出しをサポートします。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/go-to-definition.webm" type="video/webm" />
@@ -103,11 +104,11 @@ Usage:
 
 ### Hover insights
 
-See context on tables, columns, and functions without leaving your code. Simply hover over any SQL element to see details like column names and data types.
+コードから離れることなく、テーブル、列、関数のコンテキストを確認できます。SQL 要素にマウスオーバーするだけで、列名やデータ型などの詳細が表示されます。
 
-Usage:
-- Hover over `*` to see expanded list of columns and their types.
-- Hover over column name or alias to see its type.
+使用方法:
+- `*` にマウスオーバーすると、列とその型の拡張リストが表示されます。
+- 列名またはエイリアスにマウスオーバーすると、その型が表示されます。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/hover-insights.webm" type="video/webm" />
@@ -115,14 +116,14 @@ Usage:
 
 ### Live preview for models and CTEs
 
-Preview a CTE’s output, or an entire model, directly from inside your editor for faster validation and debugging.
+CTE の出力またはモデル全体をエディター内から直接プレビューできるため、検証とデバッグを迅速に行うことができます。
 
-Usage:
-- Click the **table icon** or use keyboard shortcut `cmd+enter` (macOS) / `ctrl+enter` (Windows/Linux) to preview query results.
-- Click the **Preview CTE** codelens to preview CTE results.
-- Results will be displayed in the **Query Results** tab in the bottom panel.
-- The preview table is sortable and results are stored until the tab is closed.
-- You can also select a range of SQL to preview the results of a specific SQL snippet.
+使用方法:
+- **テーブルアイコン** をクリックするか、キーボードショートカット `cmd+enter` (macOS) / `ctrl+enter` (Windows/Linux) を使用してクエリ結果をプレビューします。
+- CTE の結果をプレビューするには、**Preview CTE** コードレンズをクリックします。
+- 結果は下部パネルの **Query Results** タブに表示されます。
+- プレビューテーブルは並べ替え可能で、結果はタブを閉じるまで保存されます。
+- SQL の範囲を選択して、特定の SQL スニペットの結果をプレビューすることもできます。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/preview-cte.webm" type="video/webm" />
@@ -130,21 +131,21 @@ Usage:
 
 ### Rich lineage in context
 
-See lineage at the column or table level as you develop — no context switching or breaking flow.
+開発中に列レベルまたはテーブルレベルで系統図を確認できます。コンテキストの切り替えやフローの中断は発生しません。
 
-View table lineage:
-- Open the **Lineage** tab in your editor. It will reflect table lineage focused on the currently-open file.
-- Double-click nodes to open the files in your editor.
-- The lineage pane updates as you navigate the files in your dbt project.
-- Right-click on a node to update the DAG, or view column lineage for a node.
+テーブル系統図の表示:
+- エディターで **Lineage** タブを開きます。現在開いているファイルにフォーカスが当てられているテーブル系統図が反映されます。
+- ノードをダブルクリックすると、エディターでファイルが開きます。
+- dbt プロジェクト内のファイル間を移動すると、系統図ペインが更新されます。
+- ノードを右クリックすると、DAG が更新されるか、ノードの列系統図が表示されます。
 
-View column lineage:
-- Right-click on a filename, or in the sql contents of a model file.
-- Select **dbt: View Lineage** --> **Show column lineage**.
-- Select the column to view lineage for.
-- Double-click on a node to update the DAG selector.
-- You can also use column selectors in the lineage window by adding the `column:` prefix and appending the column name. 
-  - For example, if you want the lineage for the `AMOUNT` column of your `stg_payments` model, edit the `+model.jaffle_shop.stg_payments+` to `+column:model.jaffle_shop.stg_payments.AMOUNT+`.
+列系統図の表示:
+- ファイル名またはモデルファイルの SQL コンテンツを右クリックします。
+- **dbt: View Lineage** --> **Show column lineage** を選択します。
+- 系統図を表示する列を選択します。
+- ノードをダブルクリックすると、DAG セレクターが更新されます。
+- 系統図ウィンドウで、`column:` プレフィックスと列名を追加することで、列セレクターを使用することもできます。
+  - たとえば、`stg_payments` モデルの `AMOUNT` 列の系統が必要な場合は、`+model.jaffle_shop.stg_payments+` を `+column:model.jaffle_shop.stg_payments.AMOUNT+` に編集します。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/lineage.webm" type="video/webm" />
@@ -152,13 +153,13 @@ View column lineage:
 
 ### View compiled code
 
-Get a live view of the SQL code your models will build — right alongside your dbt code.
+モデルが構築するSQLコードを、dbtコードと並べてリアルタイムで確認できます。
 
-Usage:
-- Click the **code icon** to view compiled code side-by-side with source code.
-- Compiled code will update as you save your source code.
-- Clicking on a dbt macro will focus the corresponding compiled code.
-- Clicking on a compiled code block will focus the corresponding source code.
+使用方法：
+- **コードアイコン**をクリックすると、コンパイル済みコードとソースコードを並べて表示できます。
+- ソースコードを保存すると、コンパイル済みコードが更新されます。
+- dbtマクロをクリックすると、対応するコンパイル済みコードにフォーカスが移動します。
+- コンパイル済みコードブロックをクリックすると、対応するソースコードにフォーカスが移動します。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/compiled-code.webm" type="video/webm" />
@@ -166,54 +167,54 @@ Usage:
 
 ### Build flexibly
 
-Use the command palette to quickly build models using complex selectors. 
+コマンドパレットを使用すると、複雑なセレクターを使ったモデルを素早く構築できます。
 
-Usage:
-- Click the **dbt icon** or use keyboard shortcut `cmd+shift+enter` (macOS) / `ctrl+shift+enter` (Windows/Linux) to launch a quickpick menu.
-- Select a command to run.
+使用方法:
+- **dbt アイコン** をクリックするか、キーボードショートカット `cmd+shift+enter` (macOS) / `ctrl+shift+enter` (Windows/Linux) を使用してクイックピックメニューを起動します。
+- 実行するコマンドを選択します。
 
 <video width="100%" height="100%" playsinline muted controls>
   <source src="/img/docs/extension/build-flexibly.webm" type="video/webm" />
 </video>
 
-## Using the extension
+## 拡張機能の使用
 
-Your dbt environment must be using the dbt Fusion engine in order to use this extension. See [the Fusion documentation](/docs/fusion/about-fusion) for more on eligibility and upgrading.
+この拡張機能を使用するには、dbt 環境で dbt Fusion エンジンを使用している必要があります。ご利用資格とアップグレードの詳細については、[Fusion のドキュメント](/docs/fusion/about-fusion) をご覧ください。
 
-Once installed, the dbt extension automatically activates when you open any `.sql` or `.yml` file inside of a dbt project directory. 
+インストールが完了すると、dbt プロジェクト ディレクトリ内の `.sql` ファイルまたは `.yml` ファイルを開くと、dbt 拡張機能が自動的にアクティブになります。
 
-## Configuration
+## 構成
 
-After installation, you may want to configure the extension to better fit your development workflow:
+インストール後、開発ワークフローに合わせて拡張機能を設定することをお勧めします。
 
-1. Open the VS Code settings by pressing `Ctrl+,` (Windows/Linux) or `Cmd+,` (Mac).
-2. Search for `dbt`. On this page, you can adjust the extension’s configuration options as to fit your needs.
+1. `Ctrl+,` (Windows/Linux) または `Cmd+,` (Mac) を押して、VS Code の設定画面を開きます。
+2. `dbt` を検索します。このページで、ニーズに合わせて拡張機能の設定オプションを調整できます。
 
 ## FAQs
 
-**Can I use the dbt extension with my monorepo?**
+**モノレポでdbt拡張機能を使用できますか？**
 
-The dbt extension will not activate unless it finds a `dbt_project.yml` file in the root folder of a workspace. If you develop in a monorepo, consider using a  [.code-workspace](https://code.visualstudio.com/docs/editing/workspaces/workspaces#_singlefolder-workspaces) file to create a workspace for your dbt project folder. You can do this easily by running the `Add folder to workspace` commmand in your editor.
-
-
-## Known limitations
-
-The following are currently known limitations of the dbt extension:
-
-- **Remote development:** The dbt extension does not yet support remote development sessions over SSH. Support will be added in a future release. For more information on remote development, refer to [Supporting Remote Development and GitHub Codespaces](https://code.visualstudio.com/api/advanced-topics/remote-extensions) and [Visual Studio Code Server](https://code.visualstudio.com/docs/remote/vscode-server).
-
-- **Working with YAML files:** Today, the dbt extension has the following limitations with operating on YAML files:
-  - Go-to-definition is not supported for nodes defined in YAML files (like snapshots).
-  - Renaming models and columns will not update references in YAML files.
-  - Future releases of the dbt extension will address these limitations
-
-- **Renaming models:** When a model file is renamed, the dbt extension will apply edits to update all `ref()` calls that reference the renamed model. Due to limitations of VS Code's Language Server Client, we are not able to auto-save these edit files. As a result, you may see that renaming a model file results in compiler errors in your project. To fix these errors, you must either manually save each file that was edited by the dbt extension, or click **File** --> **Save All** to save all edited files.
+dbt拡張機能は、ワークスペースのルートフォルダに`dbt_project.yml`ファイルが見つからないとアクティブになりません。モノレポで開発する場合は、[.code-workspace](https://code.visualstudio.com/docs/editing/workspaces/workspaces#_singlefolder-workspaces)ファイルを使用して、dbtプロジェクトフォルダ用のワークスペースを作成することを検討してください。これは、エディタで`Add Folder to Workspace`コマンドを実行するだけで簡単に実行できます。
 
 
-## Support
+## 既知の制限事項
 
-dbt platform customers can contact dbt Labs support at [support@getdbt.com](mailto:support@getdbt.com). You can also get in touch with us by reaching out to your Account Manager directly.
+dbt 拡張機能の既知の制限事項は以下のとおりです。
 
-For organizations that are not customers of the dbt platform, the best place for questions and discussion is the [dbt Community Slack](https://www.getdbt.com/community/join-the-community).
+- **リモート開発:** dbt 拡張機能は、SSH 経由のリモート開発セッションをまだサポートしていません。今後のリリースでサポートされる予定です。リモート開発の詳細については、[リモート開発と GitHub Codespaces のサポート](https://code.visualstudio.com/api/advanced-topics/remote-extensions) および [Visual Studio Code サーバー](https://code.visualstudio.com/docs/remote/vscode-server) を参照してください。
 
-We welcome feedback as we work to continuously improve the extension, and would love to hear from you!
+- **YAML ファイルの操作:** 現在、dbt 拡張機能には YAML ファイルの操作に関して以下の制限があります。
+  - YAML ファイルで定義されたノード (スナップショットなど) では、定義への移動はサポートされていません。
+  - モデルや列の名前を変更しても、YAML ファイル内の参照は更新されません。
+  - dbt拡張機能の今後のリリースでは、これらの制限事項に対処します。
+
+- **モデルの名前変更:** モデルファイルの名前が変更されると、dbt拡張機能は変更を適用し、名前変更されたモデルを参照するすべての`ref()`呼び出しを更新します。VS Codeの言語サーバークライアントの制限により、これらの編集ファイルを自動保存することはできません。そのため、モデルファイルの名前を変更すると、プロジェクトでコンパイラエラーが発生する可能性があります。これらのエラーを修正するには、dbt拡張機能によって編集された各ファイルを手動で保存するか、**ファイル** --> **すべて保存** をクリックして編集したすべてのファイルを保存する必要があります。
+
+
+## サポート
+
+dbtプラットフォームをご利用のお客様は、dbt Labsサポート（[support@getdbt.com](mailto:support@getdbt.com)）までお問い合わせください。また、担当のアカウントマネージャーに直接ご連絡いただくことも可能です。
+
+dbtプラットフォームをご利用でない組織の方は、[dbtコミュニティSlack](https://www.getdbt.com/community/join-the-community)をご利用ください。ご質問やご意見は、ぜひお気軽にお問い合わせください。
+
+拡張機能の継続的な改善に努めておりますので、皆様からのフィードバックをお待ちしております。

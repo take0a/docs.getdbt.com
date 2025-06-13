@@ -4,65 +4,65 @@ id: "deploy-environments"
 description: "Learn about dbt's deployment environment to seamlessly schedule jobs or enable CI."
 ---
 
-Deployment environments in <Constant name="cloud" /> are crucial for deploying dbt jobs in production and using features or integrations that depend on dbt metadata or results. To execute dbt, environments determine the settings used during job runs, including:
+<Constant name="cloud" /> のデプロイメント環境は、dbt ジョブを本番環境にデプロイし、dbt のメタデータや結果に依存する機能や統合を使用する上で不可欠です。dbt を実行するには、ジョブ実行中に使用される設定が環境によって決定されます。これには以下が含まれます。
 
-- The version of <Constant name="core" /> that will be used to run your project
-- The warehouse connection information (including the target database/schema settings)
-- The version of your code to execute
+- プロジェクトの実行に使用する <Constant name="core" /> のバージョン
+- ウェアハウス接続情報（ターゲット データベース/スキーマ設定を含む）
+- 実行するコードのバージョン
 
-A <Constant name="cloud" /> project can have multiple deployment environments, providing you the flexibility and customization to tailor the execution of dbt jobs. You can use deployment environments to [create and schedule jobs](/docs/deploy/deploy-jobs#create-and-schedule-jobs), [enable continuous integration](/docs/deploy/continuous-integration), or more based on your specific needs or requirements.
+<Constant name="cloud" /> プロジェクトには複数のデプロイメント環境を含めることができるため、dbt ジョブの実行を柔軟かつカスタマイズして調整できます。デプロイメント環境を使用すると、[ジョブの作成とスケジュール設定](/docs/deploy/deploy-jobs#create-and-schedule-jobs)、[継続的インテグレーションの有効化](/docs/deploy/continuous-integration) など、特定のニーズや要件に基づいてさまざまな操作を実行できます。
 
-:::tip Learn how to manage <Constant name="cloud" /> environments
-To learn different approaches to managing <Constant name="cloud" /> environments and recommendations for your organization's unique needs, read [<Constant name="cloud" /> environment best practices](/guides/set-up-ci).
+:::tip <Constant name="cloud" /> 環境の管理方法を学ぶ
+<Constant name="cloud" /> 環境を管理するためのさまざまなアプローチと、組織固有のニーズに合わせた推奨事項については、[<Constant name="cloud" /> 環境のベストプラクティス](/guides/set-up-ci)をご覧ください。
 :::
 
-Learn more about development vs. deployment environments in [<Constant name="cloud" /> Environments](/docs/dbt-cloud-environments).
+開発環境とデプロイメント環境の詳細については、[<Constant name="cloud" /> 環境](/docs/dbt-cloud-environments) をご覧ください。
 
-There are three types of deployment environments:
-- **Production**: Environment for transforming data and building pipelines for production use.
-- **Staging**: Environment for working with production tools while limiting access to production data.
-- **General**: General use environment for deployment development. 
+デプロイメント環境には次の 3 つのタイプがあります。
+- **本番環境**: 本番環境で使用するデータの変換とパイプラインの構築を行う環境。
+- **ステージング環境**: 本番環境データへのアクセスを制限しながら、本番環境ツールを使用する環境。
+- **一般環境**: デプロイメント開発のための一般使用環境。
 
-We highly recommend using the `Production` environment type for the final, source of truth deployment data. There can be only one environment marked for final production workflows and we don't recommend using a `General` environment for this purpose. 
+最終的な、信頼できるデプロイメントデータには、`Production` 環境タイプを使用することを強くお勧めします。最終的な本番環境ワークフロー用にマークできる環境は 1 つだけであり、この目的で `General` 環境を使用することはお勧めしません。
 
-## Create a deployment environment
+## デプロイメント環境を作成する
 
-To create a new <Constant name="cloud" /> deployment environment, navigate to **Deploy** -> **Environments** and then click **Create Environment**. Select **Deployment** as the environment type. The option will be greyed out if you already have a development environment.
+新しい <Constant name="cloud" /> デプロイメント環境を作成するには、「**デプロイ**」 -> 「**環境**」に移動し、「**環境の作成**」をクリックします。環境タイプとして「**デプロイメント**」を選択します。既に開発環境がある場合は、このオプションはグレー表示になります。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/create-deploy-env.png" width="85%" title="Navigate to Deploy ->  Environments to create a deployment environment" />
 
-### Set as production environment
+### 本番環境として設定
 
-In <Constant name="cloud" />, each project can have one designated deployment environment, which serves as its production environment. This production environment is _essential_ for using features like <Constant name="explorer" /> and cross-project references. It acts as the source of truth for the project's production state in <Constant name="cloud" />.
+<Constant name="cloud" /> では、各プロジェクトに1つのデプロイ環境（本番環境として機能します）を設定できます。本番環境は、<Constant name="explorer" /> やプロジェクト間参照などの機能を使用する上で不可欠です。<Constant name="cloud" /> におけるプロジェクトの本番環境の状態に関する信頼できる情報源として機能します。
 
 <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/prod-settings-1.png" width="100%" title="Set your production environment as the default environment in your Environment Settings"/>
 
-### Semantic Layer
+### セマンティックレイヤー
 
-For customers using the <Constant name="semantic_layer" />, the next section of environment settings is the <Constant name="semantic_layer" /> configurations. [The <Constant name="semantic_layer" /> setup guide](/docs/use-dbt-semantic-layer/setup-sl) has the most up-to-date setup instructions.
+<Constant name="semantic_layer" /> をご利用のお客様の場合、環境設定の次のセクションは <Constant name="semantic_layer" /> 構成です。[<Constant name="semantic_layer" /> セットアップガイド](/docs/use-dbt-semantic-layer/setup-sl) に最新のセットアップ手順が記載されています。
 
-You can also leverage the dbt Job scheduler to [validate your semantic nodes in a CI job](/docs/deploy/ci-jobs#semantic-validations-in-ci) to ensure code changes made to dbt models don't break these metrics.
+また、dbt ジョブスケジューラを利用して [CI ジョブでセマンティックノードを検証](/docs/deploy/ci-jobs#semantic-validations-in-ci) し、dbt モデルへのコード変更がこれらのメトリックに違反していないことを確認することもできます。
 
-## Staging environment
+## ステージング環境
 
-Use a Staging environment to grant developers access to deployment workflows and tools while controlling access to production data. Staging environments enable you to achieve more granular control over permissions, data warehouse connections, and data isolation — within the purview of a single project in <Constant name="cloud" />.
+ステージング環境を使用すると、開発者にデプロイメントワークフローとツールへのアクセスを許可しながら、本番環境データへのアクセスを制御できます。ステージング環境を使用すると、<Constant name="cloud" /> 内の単一プロジェクトの範囲内で、権限、データウェアハウス接続、データ分離をよりきめ細かく制御できます。
 
-### Git workflow
+### Git ワークフロー
 
-You can approach this in a couple of ways, but the most straightforward is configuring Staging with a long-living branch (for example, `staging`) similar to but separate from the primary branch (for example, `main`). 
+これにはいくつかのアプローチがありますが、最も簡単な方法は、プライマリブランチ（例：`main`）と類似しているものの独立した長期ブランチ（例：`staging`）をステージング環境に設定することです。
 
-In this scenario, the workflows would ideally move upstream from the Development environment -> Staging environment -> Production environment with developer branches feeding into the `staging` branch, then ultimately merging into `main`. In many cases, the `main` and `staging` branches will be identical after a merge and remain until the next batch of changes from the `development` branches are ready to be elevated. We recommend setting branch protection rules on `staging` similar to `main`.
+このシナリオでは、ワークフローは開発環境 -> ステージング環境 -> 本番環境へと上流へと移行し、開発者ブランチが `staging` ブランチにフィードされ、最終的に `main` にマージされるのが理想的です。多くの場合、マージ後、`main` ブランチと `staging` ブランチは同一になり、`development` ブランチからの次の一連の変更が反映されるまでそのまま残ります。`staging` にも `main` と同様のブランチ保護ルールを設定することをお勧めします。
 
-Some customers prefer to connect Development and Staging to their `main` branch and then cut release branches on a regular cadence (daily or weekly), which feeds into Production.
+お客様によっては、開発環境とステージング環境を `main` ブランチに接続し、リリースブランチを定期的に（毎日または毎週）作成して本番環境にフィードすることを好まれる場合があります。
 
-### Why use a staging environment
+### ステージング環境を使用する理由
 
-These are the primary motivations for using a Staging environment:
-1. An additional validation layer before changes are deployed into Production. You can deploy, test, and explore your dbt models in Staging.
-2. Clear isolation between development workflows and production data. It enables developers to work in metadata-powered ways, using features like deferral and cross-project references, without accessing data in production deployments.
-3. Provide developers with the ability to create, edit, and trigger ad hoc jobs in the Staging environment, while keeping the Production environment locked down using [environment-level permissions](/docs/cloud/manage-access/environment-permissions). 
+ステージング環境を使用する主な理由は次のとおりです。
+1. 変更を本番環境にデプロイする前の検証レイヤーとして追加できます。ステージング環境では、dbt モデルをデプロイ、テスト、および調査できます。
+2. 開発ワークフローと本番環境データを明確に分離できます。これにより、開発者は本番環境のデプロイメントのデータにアクセスすることなく、延期やプロジェクト間参照などの機能を使用して、メタデータを活用した方法で作業できます。
+3. 開発者がステージング環境でアドホックジョブを作成、編集、トリガーできるようにし、同時に本番環境を [環境レベルの権限](/docs/cloud/manage-access/environment-permissions) によってロックダウンできるようにします。
 
-**Conditional configuration of sources** enables you to point to "prod" or "non-prod" source data, depending on the environment you're running in. For example, this source will point to `<DATABASE>.sensitive_source.table_with_pii`, where `<DATABASE>` is dynamically resolved based on an environment variable.
+**ソースの条件付き構成** を使用すると、実行している環境に応じて、「prod」または「non-prod」のソース データを指すことができます。たとえば、このソースは `<DATABASE>.sensitive_source.table_with_pii` を指します。ここで、`<DATABASE>` は環境変数に基づいて動的に解決されます。
 
 <File name="models/sources.yml">
 
@@ -76,53 +76,53 @@ sources:
 
 </File>
 
-There is exactly one source (`sensitive_source`), and all downstream dbt models select from it as `{{ source('sensitive_source', 'table_with_pii') }}`. The code in your project and the shape of the DAG remain consistent across environments. By setting it up in this way, rather than duplicating sources, you get some important benefits.
+ソースは 1 つだけ（`sensitive_source`）あり、下流のすべての dbt モデルは `{{ source('sensitive_source', 'table_with_pii') }}` としてそこから選択します。プロジェクト内のコードと DAG の形状は、環境間で一貫性を保ちます。このように設定することで、ソースを重複させることなく、いくつかの重要なメリットが得られます。
 
-**Cross-project references in dbt Mesh:** Let's say you have `Project B` downstream of `Project A` with cross-project refs configured in the models. When developers work in the IDE for `Project B`, cross-project refs will resolve to the Staging environment of `Project A`, rather than production. You'll get the same results with those refs when jobs are run in the Staging environment. Only the Production environment will reference the Production data, keeping the data and access isolated without needing separate projects.
+**dbt Mesh におけるプロジェクト間参照:** モデルでプロジェクト間参照が構成されている `Project A` の下流に `Project B` があるとします。開発者が `Project B` の IDE で作業する場合、プロジェクト間参照は本番環境ではなく `Project A` のステージング環境に解決されます。ステージング環境でジョブを実行すると、これらの参照で同じ結果が得られます。本番環境のみが本番環境データを参照するため、別のプロジェクトを必要とせずにデータとアクセスが分離されます。
 
-**Faster development enabled by deferral:** If `Project B` also has a Staging deployment, then references to unbuilt upstream models within `Project B` will resolve to that environment, using [deferral](/docs/cloud/about-cloud-develop-defer), rather than resolving to the models in Production. This saves developers time and warehouse spend, while preserving clear separation of environments.
+**遅延による開発の高速化:** `Project B` にもステージング環境のデプロイメントがある場合、`Project B` 内の未構築の上流モデルへの参照は、[遅延](/docs/cloud/about-cloud-develop-defer) を使用してステージング環境に解決され、本番環境のモデルには解決されません。これにより、環境の明確な分離を維持しながら、開発者の時間とウェアハウスのコストを削減できます。
 
-Finally, the Staging environment has its own view in [<Constant name="explorer" />](/docs/explore/explore-projects), giving you a full view of your prod and pre-prod data.
+最後に、ステージング環境は [<Constant name="explorer" />](/docs/explore/explore-projects) に独自のビューを持ち、本番環境とプレ本番環境のデータ全体を確認できるようになります。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/explore-staging-env.png" width="85%" title="Explore in a staging environment" />
 
 
-### Create a Staging environment
+### ステージング環境を作成する
 
-In the <Constant name="cloud" />, navigate to **Deploy** -> **Environments** and then click **Create Environment**. Select **Deployment** as the environment type. The option will be greyed out if you already have a development environment.
+<Constant name="cloud" /> で、「**デプロイ**」->「**環境**」に移動し、「**環境を作成**」をクリックします。環境タイプとして「**デプロイメント**」を選択します。既に開発環境がある場合は、このオプションはグレー表示になります。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/create-staging-environment.png" width="85%" title="Create a staging environment" />
 
 
-Follow the steps outlined in [deployment credentials](#deployment-connection) to complete the remainder of the environment setup.
+[デプロイ資格情報](#deployment-connection)に記載されている手順に従って、環境設定の残りの部分を完了してください。
 
-We recommend that the data warehouse credentials be for a dedicated user or service principal.
+データウェアハウスの資格情報は、専用ユーザーまたはサービスプリンシパルのものを使用することをお勧めします。
 
 ## Deployment connection
 
-:::info Warehouse Connections
+:::info ウェアハウス接続
 
-Warehouse connections are created and managed at the account-level for <Constant name="cloud" /> accounts and assigned to an environment. To change warehouse type, we recommend creating a new environment.
+ウェアハウス接続は、<Constant name="cloud" /> アカウントのアカウントレベルで作成および管理され、環境に割り当てられます。ウェアハウスの種類を変更するには、新しい環境を作成することをお勧めします。
 
-Each project can have multiple connections (Snowflake account, Redshift host, Bigquery project, Databricks host, and so on.) of the same warehouse type. Some details of that connection (databases/schemas/and so on.) can be overridden within this section of the <Constant name="cloud" /> environment settings.
+各プロジェクトには、同じウェアハウスの種類を持つ複数の接続（Snowflake アカウント、Redshift ホスト、BigQuery プロジェクト、Databricks ホストなど）を設定できます。接続の詳細（データベース、スキーマなど）の一部は、<Constant name="cloud" /> 環境設定のこのセクションでオーバーライドできます。
 :::
 
-This section determines the exact location in your warehouse dbt should target when building warehouse objects! This section will look a bit different depending on your warehouse provider.
+このセクションでは、ウェアハウスオブジェクトの構築時にdbtがターゲットとするウェアハウス内の正確な場所を指定します。このセクションは、ウェアハウスプロバイダーによって表示が多少異なります。
 
-For all warehouses, use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to override missing or inactive (grayed-out) settings.
+すべてのウェアハウスにおいて、[拡張属性](/docs/dbt-cloud-environments#extended-attributes)を使用して、不足している設定や非アクティブ（グレー表示）の設定を上書きできます。
 
 <WHCode>
 
 
 <div warehouse="Postgres">
 
-This section will not appear if you are using Postgres, as all values are inferred from the project's connection. Use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to override these values.
+Postgresを使用している場合、すべての値はプロジェクトの接続から推測されるため、このセクションは表示されません。これらの値をオーバーライドするには、[拡張属性](/docs/dbt-cloud-environments#extended-attributes)を使用してください。
 
 </div>
 
 <div warehouse="Redshift">
 
-This section will not appear if you are using Redshift, as all values are inferred from the project's connection. Use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to override these values.
+Redshift を使用している場合、すべての値はプロジェクトの接続から推測されるため、このセクションは表示されません。これらの値を上書きするには、[拡張属性](/docs/dbt-cloud-environments#extended-attributes) を使用してください。
 
 </div>
 
@@ -130,23 +130,23 @@ This section will not appear if you are using Redshift, as all values are inferr
 
 <Lightbox src="/img/docs/collaborate/snowflake-deploy-env-deploy-connection.png" width="85%" title="Snowflake Deployment Connection Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Role**: Snowflake role
-- **Database**: Target database
-- **Warehouse**: Snowflake warehouse
+- **ロール**: Snowflake ロール
+- **データベース**: ターゲットデータベース
+- **ウェアハウス**: Snowflake ウェアハウス
 
 </div>
 
 <div warehouse="Bigquery">
 
-This section will not appear if you are using Bigquery, as all values are inferred from the project's connection. Use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to override these values.
+BigQueryを使用している場合、すべての値はプロジェクトの接続から推測されるため、このセクションは表示されません。これらの値をオーバーライドするには、[拡張属性](/docs/dbt-cloud-environments#extended-attributes)を使用してください。
 
 </div>
 
 <div warehouse="Spark">
 
-This section will not appear if you are using Spark, as all values are inferred from the project's connection. Use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to override these values.
+Spark を使用している場合、すべての値はプロジェクトの接続から推測されるため、このセクションは表示されません。これらの値をオーバーライドするには、[拡張属性](/docs/dbt-cloud-environments#extended-attributes) を使用してください。
 
 </div>
 
@@ -154,20 +154,20 @@ This section will not appear if you are using Spark, as all values are inferred 
 
 <Lightbox src="/img/docs/collaborate/databricks-deploy-env-deploy-connection.png" width="85%" title="Databricks Deployment Connection Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Catalog** (optional): [Unity Catalog namespace](/docs/core/connect-data-platform/databricks-setup)
+- **カタログ** (オプション): [Unity Catalog 名前空間](/docs/core/connect-data-platform/databricks-setup)
 
 </div>
 
 </WHCode>
 
 
-### Deployment credentials
+### デプロイメント認証情報
 
-This section allows you to determine the credentials that should be used when connecting to your warehouse. The authentication methods may differ depending on the warehouse and <Constant name="cloud" /> tier you are on.
+このセクションでは、ウェアハウスへの接続時に使用する認証情報を指定できます。認証方法は、ウェアハウスと <Constant name="cloud" /> 層によって異なる場合があります。
 
-For all warehouses, use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to override missing or inactive (grayed-out) settings. For credentials, we recommend wrapping extended attributes in [environment variables](/docs/build/environment-variables) (`password: '{{ env_var(''DBT_ENV_SECRET_PASSWORD'') }}'`) to avoid displaying the secret value in the text box and the logs.
+すべてのウェアハウスにおいて、[拡張属性](/docs/dbt-cloud-environments#extended-attributes) を使用して、不足している設定や非アクティブ（グレー表示）の設定を上書きしてください。認証情報に関しては、テキストボックスとログにシークレット値が表示されないように、拡張属性を[環境変数](/docs/build/environment-variables) (`password: '{{ env_var(''DBT_ENV_SECRET_PASSWORD'') }}'`) で囲むことを推奨します。
 
 <WHCode>
 
@@ -175,11 +175,11 @@ For all warehouses, use [extended attributes](/docs/dbt-cloud-environments#exten
 
 <Lightbox src="/img/docs/collaborate/postgres-deploy-env-deploy-credentials.png" width="85%" title="Postgres Deployment Credentials Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Username**: Postgres username to use (most likely a service account)
-- **Password**: Postgres password for the listed user
-- **Schema**: Target schema
+- **ユーザー名**: 使用するPostgresユーザー名（通常はサービスアカウント）
+- **パスワード**: 指定されたユーザーのPostgresパスワード
+- **スキーマ**: 対象のスキーマ
 
 </div>
 
@@ -187,11 +187,11 @@ For all warehouses, use [extended attributes](/docs/dbt-cloud-environments#exten
 
 <Lightbox src="/img/docs/collaborate/postgres-deploy-env-deploy-credentials.png" width="85%" title="Redshift Deployment Credentials Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Username**: Redshift username to use (most likely a service account)
-- **Password**: Redshift password for the listed user
-- **Schema**: Target schema
+- **ユーザー名**: 使用するRedshiftユーザー名（通常はサービスアカウント）
+- **パスワード**: 一覧表示されているユーザーのRedshiftパスワード
+- **スキーマ**: ターゲットスキーマ
 
 </div>
 
@@ -199,18 +199,18 @@ For all warehouses, use [extended attributes](/docs/dbt-cloud-environments#exten
 
 <Lightbox src="/img/docs/collaborate/snowflake-deploy-env-deploy-credentials.png" width="85%" title="Snowflake Deployment Credentials Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Auth Method**: This determines the way dbt connects to your warehouse
-  - One of: [**Username & Password**, **Key Pair**]
-- If **Username & Password**:
-  - **Username**: username to use (most likely a service account)
-  - **Password**: password for the listed user
-- If **Key Pair**:
-  - **Username**: username to use (most likely a service account)
-  - **Private Key**: value of the Private SSH Key (optional)
-  - **Private Key Passphrase**: value of the Private SSH Key Passphrase (optional, only if required)
-- **Schema**: Target Schema for this environment
+- **認証方法**: dbt がウェアハウスに接続する方法を指定します。
+  - 次のいずれか: [**ユーザー名とパスワード**、**キーペア**]
+- **ユーザー名とパスワード** の場合:
+  - **ユーザー名**: 使用するユーザー名 (通常はサービスアカウント)
+  - **パスワード**: リストされているユーザーのパスワード
+- **キーペア** の場合:
+  - **ユーザー名**: 使用するユーザー名 (通常はサービスアカウント)
+  - **秘密鍵**: 秘密 SSH 鍵の値 (オプション)
+  - **秘密鍵のパスフレーズ**: 秘密 SSH 鍵のパスフレーズの値 (オプション、必要な場合のみ)
+- **スキーマ**: この環境のターゲットスキーマ
 
 </div>
 
@@ -218,11 +218,11 @@ For all warehouses, use [extended attributes](/docs/dbt-cloud-environments#exten
 
 <Lightbox src="/img/docs/collaborate/bigquery-deploy-env-deploy-credentials.png" width="85%" title="Bigquery Deployment Credentials Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Dataset**: Target dataset
+- **データセット**: ターゲットデータセット
 
-Use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to override missing or inactive (grayed-out) settings. For credentials, we recommend wrapping extended attributes in [environment variables](/docs/build/environment-variables) (`password: '{{ env_var(''DBT_ENV_SECRET_PASSWORD'') }}'`) to avoid displaying the secret value in the text box and the logs.
+不足している設定や非アクティブ（グレー表示）の設定を上書きするには、[拡張属性](/docs/dbt-cloud-environments#extended-attributes)を使用します。認証情報の場合は、テキストボックスやログにシークレット値が表示されないように、拡張属性を[環境変数](/docs/build/environment-variables)（`password: '{{ env_var(''DBT_ENV_SECRET_PASSWORD'') }}'`）で囲むことを推奨します。
 
 </div>
 
@@ -230,36 +230,35 @@ Use [extended attributes](/docs/dbt-cloud-environments#extended-attributes) to o
 
 <Lightbox src="/img/docs/collaborate/spark-deploy-env-deploy-credentials.png" width="85%" title="Spark Deployment Credentials Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Token**: Access token
-- **Schema**: Target schema
-
+- **トークン**: アクセストークン
+- **スキーマ**: ターゲットスキーマ
 </div>
 
 <div warehouse="Databricks">
 
 <Lightbox src="/img/docs/collaborate/spark-deploy-env-deploy-credentials.png" width="85%" title="Databricks Deployment Credentials Settings"/>
 
-#### Editable fields
+#### 編集可能なフィールド
 
-- **Token**: Access token
-- **Schema**: Target schema
+- **トークン**: アクセストークン
+- **スキーマ**: ターゲットスキーマ
 
 </div>
 
 </WHCode>
 
-## Delete an environment
+## 環境を削除する
 
-import DeleteEnvironment from '/snippets/_delete-environment.md';
+import DeleteEnvironment from '/snippets.ja/_delete-environment.md';
 
 <DeleteEnvironment />
 
-## Related docs
+## 関連ドキュメント
 
-- [<Constant name="cloud" /> environment best practices](/guides/set-up-ci)
-- [Deploy jobs](/docs/deploy/deploy-jobs)
-- [CI jobs](/docs/deploy/continuous-integration)
-- [Delete a job or environment in <Constant name="cloud" />](/faqs/Environments/delete-environment-job)
+- [<Constant name="cloud" /> 環境のベストプラクティス](/guides/set-up-ci)
+- [ジョブのデプロイ](/docs/deploy/deploy-jobs)
+- [CI ジョブ](/docs/deploy/continuous-integration)
+- [<Constant name="cloud" /> 内のジョブまたは環境の削除](/faqs/Environments/delete-environment-job)
 

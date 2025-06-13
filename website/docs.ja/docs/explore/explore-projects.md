@@ -1,5 +1,5 @@
 ---
-title: "Discover data with Catalog"
+title: "カタログでデータを発見"
 sidebar_label: "Discover data with Catalog"
 description: "Learn about Catalog and how to interact with it to understand, improve, and leverage your dbt projects."
 image: /img/docs/collaborate/dbt-explorer/example-project-lineage-graph.png
@@ -9,289 +9,289 @@ pagination_prev: null
 
 <IntroText>
 
-With <Constant name="explorer" />, you can view your project's [resources](/docs/build/projects) (such as models, tests, and metrics), their <Term id="data-lineage">lineage</Term>, and [model consumption](/docs/explore/view-downstream-exposures) to gain a better understanding of its latest production state.
-
+<Constant name="explorer" /> を使用すると、プロジェクトの [リソース](/docs/build/projects) (モデル、テスト、メトリックなど)、それらの <Term id="data-lineage">系統</Term>、および [モデルの使用](/docs/explore/view-downstream-exposures) を表示して、最新の運用状態をより深く理解することができます。
 </IntroText>
 
-Use <Constant name="explorer" /> to navigate and manage your projects within <Constant name="cloud" /> to help you and other data developers, analysts, and consumers discover and leverage your dbt resources. <Constant name="explorer" /> integrates with the [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud), [dbt <Constant name="query_page" />](/docs/explore/dbt-insights), [<Constant name="orchestrator" />](/docs/deploy/deployments), and [<Constant name="visual_editor" />](/docs/cloud/canvas) to help you develop or view your dbt resources.
+<Constant name="explorer" /> を使用して、<Constant name="cloud" /> 内のプロジェクトを移動および管理し、自分や他のデータ開発者、アナリスト、コンシューマーが dbt リソースを検出して活用できるようにします。<Constant name="explorer" /> は、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud)、[dbt <Constant name="query_page" />](/docs/explore/dbt-insights)、[<Constant name="orchestrator" />](/docs/deploy/deployments)、および [<Constant name="visual_editor" />](/docs/cloud/canvas) と統合され、dbt リソースの開発や表示に役立ちます。
 
-## Prerequisites
+## 前提条件
 
-- You have a <Constant name="cloud" /> account on the [Starter, Enterprise, or Enterprise+ plan](https://www.getdbt.com/pricing/).
-- You have set up a [production](/docs/deploy/deploy-environments#set-as-production-environment) or [staging](/docs/deploy/deploy-environments#create-a-staging-environment) deployment environment for each project you want to explore.
-- You have at least one successful job run in the deployment environment. Note that [CI jobs](/docs/deploy/ci-jobs) do not update <Constant name="explorer" />. 
-- You are on the <Constant name="explorer" /> page. To do this, select **Explore** from the navigation in <Constant name="cloud" />.
+- [Starter、Enterprise、または Enterprise+ プラン](https://www.getdbt.com/pricing/) の <Constant name="cloud" /> アカウントが必要です。
+- 探索するプロジェクトごとに、[本番環境](/docs/deploy/deploy-environments#set-as-production-environment) または [ステージング環境](/docs/deploy/deploy-environments#create-a-staging-environment) のデプロイメント環境がセットアップされている必要があります。
+- デプロイメント環境で少なくとも 1 つのジョブが正常に実行されている必要があります。[CI ジョブ](/docs/deploy/ci-jobs) は <Constant name="explorer" /> を更新しないことに注意してください。
+- <Constant name="explorer" /> ページが表示されています。これを行うには、<Constant name="cloud" /> のナビゲーションから [**探索**] を選択します。
 
-import Generatemetadata from '/snippets/_generate-metadata.md';
+import Generatemetadata from '/snippets.ja/_generate-metadata.md';
 
 <Generatemetadata />
 
 :::tip
-If your organization works in both dbt Core and Cloud, you can unify these workflows by automatically uploading dbt Core artifacts into dbt Cloud and viewing them in <Constant name="explorer" /> for a more connected dbt experience. To learn more, visit [hybrid projects](/docs/deploy/hybrid-projects).
+組織でdbt CoreとCloudの両方を使用している場合は、dbt Coreのアーティファクトをdbt Cloudに自動的にアップロードし、<Constant name="explorer" />で表示することで、これらのワークフローを統合し、より連携したdbtエクスペリエンスを実現できます。詳細については、[ハイブリッドプロジェクト](/docs/deploy/hybrid-projects)をご覧ください。
 :::
 
-### External metadata ingestion <Lifecycle status="preview" />
+### 外部メタデータの取り込み <Lifecycle status="preview" />
 
-Connect directly to your data warehouse with [external metadata ingestion](/docs/explore/external-metadata-ingestion), giving you visibility into tables, views, and other resources that aren't defined in dbt with <Constant name="explorer" />.
+[外部メタデータ取り込み](/docs/explore/external-metadata-ingestion)を使用してデータウェアハウスに直接接続することで、<Constant name="explorer" /> を使用して dbt で定義されていないテーブル、ビュー、その他のリソースを可視化できます。
 
-We create dbt metadata and pull external metadata. <Constant name="explorer" /> uses the metadata provided by the [Discovery API](/docs/dbt-cloud-apis/discovery-api) to display details about the state of your project. The available metadata depends on which [deployment environment](/docs/deploy/deploy-environments) you’ve designated as production or staging in your dbt project.
+dbt メタデータを作成し、外部メタデータを取得します。<Constant name="explorer" /> は、[Discovery API](/docs/dbt-cloud-apis/discovery-api) によって提供されるメタデータを使用して、プロジェクトの状態に関する詳細を表示します。利用可能なメタデータは、dbt プロジェクトで本番環境またはステージング環境として指定した [デプロイメント環境](/docs/deploy/deploy-environments) によって異なります。
 
-## Catalog overview 
+## カタログの概要
 
-:::info [Global navigation](/docs/explore/explore-projects#search-resources) <Lifecycle status='self_service,managed,managed_plus' /> <Lifecycle status="preview" />
+:::info [グローバルナビゲーション](/docs/explore/explore-projects#search-resources) <Lifecycle status='self_service,managed,managed_plus' /> <Lifecycle status="preview" />
 
-<Constant name="explorer" /> introduces the ability to widen your search by searching your dbt resources (models, seeds, snapshots, sources, exposures and more so) across your entire account. This broadens the results returned and gives you greater insight into all the assets across your dbt projects.
+<Constant name="explorer" /> を使用すると、アカウント全体の dbt リソース（モデル、シード、スナップショット、ソース、エクスポージャーなど）を検索することで、検索範囲を拡張できます。これにより、返される結果の範囲が広がり、dbt プロジェクト全体のすべてのアセットについて、より詳細な情報を得ることができます。
 
-To enable global navigation:
+グローバルナビゲーションを有効にするには:
 
-- Have a [developer license with Owner](/docs/cloud/manage-access/about-user-access#role-based-access-control) permissions.
-- Navigate to your [account settings](/docs/cloud/account-settings) in your <Constant name="cloud" /> account and check the box to **Enable dbt Catalog's Global Navigation**.
+- [所有者](/docs/cloud/manage-access/about-user-access#role-based-access-control) 権限を持つ開発者ライセンスが必要です。
+- <Constant name="cloud" /> アカウントの [アカウント設定](/docs/cloud/account-settings) に移動し、[**dbt カタログのグローバルナビゲーションを有効にする**] チェックボックスをオンにします。
 
 :::
 
-Navigate the <Constant name="explorer" /> overview page to access your project's resources and metadata. The page includes the following sections:
+<Constant name="explorer" /> 概要ページに移動して、プロジェクトのリソースとメタデータにアクセスします。このページには以下のセクションがあります。
 
-- **Search bar** &mdash; [Search](#search-resources) for resources in your project by keyword. You can also use filters to refine your search results.
-- **Sidebar** &mdash; Use the left sidebar to access model [performance](/docs/explore/model-performance), [project recommendations](/docs/explore/project-recommendations) in the **Project details** section. Browse your project's [resources, file tree, and database](#browse-with-the-sidebar) in the lower section of the sidebar.
-    - Find your project recommendations within your project's landing page.*
-- **Lineage graph** &mdash; Explore your project's or account's [lineage graph](#project-lineage) to visualize the relationships between resources.
-- **Latest updates** &mdash; View the latest changes or issues related to your project's resources, including the most recent job runs, changed properties, lineage, and issues.
-- **Marts and public models** &mdash; View the [marts](/best-practices/how-we-structure/1-guide-overview#guide-structure-overview) and [public models](/docs/mesh/govern/model-access#access-modifiers) in your project. You can also navigate to all public models in your account through this view.
-- **Model query history** &mdash; Use [model query history](/docs/explore/model-query-history) to track consumption queries on your models for deeper insights.
-- **Visualize downstream exposures** &mdash; [Set up](/docs/cloud-integrations/downstream-exposures-tableau) and [visualize downstream exposures](/docs/explore/view-downstream-exposures) to automatically expose relevant data models from Tableau to enhance visibility.
-- **Data health signals** &mdash; View the [data-health-signals](/docs/explore/data-health-signals) for each resource to understand its health and performance.
+- **検索バー** &mdash; キーワードでプロジェクト内のリソースを[検索](#search-resources)します。フィルターを使用して検索結果を絞り込むこともできます。
+- **サイドバー** &mdash; 左側のサイドバーを使用して、**プロジェクトの詳細** セクションのモデル[パフォーマンス](/docs/explore/model-performance)と[プロジェクトの推奨事項](/docs/explore/project-recommendations)にアクセスできます。サイドバーの下部で、プロジェクトの[リソース、ファイルツリー、データベース](#browse-with-the-sidebar)を参照できます。
+- プロジェクトの推奨事項は、プロジェクトのランディングページ内にあります。*
+- **リネージグラフ** &mdash; プロジェクトまたはアカウントの[リネージグラフ](#project-lineage)を調べて、リソース間の関係を視覚化します。
+- **最新の更新** - プロジェクトのリソースに関連する最新の変更や問題（最新のジョブ実行、変更されたプロパティ、リネージ、問題など）を表示します。
+- **マートとパブリックモデル** - プロジェクトの [マート](/best-practices/how-we-structure/1-guide-overview#guide-structure-overview) と [パブリックモデル](/docs/mesh/govern/model-access#access-modifiers) を表示します。このビューから、アカウント内のすべてのパブリックモデルに移動することもできます。
+- **モデルクエリ履歴** - [モデルクエリ履歴](/docs/explore/model-query-history) を使用して、モデルの使用状況クエリを追跡し、より深い分析情報を得ることができます。
+- **ダウンストリームのエクスポージャーを視覚化** - Tableau から関連するデータモデルを自動的に公開して可視性を高めるには、[設定](/docs/cloud-integrations/downstream-exposures-tableau)と[ダウンストリームのエクスポージャーを視覚化](/docs/explore/view-downstream-exposures)を行います。
+- **データヘルスシグナル** - 各リソースの [データヘルスシグナル](/docs/explore/data-health-signals) を表示して、その健全性とパフォーマンスを把握します。
 
-### Catalog permissions
+### カタログ権限
 
-When using global navigation and searching across your projects, the following permissions apply.
+グローバルナビゲーションを使用してプロジェクト全体を検索する場合、以下の権限が適用されます。
 
-- Your project access permissions determine which dbt projects appear in the left-hand menu of the global navigation.
-- In <Constant name="explorer" /> searches, we use soft access controls, you'll see all matching resources in search results, with clear indicators for items you don't have access to.
-- For external metadata, the global platform credential controls which resources metadata users can discover. See [External metadata ingestion](/docs/explore/external-metadata-ingestion) for more details.
+- プロジェクトのアクセス権限によって、グローバルナビゲーションの左側のメニューに表示される dbt プロジェクトが決まります。
+- <Constant name="explorer" /> 検索ではソフトアクセス制御が使用され、検索結果には一致するすべてのリソースが表示されます。アクセス権のない項目には明確なインジケーターが表示されます。
+- 外部メタデータの場合、グローバルプラットフォーム認証情報によって、メタデータユーザーが検出できるリソースが制御されます。詳細については、[外部メタデータの取り込み](/docs/explore/external-metadata-ingestion) をご覧ください。
 
-import ExplorerCourse from '/snippets/_explorer-course-link.md';
+import ExplorerCourse from '/snippets.ja/_explorer-course-link.md';
 
 <ExplorerCourse />
 
-## Explore your project's lineage graph {#project-lineage}
+## プロジェクトの系統グラフを調べる {#project-lineage}
 
-<Constant name="explorer" /> provides a visualization of your project's <Term id="dag">DAG</Term> that you can interact with. To access the project's full lineage graph, select **Overview** in the left sidebar and click the **Explore Lineage** button on the main (center) section of the page.
+<Constant name="explorer" /> は、プロジェクトの <Term id="dag">DAG</Term> を視覚的に表示し、操作できるようにします。プロジェクトの完全な系統グラフにアクセスするには、左側のサイドバーで [**概要**] を選択し、ページのメイン（中央）セクションにある [**系統グラフの参照**] ボタンをクリックします。
 
-If you don't see the project lineage graph immediately, click **Render Lineage**. It can take some time for the graph to render depending on the size of your project and your computer's available memory. The graph of very large projects might not render so you can select a subset of nodes by using selectors, instead.
+プロジェクトの系統グラフがすぐに表示されない場合は、[**系統グラフのレンダリング**] をクリックしてください。プロジェクトのサイズとコンピュータの使用可能なメモリによっては、グラフのレンダリングに時間がかかる場合があります。非常に大きなプロジェクトのグラフはレンダリングされない場合があるため、代わりにセレクタを使用してノードのサブセットを選択できます。
 
-The nodes in the lineage graph represent the project's resources and the edges represent the relationships between the nodes. Nodes are color-coded and include iconography according to their resource type.
+系統グラフ内のノードはプロジェクトのリソースを表し、エッジはノード間の関係を表します。ノードはリソースの種類に応じて色分けされ、アイコンが表示されます。
 
-By default, <Constant name="explorer" /> shows the project's [applied state](/docs/dbt-cloud-apis/project-state#definition-logical-vs-applied-state-of-dbt-nodes) lineage. That is, it shows models that have been successfully built and are available to query, not just the models defined in the project.
+デフォルトでは、<Constant name="explorer" /> はプロジェクトの [適用状態](/docs/dbt-cloud-apis/project-state#definition-logical-vs-applied-state-of-dbt-nodes) 系統を表示します。つまり、プロジェクトで定義されているモデルだけでなく、正常にビルドされ、クエリに使用できるモデルも表示されます。
 
-To explore the lineage graphs of tests and macros, view [their resource details pages](#view-resource-details). By default, <Constant name="explorer" /> excludes these resources from the full lineage graph unless a search query returns them as results.
+テストとマクロの系統グラフを調べるには、[リソースの詳細ページ](#view-resource-details) を参照してください。デフォルトでは、<Constant name="explorer" /> は、検索クエリの結果として返されない限り、これらのリソースを完全な系統グラフから除外します。
 
-<Expandable alt_header="How can I interact with the full lineage graph?">
+<Expandable alt_header="完全な系統グラフとどのように対話できますか?">
 
-- Hover over any item in the graph to display the resource's name and type.
-- Zoom in and out on the graph by mouse-scrolling.
-- Grab and move the graph and the nodes.
-- Right-click on a node (context menu) to:
-    - Refocus on the node, including its upstream and downstream nodes
-    - Refocus on the node and its downstream nodes only
-    - Refocus on the node and it upstream nodes only
-    - View the node's [resource details](#view-resource-details) page
-- Select a resource to highlight its relationship with other resources in your project. A panel opens on the graph's right-hand side that displays a high-level summary of the resource's details. The side panel includes a **General** tab for information like description, materialized type, and other details. In the side panel's upper right corner:
-    - Click the View Resource icon to [view the resource details](#view-resource-details).
-    - Click the [Open in IDE](#open-in-ide) icon to examine the resource using the [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud).
-    - Click the Copy Link to Page icon to copy the page's link to your clipboard.
-- Use [selectors](/reference/node-selection/methods) (in the search bar) to select specific resources or a subset of the DAG. This can help narrow the focus on the resources that interest you. All selectors are available for use, except those requiring a state comparison (result, source status, and state). You can also use the `--exclude` and the `--select` flag (which is optional). Examples:
-    - `resource_type:model [RESOURCE_NAME]` &mdash; Returns all models matching the name search
-    - `resource_type:metric,tag:nightly` &mdash; Returns metrics with the tag `nightly`
-- Use [graph operators](/reference/node-selection/graph-operators) (in the search bar) to select specific resources or a subset of the DAG. This can help narrow the focus on the resources that interest you. Examples:
-    - `+orders` &mdash; Returns all the upstream nodes of `orders`
-    - `+dim_customers,resource_type:source` &mdash; Returns all sources that are upstream of `dim_customers`
-- Use [set operators](/reference/node-selection/set-operators) (in the search bar) to select specific resources or a subset of the DAG. This can help narrow the focus on the resources that interest you. For example:
-    - `+snowplow_sessions +fct_orders` &mdash; Use space-delineated arguments for a union operation. Returns resources that are upstream nodes of either `snowplow_sessions` or `fct_orders`.
+- グラフ内の任意の項目にマウスオーバーすると、リソースの名前とタイプが表示されます。
+- マウススクロールでグラフを拡大/縮小できます。
+- グラフとノードを掴んで移動できます。
+- ノードを右クリック（コンテキストメニュー）すると、次の操作を実行できます。
+    - ノード（上流ノードと下流ノードを含む）に再度フォーカスします。
+    - ノードとその下流ノードのみに再度フォーカスします。
+    - ノードとその上流ノードのみに再度フォーカスします。
+    - ノードの [リソースの詳細](#view-resource-details) ページを表示します。
+- リソースを選択すると、プロジェクト内の他のリソースとの関係が強調表示されます。グラフの右側にパネルが開き、リソースの詳細の概要が表示されます。サイドパネルには、説明、マテリアライズドタイプ、その他の詳細情報を表示する [全般] タブがあります。サイドパネルの右上隅には、次の操作を実行できます。
+    - [リソースの詳細を表示](#view-resource-details) するには、[リソースの表示](#view-resource-details) アイコンをクリックします。
+    - [IDE で開く](#open-in-ide) アイコンをクリックし、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) を使用してリソースを調べます。
+    - [ページへのリンクをコピー] アイコンをクリックし、ページのリンクをクリップボードにコピーします。
+- [セレクタ](/reference/node-selection/methods) (検索バー内) を使用して、特定のリソースまたは DAG のサブセットを選択します。これにより、関心のあるリソースに焦点を絞り込むことができます。状態の比較 (結果、ソースのステータス、状態) を必要とするセレクタを除き、すべてのセレクタを使用できます。また、`--exclude` フラグと `--select` フラグ (オプション) も使用できます。例:
+    - `resource_type:model [RESOURCE_NAME]` &mdash; 名前検索に一致するすべてのモデルを返します。
+    - `resource_type:metric,tag:nightly` &mdash;タグ「nightly」が付いたメトリクスを返します。
+- 検索バーの [グラフ演算子](/reference/node-selection/graph-operators) を使用して、特定のリソースまたは DAG のサブセットを選択します。これにより、関心のあるリソースに焦点を絞り込むことができます。例:
+    - `+orders` &mdash; `orders` の上流ノードをすべて返します。
+    - `+dim_customers,resource_type:source` &mdash; `dim_customers` の上流にあるすべてのソースを返します。
+- 検索バーの [集合演算子](/reference/node-selection/set-operators) を使用して、特定のリソースまたは DAG のサブセットを選択します。これにより、関心のあるリソースに焦点を絞り込むことができます。例:
+    - `+snowplow_sessions +fct_orders` &mdash; 結合演算には、スペースで区切られた引数を使用します。 `snowplow_sessions` または `fct_orders` のいずれかの上流ノードであるリソースを返します。
 
-- [View resource details](#view-resource-details) by selecting a node (double-clicking) in the graph.
-- Click **Lenses** (lower right corner of the graph) to use <Constant name="explorer" /> [lenses](#lenses) feature.
+- グラフ内のノードを選択（ダブルクリック）して、[リソースの詳細を表示](#view-resource-details)します。
+- <Constant name="explorer" /> [レンズ](#lenses)機能を使用するには、**レンズ**（グラフの右下隅）をクリックします。
 
 </Expandable>
 
-### Example of full lineage graph
+### 完全な系統グラフの例
 
-Example of exploring a model in the project's lineage graph:
+プロジェクトの系統グラフでモデルを探索する例:
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/example-project-lineage-graph.png" width="100%" title="Example of full lineage graph" />
 
-## Lenses
+## レンズ
 
-The **Lenses** feature is available from your [project's lineage graph](#project-lineage) (lower right corner). Lenses are like map layers for your DAG. Lenses make it easier to understand your project's contextual metadata at scale, especially to distinguish a particular model or a subset of models.
+**レンズ**機能は、[プロジェクトの系統グラフ](#project-lineage) (右下隅) から利用できます。レンズはDAGのマップレイヤーのようなものです。レンズを使用すると、プロジェクトのコンテキストメタデータを大規模に把握しやすくなり、特に特定のモデルやモデルのサブセットを区別しやすくなります。
 
-When you apply a lens, tags become visible on the nodes in the lineage graph, indicating the layer value along with coloration based on that value. If you're significantly zoomed out, only the tags and their colors are visible in the graph.
+レンズを適用すると、系統グラフのノードにタグが表示され、レイヤーの値とその値に基づく色分けが示されます。大幅にズームアウトすると、グラフにはタグとその色のみが表示されます。
 
-Lenses are helpful to analyze a subset of the DAG if you're zoomed in, or to find models/issues from a larger vantage point.
+レンズは、DAGを拡大表示しているときにサブセットを分析したり、より広い視点からモデルや問題を見つけたりするのに役立ちます。
 
-<Expandable alt_header="List of available lenses">
+<Expandable alt_header="利用可能なレンズのリスト">
 
-A resource in your project is characterized by resource type, materialization type, or model layer, as well as its latest run or latest test status. Lenses are available for the following metadata:
+プロジェクト内のリソースは、リソースタイプ、マテリアライゼーションタイプ、モデルレイヤー、および最新の実行ステータスまたは最新のテストステータスによって特徴付けられます。レンズは、以下のメタデータで利用できます。
 
-- **Resource type**: Organizes resources by resource type, such as models, tests, seeds, saved query, and [more](/docs/build/projects). Resource type uses the `resource_type` selector.
-- **Materialization type**: Identifies the strategy for building the dbt models in your data platform.
-- **Latest status**: The status from the latest execution of the resource in the current environment. For example, diagnosing a failed DAG region.
-- **Model layer**: The modeling layer that the model belongs to according to [best practices guide](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). For example, discovering marts models to analyze.
-    - **Marts** &mdash; A model with the prefix `fct_` or `dim_` or a model that lives in the `/marts/` subdirectory.
-    - **Intermediate** &mdash; A model with the prefix `int_`. Or, a model that lives in the `/int/` or `/intermediate/` subdirectory.
-    - **Staging** &mdash; A model with the prefix `stg_`. Or, a model that lives in the `/staging/` subdirectory.
-- **Test status**: The status from the latest execution of the tests that ran again this resource. In the case that a model has multiple tests with different results, the lens reflects the 'worst case' status.
-- **Consumption query history**: The number of queries against this resource over a given time period.
+- **リソースタイプ**: モデル、テスト、シード、保存済みクエリ、[詳細](/docs/build/projects) など、リソースをリソースタイプ別に整理します。リソースタイプには、`resource_type` セレクタを使用します。
+- **マテリアライゼーションタイプ**: データプラットフォームで dbt モデルを構築するための戦略を識別します。
+- **最新のステータス**: 現在の環境でリソースを最後に実行したときのステータス。例: 障害が発生した DAG リージョンの診断。
+- **モデルレイヤー**: [ベストプラクティスガイド](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview) に従って、モデルが属するモデリングレイヤー。例: 分析する marts モデルの検出。
+    - **Marts** - プレフィックスが `fct_` または `dim_` のモデル、または `/marts/` サブディレクトリにあるモデル。
+    - **Intermediate** - プレフィックスが `int_` のモデル。または `/int/` または `/intermediate/` サブディレクトリにあるモデル。
+    - **Staging** - プレフィックスが `stg_` のモデル。または `/staging/` サブディレクトリにあるモデル。
+- **テストステータス**: このリソースに対して実行されたテストの最新の実行時のステータス。モデルに結果が異なる複数のテストがある場合、レンズは「最悪のケース」のステータスを反映します。
+- **消費クエリ履歴**: 特定の期間におけるこのリソースに対するクエリの数。
 
 </Expandable>
 
-### Example of lenses
+### レンズの例
 
-Example of applying the **Materialization type** _lens_ with the lineage graph zoomed out. In this view, each model name has a color according to the materialization type legend at the bottom, which specifies the materialization type. This color-coding helps to quickly identify the materialization types of different models.
+系統グラフを縮小表示した状態で**マテリアライゼーションタイプ** _レンズ_を適用した例です。このビューでは、各モデル名が、下部にあるマテリアライゼーションタイプの凡例に基づいて色分けされています。凡例にはマテリアライゼーションタイプが示されています。この色分けにより、異なるモデルのマテリアライゼーションタイプを素早く識別できます。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/example-materialization-type.jpg" width="100%" title="Example of the Materialization type lens" />
 
-Example of applying the **Tests Status** _lens_, where each model name displays the tests status according to the legend at the bottom, which specifies the test status.
+**テスト ステータス** _lens_ を適用する例。各モデル名には、テスト ステータスを指定する下部の凡例に従ってテスト ステータスが表示されます。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/example-test-status.jpg" width="100%" title="Example of the Test Status lens" />
 
 ## Keyword search {#search-resources}
 
-With <Constant name="explorer" />, global navigation provides a search experience allowing you to find dbt resources across all your projects, as well as non-dbt resources in Snowflake.
+<Constant name="explorer" /> を使用すると、グローバルナビゲーションによる検索機能が提供され、すべてのプロジェクトの dbt リソースだけでなく、Snowflake 内の dbt 以外のリソースも検索できます。
 
-You can locate resources in your project by performing a keyword search in the search bar. All resource names, column names, resource descriptions, warehouse relations, and code matching your search criteria will be displayed as a list on the main (center) section of the page. When searching for an exact column name, the results show all relational nodes containing that column in their schemas. If there's a match, a notice in the search result indicates the resource contains the specified column. Also, you can apply filters to further refine your search results.
+検索バーでキーワード検索を実行することで、プロジェクト内のリソースを見つけることができます。検索条件に一致するすべてのリソース名、列名、リソースの説明、データウェアハウスの関連、コードが、ページのメイン（中央）セクションにリストとして表示されます。正確な列名を検索すると、スキーマ内にその列を含むすべてのリレーショナルノードが結果に表示されます。一致するものがあった場合、検索結果に、リソースに指定された列が含まれていることを示す通知が表示されます。また、フィルターを適用して検索結果をさらに絞り込むこともできます。
 
-<Expandable alt_header="Search features">
+<Expandable alt_header="検索機能">
 
-- **Partial keyword search** &mdash; Also referred to as fuzzy search. <Constant name="explorer" /> uses a "contains" logic to improve your search results. This means you can search for partial terms without knowing the exact root word of your search term.
-- **Exclude keywords** &mdash; Prepend a minus sign (-) to the keyword you want to exclude from search results. For example, `-user` will exclude all matches of that keyword from search results.
-- **Boolean operators** &mdash; Use Boolean operators to enhance your keyword search. For example, the search results for `users OR github` will include matches for either keyword.
-- **Phrase search** &mdash; Surround a string of keywords with double quotation marks to search for that exact phrase (for example, `"stg users"`). To learn more, refer to [Phrase search](https://en.wikipedia.org/wiki/Phrase_search) on Wikipedia.
-- **SQL keyword search** &mdash; Use SQL keywords in your search. For example, the search results `int github users joined` will include matches that contain that specific string of keywords (similar to phrase searching).
-
-</Expandable>
-
-<Expandable alt_header="Filters side panel">
-
-The **Filters** side panel becomes available after you perform a keyword search. Use this panel to further refine the results from your keyword search. By default, <Constant name="explorer" /> searches across all resources in the project. You can filter on:
-
-- [Resource type](/docs/build/projects) (like models, sources, and so on)
-- [Model access](/docs/mesh/govern/model-access) (like public, private)
-- [Model layer](/best-practices/how-we-structure/1-guide-overview) (like marts, staging)
-- [Model materialization](/docs/build/materializations) (like view, table)
-- [Tags](/reference/resource-configs/tags) (supports multi-select)
-
-Under the **Models** option, you can filter on model properties (access or materialization type). Also available are **Advanced** options, where you can limit the search results to column name, model code, and more.
+- **部分キーワード検索** &mdash; あいまい検索とも呼ばれます。<Constant name="explorer" /> は「contains」ロジックを使用して検索結果を向上させます。つまり、検索語の正確なルートワードがわからなくても、部分的な語句を検索できます。
+- **キーワードの除外** &mdash; 検索結果から除外するキーワードの先頭にマイナス記号 (-) を付けます。たとえば、「-user」と指定すると、そのキーワードに一致するすべての語句が検索結果から除外されます。
+- **ブール演算子** &mdash; ブール演算子を使用してキーワード検索を拡張します。たとえば、「users OR github」の検索結果には、どちらかのキーワードに一致するものが含まれます。
+- **フレーズ検索** &mdash; キーワードの文字列を二重引用符で囲むと、そのフレーズと完全に一致するものを検索できます (例: `"stg users"`)。詳細については、Wikipedia の [フレーズ検索](https://en.wikipedia.org/wiki/Phrase_search) をご覧ください。
+- **SQL キーワード検索** &mdash; 検索には SQL キーワードを使用します。たとえば、「int github users connected」という検索結果には、特定のキーワード文字列を含む一致が含まれます（フレーズ検索と同様です）。
 
 </Expandable>
 
-<Expandable alt_header="Global navigation">
+<Expandable alt_header="フィルターサイドパネル">
 
-<Constant name="explorer" /> builds on the functionality of the old navigation and introduces exciting new capabilities to enhance your experience.
+キーワード検索を実行すると、**フィルター** サイドパネルが利用可能になります。このパネルを使用して、キーワード検索の結果を絞り込むことができます。デフォルトでは、<Constant name="explorer" /> はプロジェクト内のすべてのリソースを検索します。以下の項目でフィルターできます。
 
-- Search data assets &mdash; widen your search by searching your dbt resources (models, seeds, snapshots, sources, exposures and more so) across your entire account. This broadens the results returned and gives you greater insight into all the assets across your dbt projects.
-    - External metadata ingestion &mdash; connect directly to your data warehouse, giving you visibility into tables, views, and other resources that aren't defined in dbt with <Constant name="explorer" />.
-- Explore lineage &mdash; provides an interactive map of data relationships across all your dbt projects. It lets you:
-    - View upstream/downstream dependencies for models, sources, and more.
-    - Drill into project and column-level lineage, including multi-project (Mesh) links.
-    - Filter with "lineage lenses" by resource type, materialization, layer, or run status.
-    - Troubleshoot data issues by tracing root causes and downstream impacts.
-    - Optimize pipelines by spotting slow, failing, or unused parts of your DAG.
-- See recommendations &mdash; offer a project-wide snapshot of dbt health, highlighting actionable tips to enhance your analytics engineering. These insights are automatically generated using <Constant name="cloud" /> metadata and best practices from the project evaluator ruleset.
-- Model query history &mdash; shows how often each dbt model is queried in your warehouse, helping you:
-    - Track real usage via successful `SELECT`s (excluding builds/tests)
-    - Identify most/least used models for optimization or deprecation
-    - Guide investment and maintenance with data-driven insights
-- Downstream exposures &mdash; shows how your dbt models and sources are used by BI tools, apps, ML models, and reports across all connected projects
+- [リソースタイプ](/docs/build/projects) (モデル、ソースなど)
+- [モデルアクセス](/docs/mesh/govern/model-access) (パブリック、プライベートなど)
+- [モデルレイヤー](/best-practices/how-we-structure/1-guide-overview) (マート、ステージングなど)
+- [モデルの具体化](/docs/build/materializations) (ビュー、テーブルなど)
+- [タグ](/reference/resource-configs/tags) (複数選択をサポート)
+
+**モデル** オプションでは、モデルのプロパティ (アクセスタイプまたは具体化タイプ) でフィルターできます。また、**詳細** オプションも利用可能で、検索結果を列名、モデル コードなどに制限できます。
 
 </Expandable>
 
-### Example of keyword search
-Example of results from searching on the keyword `customers` and applying the filters models, description, and code. [Data health signals](/docs/explore/data-health-signals) are visible to the right of the model name in the search results.
+<Expandable alt_header="グローバルナビゲーション">
 
-## Browse with the sidebar
+<Constant name="explorer" /> は、従来のナビゲーション機能を基盤とし、ユーザーエクスペリエンスを向上させる画期的な新機能を導入しています。
 
-From the sidebar, you can browse your project's resources, its file tree, and the database.
-
-- **Resources** tab &mdash; All resources in the project organized by type. Select any resource type in the list and all those resources in the project will display as a table in the main section of the page. For a description on the different resource types (like models, metrics, and so on), refer to [About dbt projects](/docs/build/projects).
-  - [Data health signals](/docs/explore/data-health-signals) are visible to the right of the resource name under the **Health** column.
-- **File Tree** tab &mdash; All resources in the project organized by the file in which they are defined. This mirrors the file tree in your dbt project repository.
-- **Database** tab &mdash; All resources in the project organized by the database and schema in which they are built. This mirrors your data platform's structure that represents the [applied state](/docs/dbt-cloud-apis/project-state) of your project.
-
-## Integrated tool access
-
-Users with a [developer license](/docs/cloud/manage-access/about-user-access#license-based-access-control) or an analyst seat can open a resource directly from the <Constant name="explorer" /> in the <Constant name="cloud_ide" /> to view its model files, in <Constant name="query_page" /> to query it, or in <Constant name="visual_editor" /> for visual editing.
-
-## View model versions
-
-If models in the project are versioned, you can see which [version of the model](/docs/mesh/govern/model-versions) is being applied &mdash; `prerelease`, `latest`, and `old` &mdash; in the title of the model's details page and in the model list from the sidebar.
-
-## View resource details {#view-resource-details}
-You can view the definition and latest run results of any resource in your project. To find a resource and view its details, you can interact with the lineage graph, use search, or browse the <Constant name="explorer" />.
-
-The details (metadata) available to you depends on the resource's type, its definition, and the [commands](/docs/deploy/job-commands) that run within jobs in the production environment.
-
-In the upper right corner of the resource details page, you can:
-- Click the [Open in <Constant name="cloud_ide" />](#open-in-ide) icon to examine the resource using the [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud).
-- Click the Share icon to copy the page's link to your clipboard.
-
-<Expandable alt_header="What details are available for a model?">
-
-- **Data health signals** &mdash; [Data health signals](/docs/explore/data-health-signals) offer a quick, at-a-glance view of data health. These icons indicate whether a model is Healthy, Caution, Degraded, or Unknown. Hover over an icon to view detailed information about the model's health.
-- **Status bar** (below the page title) &mdash; Information on the last time the model ran, whether the run was successful, how the data is materialized, number of rows, and the size of the model.
-- **General** tab includes:
-    - **Lineage** graph &mdash; The model's lineage graph that you can interact with. The graph includes one upstream node and one downstream node from the model. Click the Expand icon in the graph's upper right corner to view the model in full lineage graph mode.
-    - **Description** section &mdash; A [description of the model](/docs/build/documentation#adding-descriptions-to-your-project).
-    - **Recent** section &mdash; Information on the last time the model ran, how long it ran for, whether the run was successful, the job ID, and the run ID.
-    - **Tests** section &mdash; [Tests](/docs/build/data-tests) for the model, including a status indicator for the latest test status. A :white_check_mark: denotes a passing test.
-    - **Details** section &mdash; Key properties like the model's relation name (for example, how it's represented and how you can query it in the data platform: `database.schema.identifier`); model governance attributes like access, group, and if contracted; and more.
-    - **Relationships** section &mdash; The nodes the model **Depends On**, is **Referenced by**, and (if applicable) is **Used by** for projects that have declared the models' project as a dependency.
-- **Code** tab &mdash; The source code and compiled code for the model.
-- **Columns** tab &mdash; The available columns in the model. This tab also shows tests results (if any) that you can select to view the test's details page. A :white_check_mark: denotes a passing test. To filter the columns in the resource, you can use the search bar that's located at the top of the columns view.
+- データアセットの検索 - アカウント全体の dbt リソース（モデル、シード、スナップショット、ソース、エクスポージャーなど）を検索することで、検索範囲を広げることができます。これにより、返される結果の幅が広がり、dbt プロジェクト全体のすべてのアセットについて、より深い洞察が得られます。
+    - 外部メタデータの取り込み - データウェアハウスに直接接続することで、<Constant name="explorer" /> を使用して dbt で定義されていないテーブル、ビュー、その他のリソースを可視化できます。
+- 系統の探索 - すべての dbt プロジェクト間のデータ関係を示すインタラクティブなマップを提供します。これにより、次のことが可能になります。
+    - モデル、ソースなどの上流/下流の依存関係を表示します。
+    - マルチプロジェクト（メッシュ）リンクを含む、プロジェクトレベルおよび列レベルの系統を詳細に分析します。
+    - リソースタイプ、マテリアライゼーション、レイヤー、実行ステータスで「リネージレンズ」を使用してフィルタリングします。
+    - 根本原因と下流への影響を追跡することで、データの問題をトラブルシューティングします。
+    - DAG の低速部分、障害発生部分、または未使用部分を特定することで、パイプラインを最適化します。
+- 推奨事項を確認 - プロジェクト全体の dbt の健全性のスナップショットを提供し、分析エンジニアリングを強化するための実用的なヒントを強調表示します。これらの分析情報は、<Constant name="cloud" /> メタデータとプロジェクト評価ルールセットのベストプラクティスを使用して自動的に生成されます。
+- モデルクエリ履歴 - 各 dbt モデルがウェアハウスでクエリされる頻度を示し、次のことに役立ちます。
+    - 成功した `SELECT` による実際の使用状況の追跡（ビルド/テストを除く）
+    - 最適化または廃止のために、最も使用頻度が高い/最も使用頻度が低いモデルを特定します。
+    - データドリブンな分析情報で投資とメンテナンスをガイドします。
+- 下流のエクスポージャー - 接続されているすべてのプロジェクトにおいて、BI ツール、アプリ、ML モデル、レポートによって dbt モデルとソースがどのように使用されているかを示します。
 
 </Expandable>
 
-<Expandable alt_header="What details are available for an exposure?">
+### キーワード検索の例
+キーワード「customers」で検索し、モデル、説明、コードのフィルターを適用した結果の例です。[データヘルスシグナル](/docs/explore/data-health-signals)は、検索結果のモデル名の右側に表示されます。
 
-- **Status bar** (below the page title) &mdash; Information on the last time the exposure was updated.
-- **Data health signals** &mdash; [Data health signals](/docs/explore/data-health-signals) offer a quick, at-a-glance view of data health. These icons indicate whether a resource is Healthy, Caution, or Degraded. Hover over an icon to view detailed information about the exposure's health.
-- **General** tab includes:
-    - **Data health** &mdash; The status on data freshness and data quality.
-    - **Status** section &mdash; The status on data freshness and data quality.
-    - **Lineage** graph &mdash; The exposure's lineage graph. Click the **Expand** icon in the graph's upper right corner to view the exposure in full lineage graph mode. Integrates natively with Tableau and auto-generates downstream lineage.
-    - **Description** section &mdash; A description of the exposure.
-    - **Details** section &mdash; Details like exposure type, maturity, owner information, and more.
-    - **Relationships** section &mdash; The nodes the exposure **Depends On**.
+## サイドバーで参照
+
+サイドバーから、プロジェクトのリソース、ファイルツリー、データベースを参照できます。
+
+- **リソース** タブ - プロジェクト内のすべてのリソースがタイプ別に整理されています。リストから任意のリソースタイプを選択すると、プロジェクト内のすべてのリソースがページのメインセクションにテーブルとして表示されます。モデル、メトリックなど、さまざまなリソースタイプの詳細については、[dbt プロジェクトについて](/docs/build/projects) を参照してください。
+    - [データヘルスシグナル](/docs/explore/data-health-signals) は、リソース名の右側の [ヘルス] 列に表示されます。
+- **ファイルツリー** タブ - プロジェクト内のすべてのリソースが、定義されているファイル別に整理されています。これは、dbt プロジェクトリポジトリ内のファイルツリーを反映しています。
+- **データベース** タブ - プロジェクト内のすべてのリソースが、それらが構築されているデータベースとスキーマ別に整理されています。これは、プロジェクトの[適用された状態](/docs/dbt-cloud-apis/project-state)を表すデータ プラットフォームの構造を反映します。
+
+## 統合ツールアクセス
+
+[開発者ライセンス](/docs/cloud/manage-access/about-user-access#license-based-access-control)またはアナリストライセンスを持つユーザーは、<Constant name="cloud_ide" /> の <Constant name="explorer" /> から直接リソースを開いてモデルファイルを表示したり、<Constant name="query_page" /> でクエリを実行したり、<Constant name="visual_editor" /> でビジュアル編集したりできます。
+
+## モデルのバージョンを表示
+
+プロジェクト内のモデルがバージョン管理されている場合、モデルの詳細ページのタイトルとサイドバーのモデルリストで、適用されている [モデルのバージョン](/docs/mesh/govern/model-versions) （「プレリリース」、「最新」、「旧」）を確認できます。
+
+## リソースの詳細を表示 {#view-resource-details}
+
+プロジェクト内の任意のリソースの定義と最新の実行結果を表示できます。リソースを見つけて詳細を表示するには、系統グラフを操作したり、検索を使用したり、<Constant name="explorer" /> を参照したりできます。
+
+表示される詳細（メタデータ）は、リソースの種類、定義、および本番環境のジョブ内で実行される [コマンド](/docs/deploy/job-commands) によって異なります。
+
+リソースの詳細ページの右上隅では、次の操作を実行できます。
+- [<Constant name="cloud_ide" /> で開く](#open-in-ide) アイコンをクリックすると、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) を使用してリソースを確認できます。
+- [共有] アイコンをクリックすると、ページのリンクをクリップボードにコピーできます。
+
+<Expandable alt_header="モデルにはどのような詳細情報がありますか?">
+
+- **データ ヘルス シグナル** &mdash; [データ ヘルス シグナル](/docs/explore/data-health-signals) を使用すると、データのヘルス状態を一目で確認できます。これらのアイコンは、モデルが「正常」、「注意」、「低下」、「不明」のいずれの状態であるかを示します。アイコンにマウス カーソルを合わせると、モデルのヘルス状態に関する詳細情報が表示されます。
+- **ステータス バー** (ページ タイトルの下) &mdash; モデルの最終実行日時、実行の成否、データのマテリアライズ方法、行数、モデルのサイズに関する情報が表示されます。
+- **全般** タブには次のものが含まれます。
+    - **系統** グラフ &mdash; 操作可能なモデルの系統グラフ。グラフには、モデルの上流ノードと下流ノードが 1 つずつ表示されます。グラフの右上隅にある展開アイコンをクリックすると、モデルが完全な系統グラフ モードで表示されます。
+    - **説明** セクション &mdash; [モデルの説明](/docs/build/documentation#プロジェクトに説明を追加する)。
+    - **最近** セクション - モデルの最終実行日時、実行時間、実行の成否、ジョブ ID、実行 ID に関する情報。
+    - **テスト** セクション - モデルの [テスト](/docs/build/data-tests)。最新のテスト ステータスを示すステータス インジケーターが含まれます。:white_check_mark: はテストが成功したことを示します。
+    - **詳細** セクション - モデルのリレーション名（データ プラットフォームでどのように表現され、どのようにクエリできるか: `database.schema.identifier`）などの主要なプロパティ、アクセス、グループ、契約の有無などのモデル ガバナンス属性など。
+    - **リレーションシップ** セクション -モデルが**依存**し、**参照**され、（該当する場合）モデルのプロジェクトを依存関係として宣言しているプロジェクトで**使用される**ノード。
+- **コード** タブ - モデルのソースコードとコンパイル済みコード。
+- **列** タブ - モデルで使用可能な列。このタブにはテスト結果（ある場合）も表示され、選択するとテストの詳細ページが表示されます。:white_check_mark: は合格したテストを示します。リソース内の列をフィルタリングするには、列ビューの上部にある検索バーを使用します。
 
 </Expandable>
 
-<Expandable alt_header="What details are available for a test?">
+<Expandable alt_header="エクスポージャに関してどのような詳細情報を入手できますか?">
 
-- **Status bar** (below the page title) &mdash; Information on the last time the test ran, whether the test passed, test name, test target, and column name. Defaults to all if not specified.
-- **Test Type** (next to the Status bar) &mdash; Information on the different test types available: Unit test or Data test. Defaults to all if not specified.
-
-When you select a test, the following details are available:
-- **General** tab includes:
-    - **Lineage** graph &mdash; The test's lineage graph that you can interact with. The graph includes one upstream node and one downstream node from the test resource. Click the Expand icon in the graph's upper right corner to view the test in full lineage graph mode.
-    - **Description** section &mdash; A description of the test.
-    - **Recent** section &mdash; Information on the last time the test ran, how long it ran for, whether the test passed, the job ID, and the run ID.
-    - **Details** section &mdash; Details like schema, severity, package, and more.
-    - **Relationships** section &mdash; The nodes the test **Depends On**.
-- **Code** tab &mdash; The source code and compiled code for the test.
-
-Example of the Tests view:
+- **ステータスバー** (ページタイトルの下) - エクスポージャーが最後に更新された日時の情報。
+- **データヘルスシグナル** - [データヘルスシグナル](/docs/explore/data-health-signals) を使用すると、データのヘルス状況を一目で確認できます。これらのアイコンは、リソースの状態が「正常」、「注意」、「劣化」のいずれであるかを示します。アイコンにマウスポインターを合わせると、エクスポージャーのヘルス状況に関する詳細情報が表示されます。
+- **全般** タブには次のものが含まれます。
+    - **データヘルス** - データの鮮度とデータ品質のステータス。
+    - **ステータス** セクション - データの鮮度とデータ品質のステータス。
+    - **リネージ** グラフ - エクスポージャーのリネージグラフ。グラフの右上隅にある [展開] アイコンをクリックすると、エクスポージャーを完全なリネージグラフ モードで表示できます。Tableau とネイティブに統合され、下流のリネージを自動生成します。
+    - **説明** セクション - エクスポージャーの説明。
+    - **詳細** セクション - エクスポージャーの種類、満期、所有者情報などの詳細。
+    - **関係** セクション - エクスポージャーが **依存** するノード。
 
 </Expandable>
 
-<Expandable alt_header="What details are available for each source table within a source collection?">
+<Expandable alt_header="テストではどのような詳細情報が得られますか?">
 
-- **Status bar** (below the page title) &mdash; Information on the last time the source was updated and the number of tables the source uses.
-- **Data health signals** &mdash; [Data health signals](/docs/explore/data-health-signals) offer a quick, at-a-glance view of data health. These icons indicate whether a resource is Healthy, Caution, or Degraded. Hover over an icon to view detailed information about the source's health.
-- **General** tab includes:
-    - **Lineage** graph &mdash; The source's lineage graph that you can interact with. The graph includes one upstream node and one downstream node from the source. Click the Expand icon in the graph's upper right corner to view the source in full lineage graph mode.
-    - **Description** section &mdash; A description of the source.
-    - **Source freshness** section &mdash; Information on whether refreshing the data was successful, the last time the source was loaded, the timestamp of when a run generated data, and the run ID.
-    - **Details** section &mdash; Details like database, schema, and more.
-    - **Relationships** section &mdash; A table that lists all the sources used with their freshness status, the timestamp of when freshness was last checked, and the timestamp of when the source was last loaded.
-- **Columns** tab &mdash; The available columns in the source. This tab also shows tests results (if any) that you can select to view the test's details page. A :white_check_mark: denotes a passing test.
+- **ステータス バー** (ページ タイトルの下) &mdash; テストの最終実行日時、テストの成功/不成功、テスト名、テスト ターゲット、列名に関する情報。指定がない場合は、すべてデフォルトで設定されます。
+- **テスト タイプ** (ステータス バーの横) &mdash; 使用可能なテスト タイプ (単体テストまたはデータ テスト) に関する情報。指定がない場合は、すべてデフォルトで設定されます。
+
+テストを選択すると、次の詳細が表示されます。
+- **全般** タブには次の内容が含まれます。
+    - **系統** グラフ &mdash; 操作可能なテストの系統グラフ。グラフには、テスト リソースからの上流ノードと下流ノードが 1 つずつ表示されます。グラフの右上隅にある展開アイコンをクリックすると、完全な系統グラフ モードでテストが表示されます。
+    - **説明** セクション &mdash; テストの説明。
+    - **最近** セクション &mdash;テストの最終実行日時、実行時間、テストの成功/不成功、ジョブID、実行IDに関する情報。
+    - **詳細** セクション - スキーマ、重大度、パッケージなどの詳細。
+    - **関係** セクション - テストが**依存**するノード。
+    - **コード** タブ - テストのソースコードとコンパイル済みコード。
+
+テストビューの例:
+
+</Expandable>
+
+<Expandable alt_header="ソース コレクション内の各ソース テーブルにはどのような詳細情報がありますか?">
+
+- **ステータス バー** (ページ タイトルの下) - ソースが最後に更新された日時と、ソースが使用するテーブルの数に関する情報。
+- **データ ヘルス シグナル** - [データ ヘルス シグナル](/docs/explore/data-health-signals) を使用すると、データのヘルス状態を一目で確認できます。これらのアイコンは、リソースの状態が「正常」、「注意」、「低下」のいずれであるかを示します。アイコンにマウス カーソルを合わせると、ソースのヘルス状態に関する詳細情報が表示されます。
+- **全般** タブには次のものが含まれます。
+    - **系統** グラフ - 操作可能なソースの系統グラフ。グラフには、ソースからの上流ノードと下流ノードが 1 つずつ表示されます。グラフの右上隅にある展開アイコンをクリックすると、完全な系統グラフ モードでソースが表示されます。
+    - **説明** セクション - ソースの説明。
+    - **ソースの鮮度** セクション -データの更新が成功したかどうか、ソースが最後に読み込まれた日時、実行によってデータが生成されたタイムスタンプ、実行 ID に関する情報。
+    - **詳細** セクション - データベース、スキーマなどの詳細。
+    - **リレーションシップ** セクション - 使用されたすべてのソースとその最新状態、最新状態が最後にチェックされた日時、ソースが最後に読み込まれた日時のタイムスタンプを一覧表示するテーブル。
+- **列** タブ - ソースで使用可能な列。このタブには、テスト結果（ある場合）も表示され、選択するとテストの詳細ページが表示されます。:white_check_mark: は、テストが成功したことを示します。
 
 </Expandable>
 
@@ -306,13 +306,13 @@ Example of the details view for the model `customers`:<br /> <Lightbox src="/img
 </DocCarousel>
 
 
-## Staging environment
+## ステージング環境
 
-<Constant name="explorer" /> supports views for [staging deployment environments](/docs/deploy/deploy-environments#staging-environment), in addition to the production environment. This gives you a unique view into your pre-production data workflows, with the same tools available in production, while providing an extra layer of scrutiny.
+<Constant name="explorer" /> は、本番環境に加えて、[ステージングデプロイメント環境](/docs/deploy/deploy-environments#staging-environment) のビューもサポートしています。これにより、本番環境と同じツールを使用しながら、本番前のデータワークフローを独自の視点で確認しながら、より詳細な調査が可能になります。
 
-You can explore the metadata from your production or staging environment to inform your data development lifecycle. Just [set a single environment](/docs/deploy/deploy-environments) per <Constant name="cloud" /> project as "production" or "staging," and ensure the proper metadata has been generated then you'll be able to view it in <Constant name="explorer" />. Refer to [Generating metadata](/docs/explore/explore-projects#generate-metadata) for more details.
+本番環境またはステージング環境のメタデータを調査し、データ開発ライフサイクルに役立てることができます。<Constant name="cloud" /> プロジェクトごとに [単一の環境](/docs/deploy/deploy-environments) を「production」または「staging」として設定し、適切なメタデータが生成されていることを確認すれば、<Constant name="explorer" /> でメタデータを表示できます。詳細については、[メタデータの生成](/docs/explore/explore-projects#generate-metadata) を参照してください。
 
-## Related content
-- [Enterprise permissions](/docs/cloud/manage-access/enterprise-permissions)
-- [About model governance](/docs/mesh/govern/about-model-governance)
-- Blog on [What is data mesh?](https://www.getdbt.com/blog/what-is-data-mesh-the-definition-and-importance-of-data-mesh)
+## 関連コンテンツ
+- [エンタープライズ権限](/docs/cloud/manage-access/enterprise-permissions)
+- [モデルガバナンスについて](/docs/mesh/govern/about-model-governance)
+- [データメッシュとは](https://www.getdbt.com/blog/what-is-data-mesh-the-definition-and-importance-of-data-mesh)に関するブログ

@@ -4,19 +4,19 @@ sidebar_label: "Build with dbt Copilot"
 description: "Use dbt Copilot to build visual models in Canvas with natural language prompts"
 ---
 
-# Build with dbt Copilot <Lifecycle status='beta, managed, managed_plus'/> 
+# dbt Copilotで構築 <Lifecycle status='beta, managed, managed_plus'/> 
 
 <IntroText>
-Use <Constant name="copilot" /> to build visual models in the <Constant name="visual_editor" /> with natural language prompts.
+<Constant name="copilot" /> を使用して、自然言語プロンプトを使用して <Constant name="visual_editor" /> でビジュアル モデルを構築します。
 
 </IntroText>
 
 :::tip Available in beta
-<Constant name="copilot" /> for <Constant name="visual_editor" />is available in beta for [<Constant name="cloud" /> Enterprise accounts](https://www.getdbt.com/pricing). To join the beta, reach out to your account team to begin this process.
+<Constant name="copilot" />（<Constant name="visual_editor" />用）は、[<Constant name="cloud" /> Enterpriseアカウント](https://www.getdbt.com/pricing)でベータ版をご利用いただけます。ベータ版への参加をご希望の場合は、担当のアカウントチームまでご連絡ください。
 :::
 
-[<Constant name="copilot" />](/docs/cloud/dbt-copilot) seamlessly integrates with [<Constant name="visual_editor" />](/docs/cloud/canvas), a drag-and-drop experience that helps you with build your visual models using natural language prompts. Before you begin, make sure you can access [<Constant name="visual_editor" />](/docs/cloud/use-canvas#access-canvas).
+[<Constant name="copilot" />](/docs/cloud/dbt-copilot) は、[<Constant name="visual_editor" />](/docs/cloud/canvas) とシームレスに統合されます。これは、自然言語プロンプトを使用してビジュアルモデルを構築するためのドラッグアンドドロップエクスペリエンスです。開始する前に、[<Constant name="visual_editor" />](/docs/cloud/use-canvas#access-canvas) にアクセスできることを確認してください。
 
-import CopilotVE from '/snippets/_use-copilot-ve.md';
+import CopilotVE from '/snippets.ja/_use-copilot-ve.md';
 
 <CopilotVE/>

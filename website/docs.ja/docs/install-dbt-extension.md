@@ -5,111 +5,109 @@ description: "Installation instructions for the dbt extension."
 sidebar_label: "Install the dbt extension"
 ---
 
-# Install the dbt VS Code extension <Lifecycle status="beta" />
+# dbt VS Code拡張機能をインストールする <Lifecycle status="beta" />
 
-The dbt extensions for VS Code and Cursor streamlines dbt development workflows. The dbt extension is powered by the dbt Fusion engine.
+VS CodeとCursor用のdbt拡張機能は、dbt開発ワークフローを効率化します。dbt拡張機能は、dbt Fusionエンジンを搭載しています。
 
-## Prerequisites
+## 前提条件
 
-To use the extension, you must meet the following prerequisites:
+拡張機能を使用するには、以下の前提条件を満たす必要があります。
 
-- You are using the [VS Code](https://code.visualstudio.com/) or [Cursor](https://www.cursor.com/en) code editor.
-- You are not using (or have disabled) 3rd party dbt extensions.
-- You are using a macOS, Windows, or a Linux-based computer.
-- The dbt extension requires installation of the dbt Fusion engine. Fusion installation is part of the extension installation process.
+- [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/en) コードエディターを使用していること。
+- サードパーティ製の dbt 拡張機能を使用していない（または無効化している）こと。
+- macOS、Windows、または Linux ベースのコンピューターを使用していること。
+- dbt 拡張機能を使用するには、dbt Fusion エンジンのインストールが必要です。Fusion のインストールは、拡張機能のインストールプロセスの一部です。
 
-## Installation instructions
+## インストール手順
 
 :::note
 
-This is the only official dbt Labs VS Code extension. Please disable or uninstall any third-party dbt extensions before installing to avoid issues.
+これは唯一の公式dbt Labs VS Code拡張機能です。問題を回避するため、インストール前にサードパーティ製のdbt拡張機能を無効にするかアンインストールしてください。
 
 :::
 
-import InstallExtension from '/snippets/_install-dbt-extension.md'; 
+import InstallExtension from '/snippets.ja/_install-dbt-extension.md'; 
 
 <InstallExtension/>
 
-## Register the extension
+## 拡張機能の登録
 
-Users must complete registration within 14 days of installing the dbt extension. There are two ways to register:
+dbt拡張機能をインストールしてから14日以内に登録を完了する必要があります。登録方法は2通りあります。
 
-- Users without an existing dbt account can register quickly and easily through an online registration form. For the initial installation, you only need to provide your name and email address to complete the registration. Subsequent installations will require you to complete the entire [dbt account registration process](#accessing-your-dbt-account) to use the extension. 
-- Users with an existing dbt account can connect their account using a `dbt_cloud.yml` credentials file.
+- dbtアカウントをお持ちでない方は、オンライン登録フォームから簡単に登録できます。初回インストール時は、お名前とメールアドレスを入力するだけで登録が完了します。2回目以降のインストールでは、拡張機能を使用するために[dbtアカウント登録プロセス](#dbtアカウントへのアクセス)をすべて完了する必要があります。
+- dbtアカウントをお持ちの方は、`dbt_cloud.yml`認証情報ファイルを使用してアカウントを接続できます。
 
-The VS Code extension is free for organizations for up to 15 users.
+VS Code拡張機能は、組織で最大15ユーザーまで無料でご利用いただけます。
 
-### New user registration
+### 新規ユーザー登録
 
-If you do not already have a dbt account, you'll need to get registered. This only takes a minute!
-1. Click the registration prompt in your editor.
+dbtアカウントをお持ちでない場合は、登録が必要です。登録は1分ほどで完了します！
+1. エディターの登録プロンプトをクリックします。
      <Lightbox src="/img/docs/extension/registration-prompt.png" width="60%" title="The extension registration prompt in VS Code."/>
-2. Accept any prompts to open the link in your browser.
-3. Fill out the registration form, then click **Continue**.
+2. ブラウザでリンクを開くためのプロンプトがあればそれに従います。
+3. 登録フォームに記入し、「**続行**」をクリックします。
     <Lightbox src="/img/docs/extension/registration-screen.png" width="60%" title="The extension registration page in the browser."/>
-4. You will receive an email with a verification link. Once you click it, your registration is complete!
+4. 確認リンクが記載されたメールが届きます。クリックすると登録が完了します。
 
-### Accessing your dbt account
+### dbtアカウントへのアクセス
 
-Registering to use the dbt extension makes it easy to create a full dbt account. You can follow these
-steps to finish setting up your account (_note: this is not required to use the dbt extension_).
+dbt拡張機能の利用登録を済ませると、dbtアカウントを簡単に作成できます。以下の手順に従ってアカウントの設定を完了してください（_注: dbt拡張機能の利用には必須ではありません_）。
 
-1. Navigate to [us1.dbt.com](https://us1.dbt.com) and click **Forgot password?**.
-2. Enter the email address you used for your dbt extension registration and click **Continue**.
-3. Check your email for a verification link and follow the password reset instructions to set a password for your account.
+1. [us1.dbt.com](https://us1.dbt.com) にアクセスし、「**パスワードをお忘れですか？**」をクリックします。
+2. dbt拡張機能の登録に使用したメールアドレスを入力し、「**続行**」をクリックします。
+3. メールに記載されている確認リンクを確認し、パスワードリセットの手順に従ってアカウントのパスワードを設定します。
 
-Now that you have activated your dbt developer account, you can access features of the dbt platform. You can also re-download your registration key using the steps outlined in [Register with an existing dbt account](#register-with-an-existing-dbt-account) below if you need to set up the dbt extension on a new machine.
+これでdbt開発者アカウントが有効化され、dbtプラットフォームの機能にアクセスできるようになりました。新しいマシンでdbt拡張機能を設定する必要がある場合は、以下の「既存のdbtアカウントで登録する」の手順に従って登録キーを再ダウンロードすることもできます。
 
-### Register with an existing dbt account 
+### 既存のdbtアカウントで登録する
 
 <!-- This anchor is linked from the VS Code registration page. Please do not change it -->
 
-If you already have a dbt account, you do not need to re-register to use the dbt extension. The dbt extension can authenticate with the dbt platform using a `dbt_cloud.yml` file. If this file is present in your `~/.dbt/` folder, then the registration flow will automatically attempt to use this
-file during registration. If you do not have a `~/.dbt/dbt_cloud.yml` file downloaded, follow the directions below:
+dbtアカウントを既にお持ちの場合は、dbt拡張機能を使用するために再登録する必要はありません。dbt拡張機能は、`dbt_cloud.yml`ファイルを使用してdbtプラットフォームで認証できます。このファイルが`~/.dbt/`フォルダに存在する場合、登録フローは自動的にこのファイルの使用を試みます。`~/.dbt/dbt_cloud.yml`ファイルをダウンロードしていない場合は、以下の手順に従ってください。
 
-<Expandable alt_header="For dbt accounts with Fusion enabled">
+<Expandable alt_header="Fusionが有効になっているdbtアカウントの場合">
 
-1. Log in to your dbt account.
-2. Click your account name at the bottom of the left-side menu and click **Account settings**.
-3. Under the **Your profile** section, click **VS Code Extension**. 
-4. In the **Set up your credentials** section, click **Download credentials**. This downloads the `dbt_cloud.yml` file. 
+1. dbt アカウントにログインします。
+2. 左側のメニューの下部にあるアカウント名をクリックし、「**アカウント設定**」をクリックします。
+3. 「**プロフィール**」セクションで、「**VS Code 拡張機能**」をクリックします。
+4. 「**資格情報の設定**」セクションで、「**資格情報のダウンロード**」をクリックします。これにより、`dbt_cloud.yml` ファイルがダウンロードされます。
     <Lightbox src="/img/docs/extension/download-registration-2.png" width="60%" title="Download the dbt_cloud.yml file to complete registration."/>
-5. Move the downloaded `dbt_cloud.yml` file to your `~/.dbt/` directory.
-6. To update your registration in VS Code, open the command palette (`ctrl+shift+P` (Windows/Linux) or `cmd+shift+p` (macOS)), then select `dbt: Register dbt extension` to complete the registration.
+5. ダウンロードした `dbt_cloud.yml` ファイルを `~/.dbt/` ディレクトリに移動します。
+6. VS Code で登録を更新するには、コマンドパレット (`ctrl+shift+P` (Windows/Linux) または `cmd+shift+p` (macOS)) を開き、「dbt: Register dbt extension」を選択して登録を完了します。
 
 </Expandable>
 
-<Expandable alt_header="For dbt accounts without Fusion enabled">
+<Expandable alt_header="Fusionが有効になっていないdbtアカウントの場合">
 
-1. Log in to your dbt account.
-2. Click your account name at the bottom of the left-side menu and click **Account settings**.
-3. Under the **Your profile** section, click **CLI**. 
-4. In the **Configure Cloud authentication** section, click **Download CLI configuration file**. This downloads the `dbt_cloud.yml` file. 
+1. dbt アカウントにログインします。
+2. 左側のメニューの下部にあるアカウント名をクリックし、「**アカウント設定**」をクリックします。
+3. 「**プロフィール**」セクションで、「**CLI**」をクリックします。
+4. 「**クラウド認証の構成**」セクションで、「**CLI 構成ファイルをダウンロード**」をクリックします。これにより、「dbt_cloud.yml」ファイルがダウンロードされます。
     <Lightbox src="/img/docs/extension/download-registration.png" width="60%" title="Download the dbt_cloud.yml file to complete registration."/>
-5. Move the downloaded `dbt_cloud.yml` file to your `~/.dbt/` directory.
-6. To update your registration in VS Code, open the command palette (`ctrl+shift+P` (Windows/Linux) or `cmd+shift+p` (macOS)), then select `dbt: Register dbt extension` to complete the registration.
+5. ダウンロードした `dbt_cloud.yml` ファイルを `~/.dbt/` ディレクトリに移動します。
+6. VS Code で登録を更新するには、コマンドパレット (`ctrl+shift+P` (Windows/Linux) または `cmd+shift+p` (macOS)) を開き、「dbt: Register dbt extension」を選択して登録を完了します。
 
 </Expandable>
 
-## Troubleshooting
+## トラブルシューティング
 <!-- This anchor is linked from the  VS Code extension. Please do not change it -->
 
-#### General troubleshooting tips
+#### 一般的なトラブルシューティングのヒント
 
-If the dbt extension has activated successfully, you will see the `dbt Extension` label in the status bar at the bottom left of your editor. You can view diagnostic information about the dbt extension by clicking on the **dbt Extension** button.
+dbt拡張機能が正常に有効化されている場合、エディターの左下にあるステータスバーに「dbt拡張機能」というラベルが表示されます。**dbt拡張機能** ボタンをクリックすると、dbt拡張機能の診断情報を表示できます。
 
-If the dbt extension label is not present, then it is likely that the dbt extension was not installed successfully. If this happens, try uninstalling the extension, restarting your editor, and then reinstalling the extension.
+dbt拡張機能のラベルが表示されない場合は、dbt拡張機能が正常にインストールされていない可能性があります。その場合は、拡張機能をアンインストールし、エディターを再起動してから再インストールしてみてください。
 
-Note: It is possible to "hide" status bar items in VS Code. Double-check if the **dbt Extension** status bar label is hidden by right-clicking on the status bar in your editor. If you see **dbt Extension** in the right-click menu, then the extension has installed successfully.
+注: VS Code では、ステータスバーの項目を「非表示」にすることができます。エディターのステータスバーを右クリックして、**dbt拡張機能** のステータスバーラベルが非表示になっているかどうかを確認してください。右クリックメニューに **dbt拡張機能** が表示されている場合は、拡張機能が正常にインストールされています。
 
-#### Missing dbt LSP features
+#### dbt LSP 機能が表示されない
 
-If you are not seeing dbt LSP features in your editor, first consult the general troubleshooting steps above. If you have confirmed that the dbt extension is installed correctly, but you still do not see dbt Language Server features (autocomplete, go-to-definition, hover text, etc):
- - Check the version of your dbt extension on the extensions page in your editor. Ensure that you are using the latest available version of the dbt extension.
- - Try reinstalling the dbt Language Server by pressing `cmd+shift+P` (macOS) or `ctrl+shift+P` (Windows/Linux) and selecting the `dbt: Reinstall dbt LSP` command.
+エディタで dbt LSP 機能が表示されない場合は、まず上記の一般的なトラブルシューティング手順をご確認ください。dbt 拡張機能が正しくインストールされていることを確認しても、dbt Language Server 機能（オートコンプリート、定義への移動、ホバーテキストなど）が表示されない場合は、以下の手順に従ってください。
+- エディタの拡張機能ページで dbt 拡張機能のバージョンを確認してください。dbt 拡張機能の最新バージョンを使用していることを確認してください。
+- `cmd+shift+P` (macOS) または `ctrl+shift+P` (Windows/Linux) を押して `dbt: Reinstall dbt LSP` コマンドを選択し、dbt Language Server を再インストールしてみてください。
 
-#### Unsupported dbt version
+#### サポートされていない dbt バージョン
 
-If you see an error message indicating that your version of dbt is unsupported, then there is likely a problem with your environment.
-- Check the **dbt Path** setting in your VS Code settings. If this path is set, ensure that it is pointing to a valid dbt Fusion engine executable.
-- If necessary, you can also install the dbt Fusion engine directly using these instructions: [Install the Fusion CLI](/docs/fusion/install-fusion).
+dbt のバージョンがサポートされていないことを示すエラーメッセージが表示された場合は、環境に問題がある可能性があります。
+- VS Code 設定で **dbt Path** 設定を確認してください。このパスが設定されている場合は、有効な dbt Fusion エンジン実行可能ファイルを指していることを確認してください。
+- 必要に応じて、[Fusion CLI のインストール](/docs/fusion/install-fusion) の手順に従って、dbt Fusion エンジンを直接インストールすることもできます。

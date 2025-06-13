@@ -1,15 +1,15 @@
-Deleting an environment automatically deletes its associated job(s). If you want to keep those jobs, move them to a different environment first. 
+環境を削除すると、関連付けられているジョブも自動的に削除されます。これらのジョブを保持したい場合は、まず別の環境に移動してください。
 
-Follow these steps to delete an environment in dbt Cloud:
+<Constant name="cloud" /> で環境を削除するには、以下の手順に従ってください。
 
-1. Click **Deploy** on the navigation header and then click **Environments**
-2. Select the environment you want to delete. 
-3. Click **Settings** on the top right of the page and then click **Edit**.
-4. Scroll to the bottom of the page and click **Delete** to delete the environment.
+1. ナビゲーションヘッダーの [**デプロイ**] をクリックし、[**環境**] をクリックします。
+2. 削除する環境を選択します。
+3. ページの右上にある [**設定**] をクリックし、[**編集**] をクリックします。
+4. ページの一番下までスクロールし、[**削除**] をクリックして環境を削除します。
 
-<Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/delete-environment.png" width="90%" title="Delete an environment"/>
+<Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/delete-environment.png" width="90%" title="環境を削除する"/>
 
-5. Confirm your action in the pop-up by clicking **Confirm delete** in the bottom right to delete the environment immediately. This action cannot be undone. However, you can create a new environment with the same information if the deletion was made in error.
-6. Refresh your page and the deleted environment should now be gone. To delete multiple environments, you'll need to perform these steps to delete each one.
+5. ポップアップで操作を確認し、右下の [**削除を確認**] をクリックすると、環境がすぐに削除されます。この操作は元に戻せません。ただし、誤って削除してしまった場合は、同じ情報で新しい環境を作成できます。
+6. ページを更新すると、削除した環境は消えているはずです。複数の環境を削除するには、それぞれの環境ごとに以下の手順を実行する必要があります。
 
-If you're having any issues, feel free to [contact us](mailto:support@getdbt.com) for additional help.
+何か問題がございましたら、お気軽に[お問い合わせ](mailto:support@getdbt.com)までお問い合わせください。

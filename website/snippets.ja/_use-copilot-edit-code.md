@@ -1,42 +1,42 @@
-dbt Copilot also allows you to generate SQL code directly within the SQL file in the [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud), using natural language prompts. This means you can rewrite or add specific portions of the SQL file without needing to edit the entire file. 
+<Constant name="copilot" /> を使用すると、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) 内の SQL ファイル内で自然言語プロンプトを使用して SQL コードを直接生成できます。つまり、SQL ファイル全体を編集することなく、ファイルの特定の部分を書き換えたり追加したりできます。
 
-This intelligent AI tool streamlines SQL development by reducing errors, scaling effortlessly with complexity, and saving valuable time. dbt Copilot's [prompt window](#use-the-prompt-window), accessible by keyboard shortcut, handles repetitive or complex SQL generation effortlessly so you can focus on high-level tasks. 
+このインテリジェントな AI ツールは、エラーを削減し、複雑なコードにも容易に対応し、貴重な時間を節約することで、SQL 開発を効率化します。<Constant name="copilot" /> の [プロンプトウィンドウ](#use-the-prompt-window) はキーボードショートカットでアクセスでき、反復的な SQL 生成や複雑な SQL 生成を簡単に処理するため、高度なタスクに集中できます。
 
-Use Copilot's prompt window for use cases like:
+Copilot のプロンプトウィンドウは、次のようなユースケースで使用できます。
 
-- Writing advanced transformations
-- Performing bulk edits efficiently
-- Crafting complex patterns like regex
+- 高度な変換の作成
+- 一括編集の効率的な実行
+- 正規表現などの複雑なパターンの作成
 
-### Use the prompt window 
+### プロンプトウィンドウを使用する
 
-Access dbt Copilot's AI prompt window using the keyboard shortcut Cmd+B (Mac) or Ctrl+B (Windows) to:
+キーボードショートカット Cmd+B (Mac) または Ctrl+B (Windows) を使用して <Constant name="copilot" /> の AI プロンプトウィンドウにアクセスし、以下の操作を行います。
 
-#### 1. Generate SQL from scratch
-- Use the keyboard shortcuts Cmd+B (Mac) or Ctrl+B (Windows) to generate SQL from scratch.
-- Enter your instructions to generate SQL code tailored to your needs using natural language.
-- Ask dbt Copilot to fix the code or add a specific portion of the SQL file.
+#### 1. SQLを最初から生成する
+- キーボードショートカットのCmd+B（Mac）またはCtrl+B（Windows）を使用して、SQLを最初から生成します。
+- 指示を入力すると、自然言語を使用してニーズに合わせたSQLコードが生成されます。
+- <Constant name="copilot" /> にコードの修正やSQLファイルの特定の部分の追加を依頼します。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/copilot-sql-generation-prompt.jpg" width="90%" title="dbt Copilot's prompt window accessible by keyboard shortcut Cmd+B (Mac) or Ctrl+B (Windows)" />
 
-#### 2. Edit existing SQL code
-- Highlight a section of SQL code and press Cmd+B (Mac) or Ctrl+B (Windows) to open the prompt window for editing.
-- Use this to refine or modify specific code snippets based on your needs.
-- Ask dbt Copilot to fix the code or add a specific portion of the SQL file.
+#### 2. 既存のSQLコードを編集する
+- SQLコードの一部を選択し、Cmd+B (Mac) または Ctrl+B (Windows) を押すと、編集用のプロンプトウィンドウが開きます。
+- これを使用して、ニーズに合わせて特定のコードスニペットを調整または変更します。
+- <Constant name="copilot" /> にコードの修正やSQLファイルの特定部分の追加を依頼します。
 
-#### 3. Review changes with the diff view to quickly assess the impact of the changes before making changes
-- When a suggestion is generated, Copilot displays a visual "diff" view to help you compare the proposed changes with your existing code:
-  - **Green**: Means new code that will be added if you accept the suggestion.
-  - **Red**: Highlights existing code that will be removed or replaced by the suggested changes.
+#### 3. 変更を加える前に、差分ビューで変更内容を確認し、変更の影響を素早く評価します。
+- 提案が生成されると、<Constant name="copilot" /> は視覚的な「差分」ビューを表示し、提案された変更と既存のコードを比較できるようにします。
+  - **緑**: 提案を受け入れた場合に追加される新しいコードを示します。
+  - **赤**: 提案された変更によって削除または置き換えられる既存のコードを強調表示します。
 
-#### 4. Accept or reject suggestions
-- **Accept**: If the generated SQL meets your requirements, click the **Accept** button to apply the changes directly to your `.sql` file directly in the IDE.
-- **Reject**: If the suggestion don’t align with your request/prompt, click **Reject** to discard the generated SQL without making changes and start again.
+#### 4. 提案を承認または拒否する
+- **承認**: 生成されたSQLが要件を満たしている場合は、「承認**」ボタンをクリックして、IDE内の`.sql`ファイルに変更を直接適用します。
+- **拒否**: 提案が要求/プロンプトと一致しない場合は、「拒否**」をクリックして、生成されたSQLを変更せずに破棄し、やり直します。
 
-#### 5. Regenerate code
-- To regenerate, press the **Escape** button on your keyboard (or click the Reject button in the popup). This will remove the generated code and puts your cursor back into the prompt text area. 
-- Update your prompt and press **Enter** to try another generation. Press **Escape** again to close the popover entirely.
+#### 5. コードの再生成
+- 再生成するには、キーボードの **Esc** キーを押すか、ポップアップの「拒否」ボタンをクリックします。これにより、生成されたコードが削除され、カーソルがプロンプトのテキストエリアに戻ります。
+- プロンプトを更新し、**Enter** キーを押して再度生成を試みます。もう一度 **Esc** キーを押すと、ポップオーバーが完全に閉じます。
 
-Once you've accepted a suggestion, you can continue to use the prompt window to generate additional SQL code and commit your changes to the branch.
+提案を受け入れたら、プロンプトウィンドウを使用して追加の SQL コードを生成し、変更をブランチにコミットできます。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/copilot-sql-generation.gif" width="100%" title="Edit existing SQL code using dbt Copilot's prompt window accessible by keyboard shortcut Cmd+B (Mac) or Ctrl+B (Windows)" />

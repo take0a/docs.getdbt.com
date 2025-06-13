@@ -6,198 +6,212 @@ sidebar_label: User interface
 tags: [IDE]
 ---
 
-The [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) is a tool for developers to effortlessly build, test, run, and version-control their dbt projects, and enhance data governance — all from the convenience of your browser. Use the Cloud <Constant name="cloud_ide" /> to compile dbt code into SQL and run it against your database directly -- no command line required!
+[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) は、開発者がブラウザから簡単に dbt プロジェクトを構築、テスト、実行、バージョン管理し、データガバナンスを強化できるツールです。Cloud <Constant name="cloud_ide" /> を使用すると、dbt コードを SQL にコンパイルし、データベースに対して直接実行できます。コマンドラインは必要ありません。
 
-This page offers comprehensive definitions and terminology of user interface elements, allowing you to navigate the <Constant name="cloud_ide" /> landscape with ease.
+このページでは、ユーザーインターフェース要素の包括的な定義と用語を提供し、<Constant name="cloud_ide" /> 環境を簡単に操作できるようにします。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-basic-layout.jpg" width="90%" title="The Cloud IDE layout includes version control on the upper left, files/folders on the left, editor on the right an command/console at the bottom"/>
 
-## Basic layout
+## 基本レイアウト
 
-The <Constant name="cloud_ide" /> streamlines your workflow, and features a popular user interface layout with files and folders on the left, editor on the right, and command and console information at the bottom. 
+<Constant name="cloud_ide" /> はワークフローを効率化し、左側にファイルとフォルダ、右側にエディター、下部にコマンドとコンソール情報を表示する、一般的なユーザーインターフェースレイアウトを採用しています。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-side-menu.jpg" width="30%" title="The Git repo link, documentation site button, Version Control menu, and File Explorer"/>
 
-1. **<Constant name="git" /> repository link &mdash;** The <Constant name="git" /> repository link, located on the upper left of the <Constant name="cloud_ide" />, takes you to your repository on the same active branch. It also displays the repository name and the active branch name.
-    * **Note:** This linking feature is only available for GitHub or GitLab repositories on multi-tenant <Constant name="cloud" /> accounts.
+1. **<Constant name="git" /> リポジトリ リンク &mdash;** <Constant name="cloud_ide" /> の左上にある <Constant name="git" /> リポジトリ リンクをクリックすると、同じアクティブ ブランチ上のリポジトリにアクセスできます。リポジトリ名とアクティブ ブランチ名も表示されます。
+  * **注:** このリンク機能は、マルチテナント <Constant name="cloud" /> アカウントの GitHub または GitLab リポジトリでのみ利用できます。
 
-2. **Documentation site button &mdash;** Clicking the Documentation site book icon, located next to the Git repository link, leads to the dbt Documentation site. The site is powered by the latest dbt artifacts generated in the IDE using the `dbt docs generate` command from the Command bar.
+2. **ドキュメント サイト ボタン &mdash;** Git リポジトリ リンクの横にあるドキュメント サイトのブック アイコンをクリックすると、dbt ドキュメント サイトに移動します。このサイトは、コマンド バーの `dbt docs generate` コマンドを使用して IDE で生成された最新の dbt アーティファクトに基づいています。
 
-3. [**Version Control**](#editing-features) &mdash; The <Constant name="cloud_ide" />'s powerful Version Control section contains all git-related elements, including the <Constant name="git" /> actions button and the **Changes** section. 
+3. [**バージョン管理**](#editing-features) &mdash; <Constant name="cloud_ide" /> の強力なバージョン管理セクションには、<Constant name="git" /> アクションボタンや **変更** セクションなど、Git 関連の要素がすべて含まれています。
 
-4. **File <Constant name="explorer" /> &mdash;** The File <Constant name="explorer" /> shows the filetree of your repository. You can:
-    - Click on any file in the filetree to open the file in the File Editor. 
-    - Click and drag files between directories to move files. 
-    - Right-click a file to access the sub-menu options like duplicate file, copy file name, copy as `ref`, rename, delete.
-    - Use file indicators, located to the right of your files or folder name, to see when changes or actions were made:
-      * Unsaved (•) — The <Constant name="cloud_ide" /> detects unsaved changes to your file/folder
-      * Modification (M) — The <Constant name="cloud_ide" /> detects a modification of existing files/folders
-      * Added (A) — The <Constant name="cloud_ide" /> detects added files
-      * Deleted (D) — The <Constant name="cloud_ide" /> detects deleted files.
+4. **ファイル <Constant name="explorer" /> &mdash;** ファイル <Constant name="explorer" /> には、リポジトリのファイルツリーが表示されます。以下の操作が可能です。
+  - ファイルツリー内の任意のファイルをクリックすると、ファイルエディタでそのファイルを開きます。
+  - ディレクトリ間でファイルをクリックしてドラッグすると、ファイルを移動できます。
+  - ファイルを右クリックすると、ファイルの複製、ファイル名のコピー、`ref` としてコピー、名前の変更、削除などのサブメニューオプションにアクセスできます。
+  - ファイル名またはフォルダ名の右側にあるファイルインジケーターを使って、変更や操作が行われた日時を確認できます。
+    * 未保存 (•) — <Constant name="cloud_ide" /> は、ファイル/フォルダへの未保存の変更を検出します。
+    * 変更 (M) — <Constant name="cloud_ide" /> は、既存のファイル/フォルダの変更を検出します。
+    * 追加 (A) — <Constant name="cloud_ide" /> は、追加されたファイルを検出します。
+    * 削除 (D) — <Constant name="cloud_ide" /> は、削除されたファイルを検出します。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-command-bar.jpg" width="100%" title="Use the Command bar to write dbt commands, toggle 'Defer', and view the current IDE status"/>
 
-5. **Command bar &mdash;**  The Command bar, located in the lower left of the <Constant name="cloud_ide" />, is used to invoke [dbt commands](/reference/dbt-commands). When a command is invoked, the associated logs are shown in the Invocation History Drawer.
+5. **コマンドバー &mdash;** <Constant name="cloud_ide" /> の左下にあるコマンドバーは、[dbt コマンド](/reference/dbt-commands) を呼び出すために使用されます。コマンドが呼び出されると、関連するログが呼び出し履歴ドロワーに表示されます。
 
-6. **Defer to production &mdash;** The **Defer to production** toggle allows developers to only build and run and test models they've edited without having to first run and build all the models that come before them (upstream parents). Refer to [Using defer in <Constant name="cloud" />](/docs/cloud/about-cloud-develop-defer#defer-in-the-dbt-cloud-ide) for more info.
+6. **本番環境への延期 &mdash;** **本番環境への延期** トグルを使用すると、開発者は編集したモデルのみをビルド、実行、テストすることができ、それ以前のモデル（上流の親）をすべて実行してビルドする必要はありません。詳細については、[<Constant name="cloud" /> での defer の使用](/docs/cloud/about-cloud-develop-defer#defer-in-the-dbt-cloud-ide) を参照してください。
 
-7. **Status button &mdash;** The <Constant name="cloud_ide" /> Status button, located on the lower right of the <Constant name="cloud_ide" />, displays the current <Constant name="cloud_ide" /> status. If there is an error in the status or in the dbt code that stops the project from parsing, the button will turn red and display "Error". If there aren't any errors, the button will display a green "Ready" status. To access the [<Constant name="cloud_ide" /> Status modal](#modals-and-menus), simply click on this button.
+7. **ステータス ボタン &mdash;** <Constant name="cloud_ide" /> の右下にある <Constant name="cloud_ide" /> ステータス ボタンには、現在の <Constant name="cloud_ide" /> ステータスが表示されます。ステータスまたは dbt コードにエラーがあり、プロジェクトの解析が停止している場合は、ボタンが赤色に変わり、「エラー」と表示されます。エラーがない場合は、ボタンに緑色の「準備完了」ステータスが表示されます。[<Constant name="cloud_ide" /> ステータス モーダル](#modals-and-menus) にアクセスするには、このボタンをクリックします。
 
-## Editing features
+## 編集機能
 
-The <Constant name="cloud_ide" /> features some delightful tools and layouts to make it easier for you to write dbt code and collaborate with teammates. 
+<Constant name="cloud_ide" /> には、dbt コードの記述やチームメイトとの共同作業を容易にする便利なツールとレイアウトが備わっています。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-editing.jpg" width="90%" title="Use the file editor, version control section, and save button during your development workflow"/>
 
-1. **File Editor &mdash;** The File Editor is where you edit code. Tabs break out the region for each opened file, and unsaved files are marked with a blue dot icon in the tab view. You can edit, format, or lint files and execute dbt commands in your protected primary git branch. Since the <Constant name="cloud_ide" /> prevents commits to the protected branch, it prompts you to commit those changes to a new branch.
+1. **ファイルエディタ &mdash;** ファイルエディタはコードを編集する場所です。開いているファイルごとにタブで領域が区切られ、保存されていないファイルはタブビューで青いドットアイコンでマークされます。保護されたプライマリ Git ブランチでは、ファイルの編集、フォーマット、lint を実行したり、dbt コマンドを実行したりできます。<Constant name="cloud_ide" /> は保護されたブランチへのコミットをブロックするため、新しいブランチに変更をコミットするように促すプロンプトが表示されます。
+    * 直感的な [キーボードショートカット](/docs/cloud/dbt-cloud-ide/keyboard-shortcuts) を使用すると、あなたとチームの開発がスムーズになります。
 
-    * Use intuitive [keyboard shortcuts](/docs/cloud/dbt-cloud-ide/keyboard-shortcuts) to help develop easier for you and your team.
+2. **保存ボタン &mdash;** エディタには、編集可能なファイルを保存する **保存** ボタンがあります。このボタンを押すか、Command + S または Control + S のショートカットを使用すると、ファイルの内容が保存されます。コンソール セクションでコード結果をプレビューするために保存する必要はありませんが、dbt 呼び出しに変更が反映される前には保存が必要です。ファイルエディタタブには、未保存の変更には青いアイコンが表示されます。
 
-2. **Save button &mdash;** The editor has a **Save** button that saves editable files. Pressing the button or using the Command-S or Control-S shortcut saves the file contents. You don't need to save to preview code results in the Console section, but it's necessary before changes appear in a dbt invocation. The File Editor tab shows a blue icon for unsaved changes.
-
-3. **Version Control &mdash;** This menu contains all git-related elements, including the <Constant name="git" /> actions button. The button updates relevant actions based on your editor's state, such as prompting to pull remote changes, commit and sync when reverted commit changes are present, creating a merge/pull request when appropriate, or pruning branches deleted from the remote repository.
-
-   - The dropdown menu on the <Constant name="git" /> actions button allows users to revert changes, refresh <Constant name="git" /> state, create merge/pull requests, prune branches, and change branches.
-   -  You can also [resolve merge conflicts](/docs/cloud/git/merge-conflicts) and for more info on git, refer to [Version control basics](/docs/cloud/git/version-control-basics#the-git-button-in-the-cloud-ide).
-   -  **Version Control Options menu &mdash;** The **Changes** section, under the <Constant name="git" /> actions button, lists all file changes since the last commit. You can click on a change to open the <Constant name="git" /> Diff View to see the inline changes. You can also right-click any file and use the file-specific options in the Version Control Options menu.
+3. **バージョン管理 -** このメニューには、<Constant name="git" /> アクションボタンを含む、すべての Git 関連要素が含まれています。このボタンは、エディタの状態に基づいて関連するアクションを更新します。たとえば、リモートの変更をプルするプロンプトの表示、元に戻されたコミット変更がある場合のコミットと同期、適切な場合のマージ/プルリクエストの作成、リモートリポジトリから削除されたブランチのプルーニングなどです。
+    - <Constant name="git" /> アクションボタンのドロップダウンメニューでは、変更を元に戻したり、<Constant name="git" /> の状態を更新したり、マージ/プルリクエストを作成したり、ブランチをプルーニングしたり、ブランチを変更したりできます。
+    - また、[マージの競合を解決](/docs/cloud/git/merge-conflicts)することもできます。git の詳細については、[バージョン管理の基本](/docs/cloud/git/version-control-basics#the-git-button-in-the-cloud-ide) を参照してください。
+    - **バージョン管理オプション メニュー &mdash;** <Constant name="git" /> アクション ボタンの下にある **変更** セクションには、前回のコミット以降のすべてのファイルの変更が一覧表示されます。変更をクリックすると、<Constant name="git" /> 差分ビューが開き、インラインの変更を確認できます。任意のファイルを右クリックし、バージョン管理オプション メニューでファイル固有のオプションを使用することもできます。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/version-control-options-menu.png" width="30%" title="Right-click edited files to access Version Control Options menu"/>
 
 
-  - Use the **Prune branches** option to remove local branches that have already been deleted from the remote repository. Selecting this triggers a [pop-up modal](#prune-branches-modal), where you can confirm the deletion of the specific local branches, keeping your branch management tidy. Note that this won't delete the branch you're currently on. Pruning branches isn't available for [managed repositories](/docs/cloud/git/managed-repository) because they don't have a typical remote setup, which prevents remote branch deletion. 
+    - **「ブランチのプルーニング」** オプションを使用すると、リモートリポジトリから既に削除されているローカルブランチを削除できます。このオプションを選択すると、[ポップアップモーダル](#prune-branches-modal) が起動し、特定のローカルブランチの削除を確認できるため、ブランチ管理を整理できます。ただし、これにより現在作業中のブランチが削除されるわけではないことに注意してください。[管理対象リポジトリ](/docs/cloud/git/managed-repository) では、標準的なリモート設定がないため、ブランチのプルーニングは利用できません。この設定により、リモートブランチの削除が防止されます。
 
-## Additional editing features
+## その他の編集機能
 
-- **Minimap &mdash;** A Minimap (code outline) gives you a high-level overview of your source code, which is useful for quick navigation and code understanding. A file's minimap is displayed on the upper-right side of the editor. To quickly jump to different sections of your file, click the shaded area.
+- **ミニマップ &mdash;** ミニマップ（コードアウトライン）は、ソースコードの概要を表示し、素早いナビゲーションとコードの理解に役立ちます。ファイルのミニマップはエディターの右上に表示されます。ファイル内の別のセクションに素早く移動するには、網掛け部分をクリックします。
+
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-minimap.jpg" width="90%" title="Use the Minimap for quick navigation and code understanding"/>
 
-- **dbt Editor Command Palette &mdash;** The dbt Editor Command Palette displays text editing actions and their associated keyboard shortcuts. This can be accessed by pressing `F1` or right-clicking in the text editing area and selecting Command Palette.
+- **dbt エディタ コマンド パレット &mdash;** dbt エディタ コマンド パレットには、テキスト編集操作とそれに関連するキーボード ショートカットが表示されます。F1 キーを押すか、テキスト編集領域で右クリックして「コマンド パレット」を選択することでアクセスできます。
+
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-editor-command-palette-with-save.jpg" width="90%" title="Click F1 to access the dbt Editor Command Palette menu for editor shortcuts"/>
 
-- **<Constant name="git" /> Diff View &mdash;** Clicking on a file in the **Changes** section of the **Version Control Menu** will open the changed file with <Constant name="git" /> Diff view. The editor will show the previous version on the left and the in-line changes made on the right.
+- **<Constant name="git" /> 差分ビュー &mdash;** **バージョン管理メニュー**の**変更**セクションでファイルをクリックすると、変更されたファイルが<Constant name="git" /> 差分ビューで開きます。エディターの左側には以前のバージョン、右側にはインライン変更が表示されます。
+
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-git-diff-view-with-save.jpg" width="90%" title="The Git Diff View displays the previous version on the left and the changes made on the right of the Editor"/>
 
-- **Markdown Preview console tab &mdash;** The Markdown Preview console tab shows a preview of your .md file's markdown code in your repository and updates it automatically as you edit your code.
+- **Markdown プレビュー コンソール タブ &mdash;** Markdown プレビュー コンソール タブには、リポジトリ内の .md ファイルのマークダウン コードのプレビューが表示され、コードを編集すると自動的に更新されます。
+
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-markdown-with-save.jpg" width="90%" title="The Markdown Preview console tab renders markdown code below the Editor tab."/>
 
-- **CSV Preview console tab &mdash;** The CSV Preview console tab displays the data from your CSV file in a table, which updates automatically as you edit the file in your seed directory.
+- **CSV プレビュー コンソール タブ &mdash;** CSV プレビュー コンソール タブには、CSV ファイルからのデータがテーブル形式で表示されます。このデータは、シード ディレクトリ内のファイルを編集すると自動的に更新されます。
+
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-csv.jpg" width="90%" title="View csv code in the CSV Preview console tab below the Editor tab."/>
 
-## Console section
+## コンソールセクション
 
-The console section, located below the File editor, includes various console tabs and buttons to help you with tasks such as previewing, compiling, building, and viewing the <Term id="dag" />. Refer to the following sub-bullets for more details on the console tabs and buttons.
+ファイルエディタの下にあるコンソールセクションには、プレビュー、コンパイル、ビルド、<Term id="dag" /> の表示などのタスクに役立つさまざまなコンソールタブとボタンがあります。コンソールタブとボタンの詳細については、以下の項目を参照してください。
+
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-console-overview.jpg" width="90%" title="The Console section is located below the File editor and has various tabs and buttons to help execute tasks"/>
 
-1. **Preview button &mdash;** When you click on the Preview button, it runs the SQL in the active file editor regardless of whether you have saved it or not and sends the results to the **Results** console tab. You can preview a selected portion of saved or unsaved code by highlighting it and then clicking the **Preview** button.
+1. **プレビューボタン &mdash;** 「プレビュー」ボタンをクリックすると、保存の有無にかかわらず、アクティブなファイルエディタでSQLが実行され、結果がコンソールの「結果」タブに送信されます。保存済みまたは未保存のコードの選択部分をハイライト表示して「プレビュー」ボタンをクリックすると、その部分をプレビューできます。
 
 <details>
-<summary>Row limits in IDE</summary>
-The <Constant name="cloud_ide" /> returns default row limits, however, you can also specify the number of records returned. Refer to the following sub-bullets for more info: <br /><br />
+<summary>IDE の行制限</summary>
+<Constant name="cloud_ide" /> はデフォルトの行数制限を返しますが、返されるレコード数を指定することもできます。詳細については、以下の項目を参照してください。<br /><br />
 <ul>
-<li><b>500-row limit:</b> To prevent the IDE from returning too much data and causing browser problems, dbt automatically sets a 500-row limit when using the <b>Preview Button</b>. You can modify this by adding <code>limit your_number</code> at the end of your SQL statement. For example, <code>SELECT * FROM</code> table <code>limit 100</code> will return up to 100 rows. Remember that you must write the <code>limit your_number</code> explicitly and cannot derive it from a macro.</li>
-<li><b>Change row limit default:</b> In dbt version 1.6 or higher, you can change the default limit of 500 rows shown in the <b>Results</b> tab when you run a query. To adjust the setting you can click on <b>Change row display</b> next to the displayed rows. Keep in mind that you can't set it higher than 10,000 rows. If you refresh the page or close your development session, the default limit will go back to 500 rows.</li>
-<li><b>Specify records returned:</b> The IDE also supports <code>SELECT TOP #</code>, which specifies the number of records to return.</li>
+<li><b>500 行の制限:</b> IDE が返すデータが多すぎてブラウザに問題が発生するのを防ぐため、dbt は <b>プレビュー ボタン</b> の使用時に自動的に 500 行の制限を設定します。この制限は、SQL ステートメントの末尾に <code>limit your_number</code> を追加することで変更できます。たとえば、<code>SELECT * FROM</code> table <code>limit 100</code> は最大 100 行を返します。 <code>limit your_number</code> は明示的に記述する必要があり、マクロから取得することはできないことに注意してください。</li>
+<li><b>行数制限のデフォルトを変更:</b> dbt バージョン 1.6 以降では、クエリ実行時に <b>結果</b> タブに表示されるデフォルトの制限である 500 行を変更できます。設定を調整するには、表示されている行の横にある <b>行表示を変更</b> をクリックします。10,000 行を超える値には設定できないことに注意してください。ページを更新するか開発セッションを閉じると、デフォルトの制限は 500 行に戻ります。</li>
+<li><b>返されるレコード数を指定:</b> IDE は、返されるレコード数を指定する <code>SELECT TOP #</code> もサポートしています。</li>
 </ul>
 </details>
 
-1. **Compile button &mdash;** The **Compile** button compiles the saved or unsaved SQL code and displays it in the **Compiled Code** tab.
+1. **コンパイルボタン &mdash;** **コンパイル** ボタンは、保存済みまたは未保存の SQL コードをコンパイルし、[**コンパイル済みコード**] タブに表示します。
 
+dbt v1.6 以降では、モデルへの変更を保存するときに、モデル固有のコンテキストを使用してコードをコンパイルできます。このコンテキストは、モデルのビルド時に使用するコンテキストに似ており、`{{ this }} ` や `{{ is_incremental() }}` などの便利なコンテキスト変数が含まれます。
 
-Starting from dbt v1.6 or higher, when you save changes to a model, you can compile its code with the model's specific context. This context is similar to what you'd have when building the model and involves useful context variables like `{{ this }} `or `{{ is_incremental() }}`.
+3. **ビルドボタン &mdash;** ビルドボタンを使用すると、ファイルエディタでアクティブなモデルに関連する dbt コマンドにすばやくアクセスできます。使用できるコマンドには、dbt build、dbt test、dbt run があり、現在のリソースのみ、リソースとその上流の依存関係、リソースとその下流の依存関係、またはすべての依存関係を含むリソースを含めるオプションがあります。このメニューは、すべての実行可能ノードで使用できます。
 
-3. **Build button &mdash;** The build button allows users to quickly access dbt commands related to the active model in the File Editor. The available commands include dbt build, dbt test, and dbt run, with options to include only the current resource, the resource and its upstream dependencies, the resource, and its downstream dependencies, or the resource with all dependencies. This menu is available for all executable nodes.
+4. **Lint ボタン** &mdash; **Lint** ボタンをクリックすると、ファイルエディタ内のアクティブなファイルに対して [linter](/docs/cloud/dbt-cloud-ide/lint-format) が実行されます。linter はコード内の構文エラーやスタイルの問題をチェックし、結果を [**コード品質**] タブに表示します。
 
-4. **Lint button** &mdash; The **Lint** button runs the [linter](/docs/cloud/dbt-cloud-ide/lint-format) on the active file in the File Editor. The linter checks for syntax errors and style issues in your code and displays the results in the **Code quality** tab.
+5. **dbt Copilot** &mdash; [dbt Copilot](/docs/cloud/dbt-copilot) は、ドキュメント、テスト、セマンティックモデルを自動的に生成できる強力な人工知能エンジンです。<Lifecycle status="self_service,managed,managed_plus" />
 
-5. **dbt Copilot** &mdash; [dbt Copilot](/docs/cloud/dbt-copilot) is a powerful artificial intelligence engine that can generate documentation, tests, and semantic models for you. <Lifecycle status="self_service,managed,managed_plus" />
+6. **結果タブ &mdash;** 結果コンソールタブには、最新のプレビュー結果が表​​形式で表示されます。
 
-6. **Results tab &mdash;** The Results console tab displays the most recent Preview results in tabular format. 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/results-console-tab.jpg" width="90%" title="Preview results show up in the Results console tab"/>
 
-7. **Code quality tab** &mdash; The Code Quality tab displays the results of the linter on the active file in the File Editor. It allows you to view code errors, provides code quality visibility and management, and displays the SQLFluff version used.
+7. **コード品質タブ &mdash;** コード品質タブには、ファイルエディタ内のアクティブファイルに対するリンターの結果が表示されます。コードエラーの確認、コード品質の可視化と管理、使用されているSQLFluffのバージョン表示が可能です。
 
-8. **Compiled Code tab &mdash;** The Compile generates the compiled code when the Compile button is executed. The Compiled Code tab displays the compiled SQL code for the active file in the File Editor.
+8. **コンパイル済みコードタブ &mdash;** 「コンパイル」ボタンを実行すると、コンパイル済みのコードが生成されます。「コンパイル済みコード」タブには、ファイルエディタ内のアクティブファイルのコンパイル済みSQLコードが表示されます。
+
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/compiled-code-console-tab.jpg" width="90%" title="Compile results show up in the Compiled Code tab"/>
 
-9. **Lineage tab &mdash;** The Lineage tab in the File Editor displays the active model's lineage or  <Term id="dag" />. By default, it shows two degrees of lineage in both directions (`2+model_name+2`), however, you can change it to +model+ (full DAG). To use the lineage:
-    - Double-click a node in the DAG to open that file in a new tab
-    - Expand or shrink the DAG using node selection syntax.
-    - Note, the `--exclude` flag isn't supported.
+9. **系統タブ &mdash;** ファイルエディタの系統タブには、アクティブモデルの系統（<Term id="dag" />）が表示されます。デフォルトでは、両方向に2段階の系統（`2+model_name+2`）が表示されますが、+model+（完全なDAG）に変更できます。系統を使用するには、次の手順に従います。
+    - DAG内のノードをダブルクリックして、そのファイルを新しいタブで開きます。
+    - ノード選択構文を使用してDAGを拡大または縮小します。
+    - 注：`--exclude`フラグはサポートされていません。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/lineage-console-tab.jpg" width="90%" title="View resource lineage in the Lineage tab"/>
 
-## Invocation history
+## 呼び出し履歴
 
-The Invocation History Drawer stores information on dbt invocations in the IDE. When you invoke a command, like executing a dbt command such as `dbt run`, the associated logs are displayed in the Invocation History Drawer. 
+呼び出し履歴ドロワーは、IDE での dbt 呼び出しに関する情報を保存します。`dbt run` などの dbt コマンドを実行すると、関連するログが呼び出し履歴ドロワーに表示されます。
 
-You can open the drawer in multiple ways: 
-- Clicking the `^` icon next to the Command bar on the lower left of the page
-- Typing a dbt command and pressing enter
-- Or pressing Control-backtick (or Ctrl + `)
+ドロワーは複数の方法で開くことができます。
+- ページ左下のコマンドバーの横にある `^` アイコンをクリックする
+- dbt コマンドを入力して Enter キーを押す
+- または、Ctrl キーとバックティックキー (または Ctrl + `) を押す
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-inv-history-drawer.jpg" width="90%" title="The Invocation History Drawer returns a log and detail of all your dbt invocations."/>
 
-1. **Invocation History list &mdash;** The left-hand panel of the Invocation History Drawer displays a list of previous invocations in the <Constant name="cloud_ide" />, including the command, branch name, command status, and elapsed time.
+1. **呼び出し履歴リスト &mdash;** 呼び出し履歴ドロワーの左側のパネルには、<Constant name="cloud_ide" /> 内の以前の呼び出しのリスト（コマンド、ブランチ名、コマンドのステータス、経過時間など）が表示されます。
 
-2. **Invocation Summary &mdash;** The Invocation Summary, located above **System Logs**, displays information about a selected command from the Invocation History list, such as the command, its status (`Running` if it's still running), the git branch that was active during the command, and the time the command was invoked.
+2. **呼び出しサマリー &mdash;** **システムログ** の上にある呼び出しサマリーには、呼び出し履歴リストから選択したコマンドに関する情報（コマンド、そのステータス（実行中の場合は「実行中」）、コマンド実行時にアクティブだった Git ブランチ、コマンドの呼び出し時刻など）が表示されます。
 
-3. **System Logs toggle &mdash;** The System Logs toggle, located under the Invocation Summary, allows the user to see the full stdout and debug logs for the entirety of the invoked command. 
+3. **システムログ切り替え &mdash;** 呼び出しサマリーの下にあるシステムログ切り替えを使用すると、呼び出されたコマンド全体の完全な標準出力ログとデバッグログを表示できます。
 
-4. **Command Control button &mdash;** Use the Command Control button, located on the right side, to control your invocation and cancel or rerun a selected run.
+4. **コマンド コントロール ボタン -** 右側にあるコマンド コントロール ボタンを使用して、呼び出しを制御し、選択した実行をキャンセルまたは再実行します。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-results.jpg" width="90%" title="The Invocation History list displays a list of previous invocations in the IDE"/>
 
-5. **Node Summary tab &mdash;** Clicking on the Results Status Tabs will filter the Node Status List based on their corresponding status. The available statuses are Pass (successful invocation of a node), Warn (test executed with a warning), Error (database error or test failure), Skip (nodes not run due to upstream error), and Queued (nodes that have not executed yet).
+5. **ノード概要タブ &mdash;** 結果ステータスタブをクリックすると、対応するステータスに基づいてノードステータスリストがフィルタリングされます。使用可能なステータスは、Pass（ノードの呼び出しが成功）、Warn（警告付きでテスト実行）、Error（データベースエラーまたはテスト失敗）、Skip（上流のエラーによりノードが実行されなかった）、Queued（まだ実行されていないノード）です。
 
-6. **Node result toggle &mdash;** After running a dbt command, information about each executed node can be found in a Node Result toggle, which includes a summary and debug logs. The Node Results List lists every node that was invoked during the command.
+6. **ノード結果トグル &mdash;** dbt コマンドを実行すると、実行された各ノードに関する情報がノード結果トグルに表示されます。このトグルには、サマリーとデバッグログが含まれます。ノード結果リストには、コマンド中に呼び出されたすべてのノードがリストされます。
 
-7. **Node result list &mdash;** The Node result list shows all the Node Results used in the dbt run, and you can filter it by clicking on a Result Status tab.
+7. **ノード結果リスト &mdash;** ノード結果リストには、dbt 実行で使用されたすべてのノード結果が表示され、結果ステータスタブをクリックしてフィルタリングできます。
 
-## Modals and Menus
-Use menus and modals to interact with <Constant name="cloud_ide" /> and access useful options to help your development workflow. 
+## モーダルとメニュー
+メニューとモーダルを使用して <Constant name="cloud_ide" /> を操作し、開発ワークフローに役立つ便利なオプションにアクセスできます。
 
-- #### Editor tab menu
-  To interact with open editor tabs, right-click any tab to access the helpful options in the file tab menu.
+- #### エディタータブメニュー
+  開いているエディタータブを操作するには、任意のタブを右クリックして、ファイルタブメニューの便利なオプションにアクセスします。
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/editor-tab-menu-with-save.jpg" width="90%" title=" Right-click a tab to view the Editor tab menu options"/>
 
-- #### File Search
-  You can easily search for and navigate between files using the File Navigation menu, which can be accessed by pressing Command-O or Control-O or clicking on the 🔍 icon in the File <Constant name="explorer" />.
+- #### ファイル検索
+  ファイルナビゲーションメニューを使用すると、ファイルを簡単に検索したり、ファイル間を移動したりできます。ファイルナビゲーションメニューは、Command + O または Control + O を押すか、ファイルメニューの 🔍 アイコンをクリックすることでアクセスできます。<Constant name="explorer" />
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-file-search-with-save.jpg" width="100%" title="The Command History returns a log and detail of all your dbt invocations."/>
 
-- #### Global Command Palette
-  The Global Command Palette provides helpful shortcuts to interact with the <Constant name="cloud_ide" />, such as git actions, specialized dbt commands, and compile, and preview actions, among others. To open the menu, use Command-P or Control-P.
+- #### グローバルコマンドパレット
+  グローバルコマンドパレットには、git アクション、特殊な dbt コマンド、コンパイル、プレビューなどの <Constant name="cloud_ide" /> を操作するための便利なショートカットが用意されています。メニューを開くには、Command + P または Control + P を押します。
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-global-command-palette-with-save.jpg" width="100%" title="The Command History returns a log and detail of all your dbt invocations."/>
 
-- #### <Constant name="cloud_ide" /> Status modal
-  The <Constant name="cloud_ide" /> Status modal shows the current error message and debug logs for the server. This also contains an option to restart the <Constant name="cloud_ide" />. Open this by clicking on the <Constant name="cloud_ide" /> Status button.
+- #### <Constant name="cloud_ide" /> ステータスモーダル
+  <Constant name="cloud_ide" /> ステータスモーダルには、サーバーの現在のエラーメッセージとデバッグログが表示されます。また、<Constant name="cloud_ide" /> を再起動するオプションも含まれています。<Constant name="cloud_ide" /> ステータスボタンをクリックしてこのモーダルを開いてください。
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-status-modal-with-save.jpg" width="90%" title="The Command History returns a log and detail of all your dbt invocations."/>
 
-- #### Commit to a new branch
-  Edit directly on your protected primary git branch and commit those changes to a new branch when ready.
+- #### 新しいブランチにコミットする
+  保護されたプライマリ Git ブランチを直接編集し、準備ができたらその変更を新しいブランチにコミットします。
+
   <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/create-new-branch.png" width="70%" title="Commit changes to a new branch"/>
 
-- #### Commit Changes modal
-  The Commit Changes modal is accessible via the <Constant name="git" /> Actions button to commit all changes or via the Version Control Options menu to commit individual changes. Once you enter a commit message, you can use the modal to commit and sync the selected changes.
+- #### 変更をコミットするモーダル
+  変更をコミットするモーダルは、<Constant name="git" /> アクションボタンからアクセスでき、すべての変更をコミットできます。また、バージョン管理オプションメニューから個々の変更をコミットすることもできます。コミットメッセージを入力したら、モーダルを使用して選択した変更をコミットし、同期できます。
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/commit-changes-modal.png" width="90%" title="The Commit Changes modal is how users commit changes to their branch."/>
 
-- #### Change Branch modal
-  The Change Branch modal allows users to switch git branches in the <Constant name="cloud_ide" />. It can be accessed through the **Change Branch** link or the **<Constant name="git" /> actions** button under the **Version control** menu.
+- #### ブランチ変更モーダル
+  ブランチ変更モーダルを使用すると、<Constant name="cloud_ide" /> 内の Git ブランチを切り替えることができます。**ブランチ変更** リンク、または **バージョン管理** メニューの **<Constant name="git" /> アクション** ボタンからアクセスできます。
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/change-branch-modal.png" width="90%" title="The Commit Changes modal is how users change their branch."/>
 
-- #### Prune branches modal
-  The Prune branches modal allows users to delete local branches that have been deleted from the remote repository, keeping your branch management tidy. This is accessible through the **<Constant name="git" /> actions** button under the [**Version control** menu](#editing-features). Note that this won't delete the branch you're currently on. Pruning branches isn't available for managed repositories because they don't have a typical remote setup, which prevents remote branch deletion.
+- #### ブランチのプルーニング モーダル
+  「ブランチのプルーニング」モーダルを使用すると、リモートリポジトリから削除されたローカルブランチを削除して、ブランチ管理を整理できます。これは、[**バージョン管理** メニュー](#editing-features) の **<Constant name="git" /> アクション** ボタンからアクセスできます。ただし、これにより現在作業中のブランチが削除されるわけではありません。管理対象リポジトリでは、一般的なリモート設定がないため、ブランチのプルーニングは利用できません。この設定により、リモートブランチの削除が防止されます。
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/prune-branch-modal.jpg" width="60%" title="The Prune branches modal allows users to delete local branches that have already been deleted from the remote repository."/>
 
-- #### Revert Uncommitted Changes modal
-  The Revert Uncommitted Changes modal is how users revert changes in the IDE. This is accessible via the `Revert File` option above the Version Control Options menu, or via the Git Actions button when there are saved, uncommitted changes in the IDE.
+- #### コミットされていない変更を元に戻すモーダル
+  コミットされていない変更を元に戻すモーダルは、IDE での変更を元に戻すためのものです。バージョン管理オプションメニューの上にある「ファイルを元に戻す」オプション、または IDE に保存済みでコミットされていない変更がある場合は「Git アクション」ボタンからアクセスできます。
+
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/revert-uncommitted-changes-with-save.jpg" width="90%" title="The Commit Changes modal is how users change their branch."/>
 
-- #### <Constant name="cloud_ide" /> Options menu
-  The <Constant name="cloud_ide" /> Options menu can be accessed by clicking on the three-dot menu located at the bottom right corner of the <Constant name="cloud_ide" />. This menu contains global options such as:
+- #### <Constant name="cloud_ide" /> オプションメニュー
+  <Constant name="cloud_ide" /> オプションメニューは、<Constant name="cloud_ide" /> の右下にある3点メニューをクリックすると表示されます。このメニューには、以下のグローバルオプションが含まれています。
 
-  * Toggling between dark or light mode for a better viewing experience
-  * Restarting the <Constant name="cloud_ide" />
-  * Rollback your repo to remote, to refresh your git state and view status details
-  * Viewing status details, including the <Constant name="cloud_ide" /> Status modal.
+  * 見やすさを向上させるために、ダークモードとライトモードを切り替える
+  * <Constant name="cloud_ide" /> を再起動する
+  * リポジトリをリモートにロールバックして、Gitの状態を更新し、ステータスの詳細を表示する
+  * <Constant name="cloud_ide" /> ステータスモーダルを含む、ステータスの詳細を表示する
 
   <Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-options-menu-with-save.jpg" width="90%" title="Access the IDE Options menu to switch to dark or light mode, restart the IDE, rollback to remote, or view the IDE status"/>

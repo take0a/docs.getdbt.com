@@ -1,18 +1,18 @@
-To begin building models with natural language prompts in the Visual Editor:
+<Constant name="visual_editor" /> で自然言語プロンプトを使用してモデルを構築するには、次の手順を実行します。
 
-1. Click on the **dbt Copilot** icon in Visual Editor menu.
-2. In the dbt Copilot prompt box, enter your prompt in natural language for dbt Copilot to build the model(s) you want. You can also reference existing models using the `@` symbol. For example, to build a model that calculates the total price of orders, you can enter `@orders` in the prompt and it'll pull in and reference the `orders` model.
-3. Click **Generate** and dbt Copilot generates a summary of the model(s) you want to build. 
-   - To start over, click on the **+** icon. To close the prompt box, click **X**.
-   <Lightbox src="/img/docs/dbt-cloud/copilot-generate.jpg" width="40%" title="Enter a prompt in the dbt Copilot prompt box to build models using natural language" />
-4. Click **Apply** to generate the model(s) in the Visual Editor.
-5. dbt Copilot displays a visual "diff" view to help you compare the proposed changes with your existing code. Review the diff view in the canvas to see the generated operators built by dbt Copilot:
-   - White: Located in the top of the canvas and means existing set up or blank canvas that will be removed or replaced by the suggested changes.
-   - Green: Located in the bottom of the canvas and means new code that will be added if you accept the suggestion. <br / >
-   <Lightbox src="/img/docs/dbt-cloud/copilot-diff.jpg" width="100%" title="Visual diff view of proposed changes" />
-6. Reject or accept the suggestions
-7. In the **generated** operator box, click the play icon to preview the data
-8. Confirm the results or continue building your model.
-   <Lightbox src="/img/docs/dbt-cloud/copilot-output.jpg" width="100%" title="Use the generated operator with play icon to preview the data" />
-9.  To edit the generated model, open **dbt Copilot** prompt box and type your edits. 
-10. Click **Submit** and dbt Copilot will generate the revised model. Repeat steps 5-8 until you're happy with the model.
+1. <Constant name="visual_editor" /> メニューの **dbt Copilot** アイコンをクリックします。
+2. dbt Copilot プロンプトボックスに、<Constant name="copilot" /> の自然言語プロンプトを入力し、必要なモデルを構築します。`@` 記号を使用して既存のモデルを参照することもできます。たとえば、注文の合計金額を計算するモデルを構築するには、プロンプトに `@orders` と入力すると、`orders` モデルが読み込まれて参照されます。
+3. **Generate** をクリックすると、dbt Copilot によって構築するモデルの概要が生成されます。
+      - 最初からやり直すには、**+** アイコンをクリックします。プロンプトボックスを閉じるには、**X** をクリックします。
+<Lightbox src="/img/docs/dbt-cloud/copilot-generate.jpg" width="40%" title="dbt Copilot プロンプトボックスにプロンプ​​トを入力し、自然言語を使用してモデルを構築します" />
+4. **適用** をクリックして、<Constant name="visual_editor" /> にモデルを生成します。
+5. dbt Copilot は、提案された変更と既存のコードを比較できるように、視覚的な「差分」ビューを表示します。キャンバスの差分ビューで、<Constant name="copilot" /> によって生成された演算子を確認します。
+      - 白: キャンバスの上部にあり、提案された変更によって削除または置き換えられる既存のセットアップまたは空白のキャンバスを示します。
+      - 緑: キャンバスの下部にあり、提案を受け入れた場合に追加される新しいコードを示します。 <br / >
+<Lightbox src="/img/docs/dbt-cloud/copilot-diff.jpg" width="100%" title="提案された変更の差分ビュー" />
+6. 提案を拒否または承認します
+7. **生成された** 演算子ボックスで、再生アイコンをクリックしてデータをプレビューします
+8. 結果を確認するか、モデルの構築を続行します。
+<Lightbox src="/img/docs/dbt-cloud/copilot-output.jpg" width="100%" title="再生アイコン付きの生成された演算子を使用してデータをプレビューします" />
+9. 生成されたモデルを編集するには、**<Constant name="copilot" />** プロンプトボックスを開き、編集内容を入力します。
+10. **送信** をクリックすると、<Constant name="copilot" /> によって修正されたモデルが生成されます。モデルに満足するまで手順 5～8 を繰り返します。

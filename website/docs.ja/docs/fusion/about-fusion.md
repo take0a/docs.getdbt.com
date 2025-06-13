@@ -10,49 +10,49 @@ pagination_prev: null
 
 <IntroText>
 
-dbt is the industry standard for data transformation. The dbt Fusion engine enables dbt to operate at speed and scale like never before.
+dbtはデータ変換の業界標準です。dbt Fusionエンジンにより、dbtはかつてないスピードとスケールを実現します。
 </IntroText>
 
-import FusionBeta from '/snippets/_fusion-beta-callout.md';
+import FusionBeta from '/snippets.ja/_fusion-beta-callout.md';
 
 <FusionBeta />
 
-The dbt Fusion engine shares the same familiar framework for authoring data transformations as <Constant name="core" />, while enabling data developers to work faster and deploy transformation workloads more efficiently.
+dbt Fusion エンジンは、<Constant name="core" /> と同じデータ変換を作成するための使い慣れたフレームワークを共有し、データ開発者が作業を高速化し、変換ワークロードをより効率的に展開できるようにします。
 
-### What is Fusion
+### Fusion とは
 
-Fusion is an entirely new piece of software, written in a different programming language (Rust) than <Constant name="core" /> (Python). Fusion is significantly faster than <Constant name="core" />, and it has a native understanding of SQL across multiple engine dialects. Fusion will eventually support the full dbt Core framework, a superset of dbt Core’s capabilities, and the vast majority of existing dbt projects.
+Fusion は、<Constant name="core" /> (Python) とは異なるプログラミング言語 (Rust) で記述された、全く新しいソフトウェアです。Fusion は <Constant name="core" /> よりも大幅に高速で、複数のエンジン方言にわたる SQL をネイティブに理解します。Fusion は、最終的には dbt Core フレームワーク全体 (dbt Core の機能のスーパーセット) と、既存の dbt プロジェクトの大部分をサポートする予定です。
 
-Fusion contains mixture of source-available, proprietary, and open source code. That means:
-- dbt Labs publishes much of the source code in the [`dbt-fusion` repository](https://github.com/dbt-labs/dbt-fusion), where you can read the code and participate in community discussions.
-- Some Fusion capabilities are exclusively available for paying customers of the cloud-based [dbt platform](https://www.getdbt.com/signup). Refer to [supported features](/docs/fusion/supported-features#paid-features) for more information.
+Fusion には、ソースコードが公開されているもの、独自のもの、そしてオープンソースのコードが混在しています。つまり、
+- dbt Labs は、ソースコードの多くを [`dbt-fusion` リポジトリ](https://github.com/dbt-labs/dbt-fusion) で公開しており、ユーザーはそこでコードを閲覧したり、コミュニティのディスカッションに参加したりできます。
+- Fusion の一部の機能は、クラウドベースの [dbt プラットフォーム](https://www.getdbt.com/signup) の有料ユーザーのみ利用可能です。詳細については、[サポートされている機能](/docs/fusion/supported-features#paid-features) を参照してください。
 
-Read more about the licensing for the dbt Fusion engine [here](http://www.getdbt.com/licenses-faq).
+dbt Fusion エンジンのライセンスの詳細については、[こちら](http://www.getdbt.com/licenses-faq) をご覧ください。
 
-## Why use Fusion
+## Fusion を使用する理由
 
-As a developer, Fusion can:
-- Immediately catch incorrect SQL in your dbt models
-- Preview inline <Term id="cte">CTEs</Term> for faster debugging
-- Trace model and column definitions across your dbt project
+開発者にとって、Fusion は以下のことを可能にします。
+- dbt モデル内の不正な SQL を即座に検出
+- インライン <Term id="cte">CTE</Term> をプレビューしてデバッグを高速化
+- dbt プロジェクト全体のモデルと列定義をトレース
 
-All of that and more is available in the [dbt extension for VSCode](/docs/about-dbt-extension), with Fusion at the foundation.
+これらすべてに加え、さらに多くの機能が [VSCode 用 dbt 拡張機能](/docs/about-dbt-extension) で利用可能であり、その基盤として Fusion が使用されています。
 
-Fusion also enables more-efficient deployments of large DAGs. By tracking which columns are used where, and which source tables have fresh data, Fusion can ensure that models are rebuilt only when they need to process new data. This ["state-aware orchestration"](https://docs.getdbt.com/docs/deploy/state-aware-about) is a feature of the dbt platform.
+Fusion は、大規模な DAG のデプロイメントをより効率的に行うこともできます。どの列がどこで使用されているか、どのソーステーブルに新しいデータがあるかを追跡することで、Fusion は新しいデータを処理する必要がある場合にのみモデルを再構築できます。この [状態認識オーケストレーション](https://docs.getdbt.com/docs/deploy/state-aware-about) は、dbt プラットフォームの機能です。
 
-### How to use Fusion
+### Fusion の使い方
 
-You can:
-- Select Fusion from the [dropdown/toggle in the dbt platform](/docs/dbt-versions/upgrade-dbt-version-in-cloud#dbt-fusion-engine)
-- [Install the dbt extension for VSCode](/docs/install-dbt-extension)
-- [Install the Fusion CLI](/docs/fusion/install-fusion)
+以下の手順を実行できます。
+- [dbt プラットフォームのドロップダウン/トグル](/docs/dbt-versions/upgrade-dbt-version-in-cloud#dbt-fusion-engine) から Fusion を選択します。
+- [VSCode 用の dbt 拡張機能をインストール](/docs/install-dbt-extension)
+- [Fusion CLI をインストール](/docs/fusion/install-fusion)
 
-Go straight to the [Quickstart](/guides/fusion) to _feel the Fusion_ as fast as possible.
+[クイックスタート](/guides/fusion) に進んで、Fusion をすぐにお試しください。
 
-## What's next?
+## 今後の予定
 
-dbt Labs launched the dbt Fusion engine as a public beta on May 28, 2025, with plans to reach full feature parity with <Constant name="core" /> ahead of [Fusion's general availability](https://docs.getdbt.com/blog/dbt-fusion-engine-path-to-ga).
+dbt Labs は、2025年5月28日に dbt Fusion エンジンをパブリックベータ版としてリリースしました。[Fusion の一般提供開始](https://docs.getdbt.com/blog/dbt-fusion-engine-path-to-ga) に先立ち、<Constant name="core" /> と完全に同等の機能を実現する予定です。
 
-import AboutFusion from '/snippets/_about-fusion.md';
+import AboutFusion from '/snippets.ja/_about-fusion.md';
 
 <AboutFusion />

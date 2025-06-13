@@ -7,36 +7,36 @@ pagination_next: "docs/cloud/canvas-interface"
 pagination_prev: null
 ---
 
-import Prerequisites from '/snippets/_canvas-prerequisites.md';
+import Prerequisites from '/snippets.ja/_canvas-prerequisites.md';
 
 # About Canvas <Lifecycle status='managed,managed_plus'/> 
 
 <p style={{ color: '#717d7d', fontSize: '1.1em' }}>
-<Constant name="visual_editor" /> helps you quickly access and transform data through a visual, drag-and-drop experience and with a built-in AI for custom code generation.
+<Constant name="visual_editor" /> は、視覚的なドラッグ アンド ドロップ操作と、カスタム コード生成用の組み込み AI により、データにすばやくアクセスして変換するのに役立ちます。
 </p>
 
-<Constant name="visual_editor" /> allows organizations to enjoy the many benefits of code-driven development—such as increased precision, ease of debugging, and ease of validation &mdash; while retaining the flexibility to have different contributors develop wherever they are most comfortable. Users can also take advantage of built-in AI for custom code generation, making it an end-to-end frictionless experience.
+<Constant name="visual_editor" /> を使用すると、組織はコード駆動開発の多くのメリット（精度の向上、デバッグの容易さ、検証の容易さなど）を享受できると同時に、さまざまな開発担当者がそれぞれの環境で開発できる柔軟性も維持できます。また、組み込み AI を活用してカスタムコードを生成することで、エンドツーエンドでスムーズなエクスペリエンスを実現できます。
 
-These models compile directly to SQL and are indistinguishable from other dbt models in your projects:
-- Visual models are version-controlled in your backing <Constant name="git" /> provider.
-- All models are accessible across projects in [<Constant name="mesh" />](/best-practices/how-we-mesh/mesh-1-intro).
-- Models can be materialized into production through [<Constant name="cloud" /> orchestration](/docs/deploy/deployments), or be built directly into a user's development schema.
-- Integrate with [<Constant name="explorer" />](/docs/explore/explore-projects) and the [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud).
+これらのモデルは SQL に直接コンパイルされ、プロジェクト内の他の dbt モデルと区別がつきません。
+- ビジュアルモデルは、バッキング <Constant name="git" /> プロバイダーでバージョン管理されます。
+- すべてのモデルは、[<Constant name="mesh" />](/best-practices/how-we-mesh/mesh-1-intro) 内のプロジェクト間でアクセスできます。
+- モデルは、[<Constant name="cloud" /> オーケストレーション](/docs/deploy/deployments) を通じて本番環境に実装することも、ユーザーの開発スキーマに直接組み込むこともできます。
+- [<Constant name="explorer" />](/docs/explore/explore-projects) および [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) と統合します。
 
 <Lightbox src="/img/docs/dbt-cloud/canvas/canvas.png" width="90%" title="Create or edit dbt models with Canvas, enabling everyone to develop with dbt through a drag-and-drop experience inside of dbt." />
 
-<Prerequisites feature={'/snippets/_canvas-prerequisites.md'} />
+<Prerequisites feature={'/snippets.ja/_canvas-prerequisites.md'} />
 
-## Feedback
+## フィードバック
 
-Please note, always review AI-generated code and content as it may produce incorrect results. <Constant name="visual_editor" /> features and/or functionality may be added or eliminated as part of the beta trial.
+AIによって生成されたコードとコンテンツは、誤った結果を生成する可能性があるため、必ずご確認ください。<Constant name="visual_editor" /> の機能は、ベータ版トライアルの一環として追加または削除される場合があります。
 
-To give feedback, please reach out to your dbt Labs account team. We appreciate your feedback and suggestions as we improve <Constant name="visual_editor" />.
+フィードバックをお寄せいただくには、dbt Labsアカウントチームまでご連絡ください。<Constant name="visual_editor" /> の改善に役立ててまいりますので、皆様からのフィードバックとご提案をお待ちしております。
 
-## Resources
+## リソース
 
-Learn more about Canvas: 
+Canvas について詳しくはこちら:
 
-- How to [use Canvas](/docs/cloud/use-canvas)
-- The Canvas [quickstart guide](/guides/canvas)
-- [Canvas fundamentals course](https://learn.getdbt.com/learn/course/canvas-fundamentals) on [dbt Learn](https://learn.getdbt.com/catalog)
+- [Canvas の使い方](/docs/cloud/use-canvas)
+- Canvas [クイックスタートガイド](/guides/canvas)
+- [dbt Learn](https://learn.getdbt.com/catalog) の [Canvas 基礎コース](https://learn.getdbt.com/learn/course/canvas-fundamentals)

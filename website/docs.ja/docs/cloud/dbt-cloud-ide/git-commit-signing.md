@@ -4,47 +4,47 @@ description: "Learn how to sign your Git commits when using the IDE for developm
 sidebar_label: Git commit signing
 ---
 
-# Git commit signing <Lifecycle status="managed,managed_plus" />
+# Git コミット署名 <Lifecycle status="managed,managed_plus" />
 
-To prevent impersonation and enhance security, you can sign your <Constant name="git" /> commits before pushing them to your repository. Using your signature, a <Constant name="git" /> provider can cryptographically verify a commit and mark it as "verified", providing increased confidence about its origin.
+なりすましを防ぎ、セキュリティを強化するために、<Constant name="git" /> コミットをリポジトリにプッシュする前に署名することができます。署名を使用することで、<Constant name="git" /> プロバイダーはコミットを暗号的に検証し、「検証済み」としてマークできるため、コミットの出所に関する信頼性が向上します。
 
-You can configure <Constant name="cloud" /> to sign your <Constant name="git" /> commits when using the <Constant name="cloud_ide" /> for development. To set up, enable the feature in <Constant name="cloud" />, follow the flow to generate a keypair, and upload the public key to your <Constant name="git" /> provider to use for signature verification.  
+開発に <Constant name="cloud_ide" /> を使用する場合、<Constant name="cloud" /> を設定して <Constant name="git" /> コミットに署名することができます。設定するには、<Constant name="cloud" /> でこの機能を有効にし、フローに従ってキーペアを生成し、署名検証に使用する公開鍵を <Constant name="git" /> プロバイダーにアップロードします。
 
 
-## Prerequisites 
+## 前提条件
 
-- GitHub or GitLab is your <Constant name="git" /> provider. Currently, Azure DevOps is not supported.
-- You have a <Constant name="cloud" /> account on the [Enterprise or Enterprise+ plan](https://www.getdbt.com/pricing/).
+- GitHub または GitLab が <Constant name="git" /> プロバイダーであること。現在、Azure DevOps はサポートされていません。
+- [Enterprise プランまたは Enterprise+ プラン](https://www.getdbt.com/pricing/) の <Constant name="cloud" /> アカウントをお持ちであること。
 
-## Generate GPG keypair in dbt
+## dbt で GPG キーペアを生成する
 
-To generate a GPG keypair in <Constant name="cloud" />, follow these steps:
-1. Go to your **Personal profile** page in <Constant name="cloud" />.
-2. Navigate to **Signed Commits** section.
-3. Enable the **Sign commits originating from this user** toggle.
-4. This will generate a GPG keypair. The private key will be used to sign all future <Constant name="git" /> commits. The public key will be displayed, allowing you to upload it to your <Constant name="git" /> provider.
+<Constant name="cloud" /> で GPG キーペアを生成するには、以下の手順に従います。
+1. <Constant name="cloud" /> の **Personal profile** ページに移動します。
+2. **Signed Commits** セクションに移動します。
+3. **Sign commits originating from this user** トグルを有効にします。
+4. これで GPG キーペアが生成されます。秘密鍵は、今後のすべての <Constant name="git" /> コミットの署名に使用されます。公開鍵が表示されるので、<Constant name="git" /> プロバイダーにアップロードできます。
 
 <Lightbox src="/img/docs/dbt-cloud/example-git-signed-commits-setting.png" width="95%" title="Example of profile setting Signed commits" />
 
-## Upload public key to Git provider 
+## Git プロバイダーに公開鍵をアップロードする
 
-To upload the public key to your <Constant name="git" /> provider, follow the detailed documentation provided by the supported <Constant name="git" /> provider:
+<Constant name="git" /> プロバイダーに公開鍵をアップロードするには、サポートされている <Constant name="git" /> プロバイダーが提供する詳細なドキュメントに従ってください。
 
 - [GitHub instructions](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account) 
 - [GitLab instructions](https://docs.gitlab.com/ee/user/project/repository/signed_commits/gpg.html) 
 
-Once you have uploaded the public key to your <Constant name="git" /> provider, your <Constant name="git" /> commits will be marked as "Verified" after you push the changes to the repository.
+公開キーを <Constant name="git" /> プロバイダーにアップロードすると、変更をリポジトリにプッシュした後、 <Constant name="git" /> コミットは「検証済み」としてマークされます。
 
 <Lightbox src="/img/docs/dbt-cloud/git-sign-verified.jpg" width="95%" title="Example of a verified Git commit in a Git provider." />
 
-## Considerations
+## 考慮事項
 
-- The GPG keypair is tied to the user, not a specific account. There is a 1:1 relationship between the user and keypair. The same key will be used for signing commits on any accounts the user is a member of.
-- The GPG keypair generated in <Constant name="cloud" /> is linked to the email address associated with your account at the time of keypair creation. This email identifies the author of signed commits.
-- For your <Constant name="git" /> commits to be marked as "verified", your <Constant name="cloud" /> email address must be a verified email address with your <Constant name="git" /> provider. The <Constant name="git" /> provider (such as, GitHub, GitLab) checks that the commit's signed email matches a verified email in your <Constant name="git" /> provider account. If they don’t match, the commit won't be marked as "verified."
-- Keep your <Constant name="cloud" /> email and <Constant name="git" /> provider's verified email in sync to avoid verification issues. If you change your <Constant name="cloud" /> email address:
-  - Generate a new GPG keypair with the updated email, following the [steps mentioned earlier](/docs/cloud/dbt-cloud-ide/git-commit-signing#generate-gpg-keypair-in-dbt-cloud).
-  - Add and verify the new email in your <Constant name="git" /> provider.
+- GPG キーペアは特定のアカウントではなく、ユーザーに紐付けられます。ユーザーとキーペアは 1:1 の関係です。ユーザーが所属するすべてのアカウントのコミットの署名には、同じキーが使用されます。
+- <Constant name="cloud" /> で生成される GPG キーペアは、キーペア作成時にアカウントに関連付けられたメールアドレスにリンクされます。このメールアドレスは、署名されたコミットの作成者を識別します。
+- <Constant name="git" /> コミットを「検証済み」とマークするには、<Constant name="cloud" /> メールアドレスが、<Constant name="git" /> プロバイダで検証済みのメールアドレスである必要があります。<Constant name="git" /> プロバイダ（GitHub、GitLab など）は、コミットの署名済みメールアドレスが、<Constant name="git" /> プロバイダアカウントで検証済みのメールアドレスと一致するかどうかを確認します。一致しない場合、コミットは「検証済み」とマークされません。
+- 検証の問題を回避するため、<Constant name="cloud" /> のメールアドレスと <Constant name="git" /> プロバイダの確認済みメールアドレスを同期させておいてください。<Constant name="cloud" /> のメールアドレスを変更する場合は、以下の手順に従ってください。
+  - [前述の手順](/docs/cloud/dbt-cloud-ide/git-commit-signing#generate-gpg-keypair-in-dbt-cloud) に従って、更新したメールアドレスで新しい GPG キーペアを生成します。
+  - <Constant name="git" /> プロバイダに新しいメールアドレスを追加して検証します。
 
 <!-- vale off -->
 
@@ -52,29 +52,25 @@ Once you have uploaded the public key to your <Constant name="git" /> provider, 
 
 <!-- vale on -->
 
-<DetailsToggle alt_header="What happens if I delete my GPG keypair in dbt?">
+<DetailsToggle alt_header="dbt で GPG キーペアを削除するとどうなりますか?">
 
-If you delete your GPG keypair in <Constant name="cloud" />, your Git commits will no longer be signed. You can generate a new GPG keypair by following the [steps mentioned earlier](/docs/cloud/dbt-cloud-ide/git-commit-signing#generate-gpg-keypair-in-dbt-cloud).
+<Constant name="cloud" /> で GPG キーペアを削除すると、Git コミットは署名されなくなります。[前述の手順](/docs/cloud/dbt-cloud-ide/git-commit-signing#generate-gpg-keypair-in-dbt-cloud) に従って新しい GPG キーペアを生成できます。
 </DetailsToggle>
 
-<DetailsToggle alt_header="What Git providers support GPG keys?">
+<DetailsToggle alt_header="どの Git プロバイダーが GPG キーをサポートしていますか?">
 
-GitHub and GitLab support commit signing, while Azure DevOps does not. Commit signing is a [git feature](https://git-scm.com/book/ms/v2/Git-Tools-Signing-Your-Work), and is independent of any specific provider. However, not all providers support the upload of public keys, or the display of verification badges on commits.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="What if my Git provider doesn't support GPG keys?">
-
-If your Git Provider does not explicitly support the uploading of public GPG keys, then
-commits will still be signed using the private key, but no verification information will
-be displayed by the provider.
+GitHubとGitLabはコミット署名をサポートしていますが、Azure DevOpsはサポートしていません。コミット署名は[gitの機能](https://git-scm.com/book/ms/v2/Git-Tools-Signing-Your-Work)であり、特定のプロバイダーに依存しません。ただし、すべてのプロバイダーが公開鍵のアップロードやコミット時の検証バッジの表示をサポートしているわけではありません。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="What if my Git provider requires that all commits are signed?">
+<DetailsToggle alt_header="Git プロバイダーが GPG キーをサポートしていない場合はどうなりますか?">
 
-If your Git provider is configured to enforce commit verification, then unsigned commits
-will be rejected. To avoid this, ensure that you have followed all previous steps to generate
-a keypair, and uploaded the public key to the provider.
+Git プロバイダーが公開 GPG キーのアップロードを明示的にサポートしていない場合、コミットは秘密キーを使用して署名されますが、プロバイダーによって検証情報は表示されません。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="Git プロバイダーがすべてのコミットに署名を要求する場合はどうなりますか?">
+
+Git プロバイダーがコミット検証を強制するように設定されている場合、署名されていないコミットは拒否されます。これを回避するには、前の手順をすべて実行してキーペアを生成し、公開鍵をプロバイダーにアップロードしてください。
 
 </DetailsToggle>

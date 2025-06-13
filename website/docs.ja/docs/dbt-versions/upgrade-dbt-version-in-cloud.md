@@ -3,66 +3,66 @@ title: "Upgrade dbt version in Cloud"
 id: "upgrade-dbt-version-in-cloud"
 ---
 
-In <Constant name="cloud" />, both [jobs](/docs/deploy/jobs) and [environments](/docs/dbt-cloud-environments) are configured to use a specific version of <Constant name="core" />. The version can be upgraded at any time.
+<Constant name="cloud" /> では、[ジョブ](/docs/deploy/jobs) と [環境](/docs/dbt-cloud-environments) の両方が、特定のバージョンの <Constant name="core" /> を使用するように設定されています。バージョンはいつでもアップグレードできます。
 
-## Environments
+## 環境
 
-Navigate to the settings page of an environment, then click **Edit**. Click the **dbt version** dropdown bar and make your selection. You can select a [release track](#release-tracks) to receive ongoing updates (recommended), or a legacy version of <Constant name="core" />. Be sure to save your changes before navigating away.
+環境の設定ページに移動し、**編集** をクリックします。**dbt バージョン** のドロップダウンバーをクリックして選択します。[リリーストラック](#release-tracks) を選択して継続的なアップデートを受け取るか（推奨）、<Constant name="core" /> のレガシーバージョンを選択できます。変更内容は必ず保存してから別のページに移動してください。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/choosing-dbt-version/example-environment-settings.png" width="90%" title="Example environment settings in dbt"/>
 
-### Release Tracks
+### リリーストラック
 
-Starting in 2024, your project will be upgraded automatically on a cadence that you choose
+2024年以降、プロジェクトはお客様が選択した頻度で自動的にアップグレードされます。
 
-The **Latest** track ensures you have up-to-date <Constant name="cloud" /> functionality, and early access to new features of the dbt framework. The **Compatible** and **Extended** tracks are designed for customers who need a less-frequent release cadence, the ability to test new dbt releases before they go live in production, and/or ongoing compatibility with the latest open source releases of <Constant name="core" />.
+**最新** トラックでは、最新の <Constant name="cloud" /> 機能と、dbt フレームワークの新機能への早期アクセスが保証されます。**互換** トラックと **拡張** トラックは、リリース頻度の低いリリース、本番環境への導入前に新しい dbt リリースをテストする機能、または <Constant name="core" /> の最新のオープンソースリリースとの継続的な互換性を必要とするお客様向けに設計されています。
 
-As a best practice, dbt Labs recommends that you test the upgrade in development first; use the [Override dbt version](#override-dbt-version) setting to test _your_ project on the latest dbt version before upgrading your deployment environments and the default development environment for all your colleagues.
+dbt Labs では、ベストプラクティスとして、まず開発環境でアップグレードをテストすることを推奨しています。[dbt バージョンのオーバーライド](#override-dbt-version) 設定を使用して、デプロイメント環境とすべての同僚のデフォルトの開発環境をアップグレードする前に、最新の dbt バージョンでプロジェクトをテストしてください。
 
-To upgrade an environment in the [<Constant name="cloud" /> Admin API](/docs/dbt-cloud-apis/admin-cloud-api) or [Terraform](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest), set `dbt_version` to the name of your release track:
-- `latest` (formerly called `versionless`; the old name is still supported)
-- `compatible` (available to Starter, Enterprise, Enterprise+ plans)
-- `extended` (available to all Enterprise plans)
+[<Constant name="cloud" /> Admin API](/docs/dbt-cloud-apis/admin-cloud-api) または [Terraform](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest) で環境をアップグレードするには、`dbt_version` をリリーストラックの名前に設定します。
+- `latest` (以前は `versionless` と呼ばれていましたが、古い名前も引き続きサポートされています)
+- `compatible` (Starter、Enterprise、Enterprise+ プランで利用可能)
+- `extended` (すべての Enterprise プランで利用可能)
 
-### Override dbt version
+### dbt バージョンのオーバーライド
 
-Configure your project to use a different dbt version than what's configured in your [development environment](/docs/dbt-cloud-environments#types-of-environments). This _override_ only affects your user account, no one else's. Use this to safely test new dbt features before upgrading the dbt version for your projects. 
+[開発環境](/docs/dbt-cloud-environments#types-of-environments) で設定されているものとは異なる dbt バージョンを使用するようにプロジェクトを設定します。このオーバーライドは、自分のユーザーアカウントにのみ影響し、他のユーザーのアカウントには影響しません。プロジェクトの dbt バージョンをアップグレードする前に、このオーバーライドを使用して新しい dbt 機能を安全にテストしてください。
 
-1. Click your account name from the left side panel and select **Account settings**. 
-2. Choose **Credentials** from the sidebar and select a project. This opens a side panel.
-3. In the side panel, click **Edit** and scroll to the **User development settings** section. 
-4. Choose a version from the **dbt version** dropdown and click **Save**.
+1. 左側のサイドパネルでアカウント名をクリックし、[アカウント設定] を選択します。
+2. サイドバーから [認証情報] を選択し、プロジェクトを選択します。サイドパネルが開きます。
+3. サイドパネルで [編集] をクリックし、[ユーザー開発設定] セクションまでスクロールします。
+4. [dbt バージョン] ドロップダウンからバージョンを選択し、[保存] をクリックします。
 
-  An example of overriding the configured version to ["Latest" release track](/docs/dbt-versions/cloud-release-tracks) for the selected project:
+    選択したプロジェクトの構成済みバージョンを [「最新」リリース トラック](/docs/dbt-versions/cloud-release-tracks) にオーバーライドする例:
 
   <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/choosing-dbt-version/example-override-version.png" width="60%" title="Example of overriding the dbt version on your user account"/>
 
-5. (Optional) Verify that <Constant name="cloud" /> will use your override setting to build the project by invoking a `dbt build` command in the <Constant name="cloud_ide" />'s command bar. Expand the **System Logs** section and find the output's first line. It should begin with `Running with dbt=` and list the version <Constant name="cloud" /> is using. <br /><br />
-   For users on Release tracks, the output will display `Running dbt...` instead of a specific version, reflecting the flexibility and continuous automatic updates provided by the release track functionality.
+5. （オプション）<Constant name="cloud" /> のコマンドバーで `dbt build` コマンドを実行し、<Constant name="cloud_ide" /> がオーバーライド設定を使用してプロジェクトをビルドすることを確認します。**システムログ** セクションを展開し、出力の最初の行を見つけます。`Running with dbt=` で始まり、<Constant name="cloud" /> が使用しているバージョンがリストされているはずです。<br /><br />
+    リリーストラックのユーザーの場合、出力には特定のバージョンではなく `Running dbt...` と表示されます。これは、リリーストラック機能によって提供される柔軟性と継続的な自動更新を反映しています。
 
-## Jobs
+## ジョブ
 
-Each job in <Constant name="cloud" /> can be configured to inherit parameters from the environment it belongs to.
+<Constant name="cloud" /> 内の各ジョブは、所属する環境からパラメータを継承するように設定できます。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/choosing-dbt-version/job-settings.png" width="200%" title="Settings of a dbt job"/>
 
-The example job seen in the screenshot above belongs to the environment "Prod". It inherits the dbt version of its environment as shown by the **Inherited from ENVIRONMENT_NAME (DBT_VERSION)** selection. You may also manually override the dbt version of a specific job to be any of the current Core releases supported by Cloud by selecting another option from the dropdown.
+上記のスクリーンショットに示されているサンプルジョブは、環境「Prod」に属しています。**ENVIRONMENT_NAME (DBT_VERSION) から継承** が選択されていることからわかるように、環境の dbt バージョンを継承しています。また、ドロップダウンから別のオプションを選択することで、特定のジョブの dbt バージョンを、Cloud でサポートされている現在の Core リリースのいずれかに手動で上書きすることもできます。
 
-## Supported versions
+## サポート対象バージョン
 
-dbt Labs has always encouraged users to upgrade dbt Core versions whenever a new minor version is released. We released our first major version of dbt - `dbt 1.0` - in December 2021. Alongside this release, we updated our policy on which versions of dbt Core we will support in the <Constant name="dbt_platform" />.
+dbt Labs は、新しいマイナーバージョンがリリースされるたびに、dbt Core のバージョンアップグレードをユーザーに推奨してきました。2021年12月に、dbt の最初のメジャーバージョンである「dbt 1.0」をリリースしました。このリリースに合わせて、<Constant name="dbt_platform" /> でサポートする dbt Core のバージョンに関するポリシーを更新しました。
 
-> **Starting with v1.0, all subsequent minor versions are available in <Constant name="cloud" />. Versions are actively supported, with patches and bug fixes, for 1 year after their initial release. At the end of the 1-year window, we encourage all users to upgrade to a newer version for better ongoing maintenance and support.**
+> **v1.0 以降、以降のすべてのマイナーバージョンは <Constant name="cloud" /> でご利用いただけます。各バージョンは、最初のリリースから1年間、パッチとバグ修正を含むアクティブなサポート期間が提供されます。1年間の期間終了後は、継続的なメンテナンスとサポートの向上のため、すべてのユーザーに新しいバージョンへのアップグレードを推奨します。**
 
-We provide different support levels for different versions, which may include new features, bug fixes, or security patches:
+バージョンごとに異なるサポートレベルを提供しており、これには新機能、バグ修正、セキュリティパッチなどが含まれる場合があります。
 
 <Snippet path="core-version-support" />
 
-We'll continue to update the following release table so that users know when we plan to stop supporting different versions of Core in <Constant name="cloud" />.
+<Constant name="cloud" /> で Core のさまざまなバージョンのサポートを停止する予定時期をユーザーが把握できるように、次のリリース テーブルを継続的に更新します。
 
 <Snippet path="core-versions-table" />
 
-Starting with v1.0, <Constant name="cloud" /> will ensure that you're always using the latest compatible patch release of `dbt-core` and plugins, including all the latest fixes. You may also choose to try prereleases of those patch releases before they are generally available.
+v1.0以降、<Constant name="cloud" /> を使用すると、最新の修正を含む `dbt-core` とプラグインの最新の互換性のあるパッチリリースを常に使用できるようになります。また、これらのパッチリリースのプレリリース版を一般公開前に試用することもできます。
 
 <!--- TODO: Include language to reflect:
   - notifying users when new minor versions are available
@@ -70,41 +70,41 @@ Starting with v1.0, <Constant name="cloud" /> will ensure that you're always usi
   - auto-upgrading users to the subsequent minor version when critical support ends
 --->
 
-For more on version support and future releases, see [Understanding <Constant name="core" /> versions](/docs/dbt-versions/core).
+バージョンのサポートと将来のリリースの詳細については、[<Constant name="core" /> バージョンについて](/docs/dbt-versions/core) を参照してください。
 
-### dbt Fusion engine
+### dbt Fusion エンジン
 
-dbt Labs has introduced the new [dbt Fusion engine](/docs/fusion/about-fusion), a ground-up rebuild of dbt. This is currently in beta on the dbt platform. Eligible customers can update environments to Fusion using the same workflows as v1.x, but there are a few things to keep in mind:
-- **To gain access to the Fusion Latest release track, you must reach out to your dbt Labs account team to request it. Week by week we'll expand the beta cohort based on project eligibility, including Starter plans**. Once we transition from Beta to Preview, all users will see it as an option for their environments, projects, jobs, etc.
+dbt Labs は、dbt を根本から再構築した新しい [dbt Fusion エンジン](/docs/fusion/about-fusion) を導入しました。これは現在、dbt プラットフォーム上でベータ版として提供されています。対象となるお客様は、v1.x と同じワークフローを使用して環境を Fusion にアップデートできますが、いくつか注意事項があります。
+- **Fusion 最新リリーストラックにアクセスするには、dbt Labs アカウントチームにリクエストを送信する必要があります。ベータ版の対象範囲は、スタータープランを含むプロジェクトの要件に基づいて、毎週拡大していきます**。ベータ版からプレビュー版に移行すると、すべてのユーザーの環境、プロジェクト、ジョブなどで Fusion がオプションとして表示されます。
 
-
- To increase the compatibility of your project, update all jobs and environments to the `Latest` release track and follow our [upgrade guide](/docs/dbt-versions/core-upgrade/upgrading-to-fusion). 
-- There are some significant changes, these can also be found in the [upgrade guide](/docs/dbt-versions/core-upgrade/upgrading-to-fusion).
-- Currently, the only supported adapter is Snowflake. More adapter support coming soon!
-- When you change your development environment(s) to `Fusion Latest`, every user will have to restart the IDE.
+プロジェクトの互換性を高めるには、すべてのジョブと環境を「最新」リリーストラックにアップデートし、[アップグレードガイド](/docs/dbt-versions/core-upgrade/upgrading-to-fusion) に従ってください。
+- いくつか重要な変更点があります。詳細は[アップグレードガイド](/docs/dbt-versions/core-upgrade/upgrading-to-fusion)でもご確認いただけます。
+- 現在サポートされているアダプタはSnowflakeのみです。今後、さらに多くのアダプタのサポートが追加される予定です。
+- 開発環境を「Fusion Latest」に変更すると、すべてのユーザーがIDEを再起動する必要があります。
 
 
   <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/cloud-upgrading-dbt-versions/upgrade-fusion.png" width="90%" title="Upgrade to the Fusion engine in your environment settings." />
 
 
-### Need help upgrading?
+### アップグレードについてサポートが必要ですか？
 
-If you want more advice on how to upgrade your dbt projects, check out our [migration guides](/docs/dbt-versions/core-upgrade/) and our [upgrading Q&A page](/docs/dbt-versions/upgrade-dbt-version-in-cloud#upgrading-legacy-versions-under-10).
+dbt プロジェクトのアップグレード方法についてさらに詳しいアドバイスが必要な場合は、[移行ガイド](/docs/dbt-versions/core-upgrade/)と[アップグレードに関する Q&A ページ](/docs/dbt-versions/upgrade-dbt-version-in-cloud#upgrading-legacy-versions-under-10)をご覧ください。
 
 
-### Testing your changes before upgrading
+### アップグレード前の変更点のテスト
 
-Once you know what code changes you'll need to make, you can start implementing them. We recommend you:
-- Create a separate dbt project, "Upgrade project", to test your changes before making them live in your main dbt project.
-- In your "Upgrade project", connect to the same repository you use for your production project.
-- Set the development environment [settings](/docs/dbt-versions/upgrade-dbt-version-in-cloud) to run the latest version of <Constant name="core" />.
-- Check out a branch `dbt-version-upgrade`, make the appropriate updates to your project, and verify your dbt project compiles and runs with the new version in the <Constant name="cloud_ide" />.
-  - If upgrading directly to the latest version results in too many issues, try testing your project iteratively on successive minor versions. There are years of development and a few breaking changes between distant versions of <Constant name="core" /> (for example, 1.0 --> 1.10). The likelihood of experiencing problems upgrading between successive minor versions is much lower, which is why upgrading regularly is recommended.
-- Once you have your project compiling and running on the latest version of dbt in the development environment for your `dbt-version-upgrade` branch, try replicating one of your production jobs to run off your branch's code.
-- You can do this by creating a new deployment environment for testing, setting the custom branch to 'ON' and referencing your `dbt-version-upgrade` branch. You'll also need to set the dbt version in this environment to the latest dbt Core version.
+必要なコード変更がわかったら、実装を開始できます。以下の手順をお勧めします:
+
+- メインの dbt プロジェクトに反映する前に、変更点をテストするための「アップグレード プロジェクト」という別の dbt プロジェクトを作成します。
+- 「アップグレード プロジェクト」で、本番環境プロジェクトと同じリポジトリに接続します。
+- 開発環境の [設定](/docs/dbt-versions/upgrade-dbt-version-in-cloud) を、<Constant name="core" /> の最新バージョンを実行するように設定します。
+- ブランチ `dbt-version-upgrade` をチェックアウトし、プロジェクトに適切な更新を加え、<Constant name="cloud_ide" /> の新しいバージョンで dbt プロジェクトがコンパイルされ、実行されることを確認します。
+  - 最新バージョンに直接アップグレードすると問題が多すぎる場合は、マイナーバージョンを順にアップグレードしてプロジェクトを反復的にテストしてみてください。 <Constant name="core" /> の遠いバージョン（例：1.0 → 1.10）間では、長年の開発期間といくつかの互換性のない変更が存在します。連続するマイナーバージョン間のアップグレードで問題が発生する可能性は大幅に低いため、定期的なアップグレードをお勧めします。
+- `dbt-version-upgrade` ブランチの開発環境で、最新バージョンの dbt でプロジェクトをコンパイルして実行したら、本番環境ジョブの 1 つを複製してブランチのコードから実行してみてください。
+- これを行うには、テスト用の新しいデプロイメント環境を作成し、カスタムブランチを「ON」に設定し、`dbt-version-upgrade` ブランチを参照します。また、この環境で dbt のバージョンを最新の dbt Core バージョンに設定する必要があります。
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/cloud-upgrading-dbt-versions/upgrade-environment.png" width="90%" title="Setting your testing environment" />
 
-- Then add a job to the new testing environment that replicates one of the production jobs your team relies on.
-  - If that job runs smoothly, you should be all set to merge your branch into main. 
-  - Then change your development and deployment environments in your main dbt project to run off the newest version of <Constant name="core" />.
+- 次に、チームが依存している本番環境ジョブの 1 つを複製するジョブを新しいテスト環境に追加します。
+  - そのジョブがスムーズに実行された場合、ブランチをメインにマージする準備が整っているはずです。
+  - 次に、メインの dbt プロジェクトの開発環境とデプロイメント環境を変更し、<Constant name="core" /> の最新バージョンで実行できるようにします。

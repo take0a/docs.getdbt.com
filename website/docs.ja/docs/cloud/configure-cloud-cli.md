@@ -6,29 +6,29 @@ sidebar_label: "Configuration and usage"
 pagination_next: null
 ---
 
-Learn how to configure the <Constant name="cloud_cli" /> for your <Constant name="cloud" /> project to run dbt commands, like `dbt environment show` to view your <Constant name="cloud" /> configuration or `dbt compile` to compile your project and validate models and tests. You'll also benefit from:
+<Constant name="cloud" /> プロジェクトの <Constant name="cloud_cli" /> を構成して、`dbt environment show` で <Constant name="cloud" /> の構成を表示したり、`dbt compile` でプロジェクトをコンパイルしてモデルとテストを検証したりするなど、dbt コマンドを実行する方法を学びます。また、以下のメリットも得られます。
 
-- Secure credential storage in the <Constant name="cloud" /> platform.
-- [Automatic deferral](/docs/cloud/about-cloud-develop-defer) of build artifacts to your Cloud project's production environment.
-- Speedier, lower-cost builds.
-- Support for <Constant name="mesh" /> ([cross-project ref](/docs/mesh/govern/project-dependencies)), and more.
+- <Constant name="cloud" /> プラットフォームにおける安全な認証情報ストレージ。
+- ビルド成果物の Cloud プロジェクトの本番環境への [自動延期](/docs/cloud/about-cloud-develop-defer)。
+- より高速で低コストのビルド。
+- <Constant name="mesh" /> のサポート ([プロジェクト間参照](/docs/mesh/govern/project-dependencies))、その他。
 
-## Prerequisites
+## 前提条件
 
-- You must set up a project in <Constant name="cloud" />.
-  - **Note** &mdash; If you're using the <Constant name="cloud_cli" />, you can connect to your [data platform](/docs/cloud/connect-data-platform/about-connections) directly in the <Constant name="cloud" /> interface and don't need a [`profiles.yml`](/docs/core/connect-data-platform/profiles.yml) file. 
-- You must have your [personal development credentials](/docs/dbt-cloud-environments#set-developer-credentials) set for that project. The <Constant name="cloud" /> CLI will use these credentials, stored securely in <Constant name="cloud" />, to communicate with your data platform.
-- You must be on dbt version 1.5 or higher. Refer to [<Constant name="cloud" /> versions](/docs/dbt-versions/upgrade-dbt-version-in-cloud) to upgrade.
+- <Constant name="cloud" /> でプロジェクトをセットアップする必要があります。
+  - **注** &mdash; <Constant name="cloud_cli" /> を使用している場合は、<Constant name="cloud" /> インターフェースから直接 [データプラットフォーム](/docs/cloud/connect-data-platform/about-connections) に接続できるため、[`profiles.yml`](/docs/core/connect-data-platform/profiles.yml) ファイルは必要ありません。
+- そのプロジェクトに [個人開発認証情報](/docs/dbt-cloud-environments#set-developer-credentials) が設定されている必要があります。<Constant name="cloud" /> CLI は、<Constant name="cloud" /> に安全に保存されているこれらの認証情報を使用して、データプラットフォームと通信します。
+- dbt バージョン 1.5 以上を使用する必要があります。アップグレードするには、[<Constant name="cloud" /> バージョン](/docs/dbt-versions/upgrade-dbt-version-in-cloud) を参照してください。
 
-## Configure the dbt CLI
+## dbt CLI を構成する
 
-Once you install the <Constant name="cloud_cli" />, you need to configure it to connect to a <Constant name="cloud" /> project.
+<Constant name="cloud_cli" /> をインストールしたら、<Constant name="cloud" /> プロジェクトに接続できるように構成する必要があります。
 
-1. In <Constant name="cloud" />, navigate to **Develop** and click **Configure <Constant name="cloud_cli" />** to download your `dbt_cloud.yml` credentials file.
+1. <Constant name="cloud" /> で **Develop** に移動し、**Configure <Constant name="cloud_cli" />** をクリックして `dbt_cloud.yml` 認証情報ファイルをダウンロードします。
 
     <details>
-    <summary>Region URLs to download credentials</summary>
-    You can also download the credentials from the links provided based on your region:
+    <summary>資格情報をダウンロードするための地域の URL</summary>
+    地域に応じて提供されるリンクから資格情報をダウンロードすることもできます:
 
     - North America: <a href="https://cloud.getdbt.com/cloud-cli">https://cloud.getdbt.com/cloud-cli</a>
     - EMEA: <a herf="https://emea.dbt.com/cloud-cli">https://emea.dbt.com/cloud-cli</a>
@@ -38,7 +38,7 @@ Once you install the <Constant name="cloud_cli" />, you need to configure it to 
 
     </details>
 
-2. Save the `dbt_cloud.yml` file in the `.dbt` directory, which stores your <Constant name="cloud_cli" /> configuration. Store it in a safe place as it contains API keys. Check out the [FAQs](#faqs) to learn how to create a `.dbt` directory and move the `dbt_cloud.yml` file.
+2. `dbt_cloud.yml` ファイルを、<Constant name="cloud_cli" /> の設定が保存されている `.dbt` ディレクトリに保存してください。API キーが含まれているため、安全な場所に保管してください。`.dbt` ディレクトリの作成方法と `dbt_cloud.yml` ファイルの移行方法については、[FAQ](#faqs) をご覧ください。
    
     - North America: https://YOUR_ACCESS_URL/cloud-cli
     - EMEA: https://emea.dbt.com/cloud-cli
@@ -46,11 +46,11 @@ Once you install the <Constant name="cloud_cli" />, you need to configure it to 
     - North American Cell 1: `https:/ACCOUNT_PREFIX.us1.dbt.com/cloud-cli`
     - Single-tenant: `https://YOUR_ACCESS_URL/cloud-cli`
   
-3. Follow the banner instructions and download the config file to:
+3. バナーの指示に従って、次の場所に構成ファイルをダウンロードします:
    - Mac or Linux:  `~/.dbt/dbt_cloud.yml`
    - Windows:  `C:\Users\yourusername\.dbt\dbt_cloud.yml`  
 
-  The config file looks like this:
+  設定ファイルは次のようになります:
 
   ```yaml
   version: "1"
@@ -76,13 +76,13 @@ Once you install the <Constant name="cloud_cli" />, you need to configure it to 
       token-value: "<pat-or-service-token-value>"  
   ```
 
-1. After downloading the config file and creating your directory, navigate to a project in your terminal:
+1. 設定ファイルをダウンロードしてディレクトリを作成したら、ターミナルでプロジェクトに移動します:
 
     ```bash
     cd ~/dbt-projects/jaffle_shop
     ```
 
-2. In your `dbt_project.yml` file, ensure you have or include a `dbt-cloud` section with a `project-id` field. The `project-id` field contains the <Constant name="cloud" /> project ID you want to use.
+2. `dbt_project.yml` ファイルに、`project-id` フィールドを含む `dbt-cloud` セクションが存在するか、または含めていることを確認してください。`project-id` フィールドには、使用する <Constant name="cloud" /> プロジェクト ID を指定します。
 
     ```yaml
     # dbt_project.yml
@@ -94,104 +94,103 @@ Once you install the <Constant name="cloud_cli" />, you need to configure it to 
         project-id: PROJECT_ID
     ```
 
-   - To find your project ID, select **Develop** in the <Constant name="cloud" /> navigation menu. You can use the URL to find the project ID. For example, in `https://YOUR_ACCESS_URL/develop/26228/projects/123456`, the project ID is `123456`.
+   - プロジェクトIDを確認するには、<Constant name="cloud" /> ナビゲーションメニューで **Develop** を選択してください。プロジェクトIDはURLで確認できます。例えば、`https://YOUR_ACCESS_URL/develop/26228/projects/123456` の場合、プロジェクトIDは `123456` です。
 
-3. You should now be able to [use the <Constant name="cloud_cli" />](#use-the-dbt-cloud-cli) and run [dbt commands](/reference/dbt-commands) like [`dbt environment show`](/reference/commands/dbt-environment) to view your <Constant name="cloud" /> configuration details or `dbt compile` to compile models in your dbt project.
+3. これで、[<Constant name="cloud_cli" /> を使用](#use-the-dbt-cloud-cli)し、[`dbt environment show`](/reference/commands/dbt-environment)などの[dbtコマンド](/reference/dbt-commands)を実行して<Constant name="cloud" />の設定詳細を表示したり、`dbt compile` を使用してdbtプロジェクト内のモデルをコンパイルしたりできるようになります。
 
-With your repo recloned, you can add, edit, and sync files with your repo.
+リポジトリを再クローンすると、ファイルの追加、編集、リポジトリとの同期が可能になります。
 
-## Set environment variables
+## 環境変数を設定する
 
-To set environment variables in the <Constant name="cloud" /> CLI for your dbt project:
+<Constant name="cloud" /> CLI で dbt プロジェクトの環境変数を設定するには、次の手順に従います。
 
-1. From <Constant name="cloud" />, click on your account name in the left side menu and select **Account settings**.
-2. Under the **Your profile** section, select **Credentials**.
-3. Click on your project and scroll to the **Environment variables** section.
-4. Click **Edit** on the lower right and then set the user-level environment variables.  
+1. <Constant name="cloud" /> の左側のメニューでアカウント名をクリックし、**Account settings** を選択します。
+2. **Your profile** セクションで、**Credentials** を選択します。
+3. プロジェクトをクリックし、**Environment variables** セクションまでスクロールします。
+4. 右下の **Edit** をクリックし、ユーザーレベルの環境変数を設定します。
 
-## Use the dbt CLI
+## dbt CLI を使用する
 
-The <Constant name="cloud_cli" /> uses the same set of [dbt commands](/reference/dbt-commands) and [MetricFlow commands](/docs/build/metricflow-commands) as dbt Core to execute the commands you provide. For example, use the [`dbt environment`](/reference/commands/dbt-environment) command to view your <Constant name="cloud" /> configuration details. With the <Constant name="cloud_cli" />, you can:
+<Constant name="cloud_cli" /> は、dbt Core と同じ [dbt コマンド](/reference/dbt-commands) と [MetricFlow コマンド](/docs/build/metricflow-commands) のセットを使用して、指定したコマンドを実行します。たとえば、[`dbt environment`](/reference/commands/dbt-environment) コマンドを使用して、<Constant name="cloud" /> の設定の詳細を確認できます。<Constant name="cloud_cli" /> を使用すると、次のことが可能になります。
 
-- Run [multiple invocations in parallel](/reference/dbt-commands) and ensure [safe parallelism](/reference/dbt-commands#parallel-execution), which is currently not guaranteed by `dbt-core`.
-- Automatically defers build artifacts to your Cloud project's production environment.
-- Supports [project dependencies](/docs/mesh/govern/project-dependencies), which allows you to depend on another project using the metadata service in <Constant name="cloud" />. 
-  - Project dependencies instantly connect to and reference (or  `ref`) public models defined in other projects. You don't need to execute or analyze these upstream models yourself. Instead, you treat them as an API that returns a dataset.
+- [複数の呼び出しを並列実行](/reference/dbt-commands) し、[安全な並列処理](/reference/dbt-commands#parallel-execution) を確保します。これは現在、`dbt-core` では保証されていません。
+- ビルド成果物を Cloud プロジェクトの運用環境に自動的に延期します。
+- [プロジェクト依存関係](/docs/mesh/govern/project-dependencies)をサポートしており、<Constant name="cloud" /> のメタデータサービスを使用して別のプロジェクトに依存できます。
+  - プロジェクト依存関係は、他のプロジェクトで定義されたパブリックモデルに即座に接続して参照（または `ref`）します。これらの上流モデルを自分で実行したり分析したりする必要はありません。代わりに、データセットを返すAPIとして扱います。
  
 :::tip Use the <code>--help</code> flag
-As a tip, most command-line tools have a `--help` flag to show available commands and arguments. Use the `--help` flag with dbt in two ways:
-- `dbt --help`: Lists the commands available for dbt<br />
-- `dbt run --help`: Lists the flags available for the `run` command
+ヒントとして、ほとんどのコマンドラインツールには、使用可能なコマンドと引数を表示するための `--help` フラグがあります。dbt では `--help` フラグを次の2つの方法で使用できます。
+- `dbt --help`: dbt で使用可能なコマンドを一覧表示します<br />
+- `dbt run --help`: `run` コマンドで使用可能なフラグを一覧表示します
 :::
  
-## Lint SQL files 
+## SQL ファイルの lint 処理
 
-From the <Constant name="cloud" /> CLI, you can invoke [SQLFluff](https://sqlfluff.com/) which is a modular and configurable SQL linter that warns you of complex functions, syntax, formatting, and compilation errors. Many of the same flags that you can pass to SQLFluff are available from the <Constant name="cloud" /> CLI.
+<Constant name="cloud" /> CLI から、[SQLFluff](https://sqlfluff.com/) を呼び出すことができます。これは、複雑な関数、構文、フォーマット、コンパイルエラーを警告する、モジュール式で設定可能な SQL リンターです。SQLFluff に渡すことができるフラグの多くは、<Constant name="cloud" /> CLI でも使用できます。
 
-The available SQLFluff commands are: 
+使用可能な SQLFluff コマンドは次のとおりです。
 
-- `lint` &mdash; Lint SQL files by passing a list of files or from standard input (stdin).
-- `fix` &mdash; Fix SQL files.
-- `format` &mdash; Autoformat SQL files.
+- `lint` - ファイルリストまたは標準入力 (stdin) を渡して SQL ファイルを lint 処理します。
+- `fix` - SQL ファイルを修正します。
+- `format` - SQL ファイルを自動フォーマットします。
 
-
-To lint SQL files, run the command as follows:  
+SQL ファイルを lint 処理するには、次のコマンドを実行します。
 
 ```
 dbt sqlfluff lint [PATHS]... [flags]
 ```
 
-When no path is set, dbt lints all SQL files in the current project. To lint a specific SQL file or a directory, set `PATHS` to the path of the SQL file(s) or directory of files. To lint multiple files or directories, pass multiple `PATHS` flags.  
+パスが設定されていない場合、dbt は現在のプロジェクト内のすべての SQL ファイルを lint します。特定の SQL ファイルまたはディレクトリを lint するには、`PATHS` を SQL ファイルまたはファイルのディレクトリのパスに設定します。複数のファイルまたはディレクトリを lint するには、複数の `PATHS` フラグを渡します。
 
-To show detailed information on all the dbt supported commands and flags, run the `dbt sqlfluff -h` command. 
+dbt でサポートされているすべてのコマンドとフラグの詳細情報を表示するには、`dbt sqlfluff -h` コマンドを実行します。
 
-#### Considerations
+#### 考慮事項
 
-When running `dbt sqlfluff` from the <Constant name="cloud_cli" />, the following are important behaviors to consider:
+<Constant name="cloud_cli" /> から `dbt sqlfluff` を実行する場合、以下の重要な動作について考慮する必要があります。
 
-- dbt reads the `.sqlfluff` file, if it exists, for any custom configurations you might have.
-- For continuous integration/continuous development (CI/CD) workflows, your project must have a `dbt_cloud.yml` file and you have successfully run commands from within this dbt project.
-- An SQLFluff command will return an exit code of 0 if it ran with any file violations. This dbt behavior differs from SQLFluff behavior, where a linting violation returns a non-zero exit code. dbt Labs plans on addressing this in a later release.
+- dbt は、`.sqlfluff` ファイルが存在する場合、カスタム構成があるかどうか確認するためにそれを読み取ります。
+- 継続的インテグレーション/継続的開発 (CI/CD) ワークフローの場合、プロジェクトに `dbt_cloud.yml` ファイルが存在し、この dbt プロジェクト内からコマンドを正常に実行している必要があります。
+- SQLFluff コマンドは、ファイル違反が発生した場合、終了コード 0 を返します。この dbt の動作は、リンティング違反で 0 以外の終了コードが返される SQLFluff の動作とは異なります。dbt Labs は、今後のリリースでこの問題に対処する予定です。
 
-## Considerations
+## 考慮事項
 
-import CloudCliRelativePath from '/snippets/_cloud-cli-relative-path.md';
+import CloudCliRelativePath from '/snippets.ja/_cloud-cli-relative-path.md';
 
 <CloudCliRelativePath />
 
 ## FAQs
 
-<DetailsToggle alt_header="How to create a .dbt directory and move your file">
+<DetailsToggle alt_header=".dbtディレクトリを作成してファイルを移動する方法">
 
-If you've never had a `.dbt` directory, you should perform the following recommended steps to create one. If you already have a `.dbt` directory, move the `dbt_cloud.yml` file into it.
+`.dbt` ディレクトリがまだない場合は、以下の推奨手順に従って作成してください。既に `.dbt` ディレクトリがある場合は、`dbt_cloud.yml` ファイルをそこに移動します。
 
 <Tabs>
 <TabItem value="Create a .dbt directory">
 
-  1. Clone your dbt project repository locally.
-  2. Use the `mkdir` command followed by the name of the folder you want to create. Add the `~` prefix to create a `.dbt` folder in the root of your filesystem:
+  1. dbt プロジェクト リポジトリをローカルにクローンします。
+  2. `mkdir` コマンドに続けて作成したいフォルダ名を指定します。`~` プレフィックスを追加して、ファイルシステムのルートに `.dbt` フォルダを作成します。
 
      ```bash
      mkdir ~/.dbt
      ```
 
-This will create a `.dbt` folder in the root directory.
+これにより、ルートディレクトリに「.dbt」フォルダが作成されます。
 
-For Mac users, since it's a hidden folder (due to the dot prefix), it won't be visible in Finder by default. To view hidden files and folders, press Command + Shift + G.
+Macユーザーの場合、このフォルダは隠しフォルダ（ドットプレフィックスのため）であるため、デフォルトではFinderに表示されません。隠しファイルと隠しフォルダを表示するには、Command + Shift + Gを押してください。
 
 </TabItem>
 
 <TabItem value="Move the dbt_cloud.yml file">
 
-### Mac or Linux
-In your command line, use the `mv` command to move your `dbt_cloud.yml` file into the `.dbt` directory. If you've just downloaded the `dbt_cloud.yml` file and it's in your Downloads folder, the command might look something like this:
+### Mac または Linux
+コマンドラインで `mv` コマンドを使用して、`dbt_cloud.yml` ファイルを `.dbt` ディレクトリに移動します。`dbt_cloud.yml` ファイルをダウンロードしてダウンロードフォルダに保存している場合は、コマンドは次のようになります。
 
 ```bash
 mv ~/Downloads/dbt_cloud.yml ~/.dbt/dbt_cloud.yml
 ```
 
 ### Windows
-In your command line, use the move command. Assuming your file is in the Downloads folder, the command might look like this:
+コマンドラインでmoveコマンドを使用します。ファイルがダウンロードフォルダにあると仮定すると、コマンドは次のようになります。
 
 ```bash
 move %USERPROFILE%\Downloads\dbt_cloud.yml %USERPROFILE%\.dbt\dbt_cloud.yml
@@ -200,13 +199,13 @@ move %USERPROFILE%\Downloads\dbt_cloud.yml %USERPROFILE%\.dbt\dbt_cloud.yml
 </TabItem>
 </Tabs>
 
-This command moves the `dbt_cloud.yml` from the `Downloads` folder to the `.dbt` folder. If your `dbt_cloud.yml` file is located elsewhere, adjust the path accordingly.
+このコマンドは、`dbt_cloud.yml` を `Downloads` フォルダから `.dbt` フォルダに移動します。`dbt_cloud.yml` ファイルが他の場所にある場合は、パスを調整してください。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How to skip artifacts from being downloaded">
+<DetailsToggle alt_header="アーティファクトのダウンロードをスキップする方法">
 
-By default, [all artifacts](/reference/artifacts/dbt-artifacts) are downloaded when you execute dbt commands from the <Constant name="cloud_cli" />. To skip these files from being downloaded, add `--download-artifacts=false` to the command you want to run. This can help improve run-time performance but might break workflows that depend on assets like the [manifest](/reference/artifacts/manifest-json). 
+デフォルトでは、<Constant name="cloud_cli" /> から dbt コマンドを実行すると、[すべてのアーティファクト](/reference/artifacts/dbt-artifacts) がダウンロードされます。これらのファイルのダウンロードをスキップするには、実行するコマンドに `--download-artifacts=false` を追加します。これにより実行時のパフォーマンスが向上しますが、[マニフェスト](/reference/artifacts/manifest-json) などのアセットに依存するワークフローが中断される可能性があります。
 
 </DetailsToggle>
 

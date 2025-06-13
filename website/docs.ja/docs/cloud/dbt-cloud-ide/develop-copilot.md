@@ -4,17 +4,17 @@ sidebar_label: "Develop with dbt Copilot"
 description: "Use dbt Copilot to generate documentation, tests, semantic models, and sql code from scratch, giving you the flexibility to modify or fix generated code." 
 ---
 
-# Develop with dbt Copilot <Lifecycle status="self_service,managed,managed_plus" /> 
+# dbt Copilotで開発する <Lifecycle status="self_service,managed,managed_plus" /> 
 
 <IntroText>
 
-This page describes how to use <Constant name="copilot" /> in the <Constant name="cloud_ide" /> to improve your development workflow.
+このページでは、<Constant name="cloud_ide" /> の <Constant name="copilot" /> を使用して開発ワークフローを改善する方法について説明します。
 </IntroText>
 
-Use [<Constant name="copilot" />](/docs/cloud/dbt-copilot) in the [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) to generate documentation, tests, semantic models, metrics, and SQL code from scratch &mdash; making it easier for you to build your dbt project, accelerate your development, and focus on high-level tasks. For information about using <Constant name="copilot" /> in the [<Constant name="visual_editor" />](/docs/cloud/canvas), see [Build with <Constant name="copilot" />](/docs/cloud/build-canvas-copilot).
+[<Constant name="copilot" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) の [<Constant name="copilot" />](/docs/cloud/dbt-copilot) を使用して、ドキュメント、テスト、セマンティック モデル、メトリック、SQL コードを最初から生成します。これにより、dbt プロジェクトの構築が容易になり、開発が加速し、高レベルのタスクに集中できるようになります。[<Constant name="visual_editor" />](/docs/cloud/canvas) での <Constant name="copilot" /> の使用については、[<Constant name="copilot" /> を使用したビルド](/docs/cloud/build-canvas-copilot) を参照してください。
 
-import CopilotResources from '/snippets/_use-copilot-resources.md';
-import CopilotEditCode from '/snippets/_use-copilot-edit-code.md';
+import CopilotResources from '/snippets.ja/_use-copilot-resources.md';
+import CopilotEditCode from '/snippets.ja/_use-copilot-edit-code.md';
 
 ## Generate resources
 

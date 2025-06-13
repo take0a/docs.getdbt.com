@@ -25,8 +25,8 @@ tags: [scheduler]
 スケジューラは以下の機能も提供します。
 - [<Constant name="cloud" />, の <Constant name="git" /> リポジトリ キャッシュ](/docs/cloud/account-settings#git-repository-caching) を使用して、サードパーティによる障害から保護し、ジョブ実行の信頼性を向上させます。<Lifecycle status="managed,managed_plus" />
 - ステージング環境と本番環境での dbt の実行を強化し、CI/CD ワークフローの容易さと信頼性を高め、大規模な dbt の導入におけるオブザーバビリティとガバナンスを実現します。
-- Uses [Hybrid projects](/docs/deploy/hybrid-projects) to upload dbt Core artifacts into dbt Cloud for central visibility, cross-project referencing, and easier collaboration. <Lifecycle status="beta,managed_plus" />
-- Uses [state-aware orchestration](/docs/deploy/state-aware-about) to decide what needs to be rebuilt based on source freshness, model staleness, and code changes. <Lifecycle status="beta,managed,managed_plus" />
+- [ハイブリッド プロジェクト](/docs/deploy/hybrid-projects) を使用して dbt Core アーティファクトを dbt Cloud にアップロードし、一元的な可視性、プロジェクト間の参照、そしてより容易なコラボレーションを実現します。<Lifecycle status="beta,managed_plus" />
+- [状態認識オーケストレーション](/docs/deploy/state-aware-about) を使用して、ソースの最新性、モデルの古さ、そしてコードの変更に基づいて、再構築が必要なものを決定します。<Lifecycle status="beta,managed,managed_plus" />
 
 ## スケジューラ用語
 

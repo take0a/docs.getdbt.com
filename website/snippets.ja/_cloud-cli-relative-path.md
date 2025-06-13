@@ -1,6 +1,6 @@
-The dbt Cloud CLI doesn't currently support relative paths in the [`packages.yml` file](/docs/build/packages). Instead, use the [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud), which supports relative paths in this scenario.
+<Constant name="cloud_cli" /> は現在、[`packages.yml` ファイル](/docs/build/packages) 内の相​​対パスをサポートしていません。代わりに、このシナリオで相対パスをサポートする [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) を使用してください。
 
-Here's an example of a [local package](/docs/build/packages#local-packages) configuration in the `packages.yml` that won't work with the dbt Cloud CLI:
+以下は、<Constant name="cloud_cli" /> では機能しない `packages.yml` 内の [ローカルパッケージ](/docs/build/packages#local-packages) 構成の例です。
 
 ```yaml
 # repository_root/my_dbt_project_in_a_subdirectory/packages.yml
@@ -9,8 +9,8 @@ packages:
   - local: ../shared_macros
 ```
 
-In this example, `../shared_macros` is a relative path that tells dbt to look for:
-- `..` &mdash; Go one directory up (to `repository_root`).
-- `/shared_macros` &mdash; Find the `shared_macros` folder in the root directory.
+この例では、`../shared_macros` は相対パスであり、dbt に以下を検索するよう指示します。
+- `..` &mdash; 1 つ上のディレクトリ（`repository_root`）に移動します。
+- `/shared_macros` &mdash; ルートディレクトリ内の `shared_macros` フォルダを見つけます。
 
-To work around this limitation, use the [dbt Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud), which fully supports relative paths in `packages.yml`.
+この制限を回避するには、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) を使用します。これは、`packages.yml` 内の相対パスを完全にサポートします。

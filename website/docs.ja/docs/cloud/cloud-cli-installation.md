@@ -6,27 +6,28 @@ description: "Instructions for installing and configuring dbt CLI"
 pagination_next: "docs/cloud/configure-cloud-cli"
 ---
 
-<Constant name="cloud" /> natively supports developing using a command line (CLI), empowering team members to contribute with enhanced flexibility and collaboration. The <Constant name="cloud" /> CLI allows you to run dbt commands against your <Constant name="cloud" /> development environment from your local command line.
+<Constant name="cloud" /> はコマンドライン (CLI) を使用した開発をネイティブにサポートしており、チームメンバーはより柔軟かつ共同作業を行いながら開発に貢献できます。<Constant name="cloud" /> CLI を使用すると、ローカルコマンドラインから <Constant name="cloud" /> 開発環境に対して dbt コマンドを実行できます。
 
-dbt commands are run against <Constant name="cloud" />'s infrastructure and benefit from:
+dbt コマンドは <Constant name="cloud" /> のインフラストラクチャに対して実行され、以下の利点があります。
 
-* Secure credential storage in the <Constant name="cloud" /> platform
-* [Automatic deferral](/docs/cloud/about-cloud-develop-defer) of build artifacts to your Cloud project's production environment 
-* Speedier, lower-cost builds
-* Support for dbt Mesh ([cross-project `ref`](/docs/mesh/govern/project-dependencies))
-* Significant platform improvements, to be released over the coming months
+* <Constant name="cloud" /> プラットフォームにおける安全な認証情報ストレージ
+* ビルド成果物の Cloud プロジェクトの運用環境への [自動延期](/docs/cloud/about-cloud-develop-defer)
+* より高速で低コストのビルド
+* dbt Mesh のサポート ([プロジェクト間 `ref`](/docs/mesh/govern/project-dependencies))
+* 今後数か月以内にリリース予定のプラットフォームの大幅な改善
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-cli-overview.jpg" title="Diagram of how the dbt CLI works with dbt's infrastructure to run dbt commands from your local command line." />
 
-## Prerequisites 
-The <Constant name="cloud" /> CLI is available in all [deployment regions](/docs/cloud/about-cloud/access-regions-ip-addresses) and for both multi-tenant and single-tenant accounts.
+## 前提条件
 
-## Install dbt CLI
+<Constant name="cloud" /> CLI は、すべての [デプロイリージョン](/docs/cloud/about-cloud/access-regions-ip-addresses) およびマルチテナント アカウントとシングルテナント アカウントの両方で使用できます。
 
-You can install the <Constant name="cloud" /> CLI on the command line by using one of these methods. 
+## dbt CLI をインストールする
+
+以下のいずれかの方法で、コマンドラインから <Constant name="cloud" /> CLI をインストールできます。
 
 <details>
-<summary>View a video tutorial for a step-by-step guide to installation.</summary>
+<summary>インストールの手順を説明したビデオチュートリアルをご覧ください。</summary>
 
 <LoomVideo id="dd80828306c5432a996d4580135041b6?sid=fe1895b7-1281-4e42-9968-5f7d11768000"/>
 
@@ -36,19 +37,19 @@ You can install the <Constant name="cloud" /> CLI on the command line by using o
 
 <TabItem value="brew" label="macOS (brew)">
 
-Before you begin, make sure you have [Homebrew installed](http://brew.sh/) in your code editor or command line terminal. Refer to the [FAQs](#faqs) if your operating system runs into path conflicts. 
+始める前に、コードエディタまたはコマンドラインターミナルに[Homebrewがインストールされている](http://brew.sh/)ことを確認してください。オペレーティングシステムでパスの競合が発生した場合は、[FAQ](#faqs)を参照してください。
 
-1. Verify that you don't already have dbt Core installed by running the following command:
+1. 次のコマンドを実行して、dbt Coreがまだインストールされていないことを確認します:
   
   ```bash
   which dbt
   ```
   
-  If the output is `dbt not found`, then that confirms you don't have it installed.
+  出力が「dbt not found」の場合、インストールされていないことが確認できます。
 
 :::tip Run `pip uninstall dbt` to uninstall dbt Core
 
-If you've installed dbt Core globally in some other way, uninstall it first before proceeding:
+他の方法で dbt Core をグローバルにインストールした場合は、続行する前にまずアンインストールしてください:
 
 ```bash
 pip uninstall dbt
@@ -56,74 +57,76 @@ pip uninstall dbt
 
 :::
 
-2. Install the <Constant name="cloud_cli" /> with Homebrew:
+2. Homebrew で <Constant name="cloud_cli" /> をインストールします。
 
-   - First, remove the `dbt-labs` tap, the separate repository for packages, from Homebrew. This prevents Homebrew from installing packages from that repository:
+   - まず、パッケージ用の別リポジトリである `dbt-labs` タップを Homebrew から削除します。これにより、Homebrew がこのリポジトリからパッケージをインストールできなくなります。
       ```bash
       brew untap dbt-labs/dbt
-   -  Then, add and install the <Constant name="cloud_cli" /> as a package:
+   - 次に、<Constant name="cloud_cli" /> をパッケージとして追加してインストールします。
       ```bash
       brew tap dbt-labs/dbt-cli
       brew install dbt
       ```
-      If you have multiple taps, use `brew install dbt-labs/dbt-cli/dbt`.
+      複数のタップがある場合は、`brew install dbt-labs/dbt-cli/dbt` を使用します。
 
-3. Verify your installation by running `dbt --help` in the command line. If you see the following output, your installation is correct:
+3. コマンドラインで「dbt --help」を実行してインストールを確認してください。以下の出力が表示されれば、インストールは正しく行われています:
+
       ```bash
       The dbt CLI - an ELT tool for running SQL transformations and data models in dbt...
       ```
 
-     If you don't see this output, check that you've deactivated pyenv or venv and don't have a global dbt version installed.
+     この出力が表示されない場合は、pyenv または venv が無効になっており、グローバル dbt バージョンがインストールされていないことを確認してください。
    
-   * Note that you no longer need to run the `dbt deps` command when your environment starts. This step was previously required during initialization. However, you should still run `dbt deps` if you make any changes to your `packages.yml` file.
+   * 環境の起動時に`dbt deps`コマンドを実行する必要がなくなりました。この手順は以前は初期化時に必要でした。ただし、`packages.yml`ファイルに変更を加えた場合は、引き続き`dbt deps`を実行する必要があります。
 
-4. Clone your repository to your local computer using `git clone`. For example, to clone a GitHub repo using HTTPS format, run `git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY`.
+4. `git clone` を使用して、リポジトリをローカルコンピュータにクローンします。たとえば、HTTPS 形式を使用して GitHub リポジトリをクローンするには、`git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY` を実行します。
 
-5. After cloning your repo, [configure](/docs/cloud/configure-cloud-cli) the <Constant name="cloud_cli" /> for your <Constant name="cloud" /> project. This lets you run dbt commands like [`dbt environment show`](/reference/commands/dbt-environment) to view your <Constant name="cloud" /> configuration or `dbt compile` to compile your project and validate models and tests. You can also add, edit, and synchronize files with your repo.
+5. リポジトリをクローンしたら、<Constant name="cloud" /> プロジェクトの <Constant name="cloud_cli" /> を [configure](/docs/cloud/configure-cloud-cli) します。これにより、[`dbt environment show`](/reference/commands/dbt-environment) を使用して <Constant name="cloud" /> 構成を表示したり、`dbt compile` を使用してプロジェクトをコンパイルし、モデルとテストを検証したりといった dbt コマンドを実行できるようになります。また、リポジトリにファイルを追加、編集、同期することもできます。
 
 </TabItem>
 
 <TabItem value="windows" label="Windows (native executable)">
 
-Refer to the [FAQs](#faqs) if your operating system runs into path conflicts.
+ご使用のオペレーティング システムでパスの競合が発生した場合は、[FAQ](#faqs) を参照してください。
 
-1. Download the latest Windows release for your platform from [GitHub](https://github.com/dbt-labs/dbt-cli/releases).
+1. [GitHub](https://github.com/dbt-labs/dbt-cli/releases) から、ご使用のプラットフォーム向けの最新の Windows リリースをダウンロードします。
 
-2. Extract the `dbt.exe` executable into the same folder as your dbt project.
+2. `dbt.exe` 実行ファイルを dbt プロジェクトと同じフォルダに解凍します。
 
 :::info
 
-Advanced users can configure multiple projects to use the same <Constant name="cloud" /> CLI by:
+上級ユーザーは、以下の手順で複数のプロジェクトで同じ <Constant name="cloud" /> CLI を使用するように設定できます。
 
- 1. Placing the executable file (`.exe`) in the "Program Files" folder
- 2. [Adding it to their Windows PATH environment variable](https://medium.com/@kevinmarkvi/how-to-add-executables-to-your-path-in-windows-5ffa4ce61a53)
- 3. Saving it where needed
+1. 実行ファイル (`.exe`) を「Program Files」フォルダに配置する
+2. [Windows PATH 環境変数に追加する](https://medium.com/@kevinmarkvi/how-to-add-executables-to-your-path-in-windows-5ffa4ce61a53)
+3. 必要な場所に保存する
 
-Note that if you're using VS Code, you must restart it to pick up modified environment variables.
+VS Code を使用している場合は、変更した環境変数を反映させるために再起動する必要があることに注意してください。
 :::
 
-4. Verify your installation by running `./dbt --help` in the command line. If you see the following output, your installation is correct:
+4. コマンドラインで「./dbt --help」を実行してインストールを確認します。以下の出力が表示されれば、インストールは正しく行われています。
+
       ```bash
       The dbt CLI - an ELT tool for running SQL transformations and data models in dbt...
       ```
 
-     If you don't see this output, check that you've deactivated pyenv or venv and don't have a global dbt version installed.
+      この出力が表示されない場合は、pyenv または venv が無効化されていること、およびグローバル dbt バージョンがインストールされていないことを確認してください。
 
-   * Note that you no longer need to run the `dbt deps` command when your environment starts. This step was previously required during initialization. However, you should still run `dbt deps` if you make any changes to your `packages.yml` file.
+   * 環境の起動時に `dbt deps` コマンドを実行する必要がなくなったことに注意してください。この手順は以前は初期化時に必要でした。ただし、`packages.yml` ファイルに変更を加えた場合は、引き続き `dbt deps` を実行する必要があります。
 
-5. Clone your repository to your local computer using `git clone`. For example, to clone a GitHub repo using HTTPS format, run `git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY`.
+5. `git clone` を使用して、リポジトリをローカルコンピュータにクローンします。たとえば、HTTPS 形式を使用して GitHub リポジトリをクローンするには、`git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY` を実行します。
 
-6. After cloning your repo, [configure](/docs/cloud/configure-cloud-cli) the <Constant name="cloud_cli" /> for your <Constant name="cloud" /> project. This lets you run dbt commands like [`dbt environment show`](/reference/commands/dbt-environment) to view your <Constant name="cloud" /> configuration or `dbt compile` to compile your project and validate models and tests. You can also add, edit, and synchronize files with your repo.
+6. リポジトリをクローンしたら、<Constant name="cloud" /> プロジェクトの <Constant name="cloud_cli" /> を [configure](/docs/cloud/configure-cloud-cli) します。これにより、[`dbt environment show`](/reference/commands/dbt-environment) などの dbt コマンドを実行して <Constant name="cloud" /> の設定を確認したり、`dbt compile` を実行してプロジェクトをコンパイルし、モデルとテストを検証したりできます。また、ファイルの追加、編集、リポジトリとの同期も可能です。
 
 </TabItem>
 
 <TabItem value="linux" label="Linux (native executable)">
 
-Refer to the [FAQs](#faqs) if your operating system runs into path conflicts.
+ご使用のオペレーティング システムでパスの競合が発生した場合は、[FAQ](#faqs) を参照してください。
 
-1. Download the latest Linux release for your platform from [GitHub](https://github.com/dbt-labs/dbt-cli/releases). (Pick the file based on your CPU architecture)
+1. [GitHub](https://github.com/dbt-labs/dbt-cli/releases) から、ご使用のプラットフォーム向けの最新の Linux リリースをダウンロードします。(CPU アーキテクチャに基づいてファイルを選択してください)
 
-2. Extract the `dbt-cloud-cli` binary to the same folder as your dbt project.
+2. `dbt-cloud-cli` バイナリを dbt プロジェクトと同じフォルダに解凍します。
 
   ```bash
   tar -xf dbt_0.29.9_linux_amd64.tar.gz
@@ -132,128 +135,131 @@ Refer to the [FAQs](#faqs) if your operating system runs into path conflicts.
 
 :::info
 
-Advanced users can configure multiple projects to use the same dbt CLI executable by adding it to their PATH environment variable in their shell profile.
+上級ユーザーは、シェル プロファイルの PATH 環境変数に dbt CLI 実行可能ファイルを追加することで、複数のプロジェクトが同じ dbt CLI 実行可能ファイルを使用するように構成できます。
 
 :::
 
-3. Verify your installation by running `./dbt --help` in the command line. If you see the following output, your installation is correct:
+3. コマンドラインで「./dbt --help」を実行してインストールを確認します。以下の出力が表示されれば、インストールは正しく行われています:
+
       ```bash
       The dbt CLI - an ELT tool for running SQL transformations and data models in dbt...
       ```
 
-     If you don't see this output, check that you've deactivated pyenv or venv and don't have a global dbt version installed.
-   
-   * Note that you no longer need to run the `dbt deps` command when your environment starts. This step was previously required during initialization. However, you should still run `dbt deps` if you make any changes to your `packages.yml` file.
+     この出力が表示されない場合は、pyenv または venv が無効化されていること、およびグローバル dbt バージョンがインストールされていないことを確認してください。
 
-4. Clone your repository to your local computer using `git clone`. For example, to clone a GitHub repo using HTTPS format, run `git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY`.
+   * 環境の起動時に `dbt deps` コマンドを実行する必要がなくなったことに注意してください。この手順は以前は初期化時に必要でした。ただし、`packages.yml` ファイルに変更を加えた場合は、引き続き `dbt deps` を実行する必要があります。
 
-5. After cloning your repo, [configure](/docs/cloud/configure-cloud-cli) the <Constant name="cloud_cli" /> for your <Constant name="cloud" /> project. This lets you run dbt commands like [`dbt environment show`](/reference/commands/dbt-environment) to view your <Constant name="cloud" /> configuration or `dbt compile` to compile your project and validate models and tests. You can also add, edit, and synchronize files with your repo.
+4. `git clone` を使用して、リポジトリをローカルコンピュータにクローンします。たとえば、HTTPS 形式を使用して GitHub リポジトリをクローンするには、`git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY` を実行します。
+
+5. リポジトリをクローンしたら、<Constant name="cloud" /> プロジェクトの <Constant name="cloud_cli" /> を [configure](/docs/cloud/configure-cloud-cli) します。これにより、[`dbt environment show`](/reference/commands/dbt-environment) などの dbt コマンドを実行して <Constant name="cloud" /> の設定を確認したり、`dbt compile` を実行してプロジェクトをコンパイルし、モデルとテストを検証したりできます。また、ファイルの追加、編集、リポジトリとの同期も可能です。
 
 </TabItem>
 
 <TabItem value="pip" label="Existing dbt Core users (pip)">
 
-If you already have dbt Core installed, the <Constant name="cloud_cli" /> may conflict. Here are some considerations:
+dbt Core が既にインストールされている場合、<Constant name="cloud_cli" /> が競合する可能性があります。以下の点にご注意ください。
 
-- **Prevent conflicts** <br /> Use both the <Constant name="cloud_cli" /> and <Constant name="core" /> with `pip` and create a new virtual environment.<br /><br />
-- **Use both <Constant name="cloud_cli" /> and <Constant name="core" />with brew or native installs** <br /> If you use Homebrew, consider aliasing the <Constant name="cloud_cli" /> as "dbt-cloud" to avoid conflict. For more details, check the [FAQs](#faqs) if your operating system experiences path conflicts.<br /><br />
-- **Reverting to dbt Core from the <Constant name="cloud_cli" />** <br />
-  If you've already installed the <Constant name="cloud_cli" /> and need to switch back to dbt Core:<br />
-  - Uninstall the <Constant name="cloud_cli" /> using the command: `pip uninstall dbt`
-  - Reinstall <Constant name="core" /> using the following command, replacing "adapter_name" with the appropriate adapter name:
+- **競合を防ぐ** <br /> `pip` で <Constant name="cloud_cli" /> と <Constant name="core" /> の両方を使用し、新しい仮想環境を作成してください。<br /><br />
+- **brew またはネイティブインストールで <Constant name="cloud_cli" /> と <Constant name="core" /> の両方を使用する** <br /> Homebrew を使用する場合は、競合を回避するために <Constant name="cloud_cli" /> に「dbt-cloud」というエイリアスを設定することを検討してください。詳細については、[FAQ](#faqs) をご覧ください。オペレーティング システムでパスの競合が発生した場合は、こちらをご覧ください。<br /><br />
+- **<Constant name="cloud_cli" /> から dbt Core に戻す** <br />
+   すでに <Constant name="cloud_cli" /> をインストールしていて、dbt Core に戻す必要がある場合:<br />
+   - コマンド `pip uninstall dbt` を使用して、<Constant name="cloud_cli" /> をアンインストールします。
+   - 次のコマンドを使用して、<Constant name="core" /> を再インストールします。「adapter_name」は適切なアダプタ名に置き換えてください。
     ```shell
     python -m pip install dbt-adapter_name --force-reinstall
     ```
-    For example, if I used Snowflake as an adapter, I would run: `python -m pip install dbt-snowflake --force-reinstall`
+    たとえば、Snowflakeをアダプタとして使用した場合、次を実行します: `python -m pip install dbt-snowflake --force-reinstall`
 
 --------
 
-Before installing the <Constant name="cloud_cli" />, make sure you have Python installed and your virtual environment venv or pyenv . If you already have a Python environment configured, you can skip to the [pip installation step](#install-dbt-cloud-cli-in-pip).
+<Constant name="cloud_cli" /> をインストールする前に、Python がインストールされ、仮想環境 venv または pyenv が設定されていることを確認してください。すでに Python 環境が設定されている場合は、[pip インストール手順](#install-dbt-cloud-cli-in-pip) に進んでください。
 
-### Install a virtual environment
+### 仮想環境をインストールする
 
-We recommend using virtual environments (venv) to namespace `cloud-cli`.
+仮想環境（venv）を使用して、名前空間「cloud-cli」を設定することをお勧めします。
 
-1. Create a new virtual environment named "dbt-cloud" with this command:
+1. 次のコマンドで、「dbt-cloud」という名前の新しい仮想環境を作成します。
    ```shell
    python3 -m venv dbt-cloud
     ```
 
-2. Activate the virtual environment each time you create a shell window or session, depending on your operating system:
+2. シェルウィンドウまたはセッションを作成するたびに、仮想環境をアクティベートします。方法は、お使いのオペレーティングシステムによって異なります。
 
-   - For Mac and Linux, use: `source dbt-cloud/bin/activate`<br/>
-   - For Windows, use: `dbt-env\Scripts\activate` 
+   - Mac および Linux の場合: `source dbt-cloud/bin/activate`<br/>
+   - Windows の場合: `dbt-env\Scripts\activate`
 
-3. (Mac and Linux only) Create an alias to activate your dbt environment with every new shell window or session. You can add the following to your shell's configuration file (for example, `$HOME/.bashrc, $HOME/.zshrc`) while replacing `<PATH_TO_VIRTUAL_ENV_CONFIG>` with the path to your virtual environment configuration:
+3. (Mac および Linux のみ) 新しいシェルウィンドウまたはセッションごとに dbt 環境をアクティベートするためのエイリアスを作成します。シェルの設定ファイル (例: `$HOME/.bashrc、 $HOME/.zshrc`) に以下のコードを追加します。`<PATH_TO_VIRTUAL_ENV_CONFIG>` は、仮想環境の設定へのパスに置き換えてください:
+
    ```shell
    alias env_dbt='source <PATH_TO_VIRTUAL_ENV_CONFIG>/bin/activate'
    ```
 
-### Install dbt CLI in pip
+### pip で dbt CLI をインストールします
 
-1. (Optional) If you already have <Constant name="core" /> installed, this installation will override that package. Check your <Constant name="core" /> version in case you need to reinstall it later by running the following command :
+1. (オプション) 既に <Constant name="core" /> がインストールされている場合は、このインストールによってそのパッケージが上書きされます。後で再インストールする必要がある場合に備えて、以下のコマンドを実行して <Constant name="core" /> のバージョンを確認してください。
 
   ```bash
  dbt --version
   ```
 
-2. Make sure you're in your virtual environment and run the following command to install the <Constant name="cloud" /> CLI:
+2. 仮想環境にいることを確認し、次のコマンドを実行して <Constant name="cloud" /> CLI をインストールします。
 
   ```bash
   pip install dbt --no-cache-dir
   ```
 
-  If there are installation issues, running the command with the `--force-reinstall` argument might help:
+  インストールに問題がある場合は、`--force-reinstall` 引数を指定してコマンドを実行すると解決する可能性があります:
+
    ```bash
    pip install dbt --no-cache-dir --force-reinstall
    ``` 
 
-3. (Optional) To revert to <Constant name="core" />, first uninstall both the <Constant name="cloud" /> CLI and <Constant name="core" />. Then reinstall <Constant name="core" />.
+3. （オプション）<Constant name="core" /> に戻すには、まず <Constant name="cloud" /> CLI と <Constant name="core" /> の両方をアンインストールします。その後、<Constant name="core" /> を再インストールします。
 
   ```bash
   pip uninstall dbt-core dbt
   pip install dbt-adapter_name --force-reinstall
   ```
 
-4. Clone your repository to your local computer using `git clone`. For example, to clone a GitHub repo using HTTPS format, run `git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY`.
+4. `git clone` を使用して、リポジトリをローカルコンピュータにクローンします。たとえば、HTTPS 形式を使用して GitHub リポジトリをクローンするには、`git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY` を実行します。
 
-5. After cloning your repo, [configure](/docs/cloud/configure-cloud-cli) the <Constant name="cloud_cli" /> for your <Constant name="cloud" /> project. This lets you run dbt commands like [`dbt environment show`](/reference/commands/dbt-environment) to view your <Constant name="cloud" /> configuration or `dbt compile` to compile your project and validate models and tests. You can also add, edit, and synchronize files with your repo.
+5. リポジトリをクローンしたら、<Constant name="cloud" /> プロジェクトの <Constant name="cloud_cli" /> を [configure](/docs/cloud/configure-cloud-cli) します。これにより、[`dbt environment show`](/reference/commands/dbt-environment) を使用して <Constant name="cloud" /> 構成を表示したり、`dbt compile` を使用してプロジェクトをコンパイルし、モデルとテストを検証したりといった dbt コマンドを実行できるようになります。また、リポジトリにファイルを追加、編集、同期することもできます。
 
 </TabItem>
 
 
 </Tabs>
 
-## Update dbt CLI
+## dbt CLI を更新する
 
-The following instructions explain how to update the <Constant name="cloud_cli" /> to the latest version depending on your operating system.
+以下の手順では、お使いのオペレーティング システムに応じて、<Constant name="cloud_cli" /> を最新バージョンに更新する方法について説明します。
 
 
 <Tabs>
 
 <TabItem value="mac" label="macOS (brew)">
 
-To update the <Constant name="cloud_cli" /> run `brew update` and then `brew upgrade dbt`.
+<Constant name="cloud_cli" /> を更新するには、`brew update` を実行してから `brew upgrade dbt` を実行します。
 
 </TabItem>
 
 <TabItem value="windows" label="Windows (executable)">
 
-To update, follow the same process explained in [Windows](/docs/cloud/cloud-cli-installation?install=windows#install-dbt-cloud-cli) and replace the existing `dbt.exe` executable with the new one.
+更新するには、[Windows](/docs/cloud/cloud-cli-installation?install=windows#install-dbt-cloud-cli) で説明されているのと同じプロセスに従い、既存の `dbt.exe` 実行可能ファイルを新しいものに置き換えます。
 
 </TabItem>
 
 <TabItem value="linux" label="Linux (executable)">
 
-To update, follow the same process explained in [Linux](/docs/cloud/cloud-cli-installation?install=linux#install-dbt-cloud-cli) and replace the existing `dbt` executable with the new one.
+更新するには、[Linux](/docs/cloud/cloud-cli-installation?install=linux#install-dbt-cloud-cli) で説明されているのと同じプロセスに従い、既存の `dbt` 実行可能ファイルを新しいものに置き換えます。
 
 </TabItem>
 
 <TabItem value="existing" label="Existing dbt Core users (pip)">
 
-To update:
-- Make sure you're in your virtual environment
-- Run `python -m pip install --upgrade dbt`.
+アップデートするには：
+- 仮想環境にいることを確認してください。
+- `python -m pip install --upgrade dbt` を実行してください。
 	
 </TabItem>
 
@@ -262,59 +268,59 @@ To update:
   
 ## Considerations
 
-import CloudCliRelativePath from '/snippets/_cloud-cli-relative-path.md';
+import CloudCliRelativePath from '/snippets.ja/_cloud-cli-relative-path.md';
 
 <CloudCliRelativePath />
 
 ## FAQs
 
-<DetailsToggle alt_header="What's the difference between the dbt CLI and dbt Core?">
+<DetailsToggle alt_header="dbt CLI と dbt Core の違いは何ですか?">
 
-The <Constant name="cloud_cli" /> and <a href="https://github.com/dbt-labs/dbt-core">dbt Core</a>, an open-source project, are both command line tools that enable you to run dbt commands. 
+<Constant name="cloud_cli" /> とオープンソース プロジェクトである <a href="https://github.com/dbt-labs/dbt-core">dbt Core</a> はどちらも、dbt コマンドを実行できるコマンドライン ツールです。
 
-The key distinction is the <Constant name="cloud_cli" /> is tailored for <Constant name="cloud" />'s infrastructure and integrates with all its <a href="https://docs.getdbt.com/docs/cloud/about-cloud/dbt-cloud-features">features</a>.
-
-</DetailsToggle>
-
-<DetailsToggle alt_header="How do I run both the dbt CLI and dbt Core?">
-
-For compatibility, both the <Constant name="cloud_cli" /> and <Constant name="core" /> are invoked by running `dbt`. This can create path conflicts if your operating system selects one over the other based on your $PATH environment variable (settings).
-
-If you have <Constant name="core" /> installed locally, either:
-
-1. Install using the <code>pip3 install dbt</code> [pip](/docs/cloud/cloud-cli-installation?install=pip#install-dbt-cloud-cli) command.
-2. Install natively, ensuring you either deactivate the virtual environment containing <Constant name="core" /> or create an alias for the <Constant name="cloud_cli" />. 
-3. (Advanced users) Install natively, but modify the $PATH environment variable to correctly point to the <Constant name="cloud_cli" /> binary to use both <Constant name="cloud_cli" /> and <Constant name="core" /> together.
-
-You can always uninstall the <Constant name="cloud_cli" /> to return to using <Constant name="core" />.
+主な違いは、<Constant name="cloud_cli" /> は <Constant name="cloud" /> のインフラストラクチャに合わせてカスタマイズされており、そのすべての <a href="https://docs.getdbt.com/docs/cloud/about-cloud/dbt-cloud-features">機能</a> と統合されていることです。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="How to create an alias?">
+<DetailsToggle alt_header="dbt CLI と dbt Core の両方を実行するにはどうすればよいですか?">
 
-To create an alias for the <Constant name="cloud_cli" />: <br />
+互換性のため、`dbt` を実行すると <Constant name="cloud_cli" /> と <Constant name="core" /> の両方が呼び出されます。これにより、オペレーティング システムが $PATH 環境変数（設定）に基づいてどちらか一方を選択した場合、パスの競合が発生する可能性があります。
 
-1. Open your shell's profile configuration file. Depending on your shell and system, this could be `~/.bashrc`, `~/.bash_profile`, `~/.zshrc`, or another file.<br />
+<Constant name="core" /> がローカルにインストールされている場合は、次のいずれかを実行してください。
 
-2. Add an alias that points to the <Constant name="cloud_cli" /> binary. For example:<code>alias dbt-cloud="path_to_dbt_cloud_cli_binary</code>
-   
-   Replace <code>path_to_dbt_cloud_cli_binary</code> with the actual path to the <Constant name="cloud_cli" /> binary, which is <code>/opt/homebrew/bin/dbt</code>. With this alias, you can use the command <code>dbt-cloud</code> to invoke the <Constant name="cloud_cli" />.<br />
+1. <code>pip3 install dbt</code> [pip](/docs/cloud/cloud-cli-installation?install=pip#install-dbt-cloud-cli) コマンドを使用してインストールします。
+2. ネイティブインストールを実行し、<Constant name="core" /> を含む仮想環境を無効化するか、<Constant name="cloud_cli" /> のエイリアスを作成します。
+3. (上級ユーザー向け) ネイティブインストールを行いますが、$PATH 環境変数を <Constant name="cloud_cli" /> バイナリを正しく指定するように変更し、<Constant name="cloud_cli" /> と <Constant name="core" /> の両方を併用します。
 
-3. Save the file and then either restart your shell or run <code>source</code> on the profile file to apply the changes.
-As an example, in bash you would run: <code>source ~/.bashrc</code><br />
-
-4. Test and use the alias to run commands:<br />
-   - To run the <Constant name="cloud_cli" />, use the <code>dbt-cloud</code> command: <code>dbt-cloud command_name</code>. Replace 'command_name' with the specific dbt command you want to execute.<br />
-   - To run the dbt Core, use the <code>dbt</code> command: <code>dbt command_name</code>. Replace 'command_name' with the specific dbt command you want to execute.<br />
-
-
-This alias will allow you to use the <code>dbt-cloud</code> command to invoke the <Constant name="cloud_cli" /> while having dbt Core installed natively.
+<Constant name="cloud_cli" /> をアンインストールすれば、いつでも <Constant name="core" /> を再び使用できます。
 
 </DetailsToggle>
 
-<DetailsToggle alt_header="Why am I receiving a `Stuck session` error when trying to run a new command?">
+<DetailsToggle alt_header="エイリアスを作成するにはどうすればいいですか?">
 
-The<Constant name="cloud_cli" /> allows only one command that writes to the data warehouse at a time. If you attempt to run multiple write commands simultaneously (for example, `dbt run` and `dbt build`), you will encounter a `stuck session` error. To resolve this, cancel the specific invocation by passing its ID to the cancel command. For more information, refer to [parallel execution](/reference/dbt-commands#parallel-execution).
+<Constant name="cloud_cli" /> のエイリアスを作成するには: <br />
+
+1. シェルのプロファイル設定ファイルを開きます。シェルとシステムに応じて、`~/.bashrc`、`~/.bash_profile`、`~/.zshrc` などのファイルになります。<br />
+
+2. <Constant name="cloud_cli" /> バイナリを指すエイリアスを追加します。例: <code>alias dbt-cloud="path_to_dbt_cloud_cli_binary</code>
+
+   <code>path_to_dbt_cloud_cli_binary</code> を、<Constant name="cloud_cli" /> バイナリへの実際のパス (<code>/opt/homebrew/bin/dbt</code>) に置き換えます。このエイリアスを使用すると、コマンド <code>dbt-cloud</code> を使用して <Constant name="cloud_cli" /> を呼び出すことができます。<br />
+
+3. ファイルを保存し、シェルを再起動するか、プロファイルファイルに対して <code>source</code> を実行して変更を適用します。
+例えば、bash の場合は次のように実行します: <code>source ~/.bashrc</code><br />
+
+4. エイリアスを使用してコマンドを実行し、テストします。<br />
+   - <Constant name="cloud_cli" /> を実行するには、<code>dbt-cloud</code> コマンドを使用します。 <code>dbt-cloud command_name</code>。「command_name」は、実行する特定のdbtコマンドに置き換えてください。<br />
+   - dbt Coreを実行するには、<code>dbt</code>コマンドを使用します：<code>dbt command_name</code>。「command_name」は、実行する特定のdbtコマンドに置き換えてください。<br />
+
+
+このエイリアスを使用すると、dbt Core がネイティブにインストールされているときに、<code>dbt-cloud</code> コマンドを使用して <Constant name="cloud_cli" /> を呼び出すことができます。
+
+</DetailsToggle>
+
+<DetailsToggle alt_header="新しいコマンドを実行しようとすると、「Stuck session」エラーが表示されるのはなぜですか?">
+
+<Constant name="cloud_cli" /> では、データウェアハウスへの書き込みコマンドは一度に 1 つだけ実行できます。複数の書き込みコマンド（例: `dbt run` と `dbt build`）を同時に実行しようとすると、`stuck session` エラーが発生します。この問題を解決するには、特定の呼び出しの ID を cancel コマンドに渡してキャンセルしてください。詳細については、[並列実行](/reference/dbt-commands#parallel-execution) を参照してください。
 
 </DetailsToggle>
 

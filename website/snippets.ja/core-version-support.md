@@ -1,5 +1,4 @@
-
-- **[Active](/docs/dbt-versions/core#ongoing-patches)** &mdash; We will patch regressions, new bugs, and include fixes for older bugs / quality-of-life improvements. We implement these changes when we have high confidence that they're narrowly scoped and won't cause unintended side effects.
-- **[Critical](/docs/dbt-versions/core#ongoing-patches)** &mdash; Newer minor versions transition the previous minor version into "Critical Support" with limited "security" releases for critical security and installation fixes.
-- **[End of Life](/docs/dbt-versions/core#eol-version-support)** &mdash; Minor versions that have reached EOL no longer receive new patch releases.
-- **Deprecated** &mdash; dbt Core versions older than v1.0 are no longer maintained by dbt Labs, nor supported in dbt Cloud.
+- **[アクティブ](/docs/dbt-versions/core#ongoing-patches)** &mdash; リグレッションや新しいバグを修正し、古いバグの修正や使い勝手の向上も行います。これらの変更は、対象範囲が狭く、意図しない副作用を引き起こさないと確信できる場合に実装します。
+- **[クリティカル](/docs/dbt-versions/core#ongoing-patches)** &mdash; 新しいマイナーバージョンでは、以前のマイナーバージョンが「クリティカルサポート」に移行し、重要なセキュリティおよびインストールの修正のための限定的な「セキュリティ」リリースが提供されます。
+- **[サポート終了](/docs/dbt-versions/core#eol-version-support)** &mdash; EOL に達したマイナーバージョンには、新しいパッチリリースが提供されなくなります。
+- **非推奨** &mdash; v1.0 より古い dbt Core バージョンは、dbt Labs によってメンテナンスされなくなり、<Constant name="dbt_platform" /> でもサポートされなくなりました。
