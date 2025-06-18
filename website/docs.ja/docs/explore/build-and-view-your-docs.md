@@ -5,76 +5,76 @@ description: "Automatically generate project documentation as you run jobs."
 pagination_next: null
 ---
 
-<Constant name="cloud" /> enables you to generate documentation for your project and data platform. The documentation is automatically updated with new information after a fully successful job run, ensuring accuracy and relevance.
+<Constant name="cloud" /> を使用すると、プロジェクトとデータプラットフォームのドキュメントを生成できます。ドキュメントは、ジョブの実行が完全に成功すると新しい情報で自動的に更新されるため、正確性と関連性が確保されます。
 
-The default documentation experience in <Constant name="cloud" /> is [<Constant name="explorer" />](/docs/explore/explore-projects), available on [Starter, Enterprise, or Enterprise+ plans](https://www.getdbt.com/pricing/). Use [<Constant name="explorer" />](/docs/explore/explore-projects) to view your project's resources (such as models, tests, and metrics) and their lineage to gain a better understanding of its latest production state.
+<Constant name="cloud" /> のデフォルトのドキュメント機能は [<Constant name="explorer" />](/docs/explore/explore-projects) で、[Starter、Enterprise、または Enterprise+ プラン](https://www.getdbt.com/pricing/) で利用できます。[<Constant name="explorer" />](/docs/explore/explore-projects) を使用して、プロジェクトのリソース（モデル、テスト、メトリックなど）とその系統を表示し、最新の本番環境の状態をより深く理解できます。
 
-Refer to [documentation](/docs/build/documentation) for more configuration details.
+設定の詳細については、[ドキュメント](/docs/build/documentation) を参照してください。
 
-This shift makes [dbt Docs](#dbt-docs) a legacy documentation feature in <Constant name="cloud" />. dbt Docs is still accessible and offers basic documentation, but it doesn't offer the same speed, metadata, or visibility as <Constant name="explorer" />. dbt Docs is available to <Constant name="cloud" /> developer plans or <Constant name="core" /> users.
+この変更により、[dbt Docs](#dbt-docs) は <Constant name="cloud" /> のレガシードキュメント機能になります。 dbt Docs は引き続きアクセス可能で、基本的なドキュメントを提供していますが、<Constant name="explorer" /> と同じ速度、メタデータ、可視性は提供されていません。dbt Docs は、<Constant name="cloud" /> 開発者プランまたは <Constant name="core" /> ユーザーが利用できます。
 
-## Set up a documentation job
+## ドキュメント生成ジョブの設定
 
-<Constant name="explorer" /> uses the [metadata](/docs/explore/explore-projects#generate-metadata) generated after each job run in the production or staging environment, ensuring it always has the latest project results. To view richer metadata, you can set up documentation for a job in <Constant name="cloud" /> when you edit your job settings or create a new job.
+<Constant name="explorer" /> は、本番環境またはステージング環境でジョブを実行するたびに生成される [メタデータ](/docs/explore/explore-projects#generate-metadata) を使用することで、常に最新のプロジェクト結果を保持します。より詳細なメタデータを表示するには、ジョブ設定の編集時または新規ジョブの作成時に、<Constant name="cloud" /> でジョブのドキュメント生成を設定できます。
 
-Configure the job to [generate metadata](/docs/explore/explore-projects#generate-metadata) when it runs. If you want to view column and statistics for models, sources, and snapshots in <Constant name="explorer" />, then this step is necessary.
+ジョブ実行時に [メタデータを生成](/docs/explore/explore-projects#generate-metadata) するようにジョブを設定します。<Constant name="explorer" /> でモデル、ソース、スナップショットの列と統計情報を表示する場合は、この手順が必要です。
 
-To set up a job to generate docs:
+ドキュメント生成ジョブを設定するには：
 
-1. In the top left, click **Deploy** and select **Jobs**.
-2. Create a new job or select an existing job and click **Settings**.
-3. Under **Execution Settings**, select **Generate docs on run** and click **Save**.
+1. 左上の [**デプロイ**] をクリックし、[ジョブ**] を選択します。
+2. 新しいジョブを作成するか、既存のジョブを選択して [設定**] をクリックします。
+3. [**実行設定**] で [**実行時にドキュメントを生成**] を選択し、[**保存**] をクリックします。
    <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/documentation-job-execution-settings.png" width="100%" title="Setting up a job to generate documentation"/>
 
-*Note, for dbt Docs users you need to configure the job to generate docs when it runs, then manually link that job to your project. Proceed to [configure project documentation](#configure-project-documentation) so your project generates the documentation when this job runs.*
+*注: dbt Docs をご利用の場合は、ジョブの実行時にドキュメントを生成するように設定し、そのジョブをプロジェクトに手動でリンクする必要があります。[プロジェクト ドキュメントの設定](#configure-project-documentation)に進み、このジョブの実行時にプロジェクトがドキュメントを生成するようにしてください。*
 
-You can also add the [`dbt docs generate` command](/reference/commands/cmd-docs) to the list of commands in the job run steps. However, you can expect different outcomes when adding the command to the run steps compared to configuring a job selecting the **Generate docs on run** checkbox. 
+[`dbt docs generate` コマンド](/reference/commands/cmd-docs)をジョブ実行ステップのコマンドリストに追加することもできます。ただし、実行ステップにコマンドを追加した場合と、[**実行時にドキュメントを生成**] チェックボックスをオンにしてジョブを構成した場合とでは、結果が異なる場合があります。
 
-Review the following options and outcomes:
+以下のオプションと結果を確認してください:
 
 | Options | Outcomes |
 |--------| ------- |
-| **Select checkbox** | Select the **Generate docs on run** checkbox to automatically generate updated project docs each time your job runs. If that particular step in your job fails, the job can still be successful if all subsequent steps are successful. |
-| **Add as a run step** | Add `dbt docs generate` to the list of commands in the job run steps, in whatever order you prefer. If that particular step in your job fails, the job will fail and all subsequent steps will be skipped.   |
+| **Select checkbox** | **実行時にドキュメントを生成** チェックボックスをオンにすると、ジョブが実行されるたびに更新されたプロジェクトドキュメントが自動的に生成されます。ジョブ内の特定のステップが失敗した場合でも、後続のステップがすべて成功すればジョブ自体は成功します。 |
+| **Add as a run step** | ジョブ実行ステップのコマンドリストに「dbt docs generate」を任意の順序で追加します。ジョブ内の特定のステップが失敗した場合、ジョブは失敗し、後続のすべてのステップはスキップされます。   |
 
-:::tip Tip &mdash; Documentation-only jobs 
+:::tip ヒント - ドキュメント作成のみのジョブ
 
-To create and schedule documentation-only jobs at the end of your production jobs, add the `dbt compile` command in the **Commands** section.
+本番環境ジョブの最後にドキュメント作成のみのジョブを作成してスケジュールするには、**コマンド** セクションに `dbt compile` コマンドを追加します。
 
 :::
 
 ## dbt Docs
 
-dbt Docs, available on developer plans or dbt Core users, generates a website from your dbt project using the `dbt docs generate` command. It provides a central location to view your project's resources, such as models, tests, and lineage  &mdash; and helps you understand the data in your warehouse.
+dbt Docsは、開発者プランまたはdbt Coreユーザーでご利用いただけます。`dbt docs generate`コマンドを使用して、dbtプロジェクトからウェブサイトを生成します。モデル、テスト、リネージといったプロジェクトのリソースを一元的に確認できる場所を提供し、ウェアハウス内のデータを理解するのに役立ちます。
 
-### Configure project documentation
+### プロジェクトドキュメントの設定
 
-You configure project documentation to generate documentation when the job you set up in the previous section runs. In the project settings, specify the job that generates documentation artifacts for that project. Once you configure this setting, subsequent runs of the job will automatically include a step to generate documentation.
+前のセクションで設定したジョブの実行時にドキュメントを生成するように、プロジェクトドキュメントを設定します。プロジェクト設定で、そのプロジェクトのドキュメントアーティファクトを生成するジョブを指定します。この設定を行うと、次回以降のジョブ実行時にドキュメント生成のステップが自動的に含まれるようになります。
 
-1. From <Constant name="cloud" />, click on your account name in the left side menu and select **Account settings**.
-2. Navigate to **Projects** and select the project that needs documentation.
-3. Click **Edit**.
-4. Under **Artifacts**, select the job that should generate docs when it runs and click **Save**.
+1. <Constant name="cloud" /> の左側メニューでアカウント名をクリックし、**アカウント設定** を選択します。
+2. **プロジェクト** に移動し、ドキュメントを生成するプロジェクトを選択します。
+3. **編集** をクリックします。
+4. **アーティファクト** で、実行時にドキュメントを生成するジョブを選択し、**保存** をクリックします。
    <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/documentation-project-details.png" width="100%" title="Configuring project documentation"/>
 
-:::tip Use <Constant name="explorer" /> for a richer documentation experience
-For a richer and more interactive experience, try out [<Constant name="explorer" />](/docs/explore/explore-projects), available on [Starter, Enterprise, or Enterprise+ plans](https://www.getdbt.com/pricing/). It includes map layers of your DAG, keyword search, interacts with the <Constant name="cloud_ide" />, model performance, project recommendations, and more.
+:::tip より充実したドキュメントエクスペリエンスを実現するには、<Constant name="explorer" /> をご利用ください。
+より充実し、インタラクティブなエクスペリエンスを実現するには、[<Constant name="explorer" />](/docs/explore/explore-projects) をお試しください。[Starter、Enterprise、または Enterprise+ プラン](https://www.getdbt.com/pricing/) でご利用いただけます。DAG のマップレイヤー、キーワード検索、<Constant name="cloud_ide" /> との連携、モデルのパフォーマンス、プロジェクトの推奨事項など、さまざまな機能を備えています。
 :::
 
-### Generating documentation
+### ドキュメントの生成
 
-To generate documentation in the <Constant name="cloud_ide" />, run the `dbt docs generate` command in the **Command Bar** in the <Constant name="cloud_ide" />. This command will generate the documentation for your dbt project as it exists in development in your IDE session.
+<Constant name="cloud_ide" /> でドキュメントを生成するには、<Constant name="cloud_ide" /> の**コマンドバー** で `dbt docs generate` コマンドを実行します。このコマンドは、IDE セッションで開発中の dbt プロジェクトのドキュメントを生成します。
 
-After running `dbt docs generate` in the <Constant name="cloud_ide" />, click the icon above the file tree, to see the latest version of your documentation rendered in a new browser window.
+<Constant name="cloud_ide" /> で `dbt docs generate` コマンドを実行した後、ファイルツリーの上にあるアイコンをクリックすると、新しいブラウザウィンドウに最新バージョンのドキュメントが表示されます。
 
-### View documentation
+### ドキュメントの表示
 
-Once you set up a job to generate documentation for your project, you can click **Explore** in the navigation and then click on **dbt Docs**. Your project's documentation should open. This link will always help you find the most recent version of your project's documentation in <Constant name="cloud" />.
+プロジェクトのドキュメントを生成するジョブを設定したら、ナビゲーションで [**Explore**] をクリックし、[**dbt Docs**] をクリックします。プロジェクトのドキュメントが開きます。このリンクを使用すると、<Constant name="cloud" /> にあるプロジェクトのドキュメントの最新バージョンをいつでも見つけることができます。
 
-These generated docs always show the last fully successful run, which means that if you have any failed tasks, including tests, then you will not see changes to the docs by this run. If you don't see a fully successful run, then you won't see any changes to the documentation.
+生成されたドキュメントには、常に最後に完全に成功した実行が表示されます。つまり、テストなどのタスクが失敗した場合、今回の実行ではドキュメントの変更は表示されません。完全に成功した実行がない場合は、ドキュメントの変更は表示されません。
 
-The <Constant name="cloud_ide" /> makes it possible to view [documentation](/docs/build/documentation) for your dbt project while your code is still in development. With this workflow, you can inspect and verify what your project's generated documentation will look like before your changes are released to production.
+<Constant name="cloud_ide" /> を使用すると、コードの開発中に dbt プロジェクトの [ドキュメント](/docs/build/documentation) を表示できます。このワークフローにより、変更が本番環境にリリースされる前に、プロジェクトで生成されたドキュメントがどのように表示されるかを確認できます。
 
-## Related docs
-- [Documentation](/docs/build/documentation)
+## 関連ドキュメント
+- [ドキュメント](/docs/build/documentation)
 - [<Constant name="explorer" />](/docs/explore/explore-projects)

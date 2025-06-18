@@ -1,22 +1,22 @@
-This section explains how you can perform a job run in your deployment environment in dbt Cloud to materialize and deploy your metrics. Currently, the deployment environment is only supported.
+このセクションでは、<Constant name="cloud" /> のデプロイメント環境でジョブを実行し、メトリクスをマテリアライズしてデプロイする方法について説明します。現在、デプロイメント環境のみがサポートされています。
 
-1. Once you’ve [defined your semantic models and metrics](/guides/sl-snowflake-qs?step=10), commit and merge your metric changes in your dbt project. 
-2. In dbt Cloud, create a new [deployment environment](/docs/deploy/deploy-environments#create-a-deployment-environment) or use an existing environment on dbt 1.6 or higher.
-    * Note &mdash; Deployment environment is currently supported (_development experience coming soon_)
-3. To create a new environment, navigate to **Deploy** in the navigation menu, select **Environments**, and then select **Create new environment**.
-4. Fill in your deployment credentials with your Snowflake username and password. You can name the schema anything you want. Click **Save** to create your new production environment.
-5. [Create a new deploy job](/docs/deploy/deploy-jobs#create-and-schedule-jobs) that runs in the environment you just created. Go back to the **Deploy** menu, select **Jobs**, select **Create job**, and click **Deploy job**.
-6. Set the job to run a `dbt parse` job to parse your projects and generate a [`semantic_manifest.json` artifact](/reference/artifacts/sl-manifest) file. Although running `dbt build` isn't required, you can choose to do so if needed.
-7. Run the job by clicking the **Run now** button. Monitor the job's progress in real-time through the **Run summary** tab. 
+1. [セマンティックモデルとメトリクスを定義](/guides/sl-snowflake-qs?step=10)したら、dbt プロジェクトでメトリクスの変更をコミットしてマージします。
+2. <Constant name="cloud" /> で、新しい [デプロイメント環境](/docs/deploy/deploy-environments#create-a-deployment-environment) を作成するか、dbt 1.6 以降の既存の環境を使用します。
+* 注: デプロイメント環境は現在サポートされています (_開発エクスペリエンスは近日公開予定_)。
+3. 新しい環境を作成するには、ナビゲーション メニューで [**デプロイ**] に移動し、[**環境**] を選択してから [**新しい環境の作成**] を選択します。
+4. デプロイメント認証情報として、Snowflake のユーザー名とパスワードを入力します。スキーマには任意の名前を付けることができます。[**保存**] をクリックして、新しい本番環境を作成します。
+5. 作成した環境で実行する [新しいデプロイジョブを作成](/docs/deploy/deploy-jobs#create-and-schedule-jobs) します。[**デプロイ**] メニューに戻り、[**ジョブ**]、[**ジョブの作成**] の順に選択して、[**ジョブのデプロイ**] をクリックします。
+6. プロジェクトを解析し、[`semantic_manifest.json` アーティファクト](/reference/artifacts/sl-manifest) ファイルを生成する `dbt parse` ジョブを実行するようにジョブを設定します。`dbt build` の実行は必須ではありませんが、必要に応じて実行できます。
+7. [**今すぐ実行**] ボタンをクリックしてジョブを実行します。[**実行サマリー**] タブでジョブの進行状況をリアルタイムで監視します。
 
-    Once the job completes successfully, your dbt project, including the generated documentation, will be fully deployed and available for use in your production environment. If any issues arise, review the logs to diagnose and address any errors.
+    ジョブが正常に完了すると、生成されたドキュメントを含む dbt プロジェクトが完全にデプロイされ、本番環境で使用できるようになります。問題が発生した場合は、ログを確認してエラーを診断し、対処してください。
 
 <details>
 
-<summary>What’s happening internally?</summary>
+<summary>内部では何が起こっているのでしょうか?</summary>
 
-- Merging the code into your main branch allows dbt Cloud to pull those changes and build the definition in the manifest produced by the run. <br />
-- Re-running the job in the deployment environment helps materialize the models, which the metrics depend on, in the data platform. It also makes sure that the manifest is up to date.<br />
-- The Semantic Layer APIs pull in the most recent manifest and enables your integration to extract metadata from it.
+- コードをメインブランチにマージすると、<Constant name="cloud" /> がそれらの変更をプルし、実行によって生成されたマニフェストに定義をビルドできるようになります。<br />
+- デプロイメント環境でジョブを再実行すると、メトリクスが依存するモデルをデータプラットフォームにマテリアライズするのに役立ちます。また、マニフェストが最新であることも確認できます。<br />
+- セマンティックレイヤー API は最新のマニフェストをプルし、統合によってそこからメタデータを抽出できるようにします。
 
 </details>

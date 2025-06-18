@@ -1,3 +1,3 @@
-When you develop in dbt Cloud, you can leverage [Git](/docs/collaborate/git-version-control) to version control your code.  
+<Constant name="cloud" /> で開発する場合、[Git](/docs/cloud/git/git-version-control) を利用してコードのバージョン管理を行うことができます。
 
-To connect to a repository, you can either set up a dbt Cloud-hosted [managed repository](/docs/cloud/git/managed-repository) or directly connect to a [supported git provider](/docs/cloud/git/connect-github). Managed repositories are a great way to trial dbt without needing to create a new repository.  In the long run, it's better to connect to a supported git provider to use features like automation and [continuous integration](/docs/deploy/continuous-integration).
+リポジトリに接続するには、<Constant name="cloud" /> でホストされる [マネージドリポジトリ](/docs/cloud/git/managed-repository) を設定するか、[サポートされている Git プロバイダー](/docs/cloud/git/connect-github) に直接接続します。マネージドリポジトリは、新しいリポジトリを作成せずに dbt を試すのに最適な方法です。長期的には、自動化や [継続的インテグレーション](/docs/deploy/continuous-integration) などの機能を使用するために、サポートされている Git プロバイダーに接続することをお勧めします。

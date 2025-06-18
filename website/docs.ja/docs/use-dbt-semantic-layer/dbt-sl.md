@@ -13,7 +13,7 @@ pagination_prev: null
 
 <IntroText>
 
-The dbt Semantic Layer eliminates duplicate coding by allowing data teams to define metrics on top of existing models and automatically handling data joins.
+dbt セマンティック レイヤーは、データ チームが既存のモデルの上にメトリックを定義し、データ結合を自動的に処理できるようにすることで、重複したコーディングを排除します。
 
 </IntroText>
 

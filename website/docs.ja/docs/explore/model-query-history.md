@@ -5,55 +5,55 @@ description: "Import and auto-generate exposures from dashboards and understand 
 image: /img/docs/collaborate/dbt-explorer/model-query-queried-models.jpg
 ---
 
-# Model query history <Lifecycle status="managed,managed_plus" />
+# モデルクエリ履歴 <Lifecycle status="managed,managed_plus" />
 
 <IntroText>
-Model query history helps data teams track model usage by analyzing query logs.
+モデル クエリ履歴は、データ チームがクエリ ログを分析してモデルの使用状況を追跡するのに役立ちます。
 </IntroText>
 
-Model query history allows you to:
+モデルクエリ履歴を使用すると、次のことが可能になります。
 
-- View the count of consumption queries for a model based on the data warehouse's query logs. 
-- Provides data teams insight, so they can focus their time and infrastructure spend on the worthwhile used data products.
-- Enable analysts to find the most popular models used by other people.
+- データウェアハウスのクエリログに基づいて、モデルの使用クエリ数を表示します。
+- データチームにインサイトを提供し、時間とインフラストラクチャの支出を、価値の高いデータ製品に集中させることができます。
+- アナリストが、他のユーザーが最もよく使用しているモデルを見つけられるようにします。
 
-Model query history is powered by a single consumption query of the query log table in your data warehouse aggregated on a daily basis. 
+モデルクエリ履歴は、データウェアハウス内のクエリログテーブルに対する単一の使用クエリを毎日集計することで作成されます。
 
-<Expandable alt_header="What is a consumption query?">
+<Expandable alt_header="消費クエリとは何ですか?">
 
-Consumption query is a metric of queries in your dbt project that has used the model in a given time. It filters down to `select` statements only to gauge model consumption and excludes dbt model build and test executions.
+消費クエリとは、特定の期間に dbt プロジェクト内でモデルを使用したクエリの指標です。モデルの消費量を測定するために `select` ステートメントのみをフィルタリングし、dbt モデルのビルドとテストの実行は除外します。
 
-So for example, if `model_super_santi` was queried 10 times in the past week, it would count as having 10 consumption queries for that particular time period.
+たとえば、`model_super_santi` が過去 1 週間に 10 回クエリされた場合、その期間の消費クエリは 10 件とカウントされます。
 </Expandable>
 
-:::info Support for Snowflake (Enterprise tier or higher) and BigQuery
+:::info Snowflake（Enterprise 層以上）と BigQuery のサポート
 
-Model query history for Snowflake users is **only available for Enterprise tier or higher**. The feature also supports BigQuery. Additional platforms coming soon.
+Snowflake ユーザー向けのモデルクエリ履歴は、**Enterprise 層以上でのみ利用可能**です。この機能は BigQuery もサポートしています。その他のプラットフォームも近日中にサポート予定です。
 :::
 
-## Prerequisites
+## 前提条件
 
-To access the features, you should meet the following:
+これらの機能にアクセスするには、以下の要件を満たしている必要があります。
 
-1. You have a <Constant name="cloud" /> account on an [Enterprise-tier plan](https://www.getdbt.com/pricing/). Single-tenant accounts should contact their account representative for setup.
-2. You have set up a [production](https://docs.getdbt.com/docs/deploy/deploy-environments#set-as-production-environment) deployment environment for each project you want to explore, with at least one successful job run. 
-3. You have [admin permissions](/docs/cloud/manage-access/enterprise-permissions) in <Constant name="cloud" /> to edit project settings or production environment settings.
-4. Use Snowflake or BigQuery as your data warehouse and can enable [query history permissions](#snowflake-model-query-history) or work with an admin to do so. Support for additional data platforms coming soon.
-   - For Snowflake users: You **must** have a Snowflake Enterprise tier or higher subscription.
+1. [エンタープライズプラン](https://www.getdbt.com/pricing/)の<Constant name="cloud" />アカウントをお持ちであること。シングルテナントアカウントの場合は、設定についてアカウント担当者にお問い合わせください。
+2. 調査するプロジェクトごとに[本番環境](https://docs.getdbt.com/docs/deploy/deploy-environments#set-as-production-environment)デプロイメント環境をセットアップし、少なくとも1つのジョブ実行が成功していること。
+3. プロジェクト設定または本番環境設定を編集するための、<Constant name="cloud" />の[管理者権限](/docs/cloud/manage-access/enterprise-permissions)を持っていること。
+4. データウェアハウスとしてSnowflakeまたはBigQueryを使用し、[クエリ履歴権限](#snowflake-model-query-history)を有効にするか、管理者に依頼して有効化できます。その他のデータプラットフォームのサポートも近日中に開始予定です。
+   - Snowflakeユーザーの場合：Snowflake Enterprise以上のサブスクリプションが必要です。
 
-## Enable query history in dbt
+## dbt でクエリ履歴を有効にする
 
-To enable model query history in <Constant name="cloud" />, follow these steps:
+<Constant name="cloud" /> でモデルクエリ履歴を有効にするには、次の手順に従います。
 
-1. Navigate to **Deploy** and then **Environments**.
-2. Select the environment marked **PROD** and click **Settings**.
-3. Click **Edit** and scroll to the **Query History** section to enable the query history toggle. When it’s green and to the right, it's enabled.
-4. Click the **Test Permissions** button to validate the deployment credentials permissions are sufficient to support query history.
-5. <Constant name="cloud" /> automatically enables query history for brand new environments. If query history fails to retrieve data, <Constant name="cloud" /> automatically disables it to prevent unintended warehouse costs.
-   - If the failure is temporary (like a network timeout), <Constant name="cloud" /> may retry.
-   - If the issue is permanent (like a missing permissions), <Constant name="cloud" /> disables query history immediately.
-   
-   To re-enable it, please reach out to [dbt Support](mailto:support@getdbt.com). 
+1. **デプロイ** に移動し、**環境** を選択します。
+2. **PROD** とマークされた環境を選択し、**設定** をクリックします。
+3. **編集** をクリックし、**クエリ履歴** セクションまでスクロールして、クエリ履歴の切り替えを有効にします。緑色で右側に表示されている場合は、有効です。
+4. **権限のテスト** ボタンをクリックして、デプロイメント資格情報の権限がクエリ履歴をサポートするのに十分であることを確認します。
+5. <Constant name="cloud" /> は、新しい環境ではクエリ履歴を自動的に有効にします。クエリ履歴によるデータの取得に失敗した場合、意図しないウェアハウスコストの発生を防ぐために、<Constant name="cloud" /> はクエリ履歴を自動的に無効にします。
+   - 失敗が一時的な場合（ネットワークタイムアウトなど）、<Constant name="cloud" /> は再試行することがあります。
+   - 問題が永続的な場合（権限不足など）、<Constant name="cloud" /> はクエリ履歴を直ちに無効にします。
+
+   再度有効にするには、[dbt サポート](mailto:support@getdbt.com) までお問い合わせください。
 
 <DocCarousel slidesPerView={1}>
 
@@ -62,65 +62,65 @@ To enable model query history in <Constant name="cloud" />, follow these steps:
 
 </DocCarousel>
 
-## Credential permissions
+## 認証情報による権限
 
-This section explains the permissions and steps you need to enable and view model query history in <Constant name="explorer" />.
+このセクションでは、<Constant name="explorer" /> でモデルクエリ履歴を有効にして表示するために必要な権限と手順について説明します。
 
-The model query history feature uses the credentials in your production environment to gather metadata from your data warehouse’s query logs. This means you may need elevated permissions with the warehouse. Before making any changes to your data platform permissions, confirm the configured permissions in <Constant name="cloud" />:
+モデルクエリ履歴機能は、本番環境の認証情報を使用して、データウェアハウスのクエリログからメタデータを収集します。そのため、ウェアハウスに対する昇格された権限が必要になる場合があります。データプラットフォームの権限を変更する前に、<Constant name="cloud" /> で構成されている権限を確認してください。
 
-1. Navigate to **Deploy** and then **Environments**.
-2. Select the Environment marked **PROD** and click **Settings**.
-3. Look at the information under **Deployment credentials**. 
-   - Note: Querying query history entails warehouse costs / uses credits.
+1. 「**デプロイ**」に移動し、「**環境**」に移動します。
+2. 「**PROD**」とマークされた環境を選択し、「**設定**」をクリックします。
+3. 「**デプロイ認証情報**」の情報を確認します。
+   - 注: クエリ履歴のクエリには、ウェアハウスのコストとクレジットの使用が発生します。
 <Lightbox src="/img/docs/collaborate/dbt-explorer/model-query-credentials.jpg" width="50%" title="Confirm your deployment credentials in your environment settings page." />
 
-4. Copy or cross reference those credential permissions with the warehouse permissions and grant your user the right permissions.
+4. これらの資格情報の権限をウェアハウスの権限とコピーまたは相互参照し、ユーザーに適切な権限を付与します。
 
-#### Snowflake model query history
-     Model query history makes use of metadata tables available to [Snowflake Enterprise tier](https://docs.snowflake.com/en/user-guide/intro-editions#enterprise-edition) accounts or higher, `QUERY_HISTORY` and `ACCESS_HISTORY`. The Snowflake user in the production environment must have the `GOVERNANCE_VIEWER` permission to view the data.
-     Before enabling Model query history, your `ACCOUNTADMIN` must run the following grant statement in Snowflake to ensure for access:
+#### Snowflake モデルのクエリ履歴
+モデルクエリ履歴は、[Snowflake Enterprise レベル](https://docs.snowflake.com/en/user-guide/intro-editions#enterprise-edition) 以上のアカウントで利用可能なメタデータテーブル、`QUERY_HISTORY`、および `ACCESS_HISTORY` を使用します。本番環境の Snowflake ユーザーがデータを表示するには、`GOVERNANCE_VIEWER` 権限が必要です。
+モデルクエリ履歴を有効にする前に、`ACCOUNTADMIN` が Snowflake で次の GRANT ステートメントを実行してアクセスを許可する必要があります。
      ```sql
      GRANT DATABASE ROLE SNOWFLAKE.GOVERNANCE_VIEWER TO ROLE <YOUR_DBT_CLOUD_DEPLOYMENT_ROLE>;
      ```
-     Without this grant, model query history won't display any data. For more details, view the snowflake docs [here](https://docs.snowflake.com/en/sql-reference/account-usage#enabling-other-roles-to-use-schemas-in-the-snowflake-database). 
+この権限がないと、モデルのクエリ履歴にデータが表示されません。詳細については、Snowflakeのドキュメント（[こちら](https://docs.snowflake.com/en/sql-reference/account-usage#enabling-other-roles-to-use-schemas-in-the-snowflake-database)）をご覧ください。. 
 
-##### BigQuery model query history
-Model query history uses the metadata from the `INFORMATION_SCHEMA.JOBS` view in BigQuery. To access this, the user configured for your production environment must have the following [IAM roles](https://cloud.google.com/bigquery/docs/access-control) for your BigQuery project:
+##### BigQuery モデルクエリ履歴
+モデルクエリ履歴は、BigQuery の `INFORMATION_SCHEMA.JOBS` ビューのメタデータを使用します。このメタデータにアクセスするには、本番環境用に構成されたユーザーに、BigQuery プロジェクトに対する次の [IAM ロール](https://cloud.google.com/bigquery/docs/access-control) が付与されている必要があります。
 
        - `roles/bigquery.resourceViewer`
        - `roles/bigquery.jobs.create`
 
-## View query history in Explorer
+## エクスプローラーでクエリ履歴を表示
 
-To enhance your discovery, you can view your model query history in various locations within <Constant name="explorer" />:
-- [View from Performance charts](#view-from-performance-charts)
-* [View from Project lineage](#view-from-project-lineage)
-- [View from Model list](#view-from-model-list)
+より効果的に探索を行うために、<Constant name="explorer" /> 内のさまざまな場所でモデルのクエリ履歴を表示できます。
+- [パフォーマンスチャートから表示](#view-from-performance-charts)
+* [プロジェクト系統から表示](#view-from-project-lineage)
+- [モデルリストから表示](#view-from-model-list)
 
-### View from Performance charts
+### パフォーマンスチャートからの表示
 
-1. Navigate to <Constant name="explorer" /> by clicking on the **Explore** link in the navigation.
-2. In the main **Overview** page, click on **Performance** under the **Project details** section. Scroll down to view the **Most consumed models**.
-3. Use the dropdown menu on the right to select the desired time period, with options available for up to the past 3 months. 
+1. ナビゲーションの「**Explore**」リンクをクリックして、<Constant name="explorer" /> に移動します。
+2. メインの「**Overview**」ページで、「**Project details**」セクションの「**Performance**」をクリックします。下にスクロールして、「**Most consumption models**」を表示します。
+3. 右側のドロップダウンメニューを使用して、過去3か月までの期間を選択します。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/most-consumed-models.jpg" width="85%" title="View most consumed models on the 'Performance' page in dbt Explorer." />
 
-4. Click on a model for more details and go to the **Performance** tab.
-5. On the **Performance** tab, scroll down to the **Model performance** section. 
-6. Select the **Consumption queries** tab to view the consumption queries over a given time for that model. 
+4. 詳細を表示するにはモデルをクリックし、「**パフォーマンス**」タブに移動します。
+5. 「**パフォーマンス**」タブで、「**モデルパフォーマンス**」セクションまで下にスクロールします。
+6. 「**消費クエリ**」タブを選択すると、そのモデルの一定期間における消費クエリが表示されます。
 <Lightbox src="/img/docs/collaborate/model-consumption-queries.jpg" width="90%" title="View consumption queries over time for a given model." />
 
-### View from Project lineage
+### プロジェクト系統からの表示
 
-1. To view your model in your project lineage, go to the main **Overview page** and click on **Project lineage.**
-2. In the lower left of your lineage, click on **Lenses** and select **Consumption queries**. 
+1. プロジェクト系統でモデルを表示するには、メインの**概要ページ**に移動し、**プロジェクト系統**をクリックします。
+2. 系統の左下にある**レンズ**をクリックし、**消費クエリ**を選択します。
 <Lightbox src="/img/docs/collaborate/dbt-explorer/model-consumption-lenses.jpg" width="85%" title="View model consumption queries in your lineage using the 'Lenses' feature." />
 
-3. Your lineage should display a small red box above each model, indicating the consumption query number. The number for each model represents the model consumption over the last 30 days.
+3. 系統図の各モデルの上に、消費クエリ数を示す小さな赤いボックスが表示されます。各モデルの数字は、過去30日間のモデル消費量を表しています。
 
-### View from Model list
+### モデルリストからの表示
 
-1. To view a list of models, go to the main **Overview page**.
-2. In the left navigation, go to the **Resources** tab and click on **Models** to view the models list.
-3. You can view the consumption query count for the models and sort by most or least consumed. The consumption query number for each model represents the consumption over the last 30 days.
+1. モデルのリストを表示するには、メインの**概要ページ**に移動します。
+2. 左側のナビゲーションで**リソース**タブに移動し、**モデル**をクリックしてモデルのリストを表示します。
+3. モデルの消費クエリ数を確認し、消費量の多い順または少ない順に並べ替えることができます。各モデルの消費クエリ数は、過去30日間の消費量を表します。
 <Lightbox src="/img/docs/collaborate/dbt-explorer/model-consumption-list.jpg" width="85%" title="View models consumption in the 'Models' list page under the 'Consumption' column." />

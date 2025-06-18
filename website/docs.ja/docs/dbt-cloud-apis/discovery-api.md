@@ -5,34 +5,34 @@ pagination_next: "docs/dbt-cloud-apis/discovery-use-cases-and-examples"
 
 # About the Discovery API <Lifecycle status="managed,managed_plus" />
 
-Every time <Constant name="cloud" /> runs a project, it generates and stores information about the project. The metadata includes details about your project’s models, sources, and other nodes along with their execution results. With the <Constant name="cloud" /> Discovery API, you can query this comprehensive information to gain a better understanding of your <Term id="dag">DAG</Term> and the data it produces.
+<Constant name="cloud" /> はプロジェクトを実行するたびに、プロジェクトに関する情報を生成して保存します。メタデータには、プロジェクトのモデル、ソース、その他のノードに関する詳細情報と、それらの実行結果が含まれます。<Constant name="cloud" /> Discovery API を使用すると、この包括的な情報をクエリして、<Term id="dag">DAG</Term> とそれが生成するデータについてより深く理解することができます。
 
-By leveraging the metadata in <Constant name="cloud" />, you can create systems for data monitoring and alerting, lineage exploration, and automated reporting. This can help you improve data discovery, data quality, and pipeline operations within your organization.
+<Constant name="cloud" /> のメタデータを活用することで、データの監視とアラート、リネージの探索、自動レポート作成のためのシステムを構築できます。これにより、組織内のデータ検出、データ品質、パイプライン運用を改善できます。
 
-You can access the Discovery API through [ad hoc queries](/docs/dbt-cloud-apis/discovery-querying), custom applications, a wide range of [partner ecosystem integrations](https://www.getdbt.com/product/integrations/) (like BI/analytics, catalog and governance, and quality and observability), and by using <Constant name="cloud" /> features like [model timing](/docs/deploy/run-visibility#model-timing) and [data health tiles](/docs/explore/data-tile).
+Discovery API には、[アドホック クエリ](/docs/dbt-cloud-apis/discovery-querying)、カスタム アプリケーション、さまざまな [パートナー エコシステム統合](https://www.getdbt.com/product/integrations/) (BI/分析、カタログとガバナンス、品質と可観測性など)、および [モデル タイミング](/docs/deploy/run-visibility#model-timing) や [データ ヘルス タイル](/docs/explore/data-tile) などの <Constant name="cloud" /> 機能を使用してアクセスできます。
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/discovery-api-figure.png" width="80%" title="A rich ecosystem for integration "/>
 
-You can query the <Constant name="cloud" /> metadata:
+<Constant name="cloud" /> メタデータに対してクエリを実行できます。
 
-- At the [environment](/docs/environments-in-dbt) level for both the latest state (use the `environment` endpoint) and historical run results (use `modelByEnvironment`) of a <Constant name="cloud" /> project in production.
-- At the job level for results on a specific <Constant name="cloud" /> job run for a given resource type, like `models` or `test`.
+- [環境](/docs/environments-in-dbt) レベルでは、本番環境の <Constant name="cloud" /> プロジェクトの最新の状態（`environment` エンドポイントを使用）と過去の実行結果（`modelByEnvironment` を使用）の両方を取得できます。
+- ジョブレベルでは、`models` や `test` などの特定のリソースタイプに対して実行された特定の <Constant name="cloud" /> ジョブの結果を取得できます。
 
 <Snippet path="metadata-api-prerequisites" />
 
-## What you can use the Discovery API for
+## Discovery API の用途
 
-Click the following tabs to learn more about the API's use cases, the analysis you can do, and the results you can achieve by integrating with it.
+以下のタブをクリックすると、API のユースケース、実行可能な分析、そして API との統合によって得られる結果について詳しくご覧いただけます。
 
-To use the API directly or integrate your tool with it, refer to [Uses case and examples](/docs/dbt-cloud-apis/discovery-use-cases-and-examples) for detailed information.
+API を直接使用する場合、またはツールと統合する場合は、[ユースケースと例](/docs/dbt-cloud-apis/discovery-use-cases-and-examples) で詳細をご確認ください。
 
 <Tabs>
 
 <TabItem value="performance" label="Performance">
 
-Use the API to look at historical information like model build time to determine the health of your dbt projects. Finding inefficiencies in orchestration configurations can help decrease infrastructure costs and improve timeliness. To learn more about how to do this, refer to [Performance](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#performance).
+API を使用して、モデルビルド時間などの履歴情報を確認し、dbt プロジェクトの健全性を確認できます。オーケストレーション構成の非効率性を見つけることで、インフラストラクチャコストの削減とタイムリーさの向上につながります。その方法の詳細については、[パフォーマンス](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#performance) をご覧ください。
 
-You can use, for example, the [model timing](/docs/deploy/run-visibility#model-timing) tab to help identify and optimize bottlenecks in model builds:
+例えば、[モデルタイミング](/docs/deploy/run-visibility#model-timing) タブを使用すると、モデルビルドのボトルネックを特定して最適化できます。
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/model-timing.png" width="200%" title="Model timing visualization in dbt"/>
 
@@ -40,17 +40,17 @@ You can use, for example, the [model timing](/docs/deploy/run-visibility#model-t
 
 <TabItem value="quality" label="Quality">
 
-Use the API to determine if the data is accurate and up-to-date by monitoring test failures, source freshness, and run status. Accurate and reliable information is valuable for analytics, decisions, and monitoring to help prevent your organization from making bad decisions. To learn more about this, refer to [Quality](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#quality).
+API を使用して、テストの失敗、ソースの鮮度、実行ステータスをモニタリングすることで、データが正確かつ最新であるかどうかを判断できます。正確で信頼性の高い情報は、分析、意思決定、モニタリングに役立ち、組織が誤った意思決定を下すのを防ぎます。詳細については、[品質](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#quality) をご覧ください。
 
-When used with [webhooks](/docs/deploy/webhooks), it can also help with detecting, investigating, and alerting issues.
+[Webhook](/docs/deploy/webhooks) と併用すると、問題の検出、調査、アラート通知にも役立ちます。
 
 </TabItem>
 
 <TabItem value="discovery" label="Discovery">
 
-Use the API to find and understand dbt assets in integrated tools using information like model and metric definitions, and column information. For more details, refer to [Discovery](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#discovery).
+API を使用すると、モデルやメトリックの定義、列情報などの情報を使用して、統合ツール内の dbt アセットを検索し、理解することができます。詳細については、[Discovery](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#discovery) を参照してください。
 
-Data producers must manage and organize data for stakeholders, while data consumers need to quickly and confidently analyze data on a large scale to make informed decisions that improve business outcomes and reduce organizational overhead. The API is useful for discovery data experiences in catalogs, analytics, apps, and machine learning (ML) tools. It can help you understand the origin and meaning of datasets for your analysis.
+データ生成者は関係者のためにデータを管理および整理する必要があり、データ利用者は大規模なデータを迅速かつ確実に分析し、情報に基づいた意思決定を行うことで、ビジネス成果の向上と組織のオーバーヘッドの削減を実現する必要があります。API は、カタログ、分析、アプリ、機械学習 (ML) ツールにおけるデータ検出エクスペリエンスに役立ちます。分析に使用するデータセットの起源と意味を理解するのに役立ちます。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/example-model-details.png" width="200%" title="Data lineage produced by dbt" />
 
@@ -58,13 +58,13 @@ Data producers must manage and organize data for stakeholders, while data consum
 
 <TabItem value="governance" label="Governance">
 
-Use the API to review who developed the models and who uses them to help establish standard practices for better governance. For more details, refer to [Governance](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#governance).
+APIを使用して、モデルの開発者と使用者を確認し、ガバナンス向上のための標準的なプラクティスを確立しましょう。詳細については、[ガバナンス](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#governance)をご覧ください。
 
 </TabItem>
 
 <TabItem value="development" label="Development">
 
-Use the API to review dataset changes and uses by examining exposures, lineage, and dependencies. From the investigation, you can learn how to define and build more effective dbt projects. For more details, refer to [Development](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#development).
+APIを使用して、データセットの変更と使用状況を、エクスポージャー、リネージ、依存関係を調べることで確認できます。調査を通して、より効果的なdbtプロジェクトを定義および構築する方法を学ぶことができます。詳細については、[開発](/docs/dbt-cloud-apis/discovery-use-cases-and-examples#development)をご覧ください。
 
 
 
@@ -75,17 +75,17 @@ Use the API to review dataset changes and uses by examining exposures, lineage, 
 
 </Tabs>
 
-## Types of project state
+## プロジェクト状態の種類
 
-There are two types of [project state](/docs/dbt-cloud-apis/project-state) at the environment level that you can query the results of:
+環境レベルで結果をクエリできる [プロジェクト状態](/docs/dbt-cloud-apis/project-state) には 2 種類あります。
 
-- **Definition** &mdash; The logical state of a dbt project’s [resources](/docs/build/projects) that update when the project is changed.
-- **Applied** &mdash; The output of successful dbt DAG execution that creates or describes the state of the database (for example: `dbt run`, `dbt test`, source freshness, and so on)
+- **定義** - プロジェクトが変更されると更新される、dbt プロジェクトの [リソース](/docs/build/projects) の論理状態。
+- **適用済み** - dbt DAG 実行の成功時に出力され、データベースの状態を作成または記述します (例: `dbt run`、`dbt test`、ソースの鮮度など)。
 
-These states allow you to easily examine the difference between a model’s definition and its applied state so you can get answers to questions like, did the model run? or did the run fail? Applied models exist as a table/view in the data platform given their most recent successful run.
+これらの状態により、モデルの定義と適用済み状態の違いを簡単に調べることができ、「モデルは実行されたか？」「実行に失敗したか？」といった疑問に答えることができます。適用済みモデルは、最後に成功した実行に基づいて、データ プラットフォーム内のテーブル/ビューとして存在します。
 
-## Related docs
+## 関連ドキュメント
 
-- [Use cases and examples for the Discovery API](/docs/dbt-cloud-apis/discovery-use-cases-and-examples)
-- [Query the Discovery API](/docs/dbt-cloud-apis/discovery-querying)
-- [Schema](/docs/dbt-cloud-apis/discovery-schema-job)
+- [Discovery API のユースケースと例](/docs/dbt-cloud-apis/discovery-use-cases-and-examples)
+- [Discovery API のクエリ](/docs/dbt-cloud-apis/discovery-querying)
+- [スキーマ](/docs/dbt-cloud-apis/discovery-schema-job)

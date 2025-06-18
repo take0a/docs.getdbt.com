@@ -6,60 +6,60 @@ pagination_prev: null
 pagination_next: "docs/cloud-integrations/set-up-snowflake-native-app"
 ---
 
-# About the dbt Snowflake Native App <Lifecycle status='preview' />
+# dbt Snowflakeネイティブアプリについて <Lifecycle status='preview' />
 
-The dbt Snowflake Native App &mdash; powered by the Snowflake Native App Framework and Snowpark Container Services &mdash; extends your <Constant name="cloud" /> experience into the Snowflake user interface. You'll be able to access these three experiences with your Snowflake login: 
+dbt Snowflakeネイティブアプリは、SnowflakeネイティブアプリフレームワークとSnowparkコンテナサービスを搭載しており、<Constant name="cloud" />エクスペリエンスをSnowflakeユーザーインターフェースに拡張します。Snowflakeログインで、以下の3つのエクスペリエンスにアクセスできます。
 
-- **<Constant name="explorer" />** &mdash; An embedded version of [<Constant name="explorer" />](/docs/explore/explore-projects) 
-- **Ask dbt** &mdash; A dbt-assisted chatbot, powered by [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl), OpenAI, and Snowflake Cortex
-- **Orchestration observability** &mdash; A view into the [job run history](/docs/deploy/run-visibility) and sample code to create Snowflake tasks that trigger [deploy jobs](/docs/deploy/deploy-jobs). 
+- **<Constant name="explorer" />** - [<Constant name="explorer" />](/docs/explore/explore-projects) の埋め込みバージョン
+- **Ask dbt** - [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl)、OpenAI、Snowflake Cortexを搭載したdbt支援チャットボット
+- **オーケストレーションの可観測性** - [ジョブ実行履歴](/docs/deploy/run-visibility)のビューと、[デプロイジョブ](/docs/deploy/deploy-jobs)をトリガーするSnowflakeタスクを作成するためのサンプルコード。
 
-These experiences enable you to extend what's been built with <Constant name="cloud" /> to users who have traditionally worked downstream from the dbt project, such as BI analysts and technical stakeholders. 
+これらのエクスペリエンスにより、<Constant name="cloud" />で構築された機能を、従来dbtプロジェクトの下流で作業してきたBIアナリストや技術関係者などのユーザーに拡張できます。
 
-For installation instructions, refer to [Set up the dbt Snowflake Native App](/docs/cloud-integrations/set-up-snowflake-native-app).
+インストール手順については、[dbt Snowflakeネイティブアプリのセットアップ](/docs/cloud-integrations/set-up-snowflake-native-app)を参照してください。
 
-## Architecture
+## アーキテクチャ
 
-There are three tools connected to the operation of the dbt Snowflake Native App:
+dbt Snowflakeネイティブアプリの動作に関連するツールは3つあります。
 
 | Tool                               | Description |
 |------------------------------------|-------------|
-| Consumer’s Snowflake account       | The location of where the Native App is installed, powered by Snowpark Container Services. <br /><br /> The Native App makes calls to the <Constant name="cloud" /> APIs and Datadog APIs (for logging) using [Snowflake's external network access](https://docs.snowflake.com/en/developer-guide/external-network-access/external-network-access-overview). <br /><br />To power the **Ask dbt** chatbot, the <Constant name="semantic_layer" /> accesses the Cortex LLM to execute queries and generate text based on the prompt. This is configured when the user sets up the <Constant name="semantic_layer" /> environment. | 
-| dbt product Snowflake account | The location of where the Native App application package is hosted and then distributed into the consumer account. <br /><br />The consumer's event table is shared to this account for application monitoring and logging. |
-| Consumer’s <Constant name="cloud" /> account       | The Native App interacts with the <Constant name="cloud" /> APIs for metadata and processing <Constant name="semantic_layer" /> queries to power the Native App experiences. <br /> <br /> The <Constant name="cloud" /> account also calls the consumer Snowflake account to utilize the warehouse to execute dbt queries for orchestration and the Cortex LLM Arctic to power the **Ask dbt** chatbot. |
+| 消費者の Snowflake アカウント | Snowpark Container Services を利用したネイティブアプリがインストールされている場所です。<br /><br />ネイティブアプリは、[Snowflake の外部ネットワーク アクセス](https://docs.snowflake.com/en/developer-guide/external-network-access/external-network-access-overview) を使用して、<Constant name="cloud" /> API と Datadog API (ログ記録用) を呼び出します。<br /><br />**Ask dbt** チャットボットを実行するために、<Constant name="semantic_layer" /> は Cortex LLM にアクセスしてクエリを実行し、プロンプトに基づいてテキストを生成します。これは、ユーザーが <Constant name="semantic_layer" /> 環境をセットアップするときに構成されます。|
+| dbt 製品 Snowflake アカウント | ネイティブ アプリ アプリケーション パッケージがホストされ、コンシューマー アカウントに配布される場所です。<br /><br />コンシューマーのイベント テーブルは、アプリケーションの監視とログ記録のためにこのアカウントと共有されます。 |
+| 消費者の <Constant name="cloud" /> アカウント | ネイティブ アプリは、メタデータの <Constant name="cloud" /> API と対話し、<Constant name="semantic_layer" /> クエリを処理して、ネイティブ アプリのエクスペリエンスを強化します。<br /> <br /> また、<Constant name="cloud" /> アカウントは、消費者の Snowflake アカウントを呼び出して、ウェアハウスを利用してオーケストレーション用の dbt クエリを実行し、Cortex LLM Arctic を使用して **Ask dbt** チャットボットを強化します。 |
 
 The following diagram provides an illustration of the architecture:
 
 <Lightbox src="/img/docs/cloud-integrations/architecture-dbt-snowflake-native-app.png" title="Architecture of dbt and Snowflake integration"/>
 
 
-## Access
+## アクセス
 
-Log in to the dbt Snowflake Native App using your regular Snowflake login authentication method. The Snowflake user must have a corresponding <Constant name="cloud" /> user with a _[developer license](/docs/cloud/manage-access/seats-and-users)_. Previously, this wasn't a requirement during the feature [Preview](/docs/dbt-versions/product-lifecycles#dbt-cloud). 
+通常のSnowflakeログイン認証方法を使用して、dbt Snowflakeネイティブアプリにログインしてください。Snowflakeユーザーには、_[開発者ライセンス](/docs/cloud/manage-access/seats-and-users)_を持つ対応する<Constant name="cloud" />ユーザーがいる必要があります。以前の機能[プレビュー](/docs/dbt-versions/product-lifecycles#dbt-cloud)では、これは必須ではありませんでした。
 
-If your Snowflake Native App is already configured, you will be prompted to [link credentials](#link-credentials) the next time you access <Constant name="cloud" /> from the app. This is a one-time process.
+Snowflakeネイティブアプリが既に構成されている場合は、アプリから<Constant name="cloud" />に次回アクセスする際に[認証情報のリンク](#link-credentials)を求めるメッセージが表示されます。これは1回限りのプロセスです。
 
-## Procurement
-The dbt Snowflake Native App is available on the [Snowflake Marketplace](https://app.snowflake.com/marketplace/listing/GZTYZSRT2UA/dbt-labs-dbt). Purchasing it includes access to the Native App and a <Constant name="cloud" /> account that's on the Enterprise-tier plan. Existing <Constant name="cloud" /> Enterprise customers can also access it. If interested, contact your Enterprise account manager.
+## 調達
+dbt Snowflakeネイティブアプリは、[Snowflakeマーケットプレイス](https://app.snowflake.com/marketplace/listing/GZTYZSRT2UA/dbt-labs-dbt)から入手できます。ご購入いただくと、ネイティブアプリへのアクセスと、Enterpriseプランの<Constant name="cloud" />アカウントが付与されます。既存の<Constant name="cloud" /> Enterpriseのお客様もご利用いただけます。ご興味をお持ちの場合は、Enterpriseアカウントマネージャーまでお問い合わせください。
 
-If you're interested, please [contact us](mailto:sales_snowflake_marketplace@dbtlabs.com) for more information.
+ご興味をお持ちいただけましたら、詳細について[お問い合わせ](mailto:sales_snowflake_marketplace@dbtlabs.com)までご連絡ください。
 
-## Support
-If you have any questions about the dbt Snowflake Native App, you may [contact our Support team](mailto:dbt-snowflake-marketplace@dbtlabs.com) for help. Please provide information about your installation of the Native App, including your <Constant name="cloud" /> account ID and Snowflake account identifier. 
+## サポート
+dbt Snowflakeネイティブアプリについてご質問がある場合は、[サポートチーム](mailto:dbt-snowflake-marketplace@dbtlabs.com)までお問い合わせください。ネイティブアプリのインストールに関する情報（<Constant name="cloud" /> アカウントIDとSnowflakeアカウントIDなど）をご提供ください。
 
-## Limitations
-- The Native app does not support <Constant name="cloud" /> accounts with [IP Restrictions](/docs/cloud/secure/ip-restrictions) enabled. 
+## 制限事項
+- ネイティブアプリは、[IP制限](/docs/cloud/secure/ip-restrictions)が有効になっている <Constant name="cloud" /> アカウントをサポートしません。
 
-## Link credentials
+## 認証情報のリンク
 
-Every Snowflake user accessing the Native app must also have <Constant name="cloud" /> account access with a [developer or read-only license](/docs/cloud/manage-access/seats-and-users). Feature access will be dependent on their <Constant name="cloud" /> license type.
+ネイティブアプリにアクセスするすべてのSnowflakeユーザーは、[開発者ライセンスまたは読み取り専用ライセンス](/docs/cloud/manage-access/seats-and-users)を持つ<Constant name="cloud" />アカウントへのアクセス権も必要です。機能へのアクセスは、<Constant name="cloud" />ライセンスの種類によって異なります。
 
-For existing accounts with the Snowflake Native App configured, users will be prompted to authenticate with <Constant name="cloud" /> the next time they log in. This is a one-time process if they have a user in <Constant name="cloud" />. If they don’t have a <Constant name="cloud" /> user, they will be denied access, and an admin will need to [create one](/docs/cloud/manage-access/invite-users). 
+Snowflakeネイティブアプリが設定されている既存のアカウントの場合、ユーザーは次回ログイン時に<Constant name="cloud" />で認証するよう求められます。<Constant name="cloud" />にユーザーが登録されている場合、これは1回限りのプロセスです。<Constant name="cloud" />ユーザーが登録されていない場合はアクセスが拒否され、管理者が[ユーザーを作成](/docs/cloud/manage-access/invite-users)する必要があります。
 
-1. When you attempt to access the <Constant name="cloud" /> platform from the Snowflake Native App, you will be prompted to link your account.
+1. Snowflakeネイティブアプリから<Constant name="cloud" />プラットフォームにアクセスしようとすると、アカウントのリンクを求めるメッセージが表示されます。
 
 <Lightbox src="/img/docs/dbt-cloud/snowflake-link-account-prompt.png" width="90%" title="The Snowflake Native App prompt to link accounts" />
 
-2. Click **Link account** and you will be prompted for your <Constant name="cloud" /> credentials. 
+2. **アカウントをリンク** をクリックすると、<Constant name="cloud" /> の資格情報の入力を求められます。
 
 <Lightbox src="/img/docs/dbt-cloud/snowflake-link-dbt-cloud.png" width="90%" title="The link accounts prompt" />

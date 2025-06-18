@@ -1,8 +1,8 @@
 <Snippet path="available-git-providers" />
 
-To set up a managed repository:
+マネージドリポジトリを設定するには：
 
-1. Under "Setup a repository", select **Managed**.
-2. Type a name for your repo such as `bbaggins-dbt-quickstart`
-3. Click **Create**. It will take a few seconds for your repository to be created and imported.
-4. Once you see the "Successfully imported repository," click **Continue**.
+1. 「リポジトリの設定」で「**マネージド**」を選択します。
+2. リポジトリの名前（例：`bbaggins-dbt-quickstart`）を入力します。
+3. 「**作成**」をクリックします。リポジトリの作成とインポートには数秒かかります。
+4. 「リポジトリのインポートに成功しました」というメッセージが表示されたら、「**続行**」をクリックします。

@@ -6,7 +6,7 @@ description: "Learn about the performance of your models so you can make improve
 
 # Model performance <Lifecycle status="managed,managed_plus" />
 
-<Constant name="explorer" /> provides metadata on <Constant name="cloud" /> runs for in-depth model performance and quality analysis. This feature assists in reducing infrastructure costs and saving time for data teams by highlighting where to fine-tune projects and deployments &mdash; such as model refactoring or job configuration adjustments.
+<Constant name="explorer" /> は、<Constant name="cloud" /> 実行に関するメタデータを提供し、詳細なモデルパフォーマンスと品質分析を可能にします。この機能は、モデルのリファクタリングやジョブ設定の調整など、プロジェクトやデプロイメントの微調整が必​​要な箇所をハイライトすることで、インフラストラクチャコストの削減とデータチームの時間節約に役立ちます。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/explorer-model-performance.gif" width="100%" title="Overview of Performance page navigation."/>
 
@@ -14,30 +14,30 @@ import ExplorerCourse from '/snippets/_explorer-course-link.md';
 
 <ExplorerCourse />
 
-## The Performance overview page 
+## パフォーマンス概要ページ
 
-You can pinpoint areas for performance enhancement by using the Performance overview page. This page presents a comprehensive analysis across all project models and displays the longest-running models, those most frequently executed, and the ones with the highest failure rates during runs/tests. Data can be segmented by environment and job type which can offer insights into:
+パフォーマンス概要ページを使用すると、パフォーマンス改善が必要な領域を特定できます。このページでは、すべてのプロジェクトモデルを包括的に分析し、実行時間が最も長いモデル、最も頻繁に実行されるモデル、実行/テスト中に失敗率が最も高いモデルを表示します。データは環境とジョブタイプ別にセグメント化できるため、以下の点に関する洞察が得られます。
 
-- Most executed models (total count).
-- Models with the longest execution time (average duration).
-- Models with the most failures, detailing run failures (percentage and count) and test failures (percentage and count).
+- 最も実行されたモデル（合計数）。
+- 実行時間が最も長いモデル（平均所要時間）。
+- 失敗が最も多いモデル。実行失敗（割合と件数）とテスト失敗（割合と件数）の詳細。
 
-Each data point links to individual models in <Constant name="explorer" />. 
+各データポイントは、<Constant name="explorer" /> 内の個々のモデルにリンクされています。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/example-performance-overview-page.png" width="90%" title="Example of Performance overview page"/>
 
-You can view historical metadata for up to the past three months. Select the time horizon using the filter, which defaults to a two-week lookback.
+過去3か月までのメタデータ履歴を表示できます。フィルターを使用して期間を選択してください。デフォルトでは2週間前まで遡って表示されます。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/ex-2-week-default.png" width="55%" title="Example of dropdown"/>
 
-## The Model performance tab
+## モデルパフォーマンスタブ
 
-You can view trends in execution times, counts, and failures by using the Model performance tab for historical performance analysis. Daily execution data includes:
+モデルパフォーマンスタブを使用して、過去のパフォーマンス分析を行うことで、実行時間、実行回数、失敗回数の傾向を確認できます。日次実行データには以下が含まれます。
 
-- Average model execution time.
-- Model execution counts, including failures/errors (total sum).
+- モデルの平均実行時間
+- モデルの実行回数（失敗/エラーを含む、合計）
 
-Clicking on a data point reveals a table listing all job runs for that day, with each row providing a direct link to the details of a specific run.
+データポイントをクリックすると、その日のすべてのジョブ実行がリストされた表が表示されます。各行には、特定の実行の詳細への直接リンクがあります。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/example-model-performance-tab.png" title="Example of the Model performance tab"/> 
 

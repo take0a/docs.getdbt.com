@@ -9,40 +9,40 @@ image: /img/docs/dbt-insights/insights-chart.jpg
 # About dbt Insights <Lifecycle status="preview,managed,managed_plus" />
 
 <IntroText>
-Learn how to query data with <Constant name="query_page" /> and view documentation in <Constant name="explorer" />.
+<Constant name="query_page" /> を使用してデータをクエリする方法と、<Constant name="explorer" /> でドキュメントを表示する方法を学習します。
 </IntroText>
 
 :::tip
-<Constant name="query_page" /> is available in private beta to Enterprise accounts. To join, please reach out to your account manager.
+<Constant name="query_page" /> は、Enterprise アカウント向けにプライベートベータ版としてご利用いただけます。ご参加いただくには、担当のアカウントマネージャーまでお問い合わせください。
 :::
 
-<Constant name="query_page" /> in <Constant name="cloud" /> empowers users to seamlessly explore and query data with an intuitive, context-rich interface. It bridges technical and business users by combining metadata, documentation, AI-assisted tools, and powerful querying capabilities into one unified experience. 
+<Constant name="cloud" /> の <Constant name="query_page" /> は、直感的でコンテキストリッチなインターフェースを通じて、ユーザーがシームレスにデータを探索およびクエリできるようにします。メタデータ、ドキュメント、AI支援ツール、そして強力なクエリ機能を1つの統合エクスペリエンスに統合することで、技術ユーザーとビジネスユーザーの橋渡しを実現します。
 
-<Constant name="query_page" /> in <Constant name="cloud" /> integrates with [<Constant name="explorer" />](/docs/explore/explore-projects), [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud), [<Constant name="visual_editor" />](/docs/cloud/canvas), [<Constant name="copilot" />](/docs/cloud/dbt-copilot), and [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) to make it easier for you to perform exploratory data analysis, leverage AI-assisted tools, make faster decisions, and collaborate across teams.
+<Constant name="cloud" /> の <Constant name="query_page" /> は、[<Constant name="explorer" />](/docs/explore/explore-projects)、[<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud)、[<Constant name="visual_editor" />](/docs/cloud/canvas)、[<Constant name="copilot" />](/docs/cloud/dbt-copilot)、[<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) と統合され、探索的データ分析の実行、AI 支援ツールの活用、迅速な意思決定、チーム間のコラボレーションが容易になります。
 
 <Lightbox src="/img/docs/dbt-insights/insights-main.gif" title="Overview of the dbt Insights and its features" />
 
-## Key benefits
+## 主なメリット
 
-Key benefits include:
-- Quickly write, run, and iterate on SQL queries with tools like syntax highlighting, tabbed editors, and query history.
-- Leverage dbt metadata, trust signals, and lineage from <Constant name="explorer" /> for informed query construction.
-- Make data accessible to users of varied technical skill levels with SQL, <Constant name="semantic_layer" /> queries, and visual tools.
-- Use <Constant name="copilot" />'s AI-assistance to generate or edit SQL queries, descriptions, and more.
+主なメリットは次のとおりです。
+- 構文のハイライト表示、タブ付きエディター、クエリ履歴などのツールを使用して、SQLクエリを迅速に作成、実行、反復処理できます。
+- <Constant name="explorer" /> の dbt メタデータ、信頼シグナル、リネージを活用して、情報に基づいたクエリを構築できます。
+- SQL、<Constant name="semantic_layer" /> クエリ、ビジュアルツールを活用して、さまざまな技術スキルレベルのユーザーがデータにアクセスできるようにします。
+- <Constant name="copilot" /> の AI アシスタンスを使用して、SQLクエリや説明などを生成または編集できます。
 
-Some example use cases include:
-- Analysts can quickly construct queries to analyze sales performance metrics across regions and view results.
-- All users have a rich development experience powered by <Constant name="explorer" />'s end-to-end exploration experience.
+ユースケースの例は次のとおりです。
+- アナリストは、地域全体の販売パフォーマンス指標を分析し、結果を表示するためのクエリを迅速に作成できます。
+- すべてのユーザーは、<Constant name="explorer" /> のエンドツーエンドの探索エクスペリエンスによって、充実した開発エクスペリエンスを享受できます。
 
-## Prerequisites 
+## 前提条件
 
-- Be on a <Constant name="cloud" /> [Enterprise-tier](https://www.getdbt.com/pricing) plan &mdash; [book a demo](https://www.getdbt.com/contact) to learn more about <Constant name="query_page" />.
-- Available on all [tenant](/docs/cloud/about-cloud/tenancy) configurations. 
-- Have a <Constant name="cloud" /> [developer license](/docs/cloud/manage-access/seats-and-users) with access to <Constant name="query_page" />.
-- Configured [developer credentials](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud#get-started-with-the-cloud-ide).
-- Your production and development [environments](/docs/dbt-cloud-environments) are on <Constant name="cloud" />’s ‘Latest’ [release track](/docs/dbt-versions/cloud-release-tracks) or a supported dbt version.
-- Use a supported data platfrom: Snowflake, BigQuery, Databricks, Redshift, or Postgres.
-	- Single sign-on (SSO) for development user accounts is supported, however SSO for production credentials is not yet supported.
-- (Optional) &mdash; To query [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) metrics from the <Constant name="query_page" />, you must also:
-  - [Configure](/docs/use-dbt-semantic-layer/setup-sl) the <Constant name="semantic_layer" /> for your dbt project.
-  - Have a successful job run in the environment where you configured the <Constant name="semantic_layer" />. 
+- <Constant name="cloud" /> [エンタープライズ層](https://www.getdbt.com/pricing) プランをご利用であること。<Constant name="query_page" /> の詳細については、[デモを予約](https://www.getdbt.com/contact) してください。
+- すべての [テナント](/docs/cloud/about-cloud/tenancy) 構成で利用可能です。
+- <Constant name="cloud" /> [開発者ライセンス](/docs/cloud/manage-access/seats-and-users) を保有し、<Constant name="query_page" /> にアクセスできること。
+- [開発者認証情報](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud#get-started-with-the-cloud-ide) を設定済みであること。
+- 本番環境と開発環境が <Constant name="cloud" /> の「最新」の [リリース トラック](/docs/dbt-versions/cloud-release-tracks) またはサポートされている dbt バージョンであること。
+- サポートされているデータ プラットフォーム (Snowflake、BigQuery、Databricks、Redshift、または Postgres) を使用してください。
+  - 開発ユーザー アカウントのシングル サインオン (SSO) はサポートされていますが、本番環境の資格情報の SSO はまだサポートされていません。
+- (オプション) &mdash; <Constant name="query_page" /> から [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) メトリクスをクエリするには、次の操作も行う必要があります。
+  - dbt プロジェクトに対して <Constant name="semantic_layer" /> を [構成](/docs/use-dbt-semantic-layer/setup-sl) します。
+  - <Constant name="semantic_layer" /> を構成した環境でジョブが正常に実行されるようにします。

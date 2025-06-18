@@ -1,38 +1,38 @@
 ---
-title: "Use cases and examples for the Discovery API"
+title: "Discovery API のユースケースと例"
 sidebar_label: "Uses and examples"
 ---
 
-With the Discovery API, you can query the metadata in <Constant name="cloud" /> to learn more about your dbt deployments and the data it generates to analyze them and make improvements.
+Discovery API を使用すると、<Constant name="cloud" /> 内のメタデータをクエリして、dbt デプロイメントとそのデプロイメントで生成されるデータの詳細を把握し、分析して改善に役立てることができます。
 
-You can use the API in a variety of ways to get answers to your business questions. Below describes some of the uses of the API and is meant to give you an idea of the questions this API can help you answer.
+この API は、ビジネス上の疑問に対する答えを得るためにさまざまな方法で使用できます。以下では、API の用途をいくつか紹介し、この API がどのような疑問の解決に役立つかをご紹介します。
 
 | Use case | Outcome | <div style={{width:'400px'}}>Example questions</div> |
 | --- | --- | --- |
-| [Performance](#performance) | Identify inefficiencies in pipeline execution to reduce infrastructure costs and improve timeliness. | <ul><li>What’s the latest status of each model?</li> <li>Do I need to run this model?</li><li>How long did my DAG take to run?</li> </ul>|
-| [Quality](#quality) | Monitor data source freshness and test results to resolve issues and drive trust in data. | <ul><li>How fresh are my data sources?</li><li>Which tests and models failed?</li><li>What’s my project’s test coverage?</li></ul>  |
-| [Discovery](#discovery) | Find and understand relevant datasets and semantic nodes with rich context and metadata. | <ul><li>What do these tables and columns mean?</li><li>What’s the full data lineage?</li><li>Which metrics can I query?</li> </ul> |
-| [Governance](#governance) | Audit data development and facilitate collaboration within and between teams. | <ul><li>Who is responsible for this model?</li><li>How do I contact the model’s owner?</li><li>Who can use this model?</li></ul>|
-| [Development](#development) | Understand dataset changes and usage and gauge impacts to inform project definition. | <ul><li>How is this metric used in BI tools?</li><li>Which nodes depend on this data source?</li><li>How has a model changed? What impact?</li> </ul>|
+| [Performance](#performance) | パイプライン実行の非効率性を特定して、インフラストラクチャ コストを削減し、適時性を向上させます。 | <ul><li>各モデルの最新のステータスは何ですか?</li> <li>このモデルを実行する必要がありますか?</li><li>DAG の実行にはどのくらいの時間がかかりましたか?</li> </ul>|
+| [Quality](#quality) | データ ソースの鮮度とテスト結果を監視して問題を解決し、データの信頼性を高めます。 | <ul><li>データ ソースはどれくらい新鮮ですか?</li><li>どのテストとモデルが失敗しましたか?</li><li>プロジェクトのテスト範囲はどの程度ですか?</li></ul> |
+| [Discovery](#discovery) | 豊富なコンテキストとメタデータを使用して、関連するデータセットとセマンティック ノードを見つけて理解します。 | <ul><li>これらのテーブルと列は何を意味しますか?</li><li>完全なデータ系統とは何ですか?</li><li>どのメトリックをクエリできますか?</li> </ul> |
+| [Governance](#governance) | データ開発を監査し、チーム内およびチーム間のコラボレーションを促進します。 | <ul><li>このモデルの責任者は誰ですか?</li><li>モデルの所有者に連絡するにはどうすればよいですか?</li><li>このモデルを使用できるのは誰ですか?</li></ul>|
+| [Development](#development) | データセットの変更と使用状況を理解し、影響度を測定してプロジェクト定義に役立てます。 | <ul><li>このメトリックは BI ツールでどのように使用されますか?</li><li>どのノードがこのデータ ソースに依存していますか?</li><li>モデルはどのように変更されましたか?どのような影響がありますか?</li> </ul>|
 
-## Performance
+## パフォーマンス
 
-You can use the Discovery API to identify inefficiencies in pipeline execution to reduce infrastructure costs and improve timeliness. Below are example questions and queries you can run.
+Discovery API を使用すると、パイプライン実行における非効率性を特定し、インフラストラクチャコストを削減し、タイムリーさを向上させることができます。以下に、実行可能な質問とクエリの例を示します。
 
-For performance use cases, people typically query the historical or latest applied state across any part of the DAG (for example, models) using the `environment`, `modelByEnvironment`, or job-level endpoints.
+パフォーマンス向上のユースケースでは、通常、`environment`、`modelByEnvironment`、またはジョブレベルのエンドポイントを使用して、DAG の任意の部分（モデルなど）の履歴または最新の適用状態をクエリします。
 
-### How long did each model take to run?
+### 各モデルの実行にはどれくらいの時間がかかりましたか？
 
-It’s helpful to understand how long it takes to build models (tables) and tests to execute during a dbt run. Longer model build times result in higher infrastructure costs and fresh data arriving later to stakeholders. Analyses like these can be in observability tools or ad-hoc queries, like in a notebook.
+dbt 実行中にモデル（テーブル）の構築とテストの実行にかかる時間を把握しておくことは有益です。モデルの構築時間が長くなると、インフラストラクチャのコストが増加し、関係者に最新のデータが届くのが遅くなります。このような分析は、オブザーバビリティツールやノートブックなどのアドホッククエリで実行できます。
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/model-timing.png" width="200%" title="Model timing visualization in dbt"/>
 
 <details>
-<summary>Example query with code</summary>
+<summary>コード付きクエリの例</summary>
 
-Data teams can monitor the performance of their models, identify bottlenecks, and optimize the overall data pipeline by fetching execution details like `executionTime` and `runElapsedTime`:
+データチームは、`executionTime` や `runElapsedTime` などの実行詳細を取得することで、モデルのパフォーマンスを監視し、ボトルネックを特定し、データパイプライン全体を最適化できます。
 
-1. Use latest state environment-level API to get a list of all executed models and their execution time. Then, sort the models by `executionTime` in descending order.
+1. 最新の状態を示す環境レベル API を使用して、実行されたすべてのモデルとその実行時間のリストを取得します。次に、`executionTime` の降順でモデルを並べ替えます。
 
 ```graphql
 query AppliedModels($environmentId: BigInt!, $first: Int!) {
@@ -57,7 +57,7 @@ query AppliedModels($environmentId: BigInt!, $first: Int!) {
 }
 ```
 
-2. Get the most recent 20 run results for the longest running model. Review the results of the model across runs or you can go to the job/run or commit itself to investigate further.
+2. 最も実行時間が長いモデルの直近20回の実行結果を取得します。実行全体にわたるモデルの結果を確認するか、ジョブ/実行またはコミット自体に移動してさらに調査することもできます。
 
 ```graphql
 query ModelHistoricalRuns(
@@ -85,7 +85,7 @@ query ModelHistoricalRuns(
 }
 ```
 
-3. Use the query results to plot a graph of the longest running model’s historical run time and execution time trends.
+3. クエリ結果を使用して、最も長く実行されているモデルの履歴実行時間と実行時間の傾向のグラフをプロットします。
 
 <!-- TODO: TEST THIS PYTHON CODE WORKS WITH NEW API AND DOCS! -->
 ```python
@@ -156,7 +156,7 @@ plt.title(model_df['name'].iloc[0]+" Execution Time")
 plt.show()
 ```
 
-Plotting examples:
+プロット例:
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/plot-of-runelapsedtime.png" width="80%" title="The plot of runElapsedTime over time"/>
 
@@ -165,14 +165,14 @@ Plotting examples:
 
 </details>
 
-### What’s the latest state of each model?
+### 各モデルの最新の状態はどうなっていますか？
 
-The Discovery API provides information about the applied state of models and how they arrived in that state. You can retrieve the status information from the most recent run and most recent successful run (execution) from the `environment` endpoint and dive into historical runs using job-based and `modelByEnvironment` endpoints.
+Discovery API は、モデルの適用状態と、その状態に至るまでの経緯に関する情報を提供します。`environment` エンドポイントから最新の実行と最新の成功した実行（実行）のステータス情報を取得できます。また、ジョブベースおよび `modelByEnvironment` エンドポイントを使用して、過去の実行履歴を詳しく調べることができます。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
-The API returns full identifier information (`database.schema.alias`) and the `executionInfo` for both the most recent run and most recent successful run from the database:
+API は、データベースからの最新の実行と最新の成功した実行の両方について、完全な識別子情報 (`database.schema.alias`) と `executionInfo` を返します:
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -208,12 +208,12 @@ query ($environmentId: BigInt!, $first: Int!) {
 
 </details>
 
-### What happened with my job run?
+### ジョブ実行で何が起こりましたか？
 
-You can query the metadata at the job level to review results for specific runs. This is helpful for historical analysis of deployment performance or optimizing particular jobs.
+ジョブレベルでメタデータをクエリして、特定の実行結果を確認できます。これは、デプロイメントパフォーマンスの履歴分析や特定のジョブの最適化に役立ちます。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 Deprecated example:
 ```graphql
@@ -248,13 +248,13 @@ query ($jobId: BigInt!, $runId: BigInt!) {
 
 </details>
 
-### What’s changed since the last run?
-Unnecessary runs incur higher infrastructure costs and load on the data team and their systems. A model doesn’t need to be run if it’s a view and there's no code change since the last run, or if it’s a table/incremental with no code change since last run and source data has not been updated since the last run.
+### 前回の実行以降に何が変更されましたか？
+不要な実行は、インフラストラクチャコストの増加とデータチームとそのシステムの負荷増大につながります。モデルがビューであり、前回の実行以降にコード変更がない場合、またはテーブル/増分モデルであり、前回の実行以降にコード変更がなく、ソースデータが前回の実行以降に更新されていない場合は、モデルを実行する必要はありません。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
-With the API, you can compare the `rawCode` between the definition and applied state, and review when the sources were last loaded (source `maxLoadedAt` relative to model `executeCompletedAt`) given the `materializedType` of the model:
+API を使用すると、定義と適用された状態の間の `rawCode` を比較し、モデルの `materializedType` に基づいて、ソースが最後にロードされた時刻 (モデルの `executeCompletedAt` に対するソースの `maxLoadedAt`) を確認できます。
 
 
 ```graphql
@@ -304,21 +304,20 @@ query ($environmentId: BigInt!, $first: Int!) {
 
 </details>
 
-## Quality
+## 品質
 
-You can use the Discovery API to monitor data source freshness and test results to diagnose and resolve issues and drive trust in data. When used with [webhooks](/docs/deploy/webhooks), can also help with detecting, investigating, and alerting issues. Below lists example questions the API can help you answer. Below are example questions and queries you can run.
+Discovery API を使用すると、データソースの鮮度とテスト結果を監視して問題を診断・解決し、データの信頼性を高めることができます。[Webhook](/docs/deploy/webhooks) と併用することで、問題の検出、調査、アラート通知にも役立ちます。以下に、API が回答に役立つ質問の例を示します。また、実行可能な質問とクエリの例も示します。
 
-For quality use cases, people typically query the historical or latest applied state, often in the upstream part of the DAG (for example, sources), using the `environment` or `environment { applied { modelHistoricalRuns } }` endpoints.
+品質ユースケースでは、通常、DAG の上流部分（ソースなど）にある過去の適用状態または最新の適用状態を、`environment` または `environment { applied { modelHistoricalRuns } }` エンドポイントを使用してクエリします。
 
-### Which models and tests failed to run?
+### 実行に失敗したモデルとテストはどれですか？
 
-By filtering on the latest status, you can get lists of models that failed to build and tests that failed during their most recent execution. This is helpful when diagnosing issues with the deployment that result in delayed or incorrect data.
+最新のステータスでフィルタリングすると、ビルドに失敗したモデルと、最新の実行時に失敗したテストのリストを取得できます。これは、遅延やデータの誤りにつながるデプロイメントの問題を診断する際に役立ちます。
 
 <details>
-<summary>Example query with code</summary>
+<summary>コード付きクエリの例</summary>
 
-1. Get the latest run results across all jobs in the environment and return only the models and tests that errored/failed.
-
+1. 環境内のすべてのジョブの最新の実行結果を取得し、エラーが発生した/失敗したモデルとテストのみを返します。
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -349,7 +348,7 @@ query ($environmentId: BigInt!, $first: Int!) {
 }
 ```
 
-2. Review the historical execution and test failure rate (up to 20 runs) for a given model, such as a frequently used and important dataset.
+2. 頻繁に使用される重要なデータセットなど、特定のモデルの実行履歴とテスト失敗率 (最大 20 回の実行) を確認します。
 
 
 ```graphql
@@ -370,18 +369,18 @@ query ($environmentId: BigInt!, $uniqueId: String!, $lastRunCount: Int) {
 }
 ```
 
-3. Identify the runs and plot the historical trends of failure/error rates.
+3. 実行を識別し、失敗/エラー率の履歴傾向をプロットします。
 
 
 </details>
 
 
-### When was the data my model uses last refreshed?
+### モデルが使用するデータはいつ最後に更新されましたか？
 
-You can get the metadata on the latest execution for a particular model or across all models in your project. For instance, investigate when each model or snapshot that's feeding into a given model was last executed or the source or seed was last loaded to gauge the _freshness_ of the data.
+特定のモデル、またはプロジェクト内のすべてのモデルの最新の実行に関するメタデータを取得できます。例えば、特定のモデルに入力する各モデルまたはスナップショットの最終実行日時、あるいはソースまたはシードの最終ロード日時を調べることで、データの鮮度を測定できます。
 
 <details>
-<summary>Example query with code</summary>
+<summary>コード付きクエリの例</summary>
 
 
 ```graphql
@@ -486,21 +485,21 @@ def create_freshness_graph(models_df, sources_df):
     return G
 ```
 
-Graph example:
+グラフの例:
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/lineage-graph-with-freshness-info.png" width="75%" title="A lineage graph with source freshness information"/>
 
 </details>
 
 
-### Are my data sources fresh?
+### データソースは最新ですか？
 
-Checking [source freshness](/docs/build/sources#source-data-freshness) allows you to ensure that sources loaded and used in your dbt project are compliant with expectations. The API provides the latest metadata about source loading and information about the freshness check criteria.
+[ソースの鮮度](/docs/build/sources#source-data-freshness)を確認することで、dbtプロジェクトで読み込まれ、使用されるソースが期待どおりであることを確認できます。APIは、ソースの読み込みに関する最新のメタデータと鮮度チェックの基準に関する情報を提供します。
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/source-freshness-page.png" width="75%" title="Source freshness page in dbt"/>
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -546,14 +545,14 @@ query ($environmentId: BigInt!, $first: Int!) {
 
 </details>
 
-### What’s the test coverage and status?
+### テストの範囲とステータスは？
 
-[Tests](https://docs.getdbt.com/docs/build/tests) are an important way to ensure that your stakeholders are reviewing high-quality data. You can execute tests during a dbt run. The Discovery API provides complete test results for a given environment or job, which it represents as the `children` of a given node that’s been tested (for example, a `model`).
+[テスト](https://docs.getdbt.com/docs/build/tests) は、関係者が高品質なデータをレビューしていることを確認するための重要な手段です。dbt 実行中にテストを実行できます。Discovery API は、特定の環境またはジョブの完全なテスト結果を提供します。これらのテスト結果は、テスト済みの特定のノード（例: モデル）の「子」として表されます。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
-For the following example, the `parents` are the nodes (code) that's being tested and `executionInfo` describes the latest test results:
+次の例では、`parents` はテスト対象のノード (コード) であり、`executionInfo` は最新のテスト結果を説明します。
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -584,14 +583,14 @@ query ($environmentId: BigInt!, $first: Int!) {
 
 </details>
 
-### How is this model contracted and versioned?
+### このモデルはどのようにコントラクト化され、バージョン管理されていますか？
 
-To enforce the shape of a model's definition, you can define contracts on models and their columns. You can also specify model versions to keep track of discrete stages in its evolution and use the appropriate one.
+モデル定義の形状を強制するために、モデルとその列にコントラクトを定義できます。また、モデルのバージョンを指定して、進化の段階を追跡し、適切なバージョンを使用することもできます。
 
 <!-- TODO: The description above is not accurate for the desired query below because only applied models can query catalogs, so the query is changed to `environment.applied`. We need to change the description to refer to the applied state, or do not query `catalog` from the definition state node. -->
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 
 ```graphql
@@ -628,16 +627,16 @@ query {
 
 ## Discovery
 
-You can use the Discovery API to find and understand relevant datasets and semantic nodes with rich context and metadata. Below are example questions and queries you can run.
+Discovery API を使用すると、豊富なコンテキストとメタデータを持つ関連データセットとセマンティックノードを検索して理解できます。以下に、実行可能な質問とクエリの例を示します。
 
-For discovery use cases, people typically query the latest applied or definition state, often in the downstream part of the DAG (for example, mart models or metrics), using the `environment` endpoint.
+Discovery のユースケースでは、通常、`environment` エンドポイントを使用して、DAG の下流部分（たとえば、スマート モデルやメトリクス）にある最新の適用状態または定義状態をクエリします。
 
-### What does this dataset and its columns mean?
+### このデータセットとその列は何を意味するのでしょうか？
 
-Query the Discovery API to map a table/view in the data platform to the model in the dbt project; then, retrieve metadata about its meaning, including descriptive metadata from its YAML file and catalog information from its YAML file and the schema.
+Discovery API にクエリを実行して、データプラットフォーム内のテーブル/ビューを dbt プロジェクトのモデルにマッピングします。次に、YAML ファイルからの説明メタデータや、YAML ファイルとスキーマからのカタログ情報など、その意味に関するメタデータを取得します。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -904,12 +903,12 @@ Graph example:
 
 -->
 
-### Which metrics are available?
+### どのようなメトリクスが利用可能ですか？
 
-You can define and query metrics using the [<Constant name="semantic_layer" />](/docs/build/about-metricflow), use them for documentation purposes (like for a data catalog), and calculate aggregations (like in a BI tool that doesn’t query the SL).
+[<Constant name="semantic_layer" />](/docs/build/about-metricflow) を使用してメトリクスを定義およびクエリし、ドキュメント作成目的（データカタログなど）で使用したり、集計計算（SL をクエリしない BI ツールなど）に使用したりできます。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -938,18 +937,18 @@ query ($environmentId: BigInt!, $first: Int!) {
 
 </details>
 
-## Governance
+## ガバナンス
 
-You can use the Discovery API to audit data development and facilitate collaboration within and between teams.
+Discovery API を使用すると、データ開発を監査し、チーム内およびチーム間のコラボレーションを促進できます。
 
-For governance use cases, people tend to query the latest definition state, often in the downstream part of the DAG (for example, public models), using the `environment` endpoint.
+ガバナンスのユースケースでは、多くの場合、DAG の下流部分（パブリックモデルなど）にある最新の定義状態を `environment` エンドポイントを使用して照会する傾向があります。
 
-### Who is responsible for this model?
+### このモデルの責任者は誰ですか？
 
-You can define and surface the groups each model is associated with. Groups contain information like owner. This can help you identify which team owns certain models and who to contact about them.
+各モデルが関連付けられているグループを定義し、表示できます。グループには所有者などの情報が含まれます。これにより、特定のモデルを所有するチームや、そのモデルについて誰に連絡すればよいかを特定できます。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -987,13 +986,12 @@ query ($environmentId: BigInt!, $first: Int!) {
 ```
 </details>
 
-### Who can use this model?
+### このモデルは誰が使用できますか？
 
-You can enable people the ability to specify the level of access for a given model. In the future, public models will function like APIs to unify project lineage and enable reuse of models using cross-project refs.
-
+特定のモデルへのアクセスレベルを指定できる権限をユーザーに付与できます。将来的には、パブリックモデルはAPIのように機能し、プロジェクトの系統を統合し、プロジェクト間の参照を使用してモデルの再利用を可能にする予定です。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -1031,22 +1029,22 @@ query ($environmentId: BigInt!, $first: Int!) {
 ```
 </details>
 
-## Development
+## 開発
 
-You can use the Discovery API to understand dataset changes and usage and gauge impacts to inform project definition. Below are example questions and queries you can run.
+Discovery API を使用すると、データセットの変更と使用状況を把握し、影響度を測定してプロジェクト定義に役立てることができます。以下に、実行可能な質問とクエリの例を示します。
 
-For development use cases, people typically query the historical or latest definition or applied state across any part of the DAG using the `environment` endpoint.
+開発ユースケースでは、通常、`environment` エンドポイントを使用して、DAG の任意の部分における過去の定義や最新の定義、または適用状態をクエリします。
 
-### How is this model or metric used in downstream tools?
-[Exposures](/docs/build/exposures) provide a method to define how a model or metric is actually used in dashboards and other analytics tools and use cases. You can query an exposure’s definition to see how project nodes are used and query its upstream lineage results to understand the state of the data used in it, which powers use cases like a freshness and quality status tile.
+### このモデルまたはメトリクスは下流のツールでどのように使用されますか？
+[エクスポージャー](/docs/build/exposures)は、ダッシュボードやその他の分析ツール、ユースケースでモデルまたはメトリクスが実際にどのように使用されるかを定義する方法を提供します。エクスポージャーの定義をクエリしてプロジェクトノードがどのように使用されているかを確認したり、上流のリネージ結果をクエリしてそこで使用されているデータの状態を把握したりできます。これは、鮮度や品質ステータスタイルなどのユースケースに役立ちます。
 
 <Lightbox src="/img/docs/collaborate/dbt-explorer/data-tile-pass.jpg" width="60%" title="Embed data health tiles in your dashboards to distill trust signals for data consumers." />
 
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
-Below is an example that reviews an exposure and the models used in it including when they were last executed.
+以下は、エクスポージャーと、その中で使用されたモデル（最後に実行された日時を含む）を確認する例です。
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -1078,14 +1076,14 @@ query ($environmentId: BigInt!, $first: Int!) {
 ```
 </details>
 
-### How has this model changed over time?
+### このモデルは時間の経過とともにどのように変化しましたか？
 
-The Discovery API provides historical information about any resource in your project. For instance, you can view how a model has evolved over time (across recent runs) given changes to its shape and contents.
+Discovery API は、プロジェクト内のあらゆるリソースに関する履歴情報を提供します。例えば、モデルの形状や内容の変化に応じて、モデルが時間の経過とともにどのように進化したか（最近の実行履歴全体にわたって）を確認できます。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
-Review the differences in `compiledCode` or `columns` between runs or plot the “Approximate Size” and “Row Count” `stats` over time:
+実行間の `compiledCode` または `columns` の違いを確認したり、時間の経過に伴う「おおよそのサイズ」と「行数」の `stats` をプロットしたりします:
 
 ```graphql
 query (
@@ -1117,14 +1115,14 @@ query (
 ```
 </details>
 
-### Which nodes depend on this data source?
+### このデータソースに依存するノードはどれですか？
 
-dbt lineage begins with data sources. For a given source, you can look at which nodes are its children then iterate downstream to get the full list of dependencies.
+dbt の系統はデータソースから始まります。特定のソースについて、どのノードが子であるかを確認し、下流に反復処理することで依存関係の完全なリストを取得できます。
 
-Currently, querying beyond 1 generation (defined as a direct parent-to-child) is not supported. To see the grandchildren of a node, you need to make two queries: one to get the node and its children, and another to get the children nodes and their children.
+現在、1世代（直接の親から子として定義）を超えるクエリはサポートされていません。ノードの孫を表示するには、2つのクエリを実行する必要があります。1つはノードとその子を取得するクエリ、もう1つは子ノードとその子を取得するクエリです。
 
 <details>
-<summary>Example query</summary>
+<summary>クエリ例</summary>
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -1155,6 +1153,6 @@ query ($environmentId: BigInt!, $first: Int!) {
 ```
 </details>
 
-## Related docs
+## 関連ドキュメント
 
-- [Query Discovery API](/docs/dbt-cloud-apis/discovery-querying)
+- [クエリ検出 API](/docs/dbt-cloud-apis/discovery-querying)

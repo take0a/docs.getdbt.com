@@ -14,7 +14,7 @@ pagination_next: "docs/use-dbt-semantic-layer/exports"
 https://github.com/dbt-labs/docs.getdbt.com/blob/current/website/snippets/_sl-run-prod-job.md
 -->
 
-import RunProdJob from '/snippets/_sl-run-prod-job.md';
+import RunProdJob from '/snippets.ja/_sl-run-prod-job.md';
 
 <RunProdJob/>
 

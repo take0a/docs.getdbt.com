@@ -1,138 +1,138 @@
-import SLEnvVars from '/snippets/_sl-env-vars.md';
+import SLEnvVars from '/snippets.ja/_sl-env-vars.md';
 
-You must be part of the Owner group and have the correct [license](/docs/cloud/manage-access/seats-and-users) and [permissions](/docs/cloud/manage-access/enterprise-permissions) to set up the Semantic Layer at the environment and project level.
-- Enterprise plan:
-  - Developer license with Account Admin permissions, or
-  - Owner with a Developer license, assigned Project Creator, Database Admin, or Admin permissions.
-- Team plan: Owner with a Developer license.
-- Free trial: You are on a free trial of the Team plan as an Owner, which means you have access to the dbt Semantic Layer.
+環境レベルおよびプロジェクトレベルでセマンティックレイヤーを設定するには、オーナーグループに属し、適切な[ライセンス](/docs/cloud/manage-access/seats-and-users)と[権限](/docs/cloud/manage-access/enterprise-permissions)を持っている必要があります。
+- Enterprise+ および Enterprise プラン：
+   - アカウント管理者権限を持つ開発者ライセンス、または
+   - 開発者ライセンスを持ち、プロジェクト作成者、データベース管理者、または管理者権限が割り当てられたオーナー。
+- Starter プラン：開発者ライセンスを持つオーナー。
+- 無​​料トライアル：現在、Starter プランの無料トライアルをオーナーとして利用しています。つまり、dbt セマンティックレイヤーにアクセスできます。
 
 ### 1. Select environment
 
-Select the environment where you want to enable the Semantic Layer:
+セマンティックレイヤーを有効にする環境を選択します。
 
-1. Navigate to **Account settings** in the navigation menu.
-2. On the **Settings** left sidebar, select the specific project you want to enable the Semantic Layer for.
-3. In the **Project details** page, navigate to the **Semantic Layer** section. Select **Configure Semantic Layer**.
+1. ナビゲーションメニューの「**アカウント設定**」に移動します。
+2. 左側のサイドバーの「**設定**」で、セマンティックレイヤーを有効にするプロジェクトを選択します。
+3. 「**プロジェクトの詳細**」ページで、「**セマンティックレイヤー**」セクションに移動します。「**セマンティックレイヤーを構成**」を選択します。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/new-sl-configure.jpg" width="70%" title="Semantic Layer section in the 'Project Details' page"/>
 
-4. In the **Set Up Semantic Layer Configuration** page, select the deployment environment you want for the Semantic Layer and click **Save**. This provides administrators with the flexibility to choose the environment where the Semantic Layer will be enabled.
+4. **「セマンティック レイヤー構成の設定」** ページで、セマンティック レイヤーを適用する環境を選択し、「保存」をクリックします。これにより、管理者はセマンティック レイヤーを有効にする環境を柔軟に選択できるようになります。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-select-env.jpg" width="75%" title="Select the deployment environment to run your Semantic Layer against."/>
 
 ### 2. Add a credential and create service tokens
 
-The dbt Semantic Layer uses [service tokens](/docs/dbt-cloud-apis/service-tokens) for authentication which are tied to an underlying data platform credential that you configure. The credential configured is used to execute queries that the Semantic Layer issues against your data platform. 
+dbt セマンティック レイヤーは、認証に [サービス トークン](/docs/dbt-cloud-apis/service-tokens) を使用します。このトークンは、ユーザーが設定した基盤となるデータ プラットフォームの認証情報に紐付けられています。設定された認証情報は、セマンティック レイヤーがデータ プラットフォームに対して発行するクエリの実行に使用されます。
 
-This credential controls the physical access to underlying data accessed by the Semantic Layer, and all access policies set in the data platform for this credential will be respected.
+この認証情報は、セマンティック レイヤーがアクセスする基盤となるデータへの物理的なアクセスを制御し、データ プラットフォームでこの認証情報に対して設定されているすべてのアクセス ポリシーが適用されます。
 
-| Feature | Team plan | Enterprise plan |
-| --- | :---: | :---: |
-| Service tokens | Can create multiple service tokens linked to one credential. | Can use multiple credentials and link multiple service tokens to each credential. Note that you cannot link a single service token to more than one credential. |
-| Credentials per project | One credential per project. | Can [add multiple](#4-add-more-credentials) credentials per project. |
-| Link multiple service tokens to a single credential | ✅ | ✅ |
+| Feature | Starter plan | Enterprise+ and Enterprise plan |
+| --- | --- | --- |
+| サービストークン | 1つの認証情報にリンクされた複数のサービストークンを作成できます。 | 複数の認証情報を使用し、各認証情報に複数のサービストークンをリンクできます。ただし、1つのサービストークンを複数の認証情報にリンクすることはできません。 |
+| プロジェクトごとの認証情報 | プロジェクトごとに 1 つの認証情報。 | プロジェクトごとに複数の認証情報を追加できます (#4-add-more-credentials)。 |
+| 複数のサービス トークンを 1 つの認証情報にリンクする | ✅ | ✅ |
 
-*If you're on a Team plan and need to add more credentials, consider upgrading to our [Enterprise plan](https://www.getdbt.com/contact). Enterprise users can refer to [Add more credentials](#4-add-more-credentials) for detailed steps on adding multiple credentials.*
+*スタータープランをご利用で、認証情報を追加する必要がある場合は、[Enterprise+プランまたはEnterpriseプラン](https://www.getdbt.com/contact)へのアップグレードをご検討ください。Enterpriseプランをご利用のお客様は、[認証情報の追加](#4-add-more-credentials)で複数の認証情報を追加する手順の詳細をご確認ください。*
 
-#### 1.  Select deployment environment
-   - After selecting the deployment environment, you should see the **Credentials & service tokens** page. 
-   - Click the **Add Semantic Layer credential** button. 
+#### 1. デプロイ環境の選択
+- デプロイ環境を選択すると、「**認証情報とサービストークン**」ページが表示されます。
+- 「**セマンティックレイヤー認証情報を追加**」ボタンをクリックします。
 
-#### 2. Configure credential
-   - In the **1. Add credentials** section, enter the credentials specific to your data platform that you want the Semantic Layer to use.
-   - Use credentials with minimal privileges. The Semantic Layer requires read access to the schema(s) containing the dbt models used in your semantic models for downstream applications
-   - <SLEnvVars/>
+#### 2. 認証情報の設定
+- **1. 認証情報の追加** セクションで、セマンティックレイヤーで使用するデータプラットフォーム固有の認証情報を入力します。
+- 最小限の権限を持つ認証情報を使用してください。セマンティックレイヤーには、下流アプリケーションのセマンティックモデルで使用される dbt モデルを含むスキーマへの読み取りアクセス権が必要です。
+- <SLEnvVars/>
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-add-credential.jpg" width="55%" title="Add credentials and map them to a service token. " />
 
 #### 3. Create or link service tokens
-   - If you have permission to create service tokens, you’ll see the [**Map new service token** option](/docs/use-dbt-semantic-layer/setup-sl#map-service-tokens-to-credentials) after adding the credential. Name the token, set permissions to 'Semantic Layer Only' and 'Metadata Only', and click **Save**. 
-   - Once the token is generated, you won't be able to view this token again, so make sure to record it somewhere safe.
-   - If you don’t have access to create service tokens, you’ll see a message prompting you to contact your admin to create one for you. Admins can create and link tokens as needed.
+- サービストークンを作成する権限がある場合は、認証情報を追加した後、[**新しいサービストークンをマップする** オプション](/docs/use-dbt-semantic-layer/setup-sl#map-service-tokens-to-credentials)が表示されます。トークンに名前を付け、権限を「セマンティックレイヤーのみ」と「メタデータのみ」に設定して、[**保存**] をクリックします。
+- トークンが生成されると、このトークンを再度表示できなくなりますので、安全な場所に記録しておいてください。
+- サービストークンを作成する権限がない場合は、管理者に連絡してトークンを作成するように求めるメッセージが表示されます。管理者は必要に応じてトークンを作成し、リンクできます。
    <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-credential-no-service-token.jpg" width="70%" title="If you don’t have access to create service tokens, you can create a credential and contact your admin to create one for you." />
 
 :::info
-- Team plans can create multiple service tokens that link to a single underlying credential, but each project can only have one credential.
-- Enterprise plans can [add multiple credentials](#4-add-more-credentials) and map those to service tokens for tailored access.
+- スタータープランでは、単一の基盤となる認証情報にリンクする複数のサービストークンを作成できますが、各プロジェクトに設定できる認証情報は1つだけです。
+- すべてのエンタープライズプランでは、[複数の認証情報を追加](#4-add-more-credentials)し、それらをサービストークンにマッピングして、アクセスをカスタマイズできます。
 
-<a href="https://www.getdbt.com/contact" style={{ color: 'white', backgroundColor: '#66c2c2', padding: '4px 8px', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>Book a free live demo</a> to discover the full potential of dbt Cloud Enterprise.
+   <a href="https://www.getdbt.com/contact" style={{ color: 'white', backgroundColor: '#66c2c2', padding: '4px 8px', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>無料のライブデモを予約</a>して、<Constant name="cloud" /> エンタープライズプラン以上の可能性を最大限にご体験ください。
 :::
 
 ### 3. View connection detail
-1. Go back to the **Project details** page for connection details to connect to downstream tools.
-2. Copy and share the environment ID, service token, host, as well as the service token name to the relevant teams for BI connection set up. If your tool uses the GraphQL API, save the GraphQL API host information instead of the JDBC URL. 
+1. 下流ツールに接続するための接続情報を確認するには、**プロジェクトの詳細** ページに戻ります。
+2. 環境ID、サービストークン、ホスト、およびサービストークン名をコピーし、BI接続設定を担当するチームに共有します。ツールでGraphQL APIを使用している場合は、JDBC URLではなくGraphQL APIホスト情報を保存してください。
 
-    For info on how to connect to other integrations, refer to [Available integrations](/docs/cloud-integrations/avail-sl-integrations).
+他の統合への接続方法については、[利用可能な統合](/docs/cloud-integrations/avail-sl-integrations)を参照してください。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-configure-example.jpg" width="50%" title="After configuring, you'll be provided with the connection details to connect to you downstream tools." />
 
-### 4. Add more credentials <Lifecycle status="enterprise"/>
-dbt Cloud Enterprise plans can optionally add multiple credentials and map them to service tokens, offering more granular control and tailored access for different teams, which can then be shared to relevant teams for BI connection setup. These credentials control the physical access to underlying data accessed by the Semantic Layer.
+### 4. Add more credentials <Lifecycle status="managed_plus,managed" />
+すべての <Constant name="cloud" /> Enterprise プランでは、オプションで複数の認証情報を追加し、それらをサービストークンにマッピングできます。これにより、よりきめ細かな制御と、各チームに合わせたアクセスが可能になります。これらの認証情報は、BI 接続設定時に関連チームと共有できます。これらの認証情報は、セマンティックレイヤーがアクセスする基盤データへの物理アクセスを制御します。
 
-We recommend configuring credentials and service tokens to reflect your teams and their roles. For example, create tokens or credentials that align with your team's needs, such as providing access to finance-related schemas to the Finance team.
+認証情報とサービストークンは、チームとその役割に合わせて設定することをお勧めします。例えば、財務チームに財務関連のスキーマへのアクセスを提供するなど、チームのニーズに合わせたトークンまたは認証情報を作成します。
 
-<Expandable alt_header="Considerations for linking credentials">
+<Expandable alt_header="資格情報のリンクに関する考慮事項">
 
-- Admins can link multiple service tokens to a single credential within a project, but each service token can only be linked to one credential per project.
-- When you send a request through the APIs, the service token of the linked credential will follow access policies of the underlying view and tables used to build your semantic layer requests.
+- 管理者はプロジェクト内の 1 つの認証情報に複数のサービス トークンをリンクできますが、各サービス トークンはプロジェクトごとに 1 つの認証情報にのみリンクできます。
+- API 経由でリクエストを送信すると、リンクされた認証情報のサービス トークンは、セマンティック レイヤー リクエストの構築に使用される基礎となるビューとテーブルのアクセス ポリシーに従います。
 - <SLEnvVars/>
 </Expandable>
 
-#### 1. Add more credentials
-- After configuring your environment, on the **Credentials & service tokens** page, click the **Add Semantic Layer credential** button to create multiple credentials and map them to a service token. <br />
-- In the **1. Add credentials** section, fill in the data platform's credential fields. We recommend using “read-only” credentials.
+#### 1. 認証情報を追加する
+- 環境を設定したら、「**認証情報とサービストークン**」ページで「**セマンティックレイヤー認証情報を追加**」ボタンをクリックして複数の認証情報を作成し、サービストークンにマッピングします。<br />
+- 「**1. 認証情報を追加**」セクションで、データプラットフォームの認証情報フィールドに入力します。「読み取り専用」の認証情報を使用することをお勧めします。
    <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-add-credential.jpg" width="55%" title="Add credentials and map them to a service token. " />
 
-#### 2. Map service tokens to credentials
-- In the **2. Map new service token** section, [map a service token to the credential](/docs/use-dbt-semantic-layer/setup-sl#map-service-tokens-to-credentials) you configured in the previous step. dbt Cloud automatically selects the service token permission set you need (Semantic Layer Only and Metadata Only).
-- To add another service token during configuration, click **Add Service Token**. 
-- You can link more service tokens to the same credential later on in the **Semantic Layer Configuration Details** page. To add another service token to an existing Semantic Layer configuration, click **Add service token** under the **Linked service tokens** section.
-- Click **Save** to link the service token to the credential. Remember to copy and save the service token securely, as it won't be viewable again after generation.
+#### 2. サービストークンを認証情報にマッピングする
+- 「**2. 新しいサービストークンをマッピングする**」セクションで、前の手順で構成した[サービストークンを認証情報にマッピング](/docs/use-dbt-semantic-layer/setup-sl#map-service-tokens-to-credentials)します。<Constant name="cloud" /> により、必要なサービストークン権限セット（セマンティックレイヤーのみとメタデータのみ）が自動的に選択されます。
+- 構成中に別のサービストークンを追加するには、「**サービストークンを追加**」をクリックします。
+- 後で「**セマンティックレイヤー構成の詳細**」ページで、同じ認証情報に複数のサービストークンをリンクできます。既存のセマンティックレイヤー構成に別のサービストークンを追加するには、「**リンクされたサービストークン**」セクションの「**サービストークンを追加**」をクリックします。
+- 「**保存**」をクリックして、サービストークンを認証情報にリンクします。サービストークンは生成後に再度表示できないため、必ずコピーして安全に保存してください。
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-credentials-service-token.jpg" width="90%" title="Use the configuration page to manage multiple credentials or link or unlink service tokens for more granular control."/>
 
-#### 3. Delete credentials
-- To delete a credential, go back to the **Credentials & service tokens** page.
-- Under **Linked Service Tokens**, click **Edit** and, select **Delete Credential** to remove a credential.
+#### 3. 認証情報を削除する
+- 認証情報を削除するには、「**認証情報とサービストークン**」ページに戻ります。
+- 「**リンクされたサービストークン**」で「**編集**」をクリックし、「**認証情報の削除**」を選択して認証情報を削除します。
 
-   When you delete a credential, any service tokens mapped to that credential in the project will no longer work and will break for any end users.
+   認証情報を削除すると、プロジェクト内でその認証情報にマッピングされているすべてのサービストークンが機能しなくなり、エンドユーザーにとって使用できなくなります。
 
-### Delete configuration
-You can delete the entire Semantic Layer configuration for a project. Note that deleting the Semantic Layer configuration will remove all credentials and unlink all service tokens to the project. It will also cause all queries to the Semantic Layer to fail.
+### 設定の削除
+プロジェクトのセマンティック レイヤー設定全体を削除できます。セマンティック レイヤー設定を削除すると、すべての認証情報が削除され、すべてのサービス トークンとプロジェクトのリンクが解除されます。また、セマンティック レイヤーへのすべてのクエリが失敗します。
 
-Follow these steps to delete the Semantic Layer configuration for a project:
+プロジェクトのセマンティック レイヤー設定を削除するには、以下の手順に従ってください。
 
-1. Navigate to the **Project details** page.
-2. In the **Semantic Layer** section, select **Delete Semantic Layer**. 
-3. Confirm the deletion by clicking **Yes, delete semantic layer** in the confirmation pop up.
+1. **プロジェクトの詳細** ページに移動します。
+2. **セマンティック レイヤー** セクションで、**セマンティック レイヤーの削除** を選択します。
+3. 確認ポップアップで [はい、セマンティック レイヤーを削除します] をクリックして削除を確定します。
 
-To re-enable the dbt Semantic Layer setup in the future, you will need to recreate your setup configurations by following the [previous steps](#set-up-dbt-semantic-layer). If your semantic models and metrics are still in your project, no changes are needed. If you've removed them, you'll need to set up the YAML configs again.
+今後、dbt セマンティック レイヤー設定を再度有効にするには、[前の手順](#set-up-dbt-semantic-layer) に従って設定を再作成する必要があります。セマンティック モデルと指標がプロジェクト内にまだ残っている場合は、変更は必要ありません。削除した場合は、YAML 設定を再度設定する必要があります。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-delete-config.jpg" width="90%" title="Delete the Semantic Layer configuration for a project."/>
 
-## Additional configuration
+## 追加設定
 
- The following are the additional flexible configurations for Semantic Layer credentials.
+   以下は、セマンティックレイヤー認証情報に関する追加の柔軟な設定です。
 
-### Map service tokens to credentials
-- After configuring your environment, you can map additional service tokens to the same credential if you have the required [permissions](/docs/cloud/manage-access/about-user-access#permission-sets).
-- Go to the **Credentials & service tokens** page and click the **+Add Service Token** button in the **Linked Service Tokens** section.
-- Type the service token name and select the permission set you need (Semantic Layer Only and Metadata Only).
-- Click **Save** to link the service token to the credential.
-- Remember to copy and save the service token securely, as it won't be viewable again after generation.
+### サービストークンを認証情報にマッピングする
+- 環境の設定後、必要な[権限](/docs/cloud/manage-access/about-user-access#permission-sets)があれば、同じ認証情報に追加のサービストークンをマッピングできます。
+- **認証情報とサービストークン** ページに移動し、**リンクされたサービストークン** セクションの **+ サービストークンを追加** ボタンをクリックします。
+- サービストークン名を入力し、必要な権限セット（セマンティックレイヤーのみとメタデータのみ）を選択します。
+- **保存** をクリックして、サービストークンを認証情報にリンクします。
+- サービストークンは生成後に再度表示できないため、必ずコピーして安全に保存してください。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-add-service-token.gif" title="Map additional service tokens to a credential." />
 
-### Unlink service tokens
-- Unlink a service token from the credential by clicking **Unlink** under the **Linked service tokens** section. If you try to query the Semantic Layer with an unlinked credential, you'll experience an error in your BI tool because no valid token is mapped.
+### サービストークンのリンクを解除する
+- 「**リンクされたサービストークン**」セクションの「**リンク解除**」をクリックして、サービストークンと認証情報のリンクを解除します。リンクされていない認証情報でセマンティックレイヤーにクエリを実行しようとすると、有効なトークンがマッピングされていないため、BIツールでエラーが発生します。
 
-### Manage from service token page
-**View credential from service token**
-- View your Semantic Layer credential directly by navigating to the **API tokens** and then **Service tokens** page. 
-- Select the service token to view the credential it's linked to. This is useful if you want to know which service tokens are mapped to credentials in your project.
+### サービストークンページから管理
+**サービストークンから認証情報を表示**
+- **APIトークン**、そして**サービストークン**ページに移動すると、セマンティックレイヤーの認証情報を直接確認できます。
+- サービストークンを選択すると、リンクされている認証情報が表示されます。これは、プロジェクト内の認証情報にマッピングされているサービストークンを確認したい場合に便利です。
 
-#### Create a new service token
-- From the **Service tokens** page, create a new service token and map it to the credential(s) (assuming the semantic layer permission exists). This is useful if you want to create a new service token and directly map it to a credential in your project.
-- Make sure to select the correct permission set for the service token (Semantic Layer Only and Metadata Only).
+#### 新しいサービストークンを作成する
+- **サービストークン** ページから新しいサービストークンを作成し、認証情報にマッピングします（セマンティックレイヤー権限が存在することを前提としています）。これは、新しいサービストークンを作成し、それをプロジェクト内の認証情報に直接マッピングする場合に便利です。
+- サービストークンの適切な権限セット（セマンティックレイヤーのみとメタデータのみ）を選択してください。
 
 <Lightbox src="/img/docs/dbt-cloud/semantic-layer/sl-create-service-token-page.jpg" width="100%" title="Create a new service token and map credentials directly on the separate 'Service tokens page'."/>

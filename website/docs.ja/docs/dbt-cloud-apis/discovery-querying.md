@@ -5,36 +5,36 @@ sidebar_label: "Query the Discovery API"
 pagination_next: "docs/dbt-cloud-apis/discovery-schema-environment"
 ---
 
-The Discovery API supports ad-hoc queries and integrations. If you are new to the API, refer to [About the Discovery API](/docs/dbt-cloud-apis/discovery-api) for an introduction.
+Discovery API はアドホッククエリと統合をサポートしています。API を初めてご利用になる場合は、[Discovery API について](/docs/dbt-cloud-apis/discovery-api) の概要をご覧ください。
 
-Use the Discovery API to evaluate data pipeline health and project state across runs or at a moment in time. dbt Labs provide a default [GraphQL explorer](https://metadata.cloud.getdbt.com/graphql) for this API, enabling you to run queries and browse the schema. However, you can also use any GraphQL client of your choice to query the API.
+Discovery API を使用すると、実行全体または特定の時点におけるデータパイプラインの健全性とプロジェクトの状態を評価できます。dbt Labs はこの API 用にデフォルトの [GraphQL エクスプローラー](https://metadata.cloud.getdbt.com/graphql) を提供しており、クエリの実行とスキーマの参照が可能です。また、任意の GraphQL クライアントを使用して API をクエリすることもできます。
 
-Since GraphQL describes the data in the API, the schema displayed in the GraphQL explorer accurately represents the graph and fields available to query.
+GraphQL は API 内のデータを記述するため、GraphQL エクスプローラーに表示されるスキーマは、クエリに使用できるグラフとフィールドを正確に表します。
 
 <Snippet path="metadata-api-prerequisites" />
 
-## Authorization
+## 承認
 
-Currently, authorization of requests takes place [using a service token](/docs/dbt-cloud-apis/service-tokens). <Constant name="cloud" /> admin users can generate a Metadata Only service token that is authorized to execute a specific query against the Discovery API.
+現在、リクエストの承認は[サービストークン](/docs/dbt-cloud-apis/service-tokens)を使用して行われます。<Constant name="cloud" /> 管理者ユーザーは、Discovery APIに対して特定のクエリを実行する権限を持つメタデータのみのサービストークンを生成できます。
 
-Once you've created a token, you can use it in the Authorization header of requests to the <Constant name="cloud" /> Discovery API. Be sure to include the Token prefix in the Authorization header, or the request will fail with a `401 Unauthorized` error. Note that `Bearer` can be used instead of `Token` in the Authorization header. Both syntaxes are equivalent.
+トークンを作成したら、<Constant name="cloud" /> Discovery APIへのリクエストのAuthorizationヘッダーで使用できます。Authorizationヘッダーには必ずTokenプレフィックスを含めてください。そうしないと、リクエストは`401 Unauthorized`エラーで失敗します。Authorizationヘッダーでは、`Token`の代わりに`Bearer`を使用できます。どちらの構文も同じです。
 
-## Access the Discovery API
+## Discovery API にアクセスする
 
-1. Create a [service account token](/docs/dbt-cloud-apis/service-tokens) to authorize requests. <Constant name="cloud" /> Admin users can generate a _Metadata Only_ service token, which can be used to execute a specific query against the Discovery API to authorize requests.
+1. リクエストを承認するための [サービスアカウントトークン](/docs/dbt-cloud-apis/service-tokens) を作成します。<Constant name="cloud" /> 管理者ユーザーは、メタデータのみのサービストークンを生成できます。このトークンを使用して、Discovery API に対して特定のクエリを実行し、リクエストを承認できます。
 
-2. Find the API URL to use from the [Discovery API endpoints](#discovery-api-endpoints) table.
+2. [Discovery API エンドポイント](#discovery-api-endpoints) テーブルから、使用する API URL を見つけます。
 
-3. For specific query points, refer to the [schema documentation](/docs/dbt-cloud-apis/discovery-schema-job).
+3. 具体的なクエリポイントについては、[スキーマドキュメント](/docs/dbt-cloud-apis/discovery-schema-job) を参照してください。
 
-## Run queries using HTTP requests
+## HTTP リクエストを使用したクエリの実行
 
-You can run queries by sending a `POST` request to the Discovery API, making sure to replace:
-* `YOUR_API_URL` with the appropriate [Discovery API endpoint](#discovery-api-endpoints) for your region and plan.
-* `YOUR_TOKEN` in the Authorization header with your actual API token. Be sure to include the Token prefix.
-* `QUERY_BODY` with a GraphQL query, for example `{ "query": "<query text>", "variables": "<variables in json>" }`
-* `VARIABLES` with a dictionary of your GraphQL query variables, such as a job ID or a filter.
-* `ENDPOINT` with the endpoint you're querying, such as environment.
+クエリを実行するには、Discovery API に `POST` リクエストを送信します。以下の部分を必ず置き換えてください。
+* `YOUR_API_URL` を、リージョンとプランに応じた適切な [Discovery API エンドポイント](#discovery-api-endpoints) に置き換えます。
+* Authorization ヘッダーの `YOUR_TOKEN` を、実際の API トークンに置き換えます。トークンプレフィックスを必ず含めてください。
+* `QUERY_BODY` を GraphQL クエリに置き換えます。例: `{ "query": "<クエリテキスト>", "variables": "<json 内の変数>" }`
+* `VARIABLES` を、ジョブ ID やフィルターなどの GraphQL クエリ変数のディクショナリに置き換えます。
+* `ENDPOINT` を、環境などのクエリ対象のエンドポイントに置き換えます。
 
   ```shell
   curl 'YOUR_API_URL' \
@@ -44,7 +44,7 @@ You can run queries by sending a `POST` request to the Discovery API, making sur
     --data QUERY_BODY
   ```
 
-Python example:
+Python の例:
 
 ```python
 response = requests.post(
@@ -56,13 +56,13 @@ response = requests.post(
 metadata = response.json()['data'][ENDPOINT]
 ```
 
-Every query will require an environment ID or job ID. You can get the ID from a <Constant name="cloud" /> URL or using the Admin API.
+すべてのクエリには環境IDまたはジョブIDが必要です。IDは、<Constant name="cloud" /> URLまたはAdmin APIを使用して取得できます。
 
-There are several illustrative example queries on this page. For more examples, refer to [Use cases and examples for the Discovery API](/docs/dbt-cloud-apis/discovery-use-cases-and-examples).
+このページには、いくつかの分かりやすいクエリ例が掲載されています。その他の例については、[Discovery APIのユースケースと例](/docs/dbt-cloud-apis/discovery-use-cases-and-examples)をご覧ください。
 
-## Discovery API endpoints
+## Discovery API エンドポイント
 
-The following are the endpoints for accessing the Discovery API. Use the one that's appropriate for your region and plan.
+以下は、Discovery API にアクセスするためのエンドポイントです。ご利用のリージョンとプランに適したエンドポイントをご利用ください。
 
 | Deployment type |	Discovery API URL |
 | --------------- | ------------------- |
@@ -72,28 +72,28 @@ The following are the endpoints for accessing the Discovery API. Use the one tha
 | Multi-cell	| `https://YOUR_ACCOUNT_PREFIX.metadata.REGION.dbt.com/graphql`<br /><br />  Replace `YOUR_ACCOUNT_PREFIX` with your specific account identifier and `REGION` with your location, which could be `us1.dbt.com`. |<br />
 | Single-tenant | `https://metadata.YOUR_ACCESS_URL/graphql`<br /><br />  Replace `YOUR_ACCESS_URL` with your specific account prefix with the appropriate [Access URL](/docs/cloud/about-cloud/access-regions-ip-addresses) for your region and plan.|
 
-## Reasonable use
+## 合理的な使用
 
-Discovery (GraphQL) API usage is subject to request rate and response size limits to maintain the performance and stability of the metadata platform and prevent abuse.
+Discovery (GraphQL) API の使用には、メタデータ プラットフォームのパフォーマンスと安定性を維持し、不正使用を防止するため、リクエスト レートとレスポンス サイズに制限があります。
 
-Job-level endpoints are subject to query complexity limits. Nested nodes (like parents), code (like rawCode), and catalog columns are considered as most complex. Overly complex queries should be broken up into separate queries with only necessary fields included. dbt Labs recommends using the environment endpoint instead for most use cases to get the latest descriptive and result metadata for a <Constant name="cloud" /> project.
+ジョブレベルのエンドポイントには、クエリの複雑さの制限があります。ネストされたノード (親など)、コード (rawCode など)、およびカタログ列は、最も複雑であるとみなされます。過度に複雑なクエリは、必要なフィールドのみを含む個別のクエリに分割する必要があります。dbt Labs は、<Constant name="cloud" /> プロジェクトの最新の記述メタデータと結果メタデータを取得するために、ほとんどのユースケースで環境エンドポイントを使用することを推奨しています。
 
-## Retention limits
-You can use the Discovery API to query data from the previous two months. For example, if today was April 1st, you could query data back to February 1st.
+## 保持期間の制限
+Discovery API を使用すると、過去 2 か月間のデータをクエリできます。たとえば、今日が 4 月 1 日の場合、2 月 1 日まで遡ってデータをクエリできます。
 
-## Run queries with the GraphQL explorer
+## GraphQL エクスプローラーでクエリを実行する
 
-You can run ad-hoc queries directly in the [GraphQL API explorer](https://metadata.cloud.getdbt.com/graphql) and use the document explorer on the left-hand side to see all possible nodes and fields.
+[GraphQL API エクスプローラー](https://metadata.cloud.getdbt.com/graphql) でアドホッククエリを直接実行し、左側のドキュメントエクスプローラーを使用してすべてのノードとフィールドを確認できます。
 
-Refer to the [Apollo explorer documentation](https://www.apollographql.com/docs/graphos/explorer/explorer) for setup and authorization information for GraphQL.
+GraphQL の設定と認証情報については、[Apollo エクスプローラーのドキュメント](https://www.apollographql.com/docs/graphos/explorer/explorer) を参照してください。
 
-1. Access the [GraphQL API explorer](https://metadata.cloud.getdbt.com/graphql) and select fields you want to query.
+1. [GraphQL API エクスプローラー](https://metadata.cloud.getdbt.com/graphql) にアクセスし、クエリを実行するフィールドを選択します。
 
-2. Select **Variables** at the bottom of the explorer and replace any `null` fields with your unique values.
+2. エクスプローラーの下部にある [**変数**] を選択し、`null` フィールドを固有の値に置き換えます。
 
-3. [Authenticate](https://www.apollographql.com/docs/graphos/explorer/connecting-authenticating#authentication) using Bearer auth with `YOUR_TOKEN`. Select **Headers** at the bottom of the explorer and select **+New header**.
+3. `YOUR_TOKEN` を使用した Bearer 認証を使用して [認証](https://www.apollographql.com/docs/graphos/explorer/connecting-authenticating#authentication) します。エクスプローラーの下部にある [**ヘッダー**] を選択し、[**+新しいヘッダー**] を選択します。
 
-4. Select **Authorization** in the **header key** dropdown list and enter your Bearer auth token in the **value** field. Remember to include the Token prefix. Your header key should be in this format: `{"Authorization": "Bearer <YOUR_TOKEN>}`.
+4. [**ヘッダーキー**] ドロップダウンリストから [**Authorization**] を選択し、[**値**] フィールドに Bearer 認証トークンを入力します。トークンプレフィックスを含めることを忘れないでください。ヘッダーキーは、`{"Authorization": "Bearer <YOUR_TOKEN>}` という形式である必要があります。
 
 <!-- TODO: Screenshot needs to be replaced with new one. If we want to show model historical runs, show `environment { applied { modelHistoricalRuns } }` -->
 <!-- However we can choose to leave this be, since the important info from the screenshot is to show how the GraphQL API canbe used -- the content (request and response) doesn't matter too much` -->
@@ -102,16 +102,16 @@ Refer to the [Apollo explorer documentation](https://www.apollographql.com/docs/
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/graphql_header.jpg" width="85%" title="Enter the header key and Bearer auth token values"/>
 
-1. Run your query by clicking the blue query button in the top right of the **Operation** editor (to the right of the query). You should see a successful query response on the right side of the explorer.
+1. **操作**エディタの右上（クエリの右側）にある青いクエリボタンをクリックしてクエリを実行します。エクスプローラーの右側にクエリ成功のレスポンスが表示されます。
 
 <!-- TODO: Screenshot needs to be replaced with new one. If we want to show model historical runs, show `environment { applied { modelHistoricalRuns } }` -->
 <!-- However we can choose to leave this be, since the important info from the screenshot is to show how the GraphQL API canbe used -- the content (request and response) doesn't matter too much` -->
 
 <Lightbox src="/img/docs/dbt-cloud/discovery-api/graphql.jpg" width="85%" title="Run queries using the Apollo Server GraphQL explorer"/>
 
-### Fragments
+### フラグメント
 
-Use the [`... on`](https://www.apollographql.com/docs/react/data/fragments/) notation to query across lineage and retrieve results from specific node types.
+[`... on`](https://www.apollographql.com/docs/react/data/fragments/) 表記を使用して、系統を横断してクエリを実行し、特定のノードタイプから結果を取得します。
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -161,29 +161,29 @@ query ($environmentId: BigInt!, $first: Int!) {
 }
 ```
 
-### Pagination
+### ページネーション
 
-Querying large datasets can impact performance on multiple functions in the API pipeline. Pagination eases the burden by returning smaller data sets one page at a time. This is useful for returning a particular portion of the dataset or the entire dataset piece-by-piece to enhance performance. <Constant name="cloud" /> utilizes cursor-based pagination, which makes it easy to return pages of constantly changing data.
+大規模なデータセットをクエリすると、API パイプライン内の複数の関数のパフォーマンスに影響を与える可能性があります。ページネーションは、小さなデータセットを一度に 1 ページずつ返すことで、この負担を軽減します。これは、データセットの特定の部分、またはデータセット全体を少しずつ返してパフォーマンスを向上させる場合に便利です。<Constant name="cloud" /> はカーソルベースのページネーションを利用するため、常に変化するデータのページを簡単に返すことができます。
 
-Use the `PageInfo` object to return information about the page. The available fields are:
+`PageInfo` オブジェクトを使用して、ページに関する情報を取得します。使用可能なフィールドは次のとおりです。
 
-- `startCursor` string type &mdash; Corresponds to the first `node` in the `edge`.
-- `endCursor` string type &mdash; Corresponds to the last `node` in the `edge`.
-- `hasNextPage` boolean type &mdash; Whether or not there are more `nodes` after the returned results.
+- `startCursor` 文字列型 - `edge` の最初の `node` に対応します。
+- `endCursor` 文字列型 - `edge` の最後の `node` に対応します。
+- `hasNextPage` ブール型 - 返された結果の後にさらに `node` があるかどうかを示します。
 
-There are connection variables available when making the query:
+クエリ作成時に使用できる接続変数は以下のとおりです。
 
-- `first` integer type &mdash; Returns the first n `nodes` for each page, up to 500.
-- `after` string type &mdash; Sets the cursor to retrieve `nodes` after. It's best practice to set the `after` variable with the object ID defined in the `endCursor` of the previous page.
+- `first` 整数型 - 各ページの最初の n 個の `nodes`（最大 500 個）を返します。
+- `after` 文字列型 - カーソルを設定して、次の `nodes` を取得します。`after` 変数には、前のページの `endCursor` で定義されたオブジェクト ID を設定することをお勧めします。
 
-Below is an example that returns the `first` 500 models `after` the specified Object ID in the variables. The `PageInfo` object returns where the object ID where the cursor starts, where it ends, and whether there is a next page.
+以下は、変数で指定されたオブジェクト ID の `後` にある最初の 500 個のモデルを返す例です。`PageInfo` オブジェクトは、カーソルの開始位置、終了位置、および次ページの有無を示すオブジェクト ID を返します。
 
 <!-- TODO: Update screenshot to use `$environmentId: BigInt!, or remove it` -->
 <!-- However we can choose to leave this be, since the important info from the screenshot is to show how the GraphQL API canbe used -- the content (request and response) doesn't matter too much` -->
 
 <Lightbox src="/img/Paginate.png" width="75%" title="Example of pagination"/>
 
-Below is a code example of the `PageInfo` object:
+以下は `PageInfo` オブジェクトのコード例です。
 
 ```graphql
 pageInfo {
@@ -194,15 +194,15 @@ pageInfo {
 totalCount # Total number of records across all pages
 ```
 
-### Filters
+### フィルター
 
-Filtering helps to narrow down the results of an API query. If you want to query and return only models and tests that are failing or find models that are taking too long to run, you can fetch execution details such as [`executionTime`](/docs/dbt-cloud-apis/discovery-schema-job-models#fields), [`runElapsedTime`](/docs/dbt-cloud-apis/discovery-schema-job-models#fields), or [`status`](/docs/dbt-cloud-apis/discovery-schema-job-models#fields). This helps data teams monitor the performance of their models, identify bottlenecks, and optimize the overall data pipeline.
+フィルターを使用すると、API クエリの結果を絞り込むことができます。失敗したモデルやテストのみをクエリして返したい場合や、実行に時間がかかりすぎるモデルを見つけたい場合は、[`executionTime`](/docs/dbt-cloud-apis/discovery-schema-job-models#fields)、[`runElapsedTime`](/docs/dbt-cloud-apis/discovery-schema-job-models#fields)、[`status`](/docs/dbt-cloud-apis/discovery-schema-job-models#fields) などの実行詳細を取得できます。これにより、データチームはモデルのパフォーマンスを監視し、ボトルネックを特定し、データパイプライン全体を最適化できます。
 
-Below is an example that filters for results of models that have succeeded on their `lastRunStatus`:
+以下は、`lastRunStatus` で成功したモデルの結果をフィルターする例です。
 
 <Lightbox src="/img/Filtering.png" width="75%" title="Example of filtering"/>
 
-Below is an example that filters for models that have an error on their last run and tests that have failed:
+以下は、前回の実行でエラーが発生したモデルと失敗したテストをフィルタリングする例です。
 
 <!-- TODO: Update screenshot to use `$environmentId: BigInt!, or remove it` -->
 <!-- However we can choose to leave this be, since the important info from the screenshot is to show how the GraphQL API canbe used -- the content (request and response) doesn't matter too much` -->
@@ -236,7 +236,7 @@ query ModelsAndTests($environmentId: BigInt!, $first: Int!) {
 }
 ```
 
-## Related content
+## 関連コンテンツ
 
-- [Use cases and examples for the Discovery API](/docs/dbt-cloud-apis/discovery-use-cases-and-examples)
-- [Schema](/docs/dbt-cloud-apis/discovery-schema-job)
+- [Discovery API のユースケースと例](/docs/dbt-cloud-apis/discovery-use-cases-and-examples)
+- [スキーマ](/docs/dbt-cloud-apis/discovery-schema-job)

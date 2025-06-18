@@ -5,58 +5,58 @@ pagination_prev: "docs/cloud-integrations/snowflake-native-app"
 pagination_next: null
 ---
 
-# Set up the dbt Snowflake Native App <Lifecycle status='preview' />
+# dbt Snowflakeネイティブアプリをセットアップする <Lifecycle status='preview' />
 
-The [dbt Snowflake Native App](/docs/cloud-integrations/snowflake-native-app) enables these features within the Snowflake user interface: <Constant name="explorer" />, the **Ask dbt** chatbot, and <Constant name="cloud" />'s orchestration observability features. 
+[dbt Snowflake ネイティブ アプリ](/docs/cloud-integrations/snowflake-native-app) は、Snowflake ユーザー インターフェース内で、<Constant name="explorer" />、**Ask dbt** チャットボット、および <Constant name="cloud" /> のオーケストレーション オブザーバビリティ機能を有効にします。
 
-Configure both <Constant name="cloud" /> and Snowflake to set up this integration. The high-level steps are described as follows: 
+この統合を設定するには、<Constant name="cloud" /> と Snowflake の両方を構成します。大まかな手順は次のとおりです。
 
-1. Set up the **Ask dbt** configuration. 
-1. Configure Snowflake. 
-1. Configure <Constant name="cloud" />.
-1. Purchase and install the dbt Snowflake Native App.
-1. Configure the app.
-1. Verify successful installation of the app.
-1. Onboard new users to the app.
+1. **Ask dbt** 構成をセットアップします。
+1. Snowflake を構成します。
+1. <Constant name="cloud" /> を構成します。
+1. dbt Snowflake ネイティブ アプリを購入してインストールします。
+1. アプリを構成します。
+1. アプリのインストールが成功したことを確認します。
+1. 新しいユーザーをアプリにオンボーディングします。
 
-The order of the steps is slightly different if you purchased the public listing of the Native App; you'll start by purchasing the Native App, satisfying the prerequisites, and then completing the remaining steps in order.  
+ネイティブ アプリの公開リストを購入した場合、手順の順序が若干異なります。まずネイティブ アプリを購入し、前提条件を満たしてから、残りの手順を順番に完了します。
 
-## Prerequisites
-The following are the prerequisites for <Constant name="cloud" /> and Snowflake. 
+## 前提条件
+<Constant name="cloud" /> と Snowflake の前提条件は次のとおりです。
 
 ### dbt
 
-- You must have a <Constant name="cloud" /> account on an Enterprise-tier plan that's in an AWS Region or Azure region. If you don't already have one, please [contact us](mailto:sales_snowflake_marketplace@dbtlabs.com) to get started.
-    - Currently, <Constant name="semantic_layer" /> is unavailable for Azure ST instances and the **Ask dbt** chatbot will not function in the dbt Snowflake Native App without it. 
-- Your <Constant name="cloud" /> account must have permission to create a [service token](/docs/dbt-cloud-apis/service-tokens). For details, refer to [Enterprise permissions](/docs/cloud/manage-access/enterprise-permissions).
-- There's a <Constant name="cloud" /> project with [<Constant name="semantic_layer" /> configured](/docs/use-dbt-semantic-layer/setup-sl) and metrics declared. 
-- You have set up a [production deployment environment](/docs/deploy/deploy-environments#set-as-production-environment).
-    - There has been at least one successful job run that includes a `docs generate` step in the deployment environment.
+- AWS リージョンまたは Azure リージョン内のエンタープライズプランの <Constant name="cloud" /> アカウントが必要です。まだお持ちでない場合は、[お問い合わせ](mailto:sales_snowflake_marketplace@dbtlabs.com) から開始してください。
+- 現在、Azure ST インスタンスでは <Constant name="semantic_layer" /> はご利用いただけません。また、このアカウントがないと、dbt Snowflake ネイティブアプリの **Ask dbt** チャットボットは機能しません。
+- <Constant name="cloud" /> アカウントには、[サービストークン](/docs/dbt-cloud-apis/service-tokens) を作成する権限が必要です。詳細については、[エンタープライズ権限](/docs/cloud/manage-access/enterprise-permissions) をご覧ください。
+- [<Constant name="semantic_layer" /> が設定](/docs/use-dbt-semantic-layer/setup-sl)され、メトリックが宣言された <Constant name="cloud" /> プロジェクトがあります。
+- [本番環境のデプロイメント環境](/docs/deploy/deploy-environments#set-as-production-environment) をセットアップしました。
+- デプロイメント環境で、`docs generate` ステップを含むジョブ実行が少なくとも 1 回成功しています。
 
 ### Snowflake
 
-- You have **ACCOUNTADMIN** access in Snowflake.
-- Your Snowflake account must have access to the Native App/SPCS integration and NA/SPCS configurations (Public Preview planned at end of June). If you're unsure, please check with your Snowflake account manager.
-- The Snowflake account must be in an AWS Region. Azure is not currently supported for Native App/SPCS integration. 
-- You have access to Snowflake Cortex through your Snowflake permissions and [Snowflake Cortex is available in your region](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#availability). Without this, Ask dbt will not work.
+- Snowflake で **ACCOUNTADMIN** アクセス権が必要です。
+- Snowflake アカウントには、ネイティブアプリ/SPCS 統合および NA/SPCS 構成へのアクセス権が必要です（パブリックプレビューは 6 月末に予定されています）。不明な場合は、Snowflake アカウントマネージャーにお問い合わせください。
+- Snowflake アカウントは AWS リージョンに属している必要があります。Azure は現在、ネイティブアプリ/SPCS 統合ではサポートされていません。
+- Snowflake の権限を通じて Snowflake Cortex にアクセスできる必要があります。[Snowflake Cortex はお客様のリージョンで利用可能です](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#availability)。これらがない場合、Ask dbt は動作しません。
 
-## Set up the configuration for Ask dbt
+## Ask dbt の設定
 
-Configure <Constant name="cloud" /> and Snowflake Cortex to power the **Ask dbt** chatbot.
+**Ask dbt** チャットボットを動かすために、<Constant name="cloud" /> と Snowflake Cortex を設定します。
 
-1. In <Constant name="cloud" />, browse to your <Constant name="semantic_layer" /> configurations. 
+1. <Constant name="cloud" /> で、<Constant name="semantic_layer" /> の設定を参照します。
 
-    1. Navigate to the left hand side panel and click your account name. From there, select **Account settings**. 
-    1. In the left sidebar, select **Projects** and choose your dbt project from the project list. 
+    1. 左側のパネルに移動し、アカウント名をクリックします。そこから [アカウント設定] を選択します。
+    1. 左側のサイドバーで [プロジェクト] を選択し、プロジェクトリストから dbt プロジェクトを選択します。
 
-    1. In the **Project details** panel, click the **Edit <Constant name="semantic_layer" /> Configuration** link (which is below the **GraphQL URL** option). 
-1. In the **<Constant name="semantic_layer" /> Configuration Details** panel, identify the Snowflake credentials (which you'll use to access Snowflake Cortex) and the environment against which the <Constant name="semantic_layer" /> is run. Save the username, role, and the environment in a temporary location to use later on. 
+    1. [プロジェクトの詳細] パネルで、[GraphQL URL] オプションの下にある [<Constant name="semantic_layer" /> 設定の編集] リンクをクリックします。
+1. **<Constant name="semantic_layer" /> 構成の詳細** パネルで、Snowflake の認証情報（Snowflake Cortex へのアクセスに使用）と、<Constant name="semantic_layer" /> を実行する環境を指定します。ユーザー名、ロール、環境を一時的な場所に保存し、後で使用できるようにします。
 
     <Lightbox src="/img/docs/cloud-integrations/semantic_layer_configuration.png" width="100%" title="Semantic Layer credentials"/>
 
-1. In Snowflake, verify that your SL and deployment user has been granted permission to use Snowflake Cortex. For more information, refer to [Required Privileges](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#required-privileges) in the Snowflake docs. 
-    
-    By default, all users should have access to Snowflake Cortex. If this is disabled for you, open a Snowflake SQL worksheet and run these statements:
+1. Snowflakeで、SLとデプロイメントユーザーにSnowflake Cortexを使用する権限が付与されていることを確認してください。詳細については、Snowflakeドキュメントの[必要な権限](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#required-privileges)を参照してください。
+
+    デフォルトでは、すべてのユーザーがSnowflake Cortexにアクセスできます。これが無効になっている場合は、Snowflake SQLワークシートを開き、以下のステートメントを実行してください。
 
     ```sql
     create role cortex_user_role;
@@ -65,92 +65,91 @@ Configure <Constant name="cloud" /> and Snowflake Cortex to power the **Ask dbt*
     grant role cortex_user_role to user DEPLOYMENT_USER;
     ```
 
-    Make sure to replace `SNOWFLAKE.CORTEX_USER`, `DEPLOYMENT_USER`, and `SL_USER` with the appropriate strings for your environment.
+    `SNOWFLAKE.CORTEX_USER`、`DEPLOYMENT_USER`、および `SL_USER` を、ご使用の環境に適した文字列に置き換えてください。
 
-## Configure dbt
-Collect the following pieces of information from <Constant name="cloud" /> to set up the application. 
+## dbt を構成する
+アプリケーションをセットアップするには、<Constant name="cloud" /> から以下の情報を収集します。
 
-1. Navigate to the left-hand side panel and click your account name. From there, select **Account settings**. Then click **API tokens > Service tokens**. Create a service token with access to all the projects you want to access in the dbt Snowflake Native App. Grant these permission sets: 
-    - **Manage marketplace apps**
-    - **Job Admin**
-    - **Metadata Only**
-    - **<Constant name="semantic_layer" /> Only**
+1. 左側のパネルに移動し、アカウント名をクリックします。そこから **アカウント設定** を選択します。次に、**API トークン > サービス トークン** をクリックします。dbt Snowflake ネイティブアプリでアクセスするすべてのプロジェクトへのアクセス権を持つサービストークンを作成します。以下の権限セットを付与します。
+    - **マーケットプレイスアプリの管理**
+    - **ジョブ管理者**
+    - **メタデータのみ**
+    - **<Constant name="semantic_layer" /> のみ**
 
-    Make sure to save the token information in a temporary location to use later during Native App configuration.
+    トークン情報は、後でネイティブアプリの構成時に使用するため、一時的な場所に保存してください。
 
-    The following is an example of granting the permission sets to all projects:
+    以下は、すべてのプロジェクトに権限セットを付与する例です。
 
     <Lightbox src="/img/docs/cloud-integrations/example-snowflake-native-app-service-token.png" title="Example of a new service token for the dbt Snowflake Native App"/>
 
-1. From the left sidebar, select **Account** and save this information in a temporary location to use later during Native App configuration:
-    - **Account ID** &mdash; A numerical string representing your <Constant name="cloud" /> account.
-    - **Access URL** &mdash; If you have a North America multi-tenant account, use `cloud.getdbt.com` as the access URL. For all other regions, refer to [Access, Regions, & IP addresses](/docs/cloud/about-cloud/access-regions-ip-addresses) and look up the access URL you should use in the table. 
+1. 左側のサイドバーから [**アカウント**] を選択し、ネイティブアプリの設定時に後で使用できるように、以下の情報を一時的な場所に保存します。
+    - **アカウントID** - <Constant name="cloud" /> アカウントを表す数値文字列。
+    - **アクセス URL** - 北米のマルチテナントアカウントをお持ちの場合は、アクセス URL として `cloud.getdbt.com` を使用してください。その他のリージョンについては、[アクセス、リージョン、および IP アドレス](/docs/cloud/about-cloud/access-regions-ip-addresses) を参照し、表から必要なアクセス URL を調べてください。
 
-## Install the dbt Snowflake Native App
-1. Browse to the listing for the dbt Snowflake Native App: 
-    - **Private listing** (recommended) &mdash; Use the link from the email sent to you. 
-    - **Public listing** &mdash; Navigate to the [Snowflake Marketplace](https://app.snowflake.com/marketplace/listing/GZTYZSRT2R3). 
-1. Click **Get** on the listing to install the dbt Snowflake Native App. This can take several minutes. When installation is complete, an email is sent to you. 
-    
-    A message will appear asking if you want to change the application and grant access to the warehouse for installation. dbt Labs strongly recommends not changing the application name unless necessary.
-1. When the dbt Snowflake Native App is successfully installed, click **Configure** in the modal window. 
+## dbt Snowflakeネイティブアプリをインストールします
+1. dbt Snowflakeネイティブアプリのリストを参照します。
+    - **プライベートリスト** (推奨) - 送信されたメールのリンクを使用します。
+    - **パブリックリスト** - [Snowflake Marketplace](https://app.snowflake.com/marketplace/listing/GZTYZSRT2R3) に移動します。
+1. リストの「**入手**」をクリックして、dbt Snowflakeネイティブアプリをインストールします。インストールには数分かかる場合があります。インストールが完了すると、メールが送信されます。
 
-## Configure the dbt Snowflake Native App
+アプリケーションを変更して、インストールのためにウェアハウスへのアクセスを許可するかどうかを確認するメッセージが表示されます。dbt Labsは、必要がない限りアプリケーション名を変更しないことを強くお勧めします。
+1. dbt Snowflakeネイティブアプリが正常にインストールされたら、モーダルウィンドウで「**構成**」をクリックします。
 
-1. On the **Activate dbt** page, click **Grant** in **Step 1: Grant Account Privileges**.
-1. When privileges have been successfully granted, click **Review** in **Step 2: Allow Connections**. 
+## dbt Snowflakeネイティブアプリの構成
 
-    Walk through the **Connect to <Constant name="cloud" /> External Access Integration** steps. You will need your <Constant name="cloud" /> account information that you collected earlier. Enter your account ID, access URL, and API service token as the **Secret value** when prompted. 
-1. On the **Activate dbt** page, click **Activate** when you've established a successful connection to the <Constant name="cloud" /> External Access Integration. It can take a few minutes to spin up the required Snowflake services and compute resources. 
-1. When activation is complete, select the **Telemetry** tab and enable the option to share your `INFO` logs. The option might take some time to display. This is because Snowflake needs to create the events table so it can be shared.
-1. When the option is successfully enabled, click **Launch app**. Then, log in to the app with your Snowflake credentials. 
-    
-    If it redirects you to a Snowsight worksheet (instead of the login page), that means the app hasn't finished installing. You can resolve this issue, typically, by refreshing the page.   
+1. **「dbtのアクティベート」** ページで、**ステップ1：アカウント権限の付与** の **「付与」** をクリックします。
+1. 権限が正常に付与されたら、**ステップ2：接続の許可** の **「確認」** をクリックします。
 
-    The following is an example of the dbt Snowflake Native App after configuration:
+    **「<Constant name="cloud" /> 外部アクセス統合への接続」** の手順を実行します。事前に収集した <Constant name="cloud" /> アカウント情報が必要になります。プロンプトが表示されたら、アカウントID、アクセスURL、APIサービストークンを **シークレット値** として入力します。
+1. **「dbtのアクティベート」** ページで、<Constant name="cloud" /> 外部アクセス統合への接続が確立されたら、**「アクティベート」** をクリックします。必要なSnowflakeサービスとコンピューティングリソースが起動するまで数分かかる場合があります。
+1. アクティベーションが完了したら、**「テレメトリ」** タブを選択し、`INFO` ログを共有するオプションを有効にします。このオプションが表示されるまで時間がかかる場合があります。これは、Snowflakeがイベントテーブルを作成して共有できるようにするためです。
+1. オプションが有効になったら、「**アプリを起動**」をクリックします。次に、Snowflakeの認証情報を使用してアプリにログインします。
+
+    ログインページではなく、Snowsightワークシートにリダイレクトされる場合は、アプリのインストールが完了していないことを意味します。通常、ページを更新することでこの問題を解決できます。
+
+    以下は、構成後のdbt Snowflakeネイティブアプリの例です。
 
     <Lightbox src="/img/docs/cloud-integrations/example-dbt-snowflake-native-app.png" title="Example of the dbt Snowflake Native App"/>
 
-## Verify the app installed successfully
+## アプリが正常にインストールされたことを確認する
 
-To verify the app installed successfully, select any of the following from the sidebar:
+アプリが正常にインストールされたことを確認するには、サイドバーから次のいずれかを選択します。
 
-- **Explore** &mdash; Launch <Constant name="explorer" /> and make sure you can access your dbt project information.
-- **Jobs** &mdash; Review the run history of the dbt jobs. 
-- **Ask dbt** &mdash; Click on any of the suggested prompts to ask the chatbot a question. Depending on the number of metrics that's defined for the dbt project, it can take several minutes to load **Ask dbt** the first time because dbt is building the Retrieval Augmented Generation (RAG). Subsequent launches will load faster.
+- **Explore** &mdash; <Constant name="explorer" /> を起動し、dbt プロジェクト情報にアクセスできることを確認します。
+- **Jobs** &mdash; dbt ジョブの実行履歴を確認します。
+- **Ask dbt** &mdash; 提案されたプロンプトのいずれかをクリックして、チャットボットに質問します。dbt プロジェクトに定義されている指標の数によっては、dbt が Retrieval Augmented Generation (RAG) を構築しているため、初回の **Ask dbt** の読み込みに数分かかる場合があります。次回の起動では読み込みが速くなります。
 
-
-The following is an example of the **Ask dbt** chatbot with the suggested prompts near the top: 
+以下は、上部近くに提案されたプロンプトが表示されている **Ask dbt** チャットボットの例です。 
 
 <Lightbox src="/img/docs/cloud-integrations/example-ask-dbt-native-app.png" title="Example of the Ask dbt chatbot"/>
 
 
-## Onboard new users
-1. From the sidebar in Snowflake, select **Data Products > Apps**. Choose **dbt** from the list to open the app's configuration page. Then, click **Manage access** (in the upper right) to onboard new users to the application. Grant the **APP_USER** role to the appropriate roles that should have access to the application but not the ability to edit the configurations. Grant **APP_ADMIN** to roles that should have access to edit or remove the configurations.
+## 新規ユーザーのオンボーディング
+1. Snowflake のサイドバーから、**[データ製品] > [アプリ]** を選択します。リストから **dbt** を選択して、アプリの構成ページを開きます。次に、右上の [アクセスの管理]** をクリックして、新規ユーザーをアプリケーションにオンボーディングします。アプリケーションへのアクセスは許可するが、構成の編集権限は付与しない適切なロールに **APP_USER** ロールを付与します。構成の編集または削除権限を付与するロールには **APP_ADMIN** ロールを付与します。
 
-1. New users can access the app with either the Snowflake app URL that's been shared with them, or by clicking **Launch app** from the app's configuration page.
+1. 新規ユーザーは、共有された Snowflake アプリの URL を使用するか、アプリの構成ページで **[アプリの起動]** をクリックすることで、アプリにアクセスできます。
 
 
 ## FAQs
 
-<Expandable alt_header="Unable to install the dbt Snowflake Native app from the Snowflake Marketplace" >
+<Expandable alt_header="Snowflake Marketplaceからdbt Snowflake Nativeアプリをインストールできない" >
 
-The <Constant name="cloud" /> Snowflake Native App is not available to Snowflake Free Trial accounts.
-
-</Expandable>
-
-<Expandable alt_header="Received the error message `Unable to access schema dbt_sl_llm` from Ask dbt" >
-
-Check that the SL user has been granted access to the `dbt_sl_llm` schema and make sure they have all the necessary permissions to read and write from the schema.
+<Constant name="cloud" /> Snowflake ネイティブ アプリは、Snowflake 無料トライアル アカウントでは利用できません。
 
 </Expandable>
 
-<Expandable alt_header="Need to update the dbt configuration options used by the Native App" >
+<Expandable alt_header="Ask dbtから `Unable to access schema dbt_sl_llm` というエラーメッセージを受け取りました" >
 
-If there's been an update to the <Constant name="cloud" /> account ID, access URL, or API service token, you need to update the configuration for the dbt Snowflake Native App. In Snowflake, navigate to the app's configuration page and delete the existing configurations. Add the new configuration and then run `CALL app_public.restart_app();` in the application database in Snowsight. 
+SL ユーザーに `dbt_sl_llm` スキーマへのアクセスが許可されていることを確認し、スキーマからの読み取りと書き込みに必要なすべての権限があることを確認します。
+
 </Expandable>
 
-<Expandable alt_header="Are environment variables supported in the Native App?" >
+<Expandable alt_header="ネイティブアプリで使用されるdbt構成オプションを更新する必要がある" >
 
-[Environment variables](/docs/build/environment-variables), like `{{env_var('DBT_WAREHOUSE') }}` aren’t supported in the <Constant name="semantic_layer" /> yet. To use the 'Ask dbt' feature, you must use the actual credentials instead.
+<Constant name="cloud" /> アカウントID、アクセスURL、またはAPIサービストークンが更新された場合は、dbt Snowflakeネイティブアプリの構成を更新する必要があります。Snowflakeでアプリの構成ページに移動し、既存の構成を削除してください。新しい構成を追加し、Snowsightのアプリケーションデータベースで `CALL app_public.restart_app();` を実行してください。
+</Expandable>
+
+<Expandable alt_header="ネイティブ アプリでは環境変数はサポートされていますか?" >
+
+[環境変数](/docs/build/environment-variables)（`{{env_var('DBT_WAREHOUSE') }}` など）は、<Constant name="semantic_layer" /> ではまだサポートされていません。「Ask dbt」機能を使用するには、代わりに実際の認証情報を使用する必要があります。
 </Expandable>

@@ -6,55 +6,55 @@ tags: [dbt Insights]
 image: /img/docs/dbt-insights/insights-results.jpg
 ---
 
-# Navigate the dbt Insights interface <Lifecycle status="preview,managed,managed_plus" />
+# dbt Insightsインターフェースを操作する <Lifecycle status="preview,managed,managed_plus" />
 
 <IntroText>
-Learn how to navigate <Constant name="query_page" /> interface and use the main components.
+<Constant name="query_page" /> インターフェースをナビゲートし、主要なコンポーネントを使用する方法を学習します。
 </IntroText>
 
 :::tip
-<Constant name="query_page" /> is available in private beta to Enterprise accounts. To join, please reach out to your account manager.
+<Constant name="query_page" /> は、Enterprise アカウント向けにプライベートベータ版としてご利用いただけます。ご参加いただくには、担当のアカウントマネージャーまでお問い合わせください。
 :::
 
-<Constant name="query_page" /> provides an interactive interface for writing, running, and analyzing SQL queries. This section highlights the main components of <Constant name="query_page" />. 
+<Constant name="query_page" /> は、SQLクエリの作成、実行、分析のための対話型インターフェースを提供します。このセクションでは、<Constant name="query_page" /> の主なコンポーネントについて説明します。
 
-## Query console
-The query console is the main component of <Constant name="query_page" />. It allows you to write, run, and analyze SQL queries. The Query console supports:
-- Query console editor, which allows you to write, run, and analyze SQL queries:
-  - It supports syntax highlighting and autocomplete suggestions 
-  - Hyperlink from SQL code `ref` to the corresponding Explorer page
-- [Query console menu](#query-console-menu), which contains **Bookmark (icon)**, **Develop**, and **Run** buttons. 
-- [Query output panel](#query-output-panel), below the query editor and displays the results of a query:
-  - Has three tabs: **Results**, **Details**, and **Chart**, which allow you to analyze query execution and visualize results.
-- [Query console sidebar menu](#query-console-sidebar-menu), which contains the **<Constant name="explorer" />**, **Bookmark**, **Query history**, and **<Constant name="copilot" />** icons.
+## クエリコンソール
+クエリコンソールは <Constant name="query_page" /> のメインコンポーネントです。SQL クエリの作成、実行、分析が可能です。クエリコンソールは以下の機能をサポートしています。
+- クエリコンソールエディター。SQL クエリの作成、実行、分析が可能です。
+  - 構文のハイライト表示とオートコンプリート機能をサポートしています。
+  - SQL コード `ref` から対応するエクスプローラーページへのハイパーリンク
+- [クエリコンソールメニュー](#query-console-menu)。**ブックマーク（アイコン）**、**開発**、**実行** ボタンが含まれています。
+- [クエリ出力パネル](#query-output-panel)。クエリエディターの下にあり、クエリの結果を表示します。
+  - **結果**、**詳細**、**チャート** の 3 つのタブがあり、クエリ実行を分析し、結果を視覚化できます。
+- [クエリ コンソール サイドバー メニュー](#query-console-sidebar-menu)。**<Constant name="explorer" />**、**ブックマーク**、**クエリ履歴**、および **<Constant name="copilot" />** のアイコンが含まれています。
 
 <Lightbox src="/img/docs/dbt-insights/insights-main.png" title="dbt Insights main interface with blank query editor" />
 
-### Query console menu
-The Query console menu is located at the top right of the Query editor. It contains the **Bookmark**, **Develop**, and **Run** buttons:
+### クエリコンソールメニュー
+クエリコンソールメニューは、クエリエディターの右上にあります。**ブックマーク**、**開発**、**実行** ボタンがあります。
 
-- **Bookmark** button &mdash; Save your frequently used SQL queries as favorites for easier access.
-  - When you click **Bookmark**, a **Bookmark Query Details** modal (pop up box) will appear where you can add a **Title** and **Description**.
-  - Let [<Constant name="copilot" />](/docs/cloud/dbt-copilot) do the writing for you &mdash; use the AI assistant to automatically generate a helpful description for your bookmark.
-  - Access the newly created bookmark from the **Bookmark** icon in the [Query console sidebar menu](#query-console-sidebar-menu). 
- - **Develop**: Open the [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) or [<Constant name="visual_editor" />](/docs/cloud/canvas) to continue editing your SQL query.
-- **Run** button &mdash; Run your SQL query and view the results in the **Results** tab.
+- **ブックマーク** ボタン - よく使用する SQL クエリをお気に入りとして保存しておくと、簡単にアクセスできます。
+  - **ブックマーク** をクリックすると、**ブックマーククエリの詳細** モーダル（ポップアップボックス）が表示され、**タイトル** と **説明** を入力できます。
+  - [<Constant name="copilot" />](/docs/cloud/dbt-copilot) が自動でブックマークを作成します - AI アシスタントがブックマークのわかりやすい説明を自動的に生成します。
+  - 新しく作成したブックマークには、[クエリコンソールサイドバーメニュー](#query-console-sidebar-menu) の **ブックマーク** アイコンからアクセスできます。
+- **開発**: [<Constant name="cloud_ide" />](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) または [<Constant name="visual_editor" />](/docs/cloud/canvas) を開いて、SQL クエリの編集を続行します。
+- **実行** ボタン &mdash; SQL クエリを実行し、[結果] タブに結果を表示します。
 
   <Lightbox src="/img/docs/dbt-insights/develop-menu.png" title="dbt Insights Develop menu." />
 
-## Query output panel
+## クエリ出力パネル
 
-The Query output panel is below the query editor and displays the results of a query. It displays the following tabs to analyze query execution and visualize results:
-- **Results** tab &mdash; Preview your SQL results, with results paginated.
-- **Details** tab &mdash; Generates succinct details of executed SQL query:
-  - Query metadata &mdash; <Constant name="copilot" />'s AI-generated title and description. Along with the supplied SQL and compiled SQL.
-  - Connection details &mdash; Relevant data platform connection information.
-  - Query details &mdash; Query duration, status, column count, row count.
-- **Chart** tab &mdash; Visualizes query results with built-in charts. 
-  - Use the chart icon to select the type of chart you want to visualize your results. Available chart types are **line chart, bar chart, or scatterplot**.
-  - Use the **Chart settings** to customize the chart type and the columns you want to visualize. 
-  - Available chart types are **line chart, bar chart, or scatterplot**.
-- **Download**  button &mdash; Allows you to export the results to CSV
+クエリ出力パネルはクエリエディターの下にあり、クエリの結果を表示します。以下のタブが表示され、クエリ実行を分析し、結果を視覚化できます。
+- **結果** タブ - SQL 結果をページ区切りでプレビューします。
+- **詳細** タブ - 実行された SQL クエリの簡潔な詳細を生成します。
+  - クエリメタデータ - <Constant name="copilot" /> の AI 生成タイトルと説明。提供された SQL とコンパイル済み SQL も表示されます。
+  - 接続の詳細 - 関連するデータプラットフォーム接続情報。
+  - クエリの詳細 - クエリの実行時間、ステータス、列数、行数。
+- **グラフ** タブ - 組み込みのグラフを使用して、クエリ結果を視覚化します。
+  - グラフアイコンを使用して、結果を視覚化するグラフの種類を選択します。使用可能なグラフの種類は、**折れ線グラフ、棒グラフ、散布図** です。
+  - **グラフ設定** を使用して、グラフの種類と視覚化する列をカスタマイズします。
+  - 使用可能なグラフの種類は、**折れ線グラフ、棒グラフ、散布図** です。
+- **ダウンロード** ボタン - 結果を CSV 形式でエクスポートできます
 
 <DocCarousel slidesPerView={1}>
 <Lightbox src="/img/docs/dbt-insights/insights-results.png" width="95%" title="dbt Insights Results tab" />
@@ -62,12 +62,12 @@ The Query output panel is below the query editor and displays the results of a q
 <Lightbox src="/img/docs/dbt-insights/insights-chart.png" width="95%" title="dbt Insights Chart tab" />
 </DocCarousel>
 
-## Query console sidebar menu
-The Query console sidebar menu and icons contains the following options:
-- **<Constant name="explorer" /> icon** &mdash; View your project's models, columns, metrics, and more using the integrated <Constant name="explorer" /> view.
-- **Bookmark icon** &mdash; Save and access your frequently used queries. 
-- **Query history icon** &mdash; View past queries, their statuses (All, Success, Error, or Pending), start time, and duration. Search for past queries and filter by status. You can also re-run a query from the Query history.
-- **<Constant name="copilot" /> icon** &mdash; Use [<Constant name="copilot" />'s AI assistant](/docs/cloud/dbt-copilot) to modify or generate queries using natural language prompts.
+## クエリコンソールのサイドバーメニュー
+クエリコンソールのサイドバーメニューとアイコンには、次のオプションがあります。
+- **<Constant name="explorer" /> アイコン** &mdash; 統合された <Constant name="explorer" /> ビューを使用して、プロジェクトのモデル、列、メトリックなどを表示します。
+- **ブックマークアイコン** &mdash; よく使用するクエリを保存してアクセスします。
+- **クエリ履歴アイコン** &mdash; 過去のクエリ、そのステータス（すべて、成功、エラー、保留中）、開始時刻、および所要時間を表示します。過去のクエリを検索し、ステータスでフィルタリングします。クエリ履歴からクエリを再実行することもできます。
+- **<Constant name="copilot" /> アイコン** &mdash; [<Constant name="copilot" /> の AI アシスタント](/docs/cloud/dbt-copilot) を使用して、自然言語プロンプトを使用してクエリを変更または生成します。
 
 <DocCarousel slidesPerView={1}>
 <Lightbox src="/img/docs/dbt-insights/insights-explorer.png" width="90%" title="dbt Insights dbt Explorer icon" />

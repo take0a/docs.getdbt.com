@@ -1,7 +1,7 @@
-- Have a dbt Cloud Team or Enterprise account. Available on all [tenant configurations](/docs/cloud/about-cloud/tenancy).
-- Ensure your production and development environments are on a [supported dbt version](/docs/dbt-versions/upgrade-dbt-version-in-cloud).
-- Use Snowflake, BigQuery, Databricks, Redshift, or Postgres.
--  Create a successful run in the environment where you configure the Semantic Layer. 
-   - **Note:** Semantic Layer supports querying in Deployment environments; development querying is coming soon.
-- Understand [MetricFlow's](/docs/build/about-metricflow) key concepts powering the dbt Semantic Layer.  
-- Note that the dbt Semantic Layer doesn't support SSH tunneling for [Postgres or Redshift](/docs/cloud/connect-data-platform/connect-redshift-postgresql-alloydb) connections.  It also doesn't support using [Single sign-on (SSO)](/docs/cloud/manage-access/sso-overview) for [production credentials](/docs/dbt-cloud-apis/service-tokens#permissions-for-service-account-tokens), though SSO is supported for development user accounts.
+- <Constant name="cloud" /> Starter、Enterprise、または Enterprise+ アカウントが必要です。すべての [テナント構成](/docs/cloud/about-cloud/tenancy) でご利用いただけます。
+- 本番環境と開発環境が [サポートされている dbt バージョン](/docs/dbt-versions/upgrade-dbt-version-in-cloud) であることを確認してください。
+- Snowflake、BigQuery、Databricks、Redshift、または Postgres を使用してください。
+- <Constant name="semantic_layer" /> を構成する環境で、正常に実行できることを事前に確認してください。
+- **注:** <Constant name="semantic_layer" /> は、デプロイメント環境でのクエリをサポートしています。開発環境でのクエリは近日中にサポートされる予定です。
+- <Constant name="semantic_layer" /> を支える [MetricFlow](/docs/build/about-metricflow) の主要概念を理解してください。
+- 開発ユーザー アカウントでは SSO がサポートされていますが、<Constant name="semantic_layer" /> は [本番環境の資格情報](/docs/dbt-cloud-apis/service-tokens#permissions-for-service-account-tokens) に対する [シングル サインオン (SSO)](/docs/cloud/manage-access/sso-overview) の使用をサポートしていないことに注意してください。

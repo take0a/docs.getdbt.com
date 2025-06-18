@@ -4,83 +4,82 @@ id: "service-tokens"
 description: "Service account tokens help you define permissions for securing access to your dbt account and its projects."
 ---
 
-# Service account tokens <Lifecycle status="managed,managed_plus" />
+# サービスアカウントトークン <Lifecycle status="managed,managed_plus" />
 
-:::info Important service account token update
+:::info サービスアカウントトークンの重要な更新
 
-If you have service tokens created on or before July 18, 2023, please read [this important update](/docs/dbt-cloud-apis/service-tokens#service-token-update).
+2023年7月18日以前に作成されたサービストークンをお持ちの場合は、[この重要な更新](/docs/dbt-cloud-apis/service-tokens#service-token-update)をお読みください。
 
 :::
 
-Service account tokens enable you to securely authenticate with the <Constant name="cloud" /> API by assigning each token a narrow set of permissions that more precisely manages access to the API. While similar to [personal access tokens](user-tokens), service account tokens belong to an account rather than a user.
+サービスアカウントトークンを使用すると、各トークンに限られた権限セットを割り当て、API へのアクセスをより正確に管理することで、<Constant name="cloud" /> API による安全な認証が可能になります。[個人アクセストークン](ユーザートークン) に似ていますが、サービスアカウントトークンはユーザーではなくアカウントに属します。
 
-You can use service account tokens for system-level integrations that do not run on behalf of any one user. Assign any permission sets available in <Constant name="cloud" /> to your service account token, which can vary slightly depending on your plan:
+サービスアカウントトークンは、特定のユーザーに代わって実行されないシステムレベルの統合に使用できます。<Constant name="cloud" /> で利用可能な権限セットをサービスアカウントトークンに割り当てます。これはプランによって若干異なる場合があります。
 
-* Enterprise and Enterprise+ plans can apply any permission sets available to service tokens.
-* Developer and Starter plans can apply  <Constant name="semantic_layer" /> permissions set to service tokens.
-* Legacy Team plans can apply Account Admin, Member, Job Admin, Read-Only, Metadata, and <Constant name="semantic_layer" /> permissions set to service tokens.
+* Enterprise プランと Enterprise+ プランでは、サービストークンに利用可能なすべての権限セットを適用できます。
+* Developer プランと Starter プランでは、<Constant name="semantic_layer" /> 権限セットをサービストークンに適用できます。
+* Legacy Team プランでは、アカウント管理者、メンバー、ジョブ管理者、読み取り専用、メタデータ、および <Constant name="semantic_layer" /> 権限セットをサービストークンに適用できます。
 
-You can assign as many permission sets as needed to one token. For more on permissions sets, see "[Enterprise Permissions](/docs/cloud/manage-access/enterprise-permissions)."
+1 つのトークンに必要な数の権限セットを割り当てることができます。権限セットの詳細については、「[エンタープライズ権限](/docs/cloud/manage-access/enterprise-permissions)」を参照してください。
 
-## Generate service account tokens
+## サービスアカウントトークンの生成
 
-You can generate service tokens if you have a Developer [license](/docs/cloud/manage-access/seats-and-users) and account admin [permissions](/docs/cloud/manage-access/about-user-access#permission-sets). To create a service token in <Constant name="cloud" />, follow these steps:
+開発者ライセンス（/docs/cloud/manage-access/seats-and-users）とアカウント管理者権限（/docs/cloud/manage-access/about-user-access#permission-sets）をお持ちの場合、サービストークンを生成できます。<Constant name="cloud" /> でサービストークンを作成するには、以下の手順に従います。
 
-1. From <Constant name="cloud" />, click on your account name in the left side menu and select **Account settings**.
-2. On the left sidebar, click on **Service Tokens**.
-3. Click the **+ New Token** button to generate a new token.
-4. Once the token is generated, you won't be able to view this token again so make sure to save it somewhere safe.
+1. <Constant name="cloud" /> の左側のメニューでアカウント名をクリックし、「**アカウント設定**」を選択します。
+2. 左側のサイドバーで、「**サービストークン**」をクリックします。
+3. 「**+ 新しいトークン**」ボタンをクリックして、新しいトークンを生成します。
+4. トークンが生成されると、再度表示できなくなりますので、安全な場所に保存してください。
 
-## Permissions for service account tokens
+## サービスアカウントトークンの権限
 
-You can assign service account tokens to any permission set available in <Constant name="cloud" />. When you assign a permission set to a token, you will also be able to choose whether to grant those permissions to all projects in the account or to specific projects.
+サービスアカウントトークンは、<Constant name="cloud" /> で利用可能な任意の権限セットに割り当てることができます。トークンに権限セットを割り当てる際に、その権限をアカウント内のすべてのプロジェクトに付与するか、特定のプロジェクトに付与するかを選択することもできます。
 
-### Team plans using service account tokens
+### サービスアカウントトークンを使用したチームプラン
 
-The following permissions can be assigned to a service account token on a Team plan. Refer to [Enterprise permissions](/docs/cloud/manage-access/enterprise-permissions) for more information about these roles. 
+チームプランのサービスアカウントトークンには、以下の権限を割り当てることができます。これらのロールの詳細については、[エンタープライズ権限](/docs/cloud/manage-access/enterprise-permissions)をご覧ください。
 
-- Account Admin &mdash; Account Admin service tokens have full `read + write` access to an account, so please use them with caution.  A Team plan refers to this permission set as an "Owner role."
-- Billing Admin
-- Job Admin 
-- Metadata Only
-- Member
-- Read-only 
-- <Constant name="semantic_layer" /> Only 
+- アカウント管理者 - アカウント管理者のサービストークンには、アカウントに対する完全な「読み取りと書き込み」権限があるため、慎重に使用してください。チームプランでは、この権限セットは「オーナーロール」と呼ばれます。
+- 課金管理者
+- ジョブ管理者
+- メタデータのみ
+- メンバー
+- 読み取り専用
+- <Constant name="semantic_layer" /> のみ
 
-### Enterprise plans using service account tokens
+### サービスアカウントトークンを使用するエンタープライズプラン
 
-Refer to [Enterprise permissions](/docs/cloud/manage-access/enterprise-permissions) for more information about these roles. 
+これらのロールの詳細については、[エンタープライズ権限](/docs/cloud/manage-access/enterprise-permissions) をご覧ください。
 
-- Account Admin &mdash; Account Admin service tokens have full `read + write` access to an account, so please use them with caution. 
-- Account Viewer
-- Admin
-- Analyst
-- Billing Admin
-- Database Admin
-- Developer
-- <Constant name="git" /> Admin
-- Job Admin
-- Job Runner
-- Job Viewer
-- Manage marketplace apps
-- Metadata Only 
-- <Constant name="semantic_layer" /> Only 
-- Security Admin
-- Stakeholder
-- Team Admin
+- アカウント管理者 - アカウント管理者のサービストークンには、アカウントへの完全な「読み取り + 書き込み」権限が付与されるため、慎重に使用してください。
+- アカウント閲覧者
+- 管理者
+- アナリスト
+- 請求管理者
+- データベース管理者
+- 開発者
+- <Constant name="git" /> 管理者
+- ジョブ管理者
+- ジョブ実行者
+- ジョブ閲覧者
+- マーケットプレイスアプリの管理
+- メタデータのみ
+- <Constant name="semantic_layer" /> のみ
+- セキュリティ管理者
+- ステークホルダー
+- チーム管理者
 
+## サービストークンの更新
 
-## Service token update
+2023年7月18日、dbt Labs はサービスアカウントトークンの重要なインフラストラクチャ変更を行いました。これらの機能強化により、2023年7月18日以降に作成されたすべてのトークンのセキュリティとパフォーマンスが向上します。セキュリティのベストプラクティスを確実に適用するには、この日付より前に作成されたサービストークンをローテーションすることをお勧めします。
 
-On July 18, 2023, dbt Labs made critical infrastructure changes to service account tokens. These enhancements improve the security and performance of all tokens created after July 18, 2023. To ensure security best practices are in place, we recommend you rotate your service tokens created before this date.
-
-To rotate your token:
-1. Navigate to **Account settings** and click **Service tokens** on the left side pane.
-2. Verify the **Created** date for the token is _on or before_ July 18, 2023. 
-    <Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/service-token-date.png" title="Service token created date"/>
-3. Click **+ New Token** on the top right side of the screen. Ensure the new token has the same permissions as the old one. 
-4. Copy the new token and replace the old one in your systems. Store it in a safe place, as it will not be available again once the creation screen is closed.
-5. Delete the old token in <Constant name="cloud" /> by clicking the **trash can icon**. _Only take this action after the new token is in place to avoid service disruptions_.
+トークンをローテーションするには：
+1. **アカウント設定** に移動し、左側のペインで **サービストークン** をクリックします。
+2. トークンの **作成** 日付が 2023年7月18日以前であることを確認します。
+<Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/service-token-date.png" title="サービストークン作成日"/>
+3. 画面右上の **+ 新しいトークン** をクリックします。新しいトークンに古いトークンと同じ権限が付与されていることを確認します。
+4. 新しいトークンをコピーし、システム内の古いトークンと置き換えます。作成画面を閉じると使用できなくなるため、安全な場所に保管してください。
+5. **ゴミ箱アイコン**をクリックして、<Constant name="cloud" /> 内の古いトークンを削除します。_サービスの中断を避けるため、この操作は新しいトークンが配置された後にのみ実行してください_。
 
 ## FAQs
 <FAQ path="Troubleshooting/ip-restrictions" />

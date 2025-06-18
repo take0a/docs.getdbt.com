@@ -6,28 +6,28 @@ pagination_next: "docs/dbt-cloud-apis/discovery-api"
 
 # dbt Administrative API <Lifecycle status="managed,managed_plus" />
 
-The <Constant name="cloud" /> Administrative API is enabled by default for [Enterprise and Enterprise+ plans](https://www.getdbt.com/pricing/). It can be used to:
+<Constant name="cloud" /> 管理APIは、[EnterpriseプランおよびEnterprise+プラン](https://www.getdbt.com/pricing/)でデフォルトで有効になっています。このAPIは以下の用途に使用できます。
 
-- Download artifacts after a job has completed
-- Kick off a job run from an orchestration tool
-- Manage your <Constant name="cloud" /> account
-- and more
+- ジョブ完了後の成果物のダウンロード
+- オーケストレーションツールからのジョブ実行の開始
+- <Constant name="cloud" /> アカウントの管理
+- その他
 
-<Constant name="cloud" /> currently supports two versions of the Administrative API: v2 and v3. In general, v3 is the recommended version to use, but we don't yet have all our v2 routes upgraded to v3. We're currently working on this. If you can't find something in our v3 docs, check out the shorter list of v2 endpoints because you might find it there. 
+<Constant name="cloud" /> は現在、Administrative API の v2 と v3 の 2 つのバージョンをサポートしています。一般的には v3 の使用が推奨されますが、すべての v2 ルートが v3 にアップグレードされているわけではありません。現在、この作業を進めています。v3 のドキュメントで見つからない情報がある場合は、v2 エンドポイントの短縮リストをご確認ください。そこに必要な情報が見つかる可能性があります。
 
-Many endpoints of the Administrative API can also be called through the [<Constant name="cloud" /> Terraform provider](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest). The built-in documentation on the Terraform registry contains [a guide on how to get started with the provider](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest/docs/guides/1_getting_started) as well as [a page showing all the Terraform resources available](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest/docs/guides/99_list_resources) to configure.
+管理APIの多くのエンドポイントは、[<Constant name="cloud" /> Terraformプロバイダー](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest)を介して呼び出すこともできます。Terraformレジストリに組み込まれているドキュメントには、[プロバイダーの使用開始方法に関するガイド](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest/docs/guides/1_getting_started)と、[設定可能なすべてのTerraformリソースを示すページ](https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest/docs/guides/99_list_resources)が含まれています。
 
 <div className="grid--2-col">
 
 <Card
     title="API v2"
-    body="Our legacy API version, with limited endpoints and features. Contains information not available in v3."
+    body="エンドポイントと機能が制限された、旧バージョンのAPIです。v3では利用できない情報が含まれています。"
 link="/dbt-cloud/api-v2"
     icon="pencil-paper"/>
 
 <Card
     title="API v3"
-    body="Our latest API version, with new endpoints and features."
+    body="新しいエンドポイントと機能を備えた最新の API バージョン。"
 link="/dbt-cloud/api-v3"
     icon="pencil-paper"/>
 
@@ -35,7 +35,7 @@ link="/dbt-cloud/api-v3"
  <Card
     title="dbt Terraform provider"
     link="https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest"
-    body="The Terraform provider maintained by dbt Labs which can be used to manage a dbt account."
+    body="dbt Labs によって管理されている Terraform プロバイダー。dbt アカウントの管理に使用できます。"
     icon="pencil-paper"/>
     <a href="https://registry.terraform.io/providers/dbt-labs/dbtcloud/latest"
     className="external-link"

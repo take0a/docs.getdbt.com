@@ -14,17 +14,17 @@ pagination_prev: "guides/sl-snowflake-qs"
 
 ## 前提条件
 
-import SetUp from '/snippets/_v2-sl-prerequisites.md';
+import SetUp from '/snippets.ja/_v2-sl-prerequisites.md';
 
 <SetUp/>
 
-import SLCourses from '/snippets/_sl-course.md';
+import SLCourses from '/snippets.ja/_sl-course.md';
 
 <SLCourses/>
 
 ## dbtセマンティックレイヤーを設定する
 
-import SlSetUp from '/snippets/_new-sl-setup.md';  
+import SlSetUp from '/snippets.ja/_new-sl-setup.md';  
 
 <SlSetUp/>
 

@@ -8,30 +8,30 @@ pagination_prev: null
 <div className="grid--2-col">
 
 <Card
-    title="Personal access tokens"
-    body="Learn about user tokens and how to use them to execute queries against the dbt API."
+    title="個人アクセストークン"
+    body="ユーザー トークンと、それを使用して dbt API に対してクエリを実行する方法について学習します。"
     link="/docs/dbt-cloud-apis/user-tokens"
     icon="dbt-bit"/>
 
 <Card
-    title="Service account tokens"
-    body="Learn how to use service account tokens to securely authenticate with dbt APIs for system-level integrations."
+    title="サービスアカウントトークン"
+    body="サービス アカウント トークンを使用して、システムレベルの統合のために dbt API で安全に認証する方法を学びます。"
     link="/docs/dbt-cloud-apis/service-tokens"
     icon="dbt-bit"/>
 
 </div>
 
-## Types of API access tokens
+## APIアクセストークンの種類
 
-**Personal access tokens:** Preferred and secure way of accessing <Constant name="cloud" /> APIs on behalf of a user. PATs are scoped to an account and can be enhanced with more granularity and control. 
+**個人アクセストークン:** ユーザーに代わって <Constant name="cloud" /> API にアクセスするための推奨される安全な方法です。PAT はアカウントにスコープが設定されており、よりきめ細かな制御が可能です。
 
-**Service tokens:** Service tokens are similar to service accounts and are the preferred method to enable access on behalf of the <Constant name="cloud" /> account.
+**サービストークン:** サービストークンはサービスアカウントに似ており、<Constant name="cloud" /> アカウントに代わってアクセスを許可するための推奨される方法です。
 
-### Which token type should you use
+### どのトークンタイプを使用すべきか
 
-You should use service tokens broadly for any production workflow where you need a service account. You should use PATs only for developmental workflows _or_ <Constant name="cloud" /> client workflows that require user context. The following examples show you when to use a personal access token (PAT) or a service token: 
+サービスアカウントが必要な本番環境のワークフローでは、サービストークンを広く使用する必要があります。PAT は、開発ワークフロー、またはユーザーコンテキストを必要とする <Constant name="cloud" /> クライアントワークフローにのみ使用してください。以下の例は、個人アクセストークン (PAT) とサービストークンのどちらを使用するべきかを示しています。
 
-* **Connecting a partner integration to <Constant name="cloud" />** &mdash; Some examples include the [<Constant name="semantic_layer" /> Google Sheets integration](/docs/cloud-integrations/avail-sl-integrations), Hightouch, Datafold, a custom app you’ve created, etc. These types of integrations should use a service token instead of a PAT because service tokens give you visibility, and you can scope them to only what the integration needs and ensure the least privilege. We highly recommend switching to a service token if you’re using a personal access token for these integrations today.
-* **Production Terraform** &mdash; Use a service token since this is a production workflow and is acting as a service account and not a user account. 
-* **<Constant name="cloud_cli" />** &mdash; Use a PAT since the <Constant name="cloud_cli" /> works within the context of a user (the user is making the requests and has to operate within the context of their user account).
-* **Testing a custom script and staging Terraform or Postman** &mdash; We recommend using a PAT as this is a developmental workflow and is scoped to the user making the changes. When you push this script or Terraform into production, use a service token instead.
+* **パートナー統合を <Constant name="cloud" /> に接続する** &mdash; 例としては、[<Constant name="semantic_layer" /> Google Sheets 統合](/docs/cloud-integrations/avail-sl-integrations)、Hightouch、Datafold、独自に作成したカスタムアプリなどが挙げられます。これらのタイプの統合では、PAT ではなくサービストークンを使用する必要があります。サービストークンを使用すると可視性が得られ、統合に必要なスコープのみを設定して最小限の権限を確保できるためです。現在、これらの統合で個人アクセストークンを使用している場合は、サービストークンへの切り替えを強くお勧めします。
+* **本番環境の Terraform** - これは本番環境のワークフローであり、ユーザーアカウントではなくサービスアカウントとして機能するため、サービストークンを使用します。
+* **<Constant name="cloud_cli" />** - <Constant name="cloud_cli" /> はユーザーのコンテキスト内で機能するため（ユーザーがリクエストを発行し、ユーザーアカウントのコンテキスト内で操作する必要があるため）、PAT を使用します。
+* **カスタムスクリプトのテストと Terraform または Postman のステージング** - これは開発ワークフローであり、変更を行うユーザーに限定されるため、PAT を使用することをお勧めします。このスクリプトまたは Terraform を本番環境にプッシュする場合は、代わりにサービストークンを使用します。

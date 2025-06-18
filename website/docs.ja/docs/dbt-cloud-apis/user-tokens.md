@@ -5,77 +5,75 @@ id: "user-tokens"
 pagination_next: "docs/dbt-cloud-apis/service-tokens"
 ---
 
-# Account-scoped personal access tokens
+# アカウントスコープの個人アクセストークン
 
 :::warning
 
-User API tokens have been deprecated and will no longer work. [Migrate](#migrate-deprecated-user-api-keys-to-personal-access-tokens) to personal access tokens to resume services.
+ユーザー API トークンは非推奨となり、機能しなくなります。サービスを再開するには、個人用アクセス トークンに [移行](#migrate-deprecated-user-api-keys-to-personal-access-tokens) してください。
 
 :::
 
-Each <Constant name="cloud" /> user with a [Developer license](https://docs.getdbt.com/docs/cloud/manage-access/seats-and-users) can create a new personal access token (PAT) to access the <Constant name="cloud" /> API and <Constant name="cloud" /> CLI. This token can execute queries against the <Constant name="cloud" /> API on the user's behalf. To access <Constant name="cloud" /> APIs and resources on behalf of the _account_, we recommend using service tokens instead. Learn more about [which token type you should use](/docs/dbt-cloud-apis/authentication#which-token-type-should-you-use) to understand the token differences.
+[開発者ライセンス](https://docs.getdbt.com/docs/cloud/manage-access/seats-and-users)を持つ各 <Constant name="cloud" /> ユーザーは、新しい個人アクセス トークン (PAT) を作成して、<Constant name="cloud" /> API および <Constant name="cloud" /> CLI にアクセスできます。このトークンは、ユーザーに代わって <Constant name="cloud" /> API に対してクエリを実行できます。_アカウント_に代わって <Constant name="cloud" /> API およびリソースにアクセスするには、代わりにサービス トークンを使用することをお勧めします。トークンの違いを理解するには、[どのトークン タイプを使用すべきか](/docs/dbt-cloud-apis/authentication#which-token-type-should-you-use) の詳細をご覧ください。
 
-PATs inherit the permissions of the user that created them. For example, if a developer-licensed user with Project Admin role access to specific projects creates a PAT, the token will get the Project Admin role with access to the same projects as the user. These tokens are also account-specific, so if a user has access to more than one <Constant name="cloud" /> account with the same email address, they need to create a unique PAT for each one of these accounts. 
+PAT は、それを作成したユーザーの権限を継承します。例えば、特定のプロジェクトへのプロジェクト管理者ロールアクセス権を持つ開発者ライセンスを持つユーザーがPATを作成した場合、そのトークンには、ユーザーと同じプロジェクトへのアクセス権を持つプロジェクト管理者ロールが付与されます。これらのトークンはアカウント固有のものであるため、ユーザーが同じメールアドレスで複数の<Constant name="cloud" />アカウントにアクセスできる場合は、各アカウントごとに固有のPATを作成する必要があります。
 
-## Create a personal access token
+## 個人用アクセストークンを作成する
 
-Creating an account-scoped PAT requires only a few steps.
-1. Navigate to your **Account Settings**, expand **API tokens** and click **Personal tokens**.
-2. Click **Create personal access token**.
-3. Give the token a descriptive name and click **Save**. 
+アカウントスコープのPATは、わずか数ステップで作成できます。
+1. **アカウント設定** に移動し、**APIトークン** を展開して **個人用トークン** をクリックします。
+2. **個人用アクセストークンを作成** をクリックします。
+3. トークンにわかりやすい名前を付け、**保存** をクリックします。
 
-4. Copy the token before closing the window. _It will not be available after, and you will have to create a new token if you lose it._ 
+4. ウィンドウを閉じる前にトークンをコピーします。_このトークンはその後は使用できず、紛失した場合は新しいトークンを作成する必要があります。_
 
+セキュリティのベストプラクティスを維持するために、PATを定期的にローテーションすることをお勧めします。そのためには、新しいトークンを作成し、古いトークンが配置されたら削除してください。
 
-To maintain best security practices, it's recommended that you regularly rotate your PATs. To do so, create a new token and delete the old one once it's in place.
+## 個人アクセストークンの削除
 
-## Delete a personal access token
+PATを完全に削除するには：
 
-To permanently delete a PAT:
+1. **アカウント設定** に移動し、**APIトークン** を展開して **個人トークン** をクリックします。
+2. 削除するトークンを見つけ、トークンの説明欄の右側にある「X」をクリックします。
+3. **削除を確定** すると、トークンは無効になります。
 
-1. Navigate to your **Account Settings**, expand **API tokens** and click **Personal tokens**.
-2. Find the token you want to delete and click "X" to the right of the token description fields.
-3. **Confirm delete** and the token will no longer be valid. 
+## 廃止されたユーザー API キーを個人アクセストークン (PAT) に移行してください。
 
-## Migrate deprecated user API keys to personal access tokens
+現在ユーザー API キーをご利用の場合、PAT への移行は不可欠です。現在の API キーは、**[個人設定] → [API キー]** にあります。
 
-The migration to PATs is critical if you are using user API keys today. The current API key is located under **Personal Settings → API Key**.
+現在ユーザー API キーをご利用の場合、いくつか留意すべき点があります。
 
- There are a few things to understand if you are using a user API key today: 
-
-* PATs are more secure. 
-    * To promote the least privilege and high-security assurance for your <Constant name="cloud" /> accounts, we highly recommend moving to the new account-scoped PATs.
-* You must create and use unique tokens in each one of your <Constant name="cloud" /> accounts that share the same email address.
-    * For example, if paul.atreides@example.com belongs to two <Constant name="cloud" /> accounts: Spice Harvesting Account and Guild Navigator Account. Before this release, the same API key was used to access both of these accounts. 
-    * After this release, Paul has to individually go into these accounts and create a unique PAT for each account he wants to access the API for. These PATs are account-specific and not user specific. 
-* Cross-Account API endpoints will change in behavior when using PATs.
-    * These are namely /v2/accounts and /v3/accounts. Since all PATs are now account specific, getting all accounts associated with a username cannot work. /v3/accounts will only return account metadata that’s relevant to the PAT that’s being used. 
-    * User account metadata will only contain information about the specific account under which the request is being made. 
-    * Any other accounts that belong to that user account will need to be requested through the PAT that belongs to that account. 
+* PAT はより安全です。
+    * <Constant name="cloud" /> アカウントの最小限の権限と高度なセキュリティ確保を促進するため、新しいアカウントスコープの PAT への移行を強くお勧めします。
+* 同じメールアドレスを共有する各 <Constant name="cloud" /> アカウントで、それぞれ固有のトークンを作成して使用する必要があります。
+    * たとえば、paul.atreides@example.com が 2 つの <Constant name="cloud" /> アカウント (Spice Harvesting アカウントと Guild Navigator アカウント) に属しているとします。このリリース以前は、これらのアカウントへのアクセスに同じ API キーが使用されていました。
+    * このリリース以降、Paul はこれらのアカウントに個別にアクセスし、API にアクセスするアカウントごとに固有の PAT を作成する必要があります。これらの PAT はアカウント固有であり、ユーザー固有ではありません。
+* クロスアカウント API エンドポイントは、PAT 使用時の動作が変更されます。
+    * 具体的には、/v2/accounts と /v3/accounts です。すべての PAT がアカウント固有になったため、ユーザー名に関連付けられているすべてのアカウントを取得することはできません。/v3/accounts は、使用されている PAT に関連するアカウントのメタデータのみを返します。
+    * ユーザーアカウントのメタデータには、リクエストが行われている特定のアカウントに関する情報のみが含まれます。
+    * そのユーザーアカウントに属する他のアカウントは、そのアカウントに属する PAT を通じてリクエストする必要があります。
 
 :::warning Undocumented APIs
 
-If you’re using any undocumented and unsupported API endpoints, please note that these can be deprecated without any notice. If you are using any undocumented endpoints and have use-cases that are not satisfied by the current API, please reach out to [support@getdbt.com](mailto:support@getdbt.com). 
+ドキュメント化されていない、またはサポートされていないAPIエンドポイントをご利用の場合、これらのエンドポイントは予告なく廃止される可能性があることにご注意ください。ドキュメント化されていないエンドポイントをご利用で、現在のAPIでは対応できないユースケースがある場合は、[support@getdbt.com](mailto:support@getdbt.com)までご連絡ください。
 
 :::
 
-### Using the personal access tokens
+### 個人アクセストークンの使用
 
-Are you using a user API key today to access <Constant name="cloud" /> APIs in any of your workflows? If not, you don’t have any action to take. If you are using a user API key, please follow the instructions below. 
+現在、ワークフロー内で <Constant name="cloud" /> API にアクセスするためにユーザー API キーを使用していますか？使用していない場合は、特に対応する必要はありません。ユーザー API キーを使用している場合は、以下の手順に従ってください。
 
-1. Make a list of all the places where you’re making a call to the <Constant name="cloud" /> API using the <Constant name="cloud" /> user API key. 
-2. Create a new PAT under **Account Settings → API Tokens → Personal Tokens.** For instructions, see [Create a personal access token](#create-a-personal-access-token).
-3. Replace the API key in your APIs with the PAT you created. You can use a PAT wherever you previously used an API key.
+1. <Constant name="cloud" /> ユーザー API キーを使用して <Constant name="cloud" /> API を呼び出しているすべての場所をリストアップしてください。
+2. **アカウント設定 > API トークン > 個人トークン** で新しい PAT を作成してください。手順については、[個人アクセストークンの作成](#create-a-personal-access-token) をご覧ください。
+3. API 内の API キーを、作成した PAT に置き換えてください。以前 API キーを使用していた場所であれば、PAT を使用できます。
     
-    To replace the API key with a PAT, include the PAT in the Authorization header of your API requests. For example: `Authorization: Bearer <your-token>`.
+    APIキーをPATに置き換えるには、APIリクエストのAuthorizationヘッダーにPATを含めます。例：`Authorization: Bearer <your-token>`
 
-    Make sure to replace `<your-token>` with the new PAT you created.
-
+    `<your-token>`を、作成した新しいPATに置き換えてください。
     :::note
 
-     The option to rotate API keys is used for existing API keys, not for replacing them with PATs. You do not need to replace your API key with a PAT in the <Constant name="cloud" /> UI.
+     APIキーのローテーションオプションは既存のAPIキーに適用され、PATへの置き換えには適用されません。<Constant name="cloud" /> UIでAPIキーをPATに置き換える必要はありません。
 
     :::
 
-4. Ensure that you’re using a PAT only where it's needed. For flows that require a service account, please use a service token. 
+4. PATは必要な場合にのみ使用してください。サービスアカウントを必要とするフローの場合は、サービストークンを使用してください。
 

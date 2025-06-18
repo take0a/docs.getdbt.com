@@ -7,37 +7,37 @@ tags: [Semantic Layer, API]
 
 # JDBC API <Lifecycle status="self_service,managed,managed_plus" />
 
-The <Constant name="semantic_layer" /> Java Database Connectivity (JDBC) API enables users to query metrics and dimensions using the JDBC protocol, while also providing standard metadata functionality. 
+<Constant name="semantic_layer" /> Java Database Connectivity (JDBC) API を使用すると、JDBC プロトコルを使用してメトリックやディメンションをクエリできるほか、標準的なメタデータ機能も利用できます。
 
-A JDBC driver is a software component enabling a Java application to interact with a data platform. Here's some more information about our JDBC API:
+JDBC ドライバーは、Java アプリケーションがデータプラットフォームとやり取りできるようにするソフトウェアコンポーネントです。JDBC API に関する詳細情報は次のとおりです。
 
-- The <Constant name="semantic_layer" /> JDBC API utilizes the open-source JDBC driver with ArrowFlight SQL protocol.
-- You can download the JDBC driver from [Maven](https://search.maven.org/remotecontent?filepath=org/apache/arrow/flight-sql-jdbc-driver/12.0.0/flight-sql-jdbc-driver-12.0.0.jar). 
-- The <Constant name="semantic_layer" /> supports ArrowFlight SQL driver version 12.0.0 and higher. 
-- You can embed the driver into your application stack as needed, and you can use dbt Labs' [example project](https://github.com/dbt-labs/example-semantic-layer-clients) for reference.
-- If you’re a partner or user building a homegrown application, you’ll need to install an AWS root CA to the Java Trust [documentation](https://www.amazontrust.com/repository/) (specific to Java and JDBC call).
+- <Constant name="semantic_layer" /> JDBC API は、ArrowFlight SQL プロトコルでオープンソースの JDBC ドライバーを使用します。
+- JDBC ドライバーは [Maven](https://search.maven.org/remotecontent?filepath=org/apache/arrow/flight-sql-jdbc-driver/12.0.0/flight-sql-jdbc-driver-12.0.0.jar) からダウンロードできます。
+- <Constant name="semantic_layer" /> は、ArrowFlight SQL ドライバー バージョン 12.0.0 以降をサポートしています。
+- 必要に応じてドライバーをアプリケーションスタックに組み込むことができ、dbt Labs の [サンプルプロジェクト](https://github.com/dbt-labs/example-semantic-layer-clients) を参照として使用できます。
+- 自社開発アプリケーションを構築するパートナーまたはユーザーの場合は、Java Trust の [ドキュメント](https://www.amazontrust.com/repository/) (Java および JDBC 呼び出しに固有) に AWS ルート CA をインストールする必要があります。
 
-dbt Labs partners can use the JDBC API to build integrations in their tools with the <Constant name="semantic_layer" />
+dbt Labs パートナーは、JDBC API を使用して、<Constant name="semantic_layer" /> との統合を自社ツールに構築できます。
 
-## Using the JDBC API
+## JDBC API の使用
 
-If you are a dbt user or partner with access to <Constant name="cloud" /> and the [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl), you can [setup](/docs/use-dbt-semantic-layer/setup-sl) and test this API with data from your own instance by configuring the <Constant name="semantic_layer" /> and obtaining the right JDBC connection parameters described in this document.
+<Constant name="cloud" /> および [<Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/dbt-sl) にアクセスできる dbt ユーザーまたはパートナーの方は、<Constant name="semantic_layer" /> を設定し、このドキュメントに記載されている適切な JDBC 接続パラメータを取得することで、この API を [セットアップ](/docs/use-dbt-semantic-layer/setup-sl) し、ご自身のインスタンスのデータでテストできます。
 
-You *may* be able to use our JDBC API with tools that do not have an official integration with the <Constant name="semantic_layer" />. If the tool you use allows you to write SQL and either supports a generic JDBC driver option (such as DataGrip) or supports Dremio and uses ArrowFlightSQL driver version 12.0.0 or higher, you can access the <Constant name="semantic_layer" /> API.
+<Constant name="semantic_layer" /> と正式に統合されていないツールでも、JDBC API を使用できる場合があります。使用するツールが SQL 記述が可能で、汎用 JDBC ドライバーオプション（DataGrip など）をサポートしているか、Dremio をサポートし、ArrowFlightSQL ドライバー バージョン 12.0.0 以降を使用している場合は、<Constant name="semantic_layer" /> API にアクセスできます。
 
-Refer to [Get started with the <Constant name="semantic_layer" />](/guides/sl-snowflake-qs) for more info.
+詳細については、[<Constant name="semantic_layer" /> を使い始める](/guides/sl-snowflake-qs) を参照してください。
 
-Note that the <Constant name="semantic_layer" /> GraphQL API doesn't support `ref` to call dbt objects. Instead, use the complete qualified table name. If you're using dbt macros at query time to calculate your metrics, you should move those calculations into your <Constant name="semantic_layer" /> metric definitions as code.
+<Constant name="semantic_layer" /> GraphQL API は、dbt オブジェクトを呼び出すための `ref` をサポートしていないことに注意してください。代わりに、完全な修飾テーブル名を使用してください。クエリ時に dbt マクロを使用してメトリクスを計算している場合は、それらの計算をコードとして <Constant name="semantic_layer" /> メトリクス定義に移動する必要があります。
 
-## Authentication
+## 認証
 
-<Constant name="cloud" /> authorizes requests to the <Constant name="semantic_layer" /> API. You need to provide an environment ID, host, and [service account tokens](/docs/dbt-cloud-apis/service-tokens).
+<Constant name="cloud" /> は、<Constant name="semantic_layer" /> API へのリクエストを承認します。環境 ID、ホスト、および [サービスアカウントトークン](/docs/dbt-cloud-apis/service-tokens) を指定する必要があります。
 
-## Connection parameters
+## 接続パラメータ
 
-The JDBC connection requires a few different connection parameters. 
+JDBC 接続には、いくつかの異なる接続パラメータが必要です。
 
-This is an example of a URL connection string and the individual components: 
+以下は、URL 接続文字列と個々のコンポーネントの例です。
 
 ```
 jdbc:arrow-flight-sql://semantic-layer.cloud.getdbt.com:443?&environmentId=202339&token=SERVICE_TOKEN
@@ -45,22 +45,22 @@ jdbc:arrow-flight-sql://semantic-layer.cloud.getdbt.com:443?&environmentId=20233
 
 | JDBC parameter | Description | Example |
 | -------------- | ----------- | ------- |
-| `jdbc:arrow-flight-sql://` | The protocol for the JDBC driver.  | `jdbc:arrow-flight-sql://` |
-| `semantic-layer.cloud.getdbt.com` | The [access URL](/docs/cloud/about-cloud/access-regions-ip-addresses) for your account's <Constant name="cloud" /> region. You must always add the `semantic-layer` prefix before the access URL.  | For <Constant name="cloud" /> deployment hosted in North America, use `semantic-layer.cloud.getdbt.com`  |
-| `environmentId` | The unique identifier for the dbt production environment, you can retrieve this from the <Constant name="cloud" /> URL <br /> when you navigate to **Environments** under **Deploy**. | If your URL ends with `.../environments/222222`, your `environmentId` is `222222`<br /><br />   |
-| `SERVICE_TOKEN` | <Constant name="cloud" /> [service token](/docs/dbt-cloud-apis/service-tokens) with “Semantic Layer Only” and "Metadata Only" permissions. Create a new service token on the **Account Settings** page. | `token=SERVICE_TOKEN` |
+| `jdbc:arrow-flight-sql://` | JDBC ドライバーのプロトコル。  | `jdbc:arrow-flight-sql://` |
+| `semantic-layer.cloud.getdbt.com` | アカウントの <Constant name="cloud" /> リージョンの [アクセス URL](/docs/cloud/about-cloud/access-regions-ip-addresses)。アクセス URL の前に必ず `semantic-layer` プレフィックスを追加する必要があります。| 北米でホストされている <Constant name="cloud" /> デプロイメントの場合は、`semantic-layer.cloud.getdbt.com` を使用します。|
+| `environmentId` | dbt 実稼働環境の一意の識別子。**Deploy** の下の **Environments** に移動すると、<Constant name="cloud" /> URL から取得できます。| URL が `.../environments/222222` で終わる場合、`environmentId` は `222222` です。<br /><br />|
+| `SERVICE_TOKEN` | <Constant name="cloud" /> [サービストークン](/docs/dbt-cloud-apis/service-tokens) には、「セマンティックレイヤーのみ」および「メタデータのみ」の権限が必要です。**アカウント設定** ページで新しいサービストークンを作成してください。| `token=SERVICE_TOKEN` |
 
-*Note &mdash; If you're testing locally on a tool like DataGrip, you may also have to provide the following variable at the end or beginning of the JDBC URL `&disableCertificateVerification=true`.
+*注意 - DataGrip などのツールでローカルにテストしている場合は、JDBC URL の末尾または先頭に次の変数 `&disableCertificateVerification=true` を指定する必要がある場合もあります。
 
-## Querying the API for metric metadata
+## メトリックメタデータのAPIクエリ
 
-The <Constant name="semantic_layer" /> JDBC API has built-in metadata calls which can provide a user with information about their metrics and dimensions.
+<Constant name="semantic_layer" /> JDBC APIには、メトリックとディメンションに関する情報をユーザーに提供できる組み込みのメタデータ呼び出しがあります。
 
-Expand the following toggles for examples and metadata commands:
+以下のトグルを展開すると、例とメタデータコマンドが表示されます。
 
 <Expandable alt_header="Fetch defined metrics">
 
-You can use this query to fetch all defined metrics in your dbt project:
+このクエリを使用して、dbt プロジェクトで定義されているすべてのメトリックを取得できます。
 
 ```bash
 select * from {{ 

@@ -6,19 +6,19 @@ id: "discovery-schema-environment"
 
 import { QueryArgsTable, SchemaTable } from "./schema";
 
-The environment object allows you to query information about a particular model based on `environmentId`.
+環境オブジェクトを使用すると、`environmentId` に基づいて特定のモデルに関する情報をクエリできます。
 
-The [Example queries](#example-queries) illustrate a few fields you can query with this `environment` object. Refer to [Fields](#fields) to view the entire schema, which provides all possible fields you can query.
+[クエリ例](#example-queries) は、この `environment` オブジェクトでクエリできるフィールドをいくつか示しています。クエリ可能なすべてのフィールドが記載されているスキーマ全体を確認するには、[フィールド](#fields) を参照してください。
 
-### Arguments
+### 引数
 
-When querying for `environment`, you can use the following arguments.
+`env​​ironment` をクエリする場合、以下の引数を使用できます。
 
 <QueryArgsTable queryName="environment" useBetaAPI />
 
-### Example queries
+### クエリの例
 
-You can use your production environment's `id`:
+本番環境の `id` を使用できます。
 
 ```graphql
 query Example {
@@ -45,7 +45,7 @@ query Example {
 	}
 ```
 
-With the deprecation of the data type `Int` for `id`, below is an example of replacing it with `BigInt`:
+`id` のデータ型 `Int` が非推奨になったため、これを `BigInt` に置き換える例を以下に示します。
 
 ```graphql
 query ($environmentId: BigInt!, $first: Int!) {
@@ -67,7 +67,7 @@ query ($environmentId: BigInt!, $first: Int!) {
 
 ```
 
-With the deprecation of `modelByEnvironment`, below is an example of replacing it with `environment`:
+`modelByEnvironment` が非推奨になったため、これを `environment` に置き換える例を以下に示します。
 
 ```graphql
 query ($environmentId: BigInt!, $uniqueId: String) {
@@ -83,13 +83,13 @@ query ($environmentId: BigInt!, $uniqueId: String) {
 }
 ```
 
-### Fields
-When querying an `environment`, you can use the following fields.
+### フィールド
+`env​​ironment` をクエリする場合、次のフィールドを使用できます。
 
 <SchemaTable nodeName="Environment" useBetaAPI />
 
-When querying the `applied` field of `environment`, you can use the following fields.
+`environment` の `applied` フィールドを照会する場合、次のフィールドを使用できます。
 <SchemaTable nodeName="AppliedState" useBetaAPI />
 
-When querying the `definition` field of `environment`, you can use the following fields.
+`environment` の `definition` フィールドを照会する場合、次のフィールドを使用できます。
 <SchemaTable nodeName="DefinitionState" useBetaAPI />

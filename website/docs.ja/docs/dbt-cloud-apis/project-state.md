@@ -1,28 +1,28 @@
 ---
-title: "Project state in dbt"
+title: "dbt でのプロジェクトの状態"
 ---
 
-<Constant name="cloud" /> provides a stateful way of deploying dbt. Artifacts are accessible programmatically via the [Discovery API](/docs/dbt-cloud-apis/discovery-querying) in the metadata platform.
+<Constant name="cloud" /> は、dbt をステートフルにデプロイする方法を提供します。アーティファクトには、メタデータ プラットフォームの [Discovery API](/docs/dbt-cloud-apis/discovery-querying) を介してプログラムでアクセスできます。
 
-With the implementation of the `environment` endpoint in the Discovery API, we've introduced the idea of multiple states. The Discovery API provides a single API endpoint that returns the latest state of models, sources, and other nodes in the DAG. 
+Discovery API に `environment` エンドポイントを実装することで、複数の状態の概念が導入されました。Discovery API は、DAG 内のモデル、ソース、その他のノードの最新の状態を返す単一の API エンドポイントを提供します。
 
-A single [deployment environment](/docs/environments-in-dbt) should represent the production state of a given <Constant name="cloud" /> project.
+単一の [デプロイメント環境](/docs/environments-in-dbt) は、特定の <Constant name="cloud" /> プロジェクトの運用状態を表します。
 
-There are two states that can be queried in <Constant name="cloud" />:
+<Constant name="cloud" /> でクエリできる状態は 2 つあります。
 
-- **Applied state** refers to what exists in the data warehouse after a successful `dbt run`. The model build succeeds and now exists as a table in the warehouse.
-    
-- **Definition state** depends on what exists in the project given the code defined in it (for example, manifest state), which hasn’t necessarily been executed in the data platform (maybe just the result of `dbt compile`).
+- **適用状態** は、`dbt run` が成功した後にデータ ウェアハウスに存在する状態を指します。モデルのビルドは成功し、ウェアハウス内にテーブルとして存在します。
 
-## Definition (logical) vs. applied state of dbt nodes
+- **定義状態** は、プロジェクト内に定義されているコード (マニフェスト状態など) に基づいてプロジェクト内に存在するものに依存しますが、必ずしもデータ プラットフォームで実行されているわけではありません (`dbt compile` の結果だけの場合もあります)。
 
-In a dbt project, the state of a node _definition_ represents the configuration, transformations, and dependencies defined in the SQL and YAML files. It captures how the node should be processed in relation to other nodes and tables in the data warehouse and may be produced by a `dbt build`, `run`, `parse`, or `compile`. It changes whenever the project code changes. 
+## dbt ノードの定義（論理）状態と適用状態
 
-A node’s _applied state_ refers to the node’s actual state after it has been successfully executed in the DAG; for example, models are executed; thus, their state is applied to the data warehouse via `dbt run` or `dbt build`. It changes whenever a node is executed. This state represents the result of the transformations and the actual data stored in the database, which for models can be a table or a view based on the defined logic.
+dbt プロジェクトにおいて、ノードの状態（_definition_）は、SQL ファイルおよび YAML ファイルで定義された構成、変換、および依存関係を表します。これは、データウェアハウス内の他のノードやテーブルとの関係において、ノードがどのように処理されるべきかを示すもので、`dbt build`、`run`、`parse`、または `compile` によって生成される場合があります。この状態は、プロジェクトコードが変更されるたびに変化します。
 
-The applied state includes execution info, which contains metadata about how the node arrived in the applied state: the most recent execution (successful or attempted), such as when it began, its status, and how long it took.
+ノードの_applied state_ は、DAG でノードが正常に実行された後の実際の状態を指します。たとえば、モデルが実行されると、その状態は `dbt run` または `dbt build` を介してデータウェアハウスに適用されます。この状態は、ノードが実行されるたびに変化します。この状態は、変換の結果と、データベースに保存された実際のデータを表します。モデルの場合、これは定義されたロジックに基づくテーブルまたはビューになります。
 
-Here’s how you’d query and compare the definition  vs. applied state of a model using the Discovery API: 
+適用状態には実行情報が含まれます。実行情報には、ノードが適用状態に到達した経緯に関するメタデータ（最新の実行（成功または試行）、開始時刻、ステータス、所要時間など）が含まれます。
+
+Discovery API を使用してモデルの定義状態と適用状態をクエリして比較する方法は次のとおりです:
 
 ```graphql
 query Compare($environmentId: Int!, $first: Int!) {
@@ -55,11 +55,11 @@ query Compare($environmentId: Int!, $first: Int!) {
 
 ```
 
-Most Discovery API use cases will favor the _applied state_ since it pertains to what has actually been run and can be analyzed.
+ほとんどの Discovery API の使用例では、実際に実行されて分析できる内容に関係するため、_適用済み状態_ が優先されます。
  
-## Affected states by node type
+## ノードタイプ別の影響を受ける状態
 
-The following table shows the states of dbt nodes and how they are affected by the Discovery API. 
+次の表は、dbt ノードの状態と、Discovery API によって影響を受ける内容を示しています。
 
 | Node                                          | Executed in DAG  | Created by execution | Exists in database | Lineage               | States               |
 |-----------------------------------------------|------------------|----------------------|--------------------|-----------------------|----------------------|
@@ -78,14 +78,14 @@ The following table shows the states of dbt nodes and how they are affected by t
 | [Unit tests](/docs/build/unit-tests)          | Yes              | Yes                  | No                 | Downstream   	       | Definition 	      |
 
 
-## Caveats about state/metadata updates 
+## 状態/メタデータの更新に関する注意事項
 
-Over time, Cloud Artifacts will provide information to maintain state for features/services in <Constant name="cloud" /> and enable you to access state in <Constant name="cloud" /> and its downstream ecosystem. Cloud Artifacts is currently focused on the latest production state, but this focus will evolve.
+今後、Cloud Artifacts は <Constant name="cloud" /> 内の機能/サービスの状態を維持するための情報を提供し、<Constant name="cloud" /> およびその下流のエコシステムの状態にアクセスできるようになります。Cloud Artifacts は現在、最新の本番環境の状態に重点を置いていますが、この重点は今後進化していく予定です。
 
-Here are some limitations of the state representation in the Discovery API:
+Discovery API における状態表現には、次のような制限があります。
 
-- Users must access the default production environment to know the latest state of a project.
-- The API gets the definition from the latest manifest generated in a given deployment environment, but that often won’t reflect the latest project code state.
-- Compiled code results may be outdated depending on <Constant name="cloud" /> run step order and failures.
-- Catalog info can be outdated, or incomplete (in the applied state), based on if/when `docs generate` was last run.
-- Source freshness checks can be out of date (in the applied state) depending on when the command was last run, and it’s not included in `build`. 
+- プロジェクトの最新の状態を確認するには、デフォルトの本番環境にアクセスする必要があります。
+- API は、特定のデプロイ環境で生成された最新のマニフェストから定義を取得しますが、これは必ずしも最新のプロジェクトコードの状態を反映しているとは限りません。
+- コンパイルされたコードの結果は、<Constant name="cloud" /> の実行順序や失敗によっては、古くなっている可能性があります。
+- カタログ情報は、`docs generate` が最後に実行されたかどうか、またはいつ実行されたかによって、古くなったり、不完全になったりする可能性があります（適用済みの状態）。
+- コマンドが最後に実行された時期によっては、ソースの鮮度チェックが古くなっている可能性があります (適用された状態)。これは `build` には含まれません。

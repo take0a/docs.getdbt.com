@@ -7,30 +7,30 @@ pagination_next:  "docs/explore/data-tile"
 image: /img/docs/cloud-integrations/auto-exposures/explorer-lineage.jpg
 ---
 
-# Visualize downstream exposures <Lifecycle status="managed,managed_plus" />
+# 下流のエクスポージャーを視覚化する <Lifecycle status="managed,managed_plus" />
 
 <IntroText>
-Downstream exposures integrate natively with Tableau (Power BI coming soon) and auto-generate downstream lineage in <Constant name="explorer" /> for a richer experience.
+ダウンストリーム エクスポージャは Tableau とネイティブに統合され (Power BI は近日公開予定)、<Constant name="explorer" /> でダウンストリーム リネージを自動生成して、より豊富なエクスペリエンスを実現します。
 </IntroText>
 
-As a data team, it’s critical that you have context into the downstream use cases and users of your data products. By leveraging downstream [exposures](/docs/build/exposures) automatically, data teams can:
+データチームにとって、データ製品の下流のユースケースとユーザーに関するコンテキストを把握することは非常に重要です。下流の[エクスポージャー](/docs/build/exposures)を自動的に活用することで、データチームは次のことが可能になります。
 
-- Gain a better understanding of how models are used in downstream analytics, improving governance and decision-making.
-- Reduce incidents and optimize workflows by linking upstream models to downstream dependencies.
-- Automate exposure tracking for supported BI tools, ensuring lineage is always up to date.
-- [Orchestrate exposures](/docs/cloud-integrations/orchestrate-exposures) to refresh the underlying data sources during scheduled dbt jobs, improving timeliness and reducing costs. Orchestrating exposures is essentially a way to ensure that your BI tools are updated regularly by using the [<Constant name="cloud" /> job scheduler](/docs/deploy/deployments).
-  - For more info on the differences between visualizing and orchestrating exposures, see [Visualize and orchestrate downstream exposures](/docs/cloud-integrations/downstream-exposures).
+- 下流の分析におけるモデルの使用方法をより深く理解し、ガバナンスと意思決定を改善します。
+- 上流のモデルを下流の依存関係にリンクすることで、インシデントを削減し、ワークフローを最適化します。
+- サポートされているBIツールのエクスポージャー追跡を自動化し、リネージを常に最新の状態に保ちます。
+- [エクスポージャーをオーケストレーション](/docs/cloud-integrations/orchestrate-exposures)により、スケジュールされたdbtジョブ中に基盤となるデータソースを更新し、タイムリーさを向上させ、コストを削減します。エクスポージャーのオーケストレーションは、基本的に[<Constant name="cloud" />ジョブスケジューラ](/docs/deploy/deployments)を使用してBIツールを定期的に更新する方法です。
+  - エクスポージャーの視覚化とオーケストレーションの違いについて詳しくは、[ダウンストリーム エクスポージャーの視覚化とオーケストレーション](/docs/cloud-integrations/downstream-exposures) をご覧ください。
 
-To configure downstream exposures automatically from dashboards in Tableau, prerequisites, and more &mdash; refer to [Configure downstream exposures](/docs/cloud-integrations/downstream-exposures-tableau).
+Tableau のダッシュボードからダウンストリーム エクスポージャーを自動的に構成する方法、前提条件などについては、[ダウンストリーム エクスポージャーの構成](/docs/cloud-integrations/downstream-exposures-tableau) をご覧ください。
 
-### Supported plans
+### サポートされているプラ​​ン
 
-Downstream exposures is available on all <Constant name="cloud" /> [Enterprise-tier plans](https://www.getdbt.com/pricing/). Currently, you can only connect to a single Tableau site on the same server.
+ダウンストリームエクスポージャーは、すべての <Constant name="cloud" /> [エンタープライズプラン](https://www.getdbt.com/pricing/) でご利用いただけます。現在、同一サーバー上の単一の Tableau サイトのみに接続できます。
 
 :::info Tableau Server
-If you're using Tableau Server, you need to [allowlist <Constant name="cloud" />'s IP addresses](/docs/cloud/about-cloud/access-regions-ip-addresses) for your <Constant name="cloud" /> region.
+Tableau Server をご利用の場合は、<Constant name="cloud" /> リージョンの [<Constant name="cloud" /> の IP アドレスを許可リストに追加](/docs/cloud/about-cloud/access-regions-ip-addresses) する必要があります。
 :::
 
-import ViewExposures from '/snippets/_auto-exposures-view.md';
+import ViewExposures from '/snippets.ja/_auto-exposures-view.md';
 
 <ViewExposures/>
