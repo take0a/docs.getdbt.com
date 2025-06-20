@@ -70,28 +70,28 @@ This configuration is only available for the dbt Fusion engine.
 
 </VersionBlock>
 
-## Definition
+## 定義
 
-The model `freshness` config powers state-aware orchestration by rebuilding models _only when new source or upstream data is available_, helping you reduce unnecessary rebuilds and optimize spend. This is useful for models that depend on other models but only need to be updated periodically.
+モデルの「freshness」構成は、新しいソースデータまたは上流データが利用可能になった場合にのみモデルを再構築することで、状態認識オーケストレーションを強化します。これにより、不要な再構築を削減し、コストを最適化できます。これは、他のモデルに依存しているものの、定期的に更新するだけで済むモデルに有効です。
 
-`freshness` works alongside dbt job orchestration by helping you determine when models should be rebuilt in a scheduled job. When a job runs, dbt makes sure models run only when needed, which helps avoid overbuilding models unnecessarily. dbt does this by:
+「freshness」は dbt ジョブオーケストレーションと連携して動作し、スケジュールされたジョブでモデルを再構築するタイミングを決定するのに役立ちます。ジョブの実行時、dbt は必要な場合にのみモデルを実行するため、モデルの不要な過剰構築を回避できます。dbt は、以下の方法でこれを行います。
 
-- Checking if there's new data available for the model
-- Ensuring enough time has passed since the last build, based on `count` and `period`
+- モデルに利用可能な新しいデータがあるかどうかを確認します。
+- 「count」と「period」に基づいて、前回のビルドから十分な時間が経過していることを確認します。
 
-For sources and upstream models (for mesh), dbt considers data "new" based on custom freshness calculations (if configured). If a source's freshness goes past its warning/error threshold, dbt raises a warning/error during the build.
+ソースおよび上流モデル（メッシュ用）の場合、dbt はカスタムフレッシュネス計算（設定されている場合）に基づいてデータを「新規」と見なします。ソースのフレッシュネスが警告/エラーしきい値を超えると、dbt はビルド中に警告/エラーを発生させます。
 
-The configuration consists of the following parts:
+構成は次の部分で構成されます。
 
 | Configuration | Description |
 |--------------|-------------|
-| `build_after` | Config nested under `freshness`. Used to determine whether a model should be rebuilt when new data is present, based on whether the specified count and period have passed since the model was last built. Although dbt checks for new data every time the job runs, `build_after` ensures the model is only rebuilt if enough time has passed and new data is available. |
-| `count` and `period` | Specify how often dbt should check for new data. For example, `count: 4, period: hour` means dbt will check every 4 hours. |
-| `updates_on` | Optional. Determines when upstream data changes should trigger a job build. Use the following values:<br /> - `any`: The model will build once _any_ direct upstream node has new data since the last build. Faster and may increase spend.<br /> - `all`: The model will only build when _all_ direct upstream nodes have new data since the last build. Less spend and more requirements. |
+| `build_after` | `freshness` の下にネストされた設定。新しいデータが存在する場合に、モデルが最後に構築されてから指定された count と period が経過したかどうかに基づいて、モデルを再構築するかどうかを決定するために使用されます。dbt はジョブが実行されるたびに新しいデータをチェックしますが、`build_after` により、十分な時間が経過して新しいデータが利用可能になった場合にのみモデルが再構築されます。 |
+| `count` と `period` | dbt が新しいデータをチェックする頻度を指定します。たとえば、`count: 4, period: hour` は、dbt が 4 時間ごとにチェックすることを意味します。 |
+| `updates_on` | オプション。上流のデータが変更されたときにジョブのビルドをトリガーするタイミングを決定します。次の値を使用します。<br /> - `any`: 最後のビルド以降、直接上流の任意のノードに新しいデータがあると、モデルがビルドされます。高速ですが、費用が増加する可能性があります。<br /> - `all`: 最後のビルド以降、直接上流の _すべて_ ノードに新しいデータがある場合にのみ、モデルがビルドされます。支出は減り、要件は増えます。 |
 
-## Default
+## デフォルト
 
-Default for the `build_after` key is:
+`build_after` キーのデフォルトは次のとおりです。
 
 ```yaml
 build_after:
@@ -100,19 +100,19 @@ build_after:
   updates_on: any
 ```
 
-This means that by default, the model will be built every time a scheduled job runs for any amount of new data.
+つまり、デフォルトでは、新しいデータの量に関係なく、スケジュールされたジョブが実行されるたびにモデルが構築されます。
 
-## Examples
+## 例
 
-The following examples show how to configure models to run less frequently and more frequently.
+以下の例は、モデルの実行頻度を低くしたり高くしたりするための設定方法を示しています。
 
-You can configure the `freshness` YAML to skip models during the build process *unless* new data is available *and* a specified time interval has passed.
+`freshness` YAML を設定することで、新しいデータが利用可能でない場合、かつ指定された時間間隔が経過しない限り、ビルドプロセス中にモデルをスキップすることができます。
 
-### Less frequent
+### 低頻度
 
-You can build a model that runs less frequently (which reduces spend) by configuring the model to only build no more often than every X amount of time, as long as as it has new data.
+新しいデータがある限り、X 回ごとにのみビルドするようにモデルを設定することで、実行頻度を低くし（コストを削減）、モデルを構築できます。
 
-Add the `freshness` configuration to the model with `count: 4` and `period: hour`:
+`count: 4` と `period: hour` を指定して、モデルに `freshness` 設定を追加します。
 
 ```yaml
 models:
@@ -132,20 +132,20 @@ models:
           updates_on: all  
 ```
 
-When the state-aware orchestration job triggers, dbt checks for two things:
+状態認識オーケストレーションジョブがトリガーされると、dbt は次の 2 つの点を確認します。
 
-- Whether new source data is available on all upstream models
-- Whether the models `stg_wizards` and `stg_worlds` were built more than 4 hours ago
+- すべての上流モデルで新しいソースデータが利用可能かどうか
+- モデル `stg_wizards` と `stg_worlds` が 4 時間以上前にビルドされているかどうか
 
-When _both_ conditions are met, dbt builds the model. In this case, the `updates_on: all` config is set. If the `raw.wizards` source has new data, but `stg_wizards` and `stg_worlds` were last built 3 hours ago, then nothing would be built.
+両方の条件が満たされた場合、dbt はモデルをビルドします。この場合、`updates_on: all` 構成が設定されています。`raw.wizards` ソースに新しいデータがあるものの、`stg_wizards` と `stg_worlds` が最後にビルドされてから 3 時間経過している場合は、何もビルドされません。
 
-If `updates_on: any` had been set in the previous example, then when `raw.wizards` source has new data, dbt would build the model unless it had been built within the last 4 hours.
+前の例で `updates_on: any` が設定されていた場合、`raw.wizards` ソースに新しいデータがある場合、モデルが過去 4 時間以内にビルドされていない限り、dbt はモデルをビルドします。
 
-### More frequent
+### より頻繁に実行
 
-If you want to build a model that runs more frequently (which might increase spend), you can configure the model to build as soon as _any_ dependency has new data instead of waiting for all dependencies.
+より頻繁に実行するモデルを構築したい場合（コストが増加する可能性があります）、すべての依存関係を待つのではなく、いずれかの依存関係に新しいデータが追加されたらすぐにモデルを構築するように設定できます。
 
-Add the `build_after` freshness configuration to the model with `count: 1` and `period: hour`:
+モデルに「count: 1」と「period: hour」を指定して、「build_after」フレッシュネス設定を追加します。
 
 ```yaml
 models:
@@ -166,11 +166,11 @@ models:
 
 ```
 
-When the state-aware orchestration job runs, dbt checks two things:
+状態認識オーケストレーションジョブが実行されると、dbt は次の 2 つの点を確認します。
 
-- If new source data is available on at least one upstream model.
-- If `stg_wizards` or `stg_worlds` wasn’t built in the last hour.
+- 少なくとも 1 つの上流モデルで新しいソースデータが利用可能かどうか。
+- `stg_wizards` または `stg_worlds` が過去 1 時間以内にビルドされていないかどうか。
 
-If _both_ conditions are met, dbt rebuilds the model. This also means if either model (`stg_wizards` _or_ `stg_worlds`) has new data, dbt rebuilds the model. If neither model has new data, nothing will be built.
+両方の条件が満たされた場合、dbt はモデルを再構築します。つまり、どちらかのモデル（`stg_wizards` または `stg_worlds`）に新しいデータがある場合、dbt はモデルを再構築します。どちらのモデルにも新しいデータがない場合は、何もビルドされません。
 
-In this example, because `updates_on: any` is set in, even if only the `raw.wizards` source has new data and only `stg_wizards` was built in the last hour (while `stg_worlds` hasn’t been updated), dbt will still build the model because it only needs one source update and one eligible (stale) model.
+この例では、`updates_on: any` が設定されているため、`raw.wizards` ソースにのみ新しいデータがあり、`stg_wizards` のみが過去 1 時間以内にビルドされた（`stg_worlds` は更新されていない）場合でも、必要なのはソース更新 1 つと適切な（古い）モデル 1 つだけなので、dbt はモデルをビルドします。
