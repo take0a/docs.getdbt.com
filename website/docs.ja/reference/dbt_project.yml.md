@@ -109,7 +109,7 @@ import PlusPrefix from '/snippets.ja/_plus-prefix.md';
 
 dbt が適切に処理できるように、`dbt_project.yml` ファイル内の設定項目は正しい YAML 命名規則に従うことが重要です。これは、複数の単語を含むリソースタイプの場合に特に重要です。
 
-- `dbt_project.yml` ファイルで複数の単語を含むリソースタイプを設定する場合は、ダッシュ (`-`) を使用します。[保存済みクエリ](/docs/build/saved-queries#configure-saved-query) の例を以下に示します。
+- `dbt_project.yml` ファイルで複数の単語を含むリソースタイプを設定する場合は、ダッシュ (`-`) を使用します。[saved query](/docs/build/saved-queries#configure-saved-query) の例を以下に示します。
 
     <File name="dbt_project.yml">
 

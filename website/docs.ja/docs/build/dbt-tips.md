@@ -15,16 +15,16 @@ pagination_next: null
 
 <Constant name="cloud_ide" /> を使用して開発している場合は、[キーボード ショートカット](/docs/cloud/dbt-cloud-ide/keyboard-shortcuts) ページを参照して、開発の生産性を高め、すべてのユーザーにとって簡単にすることができます。
 
-## YAML tips
+## YAML のヒント
 
-This section clarifies where you can use [Jinja](/docs/build/jinja-macros), nest [vars](/reference/dbt-jinja-functions/var) and [`env_var`](/reference/dbt-jinja-functions/env_var) in your YAML files.
+このセクションでは、YAML ファイル内で [Jinja](/docs/build/jinja-macros)、ネストされた [vars](/reference/dbt-jinja-functions/var)、および [`env_var`](/reference/dbt-jinja-functions/env_var) を使用できる場所を明確にします。
 
-- You can use Jinja in almost every YAML file in dbt _except_ the [`dependencies.yml` file](/docs/build/packages#use-cases). This is because the `dependencies.yml` file doesn't support Jinja.
-- Use `vars` in any YAML file that supports Jinja (like `schema.yml`, `snapshots.yml`). However, note that:
-  - In `dbt_project.yml`, `packages.yml`, and `profiles.yml` files, you must pass `vars` through the CLI using `--vars`, not defined inside the `vars:` block in the YAML file. This is because these files are parsed before Jinja is rendered.
-- You can use `env_var()` in all YAML files that support Jinja. Only `profiles.yml` and `packages.yml` support environment variables for secure values (using the `DBT_ENV_SECRET_` prefix). These are masked in logs and intended for credentials or secrets.
+- dbt のほぼすべての YAML ファイルで Jinja を使用できます。ただし、[`dependencies.yml` ファイル](/docs/build/packages#use-cases) は除きます。これは、`dependencies.yml` ファイルが Jinja をサポートしていないためです。
+- Jinja をサポートするすべての YAML ファイル (`schema.yml`、`snapshots.yml` など) で `vars` を使用してください。ただし、以下の点にご注意ください。
+  - `dbt_project.yml`、`packages.yml`、`profiles.yml` ファイルでは、`vars` を YAML ファイルの `vars:` ブロック内で定義するのではなく、`--vars` を使用して CLI に渡す必要があります。これは、これらのファイルが Jinja がレンダリングされる前に解析されるためです。
+- Jinja をサポートするすべての YAML ファイルで `env_var()` を使用できます。安全な値（`DBT_ENV_SECRET_` プレフィックスを使用）のための環境変数をサポートしているのは、`profiles.yml` と `packages.yml` のみです。これらの環境変数はログではマスクされ、認証情報またはシークレットとして使用されます。
 
-For additional information, check out [<Constant name="core" />'s context docs](https://github.com/dbt-labs/dbt-core/blob/main/core/dbt/context/README.md).
+詳細については、[<Constant name="core" /> のコンテキスト ドキュメント](https://github.com/dbt-labs/dbt-core/blob/main/core/dbt/context/README.md) をご覧ください。
 
 ## パッケージのヒント {#package-tips}
 
