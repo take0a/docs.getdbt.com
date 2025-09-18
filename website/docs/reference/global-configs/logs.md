@@ -40,7 +40,7 @@ The `json` format outputs fully structured logs in the <Term id="json" /> format
 {"data": {"adapter_name": "postgres", "adapter_version": "=1.8.0"}, "info": {"category": "", "code": "E034", "extra": {}, "invocation_id": "82131fa0-d2b4-4a77-9436-019834e22746", "level": "info", "msg": "Registered adapter: postgres=1.8.0", "name": "AdapterRegistered", "pid": 7875, "thread": "MainThread", "ts": "2024-05-29T23:32:56.437986Z"}}
 ```
 
-When the `LOG_FORMAT` is set explicitly, it will take affect in both the console and log files whereas the `LOG_FORMAT_FILE` only affects the log file.
+When the `LOG_FORMAT` is set explicitly, it will take effect in both the console and log files, whereas the `LOG_FORMAT_FILE` only affects the log file.
 
 <File name='Usage'>
 
@@ -115,7 +115,7 @@ Just like other global configs, it is possible to override these values for your
 
 ### Suppress non-error logs in output
 
-By default, dbt shows all logs in standard out (stdout). You can use the `QUIET` config to show only error logs in stdout. Logs will still include the output of anything passed to the [`print()`](/reference/dbt-jinja-functions/print) macro.  For example, you might suppress all but error logs to more easily find and debug a jinja error.
+By default, dbt shows all logs in standard out (stdout). You can use the `QUIET` config to show only error logs in stdout. Logs will still include the output of anything passed to the [`print()`](/reference/dbt-jinja-functions/print) macro.  For example, you might suppress all but error logs to more easily find and debug a Jinja error.
 
 <File name='profiles.yml'>
 

@@ -165,6 +165,8 @@ macros:
 
 </Tabs>
 
+Note that for backwards compatibility, `docs` is supported as a top-level key, but without the capabilities of config inheritance.
+
 ## Definition
 The `docs` property can be used to provide documentation-specific configuration to models. It supports the attribute `show`, which controls whether or not nodes are shown in the auto-generated documentation website. It also supports `node_color` for models, seeds, snapshots, and analyses. Other node types are not supported.
 
@@ -217,7 +219,7 @@ Note, you need to run or re-run the `dbt docs generate` command to apply and vie
 
 :::info Custom node colors not applicable in <Constant name="explorer" />
 
-The custom `node_color` attribute isn't applicable in dbt Explorer. Instead, Explorer provides [lenses](/docs/explore/explore-projects#lenses), which are map layers for your <Term id="dag"/>. Lenses help you better understand your project's contextual metadata at scale and distinguish specific models or subsets of models.
+The custom `node_color` attribute isn't applicable in <Constant name="explorer" />. Instead, Explorer provides [lenses](/docs/explore/explore-projects#lenses), which are map layers for your <Term id="dag"/>. Lenses help you better understand your project's contextual metadata at scale and distinguish specific models or subsets of models.
 
 :::
 

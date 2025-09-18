@@ -13,21 +13,21 @@ Group members may include models, tests, seeds, snapshots, analyses, and metrics
 
 ### Declaring a group
 
-Groups are defined in `.yml` files, nested under a `groups:` key.
+import DefineGroups from '/snippets/_define-groups.md';
 
-<File name='models/marts/finance/finance.yml'>
+<DefineGroups />
 
-```yaml
-groups:
-  - name: finance
-    owner:
-      # 'name' or 'email' is required; additional properties allowed
-      email: finance@jaffleshop.com
-      slack: finance-data
-      github: finance-data-team
-```
+#### Centrally defining a group
 
-</File>
+To centrally define a group in your project, there are two options:
+
+- Create one `_groups.yml` file in the root of the `models` directory.
+- Create one `_groups.yml` file in the root of a `groups` directory. For this option, you also need to configure [`model-paths`](/reference/project-configs/model-paths) in the `dbt_project.yml` file:
+
+  ```yml 
+  model-paths: ["models", "groups"]
+  ```
+
 
 ### Adding a model to a group
 

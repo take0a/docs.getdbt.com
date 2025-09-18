@@ -32,9 +32,9 @@ By default, the IDE uses sqlfmt rules to format your code, making it convenient 
 
 <Lightbox src="/img/docs/dbt-cloud/cloud-ide/prettier.gif" width="95%" title="Format YAML, Markdown, and JSON files using Prettier."/>
 
-<Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-sql-popup.jpg" width="95%" title="Use the Config button to select your tool."/>
+<Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-sql-popup.png" width="95%" title="Use the config button to select your tool."/>
 
-<Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-sqlfluff-config.jpg" width="95%" title="Customize linting by configuring your own linting code rules, including dbtonic linting/styling."/>
+<Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-sqlfluff-config.png" width="95%" title="Customize linting by configuring your own linting code rules, including dbtonic linting/styling."/>
 
 </DocCarousel>
 
@@ -45,7 +45,7 @@ With the <Constant name="cloud_ide" />, you can seamlessly use [SQLFluff](https:
 - Works with Jinja and SQL, 
 - Comes with built-in [linting rules](https://docs.sqlfluff.com/en/stable/rules.html). You can also [customize](#customize-linting) your own linting rules.
 - Empowers you to [enable linting](#enable-linting) with options like **Lint** (displays linting errors and recommends actions) or **Fix** (auto-fixes errors in the <Constant name="cloud_ide" />).
-- Displays a **Code Quality** tab to view code errors, provides code quality visibility and management, and displays the SQLFluff version used.
+- Displays a **Code Quality** tab to view code errors, provides code quality visibility and management.
 
 :::info Ephemeral models not supported
 Linting doesn't support ephemeral models in dbt v1.5 and lower. Refer to the [FAQs](#faqs) for more info.
@@ -96,7 +96,7 @@ Refer to the [Jaffle shop SQLFluff config file](https://github.com/dbt-labs/jaff
 ```
 [sqlfluff]
 templater = dbt
-# This change (from jinja to dbt templater) will make linting slower
+# This change (from Jinja to dbt templater) will make linting slower
 # because linting will first compile dbt code into data warehouse code.
 runaway_limit = 10
 max_line_length = 80
@@ -137,13 +137,14 @@ group_by_and_order_by_style = implicit
 
 For more info on styling best practices, refer to [How we style our SQL](/best-practices/how-we-style/2-how-we-style-our-sql).
 
-<Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-sqlfluff-config.jpg" width="90%" title="Customize linting by configuring your own linting code rules, including dbtonic linting/styling."/>
+<Lightbox src="/img/docs/dbt-cloud/cloud-ide/ide-sqlfluff-config.png" width="90%" title="Customize linting by configuring your own linting code rules, including dbtonic linting/styling."/>
 
 ## Format
 
 In the <Constant name="cloud_ide" />, you can format your code to match style guides with a click of a button. The <Constant name="cloud_ide" /> integrates with formatters like sqlfmt, Prettier, and Black to automatically format code on five different file types &mdash; SQL, YAML, Markdown, Python, and JSON:
 
 - SQL &mdash; Format with [sqlfmt](http://sqlfmt.com/), which provides one way to format your dbt SQL and Jinja.
+    - **Note**: Custom sqlfmt configuration in the <Constant name="cloud_ide" /> is not supported.
 - YAML, Markdown, and JSON &mdash; Format with [Prettier](https://prettier.io/). 
 - Python &mdash; Format with [Black](https://black.readthedocs.io/en/latest/).
 
@@ -219,11 +220,6 @@ However, you can customize and include an additional child `.sqlfluff` configura
 <DetailsToggle alt_header="Can I run SQLFluff commands from the terminal?">
 
 Currently, running SQLFluff commands from the terminal isn't supported. 
-</DetailsToggle>
-
-<DetailsToggle alt_header="Why is there inconsistent SQLFluff behavior when running outside the Studio IDE?">
-- Double-check that your SQLFluff version matches the one in <Constant name="cloud_ide" /> (found in the <b>Code Quality</b> tab after a lint operation). <br /><br />
-- If your lint operation passes despite clear rule violations, confirm you're not linting models with ephemeral models. Linting doesn't support ephemeral models in dbt v1.5 and lower. 
 </DetailsToggle>
 
 <DetailsToggle alt_header="What are some considerations when using dbt linting?">

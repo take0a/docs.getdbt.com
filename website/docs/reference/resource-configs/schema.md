@@ -49,12 +49,6 @@ This would result in the generated relation being located in the `mappings` sche
 
 <TabItem value="snapshots" label="Snapshots">
 
-<VersionBlock lastVersion="1.8">
-
-Available in <Constant name="core" /> v1.9 and higher. Select v1.9 or newer from the version dropdown to view the configs. Try it now in the [<Constant name="cloud" /> "Latest" release track](/docs/dbt-versions/cloud-release-tracks).
-
-</VersionBlock>
-
 <VersionBlock firstVersion="1.9">
 
 Specify a [custom schema](/docs/build/custom-schemas#understanding-custom-schemas) for a snapshot in your `dbt_project.yml` or YAML file.
@@ -118,7 +112,7 @@ For example, to save test results in a specific schema, you can configure it lik
 <File name='dbt_project.yml'>
 
 ```yml
-tests:
+data_tests:
   +store_failures: true
   +schema: test_results
 ```
@@ -182,7 +176,7 @@ seeds:
 
 </File>
 
-### Tests
+### Data tests
 
 Customize the name of the schema in which tests [configured to store failures](/reference/resource-configs/store_failures) will save their results.
 The resulting schema is `{{ profile.schema }}_{{ tests.schema }}`, with a default suffix of `dbt_test__audit`.
@@ -191,14 +185,14 @@ To use the same profile schema, set `+schema: null`.
 <File name='dbt_project.yml'>
 
 ```yml
-tests:
+data_tests:
   +store_failures: true
   +schema: _sad_test_failures  # Will write tables to my_database.my_schema__sad_test_failures
 ```
 
 </File>
 
-Ensure you have the authorization to create or access schemas for your work. To ensure that the required schemas have the correct permissions, run a sql statement in your respective data platform environment. For example, run the following command if using Redshift (exact authorization query may differ from one data platform to another):
+Ensure you have the authorization to create or access schemas for your work. To ensure that the required schemas have the correct permissions, run a SQL statement in your respective data platform environment. For example, run the following command if using Redshift (exact authorization query may differ from one data platform to another):
 
 ```sql
 create schema if not exists dev_username_dbt_test__audit authorization username;

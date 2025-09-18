@@ -41,14 +41,14 @@ import CoretoCloudTable from '/snippets/_core-to-cloud-guide-table.md';
 
 This guide outlines the steps you need to take to move from <Constant name="core" /> to <Constant name="cloud" /> and highlights the necessary technical changes:
 
-- [Account setup](https://docs.getdbt.com/guides/core-to-cloud-1?step=4): Learn how to create a <Constant name="cloud" /> account, invite team members, and configure it for your team.
-- [Data platform setup](https://docs.getdbt.com/guides/core-to-cloud-1?step=5): Find out about connecting your data platform to <Constant name="cloud" />.
-- [<Constant name="git" /> setup](https://docs.getdbt.com/guides/core-to-cloud-1?step=6): Learn to link your dbt project's <Constant name="git" /> repository with <Constant name="cloud" />.
-- [Developer setup:](https://docs.getdbt.com/guides/core-to-cloud-1?step=7) Understand the setup needed for developing in <Constant name="cloud" />.
-- [Environment variables](https://docs.getdbt.com/guides/core-to-cloud-1?step=8): Discover how to manage environment variables in <Constant name="cloud" />, including their priority.
-- [Orchestration setup](https://docs.getdbt.com/guides/core-to-cloud-1?step=9): Learn how to prepare your <Constant name="cloud" /> environment and jobs for orchestration.
-- [Models configuration](https://docs.getdbt.com/guides/core-to-cloud-1?step=10): Get insights on validating and running your models in <Constant name="cloud" />, using either the <Constant name="cloud_ide" /> or <Constant name="cloud" /> CLI.
-- [What's next?](https://docs.getdbt.com/guides/core-to-cloud-1?step=11): Summarizes key takeaways and introduces what to expect in the following guides.
+- [Account setup](/guides/core-to-cloud-1?step=4): Learn how to create a <Constant name="cloud" /> account, invite team members, and configure it for your team.
+- [Data platform setup](/guides/core-to-cloud-1?step=5): Find out about connecting your data platform to <Constant name="cloud" />.
+- [<Constant name="git" /> setup](/guides/core-to-cloud-1?step=6): Learn to link your dbt project's <Constant name="git" /> repository with <Constant name="cloud" />.
+- [Developer setup:](/guides/core-to-cloud-1?step=7) Understand the setup needed for developing in <Constant name="cloud" />.
+- [Environment variables](/guides/core-to-cloud-1?step=8): Discover how to manage environment variables in <Constant name="cloud" />, including their priority.
+- [Orchestration setup](/guides/core-to-cloud-1?step=9): Learn how to prepare your <Constant name="cloud" /> environment and jobs for orchestration.
+- [Models configuration](/guides/core-to-cloud-1?step=10): Get insights on validating and running your models in <Constant name="cloud" />, using either the <Constant name="cloud_ide" /> or <Constant name="cloud" /> CLI.
+- [What's next?](/guides/core-to-cloud-1?step=11): Summarizes key takeaways and introduces what to expect in the following guides.
 
 ### Related docs
 - [Learn <Constant name="cloud" />](https://learn.getdbt.com) on-demand video learning.
@@ -115,13 +115,6 @@ Your existing dbt project source code should live in a <Constant name="git" /> r
 
      This method is preferred for its simplicity, security features (including secure OAuth logins and automated workflows like CI builds on pull requests), and overall ease of use.
    - [Import a <Constant name="git" /> repository](/docs/cloud/git/import-a-project-by-git-url) from any valid <Constant name="git" /> URL that points to a dbt project.
-
-### Additional configuration
-Explore these additional configurations to optimize your <Constant name="git" /> setup further:
-
-1. Log into <Constant name="cloud" /> using [OAuth connections](/docs/cloud/git/connect-github) to integrate with your source code platform. It automatically links to the repository using one of the native integrations set at the account level. <Lifecycle status="managed,managed_plus" />
-  
-  Set up groups for dbt project access with those configured for repository access to streamline permissions.
 
 ## Developer setup
 
@@ -227,7 +220,7 @@ Explore these additional configurations to optimize your <Constant name="cloud" 
 
 5. **API access** &mdash; Create [API auth tokens](/docs/dbt-cloud-apis/authentication) and access to [<Constant name="cloud" /> APIs](/docs/dbt-cloud-apis/overview) as needed.  <Lifecycle status="self_service,managed" />
 
-6. **dbt Explorer** &mdash; If you use [dbt Explorer](/docs/explore/explore-projects) and run production jobs with an external orchestrator, ensure your production jobs run `dbt run` or `dbt build` to update and view models and their [metadata](/docs/explore/explore-projects#generate-metadata) in dbt Explorer. Running `dbt compile`  alone will not update model metadata. In addition, features like column-level lineage also requires catalog metadata produced through running `dbt docs generate`. <Lifecycle status="self_service,managed" />
+6. **<Constant name="explorer" />** &mdash; If you use [<Constant name="explorer" />](/docs/explore/explore-projects) and run production jobs with an external orchestrator, ensure your production jobs run `dbt run` or `dbt build` to update and view models and their [metadata](/docs/explore/explore-projects#generate-metadata) in <Constant name="explorer" />. Running `dbt compile`  alone will not update model metadata. In addition, features like column-level lineage also requires catalog metadata produced through running `dbt docs generate`. <Lifecycle status="self_service,managed" />
 
 ### CI/CD setup
 
@@ -251,7 +244,7 @@ You’ll want to make sure you set up your [development environment and credenti
    - Run `dbt compile` to make sure your project compiles correctly.
    - Run a few models in the <Constant name="cloud_ide" /> or <Constant name="cloud" /> CLI to ensure you’re experiencing accurate results in development.
 
-2. Once your first job has successfully run in your production environment, use [dbt Explorer](/docs/explore/explore-projects) to view your project's [resources](/docs/build/projects) (such as models, tests, and metrics) and their <Term id="data-lineage" />  to gain a better understanding of its latest production state. <Lifecycle status="self_service,managed" />
+2. Once your first job has successfully run in your production environment, use [<Constant name="explorer" />](/docs/explore/explore-projects) to view your project's [resources](/docs/build/projects) (such as models, tests, and metrics) and their <Term id="data-lineage" />  to gain a better understanding of its latest production state. <Lifecycle status="self_service,managed" />
 
 ## What’s next?
 

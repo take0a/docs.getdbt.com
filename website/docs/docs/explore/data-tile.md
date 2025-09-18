@@ -36,9 +36,9 @@ Data health tiles rely on [exposures](/docs/build/exposures) to surface data hea
   -  If using manual exposures, they must be explicitly defined in your YAML files.
   - If using automatic downstream exposures, ensure your BI tool is [configured](/docs/cloud-integrations/downstream-exposures-tableau) with <Constant name="cloud" />.
 - You have [source freshness](/docs/deploy/source-freshness) enabled in the job that generates this exposure.
-- The exposure used for the  data health tile must have the [`type` property](/docs/build/exposures#available-properties) set to `dashboard`. Otherwise, you won't be able to view the **Embed data health tile in your dashboard** dropdown in dbt Explorer.
+- The exposure used for the data health tile must have the [`type` property](/docs/build/exposures#available-properties) set to `dashboard`. Otherwise, you won't be able to view the **Embed data health tile in your dashboard** dropdown in <Constant name="explorer" />.
 
-## View exposure in dbt Explorer
+## View exposure in dbt Catalog
 
 First, be sure to enable [source freshness](/docs/deploy/source-freshness) in the job that generates this exposure.
 
@@ -54,7 +54,7 @@ First, be sure to enable [source freshness](/docs/deploy/source-freshness) in 
    - You can also see the last check completed, the last check time, and the last check duration.
 6. You can click the **Open Dashboard** button on the upper right to immediately view this in your analytics tool.
 
-<Lightbox src="/img/docs/collaborate/dbt-explorer/data-tile-exposures.jpg" width="95%" title="View an exposure in dbt Explorer." />
+<Lightbox src="/img/docs/collaborate/dbt-explorer/data-tile-exposures.jpg" width="95%" title="View an exposure in dbt Catalog." />
 
 ## Embed in your dashboard
 
@@ -72,7 +72,7 @@ Follow these steps to set up your data health tile:
 6. Navigate back to <Constant name="explorer" /> and select an exposure.
 
    :::tip
-      The exposure used for the  data health tile must have the [`type` property](/docs/build/exposures#available-properties) set to `dashboard`. Otherwise, you won't be able to view the **Embed data health tile in your dashboard** dropdown in dbt Explorer.
+      The exposure used for the  data health tile must have the [`type` property](/docs/build/exposures#available-properties) set to `dashboard`. Otherwise, you won't be able to view the **Embed data health tile in your dashboard** dropdown in <Constant name="explorer" />.
    :::
 
 7. Below the **Data health** section, expand on the toggle for instructions on how to embed the exposure tile (if you're an account admin with develop permissions). 
@@ -106,9 +106,8 @@ Follow these steps to embed the data health tile in PowerBI:
 4. Go to the **iFrame** tab and copy the iFrame code. Make sure the Metadata Only token is already set up.
 5. In PowerBI, paste the iFrame code you copied into your measure calculation window. The iFrame code should look like this:
 
-    ```html
-        Website =
-        "<iframe src='https://1234.metadata.ACCESS_URL/exposure-tile?uniqueId=exposure.EXPOSURE_NAME&environmentType=staging&environmentId=123456789&token=YOUR_METADATA_TOKEN' title='Exposure status tile' height='400'></iframe>"
+    ```html/text
+    <iframe src='https://1234.metadata.ACCESS_URL/exposure-tile?uniqueId=exposure.EXPOSURE_NAME&environmentType=staging&environmentId=123456789&token=YOUR_METADATA_TOKEN' title='Exposure status tile' height='400'></iframe>
     ```
 
     <Lightbox src="/img/docs/collaborate/dbt-explorer/power-bi-measure-tools.png" width="90%" title="In the 'Measure tools' tab, replace your values with the iFrame code."/>
@@ -132,11 +131,11 @@ Follow these steps to embed the data health tile in Tableau:
 <Lightbox src="/img/docs/collaborate/dbt-explorer/tableau-example.png" width="80%" title="Embed data health tile iFrame in Tableau"/>
 
 1. Create a dashboard in Tableau and connect to your database to pull in the data.
-2. Ensure you've copied the URL or iFrame snippet available in dbt Explorer's **Data health** section, under the **Embed data health into your dashboard** toggle.
+2. Ensure you've copied the URL or iFrame snippet available in <Constant name="explorer" />'s **Data health** section, under the **Embed data health into your dashboard** toggle.
 3. Insert a **Web Page** object.
 4. Insert the URL and click **Ok**.
 
-    ```html
+    ```text/html
     https://metadata.ACCESS_URL/exposure-tile?uniqueId=exposure.EXPOSURE_NAME&environmentType=production&environmentId=220370&token=<YOUR_METADATA_TOKEN>
     ```
 
@@ -152,10 +151,10 @@ Follow these steps to embed the data health tile in Sigma:
 <Lightbox src="/img/docs/collaborate/dbt-explorer/sigma-example.jpg" width="90%" title="Embed data health tile in Sigma"/>
 
 1. Create a dashboard in Sigma and connect to your database to pull in the data.
-2. Ensure you've copied the URL or iFrame snippet available in dbt Explorer's **Data health** section, under the **Embed data health into your dashboard** toggle.
+2. Ensure you've copied the URL or iFrame snippet available in <Constant name="explorer" />'s **Data health** section, under the **Embed data health into your dashboard** toggle.
 3. Add a new embedded UI element in your Sigma Workbook in the following format:
 
-    ```html
+    ```html/text
     https://metadata.ACCESS_URL/exposure-tile?uniqueId=exposure.EXPOSURE_NAME&environmentType=production&environmentId=ENV_ID_NUMBER&token=<YOUR_METADATA_TOKEN>
     ```
 
@@ -199,7 +198,7 @@ In order to set up your dashboard status tile, here is what you need:
 
 You can insert these three fields into the following iFrame, and then embed it **anywhere that you can embed an iFrame**:
 
-```
+```html/text
 <iframe src='https://metadata.YOUR_ACCESS_URL/exposure-tile?name=<exposure_name>&jobId=<job_id>&token=<metadata_only_token>' title='Exposure Status Tile'></iframe>
 ```
 
@@ -207,7 +206,7 @@ You can insert these three fields into the following iFrame, and then embed it *
 
 <Constant name="cloud" /> is hosted in multiple regions in the world and each region has a different access URL. Replace `YOUR_ACCESS_URL` with the appropriate [Access URL](/docs/cloud/about-cloud/access-regions-ip-addresses) for your region and plan. For example, if your account is hosted in the EMEA region, you would use the following iFrame code:
 
-```
+```html/text
 <iframe src='https://metadata.emea.dbt.com/exposure-tile?name=<exposure_name>&jobId=<job_id>&token=<metadata_only_token>' title='Exposure Status Tile'></iframe>
 ```
 
@@ -243,7 +242,7 @@ Looker does not allow you to directly embed HTML and instead requires creating a
 #### Tableau
 Tableau does not require you to embed an iFrame. You only need to use a Web Page object on your Tableau Dashboard and a URL in the following format:
 
-```
+```html/text
 https://metadata.YOUR_ACCESS_URL/exposure-tile?name=<exposure_name>&jobId=<job_id>&token=<metadata_only_token>
 ```
 
@@ -251,7 +250,7 @@ https://metadata.YOUR_ACCESS_URL/exposure-tile?name=<exposure_name>&jobId=<job_i
 
 <Constant name="cloud" /> is hosted in multiple regions in the world and each region has a different access URL. Replace `YOUR_ACCESS_URL` with the appropriate [Access URL](/docs/cloud/about-cloud/access-regions-ip-addresses) for your region and plan. For example, if your account is hosted in the North American region, you would use the following code:
 
-```
+```html/text
 https://metadata.cloud.getdbt.com/exposure-tile?name=<exposure_name>&jobId=<job_id>&token=<metadata_only_token>
 
 ```
@@ -266,7 +265,7 @@ https://metadata.cloud.getdbt.com/exposure-tile?name=<exposure_name>&jobId=<job_
 
 Sigma does not require you to embed an iFrame. Add a new embedded UI element in your Sigma Workbook in the following format:
 
-```
+```html/text
 https://metadata.YOUR_ACCESS_URL/exposure-tile?name=<exposure_name>&jobId=<job_id>&token=<metadata_only_token>
 ```
 
@@ -274,7 +273,7 @@ https://metadata.YOUR_ACCESS_URL/exposure-tile?name=<exposure_name>&jobId=<job_i
 
 <Constant name="cloud" /> is hosted in multiple regions in the world and each region has a different access URL. Replace `YOUR_ACCESS_URL` with the appropriate [Access URL](/docs/cloud/about-cloud/access-regions-ip-addresses) for your region and plan. For example, if your account is hosted in the APAC region, you would use the following code:
 
-```
+```html/text
 https://metadata.au.dbt.com/exposure-tile?name=<exposure_name>&jobId=<job_id>&token=<metadata_only_token>
 
 ```

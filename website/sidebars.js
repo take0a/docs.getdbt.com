@@ -18,7 +18,10 @@ const sidebarSettings = {
       label: "Get started with dbt",
       collapsed: true,
       link: { type: "doc", id: "docs/get-started-dbt" },
-      items: ["docs/get-started-dbt"],
+      items: [
+        "docs/get-started-dbt",
+        "docs/configuration-checklist",
+      ],
     }, // Get started quickstarts directory
     {
       type: "category",
@@ -141,7 +144,8 @@ const sidebarSettings = {
                     "docs/cloud/manage-access/set-up-snowflake-oauth",
                     "docs/cloud/manage-access/set-up-databricks-oauth",
                     "docs/cloud/manage-access/set-up-bigquery-oauth",
-                    "docs/cloud/manage-access/external-oauth",
+                    "docs/cloud/manage-access/snowflake-external-oauth",
+                    "docs/cloud/manage-access/redshift-external-oauth",
                   ],
                 }, // SSO
                 "docs/cloud/manage-access/audit-log",
@@ -201,10 +205,14 @@ const sidebarSettings = {
                 "docs/cloud/secure/about-private-connectivity",
                 "docs/cloud/secure/snowflake-privatelink",
                 "docs/cloud/secure/snowflake-private-link",
+                "docs/cloud/secure/snowflake-psc",
                 "docs/cloud/secure/databricks-privatelink",
                 "docs/cloud/secure/databricks-private-link",
                 "docs/cloud/secure/redshift-privatelink",
                 "docs/cloud/secure/postgres-privatelink",
+                "docs/cloud/secure/az-postgres-private-link",
+                "docs/cloud/secure/az-synapse-private-link",
+                "docs/cloud/secure/bigquery-psc",
                 "docs/cloud/secure/vcs-privatelink",
               ],
             }, // PrivateLink
@@ -215,13 +223,23 @@ const sidebarSettings = {
           type: "category",
           label: "dbt Core and Fusion",
           collapsed: true,
-          link: { type: "doc", id: "docs/core/about-core-setup" },
+          link: { type: "doc", id: "docs/about-dbt-install" },
           items: [
-            "docs/core/about-core-setup",
+            "docs/about-dbt-install",
             "docs/core/dbt-core-environments",
+             {
+              type: "category",
+              label: "Install dbt Fusion engine",
+              link: { type: "doc", id: "docs/fusion/about-fusion-install" },
+              items: [
+                "docs/fusion/about-fusion-install",
+                "docs/fusion/install-dbt-extension",
+                "docs/fusion/install-fusion-cli",
+              ],
+            },
             {
               type: "category",
-              label: "Install dbt",
+              label: "Install dbt Core",
               link: { type: "doc", id: "docs/core/installation-overview" },
               items: [
                 "docs/core/installation-overview",
@@ -247,10 +265,11 @@ const sidebarSettings = {
                 "docs/core/connect-data-platform/fabric-setup",
                 "docs/core/connect-data-platform/fabricspark-setup",
                 "docs/core/connect-data-platform/postgres-setup",
+                "docs/core/connect-data-platform/alloydb-setup",
+                "docs/core/connect-data-platform/lakebase-setup",
                 "docs/core/connect-data-platform/redshift-setup",
                 "docs/core/connect-data-platform/snowflake-setup",
                 "docs/core/connect-data-platform/trino-setup",
-                "docs/core/connect-data-platform/alloydb-setup",
                 "docs/core/connect-data-platform/hive-setup",
                 "docs/core/connect-data-platform/impala-setup",
                 "docs/core/connect-data-platform/athena-setup",
@@ -332,10 +351,10 @@ const sidebarSettings = {
           },
           items: [
             "docs/cloud/dbt-cloud-ide/develop-in-the-cloud",
+            "docs/cloud/dbt-cloud-ide/ide-user-interface",
             "docs/cloud/dbt-cloud-ide/keyboard-shortcuts",
             "docs/cloud/dbt-cloud-ide/git-commit-signing",
             "docs/cloud/dbt-cloud-ide/lint-format",
-            "docs/cloud/dbt-cloud-ide/ide-user-interface",
             "docs/cloud/dbt-cloud-ide/develop-copilot",
           ],
         },
@@ -558,6 +577,7 @@ const sidebarSettings = {
             "docs/mesh/iceberg/about-catalogs",
             "docs/mesh/iceberg/snowflake-iceberg-support",
             "docs/mesh/iceberg/databricks-iceberg-support",
+            "docs/mesh/iceberg/bigquery-iceberg-support",
           ],
         },
       ],
@@ -647,6 +667,7 @@ const sidebarSettings = {
             "docs/explore/data-health-signals",
             "docs/explore/explore-multiple-projects",
             "docs/explore/external-metadata-ingestion",
+            "docs/explore/global-navigation",
             "docs/explore/model-performance",
             "docs/explore/project-recommendations",
             "docs/explore/dbt-explorer-faqs",
@@ -736,7 +757,6 @@ const sidebarSettings = {
       link: { type: "doc", id: "docs/dbt-cloud-apis/overview" },
       items: [
         "docs/dbt-cloud-apis/overview",
-        "docs/dbt-cloud-apis/mcp",
         {
           type: "category",
           label: "API Access",
@@ -779,10 +799,54 @@ const sidebarSettings = {
               label: "Schema",
               link: {
                 type: "doc",
-                id: "docs/dbt-cloud-apis/discovery-schema-environment",
+                id: "docs/dbt-cloud-apis/discovery-schema-about",
               },
               items: [
-                "docs/dbt-cloud-apis/discovery-schema-environment",
+                "docs/dbt-cloud-apis/discovery-schema-about",
+                {
+                  type: "category",
+                  label: "Environment (recommended)",
+                  link: {
+                    type: "doc",
+                    id: "docs/dbt-cloud-apis/discovery-schema-environment",
+                  },
+                  items: [
+                   "docs/dbt-cloud-apis/discovery-schema-environment",
+                   {
+                    type: "category",
+                    label: "Applied",
+                    link: {
+                      type: "doc",
+                      id: "docs/dbt-cloud-apis/discovery-schema-environment-applied",
+                    },
+                    items: [
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-tests",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-sources",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-snapshots",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-seeds",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-resources",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-models",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-exposures",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-exposure-tile",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-tags",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-packages",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-owners",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-modelHistoricalRuns",
+                      "docs/dbt-cloud-apis/discovery-schema-environment-applied-lineage",
+                    ],
+                  },
+                    "docs/dbt-cloud-apis/discovery-schema-environment-definition",
+                  ],
+                },
+                // Uncomment to add Definition subpage, but need to make items non-empty
+                // {
+                //   type: "category",
+                //   label: "Definition",
+                //   items: [
+                //     // insert pages here
+                //   ],
+                // },
                 {
                   type: "category",
                   label: "Job",
@@ -808,21 +872,6 @@ const sidebarSettings = {
                     // "docs/dbt-cloud-apis/discovery-schema-job-macros",
                   ],
                 },
-                {
-                  type: "category",
-                  label: "Applied",
-                  items: [
-                    "docs/dbt-cloud-apis/discovery-schema-environment-applied-modelHistoricalRuns",
-                  ],
-                },
-                // Uncomment to add Definition subpage, but need to make items non-empty
-                // {
-                //   type: "category",
-                //   label: "Definition",
-                //   items: [
-                //     // insert pages here
-                //   ],
-                // },
               ],
             },
           ],
@@ -840,19 +889,34 @@ const sidebarSettings = {
         },
       ],
     },
+            {
+          type: "category",
+          label: "Copilot",
+          collapsed: true,
+          link: { type: "doc", id: "docs/cloud/dbt-copilot" },
+          items: [
+           "docs/cloud/dbt-copilot",
+           "docs/cloud/enable-dbt-copilot",
+            "docs/cloud/use-dbt-copilot",
+            "docs/cloud/copilot-styleguide",
+            "docs/cloud/copilot-chat-in-studio",
+            "docs/cloud/dbt-copilot-faqs",
+          ],
+        },
     {
       type: "category",
-      label: "dbt Copilot",
+      label: "dbt MCP",
       collapsed: true,
-      link: { type: "doc", id: "docs/cloud/dbt-copilot" },
+      link: { type: "doc", id: "docs/dbt-ai/about-mcp", },
       items: [
-        "docs/cloud/dbt-copilot",
-        "docs/cloud/enable-dbt-copilot",
-        "docs/cloud/use-dbt-copilot",
-        "docs/cloud/copilot-styleguide",
-        "docs/cloud/copilot-chat-in-studio",
-        "docs/cloud/dbt-copilot-faqs",
-      ],
+       
+          "docs/dbt-ai/about-mcp",
+          "docs/dbt-ai/setup-local-mcp",
+          "docs/dbt-ai/setup-remote-mcp",
+          "docs/dbt-ai/integrate-mcp-vscode",
+          "docs/dbt-ai/integrate-mcp-cursor",
+          "docs/dbt-ai/integrate-mcp-claude",
+          ],
     },
     {
       type: "category",
@@ -938,6 +1002,7 @@ const sidebarSettings = {
           },
           items: [
             "docs/dbt-versions/dbt-cloud-release-notes",
+            "docs/dbt-versions/dbt-cloud-release-notes-gen",
             "docs/dbt-versions/compatible-track-changelog",
             "docs/dbt-versions/2024-release-notes",
             "docs/dbt-versions/2023-release-notes",
@@ -1085,6 +1150,7 @@ const sidebarSettings = {
             description: "The list of general properties available in dbt.",
           },
           items: [
+            "reference/resource-properties/anchors",
             "reference/resource-properties/columns",
             "reference/resource-properties/config",
             "reference/resource-properties/constraints",

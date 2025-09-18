@@ -33,6 +33,10 @@ There are three license types:
 
 See [Seats and Users](/docs/cloud/manage-access/seats-and-users) for more information on the impact of licenses on these permissions.
 
+import LicenseOverrideNote from '/snippets/_license-override-note.md';
+
+<LicenseOverrideNote />
+
 ## Table of groups, licenses, and permissions
 
 Key:
@@ -67,7 +71,7 @@ The following tables outline the access that users have if they are assigned a D
 |Project-level permission | Owner | Member  | Read-only | IT license |
 |:------------------------|:-----:|:-------:|:---------:|:----------:|
 | Adapters                |   W   |    W    |    R      |      -      |
-| Connections             |   W   |    W    |    R      |      -      |
+| Connections             |   W   |    W    |    R      |      W      |
 | Credentials             |   W   |    W    |    R      |      -      |
 | Custom env. variables   |   W   |    W    |    R      |      -      |
 | Develop (<Constant name="cloud_ide" /> or <Constant name="cloud" /> CLI)| W |  W    |    -      |      -      |

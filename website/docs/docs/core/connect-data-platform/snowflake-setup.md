@@ -29,75 +29,6 @@ import SetUpPages from '/snippets/_setup-pages-intro.md';
 
 Snowflake can be configured using basic user/password authentication as shown below.
 
-<VersionBlock lastVersion="1.8">
-
-<File name='~/.dbt/profiles.yml'>
-
-```yaml
-my-snowflake-db:
-  target: dev
-  outputs:
-    dev:
-      type: snowflake
-      account: [account id]
-
-      # User/password auth
-      user: [username]
-      password: [password]
-
-      role: [user role]
-      database: [database name]
-      warehouse: [warehouse name]
-      schema: [dbt schema]
-      threads: [1 or more]
-      client_session_keep_alive: False
-      query_tag: [anything]
-
-      # optional
-      connect_retries: 0 # default 0
-      connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
-      retry_all: False  # default: false
-      reuse_connections: False
-  ```
-
-</File>
-
-### User / Password + DUO MFA authentication
-
-Snowflake integrates the DUO Mobile app to add 2-Factor authentication to basic user/password as seen below.
-
-```yaml
-my-snowflake-db:
-  target: dev
-  outputs:
-    dev:
-      type: snowflake
-      account: [account id]
-
-      # User/password auth
-      user: [username]
-      password: [password]
-      authenticator: username_password_mfa
-
-      role: [user role]
-      database: [database name]
-      warehouse: [warehouse name]
-      schema: [dbt schema]
-      threads: [1 or more]
-      client_session_keep_alive: False
-      query_tag: [anything]
-
-      # optional
-      connect_retries: 0 # default 0
-      connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
-      retry_all: False  # default: false
-      reuse_connections: False
-```
-
-</VersionBlock>
-
 <VersionBlock firstVersion="1.9">
 
 <File name='~/.dbt/profiles.yml'>
@@ -125,7 +56,7 @@ my-snowflake-db:
       # optional
       connect_retries: 0 # default 0
       connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
+      retry_on_database_errors: True # default: true
       retry_all: False  # default: false
       reuse_connections: True # default: True if client_session_keep_alive is False, otherwise None
   ```
@@ -160,7 +91,7 @@ my-snowflake-db:
       # optional
       connect_retries: 0 # default 0
       connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
+      retry_on_database_errors: True # default: true
       retry_all: False  # default: false
       reuse_connections: True # default: True if client_session_keep_alive is False, otherwise None
 ```
@@ -175,81 +106,19 @@ To use key pair authentication, specify the `private_key_path` in your configura
 
 dbt can specify a `private_key` directly as a string instead of a `private_key_path`. This `private_key` string can be in either Base64-encoded DER format, representing the key bytes, or in plain-text PEM format. Refer to [Snowflake documentation](https://docs.snowflake.com/en/user-guide/key-pair-auth) for more info on how they generate the key.
 
-<VersionBlock lastVersion="1.8">
+:::important Private keys in the dbt Fusion engine
+If you're using a 3DES-encrypted, headerless PEM body, you should either:
+- (Recommended) Re-export your existing key using a modern algorithm such as AES-256 encryption.
+- Add the `BEGIN` header and `END` footer to your PEM body. For example:
 
-<File name='~/.dbt/profiles.yml'>
-
-```yaml
-my-snowflake-db:
-  target: dev
-  outputs:
-    dev:
-      type: snowflake
-      account: [account id]
-      user: [username]
-      role: [user role]
-
-      # Keypair config
-      private_key_path: [path/to/private.key]
-      # or private_key instead of private_key_path
-      private_key_passphrase: [passphrase for the private key, if key is encrypted]
-
-      database: [database name]
-      warehouse: [warehouse name]
-      schema: [dbt schema]
-      threads: [1 or more]
-      client_session_keep_alive: False
-      query_tag: [anything]
-
-      # optional
-      connect_retries: 0 # default 0
-      connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
-      retry_all: False  # default: false
-      reuse_connections: False
-```
-
-</File>
-
-### SSO authentication
-
-To use SSO authentication for Snowflake, omit a `password` and instead supply an `authenticator` config set to 'externalbrowser' to your target. 
-
-Refer to the following example:
-
-<File name='~/.dbt/profiles.yml'>
-
-```yaml
-my-snowflake-db:
-  target: dev
-  outputs:
-    dev:
-      type: snowflake
-      account: [account id] # Snowflake <account_name>
-      user: [username] # Snowflake username
-      role: [user role] # Snowflake user role
-
-      # SSO config
-      authenticator: externalbrowser
-
-      database: [database name] # Snowflake database name
-      warehouse: [warehouse name] # Snowflake warehouse name
-      schema: [dbt schema]
-      threads: [between 1 and 8]
-      client_session_keep_alive: False
-      query_tag: [anything]
-
-      # optional
-      connect_retries: 0 # default 0
-      connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
-      retry_all: False  # default: false
-      reuse_connections: False
-```
-
-</File>
-
-</VersionBlock>
+  ```
+  -----BEGIN ENCRYPTED PRIVATE KEY-----
+  < encrypted private key contents here - line 1 >
+  < encrypted private key contents here - line 2 >
+  < ... >
+  -----END ENCRYPTED PRIVATE KEY-----
+  ```
+:::
 
 <VersionBlock firstVersion="1.9">
 
@@ -280,7 +149,7 @@ my-snowflake-db:
       # optional
       connect_retries: 0 # default 0
       connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
+      retry_on_database_errors: True # default: true
       retry_all: False  # default: false
       reuse_connections: True # default: True if client_session_keep_alive is False, otherwise None
 ```
@@ -318,7 +187,7 @@ my-snowflake-db:
       # optional
       connect_retries: 0 # default 0
       connect_timeout: 10 # default: 10
-      retry_on_database_errors: False # default: false
+      retry_on_database_errors: True # default: true
       retry_all: False  # default: false
       reuse_connections: True # default: True if client_session_keep_alive is False, otherwise None
 ```
@@ -402,6 +271,10 @@ During node execution (such as model and test), dbt opens connections against a 
 ### retry_on_database_errors
 
 The `retry_on_database_errors` flag along with the `connect_retries` count specification is intended to make retries configurable after the snowflake connector encounters errors of type snowflake.connector.errors.DatabaseError. These retries can be helpful for handling errors of type "JWT token is invalid" when using key pair authentication.
+
+By default, `retry_on_database_errors` is set to `False` when using <Constant name="core" /> (for example, if you're running dbt locally with `pip install dbt-core dbt-snowflake`).
+
+However, in the <Constant name="dbt_platform" />, this setting is automatically set to `True`, unless the user explicitly configures it. 
 
 ### retry_all
 

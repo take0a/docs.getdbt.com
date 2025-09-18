@@ -90,7 +90,7 @@ The dbt BigFrames submission method supports both service account and OAuth cred
    bq mk --location=${REGION} echo "${GOOGLE_CLOUD_PROJECT}" | tr '-' '_'_dataset
    ```
 
-4. **Create a GCS bucket to stage the python code**
+4. **Create a GCS bucket to stage the python code, and store logs**
 
    For temporary log and code storage, please create a GCS bucket and assign the required permissions:
 
@@ -102,18 +102,10 @@ The dbt BigFrames submission method supports both service account and OAuth cred
    gcloud storage buckets add-iam-policy-binding gs://${GOOGLE_CLOUD_PROJECT}-bucket --member=serviceAccount:dbt-bigframes-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com --role=roles/storage.admin
    ```
 
-5. **Create a GCS bucket to hold the logs**
-   ```python
-   #Create GCS bucket
-   gcloud storage buckets create gs://${GOOGLE_CLOUD_PROJECT}-bucket-logs --location=${REGION}
-   #Grant Storage Admin over the bucket to your SA 
-   gcloud storage buckets add-iam-policy-binding gs://${GOOGLE_CLOUD_PROJECT}-bucket-logs --member=serviceAccount:dbt-bigframes-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com --role=roles/storage.admin
-   ```
-
 ## Create, configure, and execute your Python models
 
-1. In your dbt project, create a sql model in your models directory, ending in the `.sql` file extension. Name it `my_sql_model.sql`.
-2. In the file, copy this sql into it. 
+1. In your dbt project, create a SQL model in your models directory, ending in the `.sql` file extension. Name it `my_sql_model.sql`.
+2. In the file, copy this SQL into it. 
 
    ```sql
       select 

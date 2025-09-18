@@ -22,7 +22,7 @@ The application's service principal represents the Entra ID application object. 
 
 1. [Register an Entra ID app](#register-a-microsoft-entra-id-app).
 2. [Connect Azure DevOps to your new app](#connect-azure-devops-to-your-new-app).
-3. [Add your Entra ID app to <Constant name="cloud" />](#add-your-azure-ad-app-to-dbt-cloud).
+3. [Add your Entra ID app to <Constant name="cloud" />](#connect-your-microsoft-entra-id-app-to-dbt).
 
 Once the Microsoft Entra ID app is added to <Constant name="cloud" />, it will act as a [service principal](https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser), which will be used to power headless actions in <Constant name="cloud" /> such as deployment runs and CI. The <Constant name="cloud" /> developers can then personally authenticate in <Constant name="cloud" /> from Azure DevOps. For more, see [Authenticate with Azure DevOps](/docs/cloud/git/authenticate-azure).
 
@@ -119,7 +119,7 @@ To create the configuration:
 5. Complete/edit the form (if you are migrating, the existing configurations carry over):
     - **Azure DevOps Organization:** Must match the name of your Azure DevOps organization exactly. Do not include the `dev.azure.com/` prefix in this field. ✅ Use `my-DevOps-org` ❌ Avoid `dev.azure.com/my-DevOps-org`
     - **Application (client) ID:** Found in the Microsoft Entra ID app.
-    Client Secrets: Copy the **Value** field in the Microsoft Entra ID app client secrets and paste it into the **Client Secret** field in <Constant name="cloud" />. Entra ID admins are responsible for the expiration of the app secret, and dbt Admins should note the expiration date for rotation.
+    - **Client Secret**: Copy the **Value** field in the Microsoft Entra ID app client secrets and paste it into the **Client Secret** field in <Constant name="cloud" />. Entra ID admins are responsible for the expiration of the app secret, and dbt Admins should note the expiration date for rotation.
     - **Directory(tenant) ID:** Found in the Microsoft Entra ID app.
         <Lightbox src="/img/docs/cloud-integrations/service-principal-fields.png" title="Fields for adding Entra ID app to dbt."/>
 

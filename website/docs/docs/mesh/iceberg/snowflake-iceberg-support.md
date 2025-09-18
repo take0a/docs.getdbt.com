@@ -7,10 +7,18 @@ description: Understand Snowflake support for Apache Iceberg.
 
 dbt supports materializing the table in Iceberg table format in two different ways:
 
-- the model configuration field table_format = 'iceberg' (legacy)
-- catalog integration in the model/resource/dbt_project.yml configuration
+- The model configuration field `table_format = 'iceberg'` (legacy)
+- Catalog integration can be configured in the SQL config (inside the `.sql` model file), property file (model folder), or project file ([`dbt_project.yml`](/reference/dbt_project.yml)).
 
-We recommend that you use the Iceberg catalog configuration and apply the catalog in the model config for ease of use and future-proof your code. Using table_format = 'iceberg' directly on the model configuration is a legacy approach. 
+:::info Catalog integration configuration
+
+You need to create a `catalogs.yml` file to use the integration and apply that integration on the config level.
+
+Refer to [Snowflake configurations](/reference/resource-configs/snowflake-configs) for more information.
+
+:::
+
+We recommend that you use the Iceberg catalog configuration and apply the catalog in the model config for ease of use and future-proof your code. Using `table_format = 'iceberg'` directly on the model configuration is a legacy approach. 
 
 ## Creating Iceberg Tables
 
@@ -18,7 +26,7 @@ dbt supports creating Iceberg tables for three of the Snowflake materializations
 
 - [Table](/docs/build/materializations#table)
 - [Incremental](/docs/build/materializations#incremental)
-- [Dynamic Table](#dynamic-tables) 
+- [Dynamic Table](/reference/resource-configs/snowflake-configs#dynamic-tables) 
 
 ## Iceberg catalogs
 
@@ -158,8 +166,38 @@ The following table outlines the configuration fields required to set up a catal
 | `external_volume`| yes      | `<external_volume_name>`                                                                |
 | `table_format`   | yes      | `iceberg`                                                                               |
 | `catalog_type`   | yes      | `built_in`, `iceberg_rest`*                                                             |
+| `adapter_properties`| optional| See below                                                                    |
 
 *Coming soon! Stay tuned for updates.
+
+### Adapter Properties
+
+These are the additional optional configurations, unique to Snowflake, that can be supplied and nested under `adapter_properties` to add in more configurability. 
+
+| Field                         | Accepted values                                                            |
+|------------------|-----------------------------------------------------------------------------------------|
+| `storage_serialization_policy`|  `COMPATIBLE` or `OPTIMIZED`                                               |
+| `max_data_extension_time_in_days`|  `0` to `90` with a default of `14`                                     |
+| `data_retention_time_in_days`|  Standard Account: `1`, Enterprise or higher: `0` to `90`, default `1`      |
+| `change_tracking`|  `True` or `False`                                                                      |
+
+-  **storage_serialization_policy** 
+
+The serialization policy tells Snowflake what kind of encoding and compression to perform on the table data files. If not specified at table creation, the table inherits the value set at the schema, database, or account level. If the value isn’t specified at any level, the table uses the default value. You can’t change the value of this parameter after table creation. Accepted values: . 
+
+- **max_data_extension_time_in_days** 
+
+The maximum number of days Snowflake can extend the data retention period for tables to prevent streams on the tables from becoming stale. The `MAX_DATA_EXTENSION_TIME_IN_DAYS` parameter enables you to limit this automatic extension period to control storage costs for data retention, or for compliance reasons. 
+
+- **data_retention_time_in_days** 
+
+For managed Iceberg tables, you can set a retention period for Snowflake Time Travel and undropping the table over the default account values. For tables that use an external catalog, Snowflake uses the value of the DATA_RETENTION_TIME_IN_DAYS parameter to set a retention period for Snowflake Time Travel and undropping the table. When the retention period expires, Snowflake does not delete the Iceberg metadata or snapshots from your external cloud storage.
+
+- **change_tracking** 
+
+Specifies whether to enable change tracking on the table.
+
+
 
 ### Configure catalog integration for managed Iceberg tables
 
@@ -179,15 +217,15 @@ catalogs:
 
 ```
 
-2. Apply the catalog configuration at either the model, folder, or project level. <br />
-<br />An example of `iceberg_model.yml`:
+2. Add the `catalog_name` config parameter in either the SQL config (inside the .sql model file), property file (model folder), or your `dbt_project.yml`. <br />
+<br />An example of `iceberg_model.sql`:
 
 ```yaml
 
 {{
     config(
         materialized='table',
-        catalog = catalog_horizon
+        catalog_name = catalog_horizon
 
     )
 }}
@@ -270,9 +308,21 @@ To maintain best practices,  dbt enforces an input and, by default, writes your 
 
 ### Limitations
 
-There are some limitations to the implementation you need to be aware of:
+You should be aware of these limitations to the implementation:
 
--  Using Iceberg tables with dbt, the result is that your query is materialized in Iceberg. However, often, dbt creates intermediary objects as temporary and transient tables for certain materializations, such as incremental ones. It is not possible to configure these temporary objects also to be Iceberg-formatted. You may see non-Iceberg tables created in the logs to support specific materializations, but they will be dropped after usage.
-- You cannot incrementally update a preexisting incremental model to be an Iceberg table. To do so, you must fully rebuild the table with the `--full-refresh` flag.
+-  When you use Iceberg tables with dbt, your query is materialized in Iceberg. However, dbt often creates intermediary objects as temporary and transient tables for certain materializations, such as incremental ones. It is not possible to configure these temporary objects to be Iceberg-formatted. You may see non-Iceberg tables created in the logs to support specific materializations, but they will be dropped after usage.
+- You cannot incrementally update a pre-existing incremental model to be an Iceberg table. To do so, you must fully rebuild the table with the `--full-refresh` flag.
+- As of Snowflake change bundle `2025-01`, the `SHOW TABLES` command does not include the `is_iceberg` column in its output. This forced dbt v1.9 to run a command similar to the following query for all the models in the dbt project (regardless of whether they're configured as `iceberg` models):
+
+    ```sql
+    select all_objects.*, is_iceberg
+    from table(result_scan(last_query_id(-1))) all_objects
+    left join INFORMATION_SCHEMA.tables as all_tables
+    on all_tables.table_name = all_objects."name"
+    and all_tables.table_schema = all_objects."schema_name"
+    and all_tables.table_catalog = all_objects."database_name"
+    ``` 
+    
+    This query may be relatively inefficient and potentially expensive, depending on the size of your Snowflake warehouse. Thus, the ability to run iceberg models is gated behind the `enable_iceberg_materializations` flag.
 
 </VersionBlock>

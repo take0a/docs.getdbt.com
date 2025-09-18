@@ -77,8 +77,9 @@ The dbt Semantic Layer supports the following data platforms:
 - Databricks
 - Redshift
 - Postgres
+- Trino
 
-Support for other data platforms, such as Fabric and Trino, isn't available at this time. If you're interested in using the dbt Semantic Layer with a data platform not on the list, please [contact us](https://www.getdbt.com/get-started).
+Support for other data platforms, such as Fabric, isn't available at this time. If you're interested in using the dbt Semantic Layer with a data platform not on the list, please [contact us](https://www.getdbt.com/get-started).
 </Expandable>
 
 <Expandable alt_header="Do I need to be on a specific version of dbt to use dbt Semantic Layer?">
@@ -275,11 +276,15 @@ Yes, all of our interfaces or APIs expose metric descriptions, which you can sur
 
 <Expandable alt_header="How do fine-grained access controls work with the dbt Semantic Layer?">
 
-The dbt Semantic Layer uses service tokens for authentication, mapped to underlying data platform credentials. These credentials control physical access to the raw data. The credential configuration allows admins to create a credential and map it to service tokens, which can then be shared to relevant teams for BI connection setup. You can configure credentials and service tokens to reflect your teams and their roles. 
+The dbt Semantic Layer uses service or personal tokens for authentication. 
+
+[Service tokens](/docs/dbt-cloud-apis/service-tokens) are mapped to underlying data platform credentials. These credentials control physical access to the raw data. The credential configuration allows admins to create a credential and map it to service tokens, which can then be shared to relevant teams for BI connection setup. You can configure credentials and service tokens to reflect your teams and their roles.
+
+Personal access tokens [(PATs)](/docs/dbt-cloud-apis/user-tokens) enable user-level authentication. When you use PATs to authenticate, your personal development credentials are used when running queries against the Semantic Layer.
 
 Currently, the credentials you configure when setting up the dbt Semantic Layer are used for every request. Any physical access policies you have tied to your credentials will be respected.
 
-We are currently working on introducing more fine-grained access controls, including user-level access and group credentials, that enable flexible granular permissions.
+
 
 </Expandable>
 

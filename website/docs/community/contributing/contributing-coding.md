@@ -7,7 +7,7 @@ id: "contributing-coding"
 
 #### Overview
 
-[dbt Packages](https://docs.getdbt.com/docs/build/packages) are the easiest way for analytics engineers to get involved with contributing code to the dbt Community, because dbt Packages are just standard [dbt Projects](/docs/build/projects). If you can create a dbt Project, write a macro, and ref a model: you can make a dbt Package. Packages function much like libraries do in other programming languages. They allow for prewritten, modularized development of code to solve common problems in analytics engineering. You can view all dbt Packages on the [dbt Package Hub](https://hub.getdbt.com/).
+[dbt Packages](/docs/build/packages) are the easiest way for analytics engineers to get involved with contributing code to the dbt Community, because dbt Packages are just standard [dbt Projects](/docs/build/projects). If you can create a dbt Project, write a macro, and ref a model: you can make a dbt Package. Packages function much like libraries do in other programming languages. They allow for prewritten, modularized development of code to solve common problems in analytics engineering. You can view all dbt Packages on the [dbt Package Hub](https://hub.getdbt.com/).
 
 #### Contribution opportunities
 
@@ -23,7 +23,7 @@ id: "contributing-coding"
 
 - Use packages in your own projects! The best way to know how to improve a package is to use it in a production environment then look for ways it can be modified or improved.
 - Read the following resources on package development:
-  - [So You Want to Build a dbt Package](https://docs.getdbt.com/blog/so-you-want-to-build-a-package)
+  - [So You Want to Build a dbt Package](/blog/so-you-want-to-build-a-package)
   - [Package Best Practices](https://github.com/dbt-labs/hubcap/blob/main/package-best-practices.md)
 - Need help: Visit #package-ecosystem in the dbt Slack
 
@@ -39,7 +39,7 @@ There are three primary ways to contribute to the dbt projects. We’ll use the 
 
 - [Open an issue](https://github.com/dbt-labs/dbt-fusion/issues/new/choose) to suggest an improvement or give feedback.
 - Comment / engage on existing [issues](https://github.com/dbt-labs/dbt-fusion/issues) or [discussions](https://github.com/dbt-labs/dbt-fuson/discussions). This could be upvoting issues that would be helpful for your organization, commenting to add nuance to a feature request or sharing how a feature would impact your dbt usage.
-- Create a pull request that resolves an open Issue. This involves writing the code and tests that add the feature/resolve the bug described in an Issue, and then going through the code review process asynchronously with a dbt Labs engineer.
+- Create a pull request that resolves an open Issue. This involves writing the code and tests that add the feature/resolve the bug described in an Issue, and then going through the code review process asynchronously with a dbt Labs engineer. Note that signed commits are required when contributing to <Constant name="core" />. For steps on how to sign commits, see [Signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits).
 
 #### Sample contributions
 

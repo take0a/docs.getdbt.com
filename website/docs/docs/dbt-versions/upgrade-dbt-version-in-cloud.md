@@ -3,6 +3,8 @@ title: "Upgrade dbt version in Cloud"
 id: "upgrade-dbt-version-in-cloud"
 ---
 
+import FusionDWH from '/snippets/_fusion-dwh.md';
+
 In <Constant name="cloud" />, both [jobs](/docs/deploy/jobs) and [environments](/docs/dbt-cloud-environments) are configured to use a specific version of <Constant name="core" />. The version can be upgraded at any time.
 
 ## Environments
@@ -72,15 +74,16 @@ Starting with v1.0, <Constant name="cloud" /> will ensure that you're always usi
 
 For more on version support and future releases, see [Understanding <Constant name="core" /> versions](/docs/dbt-versions/core).
 
-### dbt Fusion engine
+### dbt Fusion engine <Lifecycle status="beta" />
 
-dbt Labs has introduced the new [dbt Fusion engine](/docs/fusion/about-fusion), a ground-up rebuild of dbt. This is currently in beta on the dbt platform. Eligible customers can update environments to Fusion using the same workflows as v1.x, but there are a few things to keep in mind:
+dbt Labs has introduced the new [<Constant name="fusion_engine" />](/docs/fusion/about-fusion), a ground-up rebuild of dbt. This is currently in beta on the dbt platform. Eligible customers can update environments to Fusion using the same workflows as v1.x, but there are a few things to keep in mind:
 - **To gain access to the Fusion Latest release track, you must reach out to your dbt Labs account team to request it. Week by week we'll expand the beta cohort based on project eligibility, including Starter plans**. Once we transition from Beta to Preview, all users will see it as an option for their environments, projects, jobs, etc.
 
 
  To increase the compatibility of your project, update all jobs and environments to the `Latest` release track and follow our [upgrade guide](/docs/dbt-versions/core-upgrade/upgrading-to-fusion). 
 - There are some significant changes, these can also be found in the [upgrade guide](/docs/dbt-versions/core-upgrade/upgrading-to-fusion).
-- Currently, the only supported adapter is Snowflake. More adapter support coming soon!
+- Make sure you're using a supported adapter and authentication method:
+  <FusionDWH /> 
 - When you change your development environment(s) to `Fusion Latest`, every user will have to restart the IDE.
 
 

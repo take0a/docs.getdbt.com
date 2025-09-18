@@ -12,10 +12,6 @@ image: /img/docs/dbt-insights/insights-results.jpg
 Learn how to navigate <Constant name="query_page" /> interface and use the main components.
 </IntroText>
 
-:::tip
-<Constant name="query_page" /> is available in private beta to Enterprise accounts. To join, please reach out to your account manager.
-:::
-
 <Constant name="query_page" /> provides an interactive interface for writing, running, and analyzing SQL queries. This section highlights the main components of <Constant name="query_page" />. 
 
 ## Query console
@@ -70,7 +66,7 @@ The Query console sidebar menu and icons contains the following options:
 - **<Constant name="copilot" /> icon** &mdash; Use [<Constant name="copilot" />'s AI assistant](/docs/cloud/dbt-copilot) to modify or generate queries using natural language prompts.
 
 <DocCarousel slidesPerView={1}>
-<Lightbox src="/img/docs/dbt-insights/insights-explorer.png" width="90%" title="dbt Insights dbt Explorer icon" />
+<Lightbox src="/img/docs/dbt-insights/insights-explorer.png" width="90%" title="dbt Insights dbt Catalog icon" />
 <Lightbox src="/img/docs/dbt-insights/insights-query-history.png" width="90%" title="dbt Insights Query history icon" />
 <Lightbox src="/img/docs/dbt-insights/insights-copilot.png" width="60%" title="dbt Insights dbt Copilot" />
 <Lightbox src="/img/docs/dbt-insights/manage-bookmarks.png" width="60%" title="Manage your query bookmarks" />

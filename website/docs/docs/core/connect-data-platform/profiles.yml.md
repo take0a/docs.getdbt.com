@@ -8,15 +8,14 @@ If you're using [dbt Core](/docs/core/installation-overview), you'll need a `pro
 
 For detailed info, you can refer to the [Connection profiles](/docs/core/connect-data-platform/connection-profiles).
 
-:::tip No `profiles.yml` file needed for <Constant name="cloud" />
-If you're using <Constant name="cloud" />, you can [connect to your data platform](/docs/cloud/connect-data-platform/about-connections) directly in the <Constant name="cloud" /> interface and don't need a `profiles.yml` file.
+:::note dbt platform accounts
+If you're using the cloud-based <Constant name="cloud" /> platform, you can [connect to your data platform](/docs/cloud/connect-data-platform/about-connections) directly in the <Constant name="cloud" /> interface and don't need a `profiles.yml` file.
 :::
 
 This section identifies the parts of your `profiles.yml` that aren't specific to a particular data platform. For specific connection details, refer to the relevant page for your data platform.
 
 To add an additional target (like `prod`) to your existing `profiles.yml`, you can add another entry under the `outputs` key.
 
-<VersionBlock firstVersion="1.8">
 
 <File name='profiles.yml'>
 
@@ -43,7 +42,6 @@ To add an additional target (like `prod`) to your existing `profiles.yml`, you c
 
 </File>
 
-</VersionBlock>
 
 ## User config
 

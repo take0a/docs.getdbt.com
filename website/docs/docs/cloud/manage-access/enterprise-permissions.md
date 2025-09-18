@@ -41,7 +41,7 @@ Notable features:
 - Admin is a project-level set.
 - Unrestricted access to existing projects, but can't create new projects.
 - Can invite new members and assign access but can't create groups.
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Analyst">
@@ -53,7 +53,7 @@ Notable features:
 - Full access to the IDE and the ability to configure personal credentials for adapters and Git. 
 - Read-only access to environment configs.
 - Can view jobs but can't edit them.
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Billing admin">
@@ -67,16 +67,36 @@ Notable features:
 - No other access. 
 
 </Expandable>
+<Expandable alt_header="Cost Management admin">
+
+A specialized permission set intended to be used standalone or in conjunction with other permission sets to grant write access to the Cost Management dashboard. We created this permission set so you can access the dashboard and customize the views without granting admin (write) access to other areas of the <Constant name="dbt_platform" />. Can be paired with [Analyst-licensed users](/docs/cloud/manage-access/seats-and-users).
+
+Notable features:
+- Write access to the full set of Cost Management dashboard features.
+- Read access to settings related to Cost Management dashboard configuration.
+- No other access.
+
+</Expandable>
+<Expandable alt_header="Cost Management viewer">
+
+A specialized permission set intended to be used standalone or in conjunction with other permission sets to grant read-only access to the Cost Management dashboard. Used for granting read-only access to the dashboard. Can be paired with [Analyst-licensed users](/docs/cloud/manage-access/seats-and-users).
+
+Notable features:
+- Read access to the full set of Cost Management dashboard features.
+- Read access to settings related to Cost Management dashboard configuration.
+- No other access.
+
+</Expandable>
 <Expandable alt_header="Database admin">
 
-Database admins manage the connections and configurations between <Constant name="cloud" /> and the underlying databases. 
+Database admins manage configurations between <Constant name="cloud" /> and the underlying databases. 
 
 Notable features: 
 - Database admin is a project-level set. 
-- Can set up and maintain database connections, environment variables, and <Constant name="semantic_layer" /> configs.
+- Can set up and maintain environment variables and <Constant name="semantic_layer" /> configs.
 - Helpful for scenarios where your data warehouse admins only need access to <Constant name="cloud" /> to configure connections. 
-- Read-only access to Git repo, job, and run settings. 
-- Can access dbt Explorer.
+- Read-only access to connections, Git repo, job, and run settings. 
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Developer">
@@ -88,7 +108,7 @@ Notable features:
 - Can create, edit, and test dbt code in the IDE.
 - Read-only access to the underlying configs for environments, jobs, runs, and Git.
 - Users manage their credentials to data warehouses and Git. 
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Git admin">
@@ -101,7 +121,7 @@ Notable features:
 - Can edit project settings.
 - Read-only access to account settings (including users and groups). 
 - No access to the IDE.
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Job admin">
@@ -113,7 +133,7 @@ Notable features:
 - Job admins can set up project integrations, including [Tableau lineage](/docs/cloud-integrations/semantic-layer/tableau).
 - Read-only access to project configs. 
 - Read-only access to connections and public models.
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Job runner">
@@ -135,7 +155,7 @@ Notable features:
 - Job viewer is a project-level set.
 - Read-only access to job results, status, and logs.
 - No other access to <Constant name="cloud" /> features. 
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 
@@ -168,7 +188,7 @@ Notable features:
 - Only permission set other than Account admin that can create projects.
 - Limited account settings access. The project creator can create and edit connections, invite users, create groups, and assign licenses.
 - Unrestricted access to project configurations. 
-- Can access dbt Explorer
+- Can access <Constant name="explorer" />
 
 </Expandable>
 <Expandable alt_header="Security admin">
@@ -193,16 +213,16 @@ Notable features:
 - No other access to <Constant name="cloud" /> features. 
 
 </Expandable>
-<Expandable alt_header="Stakeholder">
+<Expandable alt_header="Stakeholder and Read-Only">
 
-Stakeholder is a read-only permission set, similar to viewer, but without access to sensitive content such as account settings or billing information. Useful for personas who need to monitor projects and their configurations.
+The Stakeholder and Read-Only are identical permission sets that are similar to Viewer, but without access to sensitive content such as account settings or billing information. Useful for personas who need to monitor projects and their configurations.
 
 Notable features: 
 - Stakeholder is a project-level set.
 - Read-only access to projects, environments, jobs, and runs.
 - Read-only access to user and group information.
 - No access to the IDE. 
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Team admin">
@@ -212,7 +232,7 @@ Notable features:
 - Team admin is a project-level set. 
 - Access to manage the project(s) for a team of users. Limited scope and access can be extended via environment permissions. 
 - Read-only access to many account settings (excluding sensitive content like billing and auth providers).
-- Can access dbt Explorer.
+- Can access <Constant name="explorer" />.
 
 </Expandable>
 <Expandable alt_header="Viewer">
@@ -224,14 +244,13 @@ Notable features:
 - Viewer is an account-level set.
 - Read-only access to all settings, projects, environments, and runs.
 - No access to the IDE. 
-- Can access dbt Explorer
+- Can access <Constant name="explorer" />
 
 </Expandable>
 
-:::tip Licenses or Permission sets
+import LicenseOverrideNote from '/snippets/_license-override-note.md';
 
-The user's [license](/docs/cloud/manage-access/about-user-access) type always overrides their assigned permission set. This means that even if a user belongs to a <Constant name="cloud" /> group with 'Account Admin' permissions, having a 'Read-Only' license would still prevent them from performing administrative actions on the account.
-:::
+<LicenseOverrideNote />
 
 <Permissions feature={'/snippets/_enterprise-permissions-table.md'} />
 

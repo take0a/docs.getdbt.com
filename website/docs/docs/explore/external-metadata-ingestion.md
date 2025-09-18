@@ -31,21 +31,29 @@ These credentials are configured separately from dbt environment credentials and
 
 ## Configuration instructions
 
-To enable external metadata ingestion:
+### Enable external metadata ingestion
 
-1. Navigate to [account settings](/docs/cloud/account-settings)
-2. Locate or create the warehouse connection you want to ingest metadata from
-3. Click **Add Credential** and enter your global metadata credentials
-    - These should have warehouse-level visibility across relevant databases and schemas
-4. Enable the option for “external metadata ingestion”
-    - This allows metadata from this connection to populate the <Constant name="explorer" />
-    - *Optional*: Enable additional features such as **cost optimization**
-5. Apply filters to restrict which metadata is ingested:
+1. Click your account name at the bottom of the left-side menu and click **[Account settings](/docs/cloud/account-settings)**.
+2. Under Account information, go to **Settings** and click **Edit** at the top right corner of the page.
+3. Select the **Ingest external metadata in dbt <Constant name="explorer" /> (formerly dbt Explorer)** option (if not already enabled).
+
+### Configure the warehouse connection
+
+1. Go to **Account settings**.
+2. Click **Connections** from the left-hand side panel.
+3. Select an existing connection or create a [**New connection**](/docs/cloud/connect-data-platform/connect-snowflake) where you want to ingest metadata from.
+4. Scroll to the bottom of the page and click **Add credentials** in **Platform metadata credentials**.
+    - Enter the necessary credentials. These should have warehouse-level visibility across relevant databases and schemas.
+5. Select the **External metadata ingestion** option.
+    - This allows metadata from this connection to populate the <Constant name="explorer" />.
+    - *Optional*: Enable additional features such as **cost optimization** in the **Features** section under **Platform metadata credentials**.
+6. Under **Catalog filters**, apply filters to restrict which metadata is ingested:
     - You can filter by **database**, **schema**, **table**, or **view**.
-    - Strongly recommend you filter by certain schemas. See [Important considerations](/docs/explore/external-metadata-ingestion#important-considerations) for more information.
+      - **Note:** To include all databases or schemas, enter `.*`  in the **Allow** field.
+    - It is strongly recommend to filter by certain schemas. See [Important considerations](/docs/explore/external-metadata-ingestion#important-considerations) for more information.
     - These fields accept CSV-formatted regular expressions:
-        - Example: `DIM` matches `DIM_ORDERS` and `DIMENSION_TABLE` (basic "contains" match)
-        - Wildcards are supported: `DIM*` matches `DIM_ORDERS`, `DIM_PRODUCTS`, etc.
+        - Example: `DIM` matches `DIM_ORDERS` and `DIMENSION_TABLE` (basic "contains" match).
+        - Wildcards are supported. For example: `DIM*` matches `DIM_ORDERS` and `DIM_PRODUCTS`.
 
 ## Required credentials
 
@@ -60,9 +68,10 @@ CREATE OR REPLACE ROLE dbt_metadata_role;
 2. Grant access to a warehouse to run queries to view metadata:
 
 ```sql
-GRANT OPERATE, USAGE ON WAREHOUSE "<your-warehouse>" TO ROLE dbt_metadata_role;
+GRANT USAGE ON WAREHOUSE "<your-warehouse>" TO ROLE dbt_metadata_role;
 ```
 
+If your warehouse needs to be restarted for metadata ingestions (doesn't have auto-resume enabled), you may need to grant `OPERATE` permissions to the role as well. 
 If you do not already have a user, create a dbt-specific user for metadata access. Replace `<your-password>` with a strong password and `<your-warehouse>` with the warehouse name used above:
 
 ```sql
@@ -89,24 +98,12 @@ This section outlines the minimum necessary privileges to read metadata from eac
 Replace `your-database` with the name of a Snowflake database to grant metadata access. Repeat this block for each relevant database:
 
 ```sql
-
-
 SET db_var = '"<your-database>"';
 
 -- Grant access to view the database and its schemas
 GRANT USAGE ON DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
 GRANT USAGE ON ALL SCHEMAS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
 GRANT USAGE ON FUTURE SCHEMAS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-
--- Grant SELECT privileges to enable metadata introspection and profiling
-GRANT SELECT ON ALL TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-GRANT SELECT ON FUTURE TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-GRANT SELECT ON ALL EXTERNAL TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-GRANT SELECT ON FUTURE EXTERNAL TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-GRANT SELECT ON ALL VIEWS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-GRANT SELECT ON FUTURE VIEWS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-GRANT SELECT ON ALL DYNAMIC TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-GRANT SELECT ON FUTURE DYNAMIC TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
 
 -- Grant REFERENCES to enable lineage and dependency analysis
 GRANT REFERENCES ON ALL TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
@@ -116,10 +113,19 @@ GRANT REFERENCES ON FUTURE EXTERNAL TABLES IN DATABASE IDENTIFIER($db_var) TO RO
 GRANT REFERENCES ON ALL VIEWS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
 GRANT REFERENCES ON FUTURE VIEWS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
 
+-- Recommended grant SELECT for privileges to enable metadata introspection and profiling
+GRANT SELECT ON ALL TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+GRANT SELECT ON FUTURE TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+GRANT SELECT ON ALL EXTERNAL TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+GRANT SELECT ON FUTURE EXTERNAL TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+GRANT SELECT ON ALL VIEWS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+GRANT SELECT ON FUTURE VIEWS IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+GRANT SELECT ON ALL DYNAMIC TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+GRANT SELECT ON FUTURE DYNAMIC TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
+
 -- Grant MONITOR on dynamic tables (e.g., for freshness or status checks)
 GRANT MONITOR ON ALL DYNAMIC TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
 GRANT MONITOR ON FUTURE DYNAMIC TABLES IN DATABASE IDENTIFIER($db_var) TO ROLE dbt_metadata_role;
-
 ```
 
 ## Grant access to Snowflake metadata
@@ -143,7 +149,7 @@ The following are best practices for external metadata ingestion, designed to en
 - Use filters to limit ingestion to relevant assets:
     - For example: restrict to production schemas only, or ignore transient/temp schemas.
 
-Note that, external metadata ingestion runs once per day at 5 PM UTC.
+External metadata ingestion runs daily at 5 PM UTC, and also runs immediately each time you update and save credentials.
 
 
 

@@ -5,22 +5,17 @@ tags: [Semantic Layer]
 sidebar_label: "Power BI"
 ---
 
-# Power BI <Lifecycle status="self_service,managed,managed_plus,beta" />
+# Power BI <Lifecycle status="self_service,managed,managed_plus,preview" />
 
 The Power BI integration enables you to query the <Constant name="semantic_layer" /> directly, allowing you to build dashboards with trusted, live data in Power BI. It provides a live connection to the <Constant name="semantic_layer" /> through Power BI Desktop or Power BI Service.
 
-:::tip
-The <Constant name="semantic_layer" /> Power BI integration is currently in private beta. To join the beta, contact your account representative.
-:::
-
 ## Prerequisites
 
-- Accept and sign the AI & beta addendum. Reach out to your account team to begin this process.
-- You have [configured the <Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/setup-sl) 
+- You have [configured the <Constant name="semantic_layer" />](/docs/use-dbt-semantic-layer/setup-sl).
 - You are on a supported [<Constant name="cloud" /> release track](/docs/dbt-versions/cloud-release-tracks) or on dbt v1.6 or higher.
 - You installed [Power BI Desktop or Power BI On-premises Data Gateway](https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-custom-connectors).
   - Power BI Service doesn't natively support custom connectors. To use the connector in Power BI Service, you must install and configure it on an On-premises Data Gateway.
-- You need your [<Constant name="cloud" /> host](/docs/use-dbt-semantic-layer/setup-sl#3-view-connection-detail), [Environment ID](/docs/use-dbt-semantic-layer/setup-sl#set-up-dbt-semantic-layer) and [service token](/docs/dbt-cloud-apis/service-tokens) to log in. This account should be set up with the <Constant name="semantic_layer" />.
+- You need your [<Constant name="cloud" /> host](/docs/use-dbt-semantic-layer/setup-sl#3-view-connection-detail), [Environment ID](/docs/use-dbt-semantic-layer/setup-sl#set-up-dbt-semantic-layer), and a [service token](/docs/dbt-cloud-apis/service-tokens) or a [personal access token](/docs/dbt-cloud-apis/user-tokens) to log in. This account should be set up with the <Constant name="semantic_layer" />.
 - You must have a <Constant name="cloud" /> Starter or Enterprise-tier [account](https://www.getdbt.com/pricing). Suitable for both Multi-tenant and Single-tenant deployment.
 
 import SLCourses from '/snippets/_sl-course.md';
@@ -31,14 +26,11 @@ import SLCourses from '/snippets/_sl-course.md';
 
 The <Constant name="semantic_layer" /> Power BI connector consists of a custom `.pqx` Power BI connector and an ODBC driver. Install both using our Windows installer by following these steps:
 
-#### 1. Join the private beta
-   - Contact your dbt Labs account representative to request access to the `.msi` installer.
-
-#### 2. Download and install the `.msi` installer
+#### 1. Download and install the [`.msi` installer](https://github.com/dbt-labs/semantic-layer-powerbi-connector/releases/download/v1.0.0/dbt.Semantic.Layer.for.Power.BI.zip)
    - Run the installer and follow the on-screen instructions.
    - This will install the ODBC driver and the connector onto your Power BI Desktop.
 
-#### 3. Verify installation
+#### 2. Verify installation
    - Open **ODBC Data Sources (64-bit)** file on your computer.
    - Navigate to **System DSN** and verify that the `dbt Labs ODBC DSN` is registered. 
    - Navigate to **Drivers** and verify that the `dbt Labs ODBC Driver` is installed.
@@ -82,7 +74,7 @@ To configure project credentials in Power BI Desktop:
    :::
 5. Click **OK** to proceed.
    <Lightbox src="/img/docs/cloud-integrations/sl-pbi/pbi-directquery.jpg" title="Select DirectQuery mode" />
-6. On the next screen, paste your service token and then click **Connect**.
+6. On the next screen, paste your service or personal token and then click **Connect**.
 7. You should see a side pane with a few "virtual" tables. `ALL` represents all of your defined semantic layer objects. The other tables represent each of your saved queries. Select the one you want to load into your dashboard. Then click **Load**.
    <Lightbox src="/img/docs/cloud-integrations/sl-pbi/pbi-sidepanel.jpg" title="Select tables in the side panel" />
 

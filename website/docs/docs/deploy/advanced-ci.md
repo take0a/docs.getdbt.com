@@ -12,19 +12,14 @@ image: /img/docs/dbt-cloud/example-ci-compare-changes-tab.png
 
 :::info How to enable this feature
 
-You can opt into Advanced CI in <Constant name="cloud" />. Please refer to [Account access to Advance CI features](/docs/cloud/account-settings#account-access-to-advanced-ci-features) to learn how enable it in your <Constant name="cloud" /> account.
-
-:::
-
-:::tip More features
-dbt Labs plans to provide additional Advanced CI features in the near future. More info coming soon.
+You can opt into Advanced CI in <Constant name="cloud" />. Please refer to [Account access to Advanced CI features](/docs/cloud/account-settings#account-access-to-advanced-ci-features) to learn how enable it in your <Constant name="cloud" /> account.
 
 :::
 
 ## Prerequisites
 - You have a <Constant name="cloud" /> Enterprise or Enterprise+ account.
-- You have [Advance CI features](/docs/cloud/account-settings#account-access-to-advanced-features) enabled.
-- You use a supported data platform: BigQuery, Databricks, Postgres, or Snowflake. Support for additional data platforms coming soon.
+- You have [Advanced CI features](/docs/cloud/account-settings#account-access-to-advanced-features) enabled.
+- You use a supported data platform: BigQuery, Databricks, Postgres, Redshift, or Snowflake. Support for additional data platforms coming soon.
 
 ## Compare changes feature {#compare-changes}
 

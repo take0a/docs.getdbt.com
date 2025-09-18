@@ -6,7 +6,7 @@ This guide includes standards we want to emphasize, likely because we've made de
 
 ### Table of Contents
 * [Folder Structure and TOC](#folder-structure-and-toc)
-* [Filenaming](#filenaming)
+* [Naming conventions and branding ](#naming-conventions-and-branding)
 * [Using Markdown](#using-markdown)
 * [Callouts](#callouts)
 * [Text formatting](#Text-formatting)
@@ -33,7 +33,58 @@ Don't worry if you're not sure where in the leftbar a new topic belongs. Do your
 
 The right sidebar (rightbar), also known as the page TOC, is created automatically for all the H2 and H3 headings on a page. For details, see [Headings and Table of contents](https://docusaurus.io/docs/markdown-features/toc) in Docusaurus. 
 
-## Filenaming
+
+## Naming conventions and branding
+
+There are many features in dbt. There are even a few different iterations of dbt itself. Figuring out what's a feature, what's a "product," and what's lingo can be a challenge. Addressing them in files and publishing to the docs site also has a set of rules to follow. This section will help clear up some of the language around calling out dbt products, features, and file names.
+
+### dbt products
+
+The following are the "branding" guidelines for the various dbt products (all case sensitive)
+- **dbt Labs** &mdash; The company that owns and operates dbt. When the docs say "we," this is who "we" is!
+- **dbt** &mdash; Always lower case, all the time. If something applies to all of our offerings, this is acceptable to use. For example, "You can write dbt models in SQL or Python." Otherwise, you should refer to the specific product type.
+- **dbt Core** &mdash; A version of dbt <= v1.X. Always lowercase `dbt` and capital `C`.
+- **dbt Fusion engine** &mdash; A version of dbt >= v2.X. You will frequently see this used interchangeably with just `Fusion` in our docs. If you're writing about us externally, using "dbt Fusion engine" would be very much appreciated!
+- dbt &mdash; Wait... didn't we already mention this? Yes and no. What was previously called `dbt Cloud` is now just `dbt`. However, this can get a little confusing in the docs, so we call it the `dbt platform` or the `cloud-based dbt platform` (all lowercase, all the time) to disambiguate. You can also refer to it by the plan tiers that are offered: `Developer`, `Starter`, `Enterprise`, and `Enterprise+` if writing about something feature-specific.
+
+### dbt features
+
+Some features in the cloud-based dbt platform are treated as proper nouns:
+- Studio IDE
+- Canvas
+- Insights
+- Catalog
+- Mesh
+- Orchestrator
+- Semantic Layer
+- Copilot
+
+All of our other features, such as models, environments, configs, and settings, are treated as common nouns.
+
+### 3rd party brands
+
+We have many official and unofficial partners in the world of dbt. We (and by extension, our docs) must respect their branding. Use proper nouns where appropriate, and even if a product has been known by a particular name for years, if the name changes, we should use the new branding. 
+- Microsoft Azure Active Directory  ❌
+- Microsoft Entra ID ✅ 
+
+Avoid shorthand unless they use it as well. For example:
+
+- Visual Studio Code &mdash; VScode ❌
+- Visual Studio Code &mdash; VS Code ✅ 
+
+### Acronyms and initialisms
+
+When using acronyms and initialisms, use all caps, unless there is another established standard:
+
+- yaml ❌ --> YAML ✅ 
+- sql ❌ --> SQL ✅ 
+- json ❌ --> JSON ✅ 
+- dbt ✅ --> DBT ❌
+- scuba ✅ --> S.C.U.B.A. ❌
+
+The exception in cases like YAML and SQL is if you are using the file extension. For example, "Save the model in a file with the .sql extension."
+
+### Filenaming
 
 If you're adding a new file in the [docs.getdbt.com](https://github.com/dbt-labs/docs.getdbt.com) repository, review the following file name guidance and examples: 
 
@@ -44,7 +95,6 @@ If you're adding a new file in the [docs.getdbt.com](https://github.com/dbt-labs
 | ✅ Use | ❌ Avoid|
 |:-------:|:-------:|
 |`/docs/cloud/about-cloud/architecture` | `/docs/deploy/how-we-think-about-architecture`|
-
 
 ## Using Markdown
 
@@ -228,7 +278,7 @@ When referring to different sections of the IDE, use the name of the section and
 
 ## Capitalization
 
-We should only capitalize products (dbt Explorer, dbt Cloud), but not features like column-level lineage. We also capitalize acronyms and proper nouns. Refer to [MS Style guide on capitalization](https://learn.microsoft.com/en-us/style-guide/capitalization) for more information.
+We should only capitalize products (Catalog, Canvas, Insights), but not features like column-level lineage. We also capitalize acronyms and proper nouns. Refer to [MS Style guide on capitalization](https://learn.microsoft.com/en-us/style-guide/capitalization) for more information.
 
 ## Titles
 
@@ -365,7 +415,7 @@ Otherwise, the text will appear squished and provide users with a bad experience
 - `<div className="grid--5-col">`: creates 5 columns cards (use sparingly)
 - You can't create cards with 6 or more columns as that would provide users a poor experience.
 
-Refer to [dbt Cloud features](/docs/cloud/about-cloud/dbt-cloud-features) and [Quickstarts](/docs/guides) as examples. 
+Refer to [dbt platform features](/docs/cloud/about-cloud/dbt-cloud-features) and [Quickstarts](/docs/guides) as examples. 
 
 ### Create cards
 
@@ -380,7 +430,7 @@ Refer to the following prop list for detailed explanations and examples:
 
 | Prop | Type | Info | Example |
 | ---- | ---- | ---- | ------- |
-| `title` | required | The title should be clear and explain an action the user should take or a product/feature. | `title: dbt Cloud IDE`
+| `title` | required | The title should be clear and explain an action the user should take or a product/feature. | `title: Studio IDE`
 | `body` | required | The body contains the actionable or informative text for the user. You can include `<a href="` link within the body of the text. However, if you do this, you must not include the `link` prop set as that'll override any `<a href's` within the body text.  | `body="The IDE is the easiest and most efficient way to develop dbt models`
 | `link` | optional | Add a link to the entire card component so when users click on the card, it'll trigger the link. Adding a link prop means it'll override any links within the body and if users click on the card, they'll be directed to the link set by the link prop. | `link="/docs/cloud/dbt-cloud-ide/develop-in-the-cloud`
 | `icon` | optional but recommended | You can add an icon to the card component by using any icons found in the [icons](https://github.com/dbt-labs/docs.getdbt.com/tree/current/website/static/img/icons) directory. <br /> * Icons are added in .svg format and you must add icons in two locations: website/static/img/icons and website/static/img/icons/white. This is so users can view the icons in dark or light mode on the docs.getdbt.com site. | ` icon="pencil-paper"/>` |
@@ -391,7 +441,7 @@ The following is an example of a 4-card column:
 <div className="grid--4-col">
 
 <Card
-    title="dbt Cloud IDE" 
+    title="Studio IDE" 
     body="The IDE is the easiest and most efficient way to develop dbt models." 
     link="/docs/cloud/dbt-cloud-ide/develop-in-the-cloud" 
     icon="pencil-paper"/> 
@@ -444,7 +494,7 @@ Sometimes, using passive voice is appropriate. Make sure it’s an intentional c
 
 ✅ Use |	❌ Avoid
 --- | ---|
-(Active voice) Ask someone with access to dbt Cloud to transform the data. | This data transformation can be done by someone with access to dbt Cloud. |
+(Active voice) Ask someone with access to dbt to transform the data. | This data transformation can be done by someone with access to the dbt platform. |
 (Passive voice &mdash; exceptions) The open-sourced rpc plugin is used by the Cloud IDE to recompile changes made in your project. |  We are using the open-sourced rpc plugin for the Cloud IDE to recompile changes made in your project. |
 
 ### Spelling
@@ -496,20 +546,20 @@ Avoid ending a sentence with a preposition unless the rewritten sentence would s
 
 Product names, trademarks, services, and tools should be written as proper nouns, unless otherwise specified by the company or trademark owner.
 
-As of October 2023, avoid using "dbt CLI" or "CLI" terminology when referring to the dbt Cloud CLI or dbt Core.  However, if referring to the command line as a tool, CLI is acceptable.
+As of October 2023, avoid using "dbt CLI" or "CLI" terminology when referring to the dbt CLI or dbt Core.  However, if referring to the command line as a tool, CLI is acceptable.
 
 dbt officially provides two command line tools for running dbt commands:
 
-- [dbt Cloud CLI](/docs/cloud/cloud-cli-installation) &mdash; This tool allows you to develop locally and execute dbt commands against your dbt Cloud development environment from your local command line.
+- [dbt CLI](/docs/cloud/cloud-cli-installation) &mdash; This tool allows you to develop locally and execute dbt commands against your dbt development environment from your local command line.
 - [dbt Core](https://github.com/dbt-labs/dbt-core) &mdash; This open-source tool is designed for local installation, enabling you to use dbt Core on the command line and communicate with databases through adapters.
 
 Here are some examples of what to use and what to avoid: <br />
 
-✅ Set up in the dbt Cloud CLI or dbt Core<br />
-✅ Set up in the dbt Cloud CLI or dbt Core CLI<br />
+✅ Set up in the dbt CLI or dbt Core<br />
+✅ Set up in the dbt CLI or dbt Core CLI<br />
 
 ❌ Set up via dbt CLI<br />
-❌ Set up in dbt Cloud, **or** via the CLI<br />
+❌ Set up in dbt **or** via the CLI<br />
 
 ### Terms to use or avoid
 
@@ -531,13 +581,13 @@ sign in | log in, login
 sign up | signup
 terminal | shell
 username | login
-dbt Cloud CLI | CLI, dbt CLI
+dbt CLI | CLI, dbt CLI
 dbt Core | CLI, dbt CLI
 </b>
 
 Note, let's make sure we're talking to our readers and keep them close to the content and documentation (second person). 
 
-For example, to explain that a feature is available on a particular dbt Cloud plan, you can use:
+For example, to explain that a feature is available on a particular dbt plan, you can use:
 - “XYZ is available on Enterprise plans”
 - “If you're on an Enterprise plan, you can access XYZ..” 
 - "Enterprise plans can access XYZ..." to keep users closer to the documentation. 

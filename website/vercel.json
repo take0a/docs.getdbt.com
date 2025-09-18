@@ -39,6 +39,21 @@
   ],
   "redirects": [
     {
+      "source": "/docs/cloud/manage-access/external-oauth",
+      "destination": "/docs/cloud/manage-access/sso-overview",
+      "permanent": true
+    },
+    {
+      "source": "/docs/dbt-cloud-apis/mcp",
+      "destination": "/docs/dbt-ai/about-mcp",
+      "permanent": true
+    },
+    {
+      "source": "/docs/core/about-core-setup",
+      "destination": "/docs/about-dbt-install",
+      "permanent": true
+    },
+    {
       "source": "/docs/cloud/secure/about-privatelink",
       "destination": "/docs/cloud/secure/about-private-connectivity",
       "permanent": true
@@ -4380,6 +4395,11 @@
     {
       "source": "/terms/:path*",
       "destination": "https://www.getdbt.com/blog",
+      "permanent": true
+    },
+    {
+      "source": "/report-a-problem",
+      "destination": "https://www.getdbt.com/report-a-problem",
       "permanent": true
     }
   ]

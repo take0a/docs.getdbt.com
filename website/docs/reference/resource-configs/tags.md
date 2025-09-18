@@ -17,25 +17,6 @@ datatype: string | [string]
 
 <File name='dbt_project.yml'>
 
-<VersionBlock lastVersion="1.8">
-
-```yml
-
-[models](/reference/model-configs):
-  [<resource-path>](/reference/resource-configs/resource-path):
-    +tags: <string> | [<string>] # Supports single strings or list of strings
-
-[snapshots](/reference/snapshot-configs):
-  [<resource-path>](/reference/resource-configs/resource-path):
-    +tags: <string> | [<string>]
-
-[seeds](/reference/seed-configs):
-  [<resource-path>](/reference/resource-configs/resource-path):
-    +tags: <string> | [<string>]
-
-```
-</VersionBlock>
-
 <VersionBlock firstVersion="1.9">
 
 ```yml
@@ -70,11 +51,6 @@ datatype: string | [string]
 The following examples show how to add tags to dbt resources in YAML files. Replace `resource_type` with `exposures`, `models`, `snapshots`, `seeds`, or `saved_queries` as appropriate.
 </VersionBlock>
 
-<VersionBlock lastVersion="1.8">
-
-The following examples show how to add tags to dbt resources in YAML files. Replace `resource_type` with `exposures`, `models`, `snapshots`, or `seeds` as appropriate.
-</VersionBlock>
-
 <File name='resource_type/properties.yml'>
 
 ```yaml
@@ -86,8 +62,8 @@ resource_type:
     columns:
       - name: column_name
         config:
-          tags: <string> | [<string>] # changed to config in v1.10
-        tests:
+          tags: <string> | [<string>] # changed to config in v1.10 and backported to 1.9
+        data_tests:
           test-name:
             config:
               tags: "single-string" # Supports single string 
@@ -123,8 +99,8 @@ models:
 </File>
 
 </TabItem>
-
 </Tabs>
+Note that for backwards compatibility, `tags` is supported as a top-level key, but without the capabilities of config inheritance.
 
 ## Definition
 Apply a tag (or list of tags) to a resource.
@@ -148,6 +124,7 @@ You can use the [`+` operator](/reference/node-selection/graph-operators#the-plu
 
 When using tags, consider the following: 
 
+- Each individual tag must be a string. 
 - Tags are additive across project hierarchy.
 - Some resource types (like sources, exposures) require tags at the top level.
 
@@ -276,12 +253,6 @@ seeds:
 
 ### Apply tags to saved queries
 
-<VersionBlock lastVersion="1.8">
-
-<VersionCallout version="1.9" />
-
-</VersionBlock>
-
 
 This following example shows how to apply a tag to a saved query in the `dbt_project.yml` file. The saved query is then tagged with `order_metrics`.
 
@@ -329,6 +300,33 @@ Run resources with multiple tags using the following commands:
 
 ## Usage notes
 
+### Tags must be strings
+
+Each individual tag must be a string value (for example, `marketing` or `daily`).
+
+In the following example, `my_tag: "my_value"` is invalid because it is a key-value pair.
+
+```yml
+sources:
+  - name: ecom
+    schema: raw
+    description: E-commerce data for the Jaffle Shop
+    config:
+      tags:
+        my_tag: "my_value". # invalid
+    tables:
+      - name: raw_customers
+        config:
+          tags:
+            my_tag: "my_value". # invalid
+```
+
+A warning is raised when the `tags` value is not a string. For example:
+
+```
+Field config.tags: {'my_tag': 'my_value'} is not valid for source (ecom)
+```
+
 ### Tags are additive
 Tags accumulate hierarchically. The [earlier example](/reference/resource-configs/tags#use-tags-to-run-parts-of-your-project) would result in:
 
@@ -369,8 +367,8 @@ sources:
         columns:
           - name: column_name
             config:
-              tags: ['column_level'] # changed to config in v1.10
-            tests:
+              tags: ['column_level'] # changed to config in v1.10 and backported to 1.9
+            data_tests:
               - unique:
                 config:
                   tags: ['test_level'] # changed to config in v1.10

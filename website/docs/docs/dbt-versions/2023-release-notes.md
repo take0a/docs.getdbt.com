@@ -37,7 +37,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     The **Extended Attributes** text box is available from your environment's settings page: 
 
-    <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/extended-attributes.jpg" width="85%" title="Example of the Extended Attributes text box" />
+    <Lightbox src="/img/docs/dbt-cloud/using-dbt-cloud/extended-attributes.png" width="85%" title="Example of the Extended attributes text box" />
 
   </Expandable>
 
@@ -78,7 +78,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
 ## November 2023
 
-- <Expandable alt_header='New features and UI changes to dbt Explorer'>
+- <Expandable alt_header='New features and UI changes to dbt Catalog'>
 
     There are new quality-of-life improvements in dbt Cloud for email and Slack notifications about your jobs: 
 
@@ -112,7 +112,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     To learn more, refer to [Repo caching](/docs/cloud/account-settings#git-repository-caching).
 
-    <Lightbox src="/img/docs/deploy/example-account-settings.png" width="85%" title="Example of the Repository caching option" />
+    <Lightbox src="/img/docs/deploy/account-settings-repository-caching.png" width="85%" title="Example of the Repository caching option" />
 
   </Expandable>
 
@@ -124,7 +124,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     This maximum limit applies to [multi-tenant instances](/docs/cloud/about-cloud/access-regions-ip-addresses) only, and _does not_ apply to single tenant instances.
 
-    Refer to the [API v3 Pagination](https://docs.getdbt.com/dbt-cloud/api-v3#/) or [API v2 Pagination](https://docs.getdbt.com/dbt-cloud/api-v2#/) sections for more information on how to paginate your API responses. 
+    Refer to the [API v3 Pagination](/dbt-cloud/api-v3#/) or [API v2 Pagination](/dbt-cloud/api-v2#/) sections for more information on how to paginate your API responses. 
 
   </Expandable>
 
@@ -691,7 +691,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     **Beginning June 1, 2023,** developers on the <Constant name="cloud" /> multi-tenant application will be able to self-serve access to their account’s run history through the <Constant name="cloud" /> user interface (UI) and API for only 365 days, on a rolling basis. Older run history will be available for download by reaching out to Customer Support. We're seeking to minimize the amount of metadata we store while maximizing application performance. 
 
-    Specifically, all `GET` requests to the dbt Cloud [Runs endpoint](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/List%20Runs) will return information on runs, artifacts, logs, and run steps only for the past 365 days.  Additionally, the run history displayed in the dbt Cloud UI will only show runs for the past 365 days.  
+    Specifically, all `GET` requests to the dbt Cloud [Runs endpoint](/dbt-cloud/api-v2#/operations/List%20Runs) will return information on runs, artifacts, logs, and run steps only for the past 365 days.  Additionally, the run history displayed in the dbt Cloud UI will only show runs for the past 365 days.  
 
     <Lightbox src="/img/docs/dbt-cloud/rn-run-history.jpg" width="100%" title="The dbt Cloud UI displaying a Run History"/>
 
@@ -724,7 +724,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
     ## 🔎 Discoverability
 
     - We made sure everyone knows that Cloud-users don’t need a [profiles.yml file](/docs/core/connect-data-platform/profiles.yml) by adding a callout on several key pages.
-    - Fleshed out the [model jinja variable page](/reference/dbt-jinja-functions/model), which originally lacked conceptual info and didn’t link to the schema page.
+    - Fleshed out the [model Jinja variable page](/reference/dbt-jinja-functions/model), which originally lacked conceptual info and didn’t link to the schema page.
     - Added a new [Quickstarts landing page](/guides). This new format sets up for future iterations that will include filtering! But for now, we are excited you can step through quickstarts in a focused way.
 
     ## Cloud projects
@@ -808,7 +808,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     :::
 
-    For more info, refer to our [documentation](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/List%20Runs).
+    For more info, refer to our [documentation](/dbt-cloud/api-v2#/operations/List%20Runs).
 
   </Expandable>
 
@@ -826,7 +826,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
 - <Expandable alt_header='Starburst adapter GA'>
 
-    The Starburst (Trino compatible) connection is now generally available in dbt Cloud. This means you can now use dbt Cloud to connect with Starburst Galaxy, Starburst Enterprise, and self-hosted Trino. This feature is powered by the [`dbt-trino`](https://github.com/starburstdata/dbt-trino) adapter. To learn more, check out our Quickstart guide for [dbt Cloud and Starburst Galaxy](https://docs.getdbt.com/guides/starburst-galaxy).
+    The Starburst (Trino compatible) connection is now generally available in dbt Cloud. This means you can now use dbt Cloud to connect with Starburst Galaxy, Starburst Enterprise, and self-hosted Trino. This feature is powered by the [`dbt-trino`](https://github.com/starburstdata/dbt-trino) adapter. To learn more, check out our Quickstart guide for [dbt Cloud and Starburst Galaxy](/guides/starburst-galaxy).
 
   </Expandable>
 
@@ -878,7 +878,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     Refer to some additional info and resources to help you upgrade your dbt version:
 
-    - [How to upgrade dbt without fear](https://docs.getdbt.com/blog/upgrade-dbt-without-fear) 
+    - [How to upgrade dbt without fear](/blog/upgrade-dbt-without-fear) 
     - [Upgrade Q&A on breaking changes](/docs/dbt-versions/upgrade-dbt-version-in-cloud#upgrading-legacy-versions-under-10)
     - [Version migration guides](/docs/dbt-versions/core-upgrade)
 
@@ -888,7 +888,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     To continue improving your [Cloud IDE](/docs/cloud/dbt-cloud-ide/develop-in-the-cloud) development experience, the dbt Labs team continue to work on adding new features, fixing bugs, and increasing reliability ✨.
 
-    Read more about the [upcoming improvements to the Cloud IDE](https://www.getdbt.com/blog/improvements-to-the-dbt-cloud-ide/) and stay up-to-date with [IDE-related changes](https://docs.getdbt.com/tags/ide).
+    Read more about the [upcoming improvements to the Cloud IDE](https://www.getdbt.com/blog/improvements-to-the-dbt-cloud-ide/) and stay up-to-date with [IDE-related changes](/tags/ide).
 
     ## New features 
 
@@ -936,7 +936,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
 
     This maximum limit applies to [multi-tenant instances](/docs/cloud/about-cloud/access-regions-ip-addresses) only, and _does not_ apply to single tenant instances.
 
-    Refer to the [Pagination](https://docs.getdbt.com/dbt-cloud/api-v2#/) section of the overview for more information on this change. 
+    Refer to the [Pagination](/dbt-cloud/api-v2#/) section of the overview for more information on this change. 
 
     </Expandable>
 
@@ -1008,7 +1008,7 @@ Archived release notes for <Constant name="cloud" /> from 2023
     - Reliability improvements – Improved error handling that previously put IDE in a bad state
     - Corrected the list of dropdown options for the Build button
     - Adjusted startup page duration
-    - Added code snippets for `unique` and `not_null` tests for yml files
+    - Added code snippets for `unique` and `not_null` tests for YAML files
     - Added code snippets for metrics based on environment dbt versions
     - Changed “commit and push” to “commit and sync” to better reflect the action
     - Improved error message when saving or renaming files to duplicate names

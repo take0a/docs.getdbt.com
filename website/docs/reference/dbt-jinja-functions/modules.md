@@ -2,7 +2,7 @@
 title: "About modules variable"
 sidebar_label: "modules"
 id: "modules"
-description: "`modules` jinja variables has useful Python modules to operate data."
+description: "`modules` Jinja variables has useful Python modules to operate data."
 ---
 
 The `modules` variable in the Jinja context contains useful Python modules for operating on data.
@@ -52,6 +52,11 @@ This variable is a pointer to the Python [re](https://docs.python.org/3/library/
 ```
 
 ## itertools
+
+:::info Note
+Starting in `dbt-core==1.10.6`, using `modules.itertools` raises a deprecation warning. For more information and suggested workarounds, refer to the [documentation on `ModulesItertoolsUsageDeprecation`](/reference/deprecations.md#modulesitertoolsusagedeprecation).
+:::
+
 This variable is a pointer to the Python [itertools](https://docs.python.org/3/library/itertools.html) module, which includes useful functions for working with iterators (loops, lists, and the like).
 
 The supported functions are:

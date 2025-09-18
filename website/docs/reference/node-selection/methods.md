@@ -13,6 +13,10 @@ The `--select` and `--selector` arguments sound similar, but they are different.
 
 </Expandable>
 
+import UsingCommas from '/snippets/_using-commas.md';
+
+<UsingCommas />
+
 Many of the methods below support Unix-style wildcards:
 
 | Wildcard | Description                                               |
@@ -328,7 +332,7 @@ dbt run --select "tag:nightly"    # run all models with the `nightly` tag
 
 The `test_name` method is used to select tests based on the name of the generic test
 that defines it. For more information about how generic tests are defined, read about
-[tests](/docs/build/data-tests).
+[data tests](/docs/build/data-tests).
 
 
   ```bash
@@ -338,8 +342,6 @@ dbt test --select "test_name:range_min_max"     # run all instances of a custom 
 ```
 
 ### The test_type
-
-<VersionBlock firstVersion="1.8">
 
 The `test_type` method is used to select tests based on their type: 
 
@@ -356,11 +358,7 @@ dbt test --select "test_type:generic"        # run all generic data tests
 dbt test --select "test_type:singular"       # run all singular data tests
 ```
 
-</VersionBlock>
-
 ### unit_test
-
-<VersionBlock firstVersion="1.8">
 
 The `unit_test` method selects [unit tests](/docs/build/unit-tests).
 
@@ -368,8 +366,6 @@ The `unit_test` method selects [unit tests](/docs/build/unit-tests).
 dbt list --select "unit_test:*"                        # list all unit tests 
 dbt list --select "+unit_test:orders_with_zero_items"  # list your unit test named "orders_with_zero_items" and all upstream resources
 ```
-
-</VersionBlock>
 
 ### version
 

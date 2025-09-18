@@ -82,7 +82,7 @@ CI/CD, or Continuous Integration and Continuous Deployment/Delivery, has become 
 
 The steps below show how to create a CI test for your dbt project. CD in <Constant name="cloud" /> requires no additional steps, as your jobs will automatically pick up the latest changes from the branch assigned to the environment your job is running in. You may choose to add steps depending on your deployment strategy. If you want to dive deeper into CD options, check out [this blog on adopting CI/CD with <Constant name="cloud" />](https://www.getdbt.com/blog/adopting-ci-cd-with-dbt-cloud/).
 
-dbt allows you to write [tests](/docs/build/data-tests) for your data pipeline, which can be run at every step of the process to ensure the stability and correctness of your data transformations. The main places you’ll use your dbt tests are:
+dbt allows you to write [data tests](/docs/build/data-tests) for your data pipeline, which can be run at every step of the process to ensure the stability and correctness of your data transformations. The main places you’ll use your dbt tests are:
 
 1. **Daily runs:** Regularly running tests on your data pipeline helps catch issues caused by bad source data, ensuring the quality of data that reaches your users.
 2. **Development**: Running tests during development ensures that your code changes do not break existing assumptions, enabling developers to iterate faster by catching problems immediately after writing code.
@@ -191,7 +191,7 @@ To get the most out of both tools, you can use the [persist docs config](/refere
 ### Related docs
 
 - [Advanced Deployment course](https://learn.getdbt.com/courses/advanced-deployment) if you want a deeper dive into these topics
-- [Autoscaling CI: The intelligent Slim CI](https://docs.getdbt.com/blog/intelligent-slim-ci)
+- [Autoscaling CI: The intelligent Slim CI](/docs/deploy/continuous-integration)
 - [Trigger a <Constant name="cloud" /> Job in your automated workflow with Python](https://discourse.getdbt.com/t/triggering-a-dbt-cloud-job-in-your-automated-workflow-with-python/2573)
 - [Databricks + <Constant name="cloud" /> Quickstart Guide](/guides/databricks)
 - Reach out to your Databricks account team to get access to preview features on Databricks.

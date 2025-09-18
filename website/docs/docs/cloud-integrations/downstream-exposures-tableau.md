@@ -8,7 +8,7 @@ image: /img/docs/cloud-integrations/auto-exposures/explorer-lineage2.jpg
 # Set up automatic exposures in Tableau <Lifecycle status="managed,managed_plus" />
 
 <IntroText>
-Set up and automatically populate downstream exposures for supported BI tool integrations, like Tableau. Visualize and orchestrate them through <a href="https://docs.getdbt.com/docs/explore/explore-projects">dbt Explorer</a> and the [<Constant name="cloud" /> job scheduler](/docs/deploy/job-scheduler) for a richer experience.
+Set up and automatically populate downstream exposures for supported BI tool integrations, like Tableau. Visualize and orchestrate them through <a href="https://docs.getdbt.com/docs/explore/explore-projects">dbt Catalog</a> and the [<Constant name="cloud" /> job scheduler](/docs/deploy/job-scheduler) for a richer experience.
 
 </IntroText>
 
@@ -86,14 +86,14 @@ Once configured in both Tableau and [<Constant name="cloud" />](#set-up-in-dbt-c
    <Lightbox src="/img/docs/cloud-integrations/auto-exposures/cloud-select-collections.jpg" title="Select the collections you want to include for the downstream exposures."/>
 
       :::info
-      <Constant name="cloud" /> automatically imports and syncs any workbook within the selected collections. New additions to the collections will be added to the lineage in <Constant name="cloud" /> during the next sync (once per day).
+      <Constant name="cloud" /> automatically imports and syncs any workbook within the selected collections. New additions to the collections will appear in the lineage in <Constant name="cloud" /> once per day &mdash; after the daily sync and a job run.
 
       <Constant name="cloud" /> immediately starts a sync when you update the selected collections list, capturing new workbooks and removing irrelevant ones.
       :::
 
 5. <Constant name="cloud" /> imports everything in the collection(s) and you can continue to [view them](#view-auto-exposures) in <Constant name="explorer" />. 
 
-   <Lightbox src="/img/docs/cloud-integrations/auto-exposures/explorer-lineage2.jpg" width="100%" title="View from the dbt Explorer in your Project lineage view, displayed with the Tableau icon."/>
+   <Lightbox src="/img/docs/cloud-integrations/auto-exposures/explorer-lineage2.jpg" width="100%" title="View from the dbt Catalog in your Project lineage view, displayed with the Tableau icon."/>
 
 import ViewExposures from '/snippets/_auto-exposures-view.md';
 

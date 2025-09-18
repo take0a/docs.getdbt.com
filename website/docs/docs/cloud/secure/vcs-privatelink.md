@@ -47,7 +47,7 @@ Creating an Interface VPC PrivateLink connection requires creating multiple AWS 
     - **Scheme:** Internal
     - **IP address type:** IPv4
     - **Network mapping:** Choose the VPC that the VPC Endpoint Service and NLB are being deployed in, and choose subnets from at least two Availability Zones.
-    - **Security Groups:** The Network Load Balancer (NLB) associated with the VPC Endpoint Service must either not have an associated Security Group, or the Security Group must have a rule that allows requests from the appropriate <Constant name="cloud" /> **private CIDR(s)**. Note that **this is different** than the static public IPs listed on the <Constant name="cloud" /> [Access, Regions, & IP addresses](https://docs.getdbt.com/docs/cloud/about-cloud/access-regions-ip-addresses) page. The correct private CIDR(s) can be provided by dbt Support upon request. If necessary, temporarily adding an allow rule of `10.0.0.0/8` should allow connectivity until the rule can be refined to the smaller dbt provided CIDR.
+    - **Security Groups:** The Network Load Balancer (NLB) associated with the VPC Endpoint Service must either not have an associated Security Group, or the Security Group must have a rule that allows requests from the appropriate <Constant name="cloud" /> **private CIDR(s)**. Note that **this is different** than the static public IPs listed on the <Constant name="cloud" /> [Access, Regions, & IP addresses](/docs/cloud/about-cloud/access-regions-ip-addresses) page. The correct private CIDR(s) can be provided by dbt Support upon request. If necessary, temporarily adding an allow rule of `10.0.0.0/8` should allow connectivity until the rule can be refined to the smaller dbt provided CIDR.
     - **Listeners:** Create one Listener per Target Group that maps the appropriate incoming port to the corresponding Target Group ([details](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html)).
 - **Endpoint Service** - The VPC Endpoint Service is what allows for the VPC to VPC connection, routing incoming requests to the configured load balancer.
     - **Load balancer type:** Network.
@@ -78,16 +78,16 @@ If the connection to the VCS service requires a custom domain and/or URL for TLS
     
 :::
 
-### 4. Add the required information to the template below, and submit your request to [dbt Support](https://docs.getdbt.com/community/resources/getting-help#dbt-cloud-support):
+### 4. Add the required information to the template below, and submit your request to [dbt Support](/community/resources/getting-help#dbt-cloud-support):
 ```
 Subject: New Multi-Tenant PrivateLink Request
 - Type: VCS Interface-type
 - VPC Endpoint Service Name:
-- Custom DNS (optional)
+- Custom DNS (if HTTPS)
     - Private hosted zone:
     - DNS record:
 - VCS install AWS Region (e.g., us-east-1, eu-west-2):
-- <Constant name="cloud" /> multi-tenant environment (US, EMEA, AU):
+- dbt AWS multi-tenant environment (US, EMEA, AU):
 ```
 
 import PrivateLinkSLA from '/snippets/_private-connection-SLA.md';
@@ -106,12 +106,24 @@ Once you accept the endpoint connection request, you can use the PrivateLink end
 
 Once dbt confirms that the PrivateLink integration is complete, you can use it in a new or existing git configuration. 
 
-1. Select **PrivateLink Endpoint** as the connection type, and your configured integrations will appear in the dropdown menu. 
-2. Select the configured endpoint from the drop down list.
-3. Click **Save**.
+**To configure a new git integration with PrivateLink:**
 
-<Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/vcs-setup-new.png" width="80%" title="Configuring a new git integration with PrivateLink" />
+1. Click your account name at the bottom left-hand menu and go to **Account settings** > **Projects**.
+2. Click **New project**.
+3. Name your project and configure your development environment.
+4. Under **Set up repository**, click **Git clone**.
+5. Select **PrivateLink Endpoint** as the connection type.
+    Your configured integrations will appear in the dropdown menu. 
+6. Select the configured endpoint from the dropdown list.
+7. Click **Save**.
 
-<Lightbox src="/img/docs/dbt-cloud/cloud-configuring-dbt-cloud/vcs-setup-existing.png" width="80%" title="Editing an existing git integration with PrivateLink" />
+**To configure an existing git integration with PrivateLink:** 
+
+1. Click your account name at the bottom left-hand menu and go to **Account settings** > **Integrations**.
+2. Under **Gitlab**, select **PrivateLink Endpoint** as the connection type.
+    Your configured integrations will appear in the dropdown menu. 
+3. Select the configured endpoint from the dropdown list.
+4. Click **Save**.
+
 
 <PrivateLinkTroubleshooting features={'/snippets/_privatelink-troubleshooting.md'}/>

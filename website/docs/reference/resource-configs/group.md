@@ -136,7 +136,7 @@ select ...
 <File name='dbt_project.yml'>
 
 ```yml
-tests:
+data_tests:
   [<resource-path>](resource-path):
     +group: GROUP_NAME
 ```
@@ -150,7 +150,7 @@ version: 2
 
 <resource_type>:
   - name: <resource_name>
-    tests:
+    data_tests:
       - <test_name>:
           config:
             group: GROUP_NAME
@@ -285,6 +285,8 @@ saved_queries:
 </TabItem>
 
 </Tabs>
+
+Note that for backwards compatibility, `group` is supported as a top-level key, but without the capabilities of config inheritance.
 
 ## Definition
 An optional configuration for assigning a group to a resource. When a resource is grouped, dbt will allow it to reference private models within the same group.

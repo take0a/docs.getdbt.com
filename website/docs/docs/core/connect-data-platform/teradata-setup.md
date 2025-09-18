@@ -27,18 +27,19 @@ import SetUpPages from '/snippets/_setup-pages-intro.md';
 
 ## Python compatibility
 
-| Plugin version | Python 3.9 | Python 3.10 | Python 3.11 | Python 3.12 |
-|----------------|------------|-------------|-------------|-------------|
-| 1.0.0.x        | ✅          | ❌           | ❌           | ❌           |
-| 1.1.x.x        | ✅          | ✅           | ❌           | ❌           |
-| 1.2.x.x        | ✅          | ✅           | ❌           | ❌           |
-| 1.3.x.x        | ✅          | ✅           | ❌           | ❌           |
-| 1.4.x.x        | ✅          | ✅           | ✅           | ❌           |
-| 1.5.x          | ✅          | ✅           | ✅           | ❌           |
-| 1.6.x          | ✅          | ✅           | ✅           | ❌           |
-| 1.7.x          | ✅          | ✅           | ✅           | ❌           |
-| 1.8.x          | ✅          | ✅           | ✅           | ✅           |
-| 1.9.x          | ✅          | ✅           | ✅           | ✅           |
+| Plugin version | Python 3.9 | Python 3.10 | Python 3.11 | Python 3.12 | Python 3.13 | 
+|----------------|------------|-------------|-------------|-------------|-------------|
+| 1.0.0.x        | ✅          | ❌           | ❌           | ❌           | ❌           |
+| 1.1.x.x        | ✅          | ✅           | ❌           | ❌           | ❌           |
+| 1.2.x.x        | ✅          | ✅           | ❌           | ❌           | ❌           |
+| 1.3.x.x        | ✅          | ✅           | ❌           | ❌           | ❌           |
+| 1.4.x.x        | ✅          | ✅           | ✅           | ❌           | ❌           |
+| 1.5.x          | ✅          | ✅           | ✅           | ❌           | ❌           |
+| 1.6.x          | ✅          | ✅           | ✅           | ❌           | ❌           |
+| 1.7.x          | ✅          | ✅           | ✅           | ❌           | ❌           |
+| 1.8.x          | ✅          | ✅           | ✅           | ✅           | ❌           |
+| 1.9.x          | ✅          | ✅           | ✅           | ✅           | ❌           |
+| 1.10.x         | ✅          | ✅           | ✅           | ✅           | ✅           |
 
 ## dbt dependent packages version compatibility
 
@@ -51,11 +52,12 @@ import SetUpPages from '/snippets/_setup-pages-intro.md';
 | 1.8.x        | 1.8.x    | 1.2.0             | 1.2.0          |
 | 1.8.x        | 1.8.x    | 1.3.0             | 1.3.0          |
 | 1.9.x        | 1.9.x    | 1.3.0             | 1.3.0          |
+| 1.10.x       | 1.10.x   | 1.3.0             | 1.3.0          |
 
 
 ### Connecting to Teradata
 
-To connect to Teradata Vantage from dbt, you'll need to add a [profile](https://docs.getdbt.com/docs/core/connection-profiles) to your `profiles.yml` file. A Teradata profile conforms to the following syntax:
+To connect to Teradata Vantage from dbt, you'll need to add a [profile](/docs/core/connect-data-platform/connection-profiles) to your `profiles.yml` file. A Teradata profile conforms to the following syntax:
 
 <File name='profiles.yml'>
 
@@ -145,7 +147,8 @@ The following incremental materialization strategies are supported:
 * `append` (default)
 * `delete+insert`
 * `merge`
-* `valid_history` (early access)
+* `valid_history`
+* `microbatch`
 
 :::info
 - To learn more about dbt incremental strategies, refer to [the dbt incremental strategy documentation](/docs/build/incremental-strategy).
@@ -241,12 +244,10 @@ For using cross-DB macros, teradata-utils as a macro namespace will not be used,
 
   `last_day` in `teradata_utils`, unlike the corresponding macro in `dbt_utils`, doesn't support `quarter` datepart.
 
-<VersionBlock firstVersion="1.8">
 
 dbt-teradata 1.8.0 and later versions support unit tests, enabling you to validate SQL models and logic with a small set of static inputs before going to production. This feature enhances test-driven development and boosts developer efficiency and code reliability. Learn more about dbt unit tests [here](/docs/build/unit-tests).
 
 
-</VersionBlock>
 
 ## Limitations
 

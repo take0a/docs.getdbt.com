@@ -92,16 +92,16 @@ We need to obtain our data source by copying our Formula 1 data into Snowflake t
     create or replace schema raw; 
     use schema raw; 
 
-    -- define our file format for reading in the csvs 
-    create or replace file format csvformat
-    type = csv
+    -- define our file format for reading in the CSVs 
+    create or replace file format CSVformat
+    type = CSV
     field_delimiter =','
     field_optionally_enclosed_by = '"', 
     skip_header=1; 
 
     --
     create or replace stage formula1_stage
-    file_format = csvformat 
+    file_format = CSVformat 
     url = 's3://formula1-dbt-cloud-python-demo/formula1-kaggle-data/';
 
     -- load in the 8 tables we need for our demo 
@@ -238,7 +238,7 @@ We need to obtain our data source by copying our Formula 1 data into Snowflake t
 
 6. Let’s unpack that pretty long query we ran into component parts. We ran this query to load in our 8 Formula 1 tables from a public S3 bucket. To do this, we:
     - Created a new database called `formula1` and a schema called `raw` to place our raw (untransformed) data into.
-    - Defined our file format for our CSV files. Importantly, here we use a parameter called `field_optionally_enclosed_by =` since the string columns in our Formula 1 csv files use quotes.  Quotes are used around string values to avoid parsing issues where commas `,` and new lines `/n` in data values could cause data loading errors.
+    - Defined our file format for our CSV files. Importantly, here we use a parameter called `field_optionally_enclosed_by =` since the string columns in our Formula 1 CSV files use quotes.  Quotes are used around string values to avoid parsing issues where commas `,` and new lines `/n` in data values could cause data loading errors.
     - Created a stage to locate our data we are going to load in. Snowflake Stages are locations where data files are stored.  Stages are used to both load and unload data to and from Snowflake locations. Here we are using an external stage, by referencing an S3 bucket.
     - Created our tables for our data to be copied into. These are empty tables with the column name and data type. Think of this as creating an empty container that the data will then fill into.
     - Used the `copy into` statement for each of our tables. We reference our staged location we created and upon loading errors continue to load in the rest of the data. You should not have data loading errors but if you do, those rows will be skipped and Snowflake will tell you which rows caused errors
@@ -283,7 +283,7 @@ We need to obtain our data source by copying our Formula 1 data into Snowflake t
 
 10. To help you version control your dbt project, we have connected it to a [managed repository](/docs/cloud/git/managed-repository), which means that dbt Labs will be hosting your repository for you. This will give you access to a <Constant name="git" /> workflow without you having to create and host the repository yourself. You will not need to know <Constant name="git" /> for this workshop; <Constant name="cloud" /> will help guide you through the workflow. In the future, when you’re developing your own project, [feel free to use your own repository](/docs/cloud/git/connect-github). This will allow you to learn more about features like [Slim CI](/docs/deploy/continuous-integration) builds after this workshop.
 
-## Change development schema name navigate the IDE
+## Change development schema name and navigate the IDE
 
 1. First we are going to change the name of our default schema to where our dbt models will build. By default, the name is `dbt_`. We will change this to `dbt_<YOUR_NAME>` to create your own personal development schema. To do this, click on your account name in the left side menu and select **Account settings**.
 
@@ -293,7 +293,7 @@ We need to obtain our data source by copying our Formula 1 data into Snowflake t
 
     <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/5-development-schema-name/2-credentials-edit-schema-name.png" title="Credentials edit schema name"/>
 
-3. Click **Edit** and change the name of your schema from `dbt_` to `dbt_YOUR_NAME` replacing `YOUR_NAME` with your initials and name (`hwatson` is used in the lab screenshots). Be sure to click **Save** for your changes!
+3. Click **Edit** and change the name of your schema from `dbt_` to `dbt_YOUR_NAME` replacing `YOUR_NAME` with your initials and name. Be sure to click **Save** for your changes!
     <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/5-development-schema-name/3-save-new-schema-name.png" title="Save new schema name"/>
 
 4. We now have our own personal development schema, amazing! When we run our first dbt models they will build into this schema.
@@ -303,7 +303,7 @@ We need to obtain our data source by copying our Formula 1 data into Snowflake t
     <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/5-development-schema-name/4-initialize-dbt-project.png" title="Initialize dbt project"/>
 
 7. After the initialization is finished, you can view the files and folders in the file tree menu. As we move through the workshop we'll be sure to touch on a few key files and folders that we'll work with to build out our project.
-8. Next click **Commit and push** to commit the new files and folders from the initialize step. We always want our commit messages to be relevant to the work we're committing, so be sure to provide a message like `initialize project` and select **Commit Changes**.
+8. Next click **Commit and sync** to commit the new files and folders from the initialize step. We always want our commit messages to be relevant to the work we're committing, so be sure to provide a message like `initialize project` and select **Commit Changes**.
 
     <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/5-development-schema-name/5-first-commit-and-push.png" title="First commit and push"/>
 
@@ -457,21 +457,21 @@ sources:
         description: One record per circuit, which is the specific race course. 
         columns:
           - name: circuitid
-            tests:
+            data_tests:
             - unique
             - not_null
       - name: constructors 
         description: One record per constructor. Constructors are the teams that build their formula 1 cars. 
         columns:
           - name: constructorid
-            tests:
+            data_tests:
             - unique
             - not_null
       - name: drivers
         description: One record per driver. This table gives details about the driver. 
         columns:
           - name: driverid
-            tests:
+            data_tests:
             - unique
             - not_null
       - name: lap_times
@@ -480,21 +480,22 @@ sources:
         description: One row per pit stop. Pit stops do not have their own id column, the combination of the race_id and driver_id identify the pit stop.
         columns:
           - name: stop
-            tests:
+            data_tests:
               - accepted_values:
-                  values: [1,2,3,4,5,6,7,8]
-                  quote: false            
+                    arguments: # available in v1.10.5 and higher. Older versions can set the <argument_name> as the top-level property.
+                        values: [1,2,3,4,5,6,7,8]
+                        quote: false            
       - name: races 
         description: One race per row. Importantly this table contains the race year to understand trends. 
         columns:
           - name: raceid
-            tests:
+            data_tests:
             - unique
             - not_null        
       - name: results
         columns:
           - name: resultid
-            tests:
+            data_tests:
             - unique
             - not_null   
         description: One row per result. The main table that we join out for grid and position variables.
@@ -502,7 +503,7 @@ sources:
         description: One status per row. The status contextualizes whether the race was finished or what issues arose e.g. collisions, engine, etc. 
         columns:
           - name: statusid
-            tests:
+            data_tests:
             - unique
             - not_null
 ```
@@ -743,11 +744,11 @@ The next step is to set up the staging models for each of the 8 source tables. G
 
     After the source and all the staging models are complete for each of the 8 tables, your staging folder should look like this:
 
-    <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/8-sources-and-staging/1-staging-folder.png" title="Staging folder"/>
+    <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/8-sources-and-staging/1-staging-folder.png" width="40%" title="Staging folder"/>
 
 1. It’s a good time to delete our example folder since these two models are extraneous to our formula1 pipeline and `my_first_model` fails a `not_null` test that we won’t spend time investigating. <Constant name="cloud" /> will warn us that this folder will be permanently deleted, and we are okay with that so select **Delete**.
 
-    <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/8-sources-and-staging/2-delete-example.png" title="Delete example folder"/>
+    <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/8-sources-and-staging/2-delete-example.png" width="40%" title="Delete example folder"/>
 
 1. Now that the staging models are built and saved, it's time to create the models in our development schema in Snowflake. To do this we're going to enter into the command line `dbt build` to run all of the models in our project, which includes the 8 new staging models and the existing example models.
 
@@ -1743,7 +1744,7 @@ Since the output of our Python models are tables, we can test SQL and Python mod
           columns:
             - name: constructor_name
               description: team that makes the car
-              tests:
+              data_tests:
                 - unique
 
         - name: lap_times_moving_avg
@@ -1751,10 +1752,11 @@ Since the output of our Python models are tables, we can test SQL and Python mod
           columns:
             - name: race_year
               description: year of the race
-              tests:
+              data_tests:
                 - relationships:
-                  to: ref('int_lap_times_years')
-                  field: race_year
+                    arguments: # available in v1.10.5 and higher. Older versions can set the <argument_name> as the top-level property.
+                        to: ref('int_lap_times_years')
+                        field: race_year
     ```
 
 2. Let’s unpack the code we have here. We have both our aggregates models with the model name to know the object we are referencing and the description of the model that we’ll populate in our documentation. At the column level (a level below our model), we are providing the column name followed by our tests. We want to ensure our `constructor_name` is unique since we used a pandas `groupby` on `constructor_name` in the model `fastest_pit_stops_by_constructor`. Next, we want to ensure our `race_year` has referential integrity from the model we selected from `int_lap_times_years` into our subsequent `lap_times_moving_avg` model.
@@ -1774,7 +1776,7 @@ Since the output of our Python models are tables, we can test SQL and Python mod
     ```
 
 2. Macros in Jinja are pieces of code that can be reused multiple times in our SQL models &mdash; they are analogous to "functions" in other programming languages, and are extremely useful if you find yourself repeating code across multiple models.
-3. We use the `{% macro %}` to indicate the start of the macro and `{% endmacro %}` for the end. The text after the beginning of the macro block is the name we are giving the macro to later call it. In this case, our macro is called `test_all_values_gte_zero`. Macros take in *arguments* to pass through, in this case the `table` and the `column`. In the body of the macro, we see an SQL statement that is using the `ref` function to dynamically select the table and then the column. You can always view macros without having to run them by using `dbt run-operation`. You can learn more [here](https://docs.getdbt.com/reference/commands/run-operation).
+3. We use the `{% macro %}` to indicate the start of the macro and `{% endmacro %}` for the end. The text after the beginning of the macro block is the name we are giving the macro to later call it. In this case, our macro is called `test_all_values_gte_zero`. Macros take in *arguments* to pass through, in this case the `table` and the `column`. In the body of the macro, we see an SQL statement that is using the `ref` function to dynamically select the table and then the column. You can always view macros without having to run them by using `dbt run-operation`. You can learn more [here](/reference/commands/run-operation).
 4. Great, now we want to reference this macro as a test! Let’s create a new test file called `macro_pit_stops_mean_is_positive.sql` in our `tests` folder.
 
   <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/13-testing/3-gte-macro-applied-to-pit-stops.png" title="creating a test on our pit stops model referencing the macro"/>
@@ -1890,12 +1892,12 @@ Now that we've completed testing and documenting our work, we're ready to deploy
   - Once our code is merged to the main branch, we'll need to run dbt in our production environment to build all of our models and run all of our tests. This will allow us to build production-ready objects into our production environment in Snowflake. Luckily for us, the Partner Connect flow has already created our deployment environment and job to facilitate this step.
 
 1. Before getting started, let's make sure that we've committed all of our work to our feature branch. If you still have work to commit, you'll be able to select the **Commit and push**, provide a message, and then select **Commit** again.
-2. Once all of your work is committed, the git workflow button will now appear as **Merge to main**. Select **Merge to main** and the merge process will automatically run in the background.
-  <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/15-deployment/1-merge-to-main-branch.png" title="Merge into main"/>
+2. Once all of your work is committed, the git workflow button will now appear as **Merge this branch to main**. Click **Merge this branch to main** and the merge process will automatically run in the background.
+  <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/15-deployment/1-merge-to-main-branch.png" title="Merge this branch to main"/>
 
 3. When it's completed, you should see the git button read **Create branch** and the branch you're currently looking at will become **main**.
 4. Now that all of our development work has been merged to the main branch, we can build our deployment job. Given that our production environment and production job were created automatically for us through Partner Connect, all we need to do here is update some default configurations to meet our needs.
-5. In the menu, select **Deploy** **> Environments**
+5. In the left-hand menu, go to **Orchestration** > **Environments**.
   <Lightbox src="/img/guides/dbt-ecosystem/dbt-python-snowpark/15-deployment/2-ui-select-environments.png" title="Navigate to environments within the UI"/>
 
 6. You should see two environments listed and you'll want to select the **Deployment** environment then **Settings** to modify it.

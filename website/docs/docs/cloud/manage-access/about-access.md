@@ -29,11 +29,11 @@ Individual users in <Constant name="cloud" /> can be people you [manually invite
 
 In either scenario, when you add a user to <Constant name="cloud" />, they are assigned a [license](#licenses). You assign licenses at the individual user or group levels. When you manually invite a user, you will assign the license in the invitation window.
 
-<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/license-dropdown.png" width="60%" title="Example of the license dropdown in the user invitation window." />
+<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/license-dropdown.png" width="40%" title="Example of the license dropdown in the user invitation window." />
 
 You can edit an existing user's license by navigating to the **Users** section of the **Account settings**, clicking on a user, and clicking **Edit** on the user pane. Delete users from this same window to free up licenses for new users.
 
-<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/edit-user.png" width="60%" title="Example of the user information window in the user directory" />
+<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/edit-user.png" width="40%" title="Example of the user information window in the user directory" />
 
 ### User passwords
 
@@ -59,7 +59,7 @@ The permissions available depends on whether you're on an [Enterprise-tier](/doc
 There are three default groups available as soon as you create your <Constant name="cloud" /> account (the person who created the account is added to all three automatically):
 
 - **Owner:** This group is for individuals responsible for the entire account and will give them elevated account admin privileges. You cannot change the permissions. 
-- **Member:** This group is for the general members of your organization, who will also have full access to the account. You cannot change the permissions. By default, <Constant name="cloud" /> adds new users to this group.
+- **Member:** This group is for the general members of your organization. Default permissions are broad, restricting only access to features that can alter billing or security. By default, <Constant name="cloud" /> adds new users to this group.
 - **Everyone:** A general group for all members of your organization. Customize the permissions to fit your organizational needs. By default, <Constant name="cloud" /> adds new users to this group.
 
 Default groups are automatically provisioned for all accounts to simplify the initial set up. We recommend  creating your own organizational groups so you can customize the permissions. Once you create your own groups, you can delete the default groups.
@@ -76,6 +76,28 @@ Default groups are automatically provisioned for all accounts to simplify the in
 If a user is assigned licenses and permissions from multiple groups, the group that grants the most access will take precedence. You must assign a permission set to any groups created beyond the three defaults, or users assigned will not have access to features beyond their user profile.
 
 :::
+
+### Group access and permissions
+
+The **Access & Permissions** section of a group is where you can assign users the right level of access based on their role or responsibilities. You decide:
+
+* Projects the group can access
+* Roles that the group members are assigned for each
+* Environments the group can edit
+
+This setup provides you with the flexibility to determine the level of access users in any given group will have. For example, you might allow one group of analysts to edit jobs in their project, but only let them view related projects, or you could grant admin-level access to a team that owns a specific project while keeping others restricted to read-only.
+
+<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/sample-access-policy.png" width="60%" title="Assign a variety of roles and access permissions to user groups." />
+
+#### Environment write access
+
+Some permission sets grant users read-only access to environment settings that can be overridden if you assign them to a group with **Environment write access**. They will then be able to create, edit, and delete environment settings, bypassing the read-only restriction.
+
+In the following example, the `analyst` permission set, which by default has read-only access to jobs, is assigned to the group across all projects; however, the **Environment write access** is set to `All Environments`.  This grants all users in this group the ability to create, edit, and delete jobs across all environments and projects. 
+
+<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/environment-write.png" width="60%" title="Users assigned environment write access will be able to edit environment settings." />
+
+Only use **Environment write access** settings when you intend to grant users the ability to edit environments. To grant users only the permissions inherent to their set, leave this setting blank (all boxes unchecked).
 
 ### SSO mappings <Lifecycle status="managed,managed_plus" />
 
@@ -111,6 +133,10 @@ Every user in <Constant name="cloud" /> will have a license assigned. Licenses c
 Developer licenses will make up a majority of the users in your environment and have the highest impact on billing, so it's important to monitor how many you have at any given time.
 
 For more information on these license types, see [Seats & Users](/docs/cloud/manage-access/seats-and-users)
+
+import LicenseOverrideNote from '/snippets/_license-override-note.md';
+
+<LicenseOverrideNote />
 
 ### Permissions
 
@@ -172,7 +198,7 @@ Euclid takes the following steps to log in:
 
   <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/sso-login-url.png" width="60%" title="The SSO login URL in the account settings." />
 
-2. Login with their Okta credentials.
+2. Log in with their Okta credentials.
 
   <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/sso-login.png" width="60%" title="The SSO login screen when using Okta as the identity provider." />
 
@@ -180,15 +206,19 @@ Euclid takes the following steps to log in:
 
   <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/post-login-screen.png" width="60%" title="The screen users see after their first SSO login." />
 
-4. They now open their email and click the link to join dbt Labs, which completes the process.
+4. They now open their email and click the link to join dbt Labs.
 
   <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/sample-email.png" width="60%" title="The email the user receives on first SSO login." />
 
-Euclid is now logged in to their account. They only have access to the `Jaffle Shop` pr, and the project selection option is removed from their UI entirely. 
+5. Their email address is now verified. They click **Authenticate with your enterprise login**, which completes the process. 
 
-<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/rbac-account-home.png" width="60%" title="The home screen with access restricted." />
+    <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/email-verified.png" width="60%" title="The confirmation that the email address is verified." />
 
-They can now configure development credentials. The `Production` environment is visible, but it is `read-only`, and they have full access in the `Staging` environment. 
+Euclid is now logged in to their account. They only have access to the `Jaffle Shop` project. Under **Orchestration**, they can configure development credentials.
+
+<Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/orchestration-environments.png" width="60%" title="The Orchestration page with the environments." />
+
+The `Production` environment is visible, but it is `read-only`, and they have full access in the `Staging` environment. 
 
 <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/access-control/production-restricted.png" width="60%" title="The Production environment landing page with read-only access." />
 
@@ -197,6 +227,10 @@ They can now configure development credentials. The `Production` environment is 
 </Expandable>
 
 With RBAC configured, you now have granular control over user access to features across <Constant name="cloud" />.
+
+### SCIM license management
+
+As part of the SSO configuration for supported IdPs, you can also configure the [System for Cross-Domain Identity Management (SCIM)](/docs/cloud/manage-access/scim) settings to add a layer of security to your user lifecycle management. As part of this process, you can integrate user license distribution into the user provisioning process through your IdP. See the [SCIM license management instructions](/docs/cloud/manage-access/scim#manage-user-licenses-with-scim) for more information.
 
 ## FAQs
 
@@ -233,3 +267,7 @@ Each <Constant name="cloud" /> plan has a base number of Developer and Read-Only
 For detailed steps, refer to [Users and licenses](/docs/cloud/manage-access/seats-and-users#licenses).
 
 </Expandable>
+
+## Learn more
+
+<WistiaVideo id="al3w450mcn" paddingTweak="62.25%" />

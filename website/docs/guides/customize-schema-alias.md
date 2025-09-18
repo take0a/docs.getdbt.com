@@ -15,7 +15,7 @@ keywords: ["generate", "schema name", "guide", "dbt", "schema customization", "c
 
 ## Introduction
 This guide explains how to customize the [schema](/docs/build/custom-schemas), [database](/docs/build/custom-databases), and [alias](/docs/build/custom-aliases) naming conventions in dbt to fit your data warehouse governance and design needs.
-When we develop dbt models and execute certain [commands](https://docs.getdbt.com/reference/dbt-commands) (such as `dbt run` or `dbt build`), objects (like tables and views) get created in the data warehouse based on these naming conventions.
+When we develop dbt models and execute certain [commands](/reference/dbt-commands) (such as `dbt run` or `dbt build`), objects (like tables and views) get created in the data warehouse based on these naming conventions.
 
 
 
@@ -39,9 +39,9 @@ The following is dbt's out-of-the-box default behavior:
 
 - The object name depends on whether an [alias](/reference/resource-configs/alias) has been defined on the model:
     - If no alias is defined, the object will be created with the same name as the model, without the `.sql` or `.py` at the end.
-        - For example, suppose that we have a model where the sql file is titled `fct_orders_complete.sql`, the custom schema is `marketing`, and no custom alias is configured. The resulting model will be created in `dbt_myschema_marketing.fct_orders_complete` in the dev environment. 
+        - For example, suppose that we have a model where the SQL file is titled `fct_orders_complete.sql`, the custom schema is `marketing`, and no custom alias is configured. The resulting model will be created in `dbt_myschema_marketing.fct_orders_complete` in the dev environment. 
     - If an alias is defined, the object will be created with the configured alias.
-    - For example, suppose that we have a model where the sql file is titled `fct_orders_complete.sql`, the custom schema is `marketing`, and the alias is configured to be `fct_orders`. The resulting model will be created in `dbt_myschema_marketing.fct_orders`
+    - For example, suppose that we have a model where the SQL file is titled `fct_orders_complete.sql`, the custom schema is `marketing`, and the alias is configured to be `fct_orders`. The resulting model will be created in `dbt_myschema_marketing.fct_orders`
 
 These default rules are a great starting point, and many organizations choose to stick with those without any customization required.
 
@@ -81,7 +81,7 @@ Further, the staging version of `fct_player_stats` should exist in a unique loca
 We often leverage the following when customizing these macros:
 
 - In <Constant name="cloud" />, we recommend utilizing [environment variables](/docs/build/environment-variables) to define where the dbt invocation is occurring (dev/stg/prod).
-    - They can be set at the environment level and all jobs will automatically inherit the default values. We'll add jinja logic (`if/else/endif`) to identify whether the run happens in dev, prod, Ci, and more.
+    - They can be set at the environment level and all jobs will automatically inherit the default values. We'll add Jinja logic (`if/else/endif`) to identify whether the run happens in dev, prod, Ci, and more.
     
 - Or as an alternative to environment variables, you can use `target.name`. For more information, you can refer to [About target variables](/reference/dbt-jinja-functions/target). 
 
@@ -275,7 +275,7 @@ The `DBT_CLOUD_GIT_BRANCH` variable is only available within the <Constant name=
 
 We’ve also seen some organizations prefer to organize their dev databases by branch name. This requires implementing similar logic in `generate_database_name()` instead of the `generate_schema_name()` macro. By default, dbt will not automatically create the databases. 
 
-Refer to the [Tips and tricks](https://docs.getdbt.com/guides/customize-schema-alias?step=5) section to learn more.    
+Refer to the [Tips and tricks](/guides/customize-schema-alias?step=5) section to learn more.    
 
 
 <File name='macros/generate_schema_name.sql'>
