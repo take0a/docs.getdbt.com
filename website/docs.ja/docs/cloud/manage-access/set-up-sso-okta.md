@@ -5,12 +5,6 @@ id: "set-up-sso-okta"
 
 # Set up SSO with Okta <Lifecycle status="managed, managed_plus" />
 
-import SetUpPages from '/snippets/_sso-docs-mt-available.md';
-
-<SetUpPages features={'/snippets/_sso-docs-mt-available.md'}/>
-
-## Okta SSO
-
 <Constant name="cloud" /> Enterprise-tier plans support single-sign on via Okta (using SAML). Currently supported features include:
 
 * IdP-initiated SSO
@@ -193,3 +187,7 @@ configured in the steps above.
 ## Setting up RBAC
 Now you have completed setting up SSO with Okta, the next steps will be to set up
 [RBAC groups](/docs/cloud/manage-access/about-user-access#role-based-access-control-) to complete your access control configuration.
+
+## Learn more
+
+<WistiaVideo id="xtmk0rrk5k" paddingTweak="62.25%" />

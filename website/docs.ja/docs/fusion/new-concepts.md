@@ -1,228 +1,201 @@
 ---
 title: "New concepts in the dbt Fusion engine"
 id: "new-concepts"
-sidebar_label: "New Concepts"
+sidebar_label: "新しい概念"
 description: "New concepts and configurations you will encounter when you install the dbt Fusion engine."
 pagination_next: null
 pagination_prev: null
 ---
 
-# New concepts <Lifecycle status="beta" />
+# 新しい概念
 
-<IntroText>
-
-Fusion を使用する際に遭遇するまったく新しい概念について学習します。
-
-</IntroText>
-
+<VersionBlock lastVersion="1.99">
 
 import FusionBeta from '/snippets.ja/_fusion-beta-callout.md';
 
 <FusionBeta />
 
-新しい dbt Fusion エンジンは、SQL をコンパイルして静的に分析し、方言を考慮した検証と列レベルの系統抽出を行います。つまり、`dbt compile` を実行すると、モデルを実行する前に、dbt プロジェクト内のすべてのモデルの完全な論理プランを生成して分析します。
-この機能を実現するために、Fusion では**2 つの新しい概念** が導入されています。
-- **コンパイル戦略** (事前コンパイルまたはジャストインタイム) は、DAG 実行前または実行中にモードをコンパイルするかどうかを決定します。
-- dbt モデル内のコード (SQL) の**静的分析**。これを有効にすると、Fusion は論理プランを生成、検証し、モデルのプランを静的に分析して、列レベルの系統やその他の豊富なメタデータを抽出します。
+</VersionBlock>
 
-dbt コアでは、`compile` は Jinja のレンダリングを意味します。dbt Fusion では、compile は新しいステップを導入し、SQL を分析します。したがって、Fusion の `compile` は `render` (Jinja) と `analyze` (SQL) の 2 つのステップに分けられます。
+<IntroText>
 
-## コンパイル戦略
+<Constant name="fusion_engine" /> は [プロジェクトの SQL を完全に理解](/blog/the-levels-of-sql-comprehension) し、方言に対応した検証や正確な列レベルの系統といった高度な機能を実現します。
 
-[事前コンパイル](https://en.wikipedia.org/wiki/Ahead-of-time_compilation)は、Fusionのデフォルトのコンパイル戦略です。つまり、ユーザーがFusionで「dbt run」を実行すると、まずすべてのモデルがコンパイルされ、その後実行されます。これにより、パフォーマンスが大幅に向上し、実行前にDAGの正確性が保証されます。これは、Rust、Typescript、Javaなどのコンパイル言語をモデル化しており、コンパイラが実行前にすべての問題を事前に検出します。
+これが可能なのは、コンパイル手順が <Constant name="core" /> エンジンよりも包括的だからです。<Constant name="core" /> が「コンパイル」と表現していたのは、単に「レンダリング」、つまり Jinja テンプレート文字列を SQL クエリに変換してデータベースに送信することだけを意味していました。
 
-<Lightbox src="/img/fusion/aot-compilation.png" title="Ahead-of-time compilation strategy (Fusion default)" />
+dbt Fusion エンジンも Jinja をレンダリングできますが、その後、プロジェクト内のレンダリングされたすべてのクエリに対して、論理プランを生成し、静的分析によって検証するという第 2 段階を実行します。この静的分析手順こそが、Fusion の新機能の基盤です。
 
-[ジャストインタイムコンパイル](https://en.wikipedia.org/wiki/Just-in-time_compilation)は<Constant name="core" />のデフォルトの動作です。dbtはDAG内の各モデルを順番にコンパイルし、実行します。これは、上流モデルの結果が下流モデルのテンプレート化に使用されるイントロスペクティブクエリの入力となる場合に必要です。下流モデルは、上流モデルのビルドが完了した後に「ジャストインタイム」でコンパイルする必要があります。
+</IntroText>
 
-<Lightbox src="/img/fusion/jit-compilation.png" title="Just-In-time compilation strategy (dbt Core)" />
+| Step | dbt Core engine | dbt Fusion engine |
+|------|-----------------|--------------------|
+| Jinja を SQL に変換する | ✅ | ✅ |
+| 論理プランを生成し、静的に分析する | ❌ | ✅ |
+| レンダリングされた SQL を実行する | ✅ | ✅ |
 
-### 動的テンプレート
+## レンダリング戦略
 
-Fusion はパフォーマンスと検証のメリットを最大化するために、デフォルトで事前コンパイル (AOT) を採用していますが、動的 Jinja テンプレート ([イントロスペクティブクエリ](/faqs/Warehouse/db-connection-dbt-compile)) を使用するモデルでは、ジャストインタイムコンパイルが必要です。
+<Lightbox src="/img/fusion/annotated_steps.png" title="各ドットは、モデルの実行ステップ（レンダリング、分析、実行）を表します。数字はDAG全体のステップ順序を表します。JITステップは緑色、AOTステップは紫色です。" alignment="left" width="600px"/>
 
-[run_query](/reference/dbt-jinja-functions/run_query) や [`dbt_utils.get_column_values`](https://github.com/dbt-labs/dbt-utils?tab=readme-ov-file#get_column_values-source) など、データプラットフォームの状態に依存する動的テンプレート関数は、生成する SQL を決定するためにデータベースにクエリを実行する必要があります。
+<Expandable alt_header="JIT rendering and execution (dbt Core)" is_open="true">
+  <video src="/img/fusion/CoreJitRun.mp4" autoPlay loop muted style={{ width: "100%", maxWidth: 950 }} />
+</Expandable>
 
-これらのパターンは、AOT コンパイルにおいて「鶏が先か卵が先か」という問題を引き起こします。Fusion は、上流モデルを実行してその結果をクエリするまで、生成される SQL を把握できないのです。下流モデルのSQLは、上流モデルで実行時に生成されるデータに依存するため、「ジャストインタイム」でコンパイルする必要があります。
+<Constant name="core" /> は常に **Just In Time (JIT) レンダリング** を使用します。モデルをレンダリングし、ウェアハウスで実行してから、次のモデルに進みます。
 
-**Fusionは、DAG内の他のすべてのモデルではAOTコンパイルを維持しながら、JITコンパイルを必要とするモデルのみをインテリジェントに切り替えます。** この選択的なアプローチにより、両方のメリットが得られます。
+<Expandable alt_header="AOT rendering, analysis and execution (dbt Fusion engine)" is_open="true">
+  <video src="/img/fusion/FusionAotRun.mp4" autoPlay loop muted style={{ width: "100%", maxWidth: 950 }} />
+</Expandable>
 
-- 動的テンプレートを使用しないモデルは、AOTのパフォーマンス向上と事前検証の恩恵を受けられます。
-- 動的テンプレートを使用するモデルは、JITコンパイルでも正常に動作します。
-- コンパイルモードは、DAG全体ではなく、モデルごとに決定されます。
+<Constant name="fusion_engine" /> は、**事前（AOT）レンダリングと分析** を_デフォルト_ に設定します。プロジェクト内のすべてのモデルをレンダリングし、各モデルの論理プランを生成して静的に分析した後、ウェアハウス内のモデルの実行を開始します。
 
-例えば、次のようなDAGの場合：
-<Lightbox src="/img/fusion/introspection-normal.png" title="Fusion switches to JIT compilation since all model_b contains an introspection query" />
+すべてのモデルを事前にレンダリングおよび分析し、すべてが有効であることが確認された時点で実行を開始することで、<Constant name="fusion_engine" /> はウェアハウスのリソースを不必要に消費することを回避します。一方、<Constant name="core" /> のエンジンによって実行されるモデル内のSQLエラーは、実行中にデータベース自体によってのみフラグが付けられます。
 
+### イントロスペクティブなクエリのレンダリング
 
-Fusion は以下を実行します。
-1. `model_a`、`model_b`、`model_d` を事前にレンダリングします。
-2. DAG の順序で、`model_a`、`model_b` の SQL を解析します。
-3. `model_a → model_b` を実行します。
-4. `model_c` を JIT コンパイル実行に切り替えます（動的テンプレートのため）。
-5. SQL 解析を続行し、`model_d` を実行します（動的モデルに依存するため）。
+AOT レンダリングの例外は、イントロスペクティブモデルです。イントロスペクティブモデルとは、レンダリングされる SQL がデータベースクエリの結果に依存するモデルです。`run_query()` や `dbt_utils.get_column_values()` などのマクロを含むモデルはイントロスペクティブです。イントロスペクションは、事前レンダリングにおいて以下の理由から問題を引き起こします。
 
-ただし、並列ブランチがある場合は次のようになります。
-<Lightbox src="/img/fusion/introspection-mixed.png" title="Fusion switches to JIT compilation _only_ for model_c (dynamic templating) and its downstreams" />
+- ほとんどのイントロスペクティブクエリは、DAG 内の以前のモデルの結果に対して実行されますが、AOT レンダリング時にはそのモデルがデータベースに存在しない可能性があります。
+- モデルがデータベースに存在していても、モデルが更新されるまでは古い情報になっている可能性があります。
 
+<Constant name="fusion_engine" /> は、**イントロスペクティブモデルに対して JIT レンダリング** に切り替え、<Constant name="core" /> と同じようにレンダリングされるようにします。
 
-Fusion は以下の処理を実行します。
-1. `model_a`、`model_b`、`model_x`、`model_y`、`model_z` はいずれも動的テンプレートモデルに依存しないため、AOT コンパイルされます。また、`model_d` は Jinja が動的ではないため、AOT レンダリングされます。
-2. `model_c` を JIT コンパイルに切り替えて実行します。
-3. `model_d` を JIT 解析して実行します。
+`adapter.get_columns_in_relation()` や `dbt_utils.star()` などのマクロは、検査対象の [`Relation`](/reference/dbt-classes#relation) 自体が動的でない限り、事前にレンダリングして解析できます。これは、<Constant name="fusion_engine" /> がコンパイルプロセスの一環としてスキーマをメモリに読み込むためです。
 
-このきめ細かなアプローチにより、動的 SQL パターンとの互換性を維持しながら、最大限のパフォーマンスと信頼性が確保されます。
+## 静的解析の原則
 
-## `static_analysis` 設定
+[静的解析](https://en.wikipedia.org/wiki/Static_program_analysis) は、開発段階でモデルがエラーなくコンパイルされた場合、デプロイ時にもコンパイルエラーなく実行されることを保証することを目的としています。しかし、イントロスペクティブクエリは、モデルがソース管理にコミットされた後にレンダリングされたクエリを変更できるため、この保証を破る可能性があります。
 
-Fusion は、サポートされている方言の SQL の大部分を静的に解析できますが、いくつかの例外と制限があります。プロジェクト内の特定のモデルにサポートされていない SQL や動的 SQL が含まれている場合、新しい静的 (SQL) 解析機能のオン/オフを切り替えることができます。この設定は下流に伝播されるため、上流モデルの静的解析がオフになっていると、Fusion はそのモデルを参照するすべての下流モデルの静的解析もオフになります。
+<Constant name="fusion_engine" /> は、単一のモデルを個別に静的に解析するだけでなく、DAG の端から端までのすべてのクエリを静的に解析できるという点で独特です。データベースでさえ、その前に置かれたクエリしか検証できません。[情報フロー理論](https://roundup.getdbt.com/i/156064124/beyond-cll-information-flow-theory-and-metadata-propagation) などの概念は、 [まだ](https://www.getdbt.com/blog/where-we-re-headed-with-the-dbt-fusion-engine) dbt プラットフォームには組み込まれていませんが、安定した入力と DAG 全体で列をトレースする機能に依存しています。
 
-## 使用方法
+### 静的解析とイントロスペクティブクエリ
 
-`static_analysis` は、モデルレベルの構成（推奨）として設定することも、実行全体に対する CLI フラグとして設定することもできます。後者はモデルレベルの構成をオーバーライドし、デバッグを支援することを目的としています。構成の詳細については、[CLI オプション](/reference/global-configs/command-line-options) および [構成とプロパティ](/reference/configs-and-properties) を参照してください。
+Fusion がイントロスペクティブクエリを検出すると、そのモデルはジャストインタイムレンダリングに切り替わります（前述のとおり）。イントロスペクティブモデルとそのすべての子孫モデルは、JIT 静的解析の対象となります。JIT 静的解析は、上流モデルが既にマテリアライズされた後に、ほとんどの SQL エラーを捕捉し、無効なモデルの実行を阻止するため、「安全でない」と呼んでいます。
 
-`static_analysis` モデルレベル構成では、以下のオプションを使用します。
+この分類は、Fusion が解析対象と実行対象の整合性を 100% 保証できなくなったことを示しています。安全でない静的解析が問題を引き起こす可能性のある最も一般的な実例は、スタンドアロンの「dbt コンパイル」ステップです（「dbt 実行」の一部として行われるコンパイルとは異なります）。
 
-- `on`: (デフォルト) SQL を静的に解析します。
-- `off`: モデルと、それに依存するすべての下流モデルに対する SQL 解析をスキップします。Fusion は、モデルがイントロスペクトクエリを使用して動的にテンプレート化されていることを検出すると、このモデルとすべての下流モデルに対する静的解析を自動的に停止し、ジャストインタイムコンパイルに切り替えます。
-- `unsafe`: 動的に生成されたモデルの SQL を Fusion に強制的に解析させます。ユーザーは、データプラットフォームや上流モデルの状態の変化に応じて、コンパイルから実行までの間にSQLが変化するリスクを負うことになります。実行時には、結果のSQLが無効になったり、異なるSQLになったりする可能性があります。Fusionは、このモデルと下流のモデルに対してJITコンパイルに切り替えます。
+「dbt 実行」中は、JIT レンダリングによって下流モデルのコードが最新のウェアハウス状態になるように更新されますが、スタンドアロンのコンパイルでは上流モデルは更新されません。このシナリオでは、Fusion は最後に実行された上流モデルから読み取ります。これはおそらく問題ありませんが、エラーが誤って報告される（偽陽性）か、まったく報告されない（偽陰性）可能性があります。
 
-<File name='models/<filename>.yml'>
+<Expandable alt_header="Rendering and analyzing without execution" is_open="true">
+  <video src="/img/fusion/FusionJitCompileUnsafe.mp4" autoPlay loop muted style={{ width: "100%", maxWidth: 950 }} />
+  `model_d` はイントロスペクションを使用しないため AOT でレンダリングされますが、`introspective_model_c` が分析されるまで待機する必要があることに注意してください。
+</Expandable>
+
+「安全でない」静的解析でも、静的解析を行わない場合と比べて大きなメリットが得られます。問題が発生することがない限り、静的解析は有効のままにしておくことをお勧めします。さらに良い方法としては、イントロスペクティブコードをAOTレンダリングと静的解析に適した方法で書き換えられるかどうかを検討してください。
+
+## エンジン間の違いをまとめる
+
+dbt Core:
+
+- すべてのモデルをジャストインタイムでレンダリングします。
+- 静的解析は実行しません。
+
+dbt Fusion エンジン:
+
+- イントロスペクティブクエリを使用しない限り、すべてのモデルをアヘッドオブタイムでレンダリングします。
+- すべてのモデルを静的に解析します。モデル自身またはその親がジャストインタイムでレンダリングされていない限り、デフォルトでアヘッドオブタイムで実行されます。親がジャストインタイムでレンダリングされている場合は、静的解析ステップもジャストインタイムで実行されます。
+
+## `static_analysis` の設定
+
+上記のデフォルトの動作に加えて、プロジェクト内の特定のモデルに対して静的解析を適用する方法をいつでも変更できます。**モデルが静的解析の対象となるのは、そのすべての親モデルも静的解析の対象となっている場合のみです。**
+
+`static_analysis` のオプションは次のとおりです。
+
+- `on`: SQL を静的に解析します。非イントロスペクトモデルの場合のデフォルトです。AOT レンダリングに依存します。
+- `unsafe`: SQL を静的に解析します。イントロスペクトモデルの場合のデフォルトです。常に JIT レンダリングを使用します。
+- `off`: このモデルとその子孫モデルに対して SQL 解析をスキップします。
+
+静的解析を無効にすると、SQL 理解に依存する VS Code 拡張機能の機能が使用できなくなります。
+
+`static_analysis` を設定するのに最適な場所は、個々のモデルまたはモデルグループの構成ファイルです。デバッグを支援するために、CLI フラグ `--static-analysis off` または `--static-analysis unsafe` を使用して、すべてのモデルレベルの設定をオーバーライドすることもできます。設定の詳細については、[CLI オプション](/reference/global-configs/command-line-options) および [設定とプロパティ](/reference/configs-and-properties) を参照してください。
+
+### 設定例
+
+パッケージ内のすべてのモデルの静的解析を無効にする:
+
+<File name='dbt_project.yml'>
 
 ```yml
-version: 2
+name: jaffle_shop
 
 models:
-  - name: <model_name>
-    config:
-      static_analysis: unsafe
-      ...
+  jaffle_shop: 
+    marts:
+      +materialized: table
+  
+  a_package_with_introspective_queries:
+    +static_analysis: off
 ```
 
 </File>
 
-CLI フラグは、実行全体にわたって `--static-analysis=unsafe` または `--static-analysis=off` を使用します。これはモデル レベルの構成よりも優先されます：
+YAML で静的分析を無効にする:
 
-```bash
-dbt run --static-analysis=unsafe
+<File name='models/my_udf_using_model.yml'>
+
+```yml
+models:
+  - name: model_with_static_analysis_off
+    config:
+      static_analysis: off
 ```
 
-## 例：新しい概念の活用例
+</File>
 
-`model_a → model_b → model_c → model_d` というDAGを想像してみてください。これらのモデルはすべて静的SQLで定義されています。
 
-### デフォルトの動作（`static_analysis: on`）
+カスタム UDF を使用してモデルの静的解析を無効にします。
 
-- `dbt compile` 実行中、Fusion はすべてのモデルをコンパイルして解析します。
-- `dbt run` 実行中、Fusion はすべてのモデルをコンパイルして解析し、その後すべてのモデルを実行します。
-
-### 動的SQLの追加後
-
-`model_c` を更新し、動的SQL（`dbt_utils.get_column_values` など）を導入します。Fusion は `model_c` に動的Jinjaが含まれていることを自動的に検出します。`model_c+` の静的解析を無効にし、Just-In-Time コンパイル戦略に切り替えます。
-
-`dbt compile` 実行中、Fusion は以下の処理を行います。
-- プロジェクトを解析し、`model_c` が動的であることを検出し、`model_c+` の `static_analysis: off` を設定します。
-- `model_a` と `model_b` をコンパイルして解析します。
-- `model_c+` (`model_d` を含む) の解析をスキップします。
-
-`dbt run` 実行中、Fusion は以下の処理を行います。
-- プロジェクトを解析し、`model_c` が動的であることを検出し、`model_c+` の `static_analysis: off` とジャストインタイムレンダリングを設定します。
-- `model_a` と `model_b` をコンパイルして解析します。
-- `model_a → model_b` を実行します。
-- `model_c` の SQL をレンダリングし (静的解析なし)、`model_c` を実行します。
-- `model_d` の SQL をレンダリングし (静的解析なし)、`model_d` を実行します。
-
-### `model_c` に `static_analysis: unsafe` を明示的に設定します。
-
-この設定は、`model_c` が動的テンプレート化されているにもかかわらず、Fusion に静的解析を試行するように指示します。
-
-`dbt compile` 実行中、Fusion は以下の処理を行います。
-- プロジェクトを解析し、`model_c` が安全でないことを検出しますが、明示的なユーザー設定の `static_analysis: unsafe` により、`model_c+` の静的解析を無効にしないように Fusion に指示します。
-- すべてのモデルをコンパイルして解析します。`model_b` のイントロスペクションクエリでは、以前に構築されたテーブルまたは本番環境（defer を使用している場合）のデータを使用します。
-
-`dbt run` 実行中、Fusion は以下の処理を行います。
-- プロジェクトを解析し、`model_c` が安全でないことを検出しますが、明示的なユーザー設定の `static_analysis: unsafe` により、`model_c+` の静的解析を無効にしないように Fusion に指示します。これらのモデルについては、Fusion は引き続き JIT コンパイルに切り替えます。
-- `model_a`、`model_b` をコンパイルして解析する
-- `model_a → model_b` を実行する
-- `model_c` をコンパイル（静的解析を含む）し、`model_c` を実行する
-- `model_d` をコンパイル（静的解析を含む）し、`model_d` を実行する
-
-- **警告:** `model_c` および `model_d` に対して実際に実行される SQL は、コンパイル時に解析された内容と異なる場合があり、スキーマの不一致やエラーが発生する可能性があります。これらのエラーの多くは静的解析中に検出されますが、検出は `model_a → model_b` が既にマテリアライズされた後の「ジャストインタイム」で行われます。
-
-## 静的解析の制限事項
-
-Fusion は、Snowflake やその他のデータウェアハウスでカスタム関数を定義するユーザー定義関数 (UDF) をコンパイルできません。モデルで UDF を使用する場合は、`static_analysis: off` を設定する必要があります。将来的には、Fusion 内で UDF の定義とコンパイルのネイティブサポートを追加する予定です。
-
-Fusion は、dbt-jinja 内のイントロスペクトクエリ呼び出しを介して、動的テンプレート SQL を自動的に検出しますが、Snowflake の `PIVOT` 関数などの動的 SQL は検出できません。モデルで `static_analysis: off` を設定するか、モデルをリファクタリングして静的に強制可能なスキーマを作成することができます (以下の例を参照)。
-
-### 動的SQL
-
-現在、SQL機能（Jinjaではなく）に基づいてスキーマが動的であるかどうかを検出できません。例えば、Snowflakeで`ANY`キーワードを使用する場合、次のようになります。
+<File name='models/my_udf_using_model.sql'>
 
 ```sql
-with quarterly_sales as (
-  select * from values
-    (1, 10000, '2023_Q1'),
-    (1, 400, '2023_Q1'),
-    (2, 4500, '2023_Q1'),
-    (2, 35000, '2023_Q1'),
-    (3, 10200, '2023_Q4')
-  as quarterly_sales(emp_id, amount, quarter)
-)
+{{ config(static_analysis='off') }}
 
-select *
-from quarterly_sales
-pivot (
-  sum(amount) for quarter in (ANY)
-)
-order by emp_id
+select 
+  user_id,
+  my_cool_udf(ip_address) as cleaned_ip
+from {{ ref('my_model') }}
 ```
 
-このサンプル モデルでは、SQL 機能 (Jinja ではない) に基づく動的スキーマが使用されているため、エラーが発生します。
+</File>
 
-```terminal
-error: dbt0432: PIVOT ANY is not compilable
-  --> models/example/my_first_model.sql:12:29 (target/compiled/models/example/my_first_model.sql:12:29)
-```
+### 静的解析を「オフ」にするのはどのような場合ですか？
 
-このエラーを修正するには、次の操作を実行できます。
-- モデルを `static_analysis: off` で構成する
-- モデルをリファクタリングして、動的な Jinja テンプレート（例: `dbt_utils.get_column_values`）を使用するようにし、モデルを `static_analysis: unsafe` で構成する
-- モデルを静的ピボットにリファクタリングして、安全な静的解析のメリットを享受する
+有効なクエリに以下のものが含まれている場合、静的解析が誤って失敗することがあります。
 
-```sql
-with quarterly_sales as ( 
-    select * from values
-    (1, 10000, '2023_01'),
-    (1, 400, '2023_01'),
-    (2, 4500, '2023_01'),
-    (2, 35000, '2023_01'),
-    (3, 10200, '2023_04')   
-as quarterly_sales(emp_id, amount, quarter)
-)
+- <Constant name="fusion_engine" /> が認識しない **構文またはネイティブ関数**。静的解析を無効にするだけでなく、[問題を開く](https://github.com/dbt-labs/dbt-fusion/issues)も行ってください。
+- <Constant name="fusion_engine" /> が認識しない **ユーザー定義関数**。静的解析を一時的に無効にする必要があります。UDF コンパイルのネイティブサポートは将来のバージョンで提供される予定です。[dbt-fusion#69](https://github.com/dbt-labs/dbt-fusion/issues/69) を参照してください。
+- **動的SQL** ([SnowflakeのPIVOT ANY](https://docs.snowflake.com/en/sql-reference/constructs/pivot#dynamic-pivot-on-all-distinct-column-values-automatically)など)は静的に分析できません。静的分析を無効にするか、明示的な列名を使用するようにピボットをリファクタリングするか、[Jinjaで動的ピボット](https://github.com/dbt-labs/dbt-utils#pivot-source)を作成することができます。
+- **イントロスペクティブクエリに入力される揮発性の高いデータ** (スタンドアロンの`dbt compile`呼び出し中)。`dbt compile`ステップではモデルが実行されないため、イントロスペクティブクエリの実行時に古いデータを使用するか、別の環境に依存します。入力データの変更頻度が高いほど、この差異によってコンパイルエラーが発生する可能性が高くなります。静的分析を無効にする前に、これらのスタンドアロンの `dbt compile` コマンドが必要かどうかを検討してください。
 
-select * from quarterly_sales pivot (
-sum(amount) for quarter in ('2023_01', '2023_04'))
-order by emp_id
-```
+## 例
 
-### UDFs
+### イントロスペクティブなモデルはない
+<Expandable alt_header="AOT rendering, analysis and execution" is_open="true">
+  <video src="/img/fusion/FusionAotRun.mp4" autoPlay loop muted style={{ width: "100%", maxWidth: 950 }} />
+</Expandable>
 
-モデル SQL でユーザー定義関数を呼び出す場合:
+- Fusion は各モデルを順番にレンダリングします。
+- 次に、各モデルの論理プランを順番に静的に解析します。
+- 最後に、各モデルのレンダリングされた SQL を実行します。Fusion がプロジェクト全体を検証するまで、データベースには何も保存されません。
 
-```sql
-select my_example_udf(player_id)
-    from {{ source('raw_data', 'raw_players') }}
-```
+### `unsafe` 静的解析を含むイントロスペクティブモデル
 
-Fusion は静的解析中にエラーを発生させます:
+`model_c` を更新し、イントロスペクティブクエリ（`dbt_utils.get_column_values` など）を追加するとします。`model_b` に対してクエリを実行していると仮定しますが、<Constant name="fusion_engine" /> のレスポンスは、イントロスペクションの実行内容に関わらず同じです。
 
-```terminal
-error: dbt0209: No function MY_EXAMPLE_UDF
-  --> models/staging/stg_players.sql:7:9 (target/compiled/models/staging/stg_players.sql:7:9)
-```
+<Expandable alt_header="Unsafe static analysis of introspective models" is_open="true">
+  <video src="/img/fusion/FusionJitRunUnsafe.mp4" autoPlay loop muted style={{ width: "100%", maxWidth: 950 }} />
+</Expandable>
 
-このエラーを修正するには、該当モデルに対して「static_analysis: off」を設定する必要があります。これにより、下流のモデルに対する静的解析も無効になります。
+- 解析中に、Fusion は `model_c` のイントロスペクションクエリを検出します。`model_c` を JIT レンダリングに切り替え、`model_c+` を JIT 静的解析に選択します。
+- `model_a` と `model_b` は引き続き AOT コンパイルの対象となるため、Fusion は上記のイントロスペクションなしの例と同じように処理します。`model_d` は引き続き AOT レンダリングの対象となりますが、解析は対象外です。
+- `model_b` が実行されると、Fusion は（更新されたばかりのデータを使用して）`model_c` の SQL をレンダリングし、解析して実行します。これら 3 つのステップはすべて連続して実行されます。
+- `model_d` の AOT レンダリングされた SQL が解析され、実行されます。
+
+<Expandable alt_header="Complex DAG with an introspective branch" is_open="true">
+  <video src="/img/fusion/FusionJitRunUnsafeComplexDag.mp4" autoPlay loop muted style={{ width: "100%", maxWidth: 950 }} />
+</Expandable>
+
+ご想像のとおり、分岐型DAGはJITコンポーネントに進む前に可能な限りAOTコンパイルを行い、複数の `--threads` が利用可能な場合はそれらも実行します。ここでは、`model_b` の実行が完了するとすぐに `model_c` のレンダリングを開始できますが、AOTコンパイルされた `model_x` と `model_y` は別々に実行されます。
 
 import AboutFusion from '/snippets.ja/_about-fusion.md';
 

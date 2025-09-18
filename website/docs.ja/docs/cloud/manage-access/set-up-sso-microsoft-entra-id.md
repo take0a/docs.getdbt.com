@@ -7,10 +7,6 @@ sidebar_label: "Set up SSO with Microsoft Entra ID"
 
 # Set up SSO with Microsoft Entra ID <Lifecycle status="managed, managed_plus" />
 
-import SetUpPages from '/snippets/_sso-docs-mt-available.md';
-
-<SetUpPages features={'/snippets/_sso-docs-mt-available.md'}/>
-
 <Constant name="cloud" /> Enterprise-tier plans support single-sign on via Microsoft Entra ID (formerly Azure AD). You will need permissions to create and manage a new Entra ID application. Currently supported features include:
 
 * IdP-initiated SSO
@@ -37,7 +33,11 @@ Log into the Azure portal for your organization. Using the [**Microsoft Entra ID
 | **Name** | <Constant name="cloud" /> |
 | **Supported account types** | Accounts in this organizational directory only _(single tenant)_ |
 
-4. Configure the **Redirect URI**. The table below shows the appropriate Redirect URI values for single-tenant and multi-tenant deployments. For most enterprise use-cases, you will want to use the single-tenant Redirect URI. Replace `YOUR_AUTH0_URI` with the [appropriate Auth0 URI](/docs/cloud/manage-access/sso-overview#auth0-uris) for your region and plan.
+4. Configure the **Redirect URI**. The table below shows the appropriate Redirect URI values for single-tenant and multi-tenant Entra ID app deployments. For most enterprise use-cases, you will want to use the single-tenant Redirect URI. Replace `YOUR_AUTH0_URI` with the [appropriate Auth0 URI](/docs/cloud/manage-access/sso-overview#auth0-uris) for your region and plan.
+
+**Note:** Your dbt platform tenancy has no bearing on this setting. This Entra ID app setting controls app access:
+     - **Single-tenant:** Only users from your Entra ID tenant can access the app.
+     - **Multi-tenant:** Users from _any_ Entra ID tenant can access the app.
 
 | Application Type | Redirect URI |
 | ----- | ----- |
@@ -46,7 +46,7 @@ Log into the Azure portal for your organization. Using the [**Microsoft Entra ID
 
 <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/azure/azure-new-application-alternative.png" width="70%" title="Configuring a new app registration"/>
 
-5. Save the App registration to continue setting up Microsoft Entra ID SSO
+5. Save the App registration to continue setting up Microsoft Entra ID SSO.
 
 :::info Configuration with the new Microsoft Entra ID interface (optional)
 
@@ -70,15 +70,17 @@ There is a [limitation](https://learn.microsoft.com/en-us/entra/identity/hybrid/
 
 The Azure users and groups you will create in the following steps are mapped to groups created in <Constant name="cloud" /> based on the group name. Reference the docs on [enterprise permissions](enterprise-permissions) for additional information on how users, groups, and permission sets are configured in <Constant name="cloud" />.
 
+The <Constant name="dbt_platform" /> uses the **User principal name** (UPN) in Microsoft Entra ID to identify and match users logging in to <Constant name="cloud" /> through SSO. The UPN is usually formatted as an email address.
+
 ### Adding users to an Enterprise application
 
 Once you've registered the application, the next step is to assign users to it. Add the users you want to be viewable to dbt with the following steps:
 
-8. Navigate back to the [**Default Directory**](https://portal.azure.com/#home) (or **Home**) and click **Enterprise Applications**
-9. Click the name of the application you created earlier
-10. Click **Assign Users and Groups**
-11. Click **Add User/Group**
-12. Assign additional users and groups as-needed
+8. Navigate back to the [**Default Directory**](https://portal.azure.com/#home) (or **Home**) and click **Enterprise Applications**.
+9. Click the name of the application you created earlier.
+10. Click **Assign Users and Groups**.
+11. Click **Add User/Group**.
+12. Assign additional users and groups as needed.
 
 <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/azure/azure-enterprise-app-users.png" title="Adding Users to an Enterprise Application a Redirect URI"/>
 
@@ -89,18 +91,15 @@ Under **Properties** check the toggle setting for **User assignment required?** 
 ### Configuring permissions
 
 13. Navigate back to [**Default Directory**](https://portal.azure.com/#home) (or **Home**) and then **App registration**.
-14. Select your application and then select **API Permissions**
-15. Click **+Add a permission** and add the permissions shown below
+14. Select your application and then select **API permissions**.
+15. Click **+Add a permission** and add the permissions shown below.
 
 | API Name | Type | Permission |
 | -------- | ---- | ---------- |
 | Microsoft Graph | Delegated | `Directory.AccessAsUser.All` |
-| Microsoft Graph | Delegated | `Directory.Read.All` |
 | Microsoft Graph | Delegated | `User.Read` |
 
-:::info Why is `Directory.AccessAsUser.All` permission required?
-`Directory.Accessasuser.all` is required is because it lets <Constant name="cloud" /> see what groups the user belongs to. <Constant name="cloud" /> doesn't use the permission for anything else. This setup avoids asking users for extra consent when they log in.
-:::
+`User.Read` is the only strictly required permission, but configuring `Directory.Accessasuser.all` prevents users from receiving extra prompts for consent when they log in. It lets <Constant name="cloud" /> see what groups the user belongs to and isn't used for anything else.
 
 16. Save these permissions, then click **Grant admin consent** to grant admin consent for this directory on behalf of all of your users.
 
@@ -108,11 +107,11 @@ Under **Properties** check the toggle setting for **User assignment required?** 
 
 ### Creating a client secret
 
-17. Under **Manage**, click **Certificates & secrets**
-18. Click **+New client secret**
-19. Name the client secret "<Constant name="cloud" />" (or similar) to identify the secret
-20. Select **730 days (24 months)** as the expiration value for this secret (recommended)
-21. Click **Add** to finish creating the client secret value (not the client secret ID)
+17. Under **Manage**, click **Certificates & secrets**.
+18. Click **+New client secret**.
+19. Name the client secret "<Constant name="cloud" />" (or similar) to identify the secret.
+20. Select **730 days (24 months)** as the expiration value for this secret (recommended).
+21. Click **Add** to finish creating the client secret value (not the client secret ID).
 22. Record the generated client secret somewhere safe. Later in the setup process, we'll use this client secret in <Constant name="cloud" /> to finish configuring the integration.
 
 <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/azure/azure-secret-config.png" title="Configuring certificates & secrets" />
@@ -120,7 +119,7 @@ Under **Properties** check the toggle setting for **User assignment required?** 
 
 ### Collect client credentials
 
-23. Navigate to the **Overview** page for the app registration
+23. Navigate to the **Overview** page for the app registration.
 24. Note the **Application (client) ID** and **Directory (tenant) ID** shown in this form and record them along with your client secret. We'll use these keys in the steps below to finish configuring the integration in <Constant name="cloud" />.
 
 <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/azure/azure-overview.png" title="Collecting credentials. Store these somewhere safe" />
@@ -146,9 +145,17 @@ To complete setup, follow the steps below in the <Constant name="cloud" /> appli
 
 <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/azure/azure-cloud-sso.png" title="Configuring Entra ID AD SSO in dbt" />
 
-1.  Click **Save** to complete setup for the Microsoft Entra ID SSO integration. From here, you can navigate to the login URL generated for your account's _slug_ to test logging in with Entra ID.
+28.  Click **Save** to complete setup for the Microsoft Entra ID SSO integration. From here, you can navigate to the login URL generated for your account's _slug_ to test logging in with Entra ID.
 
 <Snippet path="login_url_note" />
+
+### Additional configuration options
+
+The **Single sign-on** section also contains additional configuration options which are located after the credentials fields.
+
+- **Include all groups:** Retrieve all groups to which a user belongs from your identity provider. If a user is a member of nested groups, it will also include the parent groups. When this option is disabled, only groups where the user has direct membership will be supplied.  This option is enabled by default.
+
+- **Maximum number of groups to retrieve:** Provides a configurable limit to the number of groups to retrieve for users.  By default, this is set to 250 groups, but this number can be increased if users' group memberships exceed that amount.
 
 ## Setting up RBAC
 Now you have completed setting up SSO with Entra ID, the next steps will be to set up
@@ -159,3 +166,7 @@ Now you have completed setting up SSO with Entra ID, the next steps will be to s
 Ensure that the domain name under which user accounts exist in Azure matches the domain you supplied in [Supplying credentials](#supplying-credentials) when you configured SSO.
 
 <Lightbox src="/img/docs/dbt-cloud/dbt-cloud-enterprise/azure/azure-get-domain.png" title="Obtaining the user domain from Azure" />
+
+## Learn more
+
+<WistiaVideo id="e395rnl0cy" paddingTweak="62.25%" />

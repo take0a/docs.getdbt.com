@@ -1,0 +1,27 @@
+次のパッケージは <Constant name="fusion_engine" /> で検証され、サポートされています。
+
+- [dbt-labs/audit_helper](https://github.com/dbt-labs/dbt-audit-helper.git)
+- [dbt-labs/codegen](https://github.com/dbt-labs/dbt-codegen.git)
+- [dbt-labs/dbt_project_evaluator](https://github.com/dbt-labs/dbt-project-evaluator.git)
+- [dbt-labs/dbt_utils](https://github.com/dbt-labs/dbt-utils.git)
+- [fivetran/ad_reporting](https://github.com/fivetran/dbt_ad_reporting.git)
+- [fivetran/facebook_ads](https://github.com/fivetran/dbt_facebook_ads.git)
+- [fivetran/fivetran_log](https://github.com/fivetran/dbt_fivetran_log.git)
+- [fivetran/fivetran_utils](https://github.com/fivetran/dbt_fivetran_utils.git)
+- [fivetran/google_ads](https://github.com/fivetran/dbt_google_ads.git)
+- [fivetran/hubspot](https://github.com/fivetran/dbt_hubspot.git)
+- [fivetran/jira](https://github.com/fivetran/dbt_jira.git)
+- [fivetran/linkedin](https://github.com/fivetran/dbt_linkedin.git)
+- [fivetran/microsoft_ads](https://github.com/fivetran/dbt_microsoft_ads.git)
+- [fivetran/pendo](https://github.com/fivetran/dbt_pendo.git)
+- [fivetran/qualtrics](https://github.com/fivetran/dbt_qualtrics.git)
+- [fivetran/salesforce](https://github.com/fivetran/dbt_salesforce.git)
+- [fivetran/salesforce_formula_utils](https://github.com/fivetran/dbt_salesforce_formula_utils.git)
+- [fivetran/social_media_reporting](https://github.com/fivetran/dbt_social_media_reporting.git)
+- [fivetran/zendesk](https://github.com/fivetran/dbt_zendesk.git)
+- [GJMcClintock/dbt_tld](https://github.com/GJMcClintock/dbt_tld.git)
+- [godatadriven/dbt_date](https://github.com/godatadriven/dbt-date.git)
+- [metaplane/dbt_expectations](https://github.com/metaplane/dbt-expectations.git)
+- [Montreal-Analytics/snowflake_utils](https://github.com/Montreal-Analytics/dbt-snowflake-utils.git)
+
+さらに、Fivetranの`source`パッケージと`transformation`パッケージが1つのパッケージに統合されました。`fivetran/github_source`などのソースパッケージを手動でインストールした場合は、`fivetran/github`がインストールされていることを確認し、変換モデルを無効化する必要があります。
