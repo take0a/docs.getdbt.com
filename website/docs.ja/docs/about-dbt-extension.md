@@ -6,7 +6,7 @@ sidebar_label: "About the dbt VS Code extension"
 pagination_next: "docs/install-dbt-extension"
 ---
 
-# dbt VS Code拡張機能について <Lifecycle status="beta" />
+# dbt VS Code拡張機能について <Lifecycle status="preview" />
 
 dbt拡張機能は、VS Codeに超高速、インテリジェント、そしてコスト効率に優れたdbt開発エクスペリエンスをもたらします。
 
